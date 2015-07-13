@@ -1,0 +1,6 @@
+ <properties>
+      <block type='81' id=''>
+	<property name='state' value='true' />
+        <property name='masksize' value='3' />
+      </block>
+</properties>

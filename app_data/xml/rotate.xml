@@ -1,0 +1,10 @@
+<properties>
+	<block type='607' id=''>
+		<property name='state' value='true' />
+		<property name="isCenter" value='true' />
+		<property name="isScalling" value='true' />
+		<property name="isFilling" value='true' />
+		<property name="xC" value="20" />
+		<property name="yC" value="20" />
+	</block>
+</properties>

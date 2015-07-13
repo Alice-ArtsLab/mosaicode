@@ -1,0 +1,16 @@
+<help>
+   <description>
+Applies Hough Transform in order to find Circular shapes.
+   </description>
+   <content>
+Hough for Circles
+
+Quick Help: Finds Circles.
+
+Block Help:
+Output 1 contains a binary value denoting the result of the comparison between the detected circles and the selected criteria.
+Output 2 contains the input image added to red circles painted where the circles were found.
+
+   </content>
+</help>
+

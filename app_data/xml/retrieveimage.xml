@@ -1,0 +1,11 @@
+<harpiamessage>
+    <session value="" />
+	<version value="" />
+	<commands>
+		<command name="retrieveimage">
+			<param name="block">  </param>
+			<param name="output">  </param>
+			<param name="data">  </param>
+		</command>
+	</commands>
+</harpiamessage>

@@ -1,0 +1,7 @@
+ <properties>
+      <block type='01' id=''>
+	<property name='state' value='true' />
+        <property name='filename' value='~/imgHarpia.png' />
+        <property name='filetype' value='png' />
+      </block>
+</properties>

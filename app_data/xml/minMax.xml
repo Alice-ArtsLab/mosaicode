@@ -1,0 +1,13 @@
+<properties>
+	<block type='606' id=''>
+		<property name='state' value='true' />
+		<property name="minX" value="0" />
+		<property name="maxX" value="500" />
+		<property name="minY" value="0" />
+		<property name="maxY" value="500" />
+		<property name="minVal" value="0" />
+		<property name="maxVal" value="500" />
+		<property name="minORmax" value="min" />
+		<property name="criteria" value="pos" />
+	</block>
+</properties>

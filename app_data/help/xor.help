@@ -1,0 +1,17 @@
+<help>
+   <description>
+Permite a operação lógica 'Ou exclusiva' entre as duas entradas. Para esse bloco há duas possibilidades. 
+Primeira: Executa a operação entre duas imagens ponto a ponto. 
+Segunda: Executa a operação entre um valor constante e cada ponto da imagem.
+   </description>
+   <content>
+BLOCO OU EXCLUSIVO
+
+Ajuda resumida: realiza a operação lógica XOR entre duas imagens.
+
+Ajuda do bloco:
+Realiza a operação lógica XOR com os valores de intensidade luminosa de todos os pontos de duas imagens, ponto por ponto.
+
+   </content>
+</help>
+

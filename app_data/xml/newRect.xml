@@ -1,0 +1,9 @@
+<properties>
+	<block type='801' id=''>
+		<property name='state' value='true' />
+		<property name="x0" value="0" />
+		<property name="y0" value="0" />
+		<property name="width" value="640" />
+		<property name="height" value="480" />
+	</block>
+</properties>

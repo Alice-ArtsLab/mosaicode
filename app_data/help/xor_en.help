@@ -1,0 +1,16 @@
+<help>
+   <description>
+It allows the logical operation 'Exclusive Or' between two entries. For this block, there are two possibilities:
+- Execution of the operation between two images, pixel per pixel.
+- Execution of the operation between a constant value and each image pixel.
+   </description>
+   <content>
+EXCLUSIVE OR BLOCK
+
+Quick Help: Calculates the logical operation 'XOR' between two images.
+
+Block Help:
+Calculates the logical operation XOR with the light intensity values of all elements of two images, pixel per pixel.
+   </content>
+</help>
+

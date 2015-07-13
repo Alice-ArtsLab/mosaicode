@@ -1,0 +1,19 @@
+<help>
+   <description>
+Operação de morfologia matemática para realizar a fechamento da imagem de acordo com o elemento estruturante. Equivale a aplicação de uma dilatação seguida de uma erosão.
+   </description>
+   <content>
+BLOCO FECHAMENTO
+
+Ajuda resumida: operação morfológica que visa conectar objetos em uma imagem.
+
+Ajuda do bloco:
+A operação de fechamento é derivada das operações de erosão e dilatação. Corresponde respectivamente a uma operação de dilatação seguida de uma de erosão. Esta sequência resulta em geral na conexão de objetos na imagem.
+
+Propriedades:
+
+Elemento estruturante: define o tamanho do elemento estruturante.
+
+   </content>
+</help>
+

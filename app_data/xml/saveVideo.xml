@@ -1,0 +1,8 @@
+<properties>
+	<block type='11' id=''>
+		<property name='state' value='true' />
+		<property name="filename" value="~/Output.mpeg" />
+		<property name="framerate" value="25.0" />
+		<property name="codecSelection" value="MPEG1" />
+	</block>
+</properties>

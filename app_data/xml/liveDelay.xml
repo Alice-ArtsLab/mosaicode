@@ -1,0 +1,7 @@
+<properties>
+	<block type='12' id=''>
+		<property name='state' value='true' />
+		<property name='type' value='frame' />
+		<property name='frameNumber' value='5' />
+	</block>
+</properties>

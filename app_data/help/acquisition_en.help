@@ -1,0 +1,14 @@
+<help>
+   <description>
+Performs the acquisition of an image. For now, from a file or creates a new image.
+   </description>
+   <content>
+ACQUISITION BLOCK
+
+Quick Help: Loads an image from the filename selected on the block's preferences or creates a new image with the selected size in the block's preferences
+
+Block Help:
+Loads an image from the filename selected on the block's preferences or creates a new one.
+
+   </content>
+</help>

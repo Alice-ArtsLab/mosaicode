@@ -1,0 +1,11 @@
+<properties>
+	<block type='609' id=''>
+		<property name='state' value='true' />
+		<property name='_B' value='30' />
+		<property name='_B_T' value='30' />
+		<property name='_G' value='40' />
+		<property name='_G_T' value='40' />
+		<property name='_R' value='180' />
+		<property name='_R_T' value='75' />
+	</block>
+</properties>

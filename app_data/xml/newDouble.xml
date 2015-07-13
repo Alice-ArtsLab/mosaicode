@@ -1,0 +1,6 @@
+<properties>
+	<block type='701' id=''>
+		<property name='state' value='true' />
+		<property name="doubleVal" value="1.000" />
+	</block>
+</properties>

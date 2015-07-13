@@ -1,0 +1,7 @@
+<harpiamessage>
+    <session value="" />
+	<version value="" />
+	<commands>
+		<command name="process"/>
+	</commands>
+</harpiamessage>

@@ -1,0 +1,21 @@
+<help>
+   <description>
+Operação de morfologia matemática para realizar a dilatação da imagem de acordo com o elemento estruturante.
+   </description>
+   <content>
+BLOCO DILATAÇÃO
+
+Ajuda resumida: operação morfológica que provoca dilatação nos objetos de uma imagem, aumentando suas dimensões.
+
+Ajuda do bloco:
+A operação de dilatação aumenta as dimensões de objetos em uma imagem de acordo com o tamanho do elemento estruturante utilizado na operação. É comumente utilizado para conectar objetos na imagem. Serve de base para novas operações morfológicas.
+
+Propriedades:
+
+Elemento estruturante: define o tamanho do elemento estruturante.
+
+Número de aplicações: define o número de aplicações consecutivas da operação de dilatação na imagem.
+
+   </content>
+</help>
+

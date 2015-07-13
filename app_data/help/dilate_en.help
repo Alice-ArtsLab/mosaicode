@@ -1,0 +1,20 @@
+<help>
+   <description>
+Dilates image by using arbitrary structuring element
+   </description>
+   <content>
+DILATE BLOCK
+
+Quick Help: Dilates image by using arbitrary structuring element
+
+Block Help:
+The block dilates the source image using the specified structuring element that
+determines the shape of a pixel neighborhood over which the maximum is taken:
+
+dst=dilate(src,element):  dst(x,y)=max((x',y') in element))src(x+x',y+y')
+
+The function supports the in-place mode. Dilation can be applied several (iterations) times.
+In case of color image each channel is processed independently.
+
+   </content>
+</help>

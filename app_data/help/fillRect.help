@@ -1,0 +1,15 @@
+<help>
+   <description>
+Pinta o retângulo na imagem de entrada de acordo com a cor desejada.
+   </description>
+   <content>
+BLOCO PREENCHIMENTO DE RETANGULO
+
+Ajuda resumida: Preenche o retângulo de uma cor.
+
+Ajuda do bloco:
+Preenche o retângulo na imagem de entrada de acordo com a cor desejada.
+
+   </content>
+</help>
+

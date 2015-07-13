@@ -1,0 +1,20 @@
+Metadata-Version: 1.0
+Name: harpia
+Version: 1.0
+Summary: Image Processing and Computer Vision Automatic Programming Tool
+Home-page: http://s2i.das.ufsc.br/harpia/en/home.html
+Author: Clovis Peruchi Scotti
+Author-email: scotti@ieee.org
+License: GNU GPL
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: C
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Software Development :: Code Generators

@@ -1,0 +1,15 @@
+<help>
+   <description>
+Performs a morphological closings transformation
+   </description>
+   <content>
+CLOSING BLOCK
+
+Quick Help: Closes white regions
+
+Block Help:
+Closing is the morphological transformation equivalent to erode a image after dilating it.
+
+   </content>
+</help>
+

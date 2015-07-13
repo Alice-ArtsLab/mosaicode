@@ -1,0 +1,19 @@
+<help>
+   <description>
+Realiza uma equalização linear do histograma de uma imagem.
+   </description>
+   <content>
+BLOCO EQUALIZADOR DE HISTOGRAMA
+
+Ajuda resumida: a equalização do histograma de uma imagem visa alcançar maior contraste entre os diversos elementos de uma imagem.
+
+Ajuda do bloco:
+A equalização de histograma procura uniformizar a distribuição de intensidades luminosas da imagem dentro de uma faixa de valores, para obter maior contraste entre os diferentes objetos que pertencem à cena. É comumente utilizada para aumentar o contraste entre objetos e fundo da imagem e até mesmo diminuição de ruídos.
+
+Propriedades:
+
+Tipo de Equalização: o tipo de equalização de histograma pode ser automático (faixa de valores completa do histograma) ou manual (onde define-se uma faixa específica de valores máximo e mínimo).
+
+   </content>
+</help>
+

@@ -1,0 +1,15 @@
+<help>
+   <description>
+Mostra uma imagem em uma nova janela.
+   </description>
+   <content>
+BLOCO MOSTRAR IMAGEM
+
+Ajuda resumida: mostra uma imagem da cadeia de processamento de imagens.
+
+Ajuda do bloco:
+Mostra uma imagem resultante de algum ponto da cadeia de processamento de imagens.
+
+   </content>
+</help>
+

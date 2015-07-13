@@ -1,0 +1,17 @@
+<help>
+   <description>
+Aplica o logarítmo natural (neperiano) a cada ponto da imagem. ln(imagem)
+   </description>
+   <content>
+BLOCO LOGARÍTMICA
+
+Ajuda resumida: aplica a função logarítmica a uma imagem, ou seja, calcula o logarítmo natural do valor de intensidade luminosa de cada ponto da imagem.
+
+Ajuda do bloco:
+A logarítmica consiste em aplicar o logarítmo natural (ln) ao valor de intensidade luminosa de cada ponto da imagem.
+ImagemResultante = ln(ImagemOriginal)
+Ela é comumente usada para realçar imagens com baixa intensidade luminosa.
+
+   </content>
+</help>
+

@@ -1,0 +1,21 @@
+<help>
+   <description>
+Eleva o valor de cada ponto da imagem ao expoente dado. (imagem)^X
+   </description>
+   <content>
+BLOCO POTÊNCIA
+
+Ajuda resumida: eleva cada ponto de uma imagem a um valor fixo de potência.
+
+Ajuda do bloco:
+A potência consiste em elevar cada ponto de uma imagem a um valor fixo de potência.
+ImagemResultante = (ImagemOriginal)^expoente
+Ela é comumente usada para realçar imagens com baixa intensidade luminosa.
+
+Propriedades:
+
+Valor do expoente: corresponde ao expoente no qual serão elevados os valores de intensidade luminosa dos pontos de uma imagem.
+
+   </content>
+</help>
+

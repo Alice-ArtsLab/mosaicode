@@ -1,0 +1,6 @@
+ <properties>
+      <block type='06' id=''>
+	<property name='state' value='true' />
+        <property name='type' value='RGB -> GRAY' />
+      </block>
+</properties>

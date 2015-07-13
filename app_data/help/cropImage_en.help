@@ -1,0 +1,17 @@
+<help>
+   <description>
+Aplica a transformada de Hough para a deteccao de circulos.
+   </description>
+   <content>
+BLOCO DETECCAO DE CIRCULOS
+
+Ajuda resumida: Detecta formas circulares na imagem de entrada. Saida 1 é a resposta da avaliacao(*) e a saida dois mostra os circulos encontrados.
+
+Ajuda do bloco:
+Este bloco fara uma procura por circulos na imagem de entrada e depois avaliará estes circulos segundo o critério (e especificações)
+contidos na janela de propriedades do bloco. A saida 1 contem um valor binario que denota o resultado de tal avaliação. A saida 2 contém
+a imagem de entrada adicionada de circulos vermelhos denotando as estruturas detectadas.
+
+   </content>
+</help>
+

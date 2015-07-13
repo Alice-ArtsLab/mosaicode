@@ -1,0 +1,17 @@
+<help>
+   <description>
+Calculates natural logarithm of every image element.
+   </description>
+   <content>
+LOGARITHM BLOCK
+
+Quick Help: Calculates the logarithm function to an image, calculating the natural logarithm of the ligh intensity value of each image pixel.
+
+Block Help:
+The Logarith consist in calculate the natural logarithm (ln) of the light intensity value of every pixel.
+ResultImage = ln(OriginalImage)
+
+Commonly used to enhance images with high light intensity.
+   </content>
+</help>
+

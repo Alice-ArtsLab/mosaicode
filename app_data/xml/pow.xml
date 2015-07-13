@@ -1,0 +1,6 @@
+ <properties>
+      <block type='60' id=''>
+	<property name='state' value='true' />
+        <property name='exponent' value='1' />
+      </block>
+</properties>

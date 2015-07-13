@@ -1,0 +1,21 @@
+<help>
+   <description>
+Aplicação de um filtro Canny. Permite a localização de bordas e contornos. Usando valores baixos dos parâmetros 'limiar 1' e 'limiar 2', encontram-se pontos de ligação de bordas suaves. Para valores altos desses parâmetros, encontram-se segmentos iniciais de bordas espessas.
+   </description>
+   <content>
+BLOCO CANNY
+
+Ajuda resumida: operação de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.
+
+Ajuda do bloco:
+A filtragem pelo algoritmo Canny procura enfatizar regiões da imagem em que ocorram bruscas variações de intensidade luminosa. Para isto, ela baseia-se no cálculo das derivadas em X e Y da imagem (conforme é feito com o filtro Sobel). O resultado da filtragem evidencia cantos e bordas de objetos na imagem.
+
+Propriedades:
+
+Limiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas.
+
+Abertura: tamanho da abertura de máscara que será passada para um filtro Sobel para encontrar os cantos e bordas da imagem.
+
+   </content>
+</help>
+

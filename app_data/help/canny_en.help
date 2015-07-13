@@ -1,0 +1,17 @@
+<help>
+   <description>
+Implements Canny algorithm for edge detection
+   </description>
+   <content>
+CANNY BLOCK
+
+Quick Help: Implements Canny algorithm for edge detection.
+
+Block Help:
+This block returns the edges on the input image using the Canny algorithm.
+The smallest of threshold1 and threshold2 is used for edge linking, the largest - 
+to find initial segments of strong edges.
+
+   </content>
+</help>
+

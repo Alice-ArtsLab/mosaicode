@@ -1,0 +1,7 @@
+<properties>
+	<block type='601' id=''>
+		<property name='state' value='true' />
+		<property name='cmdString' value="echo $HRP_DB" />
+		<property name='enIsntZero' value="False" />
+	</block>
+</properties>

@@ -1,0 +1,14 @@
+<help>
+   <description>
+Performs a morphological opening transformation
+   </description>
+   <content>
+NOT BLOCK
+
+Quick Help: Opens white regions
+
+Block Help:
+Opening is the morphological transformation equivalent to dilate a image after eroding it.
+
+   </content>
+</help>

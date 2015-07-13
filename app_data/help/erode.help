@@ -1,0 +1,21 @@
+<help>
+   <description>
+Operação de morfologia matemática para realizar a erosão da imagem de acordo com o elemento estruturante.
+   </description>
+   <content>
+BLOCO EROSÃO
+
+Ajuda resumida: operação morfológica que provoca erosão nos objetos de uma imagem, reduzindo suas dimensões.
+
+Ajuda do bloco:
+A operação de erosão reduz as dimensões de objetos em uma imagem de acordo com o tamanho do elemento estruturante utilizado na operação. É comumente utilizado para desconectar objetos na imagem e eliminar pequenos ruídos na imagem. Serve de base para novas operações morfológicas.
+
+Propriedades:
+
+Elemento estruturante: define o tamanho do elemento estruturante.
+
+Número de aplicações: define o número de aplicações consecutivas da operação de erosão na imagem.
+
+   </content>
+</help>
+

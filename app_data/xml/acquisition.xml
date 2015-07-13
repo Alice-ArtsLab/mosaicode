@@ -1,0 +1,12 @@
+<properties>
+  <block type='00' id=''>
+    <property name='state' value='true' />
+    <property name='type' value='file' />
+		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
+    <property name='place' value='server' />
+    <property name='camera' value='00' />
+		<property name='size' value='640x480' />
+    <property name='video_name' value='' />
+		<property name='frameRate' value='20.0' />
+  </block>
+</properties>

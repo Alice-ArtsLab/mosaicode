@@ -1,0 +1,5 @@
+ <properties>
+      <block type='04' id=''>
+	<property name='state' value='true' />
+      </block>
+</properties>

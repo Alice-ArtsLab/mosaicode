@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Harpia
+Comment=Image Processing and Computer Vision Automatic Programming Tool
+GenericName=Harpia
+Icon=harpia
+Exec=harpia
+Terminal=false
+Categories=Development;Science;
+MimeType=application/hrp;

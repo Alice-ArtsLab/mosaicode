@@ -1,0 +1,14 @@
+<help>
+   <description>
+Sets every pixel to a selected value. The result image has the input image size and all elements the selected value.
+   </description>
+   <content>
+FILL BLOCK
+
+Quick Help: Sets every pixel to a given color value.
+
+Block Help:
+Sets every pixel to a given value, that can be selected in the block properties.
+   </content>
+</help>
+

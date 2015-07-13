@@ -1,0 +1,12 @@
+<help>
+   <description>
+Splits the three channel input image into three, one channel, output images.
+   </description>
+   <content>
+DECOMPOSE RGB
+Splits the three channel input image into three, one channel, output images.
+In the case of RGB images, the first output will copied from the R (red) channel on the input image, the second output from the G (green) and so on.
+In this way the first output will come from the "last" channel and the last output from the first channel. This inversion is done in order to maintain the image order compatible with the "RGB" denomination facilitating end user experience.
+</content>
+</help>
+

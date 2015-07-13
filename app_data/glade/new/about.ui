@@ -1,0 +1,1597 @@
+<?xml version="1.0"?>
+<!--*- mode: xml -*-->
+<interface>
+  <object class="GtkWindow" id="about">
+    <property name="width_request">686</property>
+    <property name="height_request">480</property>
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">About Harpia</property>
+    <property name="type">GTK_WINDOW_TOPLEVEL</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ALWAYS</property>
+    <property name="modal">False</property>
+    <property name="resizable">False</property>
+    <property name="destroy_with_parent">False</property>
+    <property name="decorated">True</property>
+    <property name="skip_taskbar_hint">False</property>
+    <property name="skip_pager_hint">False</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+    <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+    <property name="focus_on_map">True</property>
+    <property name="urgency_hint">False</property>
+    <child>
+      <object class="GtkVBox" id="vbox2">
+        <property name="border_width">10</property>
+        <property name="visible">True</property>
+        <property name="homogeneous">False</property>
+        <property name="spacing">0</property>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow6">
+            <property name="border_width">5</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+            <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
+            <property name="shadow_type">GTK_SHADOW_OUT</property>
+            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+            <child>
+              <object class="GtkViewport" id="viewport5">
+                <property name="border_width">2</property>
+                <property name="visible">True</property>
+                <property name="shadow_type">GTK_SHADOW_IN</property>
+                <child>
+                  <object class="GtkImage" id="harpia_name">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="yalign">0.5</property>
+                    <property name="xpad">2</property>
+                    <property name="ypad">2</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkNotebook" id="notebook1">
+            <property name="border_width">5</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="show_tabs">True</property>
+            <property name="show_border">True</property>
+            <property name="tab_pos">GTK_POS_TOP</property>
+            <property name="scrollable">False</property>
+            <property name="enable_popup">False</property>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow8">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                <child>
+                  <object class="GtkViewport" id="viewport6">
+                    <property name="visible">True</property>
+                    <property name="shadow_type">GTK_SHADOW_IN</property>
+                    <child>
+                      <object class="GtkLabel" id="label78">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">
+Harpia Project was one of the aproved projects under CT-INFO 2003 Edital.
+This project intends to build a graphical environment for learning, 
+implementing and management of machine vision systems.
+
+The system is (would-be) made of several software modules for hardware
+comunication, image (signal) processing and remote management of vision
+systems.
+
+The system could be used in industries or acadamics, making easier to 
+develop quality control systems, and vision system based process, 
+helping the learning and spreading of vision systems.
+</property>
+                        <property name="use_underline">False</property>
+                        <property name="use_markup">False</property>
+                        <property name="justify">GTK_JUSTIFY_LEFT</property>
+                        <property name="wrap">False</property>
+                        <property name="selectable">False</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.20000000298</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">5</property>
+                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                        <property name="width_chars">-1</property>
+                        <property name="single_line_mode">False</property>
+                        <property name="angle">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="tab_expand">False</property>
+                <property name="tab_fill">True</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label21">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">About</property>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0.5</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow7">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+                <property name="shadow_type">GTK_SHADOW_IN</property>
+                <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                <child>
+                  <object class="GtkViewport" id="viewport1">
+                    <property name="visible">True</property>
+                    <property name="shadow_type">GTK_SHADOW_IN</property>
+                    <child>
+                      <object class="GtkVBox" id="vbox1">
+                        <property name="visible">True</property>
+                        <property name="homogeneous">False</property>
+                        <property name="spacing">0</property>
+                        <child>
+                          <object class="GtkFrame" id="frame1">
+                            <property name="border_width">10</property>
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="label_yalign">0.5</property>
+                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment1">
+                                <property name="visible">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="yalign">0.5</property>
+                                <property name="xscale">1</property>
+                                <property name="yscale">1</property>
+                                <property name="top_padding">0</property>
+                                <property name="bottom_padding">0</property>
+                                <property name="left_padding">12</property>
+                                <property name="right_padding">0</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox1">
+                                    <property name="border_width">5</property>
+                                    <property name="visible">True</property>
+                                    <property name="homogeneous">True</property>
+                                    <property name="spacing">0</property>
+                                    <child>
+                                      <object class="GtkImage" id="about_finep_logo">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">True</property>
+                                        <property name="fill">False</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label4">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">FINEP 
+Financiadora de estudos e Pesquisas
+http://www.finep.gov.br/</property>
+                                        <property name="use_underline">False</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                        <property name="wrap">False</property>
+                                        <property name="selectable">False</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                        <property name="width_chars">-1</property>
+                                        <property name="single_line_mode">False</property>
+                                        <property name="angle">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label2">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Sponsors&lt;/b&gt;</property>
+                                <property name="use_underline">False</property>
+                                <property name="use_markup">True</property>
+                                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                <property name="wrap">False</property>
+                                <property name="selectable">False</property>
+                                <property name="xalign">0.5</property>
+                                <property name="yalign">0.5</property>
+                                <property name="xpad">0</property>
+                                <property name="ypad">0</property>
+                                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                <property name="width_chars">-1</property>
+                                <property name="single_line_mode">False</property>
+                                <property name="angle">0</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="padding">0</property>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="frame2">
+                            <property name="border_width">10</property>
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="label_yalign">0.5</property>
+                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment2">
+                                <property name="visible">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="yalign">0.5</property>
+                                <property name="xscale">1</property>
+                                <property name="yscale">1</property>
+                                <property name="top_padding">0</property>
+                                <property name="bottom_padding">0</property>
+                                <property name="left_padding">12</property>
+                                <property name="right_padding">0</property>
+                                <child>
+                                  <object class="GtkVBox" id="vbox2">
+                                    <property name="visible">True</property>
+                                    <property name="homogeneous">False</property>
+                                    <property name="spacing">0</property>
+                                    <child>
+                                      <object class="GtkHBox" id="hbox2">
+                                        <property name="border_width">5</property>
+                                        <property name="visible">True</property>
+                                        <property name="homogeneous">True</property>
+                                        <property name="spacing">0</property>
+                                        <child>
+                                          <object class="GtkImage" id="about_s2i_logo">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0.5</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">True</property>
+                                            <property name="fill">False</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label5">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Sistemas Industriais Inteligentes
+Departamento de Automa&#xE7;&#xE3;o e Sistemas
+Universidade Federal de Santa Catarina
+http://s2i.das.ufsc.br/</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0.5</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="padding">0</property>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkHSeparator" id="hseparator1">
+                                        <property name="height_request">10</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTable" id="table1">
+                                        <property name="border_width">5</property>
+                                        <property name="visible">True</property>
+                                        <property name="n_rows">13</property>
+                                        <property name="n_columns">3</property>
+                                        <property name="homogeneous">False</property>
+                                        <property name="row_spacing">10</property>
+                                        <property name="column_spacing">10</property>
+                                        <child>
+                                          <object class="GtkLabel" id="label6">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Christian Emanuel Silvano</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label7">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Alberto Xavier Pavim</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label8">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Tutor</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label9">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label10">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label11">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Tutor</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">4</property>
+                                            <property name="bottom_attach">5</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label12">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Tutor</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">5</property>
+                                            <property name="bottom_attach">6</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label27">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Fernando Deschamps</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">5</property>
+                                            <property name="bottom_attach">6</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label28">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Fabr&#xED;cio Luchesi Forgerini</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">4</property>
+                                            <property name="bottom_attach">5</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label29">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">F&#xE1;bio Pedrotti Terra</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label30">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">axpavim@gmail.com</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label31">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">silvano@das.ufsc.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label32">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">fpterra@yahoo.com.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label33">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">fabricio_forgerini@hotmail.com</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">4</property>
+                                            <property name="bottom_attach">5</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label34">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">fernando.deschamps@terra.com.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">5</property>
+                                            <property name="bottom_attach">6</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label21">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Ricardo Gr&#xFC;tzmacher</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">12</property>
+                                            <property name="bottom_attach">13</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label18">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">12</property>
+                                            <property name="bottom_attach">13</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label40">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">grutz@terra.com.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">12</property>
+                                            <property name="bottom_attach">13</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label39">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">jlbitt@yahoo.com</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">11</property>
+                                            <property name="bottom_attach">12</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label38">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">erdtmann@das.ufsc.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">10</property>
+                                            <property name="bottom_attach">11</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label37">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">roloff@cefetsc.edu.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">9</property>
+                                            <property name="bottom_attach">10</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label36">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">marcelo@das.ufsc.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">8</property>
+                                            <property name="bottom_attach">9</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label35">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">lcdjunges@yahoo.com.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">7</property>
+                                            <property name="bottom_attach">8</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label17">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">11</property>
+                                            <property name="bottom_attach">12</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label16">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">10</property>
+                                            <property name="bottom_attach">11</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label15">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Tutor</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">9</property>
+                                            <property name="bottom_attach">10</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label14">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Coordinator</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">8</property>
+                                            <property name="bottom_attach">9</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label13">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">7</property>
+                                            <property name="bottom_attach">8</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label22">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Jos&#xE9; Luiz Bittencourt</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">11</property>
+                                            <property name="bottom_attach">12</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label23">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Mathias Jos&#xE9; Kreutz Erdtmann</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">10</property>
+                                            <property name="bottom_attach">11</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label24">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">M&#xE1;rio L&#xFA;cio Roloff</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">9</property>
+                                            <property name="bottom_attach">10</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label25">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Marcelo Ricardo Stemmer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">8</property>
+                                            <property name="bottom_attach">9</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label26">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Lu&#xED;s Carlos Dill Junges</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">7</property>
+                                            <property name="bottom_attach">8</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label82">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Guilherme Augusto Rutzen</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">6</property>
+                                            <property name="bottom_attach">7</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label83">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">6</property>
+                                            <property name="bottom_attach">7</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label84">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">rutzen@das.ufsc.br</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">6</property>
+                                            <property name="bottom_attach">7</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label85">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Clovis Peruchi Scotti</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label86">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Present Developer</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label87">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">scotti@ieee.org</property>
+                                            <property name="use_underline">False</property>
+                                            <property name="use_markup">False</property>
+                                            <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                            <property name="wrap">False</property>
+                                            <property name="selectable">False</property>
+                                            <property name="xalign">0</property>
+                                            <property name="yalign">0.5</property>
+                                            <property name="xpad">0</property>
+                                            <property name="ypad">0</property>
+                                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                            <property name="width_chars">-1</property>
+                                            <property name="single_line_mode">False</property>
+                                            <property name="angle">0</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
+                                            <property name="x_options">fill</property>
+                                            <property name="y_options"/>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkHSeparator" id="hseparator2">
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label88">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Any bugs or sugestions
+should be directed to 
+scotti@ieee.org</property>
+                                        <property name="use_underline">False</property>
+                                        <property name="use_markup">False</property>
+                                        <property name="justify">GTK_JUSTIFY_CENTER</property>
+                                        <property name="wrap">False</property>
+                                        <property name="selectable">False</property>
+                                        <property name="xalign">0.5</property>
+                                        <property name="yalign">0.5</property>
+                                        <property name="xpad">0</property>
+                                        <property name="ypad">0</property>
+                                        <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                        <property name="width_chars">-1</property>
+                                        <property name="single_line_mode">False</property>
+                                        <property name="angle">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="padding">0</property>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label3">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Development&lt;/b&gt;</property>
+                                <property name="use_underline">False</property>
+                                <property name="use_markup">True</property>
+                                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                <property name="wrap">False</property>
+                                <property name="selectable">False</property>
+                                <property name="xalign">0.5</property>
+                                <property name="yalign">0.5</property>
+                                <property name="xpad">0</property>
+                                <property name="ypad">0</property>
+                                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                                <property name="width_chars">-1</property>
+                                <property name="single_line_mode">False</property>
+                                <property name="angle">0</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="padding">0</property>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="tab_expand">False</property>
+                <property name="tab_fill">True</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label22">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Developers</property>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0.5</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkViewport" id="viewport2">
+                <property name="visible">True</property>
+                <property name="shadow_type">GTK_SHADOW_IN</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <property name="shadow_type">GTK_SHADOW_NONE</property>
+                    <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+                    <child>
+                      <object class="GtkViewport" id="viewport4">
+                        <property name="visible">True</property>
+                        <property name="shadow_type">GTK_SHADOW_IN</property>
+                        <child>
+                          <object class="GtkLabel" id="label81">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">
+Harpia
+    Copyright (C) 2007 S2i-das-ufsc
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see www.gnu.org/licenses.
+
+This Program uses the Amara software,
+Copyright 2006 Uche Ogbuji
+ (http://uche.ogbuji.net), more information
+found in the copyright archive 
+provided with this software.</property>
+                            <property name="use_underline">False</property>
+                            <property name="use_markup">False</property>
+                            <property name="justify">GTK_JUSTIFY_CENTER</property>
+                            <property name="wrap">False</property>
+                            <property name="selectable">False</property>
+                            <property name="xalign">0.5</property>
+                            <property name="yalign">0.5</property>
+                            <property name="xpad">0</property>
+                            <property name="ypad">0</property>
+                            <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                            <property name="width_chars">-1</property>
+                            <property name="single_line_mode">False</property>
+                            <property name="angle">0</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="tab_expand">False</property>
+                <property name="tab_fill">True</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label23">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">License</property>
+                <property name="use_underline">False</property>
+                <property name="use_markup">False</property>
+                <property name="justify">GTK_JUSTIFY_LEFT</property>
+                <property name="wrap">False</property>
+                <property name="selectable">False</property>
+                <property name="xalign">0.5</property>
+                <property name="yalign">0.5</property>
+                <property name="xpad">0</property>
+                <property name="ypad">0</property>
+                <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+                <property name="width_chars">-1</property>
+                <property name="single_line_mode">False</property>
+                <property name="angle">0</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

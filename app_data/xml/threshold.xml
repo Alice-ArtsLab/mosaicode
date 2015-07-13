@@ -1,0 +1,8 @@
+<properties>
+  <block type="120" id="">
+    <property name='state' value='true' />
+    <property name="threshold" value="122" />
+    <property name="maxValue" value="255" />
+    <property name="thresholdType" value="CV_THRESH_BINARY" />
+  </block> 
+</properties>

@@ -1,0 +1,14 @@
+<help>
+   <description>
+Inserts a comment.
+   </description>
+   <content>
+COMMENT BLOCK
+
+Quick Help: Inserts a comment
+
+Block Help:
+Inserts a comment.
+   </content>
+</help>
+

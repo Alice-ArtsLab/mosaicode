@@ -1,0 +1,15 @@
+<help>
+   <description>
+Executa uma chamada de sistema
+   </description>
+   <content>
+BLOCO RUN CMD
+
+Ajuda resumida: Executa uma chamada de sistema dependendo da avaliação binaria do pixel (0,0) da imagem de entrada.
+
+Ajuda do bloco:
+Executa uma chamada de sistema definida pelo usuário dependendo da avaliação binaria do pixel (0,0) da imagem de entrada.
+Muito útil em conjunto com blocos avaliadores (Detectores de linhas ou circulos)
+   </content>
+</help>
+

@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<!--*- mode: xml -*-->
+<interface>
+  <object class="GtkWindow" id="ShowWindow">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Processed Image</property>
+    <property name="type">GTK_WINDOW_TOPLEVEL</property>
+    <property name="window_position">GTK_WIN_POS_NONE</property>
+    <property name="modal">False</property>
+    <property name="resizable">True</property>
+    <property name="destroy_with_parent">False</property>
+    <property name="decorated">True</property>
+    <property name="skip_taskbar_hint">False</property>
+    <property name="skip_pager_hint">False</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+    <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+    <property name="focus_on_map">True</property>
+    <property name="urgency_hint">False</property>
+    <child>
+      <object class="GtkVBox" id="vbox2">
+        <property name="visible">True</property>
+        <property name="homogeneous">False</property>
+        <property name="spacing">0</property>
+        <child>
+          <object class="GtkToolbar" id="toolbar1">
+            <property name="visible">True</property>
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+            <property name="tooltips">True</property>
+            <property name="show_arrow">True</property>
+            <child>
+              <object class="GtkToolItem" id="toolitem1">
+                <property name="visible">True</property>
+                <property name="visible_horizontal">True</property>
+                <property name="visible_vertical">True</property>
+                <property name="is_important">False</property>
+                <child>
+                  <object class="GtkButton" id="btnShowSave">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Save Processed Image</property>
+                    <property name="can_focus">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_btnShowSave_clicked" last_modification_time="Thu, 12 Apr 2007 18:33:11 GMT" name="clicked"/>
+                    <child>
+                      <object class="GtkImage" id="image2">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-floppy</property>
+                        <property name="icon_size">4</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.5</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="toolitem2">
+                <property name="visible">True</property>
+                <property name="visible_horizontal">True</property>
+                <property name="visible_vertical">True</property>
+                <property name="is_important">False</property>
+                <child>
+                  <object class="GtkButton" id="btnShowClose">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Close visualization</property>
+                    <property name="can_focus">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_btnShowClose_clicked" last_modification_time="Thu, 12 Apr 2007 18:32:59 GMT" name="clicked"/>
+                    <child>
+                      <object class="GtkImage" id="image3">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-quit</property>
+                        <property name="icon_size">4</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.5</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="toolitem3">
+                <property name="visible">True</property>
+                <property name="visible_horizontal">True</property>
+                <property name="visible_vertical">True</property>
+                <property name="is_important">False</property>
+                <child>
+                  <object class="GtkButton" id="btnShowZooIn">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Zoom in</property>
+                    <property name="can_focus">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_btnShowZoomIn_clicked" last_modification_time="Tue, 17 Apr 2007 20:44:39 GMT" name="clicked"/>
+                    <child>
+                      <object class="GtkImage" id="image4">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-zoom-in</property>
+                        <property name="icon_size">4</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.5</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="toolitem4">
+                <property name="visible">True</property>
+                <property name="visible_horizontal">True</property>
+                <property name="visible_vertical">True</property>
+                <property name="is_important">False</property>
+                <child>
+                  <object class="GtkButton" id="btnShowZoomOut">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Zoom out</property>
+                    <property name="can_focus">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_btnShowZoomOut_clicked" last_modification_time="Wed, 18 Apr 2007 18:19:29 GMT" name="clicked"/>
+                    <child>
+                      <object class="GtkImage" id="image5">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-zoom-out</property>
+                        <property name="icon_size">4</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.5</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="toolitem5">
+                <property name="visible">True</property>
+                <property name="visible_horizontal">True</property>
+                <property name="visible_vertical">True</property>
+                <property name="is_important">False</property>
+                <child>
+                  <object class="GtkButton" id="btnShowZoomDefault">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Normal scale</property>
+                    <property name="can_focus">True</property>
+                    <property name="relief">GTK_RELIEF_NORMAL</property>
+                    <property name="focus_on_click">True</property>
+                    <signal handler="on_btnShowZoomDefault_clicked" last_modification_time="Thu, 12 Apr 2007 18:34:40 GMT" name="clicked"/>
+                    <child>
+                      <object class="GtkImage" id="image6">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-zoom-100</property>
+                        <property name="icon_size">4</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.5</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">0</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHSeparator" id="hseparator1">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow2">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="shadow_type">GTK_SHADOW_NONE</property>
+            <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+            <child>
+              <object class="GtkViewport" id="viewport2">
+                <property name="visible">True</property>
+                <property name="shadow_type">GTK_SHADOW_IN</property>
+                <child>
+                  <object class="GtkVBox" id="vbox3">
+                    <property name="visible">True</property>
+                    <property name="homogeneous">False</property>
+                    <property name="spacing">0</property>
+                    <child>
+                      <object class="GtkImage" id="processed_image">
+                        <property name="visible">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="yalign">0.5</property>
+                        <property name="xpad">0</property>
+                        <property name="ypad">0</property>
+                      </object>
+                      <packing>
+                        <property name="padding">0</property>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="padding">0</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

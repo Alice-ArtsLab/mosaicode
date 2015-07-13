@@ -1,0 +1,17 @@
+<help>
+   <description>
+Calculates Laplacian of the image
+   </description>
+   <content>
+LAPLACE BLOCK
+
+Quick Help: Calculates Laplacian of the image
+
+Block Help:
+The function cvLaplace calculates Laplacian of the source image by summing second x- and y- derivatives calculated using Sobel operator:
+
+dst(x,y) = d2src/dx2 + d2src/dy2
+
+
+   </content>
+</help>
