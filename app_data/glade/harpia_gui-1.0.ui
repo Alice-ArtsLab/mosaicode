@@ -547,7 +547,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">View Source</property>
                 <property name="stock_id">gtk-select-all</property>
-                <signal name="clicked" handler="on_UpdateToolBar_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_ViewSource_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -641,8 +641,8 @@
                         <property name="primary_icon_sensitive">True</property>
                         <property name="secondary_icon_sensitive">True</property>
                         <signal name="activate" handler="on_SearchButton_clicked" swapped="no"/>
-                        <accelerator key="Return" signal="activate"/>
                         <accelerator key="F" signal="grab_focus" modifiers="GDK_CONTROL_MASK"/>
+                        <accelerator key="Return" signal="activate"/>
                       </widget>
                       <packing>
                         <property name="expand">True</property>
