@@ -246,7 +246,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="MULTBorderColor">
+			<widget class="GtkDrawingArea" id="BorderColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>
@@ -270,7 +270,7 @@
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_MULTBackColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:19:36 GMT"/>
+		  <signal name="clicked" handler="on_BackColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:19:36 GMT"/>
 
 		  <child>
 		    <widget class="GtkImage" id="image1">
@@ -295,12 +295,12 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="MULTBorderColorButton">
+		<widget class="GtkButton" id="BorderColorButton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_MULTBorderColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:20:01 GMT"/>
+		  <signal name="clicked" handler="on_BorderColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:20:01 GMT"/>
 
 		  <child>
 		    <widget class="GtkImage" id="image2">
@@ -339,7 +339,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="MULTBackgroundColor">
+			<widget class="GtkDrawingArea" id="BackgroundColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>
@@ -397,7 +397,7 @@
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="MULTHelpView">
+		<widget class="GtkTextView" id="HelpView">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -480,7 +480,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_multiplication_cancel_clicked" last_modification_time="Wed, 08 Feb 2006 20:57:23 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Wed, 08 Feb 2006 20:57:23 GMT"/>
 	    </widget>
 	  </child>
 

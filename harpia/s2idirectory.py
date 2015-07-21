@@ -26,6 +26,8 @@
 #
 #----------------------------------------------------------------------
 
+from classes.fill import Fill
+
 #i18n
 import gettext
 APP='harpia'
@@ -179,19 +181,7 @@ block = {
 				 "TreeGroup":_("Filters and Color Conversion")
          },
          
-    9: {"Label":_("Fill image"),
-         "Path":{"Python":"fill",
-                 "Glade":"glade/fill.ui",
-                 "Xml":"xml/fill.xml"},
-         "Inputs":1,
-         "Outputs":1,
-         "Icon":"images/fill.png",
-         "Color":"50:100:200:150",
-				 "InTypes":{0:"HRP_IMAGE"},
-				 "OutTypes":{0:"HRP_IMAGE"},
-				 "Description":_("Fill an image with the desired color."),
-				 "TreeGroup":_("General")
-         },
+    9: Fill().getBlock(),
 
     10: {"Label":_("Comment"),
          "Path":{"Python":"comment",

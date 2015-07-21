@@ -58,25 +58,24 @@ class Properties( GladeWindow, S2iCommonProperties ):
             'ACQUFilename',
             'min_neighbors',
             'ACQUButtonSearch',
-            'ACQUBackgroundColor',
-            'ACQUBorderColor',
-            'ACQUHelpView',
+            'BackgroundColor',
+            'BorderColor',
+            'HelpView',
 						'acquisition_confirm'
             ]
 
         handlers = [
             'on_ACQUButtonSearch_clicked',
-            'on_ACQUBackColorButton_clicked',
-            'on_ACQUBorderColorButton_clicked',            
+            'on_BackColorButton_clicked',
+            'on_BorderColorButton_clicked',            
             'on_acquisition_confirm_clicked',
-            'on_acquisition_cancel_clicked'
+            'on_cancel_clicked'
             ]
 
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
 
-        self.widgets['Properties'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
 
         self.m_sCurrentActive = 'file'
         #load properties values        
@@ -89,27 +88,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
         #load block state 
         t_bState = self.m_oS2iBlockProperties.GetState()
 
-        #load border color
-        self.m_oBorderColor = self.m_oS2iBlockProperties.GetBorderColor()
-
-        t_nBorderRed   = self.m_oBorderColor[0] * 257
-        t_nBorderGreen = self.m_oBorderColor[1] * 257
-        t_nBorderBlue  = self.m_oBorderColor[2] * 257
-
-        t_oBorderColor = gtk.gdk.Color(red=t_nBorderRed,green=t_nBorderGreen,blue=t_nBorderBlue)
-
-        self.widgets['ACQUBorderColor'].modify_bg(gtk.STATE_NORMAL,t_oBorderColor)        
-
-        #load block color
-        self.m_oBackColor = self.m_oS2iBlockProperties.GetBackColor()
-
-        t_nBackRed   = self.m_oBackColor[0] * 257
-        t_nBackGreen = self.m_oBackColor[1] * 257
-        t_nBackBlue  = self.m_oBackColor[2] * 257
-
-        t_oBackColor = gtk.gdk.Color(red=t_nBackRed,green=t_nBackGreen,blue=t_nBackBlue)
-
-        self.widgets['ACQUBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
+        self.configure()
 
         #load help text
         #t_oS2iHelp = bt.bind_file("../etc/acquisition/acquisition.help")
@@ -119,18 +98,12 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
     
-        self.widgets['ACQUHelpView'].set_buffer( t_oTextBuffer )
+        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
     #----------------------------------------------------------------------
 
     def __del__(self):
         pass
-
-    #---------------------------------------------------------------------- 
-
-    def on_acquisition_cancel_clicked( self, *args ):
-
-        self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
    
@@ -153,37 +126,6 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         self.widgets['Properties'].destroy()
         
-    #----------------------------------------------------------------------
-    
-    def on_ACQUBackColorButton_clicked(self,*args):
-
-        t_oColor = self.RunColorSelection()
-
-        if t_oColor <> None:
-            
-            self.widgets['ACQUBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-
-            self.m_oBackColor[0] = t_oColor.red / 257
-
-            self.m_oBackColor[1] = t_oColor.green / 257
-
-            self.m_oBackColor[2] = t_oColor.blue / 257
-
-    #----------------------------------------------------------------------
-
-    def on_ACQUBorderColorButton_clicked(self,*args):
-
-        t_oColor = self.RunColorSelection()
-
-        if t_oColor <> None:
-            
-            self.widgets['ACQUBorderColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-
-            self.m_oBorderColor[0] = t_oColor.red / 257
-            
-            self.m_oBorderColor[1] = t_oColor.green / 257
-
-            self.m_oBorderColor[2] = t_oColor.blue / 257
 
     #----------------------------------------------------------------------
  

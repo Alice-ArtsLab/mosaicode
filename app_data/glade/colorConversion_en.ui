@@ -297,7 +297,7 @@ CIE.LUV -&gt; RGB
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="COLOBorderColor">
+			<widget class="GtkDrawingArea" id="BorderColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>
@@ -321,7 +321,7 @@ CIE.LUV -&gt; RGB
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_COLOBackColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:00:29 GMT"/>
+		  <signal name="clicked" handler="on_BackColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:00:29 GMT"/>
 
 		  <child>
 		    <widget class="GtkImage" id="image1">
@@ -346,12 +346,12 @@ CIE.LUV -&gt; RGB
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="COLOBorderColorButton">
+		<widget class="GtkButton" id="BorderColorButton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_COLOBorderColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:00:35 GMT"/>
+		  <signal name="clicked" handler="on_BorderColorButton_clicked" last_modification_time="Tue, 11 Apr 2006 00:00:35 GMT"/>
 
 		  <child>
 		    <widget class="GtkImage" id="image2">
@@ -390,7 +390,7 @@ CIE.LUV -&gt; RGB
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="COLOBackgroundColor">
+			<widget class="GtkDrawingArea" id="BackgroundColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>
@@ -448,7 +448,7 @@ CIE.LUV -&gt; RGB
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="COLOHelpView">
+		<widget class="GtkTextView" id="HelpView">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -531,7 +531,7 @@ CIE.LUV -&gt; RGB
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_colorConversion_cancel_clicked" last_modification_time="Thu, 09 Feb 2006 13:13:26 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Thu, 09 Feb 2006 13:13:26 GMT"/>
 	    </widget>
 	  </child>
 

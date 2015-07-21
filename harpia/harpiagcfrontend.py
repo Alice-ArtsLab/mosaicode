@@ -821,6 +821,7 @@ class S2iHarpiaFrontend( GladeWindow ):
 		sw.add(textview)
 		textview.show()
 		win.show_all()
+		win.resize(800,600)
 
 		t_nPage = self.widgets['WorkArea'].get_current_page()
 		t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[ t_nPage ].GetIDBackendSession())

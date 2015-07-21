@@ -56,15 +56,15 @@ class Properties( GladeWindow, S2iCommonProperties ):
         widget_list = [
             'Properties',
             'COLOConversionType',
-            'COLOBackgroundColor',
-            'COLOBorderColor',
-            'COLOHelpView'
+            'BackgroundColor',
+            'BorderColor',
+            'HelpView'
             ]
 
         handlers = [
-            'on_COLOBackColorButton_clicked',
-            'on_COLOBorderColorButton_clicked',
-            'on_colorConversion_cancel_clicked',
+            'on_BackColorButton_clicked',
+            'on_BorderColorButton_clicked',
+            'on_cancel_clicked',
             'on_colorConversion_confirm_clicked'            
             ]
 
@@ -72,8 +72,6 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
         
-        self.widgets['Properties'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
-
         #load properties values
         for Property in self.m_oPropertiesXML.properties.block.property:
 
@@ -105,28 +103,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
                 if Property.value == "CIE.LUV -> RGB":
                     self.widgets['COLOConversionType'].set_active( int(12) )
 
-
-        #load border color
-        self.m_oBorderColor = self.m_oS2iBlockProperties.GetBorderColor()
-
-        t_nBorderRed   = self.m_oBorderColor[0] * 257
-        t_nBorderGreen = self.m_oBorderColor[1] * 257
-        t_nBorderBlue  = self.m_oBorderColor[2] * 257
-
-        t_oBorderColor = gtk.gdk.Color(red=t_nBorderRed,green=t_nBorderGreen,blue=t_nBorderBlue)
-
-        self.widgets['COLOBorderColor'].modify_bg(gtk.STATE_NORMAL,t_oBorderColor)        
-
-        #load block color
-        self.m_oBackColor = self.m_oS2iBlockProperties.GetBackColor()
-
-        t_nBackRed   = self.m_oBackColor[0] * 257
-        t_nBackGreen = self.m_oBackColor[1] * 257
-        t_nBackBlue  = self.m_oBackColor[2] * 257
-
-        t_oBackColor = gtk.gdk.Color(red=t_nBackRed,green=t_nBackGreen,blue=t_nBackBlue)
-
-        self.widgets['COLOBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
+        self.configure()
 
         #load help text
         t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/colorConversion"+ _("_en.help"))
@@ -135,19 +112,13 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
     
-        self.widgets['COLOHelpView'].set_buffer( t_oTextBuffer )
+        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
     #----------------------------------------------------------------------
 
     def __del__(self):
         
 	pass
-
-    #---------------------------------------------------------------------- 
-
-    def on_colorConversion_cancel_clicked( self, *args ):
-
-        self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
    
@@ -194,38 +165,6 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
     #----------------------------------------------------------------------
 
-    def on_COLOBackColorButton_clicked(self,*args):
-
-        t_oColor = self.RunColorSelection()
-
-        if t_oColor <> None:
-            
-            self.widgets['COLOBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-
-            self.m_oBackColor[0] = t_oColor.red / 257
-
-            self.m_oBackColor[1] = t_oColor.green / 257
-
-            self.m_oBackColor[2] = t_oColor.blue / 257
-
-    #----------------------------------------------------------------------
-
-    def on_COLOBorderColorButton_clicked(self,*args):
-
-        t_oColor = self.RunColorSelection()
-
-        if t_oColor <> None:
-            
-            self.widgets['COLOBorderColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-
-            self.m_oBorderColor[0] = t_oColor.red / 257
-            
-            self.m_oBorderColor[1] = t_oColor.green / 257
-
-            self.m_oBorderColor[2] = t_oColor.blue / 257
-
-    #----------------------------------------------------------------------
- 
 #ColorConversionProperties = Properties()
 #ColorConversionProperties.show( center=0 )
 

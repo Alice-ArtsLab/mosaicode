@@ -38,6 +38,8 @@ import gtk
 #from popen2 import Popen4
 from amara import binderytools
 
+from classes.fill import Fill
+
 # Bug fix -  Schiavoni
 import subprocess
 
@@ -351,23 +353,7 @@ class blockTemplate:
                            'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n'
 #############################################################################
         elif self.blockType == '09': # FILL BLOCK
-            for propIter in self.properties:
-                if propIter[0] == 'red':
-                    red = propIter[1]
-                elif propIter[0] == 'green':
-                    green = propIter[1]
-                elif propIter[0] == 'blue':
-                    blue = propIter[1]
-            self.imagesIO = \
-                 'IplImage * block' + self.blockNumber + '_img_i1 = NULL;\n' + \
-                 'IplImage * block' + self.blockNumber + '_img_o1 = NULL;\n'
-            self.functionCall = \
-                 '\nif(block' + self.blockNumber + '_img_i1){\n' + \
-                 'block' + self.blockNumber + '_img_o1 = cvCloneImage(block' + self.blockNumber + '_img_i1);\n' + \
-                 '\nCvScalar color = cvScalar('+blue +','+ green +','+ red+',0);\n' + \
-                 '\ncvSet(block' + self.blockNumber + '_img_o1,color,NULL);}\n'
-            self.dealloc = 'cvReleaseImage(&block' + self.blockNumber + '_img_o1);\n' + \
-                           'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n'
+        		Fill().generate(self)
 #############################################################################
         elif self.blockType == '14': # FILL RECT BLOCK
             for propIter in self.properties:
@@ -733,7 +719,7 @@ class blockTemplate:
                                '_img_i1->depth,block' + self.blockNumber + '_img_i1->nChannels);\n' + \
 				'cvConvertScale(block'+ self.blockNumber + '_img_i1,block' + self.blockNumber + '_img_t,(1/255.0),0);\n' + \
 			   	'cvExp(block' + self.blockNumber + '_img_t, block' + self.blockNumber + '_img_t);\n' + \
-			    	'cvConvertScale(block'+ self.blockNumber + '_img_t,block' + self.blockNumber + '_img_o1,(double)93.8092,0);}\n'
+			    	'cvConvertScale(block'+ self.blockNumber + '_img_t,block' + self.blockNumber + '_img_o1,(double)93.8092,0);\n}\n'
             self.dealloc = 'cvReleaseImage(&block' + self.blockNumber + '_img_o1);\n' + \
                            'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n' + \
                            'cvReleaseImage(&block' + self.blockNumber + '_img_t);\n'

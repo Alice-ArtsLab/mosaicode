@@ -38,10 +38,15 @@ import gtk
 #from popen2 import Popen4
 from amara import binderytools
 
+from classes.fill import Fill
+
+# Bug fix -  Schiavoni
+import subprocess
+
 #i18n
 import gettext
 APP='harpia'
-DIR='/usr/share/harpia/po'
+DIR='/usr/local/share/harpia/po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -347,24 +352,8 @@ class blockTemplate:
                            'cvReleaseImage(&block' + self.blockNumber + '_img_o3);\n' + \
                            'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n'
 #############################################################################
-        elif self.blockType == '09': # FILL BLOCK
-            for propIter in self.properties:
-                if propIter[0] == 'red':
-                    red = propIter[1]
-                elif propIter[0] == 'green':
-                    green = propIter[1]
-                elif propIter[0] == 'blue':
-                    blue = propIter[1]
-            self.imagesIO = \
-                 'IplImage * block' + self.blockNumber + '_img_i1 = NULL;\n' + \
-                 'IplImage * block' + self.blockNumber + '_img_o1 = NULL;\n'
-            self.functionCall = \
-                 '\nif(block' + self.blockNumber + '_img_i1){\n' + \
-                 'block' + self.blockNumber + '_img_o1 = cvCloneImage(block' + self.blockNumber + '_img_i1);\n' + \
-                 '\nCvScalar color = cvScalar('+blue +','+ green +','+ red+',0);\n' + \
-                 '\ncvSet(block' + self.blockNumber + '_img_o1,color,NULL);}\n'
-            self.dealloc = 'cvReleaseImage(&block' + self.blockNumber + '_img_o1);\n' + \
-                           'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n'
+        elif self.blockType == 'fill': # FILL BLOCK
+        		Fill().generate(self)
 #############################################################################
         elif self.blockType == '14': # FILL RECT BLOCK
             for propIter in self.properties:
@@ -730,7 +719,7 @@ class blockTemplate:
                                '_img_i1->depth,block' + self.blockNumber + '_img_i1->nChannels);\n' + \
 				'cvConvertScale(block'+ self.blockNumber + '_img_i1,block' + self.blockNumber + '_img_t,(1/255.0),0);\n' + \
 			   	'cvExp(block' + self.blockNumber + '_img_t, block' + self.blockNumber + '_img_t);\n' + \
-			    	'cvConvertScale(block'+ self.blockNumber + '_img_t,block' + self.blockNumber + '_img_o1,(double)93.8092,0);}\n'
+			    	'cvConvertScale(block'+ self.blockNumber + '_img_t,block' + self.blockNumber + '_img_o1,(double)93.8092,0);\n}\n'
             self.dealloc = 'cvReleaseImage(&block' + self.blockNumber + '_img_o1);\n' + \
                            'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n' + \
                            'cvReleaseImage(&block' + self.blockNumber + '_img_t);\n'
@@ -1925,12 +1914,13 @@ def parseAndGenerate(dirName, XMLChain,installDirName):
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "cv.h"
-#include "cvaux.h"
-#include "cxcore.h"
-#include "highgui.h"
-#include "cxmisc.h"
-#include "ml.h"
+#include <opencv/cv.h>
+#include <opencv/cxmisc.h>
+#include <opencv/cxcore.h>
+#include <opencv/ml.h>
+#include <opencv/cvaux.h>
+#include <opencv/cvwimage.h>
+#include <opencv/highgui.h>
 #include <math.h>
 
 #define PI 3.1415926535898
@@ -2305,15 +2295,13 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
 		
 		#...posix..
 		makeFilename = 'Makefile.' + dirName
-		makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"+installDirName+"/lib/; export PKG_CONFIG_PATH="+installDirName+"/lib/pkgconfig/;gcc -x c++ -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv` " + codeFilename
-		#   makeFileEntry = r"all: " + codeFilename + "\n\tgcc " + codeFilename + r""" -I/opt/harpia/include/ -L/opt/harpia/include/ -lopencv -lcvaux -lhighgui -o """ + codeFilename[:-2]
+		makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"+installDirName+"/lib/; export PKG_CONFIG_PATH="+installDirName+"/lib/pkgconfig/;g++ "+ codeFilename +" -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`"
 		makeFile = open(makeFilename, 'w')
 		makeFile.write(makeFileEntry)
 		makeFile.close()
 		
 		yield [_("Compiling ...")]
 		if os.name=="nt":
-#        gcc.exe "C:\tmp\harpiaBETMP01178664493.78\harpiaBETMP01178664493.78.c" -o "C:\tmp\harpiaBETMP01178664493.78\harpiaBETMP01178664493.78.exe"   -IC:/harpiaBE/include  -LC:/harpiaBE/lib -lcv -lcxcore -lhighgui  -I"C:\Dev-Cpp\include"   -L"C:\Dev-Cpp\lib" 
 				i,o = os.popen4('Makefile' + dirName + '.bat')
 
 				o.readlines()
@@ -2335,9 +2323,11 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
 				i.close()
 		else:
 				i,o = os.popen4("sh " + makeFilename)
+
 				## appending compile errors too.. helps finding bugs! =]
 				CompilingErrors = ''
 				CerrorList = o.readlines()
+
 				if len(CerrorList) <> 0:
 					CompilingErrors += "Something was detected while compiling the source code.\n" + \
 												"There is a huge chance you've found a bug, please report to scotti@das.ufsc.br \n" + \

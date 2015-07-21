@@ -351,7 +351,7 @@
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_ACQUBackColorButton_clicked" last_modification_time="Mon, 10 Apr 2006 23:32:03 GMT"/>
+		  <signal name="clicked" handler="on_BackColorButton_clicked" last_modification_time="Mon, 10 Apr 2006 23:32:03 GMT"/>
 
 		  <child>
 		    <widget class="GtkAlignment" id="alignment9">
@@ -428,12 +428,12 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="ACQUBorderColorButton">
+		<widget class="GtkButton" id="BorderColorButton">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_ACQUBorderColorButton_clicked" last_modification_time="Mon, 10 Apr 2006 23:32:29 GMT"/>
+		  <signal name="clicked" handler="on_BorderColorButton_clicked" last_modification_time="Mon, 10 Apr 2006 23:32:29 GMT"/>
 
 		  <child>
 		    <widget class="GtkImage" id="image3">
@@ -472,7 +472,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="ACQUBackgroundColor">
+			<widget class="GtkDrawingArea" id="BackgroundColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>
@@ -505,7 +505,7 @@
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
 
 		      <child>
-			<widget class="GtkDrawingArea" id="ACQUBorderColor">
+			<widget class="GtkDrawingArea" id="BorderColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>
@@ -563,7 +563,7 @@
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="ACQUHelpView">
+		<widget class="GtkTextView" id="HelpView">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
@@ -646,7 +646,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_acquisition_cancel_clicked" last_modification_time="Mon, 31 Oct 2005 21:08:47 GMT"/>
+	      <signal name="clicked" handler="on_cancel_clicked" last_modification_time="Mon, 31 Oct 2005 21:08:47 GMT"/>
 	    </widget>
 	  </child>
 

@@ -96,10 +96,16 @@ class S2iHarpiaFrontend( GladeWindow ):
 		filename = self.m_sDataDir+'glade/harpia_gui-1.0.ui'
 
 		widget_list = [
-			'HarpiaFrontend',          'SearchEntry',          'SearchButton',
-			'BlockDescription',        'WorkArea',
-			'BlocksTreeView',          'StatusLabel',
-			'ProcessImage',            'ProcessToolBar',       'CodeToolBar',
+			'HarpiaFrontend',
+			'SearchEntry',
+			'SearchButton',
+			'BlockDescription',
+			'WorkArea',
+			'BlocksTreeView',
+			'StatusLabel',
+			'ProcessImage',
+			'ProcessToolBar',
+			'CodeToolBar',
 			'UpdateToolBar',
          'ViewSource',
          'toolbar1',
@@ -113,8 +119,11 @@ class S2iHarpiaFrontend( GladeWindow ):
 			'on_QuitMenuBar_activate',         'on_CutMenuBar_activate',
 			'on_CopyMenuBar_activate',         'on_PasteMenuBar_activate',
 			'on_DeleteMenuBar_activate',       'on_AboutMenuBar_activate',
-			'on_NewToolBar_clicked',           'on_OpenToolBar_clicked',
-			'on_SaveToolBar_clicked',          'on_ProcessToolBar_clicked',        'on_CodeToolBar_clicked',
+			'on_NewToolBar_clicked',
+			'on_OpenToolBar_clicked',
+			'on_SaveToolBar_clicked',
+			'on_ProcessToolBar_clicked',
+			'on_CodeToolBar_clicked',
 			'on_ZoomOutToolBar_clicked',       'on_ZoomInToolBar_clicked',
 			'on_SearchButton_clicked',         'on_BlocksTreeView_row_activated',
 			'on_BlocksTreeView_cursor_changed','on_HarpiaFrontend_destroy',
@@ -670,6 +679,7 @@ class S2iHarpiaFrontend( GladeWindow ):
 		#falta pegar o retorno!!!!!!
 		self.UpdateStatus(7)
 
+	#----------------------------------------------------------------------
 	def on_ProcessToolBar_clicked(self, *args):
 		"""
 		Callback function called when ProcessToolBar is clicked. Starts communication with Backend and process the Chain.
@@ -689,6 +699,7 @@ class S2iHarpiaFrontend( GladeWindow ):
 		self.widgets['CodeToolBar'].set_sensitive(True)
 		
 
+	#----------------------------------------------------------------------
 	def on_CodeToolBar_clickedIneer(self):
 		t_nPage = self.widgets['WorkArea'].get_current_page()
 		if not self.m_oGcDiagrams.has_key( t_nPage ):
@@ -737,6 +748,7 @@ class S2iHarpiaFrontend( GladeWindow ):
 				self.UpdateStatus(10)
 		t_oDialog.destroy()
 
+	#----------------------------------------------------------------------
 	def on_CodeToolBar_clicked(self, *args):
 		self.widgets['ProcessToolBar'].set_sensitive(False)
 		self.widgets['CodeToolBar'].set_sensitive(False)
@@ -792,15 +804,33 @@ class S2iHarpiaFrontend( GladeWindow ):
 		"""
 		pass
 
-   def on_ViewSource_clicked(sef, *args):
+   # ----------------------------------------------------------------------
+	def on_ViewSource_clicked(self, *args):
 		"""
 		Callback function called when ViewSource is clicked.
 
 		"""
-		print "Show My Source Code"
+		win = gtk.Window()
+#		win.connect("delete-event", gtk.main_quit)
+		sw = gtk.ScrolledWindow()
+		win.add(sw)
+		sw.show()
+		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+		textview = gtk.TextView()
+		textbuffer = textview.get_buffer()
+		sw.add(textview)
+		textview.show()
+		win.show_all()
+		win.resiz3(800,600)
 
-
-	#----------------------------------------------------------------------
+		t_nPage = self.widgets['WorkArea'].get_current_page()
+		t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[ t_nPage ].GetIDBackendSession())
+		t_sBigCodePath = "/tmp/" + t_sTmpName + "/" + t_sTmpName + ".c"
+		temp_file = open(t_sBigCodePath, 'r')
+		string = temp_file.read()
+		temp_file.close()
+		textbuffer.set_text(string)
+   	#----------------------------------------------------------------------
 	
 	def on_Preferences_clicked(self, *args):
 		"""
@@ -992,7 +1022,6 @@ class S2iHarpiaFrontend( GladeWindow ):
 		"""
 		Destroys the Harpia Window.
 		"""
-
 		gtk.main_quit()
 		
 	#----------------------------------------------------------------------
