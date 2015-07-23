@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -167,4 +165,37 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #SaveProperties = Properties()
 #SaveProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'filename':
+           saveFilename = os.path.expanduser(propIter[1])
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                  'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionCall = \
+                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                      '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n' + \
+                     'cvSaveImage("' + saveFilename + '" ,block' +blockTemplate.blockNumber+'_img_i1);\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Save Image"),
+         "Path":{"Python":"save",
+                 "Glade":"glade/save.ui",
+                 "Xml":"xml/save.xml"} ,
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/save.png",
+         "Color":"50:100:200:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Save image on a file indicated by the user."),
+				 "TreeGroup":_("General")
+         }

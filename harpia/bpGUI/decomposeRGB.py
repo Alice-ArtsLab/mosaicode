@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -104,4 +102,63 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #DecomposeRGBProperties = Properties()
 #DecomposeRGBProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_t1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_t2 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_t3 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o2 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o3 = NULL;\n'
+   blockTemplate.functionCall = \
+                       '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, block' + \
+                      blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
+                      'block' + blockTemplate.blockNumber + '_img_o2 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, block' + \
+                      blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
+                      'block' + blockTemplate.blockNumber + '_img_o3 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, block' + \
+                      blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+                      'block' + blockTemplate.blockNumber + '_img_t1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, 1);\n' + \
+                      'block' + blockTemplate.blockNumber + '_img_t2 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, 1);\n' +\
+                      'block' + blockTemplate.blockNumber + '_img_t3 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, 1);\n' + \
+                      'cvSplit(block' + blockTemplate.blockNumber + '_img_i1 ,block' + blockTemplate.blockNumber + '_img_t3 ,block' + blockTemplate.blockNumber + '_img_t2 ,block' + blockTemplate.blockNumber + '_img_t1 , NULL);\n' + \
+                      'cvMerge(block' + blockTemplate.blockNumber + '_img_t1 ,block' + blockTemplate.blockNumber + '_img_t1 , block' + blockTemplate.blockNumber + '_img_t1 , NULL, block' + \
+                      blockTemplate.blockNumber + '_img_o1);\n' + \
+                      'cvMerge(block' + blockTemplate.blockNumber + '_img_t2 ,block' + blockTemplate.blockNumber + '_img_t2, block' + blockTemplate.blockNumber + '_img_t2, NULL, block'+ \
+                      blockTemplate.blockNumber + '_img_o2);\n' + \
+                      'cvMerge(block' + blockTemplate.blockNumber + '_img_t3 ,block' + blockTemplate.blockNumber + '_img_t3, block' + blockTemplate.blockNumber + '_img_t3, NULL, block'+ \
+                      blockTemplate.blockNumber + '_img_o3);}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t2);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t3);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o2);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o3);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return  {"Label":_("Decompose RGB"),
+         "Path":{"Python":"decomposeRGB",
+                 "Glade":"glade/decomposeRGB.ui",
+                 "Xml":"xml/decomposeRGB.xml"},
+         "Inputs":1,
+         "Outputs":3,
+         "Icon":"images/decomposeRGB.png",
+         "Color":"50:125:50:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE",1:"HRP_IMAGE",2:"HRP_IMAGE"},
+				 "Description":_("Decompose a color image in three color channels (R, G and B)."),
+				 "TreeGroup":_("Filters and Color Conversion")
+         }

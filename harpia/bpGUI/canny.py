@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -149,4 +147,53 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #CannyProperties = Properties()
 #CannyProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'threshold2':
+           threshold2Value = propIter[1]
+       elif propIter[0] == 'apertureSize':
+           apertureSizeValue = propIter[1]
+       elif propIter[0] == 'threshold1':
+           threshold1Value = propIter[1]
+   blockTemplate.imagesIO = \
+       'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\nIplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionArguments = \
+       'int block' + blockTemplate.blockNumber + '_arg_threshold2 = ' + threshold2Value + \
+       ';\nint block' + blockTemplate.blockNumber + '_arg_aperture_size = ' + apertureSizeValue + \
+       ';\nint block' + blockTemplate.blockNumber + '_arg_threshold1 = ' + threshold1Value + ';\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+       'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+       '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+       '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n IplImage * tmpImg' +blockTemplate.blockNumber+\
+       ' = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),8,1);\n if(block' + blockTemplate.blockNumber +\
+       '_img_i1->nChannels == 3)\n {cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1,tmpImg' + blockTemplate.blockNumber +\
+       ',CV_RGB2GRAY);}\n else\n{tmpImg' + blockTemplate.blockNumber + ' = block' + blockTemplate.blockNumber + \
+       '_img_i1 = NULL;}\n cvCanny(tmpImg' + blockTemplate.blockNumber + ', tmpImg' + blockTemplate.blockNumber + \
+       ', block' + blockTemplate.blockNumber + '_arg_threshold1, block' + blockTemplate.blockNumber + \
+       '_arg_threshold2, block' + blockTemplate.blockNumber + '_arg_aperture_size);\n'+ \
+       'if(block' + blockTemplate.blockNumber + '_img_i1->nChannels == 3)\n{cvCvtColor(tmpImg' + blockTemplate.blockNumber + \
+       ', block' + blockTemplate.blockNumber + '_img_o1,CV_GRAY2RGB);}\nelse\n{cvCopyImage(tmpImg' + blockTemplate.blockNumber +\
+       ', block' + blockTemplate.blockNumber + '_img_o1);}\ncvReleaseImage(&tmpImg' + blockTemplate.blockNumber + ');}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Canny"),
+         "Path":{"Python":"canny",
+                 "Glade":"glade/canny.ui",
+                 "Xml":"xml/canny.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/canny.png",
+         "Color":"250:180:80:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Filtering operation that employs the Canny algorithm to detect edges."),
+				 "TreeGroup":_("Gradients, Edges and Corners")
+         }

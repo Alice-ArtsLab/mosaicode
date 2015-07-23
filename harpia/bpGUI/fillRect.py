@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -74,6 +72,8 @@ class Properties( GladeWindow, S2iCommonProperties ):
         self.m_oFillColor = [0,0,0]
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
+
+        self.configure()
         
         #load properties values
         for Property in self.m_oPropertiesXML.properties.block.property:
@@ -93,7 +93,15 @@ class Properties( GladeWindow, S2iCommonProperties ):
                 self.m_oBackColor[2] = float(Property.value)
                 self.m_oFillColor[2] = float(Property.value)
 
-        self.configure()
+
+
+        t_nBackRed   = self.m_oBackColor[0] * 257
+        t_nBackGreen = self.m_oBackColor[1] * 257
+        t_nBackBlue  = self.m_oBackColor[2] * 257
+
+        t_oBackColor = gtk.gdk.Color(red=int(t_nBackRed),green=int(t_nBackGreen),blue=int(t_nBackBlue))
+
+        self.widgets['BackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
         
         #########################
         # Sets the Fill Color the same as the background color in inicialization
@@ -145,7 +153,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
         if t_oColor <> None:
             
             # Updates both the Back color and the fill color
-            self.widgets['FILLBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
+            self.widgets['BackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
             self.widgets['FILLFillColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
             
             self.m_oFillColor[0] = t_oColor.red / 257
@@ -160,4 +168,46 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #FillProperties = Properties()
 #FillProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'red':
+           red = propIter[1]
+       elif propIter[0] == 'green':
+           green = propIter[1]
+       elif propIter[0] == 'blue':
+           blue = propIter[1]
+   blockTemplate.imagesIO = \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+        'CvRect block' + blockTemplate.blockNumber + '_rect_i2;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionCall = \
+        '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n{\n' + \
+        '\tblock' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+        '\tcvSetImageROI(block' + blockTemplate.blockNumber + '_img_o1 , block' + blockTemplate.blockNumber + '_rect_i2);\n' + \
+        '\tCvScalar color = cvScalar('+blue +','+ green +','+ red+',0);\n' + \
+        '\tcvSet(block' + blockTemplate.blockNumber + '_img_o1,color,NULL);\n' + \
+        '\tcvResetImageROI(block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+        '}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Fill Rectangle"),
+         "Path":{"Python":"fillRect",
+                 "Glade":"glade/fillRect.ui",
+                 "Xml":"xml/fillRect.xml"},
+         "Inputs":2,
+         "Outputs":1,
+         "Icon":"images/fill.png",
+         "Color":"50:100:200:150",
+				 "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Fill the input rectangle on the input image with the desired color."),
+				 "TreeGroup":_("General")
+         }

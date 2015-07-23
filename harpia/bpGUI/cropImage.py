@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -104,4 +102,50 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	#for propIter in blockTemplate.properties:
+		#if propIter[0] == 'offset_x':
+			#offset_x = propIter[1]
+		#if propIter[0] == 'offset_y':
+			#offset_y = propIter[1]
 
+	blockTemplate.imagesIO =  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' +  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+									'CvRect  block' + blockTemplate.blockNumber + '_rect_i2;\n'
+	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' +  \
+											'	block' + blockTemplate.blockNumber + '_rect_i2.x = MAX(0,block' + blockTemplate.blockNumber + '_rect_i2.x);//Check whether point is negative\n' + \
+											'	block' + blockTemplate.blockNumber + '_rect_i2.y = MAX(0,block' + blockTemplate.blockNumber + '_rect_i2.y);\n' + \
+											'	block' + blockTemplate.blockNumber + '_rect_i2.x = MIN(block' +blockTemplate.blockNumber + '_img_i1->width-1,block' + blockTemplate.blockNumber + '_rect_i2.x);//Check whether point is out of the image\n' + \
+											'	block' + blockTemplate.blockNumber + '_rect_i2.y = MIN(block' +blockTemplate.blockNumber + '_img_i1->height-1,block' + blockTemplate.blockNumber + '_rect_i2.y);\n' + \
+											'	block' + blockTemplate.blockNumber + '_rect_i2.width = MIN(block' +blockTemplate.blockNumber + '_img_i1->width-block' + blockTemplate.blockNumber + '_rect_i2.x,block' + blockTemplate.blockNumber + '_rect_i2.width);//Check whether rect reaches out of the image\n' + \
+											'	block' + blockTemplate.blockNumber + '_rect_i2.height = MIN(block' +blockTemplate.blockNumber + '_img_i1->height-block' + blockTemplate.blockNumber + '_rect_i2.y,block' + blockTemplate.blockNumber + '_rect_i2.height);\n' + \
+											'	block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + '_rect_i2.width,block' + blockTemplate.blockNumber + '_rect_i2.height),' + \
+											' block' + blockTemplate.blockNumber + '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' +  \
+											'	cvSetImageROI(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_rect_i2);\n' + \
+											'	cvCopyImage(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+											'}\n'
+	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' +  \
+									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+
+
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('Crop Image'),
+         'Path':{'Python':'cropImage',
+                 'Glade':'glade/cropImage.ui',
+                 'Xml':'xml/cropImage.xml'},
+         'Inputs':2,
+         'Outputs':1,
+         'Icon':'images/cropImage.png',
+         'Color':'50:50:200:150',
+				 'InTypes':{0:'HRP_IMAGE',1:'HRP_RECT'},
+				 'OutTypes':{0:'HRP_IMAGE'},
+				 'Description':_('Crops the input image according to input Rectangle'),
+				 'TreeGroup':_('Experimental')
+         }

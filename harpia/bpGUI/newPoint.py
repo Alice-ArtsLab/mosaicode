@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -122,4 +120,34 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'x0':
+			x0 = propIter[1]
+		elif propIter[0] == 'y0':
+			y0 = propIter[1]
+	blockTemplate.imagesIO = 'CvPoint block' + blockTemplate.blockNumber + '_point_o1;\n'
+	blockTemplate.functionCall = 'block' + blockTemplate.blockNumber + '_point_o1 = cvPoint(' + str(int(float(x0))) + ',' + str(int(float(y0))) + ');\n'
+	blockTemplate.dealloc = ''
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('New Point'),
+         'Path':{'Python':'newPoint',
+                 'Glade':'glade/newPoint.ui',
+                 'Xml':'xml/newPoint.xml'},
+         'Inputs':0,
+         'Outputs':1,
+         'Icon':'images/newPoint.png',
+         'Color':'50:50:200:150',
+				 'InTypes':"",
+				 'OutTypes':{0:'HRP_POINT'},
+				 'Description':_('Creates a new Point'),
+				 'TreeGroup':_('Experimental'),
+				 "IsSource":True
+         }

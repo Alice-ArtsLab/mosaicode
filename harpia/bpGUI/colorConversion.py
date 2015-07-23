@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -168,4 +166,75 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #ColorConversionProperties = Properties()
 #ColorConversionProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   channels = '3'
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'type':
+           if propIter[1] == 'RGB -> GRAY':
+               code = 'CV_RGB2GRAY'
+               channels = '1';
+           elif propIter[1] == 'RGB -> YCrCb':
+               code = 'CV_RGB2YCrCb'
+           elif propIter[1] == 'YCrCb -> RGB':
+               code = 'CV_YCrCb2RGB'
+           elif propIter[1] == 'RGB -> HSV':
+               code = 'CV_RGB2HSV'
+           elif propIter[1] == 'HSV -> RGB':
+               code = 'CV_HSV2RGB'
+           elif propIter[1] == 'RGB -> HLS':
+               code = 'CV_RGB2HLS'
+           elif propIter[1] == 'HLS -> RGB':
+               code = 'CV_HLS2RGB'
+           elif propIter[1] == 'RGB -> CIE.XYZ':
+               code = 'CV_RGB2XYZ'
+           elif propIter[1] == 'CIE.XYZ -> RGB':
+               code = 'CV_XYZ2RGB'
+           elif propIter[1] == 'RGB -> CIE.LAB':
+               code = 'CV_RGB2Lab'
+           elif propIter[1] == 'CIE.LAB -> RGB':
+               code = 'CV_Lab2RGB'
+           elif propIter[1] == 'RGB -> CIE.LUV':
+               code = 'CV_RGB2Luv'
+           elif propIter[1] == 'CIE.LUV -> RGB':
+               code = 'CV_Luv2RGB'
+       # Standard
+       #else:
+          # code = 'CV_RGB2GRAY'
+          # channels = '1'
+   blockTemplate.imagesIO = \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n'+ \
+                      'block' + blockTemplate.blockNumber + '_img_t = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth,' + channels +');\n'+ \
+                     'cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t ,' + code +' );}\n' + \
+                     'if ( '+code+ ' == ' + "CV_RGB2GRAY" + ')\n' + \
+                     '{    cvMerge(block' + blockTemplate.blockNumber + '_img_t ,block' + blockTemplate.blockNumber + '_img_t ,block'+ blockTemplate.blockNumber + '_img_t ,NULL ,block'+ blockTemplate.blockNumber + '_img_o1);\n }\n' + \
+                     'else\n' + '{ block'+ blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_t);\n}'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Color Conversion"),
+         "Path":{"Python":"colorConversion",
+                 "Glade":"glade/colorConversion.ui",
+                 "Xml":"xml/colorConversion.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/colorConversion.png",
+         "Color":"50:125:50:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Convert colors between different standards of graylevel/color images."),
+				 "TreeGroup":_("Filters and Color Conversion")
+         }

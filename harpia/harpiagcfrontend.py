@@ -817,6 +817,8 @@ class S2iHarpiaFrontend( GladeWindow ):
 		sw.show()
 		sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 		textview = gtk.TextView()
+		textview.set_left_margin(10)
+		textview.set_right_margin(10)
 		textbuffer = textview.get_buffer()
 		sw.add(textview)
 		textview.show()

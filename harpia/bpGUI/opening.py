@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -129,4 +127,47 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #OpeningProperties = Properties()
 #OpeningProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'masksize':
+           maskSizeValue = propIter[1]
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                  'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionArguments = 'IplConvKernel * block' + blockTemplate.blockNumber + \
+                            '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
+                            maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                     'IplImage * block' + blockTemplate.blockNumber + '_auxImg;' + \
+                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                     '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber +\
+                     '_img_i1->depth ,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+                     '\nblock' + blockTemplate.blockNumber + '_auxImg = cvCreateImage(cvSize(block' + blockTemplate.blockNumber +\
+                     '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber +\
+                     '_img_i1->depth ,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+                     'cvMorphologyEx(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_o1,NULL,' + \
+                     'block'  + blockTemplate.blockNumber + '_arg_mask, CV_MOP_OPEN, 1);\n}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseStructuringElement(&block' + blockTemplate.blockNumber + '_arg_mask);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Opening"),
+          "Path":{"Python":"opening",
+                  "Glade":"glade/opening.ui",
+                 "Xml":"xml/opening.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/opening.png",
+         "Color":"180:230:220:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Morphological operation that disconnects objects and reduces noise."),
+				 "TreeGroup":_("Morphological Operations")
+         }

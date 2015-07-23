@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -49,7 +47,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
         
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
         
-        filename = self.m_sDataDir+'glade/or.ui'
+        filename = self.m_sDataDir+'glade/sum.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
@@ -62,7 +60,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         handlers = [
             'on_cancel_clicked',
-            'on_or_confirm_clicked',
+            'on_sum_confirm_clicked',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked'
             ]
@@ -73,35 +71,70 @@ class Properties( GladeWindow, S2iCommonProperties ):
         
         self.configure()
 
-
         #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/or"+ _("_en.help"))
+        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/sum"+ _("_en.help"))
         
         t_oTextBuffer = gtk.TextBuffer()
 
         t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
     
         self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-        
+
     #----------------------------------------------------------------------
 
     def __del__(self):
         
 	pass
 
+
     #----------------------------------------------------------------------
    
-    def on_or_confirm_clicked( self, *args ):
-
+    def on_sum_confirm_clicked( self, *args ):
         self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
 
         self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
-            
+
         self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
-   
-#OrProperties = Properties()
-#OrProperties.show( center=0 )
 
+#SumProperties = Properties()
+#SumProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   import harpia.gerador
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                      'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                      '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+							 harpia.gerador.inputSizeComply(2,blockTemplate.blockNumber) + 'cvAdd(block' + \
+                      blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_i2, block' + \
+                      blockTemplate.blockNumber + '_img_o1,0);\n cvResetImageROI(block' + blockTemplate.blockNumber + '_img_o1);}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n'
+
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Sum"),
+         "Path":{"Python":"Sum",
+                 "Glade":"glade/sum.ui",
+                 "Xml":"xml/sum.xml"},
+         "Inputs":2,
+         "Outputs":1,
+         "Icon":"images/sum.png", 
+         "Color":"180:10:10:150",
+				 "InTypes":{0:"HRP_IMAGE",1:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Sum two images."),
+				 "TreeGroup":_("Arithmetic and logical operations")
+         }

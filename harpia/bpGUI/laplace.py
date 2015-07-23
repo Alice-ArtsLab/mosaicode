@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -132,3 +130,43 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
 #LaplaceProperties = Properties()
 #LaplaceProperties.show( center=0 )
+
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'masksize':
+           masksizeValue = propIter[1]
+       else:
+			  masksizeValue = '3'
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_32F,block'+ \
+	    blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
+                     'cvLaplace(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1 ,' + masksizeValue+' );}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
+
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Laplace"),
+         "Path":{"Python":"laplace",
+                 "Glade":"glade/laplace.ui",
+                 "Xml":"xml/laplace.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/laplace.png",
+         "Color":"250:180:80:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Filtering operation that uses the Laplacian mask to enhance edges on the image."),
+				 "TreeGroup":_("Gradients, Edges and Corners")
+         }

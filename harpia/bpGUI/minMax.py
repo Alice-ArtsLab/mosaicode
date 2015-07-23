@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -163,4 +161,65 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in self.properties:
+		if propIter[0] == 'minX':
+			minX = propIter[1]
+		elif propIter[0] == 'maxX':
+			maxX = propIter[1]
+		elif propIter[0] == 'minY':
+			minY = propIter[1]
+		elif propIter[0] == 'maxY':
+			maxY = propIter[1]
+		elif propIter[0] == 'minVal':
+			minVal = propIter[1]
+		elif propIter[0] == 'maxVal':
+			maxVal = propIter[1]
+		elif propIter[0] == 'minORmax':
+			minORmax = propIter[1]
+		elif propIter[0] == 'criteria':
+			checkCrit = propIter[1]
+	self.imagesIO = \
+              'IplImage * block' + self.blockNumber + '_img_i1 = NULL;\n' + \
+              'double block' + self.blockNumber + '_double_o1;\n' + \
+              'CvPoint block' + self.blockNumber + '_point_o2 = cvPoint(0,0);\n'
+	self.functionCall = '\nif(block' + self.blockNumber + '_img_i1)\n{\n' + \
+											'	double minVal,maxVal;\n' + \
+											'	CvPoint minP,maxP;\n' + \
+											'	block' + self.blockNumber + '_double_o1 = 0;\n' + \
+											'	cvMinMaxLoc(block' + self.blockNumber + '_img_i1, &minVal, &maxVal, &minP, &maxP, NULL);\n'
+	if minORmax == 'max':
+		self.functionCall += '	minP = maxP;\n	minVal = maxVal;\n'
+	
+	self.functionCall += '	block' + self.blockNumber + '_point_o2 = minP;\n'
+	
+	if checkCrit == "pos":
+		self.functionCall += '	if(minP.x >= ' + minX + ' && minP.x <= ' + maxX + ')\n' + \
+													'		if(minP.y >= ' + minY + ' && minP.y <= ' + maxY + ')\n' + \
+													'			block' + self.blockNumber + '_double_o1 = 1.0;\n'
+	elif checkCrit == "val":
+		self.functionCall += '	if(minVal >= ' + minVal + ' && minVal <= ' + maxVal + ')\n' + \
+													'		block' + self.blockNumber + '_double_o1 = 1.0;\n'
+	self.functionCall += '}\n'
+	self.dealloc = 'cvReleaseImage(&block' + self.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Find Min or Max"),
+         "Path":{"Python":"minMax",
+                 "Glade":"glade/minMax.ui",
+                 "Xml":"xml/minMax.xml"},
+         "Inputs":1,
+         "Outputs":2,
+         "Icon":"images/minMax.png",
+         "Color":"50:50:200:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_DOUBLE",1:"HRP_POINT"},
+				 "Description":_("Finds min or max from input image and judges it according to a custom criteria."),
+				 "TreeGroup":_("Feature Detection")
+         }

@@ -21,7 +21,7 @@ config['classifiers'] = [
 
 setup(name='harpia',
 			version='1.0',
-			packages=['harpia', 'harpia.amara','harpia.bpGUI', 'harpia.classes'],
+			packages=['harpia', 'harpia.amara','harpia.bpGUI'],
 			scripts=['launcher/harpia'],
 			description='Image Processing and Computer Vision Automatic Programming Tool',
 			author='Clovis Peruchi Scotti',

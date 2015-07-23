@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -103,4 +101,42 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #LogProperties = Properties()
 #LogProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+			  						'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                     'block' + blockTemplate.blockNumber + '_img_t = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_32F,block'+ \
+   blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
+                      'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                      '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+	'cvConvertScale(block'+ blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_t,(1/93.8092),0);\n' + \
+   	'cvLog(block' + blockTemplate.blockNumber + '_img_t, block' + blockTemplate.blockNumber + '_img_t);\n' + \
+    	'cvConvertScale(block'+ blockTemplate.blockNumber + '_img_t,block' + blockTemplate.blockNumber + '_img_o1,255.0,0);}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Log"),
+         "Path":{"Python":"log",
+                 "Glade":"glade/log.ui",
+                 "Xml":"xml/log.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/log.png",
+         "Color":"230:230:60:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Return the image made from the neperian logarithm of each one of the image pixels."),
+				 "TreeGroup":_("Math Functions")
+         }

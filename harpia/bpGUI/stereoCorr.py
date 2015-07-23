@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -112,4 +110,50 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'maxDist':
+			maxDist = propIter[1]
+	blockTemplate.imagesIO =  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' +  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' +  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_ts1 = NULL;\n' + \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_ts2 = NULL;\n'
+	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1 && block' + blockTemplate.blockNumber + '_img_i2)\n{\n' +  \
+											'	if(!block' + blockTemplate.blockNumber + '_img_o1)\n' + \
+											'		block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' +  \
+											'	if(!block' + blockTemplate.blockNumber + '_img_ts1)\n' + \
+											'		block' + blockTemplate.blockNumber + '_img_ts1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
+											'	if(!block' + blockTemplate.blockNumber + '_img_ts2)\n' + \
+											'		block' + blockTemplate.blockNumber + '_img_ts2 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
+											'	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_ts1, CV_BGR2GRAY);\n' + \
+											'	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i2, block' + blockTemplate.blockNumber + '_img_ts2, CV_BGR2GRAY);\n' + \
+											'	cvFindStereoCorrespondence( block' + blockTemplate.blockNumber + '_img_ts1, block' + blockTemplate.blockNumber + '_img_ts2, CV_DISPARITY_BIRCHFIELD, block' + blockTemplate.blockNumber + '_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n' + \
+											'}\n'
+	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' +  \
+									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n' + \
+									'if(block' + blockTemplate.blockNumber + '_img_ts1)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts1);\n' + \
+									'if(block' + blockTemplate.blockNumber + '_img_ts2)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts2);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('Stereo Correspondence'),
+         'Path':{'Python':'stereoCorr',
+                 'Glade':'glade/stereoCorr.ui',
+                 'Xml':'xml/stereoCorr.xml'},
+         'Inputs':2,
+         'Outputs':1,
+         'Icon':'images/stereoCorr.png',
+         'Color':'10:10:20:150',
+				 'InTypes':{0:'HRP_IMAGE',1:"HRP_IMAGE"},
+				 'OutTypes':{0:'HRP_IMAGE'},
+				 'Description':_('Input1 is the left image and Input2 is the right image. Output is the depth image'),
+				 'TreeGroup':_('Feature Detection')
+         }

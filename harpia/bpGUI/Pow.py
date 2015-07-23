@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -49,12 +47,13 @@ class Properties( GladeWindow, S2iCommonProperties ):
         
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
         
-        filename = self.m_sDataDir+'glade/sum.ui'
+        filename = self.m_sDataDir+'glade/pow.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
         widget_list = [
             'Properties',
+            'POWExponent',
             'BackgroundColor',
             'BorderColor',
             'HelpView'
@@ -62,7 +61,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         handlers = [
             'on_cancel_clicked',
-            'on_sum_confirm_clicked',
+            'on_pow_confirm_clicked',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked'
             ]
@@ -71,10 +70,16 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
         
+        #load properties values
+        for Property in self.m_oPropertiesXML.properties.block.property:
+
+            if Property.name == "exponent":
+                self.widgets['POWExponent'].set_value( int(Property.value) )
+
         self.configure()
 
         #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/sum"+ _("_en.help"))
+        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/pow"+ _("_en.help"))
         
         t_oTextBuffer = gtk.TextBuffer()
 
@@ -91,16 +96,58 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
     #----------------------------------------------------------------------
    
-    def on_sum_confirm_clicked( self, *args ):
+    def on_pow_confirm_clicked( self, *args ):
+
+        for Property in self.m_oPropertiesXML.properties.block.property:
+
+            if Property.name == "exponent":                
+                Property.value = unicode( str( int( self.widgets['POWExponent'].get_value( ) )))
+                
+        self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
+
         self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
 
         self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
-
+            
         self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
+ 
+#PowProperties = Properties()
+#PowProperties.show( center=0 )
 
-#SumProperties = Properties()
-#SumProperties.show( center=0 )
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'exponent':
+           exponent = propIter[1]
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                      '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\ncvPow(block' + \
+                      blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1,' + str(exponent) +');}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
-
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Pow"),
+         "Path":{"Python":"Pow",
+                 "Glade":"glade/pow.ui",
+                 "Xml":"xml/pow.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/pow.png",
+         "Color":"230:230:60:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Power each pixel value to a fixed value."),
+				 "TreeGroup":_("Math Functions")
+         }

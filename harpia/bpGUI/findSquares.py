@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -138,4 +136,54 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	global usesFindSquares
+	usesFindSquares = 1
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'enMin':
+			enMin = (propIter[1] == "True")
+		if propIter[0] == 'enMax':
+			enMax = (propIter[1] == "True")
+		if propIter[0] == 'minVal':
+			minVal = propIter[1]
+		if propIter[0] == 'maxVal':
+			maxVal = propIter[1]
+	if not enMin:
+		minVal = -1
+	if not enMax:
+		maxVal = -1
+	blockTemplate.imagesIO =  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' +  \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_o2 = NULL;\n' + \
+									'double block' + blockTemplate.blockNumber + '_double_o1;\n' + \
+									'CvMemStorage * block' + blockTemplate.blockNumber + '_storage = NULL;\n'
+	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' +  \
+											'	block' + blockTemplate.blockNumber + '_img_o2 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' +  \
+											'	block' + blockTemplate.blockNumber + '_storage = cvCreateMemStorage(0);\n' +  \
+											'	block' + blockTemplate.blockNumber + '_double_o1 = (double)drawSquares( block' + blockTemplate.blockNumber + '_img_o2, findSquares4( block' + blockTemplate.blockNumber + '_img_o2, block' + blockTemplate.blockNumber + '_storage , ' + str(minVal) + ', ' + str(maxVal) + ') );\n' +  \
+											'	cvClearMemStorage( block' + blockTemplate.blockNumber + '_storage );\n' + \
+											'}\n'
+	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o2);\n' +  \
+									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+									'cvReleaseMemStorage(&block' + blockTemplate.blockNumber + '_storage );\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('Find Squares'),
+         'Path':{'Python':'findSquares',
+                 'Glade':'glade/findSquares.ui',
+                 'Xml':'xml/findSquares.xml'},
+         'Inputs':1,
+         'Outputs':2,
+         'Icon':'images/findSquares.png',
+         'Color':'50:50:200:150',
+				 'InTypes':{0:'HRP_IMAGE'},
+				 'OutTypes':{0:"HRP_DOUBLE",1:"HRP_IMAGE"},
+				 'Description':_('Finds four-sided polygons on the input image.\n Output 1 = Number of detected Polygons\n Output 2 = The input image tagged with the found polygons.'),
+				 'TreeGroup':_('Feature Detection')
+         }

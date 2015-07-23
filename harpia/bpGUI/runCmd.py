@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -118,4 +116,47 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	cmdString = 'echo no properties'
+	enIsntZero = False
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'cmdString':
+			cmdString = propIter[1]
+		if propIter[0] == 'enIsntZero':
+			enIsntZero = (propIter[1] == "True")
+	cmdString = cmdString.replace(r"'",r"\'")
+	cmdString = cmdString.replace(r'"',r'\"')
+	blockTemplate.imagesIO = \
+              'double block' + blockTemplate.blockNumber + '_double_i1;\n' + \
+              'double block' + blockTemplate.blockNumber + '_double_o1;\n'
+	blockTemplate.functionCall = '\nif('
+	if enIsntZero:
+		blockTemplate.functionCall += 'block' + blockTemplate.blockNumber + '_double_i1 > 0.0){\n'
+	else:
+		blockTemplate.functionCall += '1){\n'
+	blockTemplate.functionCall += 'char outPutStr[' + str(len(cmdString)+30) + '];\n' + \
+												'snprintf(outPutStr,' + str(len(cmdString)+30) + ',"export HRP_DB=%f;' + cmdString + '",(float)block' + blockTemplate.blockNumber + '_double_i1);' + \
+												'system(outPutStr);}\n' + \
+                   'block' + blockTemplate.blockNumber + '_double_o1 = block' + blockTemplate.blockNumber + '_double_i1;\n'
+	blockTemplate.dealloc = '//nothing to deallocate\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Run Command"),
+         "Path":{"Python":"runCmd",
+                 "Glade":"glade/runCmd.ui",
+                 "Xml":"xml/runCmd.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/runCmd.png",
+         "Color":"200:200:60:150",
+				 "InTypes":{0:"HRP_DOUBLE"},
+				 "OutTypes":{0:"HRP_DOUBLE"},
+				 "Description":_("Runs a shell command depending on the input value."),
+				 "TreeGroup":_("Experimental")
+         }

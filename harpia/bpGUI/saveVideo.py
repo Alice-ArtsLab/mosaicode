@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -219,4 +217,60 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #SaveProperties = Properties()
 #SaveProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	global g_bSaveVideo
+	g_bSaveVideo.append(blockTemplate.blockNumber)
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'filename':
+			videoFilename = os.path.expanduser(propIter[1])
+		if propIter[0] == 'framerate':
+			frameRate = propIter[1]
+		if propIter[0] == 'codecSelection':
+			codecMacro = 'CV_FOURCC(\'P\',\'I\',\'M\',\'2\')'
+			if propIter[1] == "MPEG1":
+				codecMacro = 'CV_FOURCC(\'P\',\'I\',\'M\',\'2\')'
+			if propIter[1] == "mjpeg":
+				codecMacro = 'CV_FOURCC(\'M\',\'J\',\'P\',\'G\')'
+			if propIter[1] == "MPEG4.2":
+				codecMacro = 'CV_FOURCC(\'M\',\'P\',\'4\',\'2\')'
+			if propIter[1] == "MPEG4.3":
+				codecMacro = 'CV_FOURCC(\'D\',\'I\',\'V\',\'3\')'
+			if propIter[1] == "MPEG4":
+				codecMacro = 'CV_FOURCC(\'D\',\'I\',\'V\',\'X\')'
+			if propIter[1] == "H263":
+				codecMacro = 'CV_FOURCC(\'U\',\'2\',\'6\',\'3\')'
+			if propIter[1] == "H263I":
+				codecMacro = 'CV_FOURCC(\'I\',\'2\',\'6\',\'3\')'
+			if propIter[1] == "FLV1":
+				codecMacro = 'CV_FOURCC(\'F\',\'L\',\'V\',\'1\')'
+	blockTemplate.imagesIO =  'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+									 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+									 'CvVideoWriter* block' + blockTemplate.blockNumber + '_vidWriter = NULL;\n'
+	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' +  \
+											'	if(block' + blockTemplate.blockNumber + '_vidWriter == NULL)//video writer not started up yet!\n' + \
+											'		block' + blockTemplate.blockNumber + '_vidWriter = cvCreateVideoWriter( "' + videoFilename + '", ' + codecMacro + ',' + frameRate + ', cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), 1 );\n' + \
+											'	cvWriteFrame( block' + blockTemplate.blockNumber + '_vidWriter, block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+											'	block' + blockTemplate.blockNumber + '_img_o1 = block' + blockTemplate.blockNumber + '_img_i1;\n' + \
+											'}\n'
+	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('Save Video'),
+         'Path':{'Python':'saveVideo',
+                 'Glade':'glade/saveVideo.ui',
+                 'Xml':'xml/saveVideo.xml'},
+         'Inputs':1,
+         'Outputs':1,
+         'Icon':'images/saveVideo.png',
+         'Color':'120:20:20:150',
+				 'InTypes':{0:'HRP_IMAGE'},
+				 'OutTypes':{0:'HRP_IMAGE'},
+				 'Description':_('Save Video needs its description'),
+				 'TreeGroup':_('General')
+         }

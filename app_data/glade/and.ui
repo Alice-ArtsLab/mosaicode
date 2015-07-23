@@ -317,6 +317,7 @@
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 		      <child>
+			<widget class="GtkDrawingArea" id="BackgroundColor">
 			  <property name="width_request">100</property>
 			  <property name="visible">True</property>
 			</widget>

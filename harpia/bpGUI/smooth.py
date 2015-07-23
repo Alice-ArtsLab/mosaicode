@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -164,4 +162,44 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #SmoothProperties = Properties()
 #SmoothProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'type':
+           typeValue = propIter[1]
+       elif propIter[0] == 'param1':
+           param1Value = propIter[1]
+       elif propIter[0] == 'param2':
+           param2Value = propIter[1]
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth,block'+ \
+	    blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
+                     'cvSmooth(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1 ,' + typeValue + ',' + param1Value + ',' + param2Value +',0,0);}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Smooth"),
+         "Path":{"Python":"smooth",
+                 "Glade":"glade/smooth.ui",
+                 "Xml":"xml/smooth.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/smooth.png",
+         "Color":"50:125:50:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Filtering operation that smooths the image."),
+				 "TreeGroup":_("Filters and Color Conversion")
+         }

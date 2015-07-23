@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -177,4 +175,99 @@ class Properties( GladeWindow, S2iCommonProperties ):
 ##propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'dpSel':
+			dpSel = propIter[1]
+		elif propIter[0] == 'distSel':
+			distSel = propIter[1]
+		elif propIter[0] == 'threshSel':
+			threshSel = propIter[1]
+		elif propIter[0] == 'qualySel':
+			qualySel = propIter[1]
+		elif propIter[0] == 'minX':
+			minX = propIter[1]
+		elif propIter[0] == 'maxX':
+			maxX = propIter[1]
+		elif propIter[0] == 'minY':
+			minY = propIter[1]
+		elif propIter[0] == 'maxY':
+			maxY = propIter[1]
+		elif propIter[0] == 'minRad':
+			minRad = propIter[1]
+		elif propIter[0] == 'maxRad':
+			maxRad = propIter[1]
+		elif propIter[0] == 'numOfCircs':
+			numOfCircs = propIter[1]
+		elif propIter[0] == 'criteria':
+			checkCrit = propIter[1]
 
+	if checkCrit == 'pos':
+		circType = 0
+	elif checkCrit == 'num':
+		circType = 1
+
+	blockTemplate.imagesIO = \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+									'IplImage * block' + blockTemplate.blockNumber + '_img_t1 = NULL;\n' + \
+									'CvSeq * block' + blockTemplate.blockNumber + '_circs = NULL;\n' + \
+									'float * PCircs' + blockTemplate.blockNumber + ' = NULL;\n' + \
+									'CvMemStorage * block' + blockTemplate.blockNumber + '_storage = NULL;\n' + \
+									'int block' + blockTemplate.blockNumber + '_it;\n' + \
+									'IplImage * block' + blockTemplate.blockNumber + '_img_o2 = NULL;\n' + \
+              'double block' + blockTemplate.blockNumber + '_double_o1;\n'
+	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+											'	block' + blockTemplate.blockNumber + '_storage = cvCreateMemStorage(0);\n' + \
+											'	block' + blockTemplate.blockNumber + '_img_t1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),8,1);\n' + \
+											'	if(block' + blockTemplate.blockNumber + '_img_i1->nChannels != 1)\n' + \
+											'		cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t1, CV_BGR2GRAY);\n' + \
+											'	else\n' + \
+											'		cvCopyImage(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t1);\n' + \
+											'	cvSmooth(block' + blockTemplate.blockNumber + '_img_t1, block' + blockTemplate.blockNumber + '_img_t1, CV_GAUSSIAN, 9, 9, 0,0 );\n' + \
+											'	block' + blockTemplate.blockNumber + '_circs = cvHoughCircles( block' + blockTemplate.blockNumber + '_img_t1, block' + blockTemplate.blockNumber + '_storage, CV_HOUGH_GRADIENT, ' + dpSel + ', ' + distSel + ', ' + threshSel + ', ' + qualySel + ',0,1000);\n' + \
+											'	block' + blockTemplate.blockNumber + '_double_o1 = 0;\n'
+	if circType == 0 :
+		blockTemplate.functionCall += '	for(block' + blockTemplate.blockNumber + '_it = 0; block' + blockTemplate.blockNumber + '_it < block' + blockTemplate.blockNumber + '_circs->total;block' + blockTemplate.blockNumber + '_it++){\n' + \
+												'		PCircs' + blockTemplate.blockNumber + ' = (float*)cvGetSeqElem( block' + blockTemplate.blockNumber + '_circs, block' + blockTemplate.blockNumber + '_it );\n' + \
+												'		if(cvRound(PCircs' + blockTemplate.blockNumber + '[2]) > ' + minRad + ' && cvRound(PCircs' + blockTemplate.blockNumber + '[2]) < ' + maxRad + ')\n' + \
+												'			if( cvRound(PCircs' + blockTemplate.blockNumber + '[0]) > ' + minX + ' && cvRound(PCircs' + blockTemplate.blockNumber + '[0]) < ' + maxX + ')\n'+ \
+												'				if(cvRound(PCircs' + blockTemplate.blockNumber + '[1]) > ' + minY + ' && cvRound(PCircs' + blockTemplate.blockNumber + '[1]) < ' + maxY + ')\n' + \
+												'					block' + blockTemplate.blockNumber + '_double_o1 = 1.0;\n' + \
+												'	}\n'
+	else :
+		blockTemplate.functionCall += '	if(block' + blockTemplate.blockNumber + '_circs->total >= ' + str(int(float(numOfCircs))) + ')\n' + \
+												'		block' + blockTemplate.blockNumber + '_double_o1 = 1.0;\n'
+
+	blockTemplate.functionCall += '	block' + blockTemplate.blockNumber + '_img_o2 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+												'	for(block' + blockTemplate.blockNumber + '_it = 0; block' + blockTemplate.blockNumber + '_it < block' + blockTemplate.blockNumber + '_circs->total;block' + blockTemplate.blockNumber + '_it++){\n' + \
+											 '		PCircs' + blockTemplate.blockNumber + ' = (float*)cvGetSeqElem( block' + blockTemplate.blockNumber + '_circs, block' + blockTemplate.blockNumber + '_it );\n' + \
+											 '		cvCircle( block' + blockTemplate.blockNumber + '_img_o2, cvPoint(cvRound(PCircs' + blockTemplate.blockNumber + '[0]),cvRound(PCircs' + blockTemplate.blockNumber + '[1])), cvRound(PCircs' + blockTemplate.blockNumber + '[2]), CV_RGB(255,0,0), 3, 8, 0 );\n' + \
+											'	}\n'
+
+	blockTemplate.functionCall +='}\n'
+	
+	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o2);\n' + \
+									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
+									'cvReleaseMemStorage(&block' + blockTemplate.blockNumber + '_storage);\n' + \
+									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Detect Hough Circles"),
+         "Path":{"Python":"checkCir",
+                 "Glade":"glade/checkCir.ui",
+                 "Xml":"xml/checkCir.xml"},
+         "Inputs":1,
+         "Outputs":2,
+         "Icon":"images/checkCir.png",
+         "Color":"20:20:60:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_DOUBLE",1:"HRP_IMAGE"},
+				 "Description":_("Output1: Returns 1 if the desired circle was found, 0 otherwise.\n Output2: The input image with the detected circles red-tagged"),
+				 "TreeGroup":_("Feature Detection")
+         }

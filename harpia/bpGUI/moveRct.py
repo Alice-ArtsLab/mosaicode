@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -120,4 +118,37 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'offset_x':
+			offset_x = propIter[1]
+		if propIter[0] == 'offset_y':
+			offset_y = propIter[1]
+	blockTemplate.imagesIO =  'CvRect block' + blockTemplate.blockNumber + '_rect_i1;\n' +  \
+              'CvPoint block' + blockTemplate.blockNumber + '_point_i2;\n' + \
+              'CvRect block' + blockTemplate.blockNumber + '_rect_o1;\n'
+	blockTemplate.functionCall = 'block' + blockTemplate.blockNumber + '_rect_o1 = block' + blockTemplate.blockNumber + '_rect_i1;\n' +  \
+											'block' + blockTemplate.blockNumber + '_rect_o1.x = block' + blockTemplate.blockNumber + '_point_i2.x + ' + offset_x + ';\n' + \
+											'block' + blockTemplate.blockNumber + '_rect_o1.y = block' + blockTemplate.blockNumber + '_point_i2.y + ' + offset_y + ';\n'
+	blockTemplate.dealloc = ''
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('Move Rectangle'),
+         'Path':{'Python':'moveRct',
+                 'Glade':'glade/moveRct.ui',
+                 'Xml':'xml/moveRct.xml'},
+         'Inputs':2,
+         'Outputs':1,
+         'Icon':'images/moveRct.png',
+         'Color':'50:50:200:150',
+				 'InTypes':{0:'HRP_RECT',1:'HRP_POINT'},
+				 'OutTypes':{0:'HRP_RECT'},
+				 'Description':_('Move Rectangle`s (0,0) point to input point'),
+				 'TreeGroup':_('Experimental')
+         }

@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -117,4 +115,60 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'type':
+			delayType = propIter[1]
+		elif propIter[0] == 'frameNumber':
+			frameNumber = int(float(propIter[1]))
+			frameNumber = max(frameNumber,1)
+	blockTemplate.imagesIO = 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+              'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+              'int block' + blockTemplate.blockNumber + '_t_idx = 0;\n' + \
+              'IplImage * block' + blockTemplate.blockNumber + '_buffer[' + str(frameNumber) + '] = {'
+	for idx in range(frameNumber):
+		blockTemplate.imagesIO += 'NULL'
+		if idx <> frameNumber-1:
+			blockTemplate.imagesIO += ','
+	blockTemplate.imagesIO += '};\n'
 
+
+	for idx in range(frameNumber):
+		blockTemplate.imagesIO += 'block' + blockTemplate.blockNumber + '_buffer[' + str(idx) + '] = cvCreateImage( cvSize(640,480), 8, 3);\n'
+		blockTemplate.imagesIO += 'cvSetZero(block' + blockTemplate.blockNumber + '_buffer[' + str(idx) + ']);\n'
+	blockTemplate.imagesIO += 'block' + blockTemplate.blockNumber + '_img_o1 = block' + blockTemplate.blockNumber + '_buffer[' + str(frameNumber-1) + '];\n'
+	
+	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n{\n' +  \
+											'	cvReleaseImage(&(block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx]));\n' + \
+											'	block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx] = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+											'	block' + blockTemplate.blockNumber + '_t_idx++;\n' + \
+											'	block' + blockTemplate.blockNumber + '_t_idx %= ' + str(frameNumber) + ';\n' + \
+											'	block' + blockTemplate.blockNumber + '_img_o1 = block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx];\n' + \
+											'}\n'
+	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+	blockTemplate.outDealloc = 'for(block' + blockTemplate.blockNumber + '_t_idx=0;block' + blockTemplate.blockNumber + '_t_idx<' + str(frameNumber) + ';block' + blockTemplate.blockNumber + '_t_idx++)\n' + \
+										'	if(block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx] != NULL)\n' + \
+										'		cvReleaseImage(&(block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx]));\n'
+
+
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {'Label':_('Live Delay'),
+         'Path':{'Python':'liveDelay',
+                 'Glade':'glade/liveDelay.ui',
+                 'Xml':'xml/liveDelay.xml'},
+         'Inputs':1,
+         'Outputs':1,
+         'Icon':'images/liveDelay.png',
+         'Color':'250:20:30:150',
+				 'InTypes':{0:'HRP_IMAGE'},
+				 'OutTypes':{0:'HRP_IMAGE'},
+				 'Description':_('Inserts a delay inside a live stream'),
+				 'TreeGroup':_('General'),
+				 'TimeShifts':True
+         }

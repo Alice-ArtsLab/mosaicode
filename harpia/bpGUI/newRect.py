@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -132,4 +130,38 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #propProperties = Properties()()
 #propProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+	for propIter in blockTemplate.properties:
+		if propIter[0] == 'x0':
+			x0 = propIter[1]
+		elif propIter[0] == 'y0':
+			y0 = propIter[1]
+		elif propIter[0] == 'width':
+			rctWidth = propIter[1]
+		elif propIter[0] == 'height':
+			rctHeight = propIter[1]
+	blockTemplate.imagesIO = '\nCvRect block' + blockTemplate.blockNumber + '_rect_o1;\n'
+	blockTemplate.functionCall = 'block' + blockTemplate.blockNumber + '_rect_o1 = cvRect(' + str(int(float(x0))) + ', ' + str(int(float(y0))) + ', ' + str(int(float(rctWidth))) + ', ' + str(int(float(rctHeight))) + ');'
+	blockTemplate.dealloc = ''
 
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return  {'Label':_('New Rectangle'),
+         'Path':{'Python':'newRect',
+                 'Glade':'glade/newRect.ui',
+                 'Xml':'xml/newRect.xml'},
+         'Inputs':0,
+         'Outputs':1,
+         'Icon':'images/newRect.png',
+         'Color':'50:50:200:150',
+				 'InTypes':"",
+				 'OutTypes':{0:'HRP_RECT'},
+				 'Description':_('Creates new rectangle'),
+				 'TreeGroup':_('Experimental'),
+				 "IsSource":True
+         }

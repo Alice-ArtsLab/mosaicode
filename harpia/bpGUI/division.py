@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -104,4 +102,39 @@ class Properties( GladeWindow, S2iCommonProperties ):
 #DivisionProperties = Properties()
 #DivisionProperties.show( center=0 )
 
-
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   import harpia.gerador
+   blockTemplate.imagesIO = \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                      'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                      '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+							 harpia.gerador.inputSizeComply(2,blockTemplate.blockNumber) + 'cvDiv(block' + \
+                      blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_i2, block' + \
+                      blockTemplate.blockNumber + '_img_o1,1);\n cvResetImageROI(block' + blockTemplate.blockNumber + '_img_o1);}\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n'
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Division"),
+         "Path":{"Python":"division",
+                 "Glade":"glade/division.ui",
+                 "Xml":"xml/division.xml"},
+         "Inputs":2,
+         "Outputs":1,
+         "Icon":"images/division.png",
+         "Color":"180:10:10:150",
+				 "InTypes":{0:"HRP_IMAGE",1:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Divide two images."),
+				 "TreeGroup":_("Arithmetic and logical operations")
+         }

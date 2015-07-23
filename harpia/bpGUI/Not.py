@@ -29,12 +29,10 @@
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -49,13 +47,12 @@ class Properties( GladeWindow, S2iCommonProperties ):
         
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
         
-        filename = self.m_sDataDir+'glade/pow.ui'
+        filename = self.m_sDataDir+'glade/not.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
         widget_list = [
             'Properties',
-            'POWExponent',
             'BackgroundColor',
             'BorderColor',
             'HelpView'
@@ -63,7 +60,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         handlers = [
             'on_cancel_clicked',
-            'on_pow_confirm_clicked',
+            'on_not_confirm_clicked',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked'
             ]
@@ -72,23 +69,17 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
         
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
-
-            if Property.name == "exponent":
-                self.widgets['POWExponent'].set_value( int(Property.value) )
-
         self.configure()
 
         #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/pow"+ _("_en.help"))
+        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/not"+ _("_en.help"))
         
         t_oTextBuffer = gtk.TextBuffer()
 
         t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
     
         self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-
+        
     #----------------------------------------------------------------------
 
     def __del__(self):
@@ -98,24 +89,56 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
     #----------------------------------------------------------------------
    
-    def on_pow_confirm_clicked( self, *args ):
-
-        for Property in self.m_oPropertiesXML.properties.block.property:
-
-            if Property.name == "exponent":                
-                Property.value = unicode( str( int( self.widgets['POWExponent'].get_value( ) )))
-                
-        self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
+    def on_not_confirm_clicked( self, *args ):
 
         self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
 
         self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
-            
+
         self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
- 
-#PowProperties = Properties()
-#PowProperties.show( center=0 )
 
+#NotProperties = Properties()
+#NotProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   blockTemplate.imagesIO = "\n //NOT input and output \n"
+   blockTemplate.imagesIO += \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL; // NOT input\n' + \
+                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL; // NOT output\n'
+   blockTemplate.imagesIO += "\n\n"
+
+   blockTemplate.functionCall = "\n\n // NOT Execution Block\n"
+   blockTemplate.functionCall += 'if(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                      'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                      '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n'
+   blockTemplate.functionCall += 'cvNot(block' + \
+                      blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1);\n}\n'
+
+   blockTemplate.dealloc = '// NOT dealloc block '
+   blockTemplate.dealloc += 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n'
+   blockTemplate.dealloc += 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+   blockTemplate.dealloc = '\n'
+
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Not"),
+         "Path":{"Python":"Not",
+                 "Glade":"glade/not.ui",
+                 "Xml":"xml/not.xml"},
+         "Inputs":1,
+         "Outputs":1,
+         "Icon":"images/not.png",
+         "Color":"10:180:10:150",
+				 "InTypes":{0:"HRP_IMAGE"},
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Negate the image. It is equivalent to the negative image."),
+				 "TreeGroup":_("Arithmetic and logical operations")
+         }

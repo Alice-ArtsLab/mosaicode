@@ -75,12 +75,11 @@ class S2iBlockPropertiesGUI:
 		BlockType = int(a_oPropertiesXML.properties.block.type)
 		PkgName = 'harpia.bpGUI.'
 		ModName = str(s2idirectory.block[BlockType]["Path"]["Python"])
-		
 		#from spam.ham import eggs" results in "
 		harpia_bpGUI_Mod = __import__(PkgName, globals(), locals(), [ModName])
 		guiMod = getattr(harpia_bpGUI_Mod, ModName)
 		
-		PropertiesGUI = guiMod.Properties(a_oPropertiesXML,self)
+		PropertiesGUI = guiMod.Properties(a_oPropertiesXML, self)
 		PropertiesGUI.show( center=0 )
 		
 		# Executes the file based on the block name

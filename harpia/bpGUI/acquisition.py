@@ -28,13 +28,12 @@
 
 from harpia.GladeWindow import  GladeWindow
 from harpia.amara import binderytools as bt
+
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties
+from harpia.s2icommonproperties import S2iCommonProperties,APP, DIR
 #i18n
 import os
 import gettext
-APP='harpia'
-DIR=os.environ['HARPIA_DATA_DIR']+'po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -512,5 +511,83 @@ class Properties( GladeWindow, S2iCommonProperties):
 #AcquisitionProperties = Properties( )
 #AcquisitionProperties.show( center=0 )
 
+# ------------------------------------------------------------------------------
+# Code generation
+# ------------------------------------------------------------------------------
+def generate(blockTemplate):
+   import harpia.gerador
+   for propIter in blockTemplate.properties:
+       if propIter[0] == 'type':
+           flag = propIter[1]
+           if ( (flag == 'live') or (flag == 'video')): # (propIter[0] == 'live' and (flag<>'file') and (flag<>'camera')):
+               harpia.gerador.g_bLive = True
+       if ( (propIter[0] == 'filename') and (flag == 'file') ):
+           argFilename = propIter[1]
+       if ( ( propIter[0] == 'size') and (flag == 'newimage') ):
+           size = propIter[1]
+           Width = size[ :size.find('x')]
+           Height = size[size.find('x')+1: ]
+       if (propIter[0] == 'camera' and flag == 'live'):#(flag<>'file') and (flag<>'newimage') and (flag<>'live')):
+           tmpPack = [] #contendo [ blockNumber , camNum ]
+           tmpPack.append(blockTemplate.blockNumber)
+           tmpPack.append(propIter[1])
+           harpia.gerador.g_bCameras.append(tmpPack)
+       if (propIter[0] == 'camera' and flag == 'camera'):#(flag<>'file') and (flag<>'newimage') and (flag<>'live')):
+           captureCamNumber = propIter[1]
+       if(propIter[0] == 'video_name' and flag == 'video'):
+           tmpPack = []
+           tmpPack.append(blockTemplate.blockNumber)
+           tmpPack.append(propIter[1])
+           harpia.gerador.g_bVideo.append(tmpPack)
+       if propIter[0] == 'frameRate':
+           if float(propIter[1]) > harpia.gerador.g_bFrameRate:
+           	harpia.gerador.g_bFrameRate = float(propIter[1])
+   blockTemplate.imagesIO = \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL; //Capture\n'
+   if flag == 'camera':
+       #global g_bCameras #pegaremos o segundo elemento da ultima lista anexada a a lista g_bCameras (isso eh o numero da ultima camera)
+       blockTemplate.functionCall = \
+           'CvCapture* block' + blockTemplate.blockNumber + '_capture = NULL; \n' + \
+           'IplImage* block' + blockTemplate.blockNumber + '_frame = NULL; \n' + \
+           'block' + blockTemplate.blockNumber + '_capture = cvCaptureFromCAM(' + captureCamNumber + '); \n' + \
+           'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
+           'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
+           'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
+           'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
+           'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
+           'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
+           'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage( block' + blockTemplate.blockNumber + '_frame );\n'
+   if flag == 'video':
+       blockTemplate.functionCall = '// Video Mode \n' + 'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage( block' + blockTemplate.blockNumber + '_frame );\n'
+   if flag == 'file':
+       blockTemplate.functionArguments = \
+        'char block' + blockTemplate.blockNumber + '_arg_Filename[] = "' + argFilename + '";\n'
+       blockTemplate.functionCall = \
+           'block' + blockTemplate.blockNumber + '_img_o1 = cvLoadImage(block' + blockTemplate.blockNumber + '_arg_Filename,-1);\n'
+   if flag == 'live':
+       blockTemplate.functionCall = '// Live Mode \n' + 'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage( block' + blockTemplate.blockNumber + '_frame );\n'
+   if flag == 'newimage':
+       blockTemplate.functionCall = \
+            'CvSize size = cvSize(' + Width +','+ Height +');\n' + \
+            'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
+            'cvSetZero(block' + blockTemplate.blockNumber + '_img_o1);\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n'
 
-
+# ------------------------------------------------------------------------------
+# Block Setup
+# ------------------------------------------------------------------------------
+def getBlock():
+	return {"Label":_("Image"),
+         "Path":{"Python":"acquisition",
+                 "Glade":"glade/acquisition.ui",
+                 "Xml":"xml/acquisition.xml"},
+         "Inputs":0,
+         "Outputs":1,
+         "Icon":"images/acquisition.png",
+         "Color":"50:100:200:150",
+				 "InTypes":"",
+				 "OutTypes":{0:"HRP_IMAGE"},
+				 "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
+				 "TreeGroup":_("General"),
+				 "IsSource":True #optional argument, if key doesn't exist, admit false
+         }
