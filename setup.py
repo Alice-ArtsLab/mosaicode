@@ -2,7 +2,11 @@
 DISTUTILS_DEBUG="True"
 
 from glob import glob
-from distutils.core import setup
+#from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 config = {}
 
@@ -20,8 +24,9 @@ config['classifiers'] = [
 			]
 
 setup(name='harpia',
+                        install_requires=['beautifulsoup4'],
 			version='1.0',
-			packages=['harpia', 'harpia.amara','harpia.bpGUI'],
+			packages=['harpia', 'harpia.amara','harpia.bpGUI', 'harpia.utils'],
 			scripts=['launcher/harpia'],
 			description='Image Processing and Computer Vision Automatic Programming Tool',
 			author='Clovis Peruchi Scotti',
