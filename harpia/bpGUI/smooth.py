@@ -38,15 +38,15 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 #----------------------------------------------------------------------
-   
+
 class Properties( GladeWindow, S2iCommonProperties ):
 
     #----------------------------------------------------------------------
 
     def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
+
         filename = self.m_sDataDir+'glade/smooth.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
@@ -71,83 +71,97 @@ class Properties( GladeWindow, S2iCommonProperties ):
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
 
-            if Property.name == "type":
-                if Property.value == "CV_BLUR":
+        #load properties values
+
+        block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+
+        for Property in block_properties:
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
+
+            if name == "type":
+                if value == "CV_BLUR":
                     self.widgets['SMOOType'].set_active( int(0) )
-                if Property.value == "CV_GAUSSIAN":
+                if value == "CV_GAUSSIAN":
                     self.widgets['SMOOType'].set_active( int(1) )
-                if Property.value == "CV_MEDIAN":
+                if value == "CV_MEDIAN":
                     self.widgets['SMOOType'].set_active( int(2) )
              #   if Property.value == "CV_BILATERAL":
              #       self.widgets['SMOOType'].set_active( int(4) )
 
-            if Property.name == "param1":
-                self.widgets['SMOOParam1'].set_value( int(Property.value) )
+            if name == "param1":
+                self.widgets['SMOOParam1'].set_value( int(value) )
 
-            if Property.name == "param2":
-                self.widgets['SMOOParam2'].set_value( int(Property.value) )
+            if name == "param2":
+                self.widgets['SMOOParam2'].set_value( int(value) )
 
         self.configure()
 
         #load help text
         t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/smooth"+ _("_en.help"))
-        
+
         t_oTextBuffer = gtk.TextBuffer()
 
         t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-    
+
         self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-        
+
     #----------------------------------------------------------------------
 
     def __del__(self):
-        
+
 	pass
 
 
     #----------------------------------------------------------------------
-   
+
     def on_smooth_confirm_clicked( self, *args ):
 
-        for Property in self.m_oPropertiesXML.properties.block.property:
 
-            if Property.name == "type":
+
+        block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+
+        for Property in block_properties:
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
+
+            new_value = value
+            if name == "type":
                 Active = self.widgets['SMOOType'].get_active( )
               #  if int(Active) == 0:
-             #       Property.value = unicode("CV_BLUR_NO_SCALE")                
+             #       Property.value = unicode("CV_BLUR_NO_SCALE")
                 if int(Active) == 0:
-                    Property.value = unicode("CV_BLUR")
+                    new_value = unicode("CV_BLUR")
                 if int(Active) == 1:
-                    Property.value = unicode("CV_GAUSSIAN")
+                    new_value = unicode("CV_GAUSSIAN")
                 if int(Active) == 2:
-                    Property.value = unicode("CV_MEDIAN")
+                    new_value = unicode("CV_MEDIAN")
               #  if int(Active) == 4:
              #       Property.value = unicode("CV_BILATERAL")
-                    
-            #if Property.name == "param1":                
+
+            #if Property.name == "param1":
                #Property.value = unicode( str( int(self.widgets['SMOOParam1'].get_value( ) ) ) )
 
-            if Property.name == "param1":                
+            if name == "param1":
                 Value = self.widgets['SMOOParam1'].get_value( )
                 if ( (Value % 2) <> 0) :
-                    Property.value = unicode( str( int(Value) ) ) 
+                    new_value = unicode( str( int(Value) ) )
                 elif (Value != 0):
-                    Property.value = unicode( str( int(Value-1) ) )
+                    new_value = unicode( str( int(Value-1) ) )
                 else:
-                    Property.value = unicode( str( int(Value) ) )
+                    new_value = unicode( str( int(Value) ) )
 
-            if Property.name == "param2":
+            if name == "param2":
                 Value = self.widgets['SMOOParam2'].get_value( )
                 if ( (Value % 2) <> 0) :
-                    Property.value = unicode( str( int(Value) ) ) 
+                    new_value = unicode( str( int(Value) ) )
                 elif (Value != 0):
-                    Property.value = unicode( str( int(Value-1) ) )
+                    new_value = unicode( str( int(Value-1) ) )
                 else:
-                    Property.value = unicode( str( int(Value) ) )
+                    new_value = unicode( str( int(Value) ) )
+
+            Property.setAttr("value", new_value)
 
         self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
 
@@ -158,7 +172,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
         self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
- 
+
 #SmoothProperties = Properties()
 #SmoothProperties.show( center=0 )
 

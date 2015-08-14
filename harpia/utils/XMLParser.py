@@ -3,18 +3,39 @@ from bs4 import BeautifulSoup
 
 class XMLParser(object):
 
-    def __init__(self, filename=None):
 
-        if(filename is None):
+    def __init__(self, source=None, fromString=False, fromTag=False):
+
+        if (source is None):
             self.parsedXML = BeautifulSoup(features='xml')
+        elif fromString:
+            self.parsedXML = BeautifulSoup(source, "xml")
+        elif fromTag:
+            self.parsedXML = source
         else:
-            self.parsedXML = BeautifulSoup(open(filename), "xml")
+            self.parsedXML = BeautifulSoup(open(source), "xml")
 
     def getTagAttr(self, tag, attr):
         return getattr(self.parsedXML, tag)[attr]
 
-    def getChildTags(self, parent, child):
-        return getattr(self.parsedXML, parent).find_all(child)
+    def getAttr(self, attr):
+        return self.parsedXML[attr]
+
+    def setAttr(self, attr, value):
+        self.parsedXML[attr] = value
+
+    def getChildTagAttr(self, parent, child, attr):
+        return getattr(getattr(self.parsedXML, parent), child)[attr]
+
+    def setChildTagAttr(self, parent, child, attr, value):
+        getattr(getattr(self.parsedXML, parent), child)[attr] = value
+
+    def getChildTags(self, child):
+        tags = []
+        for tag in self.parsedXML.find_all(child):
+            tags.append(XMLParser(tag, fromTag=True))
+
+        return tags
 
     def addTag(self, tagName, attrs):
         self.parsedXML.append(self.parsedXML.new_tag(tagName, **attrs))
@@ -25,3 +46,17 @@ class XMLParser(object):
     def getXML(self):
         return self.parsedXML.prettify()
 
+    def getTagXML(self, tag):
+        return tag.prettify()
+
+    def getTag(self, tag):
+        return XMLParser(getattr(self.parsedXML, tag), fromTag=True)
+
+    def getTagChild(self, parent, child):
+        return getattr(getattr(self.parsedXML, parent), child)
+
+    def __repr__(self):
+        return str(self.parsedXML)
+
+    # __str__ is the same as __repr__
+    __str__ = __repr__

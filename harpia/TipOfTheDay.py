@@ -190,13 +190,12 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
     def __getTipFromConf(self):
         okTipList = []
         for tipInstance in self.avTips.keys():
-            if self.avTips[tipInstance] == True:
+            if self.avTips[tipInstance]:
+                print tipInstance
                 okTipList.append(tipInstance)
         if(len(okTipList) == 0):
             randTipId = -1
         else:
-            # randTipId =
-            # random.randint(0,len(okTipList)-1)#random tip
             # next tip in the list
             randTipId = okTipList[0]
         return randTipId
@@ -208,21 +207,20 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
 
         self.confFile = XMLParser(os.path.expanduser(self.confFilePath))
 
-        tips_ver = self.confFile.getTagAttr("tipsOfTheDay", "version")
-        print tips_ver
-
+        tipsOfTheDay = self.confFile.getTag("tipsOfTheDay")
+        tips_ver = tipsOfTheDay.getAttr("version")
 
         if tips_ver != TIPS_VER:
             self.GenerateBlankConf()
             self.confFile = XMLParser(os.path.expanduser(self.confFilePath))
 
-        show_tips = self.confFile.getTagAttr("tipsOfTheDay", "show")
-        print show_tips
+        show_tips = tipsOfTheDay.getAttr("show")
 
         if show_tips == "True":
-            tips = self.confFile.getChildTags("tipsOfTheDay", "tip")
-            for tip in tips:
-                self.avTips[int(tip["id"])]=(tip["enabled"] == "True")
+            for tip in tipsOfTheDay.getChildTags("tip"):
+                self.avTips[int(tip.getAttr("id"))]=(tip.getAttr("enabled") == "True")
+
+        print self.avTips
 
     def __saveConfFile(self):
 

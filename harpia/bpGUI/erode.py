@@ -71,20 +71,24 @@ class Properties( GladeWindow, S2iCommonProperties ):
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
 
-            if Property.name == "masksize":
-                if Property.value == "3x3":
+        block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+        #load properties values
+        for Property in block_properties:
+
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
+            
+            if name == "masksize":
+                if value == "3x3":
                     self.widgets['ERODMaskSize'].set_active( int(0) )
-                if Property.value == "5x5":
+                if value == "5x5":
                     self.widgets['ERODMaskSize'].set_active( int(1) )
-                if Property.value == "7x7":
+                if value == "7x7":
                     self.widgets['ERODMaskSize'].set_active( int(2) )
 
-            if Property.name == "iterations":
-                self.widgets['ERODIterations'].set_value( int(Property.value) )
+            if name == "iterations":
+                self.widgets['ERODIterations'].set_value( int(value) )
 
         self.configure()
 
@@ -107,19 +111,24 @@ class Properties( GladeWindow, S2iCommonProperties ):
    
     def on_erode_confirm_clicked( self, *args ):
         self.widgets['erode_confirm'].grab_focus()
-        for Property in self.m_oPropertiesXML.properties.block.property:
+        block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
 
-            if Property.name == "masksize":
+        for Property in block_properties:
+
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
+
+            if name == "masksize":
                 Active = self.widgets['ERODMaskSize'].get_active( )
                 if int(Active) == 0:
-                    Property.value = unicode("3x3")
+                    Property.setAttr("value", "3x3")
                 if int(Active) == 1:
-                    Property.value = unicode("5x5")
+                    Property.setAttr("value", "5x5")
                 if int(Active) == 2:
-                    Property.value = unicode("7x7")
+                    Property.setAttr("value", "7x7")
 
-            if Property.name == "iterations":
-                Property.value = unicode( str( int( self.widgets['ERODIterations'].get_value())))
+            if name == "iterations":
+                Property.setAttr("value", str( int( self.widgets['ERODIterations'].get_value())))
             
         self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
 
