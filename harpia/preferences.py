@@ -99,7 +99,7 @@ class Preferences(GladeWindow):
 
         print "TESTE" + self.configfile
         ## A binderytool object, with the preferences stored
-        self.m_oPreferencesXML = bt.bind_file(self.configfile)
+        self.m_oPreferencesXML = XMLParser(self.configfile)
 
 
         # ---------------------------------

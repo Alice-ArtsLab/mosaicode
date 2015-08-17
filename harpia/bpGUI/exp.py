@@ -32,6 +32,7 @@ import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -72,11 +73,11 @@ class Properties( GladeWindow, S2iCommonProperties ):
         self.configure()
 
         #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/exp"+ _("_en.help"))
+        t_oS2iHelp = XMLParser(self.m_sDataDir+"help/exp"+ _("_en.help"))
         
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
+        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
         
         self.widgets['HelpView'].set_buffer( t_oTextBuffer )
         

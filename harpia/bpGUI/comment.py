@@ -33,6 +33,8 @@ from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
 import gettext
+from harpia.utils.XMLUtils import XMLParser
+
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
@@ -71,23 +73,26 @@ class Properties( GladeWindow, S2iCommonProperties ):
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
         
         #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
+        self.block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+
+        for Property in self.block_properties:
 
             #self.widgets['FILLBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-            
-            if Property.name == "comment":
-                self.m_sComment = str(Property.value)
-                #print self.m_sComment
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
+
+            if name == "comment":
+                self.m_sComment = str(value)
 
         self.configure()
 
         
         #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/comment"+ _("_en.help"))
+        t_oS2iHelp = XMLParser(self.m_sDataDir+"help/comment"+ _("_en.help"))
         
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
+        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
     
         self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 		
@@ -111,14 +116,16 @@ class Properties( GladeWindow, S2iCommonProperties ):
    
     def on_comment_confirm_clicked( self, *args ):
 
-        for Property in self.m_oPropertiesXML.properties.block.property:
+        for Property in self.block_properties:
 
-            if Property.name == "comment":
+            name = Property.getAttr("name")
+
+            if name == "comment":
                t_oText = self.widgets['COMMENTView'].get_buffer()
                t_oStart = t_oText.get_start_iter()
                t_oEnd = t_oText.get_end_iter()
                t_sComment = t_oText.get_text(t_oStart, t_oEnd)
-               Property.value = unicode(t_sComment )
+               Property.setAttr("value", unicode(t_sComment ))
 
 
         self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )

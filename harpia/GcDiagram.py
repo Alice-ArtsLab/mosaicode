@@ -34,7 +34,7 @@ import time
 from exceptions import AttributeError
 
 from amara import binderytools as bt
-from utils.XMLParser import XMLParser
+from utils.XMLUtils import XMLParser
 
 
 class GcDiagram(gnomecanvas.Canvas):

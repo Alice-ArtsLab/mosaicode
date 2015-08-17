@@ -24,30 +24,32 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 from harpia.GladeWindow import GladeWindow
 from harpia.amara import binderytools as bt
 import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-#i18n
+# i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
+
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-#----------------------------------------------------------------------
-   
-class Properties( GladeWindow, S2iCommonProperties ):
 
-    #----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
-    def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+class Properties(GladeWindow, S2iCommonProperties):
+    # ----------------------------------------------------------------------
+
+    def __init__(self, PropertiesXML, S2iBlockProperties):
+
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
-        filename = self.m_sDataDir+'glade/threshold.ui'
+
+        filename = self.m_sDataDir + 'glade/threshold.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
@@ -60,70 +62,71 @@ class Properties( GladeWindow, S2iCommonProperties ):
             'BackgroundColor',
             'BorderColor',
             'HelpView'
-            ]
+        ]
 
         handlers = [
             'on_THREThresholdType_changed',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked',
             'on_cancel_clicked',
-            'on_threshold_confirm_clicked',            
-            ]
+            'on_threshold_confirm_clicked',
+        ]
 
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
 
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
-            
+        # load properties values
+        self.block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+        for Property in self.block_properties:
+
             if Property.name == "threshold":
-                self.widgets['THREThreshold'].set_value( float(Property.value) )
+                self.widgets['THREThreshold'].set_value(float(Property.value))
 
             if Property.name == "maxValue":
-                self.widgets['THREMaxValue'].set_value( float(Property.value) )
+                self.widgets['THREMaxValue'].set_value(float(Property.value))
 
             if Property.name == "thresholdType":
                 if Property.value == "CV_THRESH_BINARY":
-                    self.widgets['THREThresholdType'].set_active( int(0) )
+                    self.widgets['THREThresholdType'].set_active(int(0))
                     self.on_THREThresholdType_changed()
                 if Property.value == "CV_THRESH_BINARY_INV":
-                    self.widgets['THREThresholdType'].set_active( int(1) )
+                    self.widgets['THREThresholdType'].set_active(int(1))
                     self.on_THREThresholdType_changed()
                 if Property.value == "CV_THRESH_TRUNC":
-                    self.widgets['THREThresholdType'].set_active( int(2) )
+                    self.widgets['THREThresholdType'].set_active(int(2))
                     self.on_THREThresholdType_changed()
                 if Property.value == "CV_THRESH_TOZERO":
-                    self.widgets['THREThresholdType'].set_active( int(3) )
+                    self.widgets['THREThresholdType'].set_active(int(3))
                     self.on_THREThresholdType_changed()
                 if Property.value == "CV_THRESH_TOZERO_INV":
-                    self.widgets['THREThresholdType'].set_active( int(4) )
+                    self.widgets['THREThresholdType'].set_active(int(4))
                     self.on_THREThresholdType_changed()
 
         self.configure()
 
-        #load help text
+        # load help text
 
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/threshold"+ _("_en.help"))
-        
+        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/threshold" + _("_en.help"))
+
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-    
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-        
-    #----------------------------------------------------------------------
+        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+
+        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
 
     def __del__(self):
-        
-	pass
 
-    #----------------------------------------------------------------------
-   
-    def on_threshold_confirm_clicked( self, *args ):
+        pass
 
-        for Property in self.m_oPropertiesXML.properties.block.property:
-            
+    # ----------------------------------------------------------------------
+
+    def on_threshold_confirm_clicked(self, *args):
+
+        for Property in self.block_properties:
+
             if Property.name == "threshold":
                 Property.value = unicode(self.widgets['THREThreshold'].get_value())
 
@@ -131,7 +134,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
                 Property.value = unicode(self.widgets['THREMaxValue'].get_value())
 
             if Property.name == "thresholdType":
-                Active = self.widgets['THREThresholdType'].get_active( )
+                Active = self.widgets['THREThresholdType'].get_active()
                 if int(Active) == 0:
                     Property.value = unicode("CV_THRESH_BINARY")
                 if int(Active) == 1:
@@ -142,75 +145,77 @@ class Properties( GladeWindow, S2iCommonProperties ):
                     Property.value = unicode("CV_THRESH_TOZERO")
                 if int(Active) == 4:
                     Property.value = unicode("CV_THRESH_TOZERO_INV")
-            
-        self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
 
-        self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
+        self.m_oS2iBlockProperties.SetPropertiesXML(self.m_oPropertiesXML)
 
-        self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
+        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
+
+        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
 
         self.widgets['Properties'].destroy()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
-    def on_THREThresholdType_changed( self, *args ):
-        
-        Active = self.widgets['THREThresholdType'].get_active( )
+    def on_THREThresholdType_changed(self, *args):
+
+        Active = self.widgets['THREThresholdType'].get_active()
         if int(Active) == 0 or int(Active) == 1:
-            self.widgets['THRELabelMaxValue'].set_sensitive( True )
-            self.widgets['THREMaxValue'].set_sensitive( True )
+            self.widgets['THRELabelMaxValue'].set_sensitive(True)
+            self.widgets['THREMaxValue'].set_sensitive(True)
         else:
-            self.widgets['THRELabelMaxValue'].set_sensitive( False )
-            self.widgets['THREMaxValue'].set_sensitive( False )
+            self.widgets['THRELabelMaxValue'].set_sensitive(False)
+            self.widgets['THREMaxValue'].set_sensitive(False)
 
-    #----------------------------------------------------------------------
-    
-#ThresholdProperties = Properties()
-#ThresholdProperties.show( center=0 )
+            # ----------------------------------------------------------------------
+
+
+# ThresholdProperties = Properties()
+# ThresholdProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-   for propIter in blockTemplate.properties:
-       if propIter[0] == 'threshold':
-           thresholdValue = propIter[1]
-       elif propIter[0] == 'maxValue':
-           maxValue = propIter[1]
-       elif propIter[0] == 'thresholdType':
-           thresholdType = propIter[1]
-   
-   blockTemplate.imagesIO = \
+    for propIter in blockTemplate.properties:
+        if propIter[0] == 'threshold':
+            thresholdValue = propIter[1]
+        elif propIter[0] == 'maxValue':
+            maxValue = propIter[1]
+        elif propIter[0] == 'thresholdType':
+            thresholdType = propIter[1]
+
+    blockTemplate.imagesIO = \
         'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
         'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-   blockTemplate.functionArguments = \
+    blockTemplate.functionArguments = \
         'int block' + blockTemplate.blockNumber + '_arg_threshold = ' + thresholdValue + ';\n' + \
         'int block' + blockTemplate.blockNumber + '_arg_maxValue = ' + maxValue + ';\n' + \
         'int block' + blockTemplate.blockNumber + '_arg_thresholdType = ' + thresholdType + ';\n'
-   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-        'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-        '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-        '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-        '\ncvThreshold(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + \
-        '_img_o1,block' + blockTemplate.blockNumber + '_arg_threshold,block' + blockTemplate.blockNumber + \
-        '_arg_maxValue,block' + blockTemplate.blockNumber + '_arg_thresholdType);}\n'
-   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
+                                 '\ncvThreshold(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + \
+                                 '_img_o1,block' + blockTemplate.blockNumber + '_arg_threshold,block' + blockTemplate.blockNumber + \
+                                 '_arg_maxValue,block' + blockTemplate.blockNumber + '_arg_thresholdType);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+
 
 # ------------------------------------------------------------------------------
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():
-	return {"Label":_("Threshold"),
-          "Path":{"Python":"threshold",
-                  "Glade":"glade/threshold.ui",
-                  "Xml":"xml/threshold.xml"},
-         "Inputs":1,
-         "Outputs":1,
-         "Icon":"images/threshold.png",
-         "Color":"50:125:50:150",
-				 "InTypes":{0:"HRP_IMAGE"},
-				 "OutTypes":{0:"HRP_IMAGE"},
-				 "Description":_("Image binarization operator, according to a fixed threshold value."),
-				 "TreeGroup":_("Filters and Color Conversion")
-          }
+    return {"Label": _("Threshold"),
+            "Path": {"Python": "threshold",
+                     "Glade": "glade/threshold.ui",
+                     "Xml": "xml/threshold.xml"},
+            "Inputs": 1,
+            "Outputs": 1,
+            "Icon": "images/threshold.png",
+            "Color": "50:125:50:150",
+            "InTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "Description": _("Image binarization operator, according to a fixed threshold value."),
+            "TreeGroup": _("Filters and Color Conversion")
+            }

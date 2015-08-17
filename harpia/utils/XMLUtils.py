@@ -7,13 +7,17 @@ class XMLParser(object):
     def __init__(self, source=None, fromString=False, fromTag=False):
 
         if (source is None):
-            self.parsedXML = BeautifulSoup(features='xml')
+            #self.parsedXML = BeautifulSoup(features='xml')
+            self.__dict__['parsedXML'] = BeautifulSoup(features='xml')
         elif fromString:
-            self.parsedXML = BeautifulSoup(source, "xml")
+            #self.parsedXML = BeautifulSoup(source, "xml")
+            self.__dict__['parsedXML'] = BeautifulSoup(source, "xml")
         elif fromTag:
-            self.parsedXML = source
+            self.__dict__['parsedXML'] = source;
+            #self.parsedXML = source
         else:
-            self.parsedXML = BeautifulSoup(open(source), "xml")
+            #self.parsedXML = BeautifulSoup(open(source), "xml")
+            self.__dict__['parsedXML'] = BeautifulSoup(open(source), "xml")
 
     def getTagAttr(self, tag, attr):
         return getattr(self.parsedXML, tag)[attr]
@@ -55,8 +59,19 @@ class XMLParser(object):
     def getTagChild(self, parent, child):
         return getattr(getattr(self.parsedXML, parent), child)
 
+    def getTagContent(self):
+        return self.parsedXML.contents[0]
+
     def __repr__(self):
         return str(self.parsedXML)
+
+    def __getattr__(self, attr):
+        #print type(self.parsedXML)
+        return self.parsedXML[attr]
+
+    def __setattr__(self, attr, value):
+        self.parsedXML[attr] = value
+
 
     # __str__ is the same as __repr__
     __str__ = __repr__

@@ -32,6 +32,7 @@ import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 #i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -74,26 +75,28 @@ class Properties( GladeWindow, S2iCommonProperties ):
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
 
         self.configure()
-        
+
+        self.block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+
         #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
+        for Property in self.block_properties:
 
             #self.widgets['FILLBackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
             
-            if Property.name == "red":
-                self.m_oBackColor[0] = float(Property.value)
-                #self.widgets['FILLFillColor'].set_value( float(Property.value) )
-                self.m_oFillColor[0] = float(Property.value)
+            if name == "red":
+                self.m_oBackColor[0] = float(value)
+                #self.widgets['FILLFillColor'].set_value( float(value) )
+                self.m_oFillColor[0] = float(value)
                 
-            if Property.name == "green":
-                self.m_oBackColor[1] = float(Property.value)
-                self.m_oFillColor[1] = float(Property.value)
+            if name == "green":
+                self.m_oBackColor[1] = float(value)
+                self.m_oFillColor[1] = float(value)
                 
-            if Property.name == "blue":
-                self.m_oBackColor[2] = float(Property.value)
-                self.m_oFillColor[2] = float(Property.value)
-
-
+            if name == "blue":
+                self.m_oBackColor[2] = float(value)
+                self.m_oFillColor[2] = float(value)
 
         t_nBackRed   = self.m_oBackColor[0] * 257
         t_nBackGreen = self.m_oBackColor[1] * 257
@@ -108,11 +111,11 @@ class Properties( GladeWindow, S2iCommonProperties ):
         self.widgets['FILLFillColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
 
         #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/fillRect"+ _("_en.help"))
+        t_oS2iHelp = XMLParser(self.m_sDataDir+"help/fillRect"+ _("_en.help"))
         
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
+        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
     
         self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
@@ -125,16 +128,18 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
     def on_fill_confirm_clicked( self, *args ):
 
-        for Property in self.m_oPropertiesXML.properties.block.property:
+        for Property in self.block_properties:
 
-            if Property.name == "red":
-                Property.value = unicode(self.m_oFillColor[0])
+            name = Property.getAttr("name")
 
-            if Property.name == "green":
-                Property.value = unicode(self.m_oFillColor[1])
+            if name == "red":
+                Property.setAttr("value", unicode(self.m_oFillColor[0]))
 
-            if Property.name == "blue":
-                Property.value = unicode(self.m_oFillColor[2])
+            if name == "green":
+                Property.setAttr("value", unicode(self.m_oFillColor[1]))
+
+            if name == "blue":
+                Property.setAttr("value", unicode(self.m_oFillColor[2]))
 
         self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
         

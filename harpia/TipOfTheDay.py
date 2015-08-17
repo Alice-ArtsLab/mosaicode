@@ -30,7 +30,7 @@ from tips import TIPS_VER
 
 import os.path
 import gtk
-from utils.XMLParser import XMLParser
+from utils.XMLUtils import XMLParser
 
 # i18n
 import gettext

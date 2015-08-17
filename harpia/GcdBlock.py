@@ -32,7 +32,7 @@ import os
 
 import s2idirectory
 import s2iblockpropertiesgui
-from utils.XMLParser import XMLParser
+from utils.XMLUtils import XMLParser
 
 import copy
 
