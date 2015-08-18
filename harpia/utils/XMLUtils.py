@@ -62,6 +62,9 @@ class XMLParser(object):
     def getTagContent(self):
         return self.parsedXML.contents[0]
 
+    def getTagChildren(self):
+        return self.parsedXML.children
+
     def __repr__(self):
         return str(self.parsedXML)
 

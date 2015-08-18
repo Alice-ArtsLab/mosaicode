@@ -33,7 +33,6 @@ import time
 
 from exceptions import AttributeError
 
-from amara import binderytools as bt
 from utils.XMLUtils import XMLParser
 
 

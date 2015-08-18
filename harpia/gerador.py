@@ -25,7 +25,7 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 ################################WARNING!!###########################################
 #                      DO NOT MANUALLY EDIT THIS FILE                              #
@@ -34,23 +34,22 @@
 
 #############################INCLUDES AND DECLARATIONS##############################
 import os
+
 import gtk
-#from popen2 import Popen4
-from amara import binderytools
 
-import bpGUI
+# from popen2 import Popen4
+
 from bpGUI import *
+from harpia.utils.XMLUtils import XMLParser
 
-import subprocess
-
-#i18n
+# i18n
 import gettext
-APP='harpia'
-DIR='/usr/local/share/harpia/po'
+
+APP = 'harpia'
+DIR = '/usr/local/share/harpia/po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
-
 
 import s2idirectory
 
@@ -63,65 +62,72 @@ blockList = []
 
 ErrorLog = 'ErrorLog'
 
-if os.name=="nt":
-    tmpDir = os.path.join(os.path.expanduser ("~"), "tmp\\")
-    if not( os.path.exists(tmpDir) ):
-            os.makedirs(tmpDir, mode=0700)
+if os.name == "nt":
+    tmpDir = os.path.join(os.path.expanduser("~"), "tmp\\")
+    if not (os.path.exists(tmpDir)):
+        os.makedirs(tmpDir, mode=0700)
 else:
-    tmpDir = "/tmp/" 
+    tmpDir = "/tmp/"
+
 
 def cleanGenerator():
-    global arguments,images,functionCalls,deallocations,outDeallocations,blockList
+    global arguments, images, functionCalls, deallocations, outDeallocations, blockList
     arguments = []
     images = []
     functionCalls = []
     deallocations = []
     outDeallocations = []
     blockList = []
-    
+
+
 # Global variable to indicate overall behavior of the code generator
 
-g_bLive = False #default eh live!!
+g_bLive = False  # default eh live!!
 
 g_ShowCount = 0
 
 g_bCameras = []
-g_bVideo = [] #default eh live!!
+g_bVideo = []  # default eh live!!
 g_bSaveVideo = []
 
 g_bFrameRate = 0.1
 
 g_sCaptureLive = '0'
 g_sVideoFilename = ''
-#g_flagFrame = 1
+# g_flagFrame = 1
 
 usesFindSquares = 0
 usesFindColor = 0
+
 
 ####################################################################################
 
 ######################### input images with different sizes must be treated ########
 
-def	inputSizeComply(nInputs, currentBlockN):
-	if nInputs == 2:
-		outPutCode = 'if(block' + str(currentBlockN) + '_img_i1->width != block' + str(currentBlockN) + '_img_i2->width || ' + \
-									'block' + str(currentBlockN) + '_img_i1->height != block' + str(currentBlockN) + '_img_i2->height)\n{\n' + \
-									'	int minW,minH;\n' + \
-									'	if(block' + str(currentBlockN) + '_img_i1->width > block' + str(currentBlockN) + '_img_i2->width)\n' + \
-									'		minW = block' + str(currentBlockN) + '_img_i2->width;\n' + \
-									'	else \n' + \
-									'		minW = block' + str(currentBlockN) + '_img_i1->width;\n\n' + \
-									'	if(block' + str(currentBlockN) + '_img_i1->height > block' + str(currentBlockN) + '_img_i2->height)\n' + \
-									'		minH = block' + str(currentBlockN) + '_img_i2->height;\n' + \
-									'	else \n' + \
-									'		minH = block' + str(currentBlockN) + '_img_i1->height;\n\n' + \
-									'	cvSetImageROI(block' + str(currentBlockN) + '_img_i2, cvRect( 0, 0, minW, minH ));\n' + \
-									'	cvSetImageROI(block' + str(currentBlockN) + '_img_i1, cvRect( 0, 0, minW, minH ));\n' + \
-									'	cvSetImageROI(block' + str(currentBlockN) + '_img_o1, cvRect( 0, 0, minW, minH ));\n' + \
-									'}\n'
-		return(outPutCode)
-	else:
-		return("//Image Sizes match\n")
+def inputSizeComply(nInputs, currentBlockN):
+    if nInputs == 2:
+        outPutCode = 'if(block' + str(currentBlockN) + '_img_i1->width != block' + str(
+            currentBlockN) + '_img_i2->width || ' + \
+                     'block' + str(currentBlockN) + '_img_i1->height != block' + str(
+            currentBlockN) + '_img_i2->height)\n{\n' + \
+                     '	int minW,minH;\n' + \
+                     '	if(block' + str(currentBlockN) + '_img_i1->width > block' + str(
+            currentBlockN) + '_img_i2->width)\n' + \
+                     '		minW = block' + str(currentBlockN) + '_img_i2->width;\n' + \
+                     '	else \n' + \
+                     '		minW = block' + str(currentBlockN) + '_img_i1->width;\n\n' + \
+                     '	if(block' + str(currentBlockN) + '_img_i1->height > block' + str(
+            currentBlockN) + '_img_i2->height)\n' + \
+                     '		minH = block' + str(currentBlockN) + '_img_i2->height;\n' + \
+                     '	else \n' + \
+                     '		minH = block' + str(currentBlockN) + '_img_i1->height;\n\n' + \
+                     '	cvSetImageROI(block' + str(currentBlockN) + '_img_i2, cvRect( 0, 0, minW, minH ));\n' + \
+                     '	cvSetImageROI(block' + str(currentBlockN) + '_img_i1, cvRect( 0, 0, minW, minH ));\n' + \
+                     '	cvSetImageROI(block' + str(currentBlockN) + '_img_o1, cvRect( 0, 0, minW, minH ));\n' + \
+                     '}\n'
+        return (outPutCode)
+    else:
+        return ("//Image Sizes match\n")
 
 
 #####################################CLASSES############################
@@ -131,6 +137,7 @@ class connection:
     destinationNumber = '00'
     destinationInput = '00'
     connType = " "
+
 
 ############################################################
 ##################### block templates ######################
@@ -149,206 +156,213 @@ class blockTemplate:
     weight = 1
     outTypes = []
 
-		
-###########################################################################
 
-######################################################3
-#### Added by cpscotti. blockTemplate needs its outputTypes even "before" its code.. here it is
+    ###########################################################################
+
+    ######################################################3
+    #### Added by cpscotti. blockTemplate needs its outputTypes even "before" its code.. here it is
     def getBlockOutputTypes(self):
-			try:
-				self.outTypes = s2idirectory.block[int(self.blockType)]["OutTypes"]
-			except:
-				self.outTypes = "HRP_IMAGE","HRP_IMAGE","HRP_IMAGE","HRP_IMAGE"
+        try:
+            self.outTypes = s2idirectory.block[int(self.blockType)]["OutTypes"]
+        except:
+            self.outTypes = "HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE"
 
-############################### processors #################################
-# THIS CODE IS TO CREATE THE C LINES FROM THE XML PARSING                  #
-############################################################################
+        ############################### processors #################################
+        # THIS CODE IS TO CREATE THE C LINES FROM THE XML PARSING                  #
+        ############################################################################
+
     def blockCodeWriter(self):
-        if self.blockType == '00': #ACQUISITION BLOCK
-        		acquisition.generate(self)
-        elif self.blockType == '06': # COLORSPACE CONVERSION
-        		colorConversion.generate(self)
-        elif self.blockType == '07': # COMPOSICAO RGB
-        		composeRGB.generate(self)
-        elif self.blockType == '08': # DECOMPOSICAO RGB
-        		decomposeRGB.generate(self)
-        elif self.blockType == '09': # FILL BLOCK
-        		fill.generate(self)
-        elif self.blockType == '14': # FILL RECT BLOCK
-        		fillRect.generate(self)
-        elif self.blockType == '10': #COMMENT
-        		comment.generate(self)
-        elif self.blockType == '120': # THRESHOLD BLOCK
-        		threshold.generate(self)
-        elif self.blockType == '80':# SOBEL
-        		sobel.generate(self)
-        elif self.blockType == '81':# LAPLACE
-        		laplace.generate(self)
-        elif self.blockType == '82':# SUAVIZADOR
-        		smooth.generate(self)
-        elif self.blockType == '83': # CANNY BLOCK
-        		canny.generate(self)
-        elif self.blockType == '100': # ERODE BLOCK
-        		erode.generate(self)
-        elif self.blockType == '101': # DILATE
-				dilate.generate(self)
-        elif self.blockType == '102': #OPENING
-				opening.generate(self)
-        elif self.blockType == '103': #CLOSING
-				closing.generate(self)
-        elif self.blockType == '01': # SAVE
-				save.generate(self)
-        elif self.blockType == '02': # SHOW
-				show.generate(self)
-        elif self.blockType == '20': #SUM
-        		Sum.generate(self)
-        elif self.blockType == '21': #SUBTRACTION
-        		subtraction.generate(self)
-        elif self.blockType == '22': #MULTIPLICATION
-        		multiplication.generate(self)
-        elif self.blockType == '23': #DIVISION
-        		division.generate(self)
-        elif self.blockType == '60':#POW
-        		Pow.generate(self)
-        elif self.blockType == '61':#Exp
-        		exp.generate(self)
-        elif self.blockType == '62':#Log
-        		log.generate(self)
-        elif self.blockType == '40': #NOT
-        		Not.generate(self)
-        elif self.blockType == '41': #AND
-        		And.generate(self)
-        elif self.blockType == '42': #OR
-        		Or.generate(self)
-        elif self.blockType == '43': #XOR
-        		xor.generate(self)
-        elif self.blockType == '601': #EXEC_CMD, check (0,0), not null.. change this.. cmd = echo auehueah, change this
-        		rumCmd.generate(self)
-        elif self.blockType == '602': #Analyses images for presence of circles..
-        		checkCir.generate(self)
-        elif self.blockType == '603': #Analyses images for presence of lines..
-        		checkLin.generate(self)
-        elif self.blockType == '604': #Resizes input image using "method" to desired dim..
-        		resize.generate(self)
-        elif self.blockType == '605': #Finds the best matchings between image (in1) and template (in2)
-        		mathTem.generate(self)
-        elif self.blockType == '606': #Finds min or max of the Image
-        		minMax.generate(self)
-        elif self.blockType == '607': #Rotates input image
-        		rotate.generate(self)
-        elif self.blockType == '04': #EQUALIZE HIST
-        		equalizeHistogram.generate(self)
-        elif self.blockType == '12': # Live Delay brief description
-        		liveDelay.generate(self)
-        elif self.blockType == '13': # Get Size
-        		getSize.generate(self)
-        elif self.blockType == '611': # Stereo Correspondence brief description 
-        		stereoCorr.generate(self)
-        elif self.blockType == '11': # Save Video brief description 
-        		saveVideo.generate(self)
-        elif self.blockType == '610': # Haar (face) Detector brief description 
-        		haarDetect.generate(self)
-        elif self.blockType == '609': # Find object of a given color brief description 
-        		findColor.generate(self)
-        elif self.blockType == '608': # Find Squares brief description 
-        		findSquares.generate(self)
-        elif self.blockType == '803': # Move Rectangle brief description
-        		moveRct.generate(self)
-        elif self.blockType == '902': # Check Point brief description 
-        		isOnRect.generate(self)
-        elif self.blockType == '901': # New Point brief description 
-        		newPoint.generate(self)
-        elif self.blockType == '802': # Crop Image brief description 
-        		cropImage.generate(self)
-        elif self.blockType == '701': # New Double Value brief description 
-        		newDouble.generate(self)
-        elif self.blockType == '801': # New Rectangle brief description 
-        		newRect.generate(self)
-        elif self.blockType == '03': #PLOT HISTOGRAM
-        		plotHistogram.generate(self)
+        if self.blockType == '00':  # ACQUISITION BLOCK
+            acquisition.generate(self)
+        elif self.blockType == '06':  # COLORSPACE CONVERSION
+            colorConversion.generate(self)
+        elif self.blockType == '07':  # COMPOSICAO RGB
+            composeRGB.generate(self)
+        elif self.blockType == '08':  # DECOMPOSICAO RGB
+            decomposeRGB.generate(self)
+        elif self.blockType == '09':  # FILL BLOCK
+            fill.generate(self)
+        elif self.blockType == '14':  # FILL RECT BLOCK
+            fillRect.generate(self)
+        elif self.blockType == '10':  # COMMENT
+            comment.generate(self)
+        elif self.blockType == '120':  # THRESHOLD BLOCK
+            threshold.generate(self)
+        elif self.blockType == '80':  # SOBEL
+            sobel.generate(self)
+        elif self.blockType == '81':  # LAPLACE
+            laplace.generate(self)
+        elif self.blockType == '82':  # SUAVIZADOR
+            smooth.generate(self)
+        elif self.blockType == '83':  # CANNY BLOCK
+            canny.generate(self)
+        elif self.blockType == '100':  # ERODE BLOCK
+            erode.generate(self)
+        elif self.blockType == '101':  # DILATE
+            dilate.generate(self)
+        elif self.blockType == '102':  # OPENING
+            opening.generate(self)
+        elif self.blockType == '103':  # CLOSING
+            closing.generate(self)
+        elif self.blockType == '01':  # SAVE
+            save.generate(self)
+        elif self.blockType == '02':  # SHOW
+            show.generate(self)
+        elif self.blockType == '20':  # SUM
+            Sum.generate(self)
+        elif self.blockType == '21':  # SUBTRACTION
+            subtraction.generate(self)
+        elif self.blockType == '22':  # MULTIPLICATION
+            multiplication.generate(self)
+        elif self.blockType == '23':  # DIVISION
+            division.generate(self)
+        elif self.blockType == '60':  # POW
+            Pow.generate(self)
+        elif self.blockType == '61':  # Exp
+            exp.generate(self)
+        elif self.blockType == '62':  # Log
+            log.generate(self)
+        elif self.blockType == '40':  # NOT
+            Not.generate(self)
+        elif self.blockType == '41':  # AND
+            And.generate(self)
+        elif self.blockType == '42':  # OR
+            Or.generate(self)
+        elif self.blockType == '43':  # XOR
+            xor.generate(self)
+        elif self.blockType == '601':  # EXEC_CMD, check (0,0), not null.. change this.. cmd = echo auehueah, change this
+            rumCmd.generate(self)
+        elif self.blockType == '602':  # Analyses images for presence of circles..
+            checkCir.generate(self)
+        elif self.blockType == '603':  # Analyses images for presence of lines..
+            checkLin.generate(self)
+        elif self.blockType == '604':  # Resizes input image using "method" to desired dim..
+            resize.generate(self)
+        elif self.blockType == '605':  # Finds the best matchings between image (in1) and template (in2)
+            mathTem.generate(self)
+        elif self.blockType == '606':  # Finds min or max of the Image
+            minMax.generate(self)
+        elif self.blockType == '607':  # Rotates input image
+            rotate.generate(self)
+        elif self.blockType == '04':  # EQUALIZE HIST
+            equalizeHistogram.generate(self)
+        elif self.blockType == '12':  # Live Delay brief description
+            liveDelay.generate(self)
+        elif self.blockType == '13':  # Get Size
+            getSize.generate(self)
+        elif self.blockType == '611':  # Stereo Correspondence brief description
+            stereoCorr.generate(self)
+        elif self.blockType == '11':  # Save Video brief description
+            saveVideo.generate(self)
+        elif self.blockType == '610':  # Haar (face) Detector brief description
+            haarDetect.generate(self)
+        elif self.blockType == '609':  # Find object of a given color brief description
+            findColor.generate(self)
+        elif self.blockType == '608':  # Find Squares brief description
+            findSquares.generate(self)
+        elif self.blockType == '803':  # Move Rectangle brief description
+            moveRct.generate(self)
+        elif self.blockType == '902':  # Check Point brief description
+            isOnRect.generate(self)
+        elif self.blockType == '901':  # New Point brief description
+            newPoint.generate(self)
+        elif self.blockType == '802':  # Crop Image brief description
+            cropImage.generate(self)
+        elif self.blockType == '701':  # New Double Value brief description
+            newDouble.generate(self)
+        elif self.blockType == '801':  # New Rectangle brief description
+            newRect.generate(self)
+        elif self.blockType == '03':  # PLOT HISTOGRAM
+            plotHistogram.generate(self)
 
-############################ connectors ####################################
-# THIS CODE IS RESPONSIBLE FOR CREATING THE ASSIGNMENTS BETWEEN THE IMAGES #
-############################################################################
-#It works simply by copying all the content resulting from it's processing to feed another image.
+        ############################ connectors ####################################
+        # THIS CODE IS RESPONSIBLE FOR CREATING THE ASSIGNMENTS BETWEEN THE IMAGES #
+        ############################################################################
+        # It works simply by copying all the content resulting from it's processing to feed another image.
+
     def connectorCodeWriter(self):
         global g_bLive
         global g_flagFrame
         global g_bSaveVideo
         for x in self.myConnections:
             if x.destinationNumber <> '--':
-              ##### cpscotti typed connections..
-              if x.connType == "HRP_IMAGE":
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
-              elif x.connType == "HRP_INT":
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_int_i' + x.destinationInput + ' = block' + self.blockNumber + '_int_o' + x.sourceOutput + ';// INT conection\n'
-              elif x.connType == "HRP_POINT":
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_point_i' + x.destinationInput + ' = block' + self.blockNumber + '_point_o' + x.sourceOutput + ';// POINT conection\n'
-              elif x.connType == "HRP_RECT":
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_rect_i' + x.destinationInput + ' = block' + self.blockNumber + '_rect_o' + x.sourceOutput + ';// RECT conection\n'
-              elif x.connType == "HRP_DOUBLE":
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_double_i' + x.destinationInput + ' = block' + self.blockNumber + '_double_o' + x.sourceOutput + ';// DOUBLE conection\n'
-              elif x.connType == "HRP_SIZE":
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_size_i' + x.destinationInput + ' = block' + self.blockNumber + '_size_o' + x.sourceOutput + ';// SIZE conection\n'
-              else:
-                self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
-               # if ( (not g_bLive) or (g_flagFrame == 0) ):
-                #self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');//conection\n'
-                #elif g_flagFrame:
-                 #   self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(frame);//conection\n'
-                 #   global g_flagFrame
-                 #   g_flagFrame = 0
-############################################################################
+                ##### cpscotti typed connections..
+                if x.connType == "HRP_IMAGE":
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
+                elif x.connType == "HRP_INT":
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_int_i' + x.destinationInput + ' = block' + self.blockNumber + '_int_o' + x.sourceOutput + ';// INT conection\n'
+                elif x.connType == "HRP_POINT":
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_point_i' + x.destinationInput + ' = block' + self.blockNumber + '_point_o' + x.sourceOutput + ';// POINT conection\n'
+                elif x.connType == "HRP_RECT":
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_rect_i' + x.destinationInput + ' = block' + self.blockNumber + '_rect_o' + x.sourceOutput + ';// RECT conection\n'
+                elif x.connType == "HRP_DOUBLE":
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_double_i' + x.destinationInput + ' = block' + self.blockNumber + '_double_o' + x.sourceOutput + ';// DOUBLE conection\n'
+                elif x.connType == "HRP_SIZE":
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_size_i' + x.destinationInput + ' = block' + self.blockNumber + '_size_o' + x.sourceOutput + ';// SIZE conection\n'
+                else:
+                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
+                    # if ( (not g_bLive) or (g_flagFrame == 0) ):
+                # self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');//conection\n'
+                # elif g_flagFrame:
+                #   self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(frame);//conection\n'
+                #   global g_flagFrame
+                #   g_flagFrame = 0
+                ############################################################################
 
 
-#############################   savers   #######################################
-# THIS CODE IS TO SAVE IMAGES THAT WILL BE RETURNED AFTER THE IMAGE PROCESSING #
-################################################################################
+                #############################   savers   #######################################
+                # THIS CODE IS TO SAVE IMAGES THAT WILL BE RETURNED AFTER THE IMAGE PROCESSING #
+                ################################################################################
+
     def saverCodeWriter(self):
         global g_bLive
         for x in self.outputsToSave:
-            #if g_bLive:
-                #self.functionCall = self.functionCall + 'cvNamedWindow("block' + self.blockNumber + '_img_o' + x +',block' + self.blockNumber + '_img_o' + x + ');\n cvShowImage("block' + self.blockNumber + '_img_o' + x +',block' + self.blockNumber + '_img_o' + x + '); \n'
-            #else:
-                self.functionCall = self.functionCall + 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'
-
-
+            # if g_bLive:
+            # self.functionCall = self.functionCall + 'cvNamedWindow("block' + self.blockNumber + '_img_o' + x +',block' + self.blockNumber + '_img_o' + x + ');\n cvShowImage("block' + self.blockNumber + '_img_o' + x +',block' + self.blockNumber + '_img_o' + x + '); \n'
+            # else:
+            self.functionCall = self.functionCall + 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'
 
     def create_XML_result(self, dirPathName):
         for x in self.outputsToSave:
             filename = "block" + str(self.blockNumber) + "_img_o" + x + ".png"
-            im = Image.open(tmpDir + dirPathName + "/" +  filename)
+            im = Image.open(tmpDir + dirPathName + "/" + filename)
             if (im.mode == 'RGB' or im.mode == 'HSV'):
-                nChannels = 3 
+                nChannels = 3
             else:
                 nChannels = 1
-            depth = nChannels*8 #Provisoriamente
-            self.xmlResult = '<result block=\"' + str(self.blockNumber) + '\" output=\"' + str(x) + '\">\n<content type = \"image\">\n<filename> ' + filename + '</filename>\n<properties depth=\"' + str(depth) + '\"  height= \"' + str(im.size[0]) + '\" width= \"' + str(im.size[1]) + '\"  channels=\"'+ str(nChannels) + '\" />\n</content>\n</result>'
+            depth = nChannels * 8  # Provisoriamente
+            self.xmlResult = '<result block=\"' + str(self.blockNumber) + '\" output=\"' + str(
+                x) + '\">\n<content type = \"image\">\n<filename> ' + filename + '</filename>\n<properties depth=\"' + str(
+                depth) + '\"  height= \"' + str(im.size[0]) + '\" width= \"' + str(
+                im.size[1]) + '\"  channels=\"' + str(nChannels) + '\" />\n</content>\n</result>'
+
 
 #######################EXAMPLE OF XML_RESULT###################################
-#<result block='03' output='o1'> 
+# <result block='03' output='o1'>
 #  <content type='image'>
 #    <buffer>000011111101</buffer>
 #    <properties depth='24' height='640'
 #                width='480' channels='3' />
 #  </content>
-#</result>
+# </result>
 ################################################################################
 
 def cleanTmpDir(dir):
-    dirList = os.listdir(tmpDir+dir)
+    dirList = os.listdir(tmpDir + dir)
     for x in dirList:
-        os.remove(tmpDir+dir+'/'+x)
-    os.rmdir(tmpDir+dir) 
+        os.remove(tmpDir + dir + '/' + x)
+    os.rmdir(tmpDir + dir)
+
 
 def GetErrorLog():
     if os.name == 'nt':
         Error = file(ErrorLog, 'rb')
     else:
-       Error = file(ErrorLog, 'r')
-    Erro = Error.read()   
+        Error = file(ErrorLog, 'r')
+    Erro = Error.read()
     Error.close()
     return Erro
+
 
 def SetErrorLog(a_sError):
     if os.name == 'nt':
@@ -358,147 +372,154 @@ def SetErrorLog(a_sError):
     Error.write(a_sError)
     Error.close()
 
+
 from threading import Thread
+
+
 class RunPrg(Thread):
-	def __init__(self,cmd):
-		Thread.__init__(self)
-		self.cmd = cmd
-	def run(self):
-		os.system(self.cmd + " 2> RunErrorLog")
+    def __init__(self, cmd):
+        Thread.__init__(self)
+        self.cmd = cmd
 
-def parseAndGenerate(dirName, XMLChain,installDirName):
-		cleanGenerator()
-		global g_bSaveVideo #Passando todas as variaveis globais devolta ao default
-		global g_bLive
-		global g_bVideo
-		global g_bCameras
-		global g_bFrameRate
-		global g_ShowCount
-		g_ShowCount = 0
-		g_bSaveVideo = []
-		g_bVideo = []
-		g_bCameras = []
-		g_bFrameRate = 0.1
-		g_bLive = False #this shall be a list containing the "blockNumbers" for each live acquisition block; len(g_bLive) works just like it is now..
-		yield [_("Starting Up Generator")]
-		doc = binderytools.bind_file(XMLChain)
-		########################Create the blocks from XMLChain############################
-		
-		##################################################################################
-		#				in the future we may want to show some kind of progress bar..
-		#							the next few comented lines implement a progress counter.. this could be thrown up to the GUI via yields =]
-		##################################################################################
-		#t_nBlockCount = 0.0
-		#for block in (doc.harpia.properties.block):
-			#t_nBlockCount += 1.0
-		#t_nItCount = 0.0
-		yield [_("Generating Code")]
-		for blockIter in (doc.harpia.properties.block):
-				#print str(100.0*(t_nItCount/t_nBlockCount)) + "%"
-				#t_nItCount += 1.0
-				tmpBlock = blockTemplate()
-				tmpBlock.blockType = blockIter.type
-				tmpBlock.blockNumber = blockIter.id
-				tmpBlock.properties = []
-				tmpBlock.myConnections = []
-				tmpBlock.outputsToSave = []
-				try:
-						for propIter in blockIter.property:
-								tmpBlock.properties.append((propIter.name,propIter.value))
-				except AttributeError:
-						pass
-				ID = tmpBlock.blockNumber
-				tmpBlock.getBlockOutputTypes()
-				for block in (doc.harpia.network.block):
-						if (block.id == ID and int(block.type) <> 10) :
-								portCount = -1
-								for output in block.outputs.output:
-										tmpConnection = connection()
-										portCount += 1
-										if output.inBlock != '--':
-												tmpConnection.sourceOutput = output.id
-												tmpConnection.destinationInput = output.input
-												tmpConnection.destinationNumber = output.inBlock
-												#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-												#!!!!!!cpscotti type-oriented connections...!!!!!
-												tmpConnection.connType = tmpBlock.outTypes[int(tmpConnection.sourceOutput) - 1]
-												#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-												tmpBlock.myConnections.append(tmpConnection)
-										else:
-												tmpConnection.destinationNumber = '--'
-												tmpBlock.myConnections.append(tmpConnection)
-										try:
-												if output.grab == 'True':
-														tmpBlock.outputsToSave.append(output.id)
-										except:
-												pass
-		###################################################################################
-		#ADDING TO EACH BLOCK OBJECT THE RESULTING CODE , THEN ADDING THE BLOCK IN A LIST #
-		###################################################################################
-		##Please, do not change the sequence
-				tmpBlock.blockCodeWriter()
-				tmpBlock.connectorCodeWriter()
-				tmpBlock.saverCodeWriter()
-				blockList.append(tmpBlock)
-		###################################################################################
-
-		weights = []
-		#Apply the weights on each connection of each block in listOfBlocks, then return a list with its connections
-		def applyWeightsOnConnections(listOfBlocks):
-		#def applyWeightsOnConnections(listOfBlocks,RollinList):
-				##For each block on listt:
-				returnList = []
-				for block in listOfBlocks:
-						##Put the connections on returnList
-						for connection in block.myConnections:
-								##and apply the weight on this connection
-								for tmpBlock in blockList:
-										if tmpBlock.blockNumber == connection.destinationNumber:
-												tmpBlock.weight += block.weight
-												if tmpBlock not in returnList:
-													#if tmpBlock not in RollinList:
-													returnList.append(tmpBlock)
-													#RollinList.append(tmpBlock)
-				return returnList
+    def run(self):
+        os.system(self.cmd + " 2> RunErrorLog")
 
 
-		for block in blockList:
-				#cpscotti..
-				#if block.blockType == '00':
-				if s2idirectory.block[int(block.blockType)]["Inputs"] == 0 and s2idirectory.block[int(block.blockType)]["Outputs"] <> 0:
-						tmpList = []
-						#RollinPathList = []
-						tmpList.append(block)
-						#RollinPathList.append(block)
-						organizedChain = applyWeightsOnConnections(tmpList) #,RollinPathList)
-						while organizedChain <> []:
-								organizedChain = applyWeightsOnConnections(organizedChain) #,RollinPathList)
-								###Recursive tests... future functionality
-								#print "Start: "
-								#for block in organizedChain:
-									#print "\t"+str(block.blockNumber)
+def parseAndGenerate(dirName, XMLChain, installDirName):
+    cleanGenerator()
+    global g_bSaveVideo  # Passando todas as variaveis globais devolta ao default
+    global g_bLive
+    global g_bVideo
+    global g_bCameras
+    global g_bFrameRate
+    global g_ShowCount
+    g_ShowCount = 0
+    g_bSaveVideo = []
+    g_bVideo = []
+    g_bCameras = []
+    g_bFrameRate = 0.1
+    g_bLive = False  # this shall be a list containing the "blockNumbers" for each live acquisition block; len(g_bLive) works just like it is now..
+    yield [_("Starting Up Generator")]
+    #doc = binderytools.bind_file(XMLChain)
+    doc = XMLParser(XMLChain)
+    ########################Create the blocks from XMLChain############################
 
+    ##################################################################################
+    #				in the future we may want to show some kind of progress bar..
+    #							the next few comented lines implement a progress counter.. this could be thrown up to the GUI via yields =]
+    ##################################################################################
+    # t_nBlockCount = 0.0
+    # for block in (doc.harpia.properties.block):
+    # t_nBlockCount += 1.0
+    # t_nItCount = 0.0
+    yield [_("Generating Code")]
+    blocks = doc.getTag("harpia").getTag("properties").getChildTags("block")
+    for blockIter in blocks:
+        # print str(100.0*(t_nItCount/t_nBlockCount)) + "%"
+        # t_nItCount += 1.0
+        tmpBlock = blockTemplate()
+        tmpBlock.blockType = blockIter.type
+        tmpBlock.blockNumber = blockIter.id
+        tmpBlock.properties = []
+        tmpBlock.myConnections = []
+        tmpBlock.outputsToSave = []
+        try:
+            block_properties = blockIter.getChildTags("property")
+            for propIter in block_properties:
+                tmpBlock.properties.append((propIter.name, propIter.value))
+        except AttributeError:
+            pass
+        ID = tmpBlock.blockNumber
+        tmpBlock.getBlockOutputTypes()
 
-		biggestWeight = -1
-		for block in blockList:
-				if block.weight >= biggestWeight:
-						biggestWeight = block.weight
+        net_blocks = doc.getTag("harpia").getTag("network").getChildTags("block")
+        for block in net_blocks:
+            if (block.id == ID and int(block.type) <> 10):
+                portCount = -1
+                outputs = block.getTag("outputs").getChildTags("output")
+                for output in outputs:
+                    tmpConnection = connection()
+                    portCount += 1
+                    if output.inBlock != '--':
+                        tmpConnection.sourceOutput = output.id
+                        tmpConnection.destinationInput = output.input
+                        tmpConnection.destinationNumber = output.inBlock
+                        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        # !!!!!!cpscotti type-oriented connections...!!!!!
+                        tmpConnection.connType = tmpBlock.outTypes[int(tmpConnection.sourceOutput) - 1]
+                        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        tmpBlock.myConnections.append(tmpConnection)
+                    else:
+                        tmpConnection.destinationNumber = '--'
+                        tmpBlock.myConnections.append(tmpConnection)
+                    try:
+                        if output.grab == 'True':
+                            tmpBlock.outputsToSave.append(output.id)
+                    except:
+                        pass
+                    ###################################################################################
+                    # ADDING TO EACH BLOCK OBJECT THE RESULTING CODE , THEN ADDING THE BLOCK IN A LIST #
+                    ###################################################################################
+                    ##Please, do not change the sequence
+        tmpBlock.blockCodeWriter()
+        tmpBlock.connectorCodeWriter()
+        tmpBlock.saverCodeWriter()
+        blockList.append(tmpBlock)
+    ###################################################################################
 
-		for activeWeight in range(biggestWeight):
-				activeWeight += 1
-				for block in blockList:
-						if block.weight == activeWeight:
-								arguments.append(block.functionArguments)
-								images.append(block.imagesIO)
-								functionCalls.append("//Weight: " + str(block.weight) + "\n")
-								functionCalls.append(block.functionCall)
-								deallocations.append(block.dealloc)
-								outDeallocations.append(block.outDealloc)
+    weights = []
+    # Apply the weights on each connection of each block in listOfBlocks, then return a list with its connections
+    def applyWeightsOnConnections(listOfBlocks):
+        # def applyWeightsOnConnections(listOfBlocks,RollinList):
+        ##For each block on listt:
+        returnList = []
+        for block in listOfBlocks:
+            ##Put the connections on returnList
+            for connection in block.myConnections:
+                ##and apply the weight on this connection
+                for tmpBlock in blockList:
+                    if tmpBlock.blockNumber == connection.destinationNumber:
+                        tmpBlock.weight += block.weight
+                        if tmpBlock not in returnList:
+                            # if tmpBlock not in RollinList:
+                            returnList.append(tmpBlock)
+                        # RollinList.append(tmpBlock)
+        return returnList
 
+    for block in blockList:
+        # cpscotti..
+        # if block.blockType == '00':
+        if s2idirectory.block[int(block.blockType)]["Inputs"] == 0 and s2idirectory.block[int(block.blockType)][
+            "Outputs"] <> 0:
+            tmpList = []
+            # RollinPathList = []
+            tmpList.append(block)
+            # RollinPathList.append(block)
+            organizedChain = applyWeightsOnConnections(tmpList)  # ,RollinPathList)
+            while organizedChain <> []:
+                organizedChain = applyWeightsOnConnections(organizedChain)  # ,RollinPathList)
+            ###Recursive tests... future functionality
+            # print "Start: "
+            # for block in organizedChain:
+            # print "\t"+str(block.blockNumber)
 
+    biggestWeight = -1
+    for block in blockList:
+        if block.weight >= biggestWeight:
+            biggestWeight = block.weight
 
+    for activeWeight in range(biggestWeight):
+        activeWeight += 1
+        for block in blockList:
+            if block.weight == activeWeight:
+                arguments.append(block.functionArguments)
+                images.append(block.imagesIO)
+                functionCalls.append("//Weight: " + str(block.weight) + "\n")
+                functionCalls.append(block.functionCall)
+                deallocations.append(block.dealloc)
+                outDeallocations.append(block.outDealloc)
 
-		header = r"""// Auto-generated C Code - S2i Harpia
+    header = r"""// Auto-generated C Code - S2i Harpia
 /*
 *	In order to compile this source code run, in a terminal window, the following command:
 *	gcc sourceCodeName.c `pkg-config --libs --cflags opencv` -o outputProgramName
@@ -529,9 +550,9 @@ double rads(double degs)
 	return (PI/180 * degs);
 }
 		"""
-		global usesFindSquares
-		if usesFindSquares == 1:
-			header += r"""
+    global usesFindSquares
+    if usesFindSquares == 1:
+        header += r"""
 
 //Routines to findSquares
 double angle( CvPoint* pt1, CvPoint* pt2, CvPoint* pt0 )
@@ -652,9 +673,9 @@ double drawSquares( IplImage* cpy, CvSeq* squares )
 //End of routines to findSquares
 
 			"""
-		global usesFindColor
-		if usesFindColor == 1:
-			header += r"""
+    global usesFindColor
+    if usesFindColor == 1:
+        header += r"""
 
 int GetColor(IplImage * imagem, int x, int y)
 {
@@ -813,155 +834,161 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
 	return numOfPoints;
 }
 			"""
-		header += "\nint main(int argc, char ** argv)\n{"
+    header += "\nint main(int argc, char ** argv)\n{"
 
-		declaration = "\n\t//declaration block\n"
-		
-		for x in arguments:
-				declaration = declaration + x
+    declaration = "\n\t//declaration block\n"
 
-		for x in images:
-				declaration = declaration + x
+    for x in arguments:
+        declaration = declaration + x
 
-		if g_bLive:
-				declaration += \
-				'int end;  end = 0; int key; \n'
-				for aCapture in g_bVideo:
-					declaration += 'CvCapture * block' + aCapture[0] + '_capture = NULL; \n IplImage * block' + aCapture[0] + '_frame = NULL; \n block' + aCapture[0] + '_capture = cvCreateFileCapture("'+ aCapture[1] +'"); \n'
-				for aCamera in g_bCameras:
-					declaration += 'CvCapture * block' + aCamera[0] + '_capture = NULL; \n IplImage * block' + aCamera[0] + '_frame = NULL; \n block' + aCamera[0] + '_capture = cvCaptureFromCAM(' + aCamera[1] + '); \n'
-				declaration += 'while(!end) \n {\t \n'
-				
-				for aCapture in g_bVideo:
-					declaration += 'cvGrabFrame (block' + aCapture[0] + '_capture); \n block' + aCapture[0] + '_frame = cvRetrieveFrame (block' + aCapture[0] + '_capture); \n'
-				
-				for aCamera in g_bCameras:
-					declaration += 'cvGrabFrame (block' + aCamera[0] + '_capture); \n block' + aCamera[0] + '_frame = cvRetrieveFrame (block' + aCamera[0] + '_capture); \n'
+    for x in images:
+        declaration = declaration + x
 
-		execution = "\n\t//execution block\n"
-		for x in functionCalls:
-				execution += x
-		if g_ShowCount == 0:
-			execution += '\n\tcvNamedWindow("Control Window",CV_WINDOW_AUTOSIZE );'
-		if g_bLive:
-				execution += '\n\tkey = cvWaitKey (' + str(int((1.0/g_bFrameRate)*1000.0)) + ');\n if(key != -1)\n end = 1;'
-			
-				
-				deallocating = "\n\t//deallocation block\n"
-				for x in deallocations:
-						deallocating += x 
-				
-				deallocating += "}"
-				
-		else:
-				deallocating = "\n\t//deallocation block\n"
-				
-				for x in deallocations:
-						deallocating += x 
+    if g_bLive:
+        declaration += \
+            'int end;  end = 0; int key; \n'
+        for aCapture in g_bVideo:
+            declaration += 'CvCapture * block' + aCapture[0] + '_capture = NULL; \n IplImage * block' + aCapture[
+                0] + '_frame = NULL; \n block' + aCapture[0] + '_capture = cvCreateFileCapture("' + aCapture[
+                               1] + '"); \n'
+        for aCamera in g_bCameras:
+            declaration += 'CvCapture * block' + aCamera[0] + '_capture = NULL; \n IplImage * block' + aCamera[
+                0] + '_frame = NULL; \n block' + aCamera[0] + '_capture = cvCaptureFromCAM(' + aCamera[1] + '); \n'
+        declaration += 'while(!end) \n {\t \n'
 
-		closing = ""
-		closing += "\n"
-		for outDea in outDeallocations:
-			closing += outDea
-		if g_bLive:
-			for aCapture in g_bVideo:
-				closing += 'cvReleaseCapture(&block' + aCapture[0] + '_capture);\n'
-			for aCamera in g_bCameras:
-				closing += 'cvReleaseCapture(&block' + aCamera[0] + '_capture);\n'
-		for vWriter in g_bSaveVideo:
-			closing += 'cvReleaseVideoWriter(&block' + vWriter + '_vidWriter);\n'
-		closing += "return 0;\n } //closing main()\n"
-		
-		
-		#Final code assembly
-		entireCode = header+declaration+execution+deallocating+closing
-		
-		yield [_("Saving Code")]
-		#saving code file
-		os.chdir(tmpDir+dirName)
-		codeFilename = dirName + '.c'
-		codeFile = open(codeFilename, 'w')
-		codeFile.write(entireCode)
-		codeFile.close()
-		
-		yield [_("Building Makefile")]
-		#Assembly of "necessary" makefiles
-		#...windows..
-		makeFilename = 'Makefile' + dirName + '.bat'
-		makeFileEntry = '"' + installDirName+'\\bin\\gcc.exe" ' + codeFilename + " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
-		makeFile = open(makeFilename, 'w')
-		makeFile.write(makeFileEntry)
-		makeFile.close()
-		
-		#...posix..
-		makeFilename = 'Makefile.' + dirName
-		makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"+installDirName+"/lib/; export PKG_CONFIG_PATH="+installDirName+"/lib/pkgconfig/;g++ "+ codeFilename +" -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`"
-		makeFile = open(makeFilename, 'w')
-		makeFile.write(makeFileEntry)
-		makeFile.close()
-		
-		yield [_("Compiling ...")]
-		if os.name=="nt":
-				i,o = os.popen4('Makefile' + dirName + '.bat')
+        for aCapture in g_bVideo:
+            declaration += 'cvGrabFrame (block' + aCapture[0] + '_capture); \n block' + aCapture[
+                0] + '_frame = cvRetrieveFrame (block' + aCapture[0] + '_capture); \n'
 
-				o.readlines()
-				o.close()
-				i.close()
-				yield [_("Running ...")]
-				i,o = os.popen4(codeFilename[:-2]+'.exe')
-		
-		## ERROR LOG
-				Error = ''
-				errorList = o.readlines()
-				for element in errorList:
-						Error = Error + element
-				
-				SetErrorLog(Error)
+        for aCamera in g_bCameras:
+            declaration += 'cvGrabFrame (block' + aCamera[0] + '_capture); \n block' + aCamera[
+                0] + '_frame = cvRetrieveFrame (block' + aCamera[0] + '_capture); \n'
 
-				o.readlines()
-				o.close()
-				i.close()
-		else:
-				i,o = os.popen4("sh " + makeFilename)
+    execution = "\n\t//execution block\n"
+    for x in functionCalls:
+        execution += x
+    if g_ShowCount == 0:
+        execution += '\n\tcvNamedWindow("Control Window",CV_WINDOW_AUTOSIZE );'
+    if g_bLive:
+        execution += '\n\tkey = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n if(key != -1)\n end = 1;'
 
-				## appending compile errors too.. helps finding bugs! =]
-				CompilingErrors = ''
-				CerrorList = o.readlines()
+        deallocating = "\n\t//deallocation block\n"
+        for x in deallocations:
+            deallocating += x
 
-				if len(CerrorList) <> 0:
-					CompilingErrors += "Something was detected while compiling the source code.\n" + \
-												"There is a huge chance you've found a bug, please report to scotti@das.ufsc.br \n" + \
-												"sending the processing chain (.hrp), this error message and some description on what you were doing.\n" + \
-												"We appreciate your help!\n"
-				for element in CerrorList:
-					CompilingErrors += element
-				
-				o.close()
-				i.close()
-				if g_bLive:
-					yield [_("Running, press any key (on the video output window) to terminate."), CompilingErrors]
-				else:
-					yield [_("Running ..."), CompilingErrors]
-				
-				#cpscotti, xunxo bunitinho pra nao travar a interface qndo tive rodando o live =]
-				t_oPrg = RunPrg("LD_LIBRARY_PATH=" + installDirName + "/lib/ ./"+codeFilename[:-2])
-				t_oPrg.start()
-				while t_oPrg.isAlive():
-					t_oPrg.join(0.4)
-					while gtk.events_pending():
-						gtk.main_iteration(False)
-				
-				#fim do "xunx"
-				
-				## ERROR LOG
-				o = open("RunErrorLog","r")
-				Error = ''
-				errorList = o.readlines()
-				for element in errorList:
-						Error += element
-				
-				yield [_("Leaving.."), Error]
-				SetErrorLog(CompilingErrors + Error)
+        deallocating += "}"
 
-				o.close()
-				i.close()
+    else:
+        deallocating = "\n\t//deallocation block\n"
+
+        for x in deallocations:
+            deallocating += x
+
+    closing = ""
+    closing += "\n"
+    for outDea in outDeallocations:
+        closing += outDea
+    if g_bLive:
+        for aCapture in g_bVideo:
+            closing += 'cvReleaseCapture(&block' + aCapture[0] + '_capture);\n'
+        for aCamera in g_bCameras:
+            closing += 'cvReleaseCapture(&block' + aCamera[0] + '_capture);\n'
+    for vWriter in g_bSaveVideo:
+        closing += 'cvReleaseVideoWriter(&block' + vWriter + '_vidWriter);\n'
+    closing += "return 0;\n } //closing main()\n"
+
+
+    # Final code assembly
+    entireCode = header + declaration + execution + deallocating + closing
+
+    yield [_("Saving Code")]
+    # saving code file
+    os.chdir(tmpDir + dirName)
+    codeFilename = dirName + '.c'
+    codeFile = open(codeFilename, 'w')
+    codeFile.write(entireCode)
+    codeFile.close()
+
+    yield [_("Building Makefile")]
+    # Assembly of "necessary" makefiles
+    # ...windows..
+    makeFilename = 'Makefile' + dirName + '.bat'
+    makeFileEntry = '"' + installDirName + '\\bin\\gcc.exe" ' + codeFilename + " -o " + codeFilename[
+                                                                                        :-2] + ".exe -lcv -lcxcore -lhighgui"
+    makeFile = open(makeFilename, 'w')
+    makeFile.write(makeFileEntry)
+    makeFile.close()
+
+    # ...posix..
+    makeFilename = 'Makefile.' + dirName
+    makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + installDirName + "/lib/; export PKG_CONFIG_PATH=" + installDirName + "/lib/pkgconfig/;g++ " + codeFilename + " -o " + codeFilename[
+                                                                                                                                                                                       :-2] + " `pkg-config --cflags --libs opencv`"
+    makeFile = open(makeFilename, 'w')
+    makeFile.write(makeFileEntry)
+    makeFile.close()
+
+    yield [_("Compiling ...")]
+    if os.name == "nt":
+        i, o = os.popen4('Makefile' + dirName + '.bat')
+
+        o.readlines()
+        o.close()
+        i.close()
+        yield [_("Running ...")]
+        i, o = os.popen4(codeFilename[:-2] + '.exe')
+
+        ## ERROR LOG
+        Error = ''
+        errorList = o.readlines()
+        for element in errorList:
+            Error = Error + element
+
+        SetErrorLog(Error)
+
+        o.readlines()
+        o.close()
+        i.close()
+    else:
+        i, o = os.popen4("sh " + makeFilename)
+
+        ## appending compile errors too.. helps finding bugs! =]
+        CompilingErrors = ''
+        CerrorList = o.readlines()
+
+        if len(CerrorList) <> 0:
+            CompilingErrors += "Something was detected while compiling the source code.\n" + \
+                               "There is a huge chance you've found a bug, please report to scotti@das.ufsc.br \n" + \
+                               "sending the processing chain (.hrp), this error message and some description on what you were doing.\n" + \
+                               "We appreciate your help!\n"
+        for element in CerrorList:
+            CompilingErrors += element
+
+        o.close()
+        i.close()
+        if g_bLive:
+            yield [_("Running, press any key (on the video output window) to terminate."), CompilingErrors]
+        else:
+            yield [_("Running ..."), CompilingErrors]
+
+        # cpscotti, xunxo bunitinho pra nao travar a interface qndo tive rodando o live =]
+        t_oPrg = RunPrg("LD_LIBRARY_PATH=" + installDirName + "/lib/ ./" + codeFilename[:-2])
+        t_oPrg.start()
+        while t_oPrg.isAlive():
+            t_oPrg.join(0.4)
+            while gtk.events_pending():
+                gtk.main_iteration(False)
+
+        # fim do "xunx"
+
+        ## ERROR LOG
+        o = open("RunErrorLog", "r")
+        Error = ''
+        errorList = o.readlines()
+        for element in errorList:
+            Error += element
+
+        yield [_("Leaving.."), Error]
+        SetErrorLog(CompilingErrors + Error)
+
+        o.close()
+        i.close()

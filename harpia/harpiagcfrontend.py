@@ -28,33 +28,23 @@
 
 
 # Libraries
-from uu import *
-import sys
-import gobject
-import pygtk
-import gnomecanvas
-import gtk
 import shutil
 import os
-import time
 from glob import glob
 
-from GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
+import gobject
+import gtk
 
-import commands
+from GladeWindow import GladeWindow
+from harpia.utils.XMLUtils import XMLParser
+
 
 # Harpia
 
 # import s2ipngexport
 import s2idirectory
 
-import GcdConnector
-import GcdBlock
-import GcdBlock_Show
 import GcDiagram
-
-from update import Update
 
 import s2iSessionManager
 import TipOfTheDay
@@ -606,17 +596,29 @@ class S2iHarpiaFrontend(GladeWindow):
             self.UpdateStatus(0)
 
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            # print "PROCESS CHAIN",t_oS2iDiagram.GetProcessChain()
-            t_oProcessXML = bt.bind_string("<harpia>" + \
-                                           str(t_oGcDiagram.GetProcessChain()) + \
-                                           "</harpia>")
+            #print "PROCESS CHAIN",t_oS2iDiagram.GetProcessChain()
+            #t_oProcessXML = bt.bind_string("<harpia>" + \
+            #                               str(t_oGcDiagram.GetProcessChain()) + \
+            #                               "</harpia>")
+            #print len(list(t_oProcessXML.harpia.properties.childNodes))
 
-            if len(t_oProcessXML.harpia.properties.childNodes) > 1:
-                for t_oBlockProperties in t_oProcessXML.harpia.properties.block:
+
+            t_oProcessXML = XMLParser("<harpia>" + \
+                                           str(t_oGcDiagram.GetProcessChain()) + \
+                                           "</harpia>", fromString=True)
+            #print t_oProcessXML
+
+            graph_size = len(list(t_oProcessXML.getTag("harpia").getTag("properties").getTagChildren()))
+
+            if graph_size > 1:
+                blocks = t_oProcessXML.getTag("harpia").getTag("properties").getChildTags("block")
+                for t_oBlockProperties in blocks:
+                    block_properties = t_oBlockProperties.getChildTags("property")
                     if int(t_oBlockProperties.type) == 00:  # 00 = acquisition block
                         inputType = 'file'
-                        for t_oProperty in t_oBlockProperties.property:
+                        for t_oProperty in block_properties:
                             if t_oProperty.name == 'type':
+                                print t_oProperty.name
                                 inputType = t_oProperty.value
 
                             ###Just in case we need to know if we are dealing with a live feed or not this early
@@ -635,7 +637,7 @@ class S2iHarpiaFrontend(GladeWindow):
                                     return
 
                     if int(t_oBlockProperties.type) == 01:  # 01 => save image
-                        for t_oProperty in t_oBlockProperties.property:
+                        for t_oProperty in block_properties:
                             if t_oProperty.name == 'filename':
                                 t_oProperty.value = os.path.realpath(t_oProperty.value)
 
@@ -643,7 +645,7 @@ class S2iHarpiaFrontend(GladeWindow):
                     # seguindo o paradigma de não mandar mais nada.. vamos testar com o haar =]
                     # não vamos mandar mais nada mas vamos traduzir o path do haarCascade pra algo real
                     if int(t_oBlockProperties.type) == 610:  # 610 => haar detector... passando a cascade .xml
-                        for t_oProperty in t_oBlockProperties.property:
+                        for t_oProperty in block_properties:
                             if t_oProperty.name == 'cascade_name':
                                 t_oProperty.value = os.path.realpath(t_oProperty.value)
                                 if (not os.path.exists(t_oProperty.value)):
@@ -654,7 +656,7 @@ class S2iHarpiaFrontend(GladeWindow):
 
                 # cpscotti standalone!!!
                 t_lsProcessChain = []  # lista pra n precisar ficar copiando prum lado e pro otro o xml inteiro
-                t_lsProcessChain.append(t_oProcessXML.xml())
+                t_lsProcessChain.append(t_oProcessXML.getXML())
 
                 t_Sm = s2iSessionManager.s2iSessionManager()
 

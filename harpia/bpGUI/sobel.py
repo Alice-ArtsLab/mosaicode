@@ -26,15 +26,15 @@
 #
 # ----------------------------------------------------------------------
 
-from harpia.GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
 import gtk
+
+from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
+from harpia.utils.XMLUtils import XMLParser
+
 # i18n
 import os
-from harpia.utils.XMLUtils import XMLParser
 import gettext
-from harpia.utils.XMLUtils import XMLParser
 
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -99,7 +99,7 @@ class Properties(GladeWindow, S2iCommonProperties):
         self.configure()
 
         # load help text
-        t_oS2iHelp = XmlParser(self.m_sDataDir + "help/sobel" + _("_en.help"))
+        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/sobel" + _("_en.help"))
 
         t_oTextBuffer = gtk.TextBuffer()
 

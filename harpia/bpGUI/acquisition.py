@@ -27,7 +27,6 @@
 #----------------------------------------------------------------------
 
 from harpia.GladeWindow import  GladeWindow
-from harpia.amara import binderytools as bt
 
 import gtk
 from harpia.s2icommonproperties import S2iCommonProperties,APP, DIR

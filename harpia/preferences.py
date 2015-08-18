@@ -28,11 +28,9 @@
 
 # Libraries
 from GladeWindow import GladeWindow
-from amara import binderytools as bt
 import shutil
 import os
-
-
+from harpia.utils.XMLUtils import XMLParser
 
 # ----------------------------------------------------------------------
 ## Implements the preferences window
@@ -84,7 +82,7 @@ class Preferences(GladeWindow):
             self.HomeFolder = os.path.join(os.path.expanduser("~"), "harpiaFiles\\")
         else:
             self.HomeFolder = os.path.expanduser("~/harpiaFiles/")
-        #        self.HomeFolder = "/tmp/.harpia/"
+        # self.HomeFolder = "/tmp/.harpia/"
 
         ## The Config File Path
         self.configfile = self.HomeFolder + "harpia.conf"
@@ -103,10 +101,10 @@ class Preferences(GladeWindow):
 
 
         # ---------------------------------
-
+        self.preferences = self.m_oPropertiesXML.getTag("harpia").getTag("editor").getChildTags("property")
 
         # Load Preferences
-        for Preference in self.m_oPreferencesXML.harpia.editor.property:
+        for Preference in  self.preferences:
 
             if Preference.name == "show-grid":
                 if Preference.value == "false":
@@ -137,7 +135,7 @@ class Preferences(GladeWindow):
         This function is called whenever the confirm button on the preferences window is clicked.
         It stores the preferences in the configfile.
         """
-        for Preference in self.m_oPreferencesXML.harpia.editor.property:
+        for Preference in  self.preferences:
             if Preference.name == "show-grid":
                 if self.widgets['PREFShowGrid'].get_active():
                     Preference.value = unicode("true")
@@ -159,10 +157,10 @@ class Preferences(GladeWindow):
 
                 # -------------------------------------------
 
-            #         Editor = "\n<editor>" + "\n</editor>\n"
-            #         Block = "\n<block>" + "\n</block>\n"
-            #         Connector = "\n<connector>" + "\n</connector>\n"
-            #         Harpia = "<harpia>" + Editor + Block + Connector + "</harpia>"
+                #         Editor = "\n<editor>" + "\n</editor>\n"
+                #         Block = "\n<block>" + "\n</block>\n"
+                #         Connector = "\n<connector>" + "\n</connector>\n"
+                #         Harpia = "<harpia>" + Editor + Block + Connector + "</harpia>"
 
         # Opens the configFile for writing
         FileHandle = open(self.configfile, "w")

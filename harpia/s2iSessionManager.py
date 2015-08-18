@@ -24,22 +24,20 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 import time
-import sys
-import os
-
-from amara import binderytools as bt
+from harpia.utils.XMLUtils import XMLParser
 
 from gerador import *
 
+
 class s2iSessionManager:
-	m_sSessionId = 0
-	m_sDirName = "harpiaBETMP0"
-	TMPDIR = "/tmp/"
-	
-	HARPIARESPONSE="""
+    m_sSessionId = 0
+    m_sDirName = "harpiaBETMP0"
+    TMPDIR = "/tmp/"
+
+    HARPIARESPONSE = """
 <harpiamessage>
     <session value="88"/>
 	<version value="88"/>
@@ -54,54 +52,51 @@ class s2iSessionManager:
 	</commands>
 </harpiamessage>
 """
-	
-	m_sOldPath = ""
-	
-	def __init__(self ):
-		self.m_sSessionId = str(time.time())
-		self.m_sDirName += self.m_sSessionId
-		self.m_sOldPath = os.path.realpath(os.curdir)
-	
-	
-	def MakeDir(self ):
-		os.chdir(self.TMPDIR)
-		os.mkdir(self.m_sDirName)
-		return
-	
-	def StoreXML(self , a_lsXML = ["<harpia></harpia>"]):
-		#try:
-		os.chdir(self.TMPDIR + '/' + self.m_sDirName)
-		t_oStoreFile = file('imageProcessingChain.xml', 'w')
-		t_oStoreFile.write(a_lsXML[0])
-		t_oStoreFile.close()
-		#except:
-			#print "Problems Saving xml"
-		return
-	
-	def RunGerador(self ):
-		#changes dir...
-		os.chdir(self.TMPDIR + '/' + self.m_sDirName)
-		#This is totally useless... it works with nothing
-		INSTALLDIR = "/"
-		#This is totally useless... it works with nothing
-		
-		for step in parseAndGenerate(self.m_sDirName,'imageProcessingChain.xml',INSTALLDIR):
-			yield step
-		
-		#comes back to original dir
-		os.chdir(self.m_sOldPath)
-		
-		return
-	
-	def ReturnResponse(self ):
-		t_oResponse = bt.bind_string(self.HARPIARESPONSE)
-		return t_sResponse
-	
-	def NewInstance(self , a_lsXML = ["<harpia></harpia>"]):
-		self.MakeDir()
-		self.StoreXML(a_lsXML)
-		for step in self.RunGerador():
-			yield step
-		return
-	
-	
+
+    m_sOldPath = ""
+
+    def __init__(self):
+        self.m_sSessionId = str(time.time())
+        self.m_sDirName += self.m_sSessionId
+        self.m_sOldPath = os.path.realpath(os.curdir)
+
+    def MakeDir(self):
+        os.chdir(self.TMPDIR)
+        os.mkdir(self.m_sDirName)
+        return
+
+    def StoreXML(self, a_lsXML=["<harpia></harpia>"]):
+        # try:
+        os.chdir(self.TMPDIR + '/' + self.m_sDirName)
+        t_oStoreFile = file('imageProcessingChain.xml', 'w')
+        t_oStoreFile.write(a_lsXML[0])
+        t_oStoreFile.close()
+        # except:
+        # print "Problems Saving xml"
+        return
+
+    def RunGerador(self):
+        # changes dir...
+        os.chdir(self.TMPDIR + '/' + self.m_sDirName)
+        # This is totally useless... it works with nothing
+        INSTALLDIR = "/"
+        # This is totally useless... it works with nothing
+
+        for step in parseAndGenerate(self.m_sDirName, 'imageProcessingChain.xml', INSTALLDIR):
+            yield step
+
+        # comes back to original dir
+        os.chdir(self.m_sOldPath)
+
+        return
+
+    def ReturnResponse(self):
+        t_oResponse = XMLParser(self.HARPIARESPONSE, fromString=True)
+        return t_oResponse
+
+    def NewInstance(self, a_lsXML=["<harpia></harpia>"]):
+        self.MakeDir()
+        self.StoreXML(a_lsXML)
+        for step in self.RunGerador():
+            yield step
+        return

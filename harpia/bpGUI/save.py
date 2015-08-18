@@ -26,10 +26,11 @@
 #
 # ----------------------------------------------------------------------
 
-from harpia.GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
 import gtk
+
+from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
+
 # i18n
 import os
 from harpia.utils.XMLUtils import XMLParser
