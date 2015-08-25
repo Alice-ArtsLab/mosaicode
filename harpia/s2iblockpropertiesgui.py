@@ -72,7 +72,8 @@ class S2iBlockPropertiesGUI:
 		"""
 		
 		#Load block type from a_oPropertiesXML
-		BlockType = int(a_oPropertiesXML.properties.block.type)
+		#BlockType = int(a_oPropertiesXML.properties.block.type)
+		BlockType = int(a_oPropertiesXML.getChildTagAttr("properties", "block", "type"))
 		PkgName = 'harpia.bpGUI.'
 		ModName = str(s2idirectory.block[BlockType]["Path"]["Python"])
 		#from spam.ham import eggs" results in "

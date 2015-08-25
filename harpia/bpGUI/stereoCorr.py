@@ -24,30 +24,33 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
+import gtk
 
 from harpia.GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
-import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-#i18n
+
+# i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
+
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-#----------------------------------------------------------------------
-   
-class Properties( GladeWindow, S2iCommonProperties ):
 
-    #----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
-    def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+class Properties(GladeWindow, S2iCommonProperties):
+    # ----------------------------------------------------------------------
+
+    def __init__(self, PropertiesXML, S2iBlockProperties):
+
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
-        filename = self.m_sDataDir+'glade/stereoCorr.ui'
+
+        filename = self.m_sDataDir + 'glade/stereoCorr.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
@@ -57,103 +60,106 @@ class Properties( GladeWindow, S2iCommonProperties ):
             'BackgroundColor',
             'BorderColor',
             'HelpView'
-            ]
+        ]
 
         handlers = [
             'on_cancel_clicked',
             'on_prop_confirm_clicked',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked'
-            ]
+        ]
 
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
 
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
-					if Property.name == "maxDist":
-						self.widgets['maxDist'].set_value( float(Property.value) );
+
+        # load properties values
+        self.block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+        for Property in self.block_properties:
+            if Property.name == "maxDist":
+                self.widgets['maxDist'].set_value(float(Property.value));
 
         self.configure()
 
-        #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+'help/stereoCorr'+ _('_en.help'))
-        
+        # load help text
+        t_oS2iHelp = XMLParser(self.m_sDataDir + 'help/stereoCorr' + _('_en.help'))
+
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-    
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-        
-    #----------------------------------------------------------------------
+        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+
+        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
 
     def __del__(self):
-				pass
+        pass
 
-    #----------------------------------------------------------------------
-   
-    def on_prop_confirm_clicked( self, *args ):
+    # ----------------------------------------------------------------------
 
-			for Property in self.m_oPropertiesXML.properties.block.property:
-				if Property.name == "maxDist":
-					Property.value = unicode(self.widgets['maxDist'].get_value())
-			self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
+    def on_prop_confirm_clicked(self, *args):
 
-			self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
-			self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
-			self.widgets['Properties'].destroy()
+        for Property in self.block_properties:
+            if Property.name == "maxDist":
+                Property.value = unicode(self.widgets['maxDist'].get_value())
+        self.m_oS2iBlockProperties.SetPropertiesXML(self.m_oPropertiesXML)
 
-    #----------------------------------------------------------------------
-    
-#propProperties = Properties()()
-#propProperties.show( center=0 )
+        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
+        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
+        self.widgets['Properties'].destroy()
+
+        # ----------------------------------------------------------------------
+
+
+# propProperties = Properties()()
+# propProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-	for propIter in blockTemplate.properties:
-		if propIter[0] == 'maxDist':
-			maxDist = propIter[1]
-	blockTemplate.imagesIO =  \
-              'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' +  \
-              'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' +  \
-              'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-              'IplImage * block' + blockTemplate.blockNumber + '_img_ts1 = NULL;\n' + \
-              'IplImage * block' + blockTemplate.blockNumber + '_img_ts2 = NULL;\n'
-	blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1 && block' + blockTemplate.blockNumber + '_img_i2)\n{\n' +  \
-											'	if(!block' + blockTemplate.blockNumber + '_img_o1)\n' + \
-											'		block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' +  \
-											'	if(!block' + blockTemplate.blockNumber + '_img_ts1)\n' + \
-											'		block' + blockTemplate.blockNumber + '_img_ts1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
-											'	if(!block' + blockTemplate.blockNumber + '_img_ts2)\n' + \
-											'		block' + blockTemplate.blockNumber + '_img_ts2 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
-											'	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_ts1, CV_BGR2GRAY);\n' + \
-											'	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i2, block' + blockTemplate.blockNumber + '_img_ts2, CV_BGR2GRAY);\n' + \
-											'	cvFindStereoCorrespondence( block' + blockTemplate.blockNumber + '_img_ts1, block' + blockTemplate.blockNumber + '_img_ts2, CV_DISPARITY_BIRCHFIELD, block' + blockTemplate.blockNumber + '_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n' + \
-											'}\n'
-	blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' +  \
-									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-									'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n' + \
-									'if(block' + blockTemplate.blockNumber + '_img_ts1)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts1);\n' + \
-									'if(block' + blockTemplate.blockNumber + '_img_ts2)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts2);\n'
+    for propIter in blockTemplate.properties:
+        if propIter[0] == 'maxDist':
+            maxDist = propIter[1]
+    blockTemplate.imagesIO = \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_ts1 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_ts2 = NULL;\n'
+    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1 && block' + blockTemplate.blockNumber + '_img_i2)\n{\n' + \
+                                 '	if(!block' + blockTemplate.blockNumber + '_img_o1)\n' + \
+                                 '		block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
+                                 '	if(!block' + blockTemplate.blockNumber + '_img_ts1)\n' + \
+                                 '		block' + blockTemplate.blockNumber + '_img_ts1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
+                                 '	if(!block' + blockTemplate.blockNumber + '_img_ts2)\n' + \
+                                 '		block' + blockTemplate.blockNumber + '_img_ts2 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
+                                 '	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_ts1, CV_BGR2GRAY);\n' + \
+                                 '	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i2, block' + blockTemplate.blockNumber + '_img_ts2, CV_BGR2GRAY);\n' + \
+                                 '	cvFindStereoCorrespondence( block' + blockTemplate.blockNumber + '_img_ts1, block' + blockTemplate.blockNumber + '_img_ts2, CV_DISPARITY_BIRCHFIELD, block' + blockTemplate.blockNumber + '_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n' + \
+                                 '}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n' + \
+                            'if(block' + blockTemplate.blockNumber + '_img_ts1)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts1);\n' + \
+                            'if(block' + blockTemplate.blockNumber + '_img_ts2)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts2);\n'
+
 
 # ------------------------------------------------------------------------------
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():
-	return {'Label':_('Stereo Correspondence'),
-         'Path':{'Python':'stereoCorr',
-                 'Glade':'glade/stereoCorr.ui',
-                 'Xml':'xml/stereoCorr.xml'},
-         'Inputs':2,
-         'Outputs':1,
-         'Icon':'images/stereoCorr.png',
-         'Color':'10:10:20:150',
-				 'InTypes':{0:'HRP_IMAGE',1:"HRP_IMAGE"},
-				 'OutTypes':{0:'HRP_IMAGE'},
-				 'Description':_('Input1 is the left image and Input2 is the right image. Output is the depth image'),
-				 'TreeGroup':_('Feature Detection')
-         }
+    return {'Label': _('Stereo Correspondence'),
+            'Path': {'Python': 'stereoCorr',
+                     'Glade': 'glade/stereoCorr.ui',
+                     'Xml': 'xml/stereoCorr.xml'},
+            'Inputs': 2,
+            'Outputs': 1,
+            'Icon': 'images/stereoCorr.png',
+            'Color': '10:10:20:150',
+            'InTypes': {0: 'HRP_IMAGE', 1: "HRP_IMAGE"},
+            'OutTypes': {0: 'HRP_IMAGE'},
+            'Description': _('Input1 is the left image and Input2 is the right image. Output is the depth image'),
+            'TreeGroup': _('Feature Detection')
+            }

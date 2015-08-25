@@ -24,30 +24,33 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
+import gtk
 
 from harpia.GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
-import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-#i18n
+
+# i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
+
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-#----------------------------------------------------------------------
-   
-class Properties( GladeWindow, S2iCommonProperties ):
 
-    #----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
-    def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+class Properties(GladeWindow, S2iCommonProperties):
+    # ----------------------------------------------------------------------
+
+    def __init__(self, PropertiesXML, S2iBlockProperties):
+
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
-        filename = self.m_sDataDir+'glade/newDouble.ui'
+
+        filename = self.m_sDataDir + 'glade/newDouble.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
@@ -58,89 +61,92 @@ class Properties( GladeWindow, S2iCommonProperties ):
             'BorderColor',
             'HelpView',
             'prop_confirm'
-            ]
+        ]
 
         handlers = [
             'on_cancel_clicked',
             'on_prop_confirm_clicked',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked'
-            ]
+        ]
 
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
-					if Property.name == "doubleVal":
-						self.widgets['doubleVal'].set_value( float(Property.value) );
+
+        # load properties values
+        self.block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
+
+        for Property in self.block_properties:
+            if Property.name == "doubleVal":
+                self.widgets['doubleVal'].set_value(float(Property.value));
 
         self.configure()
 
-        #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+'help/newDouble'+ _('_en.help'))
-        
+        # load help text
+        t_oS2iHelp = XMLParser(self.m_sDataDir + 'help/newDouble' + _('_en.help'))
+
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-    
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-        
-    #----------------------------------------------------------------------
+        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+
+        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
 
     def __del__(self):
-				pass
+        pass
 
-    #----------------------------------------------------------------------
-   
-    def on_prop_confirm_clicked( self, *args ):
+    # ----------------------------------------------------------------------
 
-			self.widgets['prop_confirm'].grab_focus()
+    def on_prop_confirm_clicked(self, *args):
 
-			for Property in self.m_oPropertiesXML.properties.block.property:
-				if Property.name == "doubleVal":
-					Property.value = unicode(self.widgets['doubleVal'].get_value())
+        self.widgets['prop_confirm'].grab_focus()
 
-				
-			self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
-			
+        for Property in self.block_properties:
+            if Property.name == "doubleVal":
+                Property.value = unicode(self.widgets['doubleVal'].get_value())
 
-			self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
-			self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
-			self.widgets['Properties'].destroy()
+        self.m_oS2iBlockProperties.SetPropertiesXML(self.m_oPropertiesXML)
 
-    #----------------------------------------------------------------------
-    
-#propProperties = Properties()()
-#propProperties.show( center=0 )
+        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
+        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
+        self.widgets['Properties'].destroy()
+
+        # ----------------------------------------------------------------------
+
+
+# propProperties = Properties()()
+# propProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-	for propIter in blockTemplate.properties:
-		if propIter[0] == 'doubleVal':
-			doubleVal = propIter[1]
-	blockTemplate.imagesIO =  '\ndouble  block' + blockTemplate.blockNumber + '_double_o1;\n'
-	blockTemplate.functionCall = '	block' + blockTemplate.blockNumber + '_double_o1 = ' + str(float(doubleVal)) + ';\n'
-	blockTemplate.dealloc = ''
+    for propIter in blockTemplate.properties:
+        if propIter[0] == 'doubleVal':
+            doubleVal = propIter[1]
+    blockTemplate.imagesIO = '\ndouble  block' + blockTemplate.blockNumber + '_double_o1;\n'
+    blockTemplate.functionCall = '	block' + blockTemplate.blockNumber + '_double_o1 = ' + str(
+        float(doubleVal)) + ';\n'
+    blockTemplate.dealloc = ''
+
 
 # ------------------------------------------------------------------------------
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():
-	return {'Label':_('New Double'),
-         'Path':{'Python':'newDouble',
-                 'Glade':'glade/newDouble.ui',
-                 'Xml':'xml/newDouble.xml'},
-         'Inputs':0,
-         'Outputs':1,
-         'Icon':'images/newDouble.png',
-         'Color':'50:50:200:150',
-				 'InTypes':"",
-				 'OutTypes':{0:'HRP_DOUBLE'},
-				 'Description':_('Creates new literal value (Double)'),
-				 'TreeGroup':_('Experimental'),
-				 "IsSource":True
-         }
+    return {'Label': _('New Double'),
+            'Path': {'Python': 'newDouble',
+                     'Glade': 'glade/newDouble.ui',
+                     'Xml': 'xml/newDouble.xml'},
+            'Inputs': 0,
+            'Outputs': 1,
+            'Icon': 'images/newDouble.png',
+            'Color': '50:50:200:150',
+            'InTypes': "",
+            'OutTypes': {0: 'HRP_DOUBLE'},
+            'Description': _('Creates new literal value (Double)'),
+            'TreeGroup': _('Experimental'),
+            "IsSource": True
+            }

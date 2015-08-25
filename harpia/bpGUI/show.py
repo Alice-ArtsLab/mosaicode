@@ -24,31 +24,31 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
-
-from harpia.GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
+# ----------------------------------------------------------------------
 
 import gtk
+
+from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-#i18n
+# i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
+
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-#----------------------------------------------------------------------
-   
-class Properties( GladeWindow, S2iCommonProperties ):
 
-    #----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
-    def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+class Properties(GladeWindow, S2iCommonProperties):
+    # ----------------------------------------------------------------------
+
+    def __init__(self, PropertiesXML, S2iBlockProperties):
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
-        filename = self.m_sDataDir+'glade/show.ui'
+
+        filename = self.m_sDataDir + 'glade/show.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
@@ -58,99 +58,98 @@ class Properties( GladeWindow, S2iCommonProperties ):
             'BackgroundColor',
             'BorderColor',
             'HelpView'
-            ]
+        ]
 
         handlers = [
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked',
             'on_cancel_clicked',
             'on_show_confirm_clicked'
-            ]
+        ]
 
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
 
-        #load properties values
-        #There is no properties
 
-        #load block state 
+        # load properties values
+        # There is no properties
+
+        # load block state
         t_bState = self.m_oS2iBlockProperties.GetState()
-                
-        self.widgets['SHOWDisable'].set_active( not t_bState )
+
+        self.widgets['SHOWDisable'].set_active(not t_bState)
 
         self.configure()
 
 
-        #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/show"+ _("_en.help"))
-        
+        # load help text
+        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/show" + _("_en.help"))
+
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-    
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
-        
-    #----------------------------------------------------------------------
+        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+
+        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
 
     def __del__(self):
-        
-	pass
+        pass
 
-    #----------------------------------------------------------------------
-   
-    def on_show_confirm_clicked( self, *args ):
+    # ----------------------------------------------------------------------
 
+    def on_show_confirm_clicked(self, *args):
         if self.widgets['SHOWDisable'].get_active() == self.m_oS2iBlockProperties.GetState():
-
             self.m_oS2iBlockProperties.ToggleState()
 
-        self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
+        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
 
-        self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
+        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
 
         self.widgets['Properties'].destroy()
 
-    #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
 
-#ShowProperties = Properties()
-#ShowProperties.show( center=0 )
+
+# ShowProperties = Properties()
+# ShowProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-   import harpia.gerador
-   harpia.gerador.g_ShowCount += 1
-   blockTemplate.imagesIO = \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-   if(not harpia.gerador.g_bLive):
-       blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-      ' block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                       'cvSaveImage("block' + blockTemplate.blockNumber + '_OUT.png" ,block' +blockTemplate.blockNumber+'_img_i1);}\n'
-   else:
-       blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-         ' block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                       'cvNamedWindow("block' + blockTemplate.blockNumber + '_img_o1",CV_WINDOW_AUTOSIZE );\n cvShowImage("block' + blockTemplate.blockNumber + '_img_o1",block' + blockTemplate.blockNumber + '_img_i1);} \n'
-   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    import harpia.gerador
+    harpia.gerador.g_ShowCount += 1
+    blockTemplate.imagesIO = \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+    if (not harpia.gerador.g_bLive):
+        blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                                     ' block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                                     'cvSaveImage("block' + blockTemplate.blockNumber + '_OUT.png" ,block' + blockTemplate.blockNumber + '_img_i1);}\n'
+    else:
+        blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                                     ' block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+                                     'cvNamedWindow("block' + blockTemplate.blockNumber + '_img_o1",CV_WINDOW_AUTOSIZE );\n cvShowImage("block' + blockTemplate.blockNumber + '_img_o1",block' + blockTemplate.blockNumber + '_img_i1);} \n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+
 
 # ------------------------------------------------------------------------------
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():
-	return {"Label":_("Show Image"),
-         "Path":{"Python":"show",
-                 "Glade":"glade/show.ui",
-                 "Xml":"xml/show.xml"},
-         "Inputs":1,
-         "Outputs":1,
-         "Icon":"images/show.png",
-         "Color":"50:100:200:150",
-				 "InTypes":{0:"HRP_IMAGE"},
-				 "OutTypes":{0:"HRP_IMAGE"},
-				 "Description":_("Shows the input image on a new window."),
-				 "TreeGroup":_("General")
-         }
+    return {"Label": _("Show Image"),
+            "Path": {"Python": "show",
+                     "Glade": "glade/show.ui",
+                     "Xml": "xml/show.xml"},
+            "Inputs": 1,
+            "Outputs": 1,
+            "Icon": "images/show.png",
+            "Color": "50:100:200:150",
+            "InTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "Description": _("Shows the input image on a new window."),
+            "TreeGroup": _("General")
+            }

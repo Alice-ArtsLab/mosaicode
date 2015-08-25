@@ -24,30 +24,33 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+
+import gtk
 
 from harpia.GladeWindow import GladeWindow
-from harpia.amara import binderytools as bt
-import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-#i18n
+
+# i18n
 import os
+from harpia.utils.XMLUtils import XMLParser
 import gettext
+
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-#----------------------------------------------------------------------
-   
-class Properties( GladeWindow, S2iCommonProperties ):
 
-    #----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
-    def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+class Properties(GladeWindow, S2iCommonProperties):
+    # ----------------------------------------------------------------------
+
+    def __init__(self, PropertiesXML, S2iBlockProperties):
+
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
-        filename = self.m_sDataDir+'glade/canny.ui'
+
+        filename = self.m_sDataDir + 'glade/canny.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
 
@@ -59,141 +62,152 @@ class Properties( GladeWindow, S2iCommonProperties ):
             'BackgroundColor',
             'BorderColor',
             'HelpView',
-						'canny_confirm'
-            ]
+            'canny_confirm'
+        ]
 
         handlers = [
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked',
             'on_cancel_clicked',
             'on_canny_confirm_clicked'
-            ]
+        ]
 
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
 
-        #load properties values
-        for Property in self.m_oPropertiesXML.properties.block.property:
+        block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
 
-            if Property.name == "threshold1":
-                self.widgets['CANNThreshold1'].set_value( float(Property.value) )
+        # load properties values
+        for Property in block_properties:
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
 
-            if Property.name == "threshold2":
-                self.widgets['CANNThreshold2'].set_value( float(Property.value) )
+            if name == "threshold1":
+                self.widgets['CANNThreshold1'].set_value(float(value))
 
-            if Property.name == "apertureSize":
-              #  if Property.value == "1":
-              #      self.widgets['CANNApertureSize'].set_active( int(0) )
-                if Property.value == "3":
-                    self.widgets['CANNApertureSize'].set_active( int(0) )
-                if Property.value == "5":
-                    self.widgets['CANNApertureSize'].set_active( int(1) )
-                if Property.value == "7":
-                    self.widgets['CANNApertureSize'].set_active( int(2) )
+            if name == "threshold2":
+                self.widgets['CANNThreshold2'].set_value(float(value))
+
+            if name == "apertureSize":
+                #  if Property.value == "1":
+                #      self.widgets['CANNApertureSize'].set_active( int(0) )
+                if value == "3":
+                    self.widgets['CANNApertureSize'].set_active(int(0))
+                if value == "5":
+                    self.widgets['CANNApertureSize'].set_active(int(1))
+                if value == "7":
+                    self.widgets['CANNApertureSize'].set_active(int(2))
 
         self.configure()
 
-        #load help text
-        t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/canny"+ _("_en.help"))
-        
+        # load help text
+        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/canny" + _("_en.help"))
+
         t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-    
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
+        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-    #----------------------------------------------------------------------
+        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
 
     def __del__(self):
-        
-	pass
 
+        pass
 
-    #----------------------------------------------------------------------
-   
-    def on_canny_confirm_clicked( self, *args ):
+    # ----------------------------------------------------------------------
+
+    def on_canny_confirm_clicked(self, *args):
         self.widgets['canny_confirm'].grab_focus()
-        for Property in self.m_oPropertiesXML.properties.block.property:
 
-            if Property.name == "threshold1":
-                Property.value = unicode(self.widgets['CANNThreshold1'].get_value())
+        block_properties = self.m_oPropertiesXML.getTag("properties").getTag("block").getChildTags("property")
 
-            if Property.name == "threshold2":
-                Property.value = unicode(self.widgets['CANNThreshold2'].get_value())
+        for Property in block_properties:
 
-            if Property.name == "apertureSize":
-                Active = self.widgets['CANNApertureSize'].get_active( )
-                #if int(Active) == 0:
+            name = Property.getAttr("name")
+            value = Property.getAttr("value")
+
+            if name == "threshold1":
+                Property.setAttr("value", self.widgets['CANNThreshold1'].get_value())
+
+            if name == "threshold2":
+                Property.setAttr("value",self.widgets['CANNThreshold2'].get_value())
+
+            if name == "apertureSize":
+                Active = self.widgets['CANNApertureSize'].get_active()
+                # if int(Active) == 0:
                 #    Property.value = unicode("1")
                 if int(Active) == 0:
-                    Property.value = unicode("3")
+                    Property.setAttr("value", "3")
                 if int(Active) == 1:
-                    Property.value = unicode("5")
+                    Property.setAttr("value", "5")
                 if int(Active) == 2:
-                    Property.value = unicode("7")
+                    Property.setAttr("value", "7")
 
-        self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
 
-        self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
+        self.m_oS2iBlockProperties.SetPropertiesXML(self.m_oPropertiesXML)
 
-        self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
+        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
+
+        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
 
         self.widgets['Properties'].destroy()
 
-    #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
 
-#CannyProperties = Properties()
-#CannyProperties.show( center=0 )
+
+# CannyProperties = Properties()
+# CannyProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-   for propIter in blockTemplate.properties:
-       if propIter[0] == 'threshold2':
-           threshold2Value = propIter[1]
-       elif propIter[0] == 'apertureSize':
-           apertureSizeValue = propIter[1]
-       elif propIter[0] == 'threshold1':
-           threshold1Value = propIter[1]
-   blockTemplate.imagesIO = \
-       'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\nIplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-   blockTemplate.functionArguments = \
-       'int block' + blockTemplate.blockNumber + '_arg_threshold2 = ' + threshold2Value + \
-       ';\nint block' + blockTemplate.blockNumber + '_arg_aperture_size = ' + apertureSizeValue + \
-       ';\nint block' + blockTemplate.blockNumber + '_arg_threshold1 = ' + threshold1Value + ';\n'
-   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-       'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-       '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-       '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n IplImage * tmpImg' +blockTemplate.blockNumber+\
-       ' = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),8,1);\n if(block' + blockTemplate.blockNumber +\
-       '_img_i1->nChannels == 3)\n {cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1,tmpImg' + blockTemplate.blockNumber +\
-       ',CV_RGB2GRAY);}\n else\n{tmpImg' + blockTemplate.blockNumber + ' = block' + blockTemplate.blockNumber + \
-       '_img_i1 = NULL;}\n cvCanny(tmpImg' + blockTemplate.blockNumber + ', tmpImg' + blockTemplate.blockNumber + \
-       ', block' + blockTemplate.blockNumber + '_arg_threshold1, block' + blockTemplate.blockNumber + \
-       '_arg_threshold2, block' + blockTemplate.blockNumber + '_arg_aperture_size);\n'+ \
-       'if(block' + blockTemplate.blockNumber + '_img_i1->nChannels == 3)\n{cvCvtColor(tmpImg' + blockTemplate.blockNumber + \
-       ', block' + blockTemplate.blockNumber + '_img_o1,CV_GRAY2RGB);}\nelse\n{cvCopyImage(tmpImg' + blockTemplate.blockNumber +\
-       ', block' + blockTemplate.blockNumber + '_img_o1);}\ncvReleaseImage(&tmpImg' + blockTemplate.blockNumber + ');}\n'
-   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    for propIter in blockTemplate.properties:
+        if propIter[0] == 'threshold2':
+            threshold2Value = propIter[1]
+        elif propIter[0] == 'apertureSize':
+            apertureSizeValue = propIter[1]
+        elif propIter[0] == 'threshold1':
+            threshold1Value = propIter[1]
+    blockTemplate.imagesIO = \
+        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\nIplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+    blockTemplate.functionArguments = \
+        'int block' + blockTemplate.blockNumber + '_arg_threshold2 = ' + threshold2Value + \
+        ';\nint block' + blockTemplate.blockNumber + '_arg_aperture_size = ' + apertureSizeValue + \
+        ';\nint block' + blockTemplate.blockNumber + '_arg_threshold1 = ' + threshold1Value + ';\n'
+    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
+                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n IplImage * tmpImg' + blockTemplate.blockNumber + \
+                                 ' = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),8,1);\n if(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->nChannels == 3)\n {cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1,tmpImg' + blockTemplate.blockNumber + \
+                                 ',CV_RGB2GRAY);}\n else\n{tmpImg' + blockTemplate.blockNumber + ' = block' + blockTemplate.blockNumber + \
+                                 '_img_i1 = NULL;}\n cvCanny(tmpImg' + blockTemplate.blockNumber + ', tmpImg' + blockTemplate.blockNumber + \
+                                 ', block' + blockTemplate.blockNumber + '_arg_threshold1, block' + blockTemplate.blockNumber + \
+                                 '_arg_threshold2, block' + blockTemplate.blockNumber + '_arg_aperture_size);\n' + \
+                                 'if(block' + blockTemplate.blockNumber + '_img_i1->nChannels == 3)\n{cvCvtColor(tmpImg' + blockTemplate.blockNumber + \
+                                 ', block' + blockTemplate.blockNumber + '_img_o1,CV_GRAY2RGB);}\nelse\n{cvCopyImage(tmpImg' + blockTemplate.blockNumber + \
+                                 ', block' + blockTemplate.blockNumber + '_img_o1);}\ncvReleaseImage(&tmpImg' + blockTemplate.blockNumber + ');}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+
 
 # ------------------------------------------------------------------------------
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():
-	return {"Label":_("Canny"),
-         "Path":{"Python":"canny",
-                 "Glade":"glade/canny.ui",
-                 "Xml":"xml/canny.xml"},
-         "Inputs":1,
-         "Outputs":1,
-         "Icon":"images/canny.png",
-         "Color":"250:180:80:150",
-				 "InTypes":{0:"HRP_IMAGE"},
-				 "OutTypes":{0:"HRP_IMAGE"},
-				 "Description":_("Filtering operation that employs the Canny algorithm to detect edges."),
-				 "TreeGroup":_("Gradients, Edges and Corners")
-         }
+    return {"Label": _("Canny"),
+            "Path": {"Python": "canny",
+                     "Glade": "glade/canny.ui",
+                     "Xml": "xml/canny.xml"},
+            "Inputs": 1,
+            "Outputs": 1,
+            "Icon": "images/canny.png",
+            "Color": "250:180:80:150",
+            "InTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "Description": _("Filtering operation that employs the Canny algorithm to detect edges."),
+            "TreeGroup": _("Gradients, Edges and Corners")
+            }

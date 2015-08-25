@@ -24,24 +24,23 @@
 #
 #    For further information, check the COPYING file distributed with this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 # Used Libraries
 import os
 import gtk
 import gtk.glade
-#i18n
+# i18n
 import gettext
 
 _ = gettext.gettext
-APP='harpia'
-DIR='/usr/share/harpia/po'
+APP = 'harpia'
+DIR = '/usr/share/harpia/po'
 
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 def search_file(filename, search_path):
-
     """ This global function find a file, when gived a search path
     """
 
@@ -58,16 +57,16 @@ def search_file(filename, search_path):
     else:
         return None
 
-#----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
 ## Displays a GUI
 class GladeWindow(object):
-
-    '''A base class for displaying a GUI developed with Glade. Create a subclass 
+    '''A base class for displaying a GUI developed with Glade. Create a subclass
     and add any callbacks and other code. The derived class
     __init__ method needs to call GladeWindow.__init__
     The callbacks that start with on_ are automatically connected.'''
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def set_search_path(cls, path):
 
@@ -77,7 +76,7 @@ class GladeWindow(object):
 
     set_search_path = classmethod(set_search_path)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def __init__(self, filename, top_window, widget_list, handlers,
                  pull_down_dict=None):
@@ -93,7 +92,7 @@ class GladeWindow(object):
             strings to put in the combo
         '''
 
-#i18n stuff
+        # i18n stuff
 
 
         gettext.bindtextdomain(APP, DIR)
@@ -101,8 +100,6 @@ class GladeWindow(object):
         gtk.glade.bindtextdomain(APP, DIR)
         gtk.glade.textdomain(APP)
 
-		
-        
         self.widget_list = widget_list
 
         try:
@@ -112,7 +109,7 @@ class GladeWindow(object):
 
         fname = search_file(filename, search_path)
         self.xml = gtk.glade.XML(fname)
-        
+
         # connect callbacks
         self.cb_dict = {}
         for f in handlers:
@@ -126,7 +123,7 @@ class GladeWindow(object):
         if pull_down_dict is not None:
             for w, l in pull_down_dict.items():
                 self.widgets[w].set_popdown_strings(l)
-            
+
         # set attribute for top_window so it can be accessed as self.top_window
         self.top_window = self.xml.get_widget(top_window)
 
@@ -136,7 +133,7 @@ class GladeWindow(object):
         # initialize callback func
         self.cb_func = None
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def set_top_window(self, top_window):
 
@@ -145,10 +142,10 @@ class GladeWindow(object):
         their top window, especially so the dialog is set_transient_for
         the actual main window
         '''
-        
+
         self.top_window = top_window
-        
-    #----------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------
 
     def set_callback_function(self, cb_func, *cb_args, **cb_kwargs):
 
@@ -158,9 +155,8 @@ class GladeWindow(object):
         self.cb_func = cb_func
         self.cb_args = cb_args
         self.cb_kwargs = cb_kwargs
-        
-    
-    #----------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------
 
     def show(self, center=1, prev_window=None, *args):
 
@@ -176,7 +172,7 @@ class GladeWindow(object):
             self.top_window.set_position(gtk.WIN_POS_NONE)
         self.top_window.show()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def hide(self):
 
@@ -193,5 +189,5 @@ class GladeWindow(object):
             self.cb_func(*self.cb_args, **self.cb_kwargs)
         if self.prev_window is None:
             gtk.main_quit()
-            
-#----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
