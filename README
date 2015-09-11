@@ -8,6 +8,10 @@ to install harpia, unpack this distribution:
 
 then procede with instalation
 #: sudo python setup.py install
+#: sudo apt-get install python-gtk2 python-glade2
+#: sudo apt-get install python-gnome2
+#: sudo apt-get install python-pip
+#: sudo pip install BeautifulSoup4
 
 to uninstall
 #: sudo ./uninstall.sh
@@ -25,6 +29,10 @@ You can (:]) generate a Built distribution for your platform using:
 FURTHER INFO:
 
 http://s2i.das.ufsc.br/harpia/en/home.html
+
+or asking to:
+scotti-at-ieee.org
+
 
 or asking to:
 scotti-at-ieee.org
