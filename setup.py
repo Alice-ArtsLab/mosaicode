@@ -24,7 +24,7 @@ config['classifiers'] = [
 			]
 
 setup(name='harpia',
-                        install_requires=['beautifulsoup4'],
+            install_requires=['beautifulsoup4'],
 			version='1.0',
 			packages=['harpia','harpia.bpGUI', 'harpia.utils'],
 			scripts=['launcher/harpia'],

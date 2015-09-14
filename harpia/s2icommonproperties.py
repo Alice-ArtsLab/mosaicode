@@ -29,6 +29,7 @@
 # Imported Libraries
 import gtk
 import gobject
+from harpia.utils.XMLUtils import XMLParser
 
 
 #i18n
@@ -43,109 +44,118 @@ gettext.textdomain(APP)
 #----------------------------------------------------------------------
 ## Block Properties base class
 class S2iCommonProperties:
-	"""
-	This class implements the base properties for the blocks.
-	In the Harpia current version, it only implements the color selection that is used to change the block back color and border color.
-	"""
-
-	#----------------------------------------------------------------------
-
-	m_oColorSelectionDlg = None
-	
-	#----------------------------------------------------------------------
-	
-	def __init__( self, *args ):
-
-		pass
-
-	#----------------------------------------------------------------------
-
-	def __del__(self):
-		pass
-
-	#----------------------------------------------------------------------
-
-	def RunColorSelection(self,*args):
-		"""
-		This function creates a window for Color selection. This function is used to change the block back color and the border color.
-		"""
-
-		if self.m_oColorSelectionDlg == None:
-			
-			self.m_oColorSelectionDlg = gtk.ColorSelectionDialog(_("Color selection"))
-
-		t_oColorSelection = self.m_oColorSelectionDlg.colorsel
-		
-		t_oResponse = self.m_oColorSelectionDlg.run()
-
-		if t_oResponse == gtk.RESPONSE_OK:
-
-			t_oColor = t_oColorSelection.get_current_color()
-
-			self.m_oColorSelectionDlg.hide()
-
-			return t_oColor
-
-		else:
-			self.m_oColorSelectionDlg.hide()
-
-			return None
-			
-	#----------------------------------------------------------------------
-	
-	def on_cancel_clicked( self, *args ):
-		self.widgets['Properties'].destroy()
-		
+    """
+    This class implements the base properties for the blocks.
+    In the Harpia current version, it only implements the color selection that is used to change the block back color and border color.
+    """
 
     #----------------------------------------------------------------------
 
-	def on_BackColorButton_clicked(self,*args):
-		t_oColor = self.RunColorSelection()
-		if t_oColor <> None:
-			self.widgets['BackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-			self.m_oBackColor[0] = t_oColor.red / 257
-			self.m_oBackColor[1] = t_oColor.green / 257
-			self.m_oBackColor[2] = t_oColor.blue / 257
+    m_oColorSelectionDlg = None
+    
+    #----------------------------------------------------------------------
+    
+    def __init__( self, *args ):
+
+        pass
 
     #----------------------------------------------------------------------
 
-	def on_BorderColorButton_clicked(self,*args):
-		t_oColor = self.RunColorSelection()
-		if t_oColor <> None:
-			self.widgets['BorderColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-			self.m_oBorderColor[0] = t_oColor.red / 257
-			self.m_oBorderColor[1] = t_oColor.green / 257
-			self.m_oBorderColor[2] = t_oColor.blue / 257
+    def __del__(self):
+        pass
 
     #----------------------------------------------------------------------
 
-	def configure(self):
-		self.widgets['Properties'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
+    def RunColorSelection(self,*args):
+        """
+        This function creates a window for Color selection. This function is used to change the block back color and the border color.
+        """
 
-		#load properties values
-		#there is no properties
+        if self.m_oColorSelectionDlg == None:
+            
+            self.m_oColorSelectionDlg = gtk.ColorSelectionDialog(_("Color selection"))
 
-		#load border color
-		self.m_oBorderColor = self.m_oS2iBlockProperties.GetBorderColor()
+        t_oColorSelection = self.m_oColorSelectionDlg.colorsel
+        
+        t_oResponse = self.m_oColorSelectionDlg.run()
 
-		t_nBorderRed   = self.m_oBorderColor[0] * 257
-		t_nBorderGreen = self.m_oBorderColor[1] * 257
-		t_nBorderBlue  = self.m_oBorderColor[2] * 257
+        if t_oResponse == gtk.RESPONSE_OK:
 
-		t_oBorderColor = gtk.gdk.Color(red=t_nBorderRed,green=t_nBorderGreen,blue=t_nBorderBlue)
+            t_oColor = t_oColorSelection.get_current_color()
 
-		self.widgets['BorderColor'].modify_bg(gtk.STATE_NORMAL,t_oBorderColor)        
+            self.m_oColorSelectionDlg.hide()
 
-		#load block color
-		self.m_oBackColor = self.m_oS2iBlockProperties.GetBackColor()
+            return t_oColor
 
-		t_nBackRed   = self.m_oBackColor[0] * 257
-		t_nBackGreen = self.m_oBackColor[1] * 257
-		t_nBackBlue  = self.m_oBackColor[2] * 257
+        else:
+            self.m_oColorSelectionDlg.hide()
 
-		t_oBackColor = gtk.gdk.Color(red=t_nBackRed,green=t_nBackGreen,blue=t_nBackBlue)
+            return None
+            
+    #----------------------------------------------------------------------
+    
+    def on_cancel_clicked( self, *args ):
+        self.widgets['Properties'].destroy()
+        
 
-		self.widgets['BackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
+    #----------------------------------------------------------------------
 
+    def on_BackColorButton_clicked(self,*args):
+        t_oColor = self.RunColorSelection()
+        if t_oColor <> None:
+            self.widgets['BackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
+            self.m_oBackColor[0] = t_oColor.red / 257
+            self.m_oBackColor[1] = t_oColor.green / 257
+            self.m_oBackColor[2] = t_oColor.blue / 257
+
+    #----------------------------------------------------------------------
+
+    def on_BorderColorButton_clicked(self,*args):
+        t_oColor = self.RunColorSelection()
+        if t_oColor <> None:
+            self.widgets['BorderColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
+            self.m_oBorderColor[0] = t_oColor.red / 257
+            self.m_oBorderColor[1] = t_oColor.green / 257
+            self.m_oBorderColor[2] = t_oColor.blue / 257
+
+    #----------------------------------------------------------------------
+
+    def configure(self):
+        self.widgets['Properties'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
+
+        #load properties values
+        #there is no properties
+
+        #load border color
+        self.m_oBorderColor = self.m_oS2iBlockProperties.GetBorderColor()
+
+        t_nBorderRed   = self.m_oBorderColor[0] * 257
+        t_nBorderGreen = self.m_oBorderColor[1] * 257
+        t_nBorderBlue  = self.m_oBorderColor[2] * 257
+
+        t_oBorderColor = gtk.gdk.Color(red=t_nBorderRed,green=t_nBorderGreen,blue=t_nBorderBlue)
+
+        self.widgets['BorderColor'].modify_bg(gtk.STATE_NORMAL,t_oBorderColor)        
+
+        #load block color
+        self.m_oBackColor = self.m_oS2iBlockProperties.GetBackColor()
+
+        t_nBackRed   = self.m_oBackColor[0] * 257
+        t_nBackGreen = self.m_oBackColor[1] * 257
+        t_nBackBlue  = self.m_oBackColor[2] * 257
+
+        t_oBackColor = gtk.gdk.Color(red=t_nBackRed,green=t_nBackGreen,blue=t_nBackBlue)
+
+        self.widgets['BackgroundColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
+
+        # load help text
+        t_oTextBuffer = gtk.TextBuffer()
+        t_oTextBuffer.set_text(self.getHelp())
+        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+
+    #----------------------------------------------------------------------
+    def getHelp(self):
+        pass
     #----------------------------------------------------------------------
 

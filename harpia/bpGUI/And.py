@@ -27,7 +27,6 @@
 # ----------------------------------------------------------------------
 
 from harpia.GladeWindow import GladeWindow
-from harpia.utils.XMLUtils import XMLParser
 import gtk
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 import os
@@ -71,18 +70,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         self.configure()
 
-
-        # load help text
-        #t_oS2iHelp = bt.bind_file(self.m_sDataDir+"help/and"+ _("_en.help"))
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/and" + _("_en.help"))
-
-        t_oTextBuffer = gtk.TextBuffer()
-
-        #t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.help.content) ) )
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
-
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
-
     # ----------------------------------------------------------------------
 
     def __del__(self):
@@ -97,9 +84,9 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         # ----------------------------------------------------------------------
 
+    def getHelp(self):
+        return "Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades. Primeira: Executa a operação entre duas imagens ponto a ponto. Segunda: Executa a operação entre um valor constante e cada ponto da imagem."
 
-# AndProperties = Properties()
-# AndProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
