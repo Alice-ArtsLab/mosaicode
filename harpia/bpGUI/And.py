@@ -126,3 +126,19 @@ def getBlock():
             "Description": _("Logical AND operation between two images."),
             "TreeGroup": _("Arithmetic and logical operations")
             }
+
+def gethelp():
+    #funcao de help
+    return "<help>\
+               <description>\
+            Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades.\
+            Primeira: Executa a operação entre duas imagens ponto a ponto. Segunda: Executa a operação entre um valor constante e cada ponto da imagem.\
+               </description>\
+               <content>\
+            BLOCO E\
+            Ajuda resumida: realiza a operação lógica E entre duas imagens.\
+            Ajuda do bloco:\
+            Realiza a operação lógica E com os valores de intensidade luminosa de todos os pontos de duas imagens, ponto por ponto.\
+               </content>\
+            </help>\
+            "

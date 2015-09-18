@@ -8,7 +8,7 @@ to install harpia, unpack this distribution:
 
 then procede with instalation
 #: sudo python setup.py install
-sudo apt-get install libopencv-dev python-opencv
+#: sudo apt-get install libopencv-dev python-opencv
 #: sudo apt-get install python-gtk2 python-glade2
 #: sudo apt-get install python-gnome2
 #: sudo apt-get install python-pip
