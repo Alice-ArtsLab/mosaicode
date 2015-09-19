@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # [HARPIA PROJECT]
-#
+#[Ourobolos Project UFSJ]
 #
 # S2i - Intelligent Industrial Systems
 # DAS - Automation and Systems Department
@@ -100,15 +100,18 @@ class Properties(GladeWindow, S2iCommonProperties):
                     self.widgets['CANNApertureSize'].set_active(int(2))
 
         self.configure()
+       
+    
+        #----------------------------------------------------------------
+        # # # load help text -- Commit Carlos 
+        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/canny" + _("_en.help"))
 
-        # load help text
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/canny" + _("_en.help"))
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
-
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+    
 
     # ----------------------------------------------------------------------
 
@@ -155,10 +158,17 @@ class Properties(GladeWindow, S2iCommonProperties):
         self.widgets['Properties'].destroy()
 
         # ----------------------------------------------------------------------
+        #help function -- 
+    def getHelp(self):
+        return "Operacão de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.\nPropriedades\nLimiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas."
+
 
 
 # CannyProperties = Properties()
 # CannyProperties.show( center=0 )
+
+
+#GetHelp generation
 
 # ------------------------------------------------------------------------------
 # Code generation

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # [HARPIA PROJECT]
-#
+# [Ourobolos Project UFSJ]
 #
 # S2i - Intelligent Industrial Systems
 # DAS - Automation and Systems Department
@@ -111,14 +111,14 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         self.configure()
 
-        # load help text
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/checkLin" + _("_en.help"))
+        # # load help text
+        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/checkLin" + _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
 
     # ----------------------------------------------------------------------
 
@@ -159,6 +159,8 @@ class Properties(GladeWindow, S2iCommonProperties):
         self.widgets['Properties'].destroy()
 
         # ----------------------------------------------------------------------
+    def getHelp(self):
+        return 'Aplica a transformada de Hough para a deteccao de linhas.\nDetecta formas que se assemelhem a linhas na imagem de entrada. Saida 1 é a resposta da avaliacao(*) e a saida dois mostra as linhas encontradas.'
 
 
 # propProperties = Properties()()
