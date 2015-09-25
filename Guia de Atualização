@@ -35,6 +35,9 @@ checkLin.py
 closig.py
 comment.py
 acquisition.py
+haardetect.py
+isOnRect.py
+
 
 
 
