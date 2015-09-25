@@ -192,13 +192,14 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         #load help text
         #t_oS2iHelp = bt.bind_file("../etc/acquisition/acquisition.help")
-        t_oS2iHelp = XMLParser(self.m_sDataDir+"help/acquisition"+ _("_en.help"))
+        # t_oS2iHelp = XMLParser(self.m_sDataDir+"help/acquisition"+ _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
+        # t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
 
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
+        # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
+
 
     #----------------------------------------------------------------------
 
@@ -292,6 +293,11 @@ class Properties( GladeWindow, S2iCommonProperties):
 
     #----------------------------------------------------------------------
 
+    def getHelp(self):
+        return "oi"
+
+
+    #----------------------------------------------------------------------
     def on_ACQUButtonSearch_clicked( self, *args ):
 
         dialog = gtk.FileChooserDialog("Abrir...",
@@ -327,7 +333,7 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         self.widgets['ACQUFilename'].set_text(response);
 
-    #----------------------------------------------------------------------
+    #----------------------------------
 
     def on_ACQUVideoSearch_clicked( self, *args ):
 
