@@ -90,7 +90,7 @@ class Properties( GladeWindow, S2iCommonProperties):
             'frameRate',
             'streamProperties_label',
             'frameRate_label2',
-						'acquisition_confirm'
+                        'acquisition_confirm'
             ]
 
         handlers = [
@@ -200,7 +200,6 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
-
     #----------------------------------------------------------------------
 
     def __del__(self):
@@ -294,10 +293,9 @@ class Properties( GladeWindow, S2iCommonProperties):
     #----------------------------------------------------------------------
 
     def getHelp(self):
-        return "oi"
+        return "Ajuda resumida: realiza a aquisição de uma imagem a partir de algum dispositivo,\
+        seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
-
-    #----------------------------------------------------------------------
     def on_ACQUButtonSearch_clicked( self, *args ):
 
         dialog = gtk.FileChooserDialog("Abrir...",
@@ -333,7 +331,7 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         self.widgets['ACQUFilename'].set_text(response);
 
-    #----------------------------------
+    #----------------------------------------------------------------------
 
     def on_ACQUVideoSearch_clicked( self, *args ):
 
@@ -559,7 +557,7 @@ def generate(blockTemplate):
            harpia.gerador.g_bVideo.append(tmpPack)
        if propIter[0] == 'frameRate':
            if float(propIter[1]) > harpia.gerador.g_bFrameRate:
-           	harpia.gerador.g_bFrameRate = float(propIter[1])
+            harpia.gerador.g_bFrameRate = float(propIter[1])
    blockTemplate.imagesIO = \
         'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL; //Capture\n'
    if flag == 'camera':
@@ -595,7 +593,7 @@ def generate(blockTemplate):
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():
-	return {"Label":_("Image"),
+    return {"Label":_("Image"),
          "Path":{"Python":"acquisition",
                  "Glade":"glade/acquisition.ui",
                  "Xml":"xml/acquisition.xml"},
@@ -603,9 +601,9 @@ def getBlock():
          "Outputs":1,
          "Icon":"images/acquisition.png",
          "Color":"50:100:200:150",
-				 "InTypes":"",
-				 "OutTypes":{0:"HRP_IMAGE"},
-				 "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
-				 "TreeGroup":_("General"),
-				 "IsSource":True #optional argument, if key doesn't exist, admit false
+                 "InTypes":"",
+                 "OutTypes":{0:"HRP_IMAGE"},
+                 "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
+                 "TreeGroup":_("General"),
+                 "IsSource":True #optional argument, if key doesn't exist, admit false
          }
