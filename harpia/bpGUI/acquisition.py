@@ -192,13 +192,13 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         #load help text
         #t_oS2iHelp = bt.bind_file("../etc/acquisition/acquisition.help")
-        t_oS2iHelp = XMLParser(self.m_sDataDir+"help/acquisition"+ _("_en.help"))
+        # t_oS2iHelp = XMLParser(self.m_sDataDir+"help/acquisition"+ _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
+        # t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
 
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
+        # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
     #----------------------------------------------------------------------
 
@@ -291,6 +291,10 @@ class Properties( GladeWindow, S2iCommonProperties):
         self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
+
+    def getHelp(self):
+        return "Ajuda resumida: realiza a aquisição de uma imagem a partir de algum dispositivo,\
+        seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
     def on_ACQUButtonSearch_clicked( self, *args ):
 
