@@ -97,7 +97,7 @@ class Properties( GladeWindow, S2iCommonProperties ):
     
         # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
     def getHelp(self):
-        return "Insere comentario -- Magno"
+        return "Insere comentario"
 		
         # Comment View
         

@@ -114,13 +114,13 @@ class Properties( GladeWindow, S2iCommonProperties ):
         self.widgets['FILLFillColor'].modify_bg(gtk.STATE_NORMAL,t_oBackColor)
 
         #load help text
-        t_oS2iHelp = XMLParser(self.m_sDataDir+"help/fill"+ _("_en.help"))
+        # t_oS2iHelp = XMLParser(self.m_sDataDir+"help/fill"+ _("_en.help"))
         
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
+        # t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
     
-        self.widgets['HelpView'].set_buffer( t_oTextBuffer )
+        # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
     #----------------------------------------------------------------------
 
@@ -128,6 +128,11 @@ class Properties( GladeWindow, S2iCommonProperties ):
       pass
 
     #----------------------------------------------------------------------
+
+    def getHelp(self):
+        return "Preenche toda a imagem de uma cor."
+
+    #--------------------------------------------------------------------
 
     def on_fill_confirm_clicked( self, *args ):
 

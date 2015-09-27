@@ -135,6 +135,12 @@ class Properties(GladeWindow, S2iCommonProperties):
 
     # ----------------------------------------------------------------------
 
+    def getHelp(self):
+        return "Detecta formas circulares na imagem de entrada.\
+        Saida 1 é a resposta da avaliacao(*) e a saida dois mostra \
+        os circulos encontrados."
+    #-----------------------------------------------------------------------
+
     def on_prop_confirm_clicked(self, *args):
         self.widgets['prop_confirm'].grab_focus()
         for Property in self.block_properties:
