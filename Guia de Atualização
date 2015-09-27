@@ -37,5 +37,19 @@ comment.py
 acquisition.py
 haarDetect.py
 coloronversion.py
+composeRGB.py
+cropimage.py
+decomposeRGB.py
+dilate.py
+division.py
+equalizeHistogram.py
+erode.py
+exp.py
+fill.py
+fillRect.py
+findcolor.py
+findsquare.py
+getsize.py
+
 
 
