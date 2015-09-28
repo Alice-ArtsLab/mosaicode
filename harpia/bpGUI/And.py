@@ -84,8 +84,10 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         # ----------------------------------------------------------------------
 
-    def getHelp(self):
-        return "Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades. Primeira: Executa a operação entre duas imagens ponto a ponto. Segunda: Executa a operação entre um valor constante e cada ponto da imagem."
+    def getHelp(self):#Função que chama a help
+        return "Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades.\
+        Primeira: Executa a operação entre duas imagens ponto a ponto.\
+        Segunda: Executa a operação entre um valor constante e cada ponto da imagem."
 
 
 # ------------------------------------------------------------------------------

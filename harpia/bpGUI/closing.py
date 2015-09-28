@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # [HARPIA PROJECT]
-#
+#[Ourobolos Project UFSJ]
 #
 # S2i - Intelligent Industrial Systems
 # DAS - Automation and Systems Department
@@ -92,14 +92,14 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         self.configure()
 
-        # load help text
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/closing" + _("_en.help"))
+        # # load help text
+        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/closing" + _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
 
     # ----------------------------------------------------------------------
 
@@ -134,7 +134,8 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         # ----------------------------------------------------------------------
 
-
+    def getHelp(self):
+        return"Operação de morfologia matemática para realizar a fechamento da imagem de acordo com o elemento estruturante. Equivale a aplicação de uma dilatação seguida de uma erosão."
 # ClosingProperties = Properties()
 # ClosingProperties.show( center=0 )
 
