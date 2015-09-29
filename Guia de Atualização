@@ -37,6 +37,18 @@ comment.py
 acquisition.py
 haardetect.py
 isOnRect.py
+laplace.py
+liveDelay.py
+log.py
+matchTem.py
+minMax.py
+moveRct.py
+multiplication.py
+newDouble.py
+newPoint.py
+newRect.py
+not.py
+opening.py
 
 
 
