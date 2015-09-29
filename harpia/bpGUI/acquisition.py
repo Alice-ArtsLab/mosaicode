@@ -290,10 +290,10 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         self.widgets['Properties'].destroy()
 
-    #----------------------------------------------------------------------
+    #------------------------Help Text----------------------------------------------
 
-    def getHelp(self):
-        return "Ajuda resumida: realiza a aquisição de uma imagem a partir de algum dispositivo,\
+    def getHelp(self):#adicionado help
+        return "Realiza a aquisição de uma imagem a partir de algum dispositivo,\
         seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
     def on_ACQUButtonSearch_clicked( self, *args ):
