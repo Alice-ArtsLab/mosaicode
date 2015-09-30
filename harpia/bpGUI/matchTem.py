@@ -97,13 +97,17 @@ class Properties(GladeWindow, S2iCommonProperties):
         self.configure()
 
         # load help text
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/checkCir" + _("_en.help"))
+        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/checkCir" + _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
+    def getHelp(self):
+        return "operação de filtragem destinada a suavizar uma imagem."
 
     # ----------------------------------------------------------------------
 
