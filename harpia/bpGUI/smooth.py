@@ -99,21 +99,23 @@ class Properties(GladeWindow, S2iCommonProperties):
             if name == "param2":
                 self.widgets['SMOOParam2'].set_value(int(value))
 
-        self.configure()
-
+    	self.configure()
         # load help text
         # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/smooth" + _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
 
     #----------------Help Text--------------------------------------
-    def getHelp(self): #adicionado help
-        return "Operação de filtragem destinada\
-        a suavizar uma imagem."
+      #----------------Help Text--------------------------------------
+
+    def getHelp(self):#adicionado help
+        return "Aplicação de um filtro de suavização. Suaviza os contornos de objetos na imagem, borrando-os levemente."
+
+    # ----------------------------------------------------------------------
       
 
     # ----------------------------------------------------------------------
@@ -220,6 +222,6 @@ def getBlock():
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Filtering operation that smooths the image."),
+            "Description": _("Operação de filtragem destinada suavizar uma imagem"),
             "TreeGroup": _("Filters and Color Conversion")
             }
