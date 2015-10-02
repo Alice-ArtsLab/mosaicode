@@ -75,13 +75,18 @@ class Properties(GladeWindow, S2iCommonProperties):
 
 
         # load help text
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/log" + _("_en.help"))
+        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/log" + _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    # ----------------------------------------------------------------------
+    def getHelp(self):
+        return "aplica a função logarítmica a uma imagem, ou seja,\
+        calcula o logarítmo natural do valor de intensidade luminosa de cada ponto da imagem."
 
     # ----------------------------------------------------------------------
 

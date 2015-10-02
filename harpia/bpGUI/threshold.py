@@ -108,13 +108,18 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         # load help text
 
-        t_oS2iHelp = XMLParser(self.m_sDataDir + "help/threshold" + _("_en.help"))
+        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/threshold" + _("_en.help"))
 
-        t_oTextBuffer = gtk.TextBuffer()
+        # t_oTextBuffer = gtk.TextBuffer()
 
-        t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
+        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
 
-        self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
+
+    #----------------Help Text--------------------------------------
+
+    def getHelp(self):#adicionado help
+        return "Operador de binarização da imagem, de acordo com um valor fixo de intensidade luminosa (valor de limiar)."
 
     # ----------------------------------------------------------------------
 

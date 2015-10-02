@@ -82,7 +82,7 @@ class Properties(GladeWindow, S2iCommonProperties):
         self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
         self.widgets['Properties'].destroy()
 
-        # ----------------------------------------------------------------------
+        # --------------------------Help Text--------------------------------------------
 
     def getHelp(self):#Função que chama a help
         return "Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades.\
