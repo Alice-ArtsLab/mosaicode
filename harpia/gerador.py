@@ -170,110 +170,13 @@ class blockTemplate:
         ############################### processors #################################
         # THIS CODE IS TO CREATE THE C LINES FROM THE XML PARSING                  #
         ############################################################################
-
     def blockCodeWriter(self):
-        if self.blockType == '00':  # ACQUISITION BLOCK
-            acquisition.generate(self)
-        elif self.blockType == '06':  # COLORSPACE CONVERSION
-            colorConversion.generate(self)
-        elif self.blockType == '07':  # COMPOSICAO RGB
-            composeRGB.generate(self)
-        elif self.blockType == '08':  # DECOMPOSICAO RGB
-            decomposeRGB.generate(self)
-        elif self.blockType == '09':  # FILL BLOCK
-            fill.generate(self)
-        elif self.blockType == '14':  # FILL RECT BLOCK
-            fillRect.generate(self)
-        elif self.blockType == '10':  # COMMENT
-            comment.generate(self)
-        elif self.blockType == '120':  # THRESHOLD BLOCK
-            threshold.generate(self)
-        elif self.blockType == '80':  # SOBEL
-            sobel.generate(self)
-        elif self.blockType == '81':  # LAPLACE
-            laplace.generate(self)
-        elif self.blockType == '82':  # SUAVIZADOR
-            smooth.generate(self)
-        elif self.blockType == '83':  # CANNY BLOCK
-            canny.generate(self)
-        elif self.blockType == '100':  # ERODE BLOCK
-            erode.generate(self)
-        elif self.blockType == '101':  # DILATE
-            dilate.generate(self)
-        elif self.blockType == '102':  # OPENING
-            opening.generate(self)
-        elif self.blockType == '103':  # CLOSING
-            closing.generate(self)
-        elif self.blockType == '01':  # SAVE
-            save.generate(self)
-        elif self.blockType == '02':  # SHOW
-            show.generate(self)
-        elif self.blockType == '20':  # SUM
-            Sum.generate(self)
-        elif self.blockType == '21':  # SUBTRACTION
-            subtraction.generate(self)
-        elif self.blockType == '22':  # MULTIPLICATION
-            multiplication.generate(self)
-        elif self.blockType == '23':  # DIVISION
-            division.generate(self)
-        elif self.blockType == '60':  # POW
-            Pow.generate(self)
-        elif self.blockType == '61':  # Exp
-            exp.generate(self)
-        elif self.blockType == '62':  # Log
-            log.generate(self)
-        elif self.blockType == '40':  # NOT
-            Not.generate(self)
-        elif self.blockType == '41':  # AND
-            And.generate(self)
-        elif self.blockType == '42':  # OR
-            Or.generate(self)
-        elif self.blockType == '43':  # XOR
-            xor.generate(self)
-        elif self.blockType == '601':  # EXEC_CMD, check (0,0), not null.. change this.. cmd = echo auehueah, change this
-            rumCmd.generate(self)
-        elif self.blockType == '602':  # Analyses images for presence of circles..
-            checkCir.generate(self)
-        elif self.blockType == '603':  # Analyses images for presence of lines..
-            checkLin.generate(self)
-        elif self.blockType == '604':  # Resizes input image using "method" to desired dim..
-            resize.generate(self)
-        elif self.blockType == '605':  # Finds the best matchings between image (in1) and template (in2)
-            mathTem.generate(self)
-        elif self.blockType == '606':  # Finds min or max of the Image
-            minMax.generate(self)
-        elif self.blockType == '607':  # Rotates input image
-            rotate.generate(self)
-        elif self.blockType == '04':  # EQUALIZE HIST
-            equalizeHistogram.generate(self)
-        elif self.blockType == '12':  # Live Delay brief description
-            liveDelay.generate(self)
-        elif self.blockType == '13':  # Get Size
-            getSize.generate(self)
-        elif self.blockType == '611':  # Stereo Correspondence brief description
-            stereoCorr.generate(self)
-        elif self.blockType == '11':  # Save Video brief description
-            saveVideo.generate(self)
-        elif self.blockType == '610':  # Haar (face) Detector brief description
-            haarDetect.generate(self)
-        elif self.blockType == '609':  # Find object of a given color brief description
-            findColor.generate(self)
-        elif self.blockType == '608':  # Find Squares brief description
-            findSquares.generate(self)
-        elif self.blockType == '803':  # Move Rectangle brief description
-            moveRct.generate(self)
-        elif self.blockType == '902':  # Check Point brief description
-            isOnRect.generate(self)
-        elif self.blockType == '901':  # New Point brief description
-            newPoint.generate(self)
-        elif self.blockType == '802':  # Crop Image brief description
-            cropImage.generate(self)
-        elif self.blockType == '701':  # New Double Value brief description
-            newDouble.generate(self)
-        elif self.blockType == '801':  # New Rectangle brief description
-            newRect.generate(self)
-        elif self.blockType == '03':  # PLOT HISTOGRAM
-            plotHistogram.generate(self)
+        PkgName = 'harpia.bpGUI.'
+        ModName = str(s2idirectory.block[int(self.blockType)]["Path"]["Python"])
+        #from spam.ham import eggs" results in "
+        harpia_bpGUI_Mod = __import__(PkgName, globals(), locals(), [ModName])
+        guiMod = getattr(harpia_bpGUI_Mod, ModName)        
+        guiMod.generate(self)
 
         ############################ connectors ####################################
         # THIS CODE IS RESPONSIBLE FOR CREATING THE ASSIGNMENTS BETWEEN THE IMAGES #
