@@ -95,7 +95,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.TextWidth = self.width - WIDTH_2_TEXT_OFFSET
 
 
-        t_nMaxIO = max(self.m_oDictBlock["Inputs"],self.m_oDictBlock["Outputs"])
+        t_nMaxIO = max(len(self.m_oDictBlock["InTypes"]), len(self.m_oDictBlock["OutTypes"]))
 
         ## Generates the block size, based on the number of inputs,outputs
 
@@ -144,14 +144,14 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         return -1
 
     def ComputeOutputPorts(self):
-        for outputPort in range(self.m_oDictBlock["Outputs"]):
+        for outputPort in range(len(self.m_oDictBlock["OutTypes"])):
             self.outputPortCenters.append((self.width-(self.m_nInputWidth/2),  (self.m_nRadius # upper border
                                                                                                                 + (outputPort*5) # spacing betwen ports
                                                                                                                 + outputPort*self.m_nInputHeight #previous ports
                                                                                                                 + self.m_nInputHeight/2)))#going to the port's center
 
     def ComputeInputPorts(self):
-        for inputPort in range(self.m_oDictBlock["Inputs"]):
+        for inputPort in range(len(self.m_oDictBlock["InTypes"])):
             self.inputPortCenters.append((self.m_nInputWidth/2,  (self.m_nRadius # upper border
                                                                                                                 + (inputPort*5) # spacing betwen ports
                                                                                                                 + inputPort*self.m_nInputHeight #previous ports
@@ -323,7 +323,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.m_bHasFlow = True
         else:
             sourceConnectors = self.ParentDiagram.GetConnectorsTo(self.m_nBlockCountId)
-            if len(sourceConnectors) <> self.m_oDictBlock["Inputs"]:
+            if len(sourceConnectors) <> len(self.m_oDictBlock["InTypes"]):
                 #print "Block ",self.Label," id(",self.m_nBlockCountId,") doesnt has flow"
                 self.m_bHasFlow = False
             else:

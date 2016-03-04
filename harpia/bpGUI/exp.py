@@ -136,8 +136,6 @@ def getBlock():
          "Path":{"Python":"exp",
                  "Glade":"glade/exp.ui",
                  "Xml":"xml/exp.xml"},
-         "Inputs":1,
-         "Outputs":1,
          "Icon":"images/exp.png",
          "Color":"230:230:60:150",
 				 "InTypes":{0:"HRP_IMAGE"},

@@ -382,7 +382,7 @@ class GcDiagram(gnomecanvas.Canvas):
             Network += '<block type="' + str(self.m_oBlocks[t_oBlockIdx].GetType()) + '" id="' + str(
                 self.m_oBlocks[t_oBlockIdx].GetId()) + '">\n'
             Network += "<inputs>\n"
-            for t_nInputIdx in range(self.m_oBlocks[t_oBlockIdx].m_oDictBlock["Inputs"]):
+            for t_nInputIdx in range(len(self.m_oBlocks[t_oBlockIdx].m_oDictBlock["InTypes"])):
                 Network += '<input id="' + str(
                     t_nInputIdx + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
             Network += "</inputs>\n"
@@ -396,7 +396,7 @@ class GcDiagram(gnomecanvas.Canvas):
                         t_oConnector.toBlock) + '" input="' + str(
                         t_oConnector.toBlockIn + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
                     t_dConnectedOuts[t_oConnector.fromBlockOut] = 1
-            for Output in range(self.m_oBlocks[t_oBlockIdx].m_oDictBlock["Outputs"]):
+            for Output in range(len(self.m_oBlocks[t_oBlockIdx].m_oDictBlock["OutTypes"])):
                 if not t_dConnectedOuts.has_key(Output):
                     Network += '<output id="' + str(Output + 1) + '" inBlock="--" input="--"/>\n'
             Network += "</outputs>\n"

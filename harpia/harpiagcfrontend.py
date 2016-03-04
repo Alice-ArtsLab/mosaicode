@@ -142,8 +142,8 @@ class S2iHarpiaFrontend(GladeWindow):
         self.BlocksProperties = dict()
 
         for x in s2idirectory.block:
-            self.BlocksProperties[s2idirectory.block[x]["Label"]] = {"Inputs": s2idirectory.block[x]["Inputs"],
-                                                                     "Outputs": s2idirectory.block[x]["Outputs"]}
+            self.BlocksProperties[s2idirectory.block[x]["Label"]] = {"Inputs": len(s2idirectory.block[x]["InTypes"]),
+                                                                     "Outputs": len(s2idirectory.block[x]["OutTypes"])}
 
 
         # cpscotti .. taking out more dumb code..

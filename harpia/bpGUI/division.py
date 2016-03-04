@@ -134,8 +134,6 @@ def getBlock():
             "Path": {"Python": "division",
                      "Glade": "glade/division.ui",
                      "Xml": "xml/division.xml"},
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/division.png",
             "Color": "180:10:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},

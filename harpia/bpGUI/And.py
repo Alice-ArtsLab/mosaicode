@@ -96,19 +96,19 @@ class Properties(GladeWindow, S2iCommonProperties):
 def generate(blockTemplate):
     import harpia.gerador
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 harpia.gerador.inputSizeComply(2, blockTemplate.blockNumber) + 'cvAnd(block' + \
-                                 blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_i2, block' + \
-                                 blockTemplate.blockNumber + '_img_o1,0);\n cvResetImageROI(block' + blockTemplate.blockNumber + '_img_o1);}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_i2 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height),block$$' + \
+                                 '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
+                                 harpia.gerador.inputSizeComply(2, blockTemplate.blockNumber) + 'cvAnd(block$$' + \
+                                 '_img_i1, block$$_img_i2, block$$' + \
+                                 '_img_o1,0);\n cvResetImageROI(block$$_img_o1);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_i2);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -119,8 +119,6 @@ def getBlock():
             "Path": {"Python": "And",
                      "Glade": "glade/and.ui",
                      "Xml": "xml/and.xml"},
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/and.png",
             "Color": "10:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
