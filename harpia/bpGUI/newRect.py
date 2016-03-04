@@ -152,8 +152,8 @@ def generate(blockTemplate):
             rctWidth = propIter[1]
         elif propIter[0] == 'height':
             rctHeight = propIter[1]
-    blockTemplate.imagesIO = '\nCvRect block' + blockTemplate.blockNumber + '_rect_o1;\n'
-    blockTemplate.functionCall = 'block' + blockTemplate.blockNumber + '_rect_o1 = cvRect(' + str(
+    blockTemplate.imagesIO = '\nCvRect block$$_rect_o1;\n'
+    blockTemplate.functionCall = 'block$$_rect_o1 = cvRect(' + str(
         int(float(x0))) + ', ' + str(int(float(y0))) + ', ' + str(int(float(rctWidth))) + ', ' + str(
         int(float(rctHeight))) + ');'
     blockTemplate.dealloc = ''
@@ -174,6 +174,6 @@ def getBlock():
             'InTypes': "",
             'OutTypes': {0: 'HRP_RECT'},
             'Description': _('Creates new rectangle'),
-            'TreeGroup': _('Experimental'),
+            'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }

@@ -139,8 +139,8 @@ def generate(blockTemplate):
             x0 = propIter[1]
         elif propIter[0] == 'y0':
             y0 = propIter[1]
-    blockTemplate.imagesIO = 'CvPoint block' + blockTemplate.blockNumber + '_point_o1;\n'
-    blockTemplate.functionCall = 'block' + blockTemplate.blockNumber + '_point_o1 = cvPoint(' + str(
+    blockTemplate.imagesIO = 'CvPoint block$$_point_o1;\n'
+    blockTemplate.functionCall = 'block$$_point_o1 = cvPoint(' + str(
         int(float(x0))) + ',' + str(int(float(y0))) + ');\n'
     blockTemplate.dealloc = ''
 
@@ -160,6 +160,6 @@ def getBlock():
             'InTypes': "",
             'OutTypes': {0: 'HRP_POINT'},
             'Description': _('Creates a new Point'),
-            'TreeGroup': _('Experimental'),
+            'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }

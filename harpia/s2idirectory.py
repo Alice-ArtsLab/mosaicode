@@ -150,6 +150,7 @@ typeIconsOut = {
 #Available groups!! PAY ATTENTION TO THIS BEFORE ADDING A NEW GROUP
 groups = {
 			_("General"):[],
+			_("Basic Data Type"):[],
 			_("Arithmetic and logical operations"):[],
 			_("Gradients, Edges and Corners"):[],
 			_("Math Functions"):[],

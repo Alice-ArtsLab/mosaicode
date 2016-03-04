@@ -131,8 +131,8 @@ def generate(blockTemplate):
     for propIter in blockTemplate.properties:
         if propIter[0] == 'doubleVal':
             doubleVal = propIter[1]
-    blockTemplate.imagesIO = '\ndouble  block' + blockTemplate.blockNumber + '_double_o1;\n'
-    blockTemplate.functionCall = '	block' + blockTemplate.blockNumber + '_double_o1 = ' + str(
+    blockTemplate.imagesIO = '\ndouble  block$$_double_o1;\n'
+    blockTemplate.functionCall = '	block$$_double_o1 = ' + str(
         float(doubleVal)) + ';\n'
     blockTemplate.dealloc = ''
 
@@ -152,6 +152,6 @@ def getBlock():
             'InTypes': "",
             'OutTypes': {0: 'HRP_DOUBLE'},
             'Description': _('Creates new literal value (Double)'),
-            'TreeGroup': _('Experimental'),
+            'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }
