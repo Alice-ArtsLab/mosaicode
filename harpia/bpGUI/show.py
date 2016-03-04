@@ -158,3 +158,10 @@ def getBlock():
             "Description": _("Shows the input image on a new window."),
             "TreeGroup": _("General")
             }
+            
+def getXML():
+    return r"""<properties>
+      <block type='02' id=''>
+	<property name='state' value='true' />
+      </block>
+</properties>"""

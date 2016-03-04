@@ -110,7 +110,6 @@ class Properties(GladeWindow, S2iCommonProperties):
         # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
 
     #----------------Help Text--------------------------------------
-      #----------------Help Text--------------------------------------
 
     def getHelp(self):#adicionado help
         return "Aplicação de um filtro de suavização. Suaviza os contornos de objetos na imagem, borrando-os levemente."

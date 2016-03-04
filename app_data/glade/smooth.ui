@@ -514,7 +514,7 @@ CV_MEDIAN</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTextView" id="SMOOHelpView">
+		<widget class="GtkTextView" id="HelpView">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="editable">False</property>
