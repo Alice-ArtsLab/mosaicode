@@ -129,13 +129,13 @@ def generate(blockTemplate):
     # elif propIter[0] == 'frameNumber':
     # frameNumber = int(float(propIter[1]))
     # frameNumber = max(frameNumber,1)
-    blockTemplate.imagesIO = 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-                             'CvRect block' + blockTemplate.blockNumber + '_rect_o1 = cvRect( 0, 0, 1, 1);\n'
+    blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
+                             'CvRect block$$_rect_o1 = cvRect( 0, 0, 1, 1);\n'
 
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n{\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_o1 = cvRect( 0, 0, block' + blockTemplate.blockNumber + '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height);\n' + \
+    blockTemplate.functionCall = '\nif(block$$_img_i1)\n{\n' + \
+                                 '	block$$_rect_o1 = cvRect( 0, 0, block$$_img_i1->width, block$$_img_i1->height);\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------

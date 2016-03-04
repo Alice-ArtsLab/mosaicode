@@ -177,6 +177,10 @@ class blockTemplate:
         harpia_bpGUI_Mod = __import__(PkgName, globals(), locals(), [ModName])
         guiMod = getattr(harpia_bpGUI_Mod, ModName)        
         guiMod.generate(self)
+        self.imagesIO = self.imagesIO.replace("$$", str(self.blockNumber))
+        self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
+        self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
+        self.functionArguments = self.functionArguments.replace("$$", str(self.blockNumber))
 
         ############################ connectors ####################################
         # THIS CODE IS RESPONSIBLE FOR CREATING THE ASSIGNMENTS BETWEEN THE IMAGES #

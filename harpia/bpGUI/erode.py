@@ -158,26 +158,26 @@ def generate(blockTemplate):
             iterationsValue = propIter[1]
     blockTemplate.imagesIO = "// ERODE input and output\n"
     blockTemplate.imagesIO += \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL; // ERODE input\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL; // ERODE output\n'
+        'IplImage * block$$_img_i1 = NULL; // ERODE input\n' + \
+        'IplImage * block$$_img_o1 = NULL; // ERODE output\n'
     blockTemplate.imagesIO += '\n\n'
 
-    blockTemplate.functionArguments = 'int block' + blockTemplate.blockNumber + '_arg_iterations = ' + \
+    blockTemplate.functionArguments = 'int block$$_arg_iterations = ' + \
                                       iterationsValue + ';\n'
-    blockTemplate.functionArguments += 'IplConvKernel * block' + blockTemplate.blockNumber + \
+    blockTemplate.functionArguments += 'IplConvKernel * block$$'  + \
                                        '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + \
                                        ' , ' + maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
 
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth ,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 '\ncvErode(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + \
-                                 '_img_o1,block' + blockTemplate.blockNumber + '_arg_mask,block' + blockTemplate.blockNumber + \
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width, block$$_img_i1->height), block$$' + \
+                                 '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
+                                 '\ncvErode(block$$_img_i1,block$$' + \
+                                 '_img_o1,block$$_arg_mask,block$$' + \
                                  '_arg_iterations);\n}\n'
 
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1); // ERODE input\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1); // ERODE output\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1); // ERODE input\n' + \
+                            'cvReleaseImage(&block$$_img_i1); // ERODE output\n'
 
 
 # ------------------------------------------------------------------------------
