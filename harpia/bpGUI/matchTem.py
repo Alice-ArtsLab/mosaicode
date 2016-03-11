@@ -185,8 +185,6 @@ def getBlock():
             "Path": {"Python": "matchTem",
                      "Glade": "glade/matchTem.ui",
                      "Xml": "xml/matchTem.xml"},
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/matchTem.png",
             "Color": "180:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
