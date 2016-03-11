@@ -194,17 +194,17 @@ def generate(blockTemplate):
         elif propIter[0] == 'param2':
             param2Value = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth,block' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'IplImage * block$$_img_t = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth,block' + \
                                  blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'cvSmooth(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1 ,' + typeValue + ',' + param1Value + ',' + param2Value + ',0,0);}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
+                                 'cvSmooth(block$$_img_i1, block$$_img_o1 ,' + typeValue + ',' + param1Value + ',' + param2Value + ',0,0);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_t);\n'
 
 
 # ------------------------------------------------------------------------------
