@@ -139,8 +139,6 @@ def getBlock():
             "Path": {"Python": "log",
                      "Glade": "glade/log.ui",
                      "Xml": "xml/log.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/log.png",
             "Color": "230:230:60:150",
             "InTypes": {0: "HRP_IMAGE"},

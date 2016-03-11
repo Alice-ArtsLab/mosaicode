@@ -177,8 +177,6 @@ def getBlock():
             'Path': {'Python': 'liveDelay',
                      'Glade': 'glade/liveDelay.ui',
                      'Xml': 'xml/liveDelay.xml'},
-            'Inputs': 1,
-            'Outputs': 1,
             'Icon': 'images/liveDelay.png',
             'Color': '250:20:30:150',
             'InTypes': {0: 'HRP_IMAGE'},
