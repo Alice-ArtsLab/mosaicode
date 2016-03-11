@@ -197,8 +197,6 @@ def getBlock():
             "Path": {"Python": "sobel",
                      "Glade": "glade/sobel.ui",
                      "Xml": "xml/sobel.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/sobel.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE"},
