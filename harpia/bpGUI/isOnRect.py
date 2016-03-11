@@ -155,8 +155,6 @@ def getBlock():
             'Path': {'Python': 'isOnRect',
                      'Glade': 'glade/isOnRect.ui',
                      'Xml': 'xml/isOnRect.xml'},
-            'Inputs': 2,
-            'Outputs': 1,
             'Icon': 'images/isOnRect.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_POINT', 1: 'HRP_RECT'},
