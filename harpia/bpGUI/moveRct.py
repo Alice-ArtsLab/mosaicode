@@ -153,8 +153,6 @@ def getBlock():
             'Path': {'Python': 'moveRct',
                      'Glade': 'glade/moveRct.ui',
                      'Xml': 'xml/moveRct.xml'},
-            'Inputs': 2,
-            'Outputs': 1,
             'Icon': 'images/moveRct.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},

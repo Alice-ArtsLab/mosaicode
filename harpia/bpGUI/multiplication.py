@@ -135,8 +135,6 @@ def getBlock():
             "Path": {"Python": "multiplication",
                      "Glade": "glade/multiplication.ui",
                      "Xml": "xml/multiplication.xml"},
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/multiplication.png",
             "Color": "180:10:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
