@@ -179,8 +179,6 @@ def getBlock():
             "Path": {"Python": "laplace",
                      "Glade": "glade/laplace.ui",
                      "Xml": "xml/laplace.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/laplace.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE"},

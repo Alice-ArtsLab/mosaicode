@@ -295,8 +295,6 @@ def getBlock():
             "Path": {"Python": "plotHistogram",
                      "Glade": "glade/plotHistogram.ui",
                      "Xml": "xml/plotHistogram.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/plotHistogram.png",
             "Color": "0:0:0:150",
             "InTypes": {0: "HRP_IMAGE"},
