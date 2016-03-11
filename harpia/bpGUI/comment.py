@@ -174,8 +174,6 @@ def getBlock():
          "Path":{"Python":"comment",
                  "Glade":"glade/comment.ui",
                  "Xml":"xml/comment.xml"},
-         "Inputs":0,
-         "Outputs":0,
          "Icon":"images/comment.png",
          "Color":"50:100:200:150",
 				 "InTypes":"",

@@ -148,8 +148,6 @@ def getBlock():
             'Path': {'Python': 'cropImage',
                      'Glade': 'glade/cropImage.ui',
                      'Xml': 'xml/cropImage.xml'},
-            'Inputs': 2,
-            'Outputs': 1,
             'Icon': 'images/cropImage.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_IMAGE', 1: 'HRP_RECT'},
