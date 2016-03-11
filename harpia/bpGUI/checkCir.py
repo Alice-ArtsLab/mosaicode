@@ -269,8 +269,6 @@ def getBlock():
             "Path": {"Python": "checkCir",
                      "Glade": "glade/checkCir.ui",
                      "Xml": "xml/checkCir.xml"},
-            "Inputs": 1,
-            "Outputs": 2,
             "Icon": "images/checkCir.png",
             "Color": "20:20:60:150",
             "InTypes": {0: "HRP_IMAGE"},

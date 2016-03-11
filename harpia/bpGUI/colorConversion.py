@@ -243,8 +243,6 @@ def getBlock():
             "Path": {"Python": "colorConversion",
                      "Glade": "glade/colorConversion.ui",
                      "Xml": "xml/colorConversion.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/colorConversion.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},

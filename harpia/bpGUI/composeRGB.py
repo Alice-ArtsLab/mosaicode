@@ -149,8 +149,6 @@ def getBlock():
          "Path":{"Python":"composeRGB",
                  "Glade":"glade/composeRGB.ui",
                  "Xml":"xml/composeRGB.xml"},
-         "Inputs":3,
-         "Outputs":1,
          "Icon":"images/composeRGB.png",
          "Color":"50:125:50:150",
 				 "InTypes":{0:"HRP_IMAGE",1:"HRP_IMAGE",2:"HRP_IMAGE"},

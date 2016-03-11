@@ -212,8 +212,6 @@ def getBlock():
             "Path": {"Python": "canny",
                      "Glade": "glade/canny.ui",
                      "Xml": "xml/canny.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/canny.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE"},

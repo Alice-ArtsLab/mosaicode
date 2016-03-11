@@ -247,8 +247,6 @@ def getBlock():
             "Path": {"Python": "checkLin",
                      "Glade": "glade/checkLin.ui",
                      "Xml": "xml/checkLin.xml"},
-            "Inputs": 1,
-            "Outputs": 2,
             "Icon": "images/checkLin.png",
             "Color": "80:20:130:150",
             "InTypes": {0: "HRP_IMAGE"},
