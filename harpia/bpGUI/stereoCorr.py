@@ -160,8 +160,6 @@ def getBlock():
             'Path': {'Python': 'stereoCorr',
                      'Glade': 'glade/stereoCorr.ui',
                      'Xml': 'xml/stereoCorr.xml'},
-            'Inputs': 2,
-            'Outputs': 1,
             'Icon': 'images/stereoCorr.png',
             'Color': '10:10:20:150',
             'InTypes': {0: 'HRP_IMAGE', 1: "HRP_IMAGE"},

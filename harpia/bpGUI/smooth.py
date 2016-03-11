@@ -215,8 +215,6 @@ def getBlock():
             "Path": {"Python": "smooth",
                      "Glade": "glade/smooth.ui",
                      "Xml": "xml/smooth.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/smooth.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},

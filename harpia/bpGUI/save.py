@@ -203,8 +203,6 @@ def getBlock():
             "Path": {"Python": "save",
                      "Glade": "glade/save.ui",
                      "Xml": "xml/save.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/save.png",
             "Color": "50:100:200:150",
             "InTypes": {0: "HRP_IMAGE"},
