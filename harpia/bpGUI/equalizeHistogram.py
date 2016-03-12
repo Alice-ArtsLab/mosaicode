@@ -197,8 +197,6 @@ def getBlock():
             "Path": {"Python": "equalizeHistogram",
                      "Glade": "glade/equalizeHistogram.ui",
                      "Xml": "xml/equalizeHistogram.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/equalizeHistogram.png",
             "Color": "0:0:0:150",
             "InTypes": {0: "HRP_IMAGE"},

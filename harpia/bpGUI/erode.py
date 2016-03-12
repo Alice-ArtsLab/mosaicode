@@ -188,8 +188,6 @@ def getBlock():
             "Path": {"Python": "erode",
                      "Glade": "glade/erode.ui",
                      "Xml": "xml/erode.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/erode.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},

@@ -185,8 +185,6 @@ def getBlock():
             "Path": {"Python": "dilate",
                      "Glade": "glade/dilate.ui",
                      "Xml": "xml/dilate.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/dilate.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},
