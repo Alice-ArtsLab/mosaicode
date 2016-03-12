@@ -143,8 +143,8 @@ def generate(blockTemplate):
                                  '		block$$_img_ts2 = cvCreateImage(cvGetSize(block$$_img_i1), IPL_DEPTH_8U, 1);\n' + \
                                  '	cvCvtColor(block$$_img_i1, block$$_img_ts1, CV_BGR2GRAY);\n' + \
                                  '	cvCvtColor(block$$_img_i2, block$$_img_ts2, CV_BGR2GRAY);\n' + \
-                                 '	cvFindStereoCorrespondence( block$$_img_ts1, block$$_img_ts2, CV_DISPARITY_BIRCHFIELD, block$$_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n' + \
-                                 '}\n'
+                                 '	cvFindStereoCorrespondence( block$$_img_ts1, block$$_img_ts2, CV_DISPARITY_BIRCHFIELD' +\
+                                 'block$$_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                             'cvReleaseImage(&block$$_img_i1);\n' + \
                             'cvReleaseImage(&block$$_img_i2);\n' + \
