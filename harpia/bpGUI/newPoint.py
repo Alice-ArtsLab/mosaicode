@@ -153,8 +153,6 @@ def getBlock():
             'Path': {'Python': 'newPoint',
                      'Glade': 'glade/newPoint.ui',
                      'Xml': 'xml/newPoint.xml'},
-            'Inputs': 0,
-            'Outputs': 1,
             'Icon': 'images/newPoint.png',
             'Color': '50:50:200:150',
             'InTypes': "",

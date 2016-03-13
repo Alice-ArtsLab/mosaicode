@@ -143,24 +143,24 @@ def generate(blockTemplate):
         if propIter[0] == 'masksize':
             maskSizeValue = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
     blockTemplate.functionArguments = 'IplConvKernel * block' + blockTemplate.blockNumber + \
                                       '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
                                       maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'IplImage * block' + blockTemplate.blockNumber + '_auxImg;' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth ,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 '\nblock' + blockTemplate.blockNumber + '_auxImg = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth ,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'cvMorphologyEx(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_o1,NULL,' + \
-                                 'block' + blockTemplate.blockNumber + '_arg_mask, CV_MOP_OPEN, 1);\n}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseStructuringElement(&block' + blockTemplate.blockNumber + '_arg_mask);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'IplImage * block$$_auxImg;' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->width, block$$_img_i1->height), block' + blockTemplate.blockNumber + \
+                                 '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
+                                 '\nblock$$_auxImg = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->width, block$$_img_i1->height), block' + blockTemplate.blockNumber + \
+                                 '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
+                                 'cvMorphologyEx(block$$_img_i1,block$$_img_o1,NULL,' + \
+                                 'block$$_arg_mask, CV_MOP_OPEN, 1);\n}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseStructuringElement(&block$$_arg_mask);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -171,8 +171,6 @@ def getBlock():
             "Path": {"Python": "opening",
                      "Glade": "glade/opening.ui",
                      "Xml": "xml/opening.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/opening.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},
