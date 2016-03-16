@@ -40,15 +40,15 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 #----------------------------------------------------------------------
-   
+
 class Properties( GladeWindow, S2iCommonProperties ):
 
     #----------------------------------------------------------------------
 
     def __init__( self, PropertiesXML, S2iBlockProperties):
-        
+
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        
+
         filename = self.m_sDataDir+'glade/composeRGB.ui'
         self.m_oPropertiesXML = PropertiesXML
         self.m_oS2iBlockProperties = S2iBlockProperties
@@ -70,22 +70,22 @@ class Properties( GladeWindow, S2iCommonProperties ):
         top_window = 'Properties'
 
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-        
+
         self.configure()
 
         #load help text
         # t_oS2iHelp = XMLParser(self.m_sDataDir+"help/composeRGB"+ _("_en.help"))
-        
+
         # t_oTextBuffer = gtk.TextBuffer()
 
         # t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
-    
+
         # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
     #----------------------------------------------------------------------
 
     def __del__(self):
-        
+
 	pass
 
     #----------------------------------------------------------------------
@@ -100,9 +100,9 @@ class Properties( GladeWindow, S2iCommonProperties ):
 
         self.widgets['Properties'].destroy()
 
-            
+
     #----------------------------------------------------------------------
-  
+
 #ComposeRGBProperties = Properties()
 #ComposeRGBProperties.show( center=0 )
 
@@ -110,7 +110,8 @@ class Properties( GladeWindow, S2iCommonProperties ):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-   blockTemplate.imagesIO = \
+    import harpia.gerador
+    blockTemplate.imagesIO = \
                  'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
                  'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
                  'IplImage * block' + blockTemplate.blockNumber + '_img_i3 = NULL;\n' + \
@@ -118,7 +119,7 @@ def generate(blockTemplate):
                  'IplImage * block' + blockTemplate.blockNumber + '_img_t2 = NULL;\n' + \
                  'IplImage * block' + blockTemplate.blockNumber + '_img_t3 = NULL;\n' + \
                  'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-   blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
+    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
                      'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
                       '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, block' + \
                       blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
@@ -133,7 +134,7 @@ def generate(blockTemplate):
                       'cvSplit(block' + blockTemplate.blockNumber + '_img_i3 ,NULL ,NULL, block' + blockTemplate.blockNumber + '_img_t3 , NULL);\n' + \
                       'cvMerge(block' + blockTemplate.blockNumber + '_img_t3 ,block' + blockTemplate.blockNumber + '_img_t2 ,block'+ blockTemplate.blockNumber + '_img_t1 , NULL, block'+ \
                       blockTemplate.blockNumber + '_img_o1);}\n'
-   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
+    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
                   'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t2);\n' + \
                   'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t3);\n' + \
                   'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \

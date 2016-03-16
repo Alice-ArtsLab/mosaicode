@@ -1,0 +1,78 @@
+<harpia>
+<GcState>
+	<block type="0" id="1">
+		<position x="-39.0" y="80.0"/>
+	</block>
+	<block type="802" id="2">
+		<position x="293.0" y="81.0"/>
+	</block>
+	<block type="2" id="3">
+		<position x="575.0" y="70.0"/>
+	</block>
+	<block type="801" id="7">
+		<position x="-7.0" y="175.0"/>
+	</block>
+</GcState>
+<properties>
+  <block id="1" type="00">
+ <property name="state" value="true"/>
+ <property name="type" value="file"/>
+ <property name="filename" value="/home/carlosmagno/harpia/app_data/images/harpia_foto.jpg"/>
+ <property name="place" value="server"/>
+ <property name="camera" value="0"/>
+ <property name="size" value="640x480"/>
+ <property name="video_name" value=""/>
+ <property name="frameRate" value="20.0"/>
+</block>
+
+  <block id="7" type="801">
+ <property name="state" value="true"/>
+ <property name="x0" value="200.0"/>
+ <property name="y0" value="200.0"/>
+ <property name="width" value="640.0"/>
+ <property name="height" value="480.0"/>
+</block>
+
+  <block id="2" type="802">
+ <property name="state" value="true"/>
+</block>
+
+  <block id="3" type="02">
+ <property name="state" value="true"/>
+</block>
+
+  </properties>
+<network>
+<block type="0" id="1">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="2" input="1"/>
+</outputs>
+</block>
+<block type="801" id="7">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="2" input="2"/>
+</outputs>
+</block>
+<block type="802" id="2">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="3" input="1"/>
+</outputs>
+</block>
+<block type="2" id="3">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>

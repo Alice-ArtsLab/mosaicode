@@ -90,9 +90,7 @@ class Properties(GladeWindow, S2iCommonProperties):
 
 
     def getHelp(self):
-        return "Detecta formas circulares na imagem de entrada.\
-         Saida 1 é a resposta da avaliacao(*) e a saida dois mostra\
-          os circulos encontrados."
+        return "Corta a Imagem de acordo com o Retangulo\n de entrada."
 
 
     #-----------------------------------------------------------------------
@@ -114,30 +112,30 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
+    import harpia.gerador
     # for propIter in blockTemplate.properties:
     # if propIter[0] == 'offset_x':
     # offset_x = propIter[1]
     # if propIter[0] == 'offset_y':
     # offset_y = propIter[1]
-
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'CvRect  block' + blockTemplate.blockNumber + '_rect_i2;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_i2.x = MAX(0,block' + blockTemplate.blockNumber + '_rect_i2.x);//Check whether point is negative\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_i2.y = MAX(0,block' + blockTemplate.blockNumber + '_rect_i2.y);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_i2.x = MIN(block' + blockTemplate.blockNumber + '_img_i1->width-1,block' + blockTemplate.blockNumber + '_rect_i2.x);//Check whether point is out of the image\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_i2.y = MIN(block' + blockTemplate.blockNumber + '_img_i1->height-1,block' + blockTemplate.blockNumber + '_rect_i2.y);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_i2.width = MIN(block' + blockTemplate.blockNumber + '_img_i1->width-block' + blockTemplate.blockNumber + '_rect_i2.x,block' + blockTemplate.blockNumber + '_rect_i2.width);//Check whether rect reaches out of the image\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_rect_i2.height = MIN(block' + blockTemplate.blockNumber + '_img_i1->height-block' + blockTemplate.blockNumber + '_rect_i2.y,block' + blockTemplate.blockNumber + '_rect_i2.height);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + '_rect_i2.width,block' + blockTemplate.blockNumber + '_rect_i2.height),' + \
-                                 ' block' + blockTemplate.blockNumber + '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 '	cvSetImageROI(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_rect_i2);\n' + \
-                                 '	cvCopyImage(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'CvRect  block$$_rect_i2;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 '	block$$_rect_i2.x = MAX(0,block$$_rect_i2.x);//Check whether point is negative\n' + \
+                                 '	block$$_rect_i2.y = MAX(0,block$$_rect_i2.y);\n' + \
+                                 '	block$$_rect_i2.x = MIN(block$$_img_i1->width-1,block$$_rect_i2.x);//Check whether point is out of the image\n' + \
+                                 '	block$$_rect_i2.y = MIN(block$$_img_i1->height-1,block$$_rect_i2.y);\n' + \
+                                 '	block$$_rect_i2.width = MIN(block$$_img_i1->width-block$$_rect_i2.x,block$$_rect_i2.width);//Check whether rect reaches out of the image\n' + \
+                                 '	block$$_rect_i2.height = MIN(block$$_img_i1->height-block$$_rect_i2.y,block$$_rect_i2.height);\n' + \
+                                 '	block$$_img_o1 = cvCreateImage(cvSize(block$$_rect_i2.width,block$$_rect_i2.height),' + \
+                                 ' block$$_img_i1->depth,block$$_img_i1->nChannels);\n' + \
+                                 '	cvSetImageROI(block$$_img_i1,block$$_rect_i2);\n' + \
+                                 '	cvCopyImage(block$$_img_i1,block$$_img_o1);\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
