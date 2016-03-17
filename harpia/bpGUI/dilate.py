@@ -163,16 +163,11 @@ def generate(blockTemplate):
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
     blockTemplate.functionArguments = 'int block$$_arg_iterations = ' + iterationsValue + \
-                                      ';\nIplConvKernel * block' + blockTemplate.blockNumber + \
-                                      '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
+                                      ';\nIplConvKernel * block$$_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
                                       maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                 'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width, block$$_img_i1->height), block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
-                                 '\ncvDilate(block$$_img_i1,block' + blockTemplate.blockNumber + \
-                                 '_img_o1,block$$_arg_mask,block' + blockTemplate.blockNumber + \
-                                 '_arg_iterations);}\n'
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width, block$$_img_i1->height), block$$_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
+                                 '\ncvDilate(block$$_img_i1,block$$_img_o1,block$$_arg_mask,block$$_arg_iterations);}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                             'cvReleaseImage(&block$$_img_i1);\n'
 

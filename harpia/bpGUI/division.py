@@ -115,12 +115,8 @@ def generate(blockTemplate):
         'IplImage * block$$_img_i2 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                 'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block$$_img_i1->height),block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
-                                 harpia.gerador.inputSizeComply(2, blockTemplate.blockNumber) + 'cvDiv(block' + \
-                                 blockTemplate.blockNumber + '_img_i1, block$$_img_i2, block' + \
-                                 blockTemplate.blockNumber + '_img_o1,1);\n cvResetImageROI(block$$_img_o1);}\n'
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height),block$$_img_i1->depth,block$$_img_i1->nChannels);\n' + \
+                                 harpia.gerador.inputSizeComply(2, blockTemplate.blockNumber) + 'cvDiv(block$$_img_i1, block$$_img_i2, block$$_img_o1,1);\n cvResetImageROI(block$$_img_o1);}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                             'cvReleaseImage(&block$$_img_i1);\n' + \
                             'cvReleaseImage(&block$$_img_i2);\n'
