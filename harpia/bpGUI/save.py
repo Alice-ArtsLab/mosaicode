@@ -185,14 +185,14 @@ def generate(blockTemplate):
         if propIter[0] == 'filename':
             saveFilename = os.path.expanduser(propIter[1])
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
     blockTemplate.functionCall = \
-        'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-        '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n' + \
-        'cvSaveImage("' + saveFilename + '" ,block' + blockTemplate.blockNumber + '_img_i1);\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+        'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+        '\nif(block$$_img_i1)\n' + \
+        'cvSaveImage("' + saveFilename + '" ,block$$_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
