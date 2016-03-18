@@ -162,8 +162,6 @@ def getBlock():
             "Path": {"Python": "runCmd",
                      "Glade": "glade/runCmd.ui",
                      "Xml": "xml/runCmd.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/runCmd.png",
             "Color": "200:200:60:150",
             "InTypes": {0: "HRP_DOUBLE"},
