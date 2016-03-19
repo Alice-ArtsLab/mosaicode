@@ -112,35 +112,29 @@ class Properties( GladeWindow, S2iCommonProperties ):
 def generate(blockTemplate):
     import harpia.gerador
     blockTemplate.imagesIO = \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_i3 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_t1 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_t2 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_t3 = NULL;\n' + \
-                 'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                     'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, block' + \
-                      blockTemplate.blockNumber + '_img_i1->nChannels);\n'+\
-                      'block' + blockTemplate.blockNumber + '_img_t1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, 1);\n'+\
-                      'block' + blockTemplate.blockNumber + '_img_t2 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, 1);\n'+\
-                      'block' + blockTemplate.blockNumber + '_img_t3 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                      '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth, 1);\n'+\
-                      'cvSplit(block' + blockTemplate.blockNumber + '_img_i1 ,block' + blockTemplate.blockNumber + '_img_t1  ,NULL, NULL , NULL);\n' + \
-                      'cvSplit(block' + blockTemplate.blockNumber + '_img_i2 ,NULL ,block' + blockTemplate.blockNumber + '_img_t2, NULL, NULL);\n' + \
-                      'cvSplit(block' + blockTemplate.blockNumber + '_img_i3 ,NULL ,NULL, block' + blockTemplate.blockNumber + '_img_t3 , NULL);\n' + \
-                      'cvMerge(block' + blockTemplate.blockNumber + '_img_t3 ,block' + blockTemplate.blockNumber + '_img_t2 ,block'+ blockTemplate.blockNumber + '_img_t1 , NULL, block'+ \
-                      blockTemplate.blockNumber + '_img_o1);}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t2);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t3);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i3);\n'
+                 'IplImage * block$$_img_i1 = NULL;\n' + \
+                 'IplImage * block$$_img_i2 = NULL;\n' + \
+                 'IplImage * block$$_img_i3 = NULL;\n' + \
+                 'IplImage * block$$_img_t1 = NULL;\n' + \
+                 'IplImage * block$$_img_t2 = NULL;\n' + \
+                 'IplImage * block$$_img_t3 = NULL;\n' + \
+                 'IplImage * block$$_img_o1 = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                     'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth, block$$_img_i1->nChannels);\n'+\
+                      'block$$_img_t1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth, 1);\n'+\
+                      'block$$_img_t2 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth, 1);\n'+\
+                      'block$$_img_t3 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth, 1);\n'+\
+                      'cvSplit(block$$_img_i1 ,block$$_img_t1  ,NULL, NULL , NULL);\n' + \
+                      'cvSplit(block$$_img_i2 ,NULL ,block$$_img_t2, NULL, NULL);\n' + \
+                      'cvSplit(block$$_img_i3 ,NULL ,NULL, block$$_img_t3 , NULL);\n' + \
+                      'cvMerge(block$$_img_t3 ,block$$_img_t2 ,block$$_img_t1 , NULL, block$$_img_o1);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_t1);\n' + \
+                  'cvReleaseImage(&block$$_img_t2);\n' + \
+                  'cvReleaseImage(&block$$_img_t3);\n' + \
+                  'cvReleaseImage(&block$$_img_o1);\n' + \
+                  'cvReleaseImage(&block$$_img_i1);\n' + \
+                  'cvReleaseImage(&block$$_img_i2);\n' + \
+                  'cvReleaseImage(&block$$_img_i3);\n'
 
 # ------------------------------------------------------------------------------
 # Block Setup
