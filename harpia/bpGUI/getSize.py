@@ -146,8 +146,6 @@ def getBlock():
             'Path': {'Python': 'getSize',
                      'Glade': 'glade/getSize.ui',
                      'Xml': 'xml/getSize.xml'},
-            'Inputs': 1,
-            'Outputs': 1,
             'Icon': 'images/getSize.xpm',
             'Color': '250:20:30:150',
             'InTypes': {0: 'HRP_IMAGE'},
