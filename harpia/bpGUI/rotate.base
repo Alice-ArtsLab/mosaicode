@@ -1,0 +1,4 @@
+Name: ROTATE
+Input: Image, Double
+Output: Image
+Properties: Rotation (Image Center, Point (X, Y)), Resize Image To Fit In (True, False), Fill Leftovers (True, False)

@@ -176,17 +176,17 @@ def generate(blockTemplate):
         if propIter[0] == 'masksize':
             masksizeValue = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_32F,block' + \
-                                 blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'cvSobel(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1 ,' + xOrderValue + ',' + yOrderValue + ',' + masksizeValue + ' );}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'IplImage * block$$_img_t = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$' + \
+                                 '_img_i1->nChannels);\n' + \
+                                 'cvSobel(block$$_img_i1, block$$_img_o1 ,' + xOrderValue + ',' + yOrderValue + ',' + masksizeValue + ' );}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_t);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -197,8 +197,6 @@ def getBlock():
             "Path": {"Python": "sobel",
                      "Glade": "glade/sobel.ui",
                      "Xml": "xml/sobel.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/sobel.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE"},

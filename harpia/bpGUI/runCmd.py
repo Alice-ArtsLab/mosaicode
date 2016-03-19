@@ -139,18 +139,18 @@ def generate(blockTemplate):
     cmdString = cmdString.replace(r"'", r"\'")
     cmdString = cmdString.replace(r'"', r'\"')
     blockTemplate.imagesIO = \
-        'double block' + blockTemplate.blockNumber + '_double_i1;\n' + \
-        'double block' + blockTemplate.blockNumber + '_double_o1;\n'
+        'double block$$_double_i1;\n' + \
+        'double block$$_double_o1;\n'
     blockTemplate.functionCall = '\nif('
     if enIsntZero:
-        blockTemplate.functionCall += 'block' + blockTemplate.blockNumber + '_double_i1 > 0.0){\n'
+        blockTemplate.functionCall += 'block$$_double_i1 > 0.0){\n'
     else:
         blockTemplate.functionCall += '1){\n'
     blockTemplate.functionCall += 'char outPutStr[' + str(len(cmdString) + 30) + '];\n' + \
                                   'snprintf(outPutStr,' + str(len(
-        cmdString) + 30) + ',"export HRP_DB=%f;' + cmdString + '",(float)block' + blockTemplate.blockNumber + '_double_i1);' + \
+        cmdString) + 30) + ',"export HRP_DB=%f;' + cmdString + '",(float)block$$_double_i1);' + \
                                   'system(outPutStr);}\n' + \
-                                  'block' + blockTemplate.blockNumber + '_double_o1 = block' + blockTemplate.blockNumber + '_double_i1;\n'
+                                  'block$$_double_o1 = block$$_double_i1;\n'
     blockTemplate.dealloc = '//nothing to deallocate\n'
 
 
@@ -162,8 +162,6 @@ def getBlock():
             "Path": {"Python": "runCmd",
                      "Glade": "glade/runCmd.ui",
                      "Xml": "xml/runCmd.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/runCmd.png",
             "Color": "200:200:60:150",
             "InTypes": {0: "HRP_DOUBLE"},

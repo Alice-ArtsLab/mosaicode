@@ -1,0 +1,5 @@
+Name: STEREO_CORRESPONDENCE
+Input: Image, Image
+Output: Image
+Properties: Max Pixel Distance (0 - 100)
+

@@ -176,20 +176,20 @@ def generate(blockTemplate):
     if not enMax:
         maxVal = -1
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o2 = NULL;\n' + \
-        'double block' + blockTemplate.blockNumber + '_double_o1;\n' + \
-        'CvMemStorage * block' + blockTemplate.blockNumber + '_storage = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_o2 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_storage = cvCreateMemStorage(0);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_double_o1 = (double)drawSquares( block' + blockTemplate.blockNumber + '_img_o2, findSquares4( block' + blockTemplate.blockNumber + '_img_o2, block' + blockTemplate.blockNumber + '_storage , ' + str(
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o2 = NULL;\n' + \
+        'double block$$_double_o1;\n' + \
+        'CvMemStorage * block$$_storage = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 '	block$$_img_o2 = cvCloneImage(block$$_img_i1);\n' + \
+                                 '	block$$_storage = cvCreateMemStorage(0);\n' + \
+                                 '	block$$_double_o1 = (double)drawSquares( block$$_img_o2, findSquares4( block$$_img_o2, block$$_storage , ' + str(
         minVal) + ', ' + str(maxVal) + ') );\n' + \
-                                 '	cvClearMemStorage( block' + blockTemplate.blockNumber + '_storage );\n' + \
+                                 '	cvClearMemStorage( block$$_storage );\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o2);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseMemStorage(&block' + blockTemplate.blockNumber + '_storage );\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o2);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseMemStorage(&block$$_storage );\n'
 
 
 # ------------------------------------------------------------------------------
@@ -200,8 +200,6 @@ def getBlock():
             'Path': {'Python': 'findSquares',
                      'Glade': 'glade/findSquares.ui',
                      'Xml': 'xml/findSquares.xml'},
-            'Inputs': 1,
-            'Outputs': 2,
             'Icon': 'images/findSquares.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_IMAGE'},

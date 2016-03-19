@@ -215,25 +215,25 @@ def generate(blockTemplate):
     # o3 - variance
     # o4 - img
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o4 = NULL;\n' + \
-        'CvPoint block' + blockTemplate.blockNumber + '_point_o1;\n' + \
-        'uchar block' + blockTemplate.blockNumber + 'c_value[3] = {' + c_B + ',' + c_G + ',' + c_R + '};\n' + \
-        'uchar block' + blockTemplate.blockNumber + 'tolerance[3] = {' + c_B_T + ',' + c_G_T + ',' + c_R_T + '};\n' + \
-        'double block' + blockTemplate.blockNumber + '_double_o2;\n' + \
-        'double block' + blockTemplate.blockNumber + '_double_o3;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 '	IplImage * block' + blockTemplate.blockNumber + '_img_t1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),IPL_DEPTH_8U, 1);\n' + \
-                                 '	if(!block' + blockTemplate.blockNumber + '_img_o4)\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_img_o4 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o4 = NULL;\n' + \
+        'CvPoint block$$_point_o1;\n' + \
+        'uchar block$$c_value[3] = {' + c_B + ',' + c_G + ',' + c_R + '};\n' + \
+        'uchar block$$tolerance[3] = {' + c_B_T + ',' + c_G_T + ',' + c_R_T + '};\n' + \
+        'double block$$_double_o2;\n' + \
+        'double block$$_double_o3;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 '	IplImage * block$$_img_t1 = cvCreateImage(cvGetSize(block$$_img_i1),IPL_DEPTH_8U, 1);\n' + \
+                                 '	if(!block$$_img_o4)\n' + \
+                                 '		block$$_img_o4 = cvCloneImage(block$$_img_i1);\n' + \
                                  '	else\n' + \
-                                 ' 	cvCopy(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_o4,0);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_double_o2 = CheckForColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t1, block' + blockTemplate.blockNumber + 'c_value, block' + blockTemplate.blockNumber + 'tolerance, &block' + blockTemplate.blockNumber + '_point_o1, &block' + blockTemplate.blockNumber + '_double_o3);\n' + \
-                                 '	cvCircle(block' + blockTemplate.blockNumber + '_img_o4,block' + blockTemplate.blockNumber + '_point_o1,8,cvScalarAll(255),4,8,0);\n' + \
-                                 '	cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
+                                 ' 	cvCopy(block$$_img_i1,block$$_img_o4,0);\n' + \
+                                 '	block$$_double_o2 = CheckForColor(block$$_img_i1, block$$_img_t1, block$$c_value, block$$tolerance, &block$$_point_o1, &block$$_double_o3);\n' + \
+                                 '	cvCircle(block$$_img_o4,block$$_point_o1,8,cvScalarAll(255),4,8,0);\n' + \
+                                 '	cvReleaseImage(&block$$_img_t1);\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o4);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o4);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -244,8 +244,6 @@ def getBlock():
             'Path': {'Python': 'findColor',
                      'Glade': 'glade/findColor.ui',
                      'Xml': 'xml/findColor.xml'},
-            'Inputs': 1,
-            'Outputs': 4,
             'Icon': 'images/findColor.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_IMAGE'},

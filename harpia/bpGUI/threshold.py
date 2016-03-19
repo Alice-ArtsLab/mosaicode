@@ -191,21 +191,21 @@ def generate(blockTemplate):
             thresholdType = propIter[1]
 
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
     blockTemplate.functionArguments = \
-        'int block' + blockTemplate.blockNumber + '_arg_threshold = ' + thresholdValue + ';\n' + \
-        'int block' + blockTemplate.blockNumber + '_arg_maxValue = ' + maxValue + ';\n' + \
-        'int block' + blockTemplate.blockNumber + '_arg_thresholdType = ' + thresholdType + ';\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 '\ncvThreshold(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + \
-                                 '_img_o1,block' + blockTemplate.blockNumber + '_arg_threshold,block' + blockTemplate.blockNumber + \
-                                 '_arg_maxValue,block' + blockTemplate.blockNumber + '_arg_thresholdType);}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+        'int block$$_arg_threshold = ' + thresholdValue + ';\n' + \
+        'int block$$_arg_maxValue = ' + maxValue + ';\n' + \
+        'int block$$_arg_thresholdType = ' + thresholdType + ';\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height),block$$' + \
+                                 '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
+                                 '\ncvThreshold(block$$_img_i1,block$$' + \
+                                 '_img_o1,block$$_arg_threshold,block$$' + \
+                                 '_arg_maxValue,block$$_arg_thresholdType);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -216,8 +216,6 @@ def getBlock():
             "Path": {"Python": "threshold",
                      "Glade": "glade/threshold.ui",
                      "Xml": "xml/threshold.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/threshold.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},

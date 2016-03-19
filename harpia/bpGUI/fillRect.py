@@ -190,19 +190,19 @@ def generate(blockTemplate):
        elif propIter[0] == 'blue':
            blue = propIter[1]
    blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'CvRect block' + blockTemplate.blockNumber + '_rect_i2;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'CvRect block$$_rect_i2;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
    blockTemplate.functionCall = \
-        '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n{\n' + \
-        '\tblock' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-        '\tcvSetImageROI(block' + blockTemplate.blockNumber + '_img_o1 , block' + blockTemplate.blockNumber + '_rect_i2);\n' + \
+        '\nif(block$$_img_i1)\n{\n' + \
+        '\tblock$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+        '\tcvSetImageROI(block$$_img_o1 , block$$_rect_i2);\n' + \
         '\tCvScalar color = cvScalar('+blue +','+ green +','+ red+',0);\n' + \
-        '\tcvSet(block' + blockTemplate.blockNumber + '_img_o1,color,NULL);\n' + \
-        '\tcvResetImageROI(block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+        '\tcvSet(block$$_img_o1,color,NULL);\n' + \
+        '\tcvResetImageROI(block$$_img_o1);\n' + \
         '}\n'
-   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                  'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                  'cvReleaseImage(&block$$_img_i1);\n'
 
 # ------------------------------------------------------------------------------
 # Block Setup
@@ -212,8 +212,6 @@ def getBlock():
          "Path":{"Python":"fillRect",
                  "Glade":"glade/fillRect.ui",
                  "Xml":"xml/fillRect.xml"},
-         "Inputs":2,
-         "Outputs":1,
          "Icon":"images/fill.png",
          "Color":"50:100:200:150",
 				 "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
