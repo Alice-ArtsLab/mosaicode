@@ -276,8 +276,6 @@ def getBlock():
             'Path': {'Python': 'saveVideo',
                      'Glade': 'glade/saveVideo.ui',
                      'Xml': 'xml/saveVideo.xml'},
-            'Inputs': 1,
-            'Outputs': 1,
             'Icon': 'images/saveVideo.png',
             'Color': '120:20:20:150',
             'InTypes': {0: 'HRP_IMAGE'},

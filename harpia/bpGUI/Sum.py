@@ -136,8 +136,6 @@ def getBlock():
             "Path": {"Python": "Sum",
                      "Glade": "glade/sum.ui",
                      "Xml": "xml/sum.xml"},
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/sum.png",
             "Color": "180:10:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
