@@ -1,0 +1,4 @@
+Name: RUMCMD
+Input: Double
+Output: Double
+Properties: String Shell Command, Run Command Only If Input Is Greater Than 0.0 (True, False)
