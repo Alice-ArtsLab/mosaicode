@@ -69,18 +69,14 @@ class GladeWindow(object):
     # ----------------------------------------------------------------------
 
     def set_search_path(cls, path):
-
         '''This function Sets the search path for looking for the .glade files'''
-
         cls.search_path = path
-
     set_search_path = classmethod(set_search_path)
 
     # ----------------------------------------------------------------------
 
     def __init__(self, filename, top_window, widget_list, handlers,
                  pull_down_dict=None):
-
         '''
         Constructor. 
 	The filename is simply the filename of the .glade file
@@ -93,8 +89,6 @@ class GladeWindow(object):
         '''
 
         # i18n stuff
-
-
         gettext.bindtextdomain(APP, DIR)
         gettext.textdomain(APP)
         gtk.glade.bindtextdomain(APP, DIR)
@@ -136,19 +130,16 @@ class GladeWindow(object):
     # ----------------------------------------------------------------------
 
     def set_top_window(self, top_window):
-
         ''' 
         Notebook pages that are in containers need to be able to change
         their top window, especially so the dialog is set_transient_for
         the actual main window
         '''
-
         self.top_window = top_window
 
     # ----------------------------------------------------------------------
 
     def set_callback_function(self, cb_func, *cb_args, **cb_kwargs):
-
         '''
 	Stores the cb_func and its cb_args and cb_kwargs
         '''
@@ -159,11 +150,9 @@ class GladeWindow(object):
     # ----------------------------------------------------------------------
 
     def show(self, center=1, prev_window=None, *args):
-
         '''
         Display the top_window widget
         '''
-
         if prev_window is not None:
             self.prev_window = prev_window
         if center:
@@ -175,13 +164,11 @@ class GladeWindow(object):
     # ----------------------------------------------------------------------
 
     def hide(self):
-
         '''
         Hides the current window, shows self.prev_window
         if self.cb_func is not None, it is called with its cb_args
         and cb_kwargs
         '''
-
         self.top_window.hide()
         if self.prev_window is not None:
             self.prev_window.show()

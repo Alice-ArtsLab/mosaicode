@@ -49,10 +49,8 @@ class S2iBlockPropertiesGUI:
 		"""
 		Constructor. Receives a s2iBlock and sets the member atributte s2iBlock with this argument.
 		"""
-		
 		## S2i Block member atributte.
 		self.m_oS2iBlock = a_oS2iBlock
-		
 		self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
 	
 	#----------------------------------------------------------------------
@@ -91,8 +89,7 @@ class S2iBlockPropertiesGUI:
 		"""
 		Sets the PropertiesXML with the propertiesXML argument.
 		"""
-
-		self.m_oS2iBlock.SetPropertiesXML( a_oPropertiesXML )
+		self.m_oS2iBlock.SetPropertiesXML(a_oPropertiesXML)
 		
 	#----------------------------------------------------------------------
 
@@ -108,7 +105,6 @@ class S2iBlockPropertiesGUI:
 		"""
 		Returns the block ToggleState.
 		"""
-
 		self.m_oS2iBlock.ToggleState()
 
 	#----------------------------------------------------------------------
@@ -126,7 +122,6 @@ class S2iBlockPropertiesGUI:
 		"""
 		Returns the block back color.
 		"""
-
 		return self.m_oS2iBlock.GetBackColor()
 	
 	#----------------------------------------------------------------------
@@ -135,7 +130,6 @@ class S2iBlockPropertiesGUI:
 		"""
 		Sets the border color.
 		"""
-
 		self.m_oS2iBlock.SetBorderColor(a_oBorderColor)
 
 	#----------------------------------------------------------------------
@@ -144,7 +138,6 @@ class S2iBlockPropertiesGUI:
 		"""
 		Sets the block BackColor.
 		"""
-
 		self.m_oS2iBlock.SetBackColor(a_oBackColor)
 
 	#----------------------------------------------------------------------

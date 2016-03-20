@@ -156,10 +156,6 @@ class S2iHarpiaFrontend(GladeWindow):
             self.BlocksProperties[s2idirectory.block[x]["Label"]] = {"Inputs": len(s2idirectory.block[x]["InTypes"]),
                                                                      "Outputs": len(s2idirectory.block[x]["OutTypes"])}
 
-
-        # cpscotti .. taking out more dumb code..
-
-
         self.widgets['HarpiaFrontend'].set_icon_from_file(self.m_sDataDir + "images/harpia_ave.png")
         self.m_oIconUpdate = gtk.Image()
         self.m_oIconUpdate.set_from_file(self.m_sDataDir + "images/system-software-update.png")
@@ -265,7 +261,7 @@ class S2iHarpiaFrontend(GladeWindow):
         return
 
     def on_NewMenuBar_activate(self, *args):
-
+        print "New Menu Bar Activate"
         self.on_NewToolBar_clicked()
 
     # ----------------------------------------------------------------------
@@ -1008,21 +1004,14 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         Callback funtion called when CloseMenuBar is activated. Close the current diagram tab.
         """
-
         t_nCurrentTabIndex = self.widgets['WorkArea'].get_current_page()
-
         if t_nCurrentTabIndex <> -1:
-
             self.widgets["WorkArea"].remove_page(t_nCurrentTabIndex)
-
             if self.m_oGcDiagrams.has_key(t_nCurrentTabIndex):
                 del self.m_oGcDiagrams[t_nCurrentTabIndex]
-
             t_oGcDiagrams = {}
-
             for t_nTabIndex, t_nOldTabIndex in enumerate(self.m_oGcDiagrams.keys()):
                 t_oGcDiagrams[t_nTabIndex] = self.m_oGcDiagrams[t_nOldTabIndex]
-
             self.m_oGcDiagrams = t_oGcDiagrams
 
     # ----------------------------------------------------------------------
@@ -1057,18 +1046,11 @@ class S2iHarpiaFrontend(GladeWindow):
                             t_sNewLabel = t_oGcDiagram.GetFilename().split("/").pop()
                             t_oLabel = gtk.Label(str(t_sNewLabel))
                             self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
-
                         # print example[1]
 
     def LoadExamplesMenu(self):
         t_lListOfExamples = glob(self.m_sDataDir + "examples/*")
         t_lListOfExamples.sort()
-
-        ##ALG to prevent using filenames with _ on the menus
-        # t_lNewL = []
-        # for s in t_lListOfExamples:
-        # t_lNewL.append(s.replace("_","-"))
-        # t_lListOfExamples = t_lNewL
 
         self.widgets['fake_separator'].destroy()
         self.widgets.pop('fake_separator')
