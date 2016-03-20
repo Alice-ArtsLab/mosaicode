@@ -32,6 +32,8 @@ import math
 import gnomecanvas
 import sys
 
+from GcdConnectorMenu import GcdConnectorMenu
+
 #sys.path.append('../bin')
 #import s2idirectory
 
@@ -149,34 +151,7 @@ class GcdConnector( gnomecanvas.CanvasGroup):
 			self.widgets["Line"].set(width_units=1.0)#(line_style=gtk.gdk.LINE_ON_OFF_DASH)
 
 	def RightClick(self, a_oEvent):
-		t_oMenu = gtk.Menu()
-	
-		t_oMenuItem = gtk.MenuItem("Properties")
-		#t_oMenuItem.connect("activate", self.ShowPropertiesGUI )
-		t_oMenu.append(t_oMenuItem)
-		
-		# Menu separator
-		t_oMenuItem = gtk.SeparatorMenuItem()
-		t_oMenu.append(t_oMenuItem)
-		
-		# Excluir (delete) item
-		t_oMenuItem = gtk.MenuItem("Delete")
-		t_oMenuItem.connect("activate", self.DeleteClicked )
-		t_oMenu.append(t_oMenuItem)
-
-		# Another separator
-		t_oMenuItem = gtk.SeparatorMenuItem()
-		t_oMenu.append(t_oMenuItem)
-		# Shows the menu
-		t_oMenu.show_all()
-		t_oMenu.popup(None, None, None, a_oEvent.button, a_oEvent.time)
-
-	def DeleteClicked(self, *args ): #this strongly depends on the garbage collector
-		for connIdx in range(len(self.ParentDiagram.m_oConnectors)):
-			if self.ParentDiagram.m_oConnectors[connIdx] == self:
-				self.ParentDiagram.m_oConnectors.pop(connIdx)
-				self.wGroup.destroy()
-				break #faster, necessary (not iteraring on reverse!)
+		GcdConnectorMenu(self, a_oEvent)
 
 def Psub(p1,p0):
 	return p1[0]-p0[0],p1[1]-p0[1]
