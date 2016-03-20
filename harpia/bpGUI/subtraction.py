@@ -120,7 +120,7 @@ def generate(blockTemplate):
                                  'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
                                  '_img_i1->width,block$$_img_i1->height),block$$' + \
                                  '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
-                                 harpia.gerador.inputSizeComply(2, $$) + 'cvSub(block$$' + \
+                                 harpia.gerador.inputSizeComply(2, blockTemplate.blockNumber) + 'cvSub(block$$' + \
                                  '_img_i1, block$$_img_i2, block$$' + \
                                  '_img_o1,0);\n cvResetImageROI(block$$_img_o1);}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \

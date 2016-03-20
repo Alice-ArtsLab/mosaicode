@@ -396,8 +396,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     for block in blockList:
         # cpscotti..
         # if block.blockType == '00':
-        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and s2idirectory.block[int(block.blockType)][
-            "Outputs"] <> 0:
+        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) <> 0:
             tmpList = []
             # RollinPathList = []
             tmpList.append(block)
