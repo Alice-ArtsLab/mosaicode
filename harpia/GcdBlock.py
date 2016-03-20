@@ -190,8 +190,6 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                             return False
 
         elif event.type == gtk.gdk._2BUTTON_PRESS:
-            #Open up the block's options
-            print("Open " + self.m_oDictBlock["Label"] + " props")
             GcdBlockMenu(self, event)
             return True
 

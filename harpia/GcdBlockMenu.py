@@ -31,16 +31,27 @@ import gnomecanvas
 import os
 
 import s2iblockpropertiesgui
+from harpia import showimage
 
 class GcdBlockMenu:
 
     def __init__(self, block, event):
         self.block = block
+
+        if event.type == gtk.gdk._2BUTTON_PRESS and self.block.m_nBlockType == 2:
+             self.ShowImageGUI()
+             return
+
         t_oMenu = gtk.Menu()
 
         t_oMenuItem = gtk.MenuItem("Properties")
-        t_oMenuItem.connect("activate", self.ShowBlockGUI )
+        t_oMenuItem.connect("activate", self.ShowBlockProperties )
         t_oMenu.append(t_oMenuItem)
+
+        if self.block.m_nBlockType == 2:
+            t_oMenuItem = gtk.MenuItem("Show Image")
+            t_oMenuItem.connect("activate", self.ShowImageGUI)
+            t_oMenu.append(t_oMenuItem)
 
 #        t_oMenuItem = gtk.MenuItem("PrintXML")
 #        t_oMenuItem.connect("activate", self.PrintXML )
@@ -61,7 +72,7 @@ class GcdBlockMenu:
         t_oMenu.show_all()
         t_oMenu.popup(None, None, None, event.button, event.time)
 
-    def ShowBlockGUI(self, *args):
+    def ShowBlockProperties(self, *args):
         PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI( self.block )
         PropertiesGUI.EditProperties( self.block.m_oPropertiesXML )
 
@@ -73,4 +84,10 @@ class GcdBlockMenu:
 
     def PrintXML(self, *args):
         print self.block.m_oPropertiesXML.getXML()
+
+    def ShowImageGUI(self, *args):
+        t_sPath = "/tmp/harpiaBETMP0" + str(self.block.ParentDiagram.GetIDBackendSession()) + "/block" + str(self.block.GetId()) + "_OUT.png"
+        ShowGUI = showimage.ShowImage(t_sPath, self.block.ParentDiagram.m_sErrorLog )
+        ShowGUI.show()
+
 
