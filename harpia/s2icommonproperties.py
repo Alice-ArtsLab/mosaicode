@@ -50,13 +50,11 @@ class S2iCommonProperties:
     """
 
     #----------------------------------------------------------------------
-
     m_oColorSelectionDlg = None
     
     #----------------------------------------------------------------------
     
     def __init__( self, *args ):
-
         pass
 
     #----------------------------------------------------------------------
@@ -72,24 +70,15 @@ class S2iCommonProperties:
         """
 
         if self.m_oColorSelectionDlg == None:
-            
             self.m_oColorSelectionDlg = gtk.ColorSelectionDialog(_("Color selection"))
-
         t_oColorSelection = self.m_oColorSelectionDlg.colorsel
-        
         t_oResponse = self.m_oColorSelectionDlg.run()
-
         if t_oResponse == gtk.RESPONSE_OK:
-
             t_oColor = t_oColorSelection.get_current_color()
-
             self.m_oColorSelectionDlg.hide()
-
             return t_oColor
-
         else:
             self.m_oColorSelectionDlg.hide()
-
             return None
             
     #----------------------------------------------------------------------
@@ -97,6 +86,11 @@ class S2iCommonProperties:
     def on_cancel_clicked( self, *args ):
         self.widgets['Properties'].destroy()
         
+
+    def on_confirm_clicked(self, *args):
+        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
+        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
+        self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
 
