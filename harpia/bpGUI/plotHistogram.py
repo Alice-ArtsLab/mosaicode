@@ -213,11 +213,11 @@ def generate(blockTemplate):
         'int block$$_plotHistArrIter;\n'
     blockTemplate.functionCall = '\nif(block$$_img_i1 && block$$_img_i1->nChannels == 3){\n' + \
                                  '	block$$_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,3);\n' + \
-                                 '	block$$_SourceCx[0] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '	block$$_SourceCx[0] = cvCreateImage(cvSize(block' + $$ + \
                                  '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block$$_SourceCx[1] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '	block$$_SourceCx[1] = cvCreateImage(cvSize(block' + $$ + \
                                  '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block$$_SourceCx[2] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '	block$$_SourceCx[2] = cvCreateImage(cvSize(block' + $$ + \
                                  '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
                                  '	block$$_HistCx[0] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
                                  '	block$$_HistCx[1] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
@@ -257,7 +257,7 @@ def generate(blockTemplate):
                                  'else\n' + \
                                  '{\n' + \
                                  '	block$$_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,1);\n' + \
-                                 '	block$$_SourceCx[0] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '	block$$_SourceCx[0] = cvCreateImage(cvSize(block' + $$ + \
                                  '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
                                  '	block$$_hist_rang[0] = 0;\n' + \
                                  '	block$$_hist_rang[1] = 255;\n' + \
