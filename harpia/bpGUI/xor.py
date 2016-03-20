@@ -62,25 +62,14 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         handlers = [
             'on_cancel_clicked',
-            'on_xor_confirm_clicked',
+            'on_confirm_clicked',
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked'
         ]
 
         top_window = 'Properties'
-
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-
         self.configure()
-
-        # load help text
-        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/xor" + _("_en.help"))
-
-        # t_oTextBuffer = gtk.TextBuffer()
-
-        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
-
-        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
 
     #----------------Help Text--------------------------------------
 
@@ -92,21 +81,7 @@ class Properties(GladeWindow, S2iCommonProperties):
     def __del__(self):
         pass
 
-    # ----------------------------------------------------------------------
-
-    def on_xor_confirm_clicked(self, *args):
-        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
-
-        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
-
-        self.widgets['Properties'].destroy()
-
-
         # ----------------------------------------------------------------------
-
-
-# XorProperties = Properties()
-# XorProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation

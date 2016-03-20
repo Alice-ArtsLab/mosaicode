@@ -161,10 +161,11 @@ class Properties( GladeWindow, S2iCommonProperties ):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-   for propIter in blockTemplate.properties:
-       if propIter[0] == 'comment':
-           comment = propIter[1]
-   blockTemplate.functionCall = '/*'+comment+'*/ \n'
+    import harpia.gerador
+    for propIter in blockTemplate.properties:
+        if propIter[0] == 'comment':
+            comment = propIter[1]
+            blockTemplate.functionCall = '/*'+comment+'*/ \n'
 
 # ------------------------------------------------------------------------------
 # Block Setup
