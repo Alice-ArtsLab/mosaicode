@@ -54,9 +54,7 @@ def main(argv):
 	
 	## Initialize the Frontend
 	HarpiaFrontend = harpiagcfrontend.S2iHarpiaFrontend()
-	
 	HarpiaFrontend.show( center=0 )
-	
 	gtk.main()
 	
 	#----------------------------------------------------------------------

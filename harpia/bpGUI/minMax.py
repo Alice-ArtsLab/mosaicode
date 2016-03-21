@@ -223,8 +223,6 @@ def getBlock():
             "Path": {"Python": "minMax",
                      "Glade": "glade/minMax.ui",
                      "Xml": "xml/minMax.xml"},
-            "Inputs": 1,
-            "Outputs": 2,
             "Icon": "images/minMax.png",
             "Color": "50:50:200:150",
             "InTypes": {0: "HRP_IMAGE"},

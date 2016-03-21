@@ -38,7 +38,6 @@ setup(name='harpia',
 			data_files=[ ('/usr/share/harpia/images', glob("app_data/images/*")), #this is fucked up! must put it in package_data!!
 		 							 ('/usr/share/harpia/xml', glob("app_data/xml/*.xml")), #same thing
 		 							 ('/usr/share/harpia/po/pt/LC_MESSAGES/', glob("app_data/po/pt/LC_MESSAGES/*")),
-		 							 ('/usr/share/harpia/help', glob("app_data/help/*.help")),
 		 							 ('/usr/share/harpia/glade', glob("app_data/glade/*.ui")),
 		 							 ('/usr/share/harpia/examples', glob("app_data/examples/*.hrp")),
 		 							 ('/usr/share/applications/', ["app_data/harpia.desktop"]),

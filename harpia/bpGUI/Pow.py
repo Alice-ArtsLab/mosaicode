@@ -143,6 +143,7 @@ def generate(blockTemplate):
         exponent) + ');}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
                             'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.functionCall += '\n // Valney esteve aqui \n'
 
 
 # ------------------------------------------------------------------------------
@@ -153,8 +154,6 @@ def getBlock():
             "Path": {"Python": "Pow",
                      "Glade": "glade/pow.ui",
                      "Xml": "xml/pow.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/pow.png",
             "Color": "230:230:60:150",
             "InTypes": {0: "HRP_IMAGE"},

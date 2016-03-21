@@ -161,10 +161,11 @@ class Properties( GladeWindow, S2iCommonProperties ):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-   for propIter in blockTemplate.properties:
-       if propIter[0] == 'comment':
-           comment = propIter[1]
-   blockTemplate.functionCall = '/*'+comment+'*/ \n'
+    import harpia.gerador
+    for propIter in blockTemplate.properties:
+        if propIter[0] == 'comment':
+            comment = propIter[1]
+            blockTemplate.functionCall = '/*'+comment+'*/ \n'
 
 # ------------------------------------------------------------------------------
 # Block Setup
@@ -174,8 +175,6 @@ def getBlock():
          "Path":{"Python":"comment",
                  "Glade":"glade/comment.ui",
                  "Xml":"xml/comment.xml"},
-         "Inputs":0,
-         "Outputs":0,
          "Icon":"images/comment.png",
          "Color":"50:100:200:150",
 				 "InTypes":"",

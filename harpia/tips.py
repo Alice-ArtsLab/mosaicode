@@ -36,6 +36,7 @@ gettext.textdomain(APP)
 TIPS_VER = "v0.86"
 
 TIPS = (
+		_("Em breve novas dicas.\n Mantenha o seu repositorio atualizado.\n Projeto Ouroboros"),
 
 		_("Use the toolbox located on the left side of the screen\n"
 			"to select a block. Drag 'n Drop it on the white\n"

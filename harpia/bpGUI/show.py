@@ -127,18 +127,18 @@ def generate(blockTemplate):
     import harpia.gerador
     harpia.gerador.g_ShowCount += 1
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
     if (not harpia.gerador.g_bLive):
-        blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                     ' block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                                     'cvSaveImage("block' + blockTemplate.blockNumber + '_OUT.png" ,block' + blockTemplate.blockNumber + '_img_i1);}\n'
+        blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                     ' block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+                                     'cvSaveImage("block$$_OUT.png" ,block$$_img_i1);}\n'
     else:
-        blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                     ' block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                                     'cvNamedWindow("block' + blockTemplate.blockNumber + '_img_o1",CV_WINDOW_AUTOSIZE );\n cvShowImage("block' + blockTemplate.blockNumber + '_img_o1",block' + blockTemplate.blockNumber + '_img_i1);} \n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+        blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                     ' block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+                                     'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n cvShowImage("block$$_img_o1",block$$_img_i1);} \n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -149,8 +149,6 @@ def getBlock():
             "Path": {"Python": "show",
                      "Glade": "glade/show.ui",
                      "Xml": "xml/show.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/show.png",
             "Color": "50:100:200:150",
             "InTypes": {0: "HRP_IMAGE"},

@@ -175,8 +175,6 @@ def getBlock():
             "Path": {"Python": "closing",
                      "Glade": "glade/closing.ui",
                      "Xml": "xml/closing.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/closing.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},

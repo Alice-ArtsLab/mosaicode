@@ -129,27 +129,27 @@ def generate(blockTemplate):
         if propIter[0] == 'maxDist':
             maxDist = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_ts1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_ts2 = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1 && block' + blockTemplate.blockNumber + '_img_i2)\n{\n' + \
-                                 '	if(!block' + blockTemplate.blockNumber + '_img_o1)\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
-                                 '	if(!block' + blockTemplate.blockNumber + '_img_ts1)\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_img_ts1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
-                                 '	if(!block' + blockTemplate.blockNumber + '_img_ts2)\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_img_ts2 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1), IPL_DEPTH_8U, 1);\n' + \
-                                 '	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_ts1, CV_BGR2GRAY);\n' + \
-                                 '	cvCvtColor(block' + blockTemplate.blockNumber + '_img_i2, block' + blockTemplate.blockNumber + '_img_ts2, CV_BGR2GRAY);\n' + \
-                                 '	cvFindStereoCorrespondence( block' + blockTemplate.blockNumber + '_img_ts1, block' + blockTemplate.blockNumber + '_img_ts2, CV_DISPARITY_BIRCHFIELD, block' + blockTemplate.blockNumber + '_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n' + \
-                                 '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_img_ts1)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts1);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_img_ts2)\n\tcvReleaseImage(&block' + blockTemplate.blockNumber + '_img_ts2);\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_i2 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'IplImage * block$$_img_ts1 = NULL;\n' + \
+        'IplImage * block$$_img_ts2 = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1 && block$$_img_i2)\n{\n' + \
+                                 '	if(!block$$_img_o1)\n' + \
+                                 '		block$$_img_o1 = cvCreateImage(cvGetSize(block$$_img_i1), IPL_DEPTH_8U, 1);\n' + \
+                                 '	if(!block$$_img_ts1)\n' + \
+                                 '		block$$_img_ts1 = cvCreateImage(cvGetSize(block$$_img_i1), IPL_DEPTH_8U, 1);\n' + \
+                                 '	if(!block$$_img_ts2)\n' + \
+                                 '		block$$_img_ts2 = cvCreateImage(cvGetSize(block$$_img_i1), IPL_DEPTH_8U, 1);\n' + \
+                                 '	cvCvtColor(block$$_img_i1, block$$_img_ts1, CV_BGR2GRAY);\n' + \
+                                 '	cvCvtColor(block$$_img_i2, block$$_img_ts2, CV_BGR2GRAY);\n' + \
+                                 '	cvFindStereoCorrespondence( block$$_img_ts1, block$$_img_ts2, CV_DISPARITY_BIRCHFIELD' +\
+                                 'block$$_img_o1, ' + maxDist + ', 15, 3, 6, 8, 15 );\n}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_i2);\n' + \
+                            'if(block$$_img_ts1)\n\tcvReleaseImage(&block$$_img_ts1);\n' + \
+                            'if(block$$_img_ts2)\n\tcvReleaseImage(&block$$_img_ts2);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -160,8 +160,6 @@ def getBlock():
             'Path': {'Python': 'stereoCorr',
                      'Glade': 'glade/stereoCorr.ui',
                      'Xml': 'xml/stereoCorr.xml'},
-            'Inputs': 2,
-            'Outputs': 1,
             'Icon': 'images/stereoCorr.png',
             'Color': '10:10:20:150',
             'InTypes': {0: 'HRP_IMAGE', 1: "HRP_IMAGE"},

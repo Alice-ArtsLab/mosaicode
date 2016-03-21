@@ -26,7 +26,6 @@
 
 import gnomecanvas
 import GcdBlock
-import GcdBlock_Show
 import GcdConnector
 import gtk
 import time
@@ -148,7 +147,6 @@ class GcDiagram(gnomecanvas.Canvas):
         if event.type == gtk.gdk.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
             if event.button == 1:
                 self.wbWidget.grab_focus()
-                # print "aborting conn on whiteBoard"
                 self.AbortConnection()
                 return False
         return False
@@ -205,10 +203,7 @@ class GcDiagram(gnomecanvas.Canvas):
         return self.m_nBlockCountId - 1
 
     def InsertBlockPosId(self, a_nBlockType, x, y, a_sBlockCountId):
-        if a_nBlockType == 02:  # show block
-            t_oNewBlock = GcdBlock_Show.GcdBlock_Show(self, a_nBlockType, a_sBlockCountId)
-        else:
-            t_oNewBlock = GcdBlock.GcdBlock(self, a_nBlockType, a_sBlockCountId)
+        t_oNewBlock = GcdBlock.GcdBlock(self, a_nBlockType, a_sBlockCountId)
 
             # print "orig",x,",",y #relative coords
 

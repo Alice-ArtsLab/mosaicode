@@ -30,6 +30,7 @@ import math
 import gnomecanvas
 import os
 
+from GcdBlockMenu import GcdBlockMenu
 import s2idirectory
 import s2iblockpropertiesgui
 from utils.XMLUtils import XMLParser
@@ -47,11 +48,8 @@ class GcdBlock( gnomecanvas.CanvasGroup):
     def __init__( self, diagram, a_nBlockType, a_nBlockCountId=1):#a_nInputs, a_nOutputs, a_nBlockType ):
 
         self.m_nBlockType = a_nBlockType
-
         self.ParentDiagram = diagram
-
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-
         if s2idirectory.block.has_key(a_nBlockType):
             self.m_oDictBlock = s2idirectory.block[a_nBlockType] #a_oDictBlock
         else:
@@ -59,11 +57,8 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             print "Bad block type.. assuming 00"
 
         self.m_nBlockCountId = a_nBlockCountId
-
         self.widgets = {}
-
         self.m_bFocus = False
-
         self.m_bHasFlow = False
         self.m_bTimeShifts = False
         self.m_bIsSource = False
@@ -80,25 +75,19 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
         self.m_oBorderColor = [ 0, 0, 0, 255 ]
         self.m_oBackColor = [0,0,0,150]
-
         self.m_nRadius = 15
-
         self.m_nInputHeight = 24
         self.m_nInputWidth = 24
         self.m_nOutputHeight = 24
         self.m_nOutputWidth = 24
-
         self.inputPortCenters = []
         self.outputPortCenters = []
-
         self.width = WIDTH_DEFAULT
         self.TextWidth = self.width - WIDTH_2_TEXT_OFFSET
-
 
         t_nMaxIO = max(len(self.m_oDictBlock["InTypes"]), len(self.m_oDictBlock["OutTypes"]))
 
         ## Generates the block size, based on the number of inputs,outputs
-
         # Comment block is too small...
         if not t_nMaxIO:
             t_nMaxIO = 1
@@ -112,12 +101,9 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.iconFile = self.m_sDataDir+self.m_oDictBlock["Icon"]
 
         self.__gobject_init__()
-
         self.wGroup = self.ParentDiagram.root().add(self,x=0,y=0)
         self.wGroup.connect("event", self.group_event)
-
         self.wGroup.set_flags(gtk.CAN_FOCUS)
-
         self.Build()
 
     def IsInput(self,event):#checks whether distance from any input center to the event position is less than PORT_SENSITIVITY
@@ -146,16 +132,16 @@ class GcdBlock( gnomecanvas.CanvasGroup):
     def ComputeOutputPorts(self):
         for outputPort in range(len(self.m_oDictBlock["OutTypes"])):
             self.outputPortCenters.append((self.width-(self.m_nInputWidth/2),  (self.m_nRadius # upper border
-                                                                                                                + (outputPort*5) # spacing betwen ports
-                                                                                                                + outputPort*self.m_nInputHeight #previous ports
-                                                                                                                + self.m_nInputHeight/2)))#going to the port's center
+                     + (outputPort*5) # spacing betwen ports
+                     + outputPort*self.m_nInputHeight #previous ports
+                     + self.m_nInputHeight/2)))#going to the port's center
 
     def ComputeInputPorts(self):
         for inputPort in range(len(self.m_oDictBlock["InTypes"])):
             self.inputPortCenters.append((self.m_nInputWidth/2,  (self.m_nRadius # upper border
-                                                                                                                + (inputPort*5) # spacing betwen ports
-                                                                                                                + inputPort*self.m_nInputHeight #previous ports
-                                                                                                                + self.m_nInputHeight/2)))#going to the port's center
+                     + (inputPort*5) # spacing betwen ports
+                     + inputPort*self.m_nInputHeight #previous ports
+                     + self.m_nInputHeight/2)))#going to the port's center
 
     def group_event(self, widget, event=None):
         if event.type == gtk.gdk.BUTTON_PRESS:
@@ -204,9 +190,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                             return False
 
         elif event.type == gtk.gdk._2BUTTON_PRESS:
-            #Open up the block's options
-            print("Open " + self.m_oDictBlock["Label"] + " props")
-            self.ShowBlockGUI()
+            GcdBlockMenu(self, event)
             return True
 
         elif event.type == gtk.gdk.ENTER_NOTIFY:
@@ -223,9 +207,6 @@ class GcdBlock( gnomecanvas.CanvasGroup):
     def __del__(self):
         print "GC: deleting GcdBlock:",self.m_nBlockCountId
 
-    def DeleteClicked(self, *args ): #this strongly depends on the garbage collector
-        self.ParentDiagram.DeleteBlock(self.m_nBlockCountId)
-
     def _BbRect(self):
         p = []
 
@@ -240,9 +221,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         #linha superior.. p/ referencia
         pf.append((self.m_nRadius,0))
         pf.append((self.width-self.m_nRadius,0))
-
         pf.extend(AlterArc(m_oArc3,self.width-self.m_nRadius,self.m_nRadius))##canto superior direito
-
         pf.extend(AlterArc(m_oArc0,self.width-self.m_nRadius,self.height-self.m_nRadius))##canto inferior direito
         pf.extend(AlterArc(m_oArc1,self.m_nRadius,self.height-self.m_nRadius))##canto inferior esquerdo
         pf.extend(AlterArc(m_oArc2,self.m_nRadius,self.m_nRadius))##canto superior esquerdo
@@ -256,8 +235,8 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         #print self.m_oDictBlock["Color"].split(":")
         self.SetBackColor()
         w1 = self.wGroup.add(gnomecanvas.CanvasPolygon, points=p,# y1=y1, x2=x2, y2=y2,
-                                                                fill_color_rgba=ColorFromList(self.m_oBackColor), outline_color='black',
-                                                                width_units=1.0)
+                    fill_color_rgba=ColorFromList(self.m_oBackColor), outline_color='black',
+                    width_units=1.0)
         #w1.set(dash=[1.0, 1, [0.1,0.1]])#set_dash( 1.0,(5.0,0.1) )
         self.widgets["Rect"] = w1
 
@@ -276,9 +255,9 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                 pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+s2idirectory.icons["IconInput"])
 
             t_Wid = self.wGroup.add(gnomecanvas.CanvasPixbuf, pixbuf=pb,x=0,y=(self.m_nRadius # upper border
-                                                                                                                                                + (x*5) # spacing betwen ports
-                                                                                                                                                 + x*self.m_nInputHeight), #previous ports
-                                                                                                                                                 anchor=gtk.ANCHOR_NORTH_WEST)
+                              + (x*5) # spacing betwen ports
+                              + x*self.m_nInputHeight), #previous ports
+                              anchor=gtk.ANCHOR_NORTH_WEST)
             inPWids.append(t_Wid)
         self.widgets["Inputs"] = inPWids
 
@@ -290,16 +269,16 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             except:
                 pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+s2idirectory.icons["IconOutput"])
             t_Wid = self.wGroup.add(gnomecanvas.CanvasPixbuf, pixbuf=pb,x=(self.width-self.m_nOutputWidth),y=(self.m_nRadius # upper border
-                                                                                                                                                + (x*5) # spacing betwen ports
-                                                                                                                                                 + x*self.m_nOutputHeight), #previous ports
-                                                                                                                                                 anchor=gtk.ANCHOR_NORTH_WEST)
+                      + (x*5) # spacing betwen ports
+                      + x*self.m_nOutputHeight), #previous ports
+                      anchor=gtk.ANCHOR_NORTH_WEST)
             outPWids.append(t_Wid)
         self.widgets["Outputs"] = outPWids
 
     def _BLabels(self):
         label = self.wGroup.add(gnomecanvas.CanvasText, text=self.m_oDictBlock["Label"],
-                                                                fill_color='black', anchor=gtk.ANCHOR_CENTER,
-                                                                weight=pango.WEIGHT_BOLD, size_points=9, x=(self.width/2), y=(self.height-10))
+                            fill_color='black', anchor=gtk.ANCHOR_CENTER,
+                            weight=pango.WEIGHT_BOLD, size_points=9, x=(self.width/2), y=(self.height-10))
         self.TextWidth = label.get_property('text-width')
         oldX,oldY = ((self.width/2),(self.height-10))
         self.width = max(self.TextWidth+WIDTH_2_TEXT_OFFSET,self.width)
@@ -371,8 +350,8 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.m_bFocus = False
 
     def UpdateFlowDisplay(self):
-
-        t_oFocusCorrectedColor = [self.m_oBackColor[0],self.m_oBackColor[1],self.m_oBackColor[2],self.m_oBackColor[3]]
+        t_oFocusCorrectedColor = [self.m_oBackColor[0],self.m_oBackColor[1],
+                        self.m_oBackColor[2],self.m_oBackColor[3]]
 
         if self.m_bHasFlow:
             t_oFocusCorrectedColor[3] = self.m_oBackColor[3] #with focus: original colors
@@ -388,37 +367,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.widgets["Rect"].set(width_units=1)
 
     def RightClick(self, a_oEvent):
-        t_oMenu = gtk.Menu()
-
-        t_oMenuItem = gtk.MenuItem("Properties")
-        t_oMenuItem.connect("activate", self.ShowBlockGUI )
-        t_oMenu.append(t_oMenuItem)
-
-        t_oMenuItem = gtk.MenuItem("PrintXML")
-        t_oMenuItem.connect("activate", self.PrintXML )
-        t_oMenu.append(t_oMenuItem)
-
-        t_oMenuItem = gtk.MenuItem("PrintPOS")
-        t_oMenuItem.connect("activate", self.PrintPOS )
-        t_oMenu.append(t_oMenuItem)
-
-        t_oMenuItem = gtk.SeparatorMenuItem()
-        t_oMenu.append(t_oMenuItem)
-
-        t_oMenuItem = gtk.MenuItem("Delete")
-        t_oMenuItem.connect("activate", self.DeleteClicked )
-        t_oMenu.append(t_oMenuItem)
-
-        t_oMenuItem = gtk.SeparatorMenuItem()
-        t_oMenu.append(t_oMenuItem)
-
-        # Shows the menu
-        t_oMenu.show_all()
-        t_oMenu.popup(None, None, None, a_oEvent.button, a_oEvent.time)
-
-    def ShowBlockGUI(self, *args):
-        PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI( self )
-        PropertiesGUI.EditProperties( self.m_oPropertiesXML )
+       GcdBlockMenu(self, a_oEvent)
 
     def GetState(self):
         return self.m_bHasFlow
@@ -458,6 +407,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
     def SetBorderColor(self, a_nColor=None):
         print "SetBorderColor is deprecated, fix this"
+        self.m_oBackColor = a_nColor
 
     def ToggleState(self,*args):
         print "ToggleState is deprecated, fix this"
@@ -469,11 +419,6 @@ class GcdBlock( gnomecanvas.CanvasGroup):
     def SetPropertiesXML(self, outerProps):
         self.m_oPropertiesXML = outerProps
 
-
-    #debug functions
-    def PrintXML(self, *args):
-        print self.m_oPropertiesXML.getXML()
-
     def GetId(self):
         return self.m_nBlockCountId
 
@@ -482,9 +427,6 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
     def GetPos(self):
         return self.wGroup.get_property('x'),self.wGroup.get_property('y')
-
-    def PrintPOS(self, *args):
-        print "(",self.wGroup.get_property('x'),",",self.wGroup.get_property('y'),")"
 
 def Dist(p1,p2):
     return math.sqrt( math.pow(p2[0]-p1[0],2) + math.pow(p2[1]-p1[1],2))

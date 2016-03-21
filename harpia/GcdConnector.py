@@ -32,6 +32,8 @@ import math
 import gnomecanvas
 import sys
 
+from GcdConnectorMenu import GcdConnectorMenu
+
 #sys.path.append('../bin')
 #import s2idirectory
 
@@ -39,33 +41,21 @@ class GcdConnector( gnomecanvas.CanvasGroup):
 	def __init__( self, diagram, a_nConnectorCountId=1, a_nFrom=-1, a_nFromOut=-1):#a_nInputs, a_nOutputs, a_nBlockType ):
 		
 		self.ParentDiagram = diagram
-		
 		self.m_nCountId = a_nConnectorCountId
-		
 		self.fromBlock = a_nFrom
 		self.fromBlockOut = a_nFromOut
-		
 		self.fromPoint = self.ParentDiagram.m_oBlocks[self.fromBlock].GetOutputPos(self.fromBlockOut) #pegando o ponto verdadeiro de onde sai o conector
-
 		self.ConnBoundary = 16.0
-
 		self.toPoint = (0,0)
-		
 		self.toBlock = -1#a_nTo
 		self.toBlockIn = -1#a_nToIn
-		
 		self.m_bFocus = False
 		self.m_bHasFlow = False
-		
 		self.__gobject_init__()
-		
 		self.wGroup = self.ParentDiagram.root().add(self,x=0,y=0)
 		self.wGroup.connect("event", self.group_event)
-		
 		self.wGroup.set_flags(gtk.CAN_FOCUS)
-		
 		self.widgets = {}
-		
 		self.Build()
 
 	def __del__(self):
@@ -75,7 +65,6 @@ class GcdConnector( gnomecanvas.CanvasGroup):
 		self.toBlock = a_nTo
 		self.toBlockIn = a_nToIn
 		self.toPoint = self.ParentDiagram.m_oBlocks[self.toBlock].GetInputPos(self.toBlockIn) #pegando o ponto verdadeiro de onde sai o conector
-		#print "Connected block"+str(self.fromBlock)+"_Out"+str(self.fromBlockOut)+" to block"+str(self.toBlock)+"_In"+str(self.toBlockIn)+" !!!"
 		self.UpdateTracking(self.toPoint)
 
 	def group_event(self, widget, event=None):
@@ -162,34 +151,7 @@ class GcdConnector( gnomecanvas.CanvasGroup):
 			self.widgets["Line"].set(width_units=1.0)#(line_style=gtk.gdk.LINE_ON_OFF_DASH)
 
 	def RightClick(self, a_oEvent):
-		t_oMenu = gtk.Menu()
-	
-		t_oMenuItem = gtk.MenuItem("Properties")
-		#t_oMenuItem.connect("activate", self.ShowPropertiesGUI )
-		t_oMenu.append(t_oMenuItem)
-		
-		# Menu separator
-		t_oMenuItem = gtk.SeparatorMenuItem()
-		t_oMenu.append(t_oMenuItem)
-		
-		# Excluir (delete) item
-		t_oMenuItem = gtk.MenuItem("Delete")
-		t_oMenuItem.connect("activate", self.DeleteClicked )
-		t_oMenu.append(t_oMenuItem)
-
-		# Another separator
-		t_oMenuItem = gtk.SeparatorMenuItem()
-		t_oMenu.append(t_oMenuItem)
-		# Shows the menu
-		t_oMenu.show_all()
-		t_oMenu.popup(None, None, None, a_oEvent.button, a_oEvent.time)
-
-	def DeleteClicked(self, *args ): #this strongly depends on the garbage collector
-		for connIdx in range(len(self.ParentDiagram.m_oConnectors)):
-			if self.ParentDiagram.m_oConnectors[connIdx] == self:
-				self.ParentDiagram.m_oConnectors.pop(connIdx)
-				self.wGroup.destroy()
-				break #faster, necessary (not iteraring on reverse!)
+		GcdConnectorMenu(self, a_oEvent)
 
 def Psub(p1,p0):
 	return p1[0]-p0[0],p1[1]-p0[1]

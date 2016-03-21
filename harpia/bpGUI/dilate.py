@@ -160,21 +160,16 @@ def generate(blockTemplate):
         elif propIter[0] == 'iterations':
             iterationsValue = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-    blockTemplate.functionArguments = 'int block' + blockTemplate.blockNumber + '_arg_iterations = ' + iterationsValue + \
-                                      ';\nIplConvKernel * block' + blockTemplate.blockNumber + \
-                                      '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
+    blockTemplate.functionArguments = 'int block$$_arg_iterations = ' + iterationsValue + \
+                                      ';\nIplConvKernel * block$$_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
                                       maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width, block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth ,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 '\ncvDilate(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + \
-                                 '_img_o1,block' + blockTemplate.blockNumber + '_arg_mask,block' + blockTemplate.blockNumber + \
-                                 '_arg_iterations);}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width, block$$_img_i1->height), block$$_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
+                                 '\ncvDilate(block$$_img_i1,block$$_img_o1,block$$_arg_mask,block$$_arg_iterations);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -185,8 +180,6 @@ def getBlock():
             "Path": {"Python": "dilate",
                      "Glade": "glade/dilate.ui",
                      "Xml": "xml/dilate.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/dilate.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},

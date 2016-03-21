@@ -226,8 +226,6 @@ def getBlock():
             "Path": {"Python": "rotate",
                      "Glade": "glade/rotate.ui",
                      "Xml": "xml/rotate.xml"},
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/rotate.png",
             "Color": "90:5:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_DOUBLE"},

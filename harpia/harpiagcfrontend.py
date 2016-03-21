@@ -105,22 +105,33 @@ class S2iHarpiaFrontend(GladeWindow):
         ]
 
         handlers = [
-            'on_NewMenuBar_activate', 'on_OpenMenuBar_activate',
-            'on_SaveMenuBar_activate', 'on_SaveASMenuBar_activate',
-            'on_QuitMenuBar_activate', 'on_CutMenuBar_activate',
-            'on_CopyMenuBar_activate', 'on_PasteMenuBar_activate',
-            'on_DeleteMenuBar_activate', 'on_AboutMenuBar_activate',
+            'on_NewMenuBar_activate',
+            'on_OpenMenuBar_activate',
+            'on_SaveMenuBar_activate',
+            'on_SaveASMenuBar_activate',
+            'on_QuitMenuBar_activate',
+            'on_CutMenuBar_activate',
+            'on_CopyMenuBar_activate',
+            'on_PasteMenuBar_activate',
+            'on_DeleteMenuBar_activate',
+            'on_AboutMenuBar_activate',
             'on_NewToolBar_clicked',
             'on_OpenToolBar_clicked',
             'on_SaveToolBar_clicked',
             'on_ProcessToolBar_clicked',
             'on_CodeToolBar_clicked',
-            'on_ZoomOutToolBar_clicked', 'on_ZoomInToolBar_clicked',
-            'on_SearchButton_clicked', 'on_BlocksTreeView_row_activated',
-            'on_BlocksTreeView_cursor_changed', 'on_HarpiaFrontend_destroy',
-            'on_ZoomDefaultToolBar_clicked', 'on_Preferences_clicked',
-            'on_Export_clicked', 'on_CloseMenuBar_activate',
-            'on_UpdateToolBar_clicked', 'on_tip_activate',
+            'on_ZoomOutToolBar_clicked',
+            'on_ZoomInToolBar_clicked',
+            'on_SearchButton_clicked',
+            'on_BlocksTreeView_row_activated',
+            'on_BlocksTreeView_cursor_changed',
+            'on_HarpiaFrontend_destroy',
+            'on_ZoomDefaultToolBar_clicked',
+            'on_Preferences_clicked',
+            'on_Export_clicked',
+            'on_CloseMenuBar_activate',
+            'on_UpdateToolBar_clicked',
+            'on_tip_activate',
             'on_ViewSource_clicked',
             'on_reset_tip_activate'
         ]
@@ -145,20 +156,11 @@ class S2iHarpiaFrontend(GladeWindow):
             self.BlocksProperties[s2idirectory.block[x]["Label"]] = {"Inputs": len(s2idirectory.block[x]["InTypes"]),
                                                                      "Outputs": len(s2idirectory.block[x]["OutTypes"])}
 
-
-        # cpscotti .. taking out more dumb code..
-
-
         self.widgets['HarpiaFrontend'].set_icon_from_file(self.m_sDataDir + "images/harpia_ave.png")
-
         self.m_oIconUpdate = gtk.Image()
-
         self.m_oIconUpdate.set_from_file(self.m_sDataDir + "images/system-software-update.png")
-
         self.m_oIconUpdate.show_all()
-
         self.widgets['UpdateToolBar'].set_icon_widget(self.m_oIconUpdate)
-
         self.g_sTreeViewPath = "0,0"
 
         if os.name == "nt":
@@ -169,22 +171,15 @@ class S2iHarpiaFrontend(GladeWindow):
                 self.widgets['toolbar1'].remove(self.widgets['UpdateToolBar'])
 
         self.m_nStatus = 0
-
         self.SaveAs = False
 
         # Member Diagram references
         self.m_oGcDiagrams = {}
-
         self.m_oSessionIDs = {}
-
         self.m_oCopyBuffer = (-1, -1)  # tuple (fromPage, [listOfBlocks]) ...listOfConns?
-
         self.m_nCurrentIDSession = None
-
         self.LoadExamplesMenu()
-
         self.__InsertBlocks()
-
         self.on_CloseMenuBar_activate()  # removing the dummie page
         self.on_NewToolBar_clicked()  # creating blank page
 
@@ -205,7 +200,6 @@ class S2iHarpiaFrontend(GladeWindow):
         """
 
         t_oTreeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_PYOBJECT)
-
         t_oImage = gtk.CellRendererPixbuf()
 
         for t_sItem in self.Blocks.keys():
@@ -216,13 +210,9 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_oTreeStore.append(t_oParent, [self.Blocks[t_sItem][t_nIndex], t_oImage])
 
         self.widgets['BlocksTreeView'].set_model(t_oTreeStore)
-
         t_oTextRender = gtk.CellRendererText()
-
         t_oTextRender.set_property('editable', False)
-
         t_oColumn = gtk.TreeViewColumn(_("Available Blocks"), t_oTextRender, text=0)
-
         self.widgets['BlocksTreeView'].append_column(t_oColumn)
 
         #		TARGETS = [
@@ -271,7 +261,7 @@ class S2iHarpiaFrontend(GladeWindow):
         return
 
     def on_NewMenuBar_activate(self, *args):
-
+        print "New Menu Bar Activate"
         self.on_NewToolBar_clicked()
 
     # ----------------------------------------------------------------------
@@ -391,11 +381,8 @@ class S2iHarpiaFrontend(GladeWindow):
         t_oNewDiagram = GcDiagram.GcDiagram()  # created new diagram
 
         t_oTable = gtk.Table(2, 2, False)
-
         t_oFrame = gtk.Frame()
-
         t_oFrame.set_shadow_type(gtk.SHADOW_IN)
-
         t_oTable.attach(t_oFrame, 0, 1, 0, 1,
                         gtk.EXPAND | gtk.FILL | gtk.SHRINK,
                         gtk.EXPAND | gtk.FILL | gtk.SHRINK)
@@ -906,27 +893,19 @@ class S2iHarpiaFrontend(GladeWindow):
             return
 
         for t_nClassIndex, t_sClassName in enumerate(self.Blocks.keys()):
-
             t_sClassNameLow = t_sClassName.lower()
-
             if t_sClassNameLow.find(t_sSearchValue) != -1:
                 self.widgets['BlocksTreeView'].collapse_all()
-
                 self.widgets['BlocksTreeView'].expand_row((t_nClassIndex), True)
-
                 self.widgets['BlocksTreeView'].set_cursor((t_nClassIndex))
 
                 return
 
             for t_nBlockIndex, t_sBlockName in enumerate(self.Blocks[t_sClassName]):
-
                 t_sBlockName = t_sBlockName.lower()
-
                 if t_sBlockName.find(t_sSearchValue) != -1:
                     self.widgets['BlocksTreeView'].collapse_all()
-
                     self.widgets['BlocksTreeView'].expand_to_path((t_nClassIndex, t_nBlockIndex))
-
                     self.widgets['BlocksTreeView'].set_cursor((t_nClassIndex, t_nBlockIndex))
 
                     return
@@ -962,24 +941,16 @@ class S2iHarpiaFrontend(GladeWindow):
         Callback function called when BlocksTreeView_row is activated. Loads the block in the diagram.
         """
         t_oTreeViewModel = treeview.get_model()
-
         t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewModel.get_iter(path), 0)
 
         if t_sBlockName not in self.Blocks.keys():
-
             t_nPage = self.widgets['WorkArea'].get_current_page()
-
             if self.m_oGcDiagrams.has_key(t_nPage):
-
                 t_oCurrentGcDiagram = self.m_oGcDiagrams[t_nPage]
-
                 t_nBlockType = -1
-
                 for t_oBlockTypeIter in s2idirectory.block.keys():
-
                     if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == t_sBlockName:
                         t_nBlockType = t_oBlockTypeIter
-
                         break
                 t_oCurrentGcDiagram.InsertBlock(t_nBlockType, x, y)
 
@@ -991,13 +962,9 @@ class S2iHarpiaFrontend(GladeWindow):
         """
 
         t_oTreeViewSelection = treeview.get_selection()
-
         (t_oTreeViewModel, t_oTreeViewIter) = t_oTreeViewSelection.get_selected()
-
         if t_oTreeViewIter != None:
-
             t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewIter, 0)
-
             for x in s2idirectory.block:
                 if s2idirectory.block[x]["Label"] == t_sBlockName:
                     t_oTextBuffer = gtk.TextBuffer()
@@ -1037,21 +1004,14 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         Callback funtion called when CloseMenuBar is activated. Close the current diagram tab.
         """
-
         t_nCurrentTabIndex = self.widgets['WorkArea'].get_current_page()
-
         if t_nCurrentTabIndex <> -1:
-
             self.widgets["WorkArea"].remove_page(t_nCurrentTabIndex)
-
             if self.m_oGcDiagrams.has_key(t_nCurrentTabIndex):
                 del self.m_oGcDiagrams[t_nCurrentTabIndex]
-
             t_oGcDiagrams = {}
-
             for t_nTabIndex, t_nOldTabIndex in enumerate(self.m_oGcDiagrams.keys()):
                 t_oGcDiagrams[t_nTabIndex] = self.m_oGcDiagrams[t_nOldTabIndex]
-
             self.m_oGcDiagrams = t_oGcDiagrams
 
     # ----------------------------------------------------------------------
@@ -1086,18 +1046,11 @@ class S2iHarpiaFrontend(GladeWindow):
                             t_sNewLabel = t_oGcDiagram.GetFilename().split("/").pop()
                             t_oLabel = gtk.Label(str(t_sNewLabel))
                             self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
-
                         # print example[1]
 
     def LoadExamplesMenu(self):
         t_lListOfExamples = glob(self.m_sDataDir + "examples/*")
         t_lListOfExamples.sort()
-
-        ##ALG to prevent using filenames with _ on the menus
-        # t_lNewL = []
-        # for s in t_lListOfExamples:
-        # t_lNewL.append(s.replace("_","-"))
-        # t_lListOfExamples = t_lNewL
 
         self.widgets['fake_separator'].destroy()
         self.widgets.pop('fake_separator')

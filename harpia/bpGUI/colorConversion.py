@@ -183,6 +183,7 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
+    import harpia.gerador
     channels = '3'
     for propIter in blockTemplate.properties:
         if propIter[0] == 'type':
@@ -218,21 +219,19 @@ def generate(blockTemplate):
                 # code = 'CV_RGB2GRAY'
                 # channels = '1'
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_t = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), block' + blockTemplate.blockNumber + '_img_i1->depth,' + channels + ');\n' + \
-                                 'cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t ,' + code + ' );}\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'IplImage * block$$_img_t = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth,block$$_img_i1->nChannels);\n' + \
+                                 'block$$_img_t = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth,' + channels + ');\n' + \
+                                 'cvCvtColor(block$$_img_i1, block$$_img_t ,' + code + ' );}\n' + \
                                  'if ( ' + code + ' == ' + "CV_RGB2GRAY" + ')\n' + \
-                                 '{    cvMerge(block' + blockTemplate.blockNumber + '_img_t ,block' + blockTemplate.blockNumber + '_img_t ,block' + blockTemplate.blockNumber + '_img_t ,NULL ,block' + blockTemplate.blockNumber + '_img_o1);\n }\n' + \
-                                 'else\n' + '{ block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_t);\n}'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n'
+                                 '{    cvMerge(block$$_img_t ,block$$_img_t ,block$$_img_t ,NULL ,block$$_img_o1);\n }\n' + \
+                                 'else\n' + '{ block$$_img_o1 = cvCloneImage(block$$_img_t);\n}'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_t);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_o1);\n'
 
 
 # ------------------------------------------------------------------------------
@@ -243,8 +242,6 @@ def getBlock():
             "Path": {"Python": "colorConversion",
                      "Glade": "glade/colorConversion.ui",
                      "Xml": "xml/colorConversion.xml"},
-            "Inputs": 1,
-            "Outputs": 1,
             "Icon": "images/colorConversion.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
