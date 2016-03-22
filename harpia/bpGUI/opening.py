@@ -145,16 +145,16 @@ def generate(blockTemplate):
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
-    blockTemplate.functionArguments = 'IplConvKernel * block' + $$ + \
+    blockTemplate.functionArguments = 'IplConvKernel * block$$' + \
                                       '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
                                       maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                  'IplImage * block$$_auxImg;' + \
-                                 'block$$_img_o1 = cvCreateImage(cvSize(block' + $$ + \
-                                 '_img_i1->width, block$$_img_i1->height), block' + $$ + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width, block$$_img_i1->height), block$$' + \
                                  '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
-                                 '\nblock$$_auxImg = cvCreateImage(cvSize(block' + $$ + \
-                                 '_img_i1->width, block$$_img_i1->height), block' + $$ + \
+                                 '\nblock$$_auxImg = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width, block$$_img_i1->height), block$$' + \
                                  '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
                                  'cvMorphologyEx(block$$_img_i1,block$$_img_o1,NULL,' + \
                                  'block$$_arg_mask, CV_MOP_OPEN, 1);\n}\n'
