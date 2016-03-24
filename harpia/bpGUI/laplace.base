@@ -1,0 +1,4 @@
+Name: LAPLACE
+Input: Image
+Output: Image
+Properties: Mask Size {1, 3, 5, 7}
