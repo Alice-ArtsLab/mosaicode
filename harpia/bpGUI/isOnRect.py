@@ -135,15 +135,15 @@ def generate(blockTemplate):
     # if propIter[0] == 'method':
     # interMethod = propIter[1]
 
-    blockTemplate.imagesIO = 'CvRect block' + blockTemplate.blockNumber + '_rect_i2;\n' + \
-                             'CvPoint block' + blockTemplate.blockNumber + '_point_i1;\n' + \
-                             'double block' + blockTemplate.blockNumber + '_double_o1;\n'
-    blockTemplate.functionCall = '\n block' + blockTemplate.blockNumber + '_double_o1 = 0.0;\n' + \
-                                 'if(block' + blockTemplate.blockNumber + '_point_i1.x >= block' + blockTemplate.blockNumber + '_rect_i2.x)\n' + \
-                                 '	if(block' + blockTemplate.blockNumber + '_point_i1.y >= block' + blockTemplate.blockNumber + '_rect_i2.y)\n' + \
-                                 '		if(block' + blockTemplate.blockNumber + '_point_i1.x < block' + blockTemplate.blockNumber + '_rect_i2.x + block' + blockTemplate.blockNumber + '_rect_i2.width)\n' + \
-                                 '			if(block' + blockTemplate.blockNumber + '_point_i1.y < block' + blockTemplate.blockNumber + '_rect_i2.y + block' + blockTemplate.blockNumber + '_rect_i2.height)\n' + \
-                                 '				block' + blockTemplate.blockNumber + '_double_o1 = 1.0;\n'
+    blockTemplate.imagesIO = 'CvRect block$$_rect_i2;\n' + \
+                             'CvPoint block$$_point_i1;\n' + \
+                             'double block$$_double_o1;\n'
+    blockTemplate.functionCall = '\n block$$_double_o1 = 0.0;\n' + \
+                                 'if(block$$_point_i1.x >= block$$_rect_i2.x)\n' + \
+                                 '	if(block$$_point_i1.y >= block$$_rect_i2.y)\n' + \
+                                 '		if(block$$_point_i1.x < block$$_rect_i2.x + block$$_rect_i2.width)\n' + \
+                                 '			if(block$$_point_i1.y < block$$_rect_i2.y + block$$_rect_i2.height)\n' + \
+                                 '				block$$_double_o1 = 1.0;\n'
     blockTemplate.dealloc = ''
 
 

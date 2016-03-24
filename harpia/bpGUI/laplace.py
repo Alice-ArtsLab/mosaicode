@@ -120,8 +120,8 @@ class Properties(GladeWindow, S2iCommonProperties):
     def on_laplace_confirm_clicked(self, *args):
         self.widgets['laplace_confirm'].grab_focus()
         for Property in self.block_properties:
-            
-            name = Property.getAttr("name")            
+
+            name = Property.getAttr("name")
 
             if name == "masksize":
                 Active = self.widgets['LAPLMaskSize'].get_active()
@@ -158,17 +158,16 @@ def generate(blockTemplate):
         else:
             masksizeValue = '3'
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_32F,block' + \
-                                 blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'cvLaplace(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1 ,' + masksizeValue + ' );}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'IplImage * block$$_img_t = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$_img_i1->nChannels);\n' + \
+                                 'cvLaplace(block$$_img_i1, block$$_img_o1 ,' + masksizeValue + ' );}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_t);\n'
 
 
 # ------------------------------------------------------------------------------

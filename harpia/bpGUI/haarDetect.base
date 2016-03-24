@@ -1,0 +1,4 @@
+Name: HAARDETECT
+Input: Image
+Output: Rotate Image, Move Rectangle, Crop Image
+Properties: Filename ( image file path ), Min. Neighbors (0 - 100). 

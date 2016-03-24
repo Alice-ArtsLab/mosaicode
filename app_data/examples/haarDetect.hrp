@@ -1,0 +1,152 @@
+<harpia>
+<GcState>
+	<block type="610" id="1">
+		<position x="348.0" y="3.0"/>
+	</block>
+	<block type="0" id="2">
+		<position x="103.0" y="18.0"/>
+	</block>
+	<block type="802" id="21">
+		<position x="718.0" y="145.0"/>
+	</block>
+	<block type="803" id="22">
+		<position x="707.0" y="35.0"/>
+	</block>
+	<block type="607" id="24">
+		<position x="673.0" y="-93.0"/>
+	</block>
+	<block type="802" id="29">
+		<position x="858.0" y="39.0"/>
+	</block>
+	<block type="2" id="30">
+		<position x="989.0" y="-46.0"/>
+	</block>
+	<block type="2" id="31">
+		<position x="927.0" y="179.0"/>
+	</block>
+</GcState>
+<properties>
+  <block id="2" type="00">
+ <property name="state" value="true"/>
+ <property name="type" value="file"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+ <property name="place" value="server"/>
+ <property name="camera" value="0"/>
+ <property name="size" value="640x480"/>
+ <property name="video_name" value=""/>
+ <property name="frameRate" value="20.0"/>
+</block>
+
+  <block id="1" type="610">
+ <property name="state" value="true"/>
+ <property name="cascade_name" value="/usr/share/harpia/images/haarcascade_frontalface_alt2.xml"/>
+ <property name="min_neighbors" value="2"/>
+</block>
+
+  <block id="21" type="802">
+ <property name="state" value="true"/>
+</block>
+
+  <block id="22" type="803">
+ <property name="state" value="true"/>
+ <property name="offset_x" value="0"/>
+ <property name="offset_y" value="0"/>
+</block>
+
+  <block id="24" type="607">
+ <property name="state" value="true"/>
+ <property name="isCenter" value="true"/>
+ <property name="isScalling" value="true"/>
+ <property name="isFilling" value="true"/>
+ <property name="xC" value="20"/>
+ <property name="yC" value="20"/>
+</block>
+
+  <block id="29" type="802">
+ <property name="state" value="true"/>
+</block>
+
+  <block id="30" type="02">
+ <property name="state" value="true"/>
+</block>
+
+  <block id="31" type="02">
+ <property name="state" value="true"/>
+</block>
+
+  </properties>
+<network>
+<block type="0" id="2">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="1" input="1"/>
+</outputs>
+</block>
+<block type="610" id="1">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="2" inBlock="21" input="2"/>
+<output id="2" inBlock="22" input="1"/>
+<output id="3" inBlock="21" input="1"/>
+<output id="1" inBlock="22" input="2"/>
+<output id="4" inBlock="24" input="2"/>
+<output id="3" inBlock="24" input="1"/>
+</outputs>
+</block>
+<block type="802" id="21">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="31" input="1"/>
+</outputs>
+</block>
+<block type="803" id="22">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="29" input="2"/>
+</outputs>
+</block>
+<block type="607" id="24">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="29" input="1"/>
+</outputs>
+</block>
+<block type="802" id="29">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="30" input="1"/>
+</outputs>
+</block>
+<block type="2" id="30">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="2" id="31">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>

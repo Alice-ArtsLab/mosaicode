@@ -113,22 +113,22 @@ class Properties(GladeWindow, S2iCommonProperties):
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_t = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_32F,block' + \
-                                 blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n' + \
-                                 'cvConvertScale(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_img_t,(1/93.8092),0);\n' + \
-                                 'cvLog(block' + blockTemplate.blockNumber + '_img_t, block' + blockTemplate.blockNumber + '_img_t);\n' + \
-                                 'cvConvertScale(block' + blockTemplate.blockNumber + '_img_t,block' + blockTemplate.blockNumber + '_img_o1,255.0,0);}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t);\n'
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'IplImage * block$$_img_t = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_t = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$' + \
+                                 '_img_i1->nChannels);\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height),block$$' + \
+                                 '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
+                                 'cvConvertScale(block$$_img_i1,block$$_img_t,(1/93.8092),0);\n' + \
+                                 'cvLog(block$$_img_t, block$$_img_t);\n' + \
+                                 'cvConvertScale(block$$_img_t,block$$_img_o1,255.0,0);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n' + \
+                            'cvReleaseImage(&block$$_img_t);\n'
 
 
 # ------------------------------------------------------------------------------
