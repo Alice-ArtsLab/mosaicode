@@ -342,10 +342,10 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_oFromDiagram = self.m_oGcDiagrams[self.m_oCopyBuffer[0]]
                 # print "source exists"
 
-                if t_oFromDiagram.m_oBlocks.has_key(self.m_oCopyBuffer[1]):
-                    newBlockId = t_oGcDiagram.InsertBlock(t_oFromDiagram.m_oBlocks[self.m_oCopyBuffer[1]].m_nBlockType)
-                    t_oGcDiagram.m_oBlocks[newBlockId].SetPropertiesXML_nID(
-                        t_oFromDiagram.m_oBlocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
+                if t_oFromDiagram.blocks.has_key(self.m_oCopyBuffer[1]):
+                    newBlockId = t_oGcDiagram.InsertBlock(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
+                    t_oGcDiagram.blocks[newBlockId].SetPropertiesXML_nID(
+                        t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
                 # print "setting props"
 
     # ----------------------------------------------------------------------
@@ -357,7 +357,7 @@ class S2iHarpiaFrontend(GladeWindow):
         if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
             blockId = t_oGcDiagram.GetBlockOnFocus()
-            if t_oGcDiagram.m_oBlocks.has_key(blockId):
+            if t_oGcDiagram.blocks.has_key(blockId):
                 t_oGcDiagram.DeleteBlock(blockId)
 
     # ----------------------------------------------------------------------

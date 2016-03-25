@@ -64,7 +64,7 @@ class Properties(GladeWindow, S2iCommonProperties):
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked',
             'on_cancel_clicked',
-            'on_show_confirm_clicked'
+            'on_confirm_clicked'
         ]
 
         top_window = 'Properties'
@@ -101,20 +101,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 
     def __del__(self):
         pass
-
-    # ----------------------------------------------------------------------
-
-    def on_show_confirm_clicked(self, *args):
-        if self.widgets['SHOWDisable'].get_active() == self.m_oS2iBlockProperties.GetState():
-            self.m_oS2iBlockProperties.ToggleState()
-
-        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
-
-        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
-
-        self.widgets['Properties'].destroy()
-
-        # ----------------------------------------------------------------------
 
 
 # ShowProperties = Properties()

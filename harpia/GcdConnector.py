@@ -33,145 +33,120 @@ import gnomecanvas
 import sys
 
 from GcdConnectorMenu import GcdConnectorMenu
+from utils.graphicfunctions import *
 
-#sys.path.append('../bin')
-#import s2idirectory
+CONNECTION_BOUNDARY = 16.0
 
 class GcdConnector( gnomecanvas.CanvasGroup):
-	def __init__( self, diagram, a_nConnectorCountId=1, a_nFrom=-1, a_nFromOut=-1):#a_nInputs, a_nOutputs, a_nBlockType ):
-		
-		self.ParentDiagram = diagram
-		self.m_nCountId = a_nConnectorCountId
-		self.fromBlock = a_nFrom
-		self.fromBlockOut = a_nFromOut
-		self.fromPoint = self.ParentDiagram.m_oBlocks[self.fromBlock].GetOutputPos(self.fromBlockOut) #pegando o ponto verdadeiro de onde sai o conector
-		self.ConnBoundary = 16.0
-		self.toPoint = (0,0)
-		self.toBlock = -1#a_nTo
-		self.toBlockIn = -1#a_nToIn
-		self.m_bFocus = False
-		self.m_bHasFlow = False
-		self.__gobject_init__()
-		self.wGroup = self.ParentDiagram.root().add(self,x=0,y=0)
-		self.wGroup.connect("event", self.group_event)
-		self.wGroup.set_flags(gtk.CAN_FOCUS)
-		self.widgets = {}
-		self.Build()
 
-	def __del__(self):
-		print "GC: deleting GcdConnector:",self.m_nCountId
+    def __init__( self, diagram, a_nFrom=-1, a_nFromOut=-1):
+        self.diagram = diagram
+        self.from_block = a_nFrom
+        self.from_block_out = a_nFromOut
+        #pegando o ponto verdadeiro de onde sai o conector
+        self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out) 
+        self.toPoint = (0,0)
+        self.to_block = -1#a_nTo
+        self.to_block_in = -1#a_nToIn
+        self.focus = False
+        self.has_flow = False
 
-	def SetEnd(self, a_nTo=-1, a_nToIn=-1):
-		self.toBlock = a_nTo
-		self.toBlockIn = a_nToIn
-		self.toPoint = self.ParentDiagram.m_oBlocks[self.toBlock].GetInputPos(self.toBlockIn) #pegando o ponto verdadeiro de onde sai o conector
-		self.UpdateTracking(self.toPoint)
+        self.__gobject_init__()
 
-	def group_event(self, widget, event=None):
-		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 1:
-				self.wGroup.grab_focus()
-				self.UpdateFocus()
-				return False
-			elif event.button == 3:
-				self.RightClick(event)
-		return False
-	
-	def LineDone(self):#, newEnd=None):
-		self.wGroup.connect("event", self.group_event)
-		#print "Line from ",self.fromPoint," to ", self.toPoint 
-	
-	def UpdateTracking(self, newEnd=None):
-		if newEnd == None:
-			newEnd = self.fromPoint
-			
-		vec = Psub(newEnd,self.fromPoint)
-		vec = CordModDec(vec)
-		newEnd = Psum(self.fromPoint,vec)
-		
-		self.toPoint = newEnd
-		
-		p = []
-		p.append(self.fromPoint[0])
-		p.append(self.fromPoint[1])
-		p.append(self.toPoint[0])
-		p.append(self.toPoint[1])
-		
-		if not self.widgets.has_key("Line"):
-			w1 = self.wGroup.add(gnomecanvas.CanvasLine, points=p,fill_color='black',width_units=3.0,first_arrowhead=False,last_arrowhead=True,arrow_shape_a=4.0,arrow_shape_b=8.0,arrow_shape_c=4.0)
-			wOut = self.wGroup.add(gnomecanvas.CanvasLine, points=p,fill_color_rgba=ColorFromList([0,0,0,0]),width_units=self.ConnBoundary,first_arrowhead=False,last_arrowhead=True,arrow_shape_a=4.0,arrow_shape_b=8.0,arrow_shape_c=4.0)
+        self.group = self.diagram.root().add(self,x=0,y=0)
+        self.group.connect("event", self.__group_event)
+        self.group.set_flags(gtk.CAN_FOCUS)
+        self.widgets = {}
+        self.update_tracking()
 
-			self.widgets["Line"] = w1
-			self.widgets["LineOut"] = wOut
-		else:
-			self.widgets["Line"].set(points=p)
-			self.widgets["LineOut"].set(points=p)
-	
-		#self.UpdateFlow()
-	
-	def UpdateConnectors(self):
-		
-		self.fromPoint = self.ParentDiagram.m_oBlocks[self.fromBlock].GetOutputPos(self.fromBlockOut) #pegando o ponto verdadeiro de onde sai o conector
-		self.toPoint = self.ParentDiagram.m_oBlocks[self.toBlock].GetInputPos(self.toBlockIn) #pegando o ponto verdadeiro de onde sai o conector
-		p = []
-		p.append(self.fromPoint[0])
-		p.append(self.fromPoint[1])
-		p.append(self.toPoint[0])
-		p.append(self.toPoint[1])
-		
-		if not self.widgets.has_key("Line"):
-			w1 = self.wGroup.add(gnomecanvas.CanvasLine, points=p,fill_color='black',width_units=3.0,first_arrowhead=False,last_arrowhead=True,arrow_shape_a=4.0,arrow_shape_b=8.0,arrow_shape_c=4.0)
-			wOut = self.wGroup.add(gnomecanvas.CanvasLine, points=p,fill_color_rgba=ColorFromList([0,0,0,0]),width_units=self.ConnBoundary,first_arrowhead=False,last_arrowhead=True,arrow_shape_a=4.0,arrow_shape_b=8.0,arrow_shape_c=4.0)
+    def __del__(self):
+        pass
 
-			self.widgets["Line"] = w1
-			self.widgets["LineOut"] = wOut
-		else:
-			self.widgets["Line"].set(points=p)
-			self.widgets["LineOut"].set(points=p)
-	
-	def UpdateFocus(self):
-		if self.ParentDiagram.get_property('focused-item') == self.wGroup:
-			self.m_bFocus = True
-			self.widgets["Line"].set(fill_color_rgba=ColorFromList([255,0,0,255]),width_units=5.0)
-		else:
-			self.m_bFocus = False
-			self.widgets["Line"].set(fill_color='black',width_units=3.0)
-	
-	def Build(self):
-		self.UpdateTracking()
-		
-	def UpdateFlow(self):
-		self.m_bHasFlow = self.ParentDiagram.m_oBlocks[self.fromBlock].m_bHasFlow
-		return self.m_bHasFlow
+    def __group_event(self, widget, event=None):
+        if event.type == gtk.gdk.BUTTON_PRESS:
+            if event.button == 1:
+                self.group.grab_focus()
+                self.update_focus()
+                return False
+            elif event.button == 3:
+                self.__right_click(event)
+        return False
 
-	def UpdateFlowDisplay(self):
-		if self.m_bHasFlow:
-			self.widgets["Line"].set(width_units=3.0)
-		else:
-			self.widgets["Line"].set(width_units=1.0)#(line_style=gtk.gdk.LINE_ON_OFF_DASH)
+    def __right_click(self, a_oEvent):
+        GcdConnectorMenu(self, a_oEvent)
 
-	def RightClick(self, a_oEvent):
-		GcdConnectorMenu(self, a_oEvent)
+    def set_end(self, a_nTo=-1, a_nToIn=-1):
+        self.to_block = a_nTo
+        self.to_block_in = a_nToIn
+        #pegando o ponto verdadeiro de onde sai o conector
+        self.toPoint = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
+        self.update_tracking(self.toPoint)
 
-def Psub(p1,p0):
-	return p1[0]-p0[0],p1[1]-p0[1]
+    def line_done(self):#, newEnd=None):
+        self.group.connect("event", self.__group_event)
 
-def Psum(p1,p0):
-	return p1[0]+p0[0],p1[1]+p0[1]
+    def update_connectors(self):
+        #pegando o ponto verdadeiro de onde sai o conector
+        self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out)
+        #pegando o ponto verdadeiro de onde sai o conector
+        self.toPoint = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
+        self.__update_draw()
 
-def CordModDec(Vector):
-	ans = []
-	for e in Vector:
-		ans.append(e)
-	
-	for e in range(len(ans)):
-		if ans[e] > 0:
-			ans[e] -= 1
-		else:
-			ans[e] += 1
-	
-	return (ans[0],ans[1])
-		
-def ColorFromList(rgba):
-	color = int(rgba[0])*0x1000000+int(rgba[1])*0x10000+int(rgba[2])*0x100+(int(rgba[3])*0x01)
-	return color
+    def update_tracking(self, newEnd=None):
+        if newEnd == None:
+            newEnd = self.from_point
+            
+        vec = Psub(newEnd,self.from_point)
+        vec = CordModDec(vec)
+        self.toPoint = Psum(self.from_point,vec)
+        self.__update_draw()
+
+    def __update_draw(self):
+        p = []
+        p.append(self.from_point[0])
+        p.append(self.from_point[1])
+        p.append(self.toPoint[0])
+        p.append(self.toPoint[1])
+        if not self.widgets.has_key("Line"):
+            w1 = self.group.add(gnomecanvas.CanvasLine,
+                     points=p,
+                     fill_color='black',
+                     width_units=3.0,
+                     first_arrowhead=False,
+                     last_arrowhead=True,
+                     arrow_shape_a=4.0,
+                     arrow_shape_b=8.0,
+                     arrow_shape_c=4.0)
+            wOut = self.group.add(gnomecanvas.CanvasLine,
+                    points=p,
+                    fill_color_rgba=ColorFromList([0,0,0,0]),
+                    width_units=CONNECTION_BOUNDARY,
+                    first_arrowhead=False,
+                    last_arrowhead=True,
+                    arrow_shape_a=4.0,
+                    arrow_shape_b=8.0,
+                    arrow_shape_c=4.0)
+
+            self.widgets["Line"] = w1
+            self.widgets["LineOut"] = wOut
+        else:
+            self.widgets["Line"].set(points=p)
+            self.widgets["LineOut"].set(points=p)
+
+    def update_focus(self):
+        if self.diagram.get_property('focused-item') == self.group:
+            self.focus = True
+            self.widgets["Line"].set(fill_color_rgba=ColorFromList([255,0,0,255]),width_units=5.0)
+        else:
+            self.focus = False
+            self.widgets["Line"].set(fill_color='black',width_units=3.0)
+
+    def update_flow(self):
+        self.has_flow = self.diagram.blocks[self.from_block].has_flow
+        return self.has_flow
+
+    def update_flow_display(self):
+        if self.has_flow:
+            self.widgets["Line"].set(width_units=3.0)
+        else:
+            self.widgets["Line"].set(width_units=1.0)
