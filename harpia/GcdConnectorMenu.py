@@ -48,9 +48,9 @@ class GcdConnectorMenu:
       menu.popup(None, None, None, event.button, event.time)
 
    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
-      for connIdx in range(len(self.connector.diagram.m_oConnectors)):
-         if self.connector.diagram.m_oConnectors[connIdx] == self.connector:
-            self.connector.diagram.m_oConnectors.pop(connIdx)
+      for connIdx in range(len(self.connector.diagram.connectors)):
+         if self.connector.diagram.connectors[connIdx] == self.connector:
+            self.connector.diagram.connectors.pop(connIdx)
             self.connector.group.destroy()
             break #faster, necessary (not iteraring on reverse!)
 

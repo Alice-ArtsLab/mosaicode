@@ -17,7 +17,6 @@ class blockTemplate:
     weight = 1
     outTypes = []
 
-
     ###########################################################################
 
     ######################################################3
@@ -41,6 +40,8 @@ class blockTemplate:
         self.imagesIO = self.imagesIO.replace("$$", str(self.blockNumber))
         self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
         self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
+        self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
+        self.outDealloc = self.outDealloc.replace("$$", str(self.blockNumber))
         self.functionArguments = self.functionArguments.replace("$$", str(self.blockNumber))
 
         ############################ connectors ####################################

@@ -97,7 +97,7 @@ class S2iBlockPropertiesGUI:
         """
         Returns the block state.
         """
-        return  self.m_oS2iBlock.GetState()
+        return  self.m_oS2iBlock.get_state()
 
     #----------------------------------------------------------------------
 

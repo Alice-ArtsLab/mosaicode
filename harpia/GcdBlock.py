@@ -55,7 +55,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
         self.block_type = block_type
         self.diagram = diagram
-        self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
+        self.data_dir = os.environ['HARPIA_DATA_DIR']
         if s2idirectory.block.has_key(block_type):
             self.block_description = s2idirectory.block[block_type]
         else:
@@ -75,15 +75,15 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         if self.block_description.has_key("TimeShifts"): #delay block
             self.m_bTimeShifts = self.block_description["TimeShifts"]
 
-        self.m_oPropertiesXML = XMLParser(self.m_sDataDir+str(self.block_description["Path"]["Xml"]))
+        self.m_oPropertiesXML = XMLParser(self.data_dir +
+                    str(self.block_description["Path"]["Xml"]))
         self.m_oPropertiesXML.getTag("properties").getTag("block").setAttr("id",str(self.block_id))
 
         self.m_oBorderColor = [ 0, 0, 0, 255 ]
         self.m_oBackColor = [0,0,0,150]
-        self.inputPortCenters = []
-        self.outputPortCenters = []
+        self.input_port_centers = []
+        self.output_port_centers = []
         self.width = WIDTH_DEFAULT
-        self.TextWidth = self.width - WIDTH_2_TEXT_OFFSET
 
         t_nMaxIO = max(len(self.block_description["InTypes"]), len(self.block_description["OutTypes"]))
 
@@ -93,38 +93,41 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             t_nMaxIO = 1
 
         self.height = max( ((t_nMaxIO-1)* 5 ) #espacamento entre ports = 5
-                                                +(RADIUS*2 ) #tirando a margem superior e inferior
-                                                +(t_nMaxIO * INPUT_HEIGHT),#adicionando a altura de cada port
-                                                 HEIGHT_DEFAULT)
+                          +(RADIUS*2 ) #tirando a margem superior e inferior
+                          +(t_nMaxIO * INPUT_HEIGHT),#adicionando a altura de cada port
+                          HEIGHT_DEFAULT)
 
         self.__gobject_init__()
         self.group = self.diagram.root().add(self,x=0,y=0)
-        self.group.connect("event", self.group_event)
+        self.group.connect("event", self.__group_event)
         self.group.set_flags(gtk.CAN_FOCUS)
         self.build()
 
     def __is_input(self,event):
-        clicked_point = (event.x - self.group.get_property('x'),event.y - self.group.get_property('y'))
-        inputPortCenters = []
-        if len(self.inputPortCenters) == 0: #compute portCenters if they don't exist
+        clicked_point = (event.x - self.group.get_property('x'),
+                    event.y - self.group.get_property('y'))
+        input_port_centers = []
+        #compute portCenters if they don't exist
+        if len(self.input_port_centers) == 0:
             self.__compute_input_ports()
-        for point_index in range(len(self.inputPortCenters)):
-            if Dist(self.inputPortCenters[point_index],clicked_point) < PORT_SENSITIVITY:
+        for point_index in range(len(self.input_port_centers)):
+            if Dist(self.input_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
                 return point_index
         return -1
 
     def __is_output(self,event):
-        clicked_point = (event.x - self.group.get_property('x'),event.y - self.group.get_property('y'))
-        if len(self.outputPortCenters) == 0: #compute portCenters if they don't exist
+        clicked_point = (event.x - self.group.get_property('x'),
+                    event.y - self.group.get_property('y'))
+        if len(self.output_port_centers) == 0: #compute portCenters if they don't exist
             self.__compute_output_ports()
-        for point_index in range(len(self.outputPortCenters)):
-            if Dist(self.outputPortCenters[point_index],clicked_point) < PORT_SENSITIVITY:
+        for point_index in range(len(self.output_port_centers)):
+            if Dist(self.output_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
                 return point_index
         return -1
 
     def __compute_output_ports(self):
         for outputPort in range(len(self.block_description["OutTypes"])):
-            self.outputPortCenters.append((self.width-(INPUT_WIDTH/2),
+            self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
                      (RADIUS # upper border
                      + (outputPort*5) # spacing betwen ports
                      + outputPort*INPUT_HEIGHT #previous ports
@@ -132,13 +135,13 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
     def __compute_input_ports(self):
         for inputPort in range(len(self.block_description["InTypes"])):
-            self.inputPortCenters.append((INPUT_WIDTH/2,
+            self.input_port_centers.append((INPUT_WIDTH/2,
                      (RADIUS # upper border
                      + (inputPort*5) # spacing betwen ports
                      + inputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
 
-    def group_event(self, widget, event=None):
+    def __group_event(self, widget, event=None):
         if event.type == gtk.gdk.BUTTON_PRESS:
                 if event.button == 1:
                     # Remember starting position.
@@ -148,12 +151,12 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
                     #Cascading event resolution:
                     input_event = self.__is_input(event)
-                    if input_event <> -1:
+                    if input_event != -1:
                         self.diagram.ClickedInput(self.block_id,input_event)
                         return True
                     else:
                         output_event = self.__is_output(event)
-                        if output_event <> -1:
+                        if output_event != -1:
                             self.diagram.ClickedOutput(self.block_id,output_event)
                             return True
                         else:
@@ -166,7 +169,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                     return True #explicitly returns true so that diagram won't catch this event
         elif event.type == gtk.gdk.MOTION_NOTIFY:
                 if event.state & gtk.gdk.BUTTON1_MASK:
-                    if self.diagram.m_oCurrConnector == None:
+                    if self.diagram.curr_connector == None:
                         if(widget == self.group):#make sure we're not moving somebody else!
                             # Get the new position and move by the difference
                             new_x = event.x
@@ -230,7 +233,8 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.widgets["Rect"] = w1
 
     def _BIcon(self):
-        pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+self.block_description["Icon"])
+        pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
+                    self.block_description["Icon"])
         icon = self.group.add(gnomecanvas.CanvasPixbuf,
                     pixbuf=pb,
                     x=(self.width/2),
@@ -242,9 +246,11 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         inPWids = []
         for x in range(len(self.block_description["InTypes"])):
             try:
-                pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+s2idirectory.typeIconsIn[self.block_description["InTypes"][x]])
+                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
+                            s2idirectory.typeIconsIn[self.block_description["InTypes"][x]])
             except:
-                pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+s2idirectory.icons["IconInput"])
+                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
+                            s2idirectory.icons["IconInput"])
 
             t_Wid = self.group.add(gnomecanvas.CanvasPixbuf, pixbuf=pb,x=0,y=(RADIUS # upper border
                               + (x*5) # spacing betwen ports
@@ -257,12 +263,18 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         outPWids = []
         for x in range(len(self.block_description["OutTypes"])):
             try:
-                pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+s2idirectory.typeIconsOut[self.block_description["OutTypes"][x]])
+                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
+                            s2idirectory.typeIconsOut[
+                            self.block_description["OutTypes"][x]])
             except:
-                pb = gtk.gdk.pixbuf_new_from_file(self.m_sDataDir+s2idirectory.icons["IconOutput"])
-            t_Wid = self.group.add(gnomecanvas.CanvasPixbuf, pixbuf=pb,x=(self.width-OUTPUT_WIDTH),y=(RADIUS # upper border
-                      + (x*5) # spacing betwen ports
-                      + x*OUTPUT_HEIGHT), #previous ports
+                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
+                            s2idirectory.icons["IconOutput"])
+            t_Wid = self.group.add(gnomecanvas.CanvasPixbuf,
+                            pixbuf=pb,
+                            x=(self.width-OUTPUT_WIDTH),
+                            y=(RADIUS # upper border
+                            + (x*5) # spacing betwen ports
+                            + x*OUTPUT_HEIGHT), #previous ports
                       anchor=gtk.ANCHOR_NORTH_WEST)
             outPWids.append(t_Wid)
         self.widgets["Outputs"] = outPWids
@@ -276,9 +288,9 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                             size_points=9,
                             x=(self.width/2),
                             y=(self.height-10))
-        self.TextWidth = label.get_property('text-width')
+        text_width = label.get_property('text-width')
         oldX,oldY = ((self.width/2),(self.height-10))
-        self.width = max(self.TextWidth+WIDTH_2_TEXT_OFFSET,self.width)
+        self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
         label.move((self.width/2)-oldX, (self.height-10)-oldY)
         self.widgets["Label"] = label
 
@@ -289,8 +301,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self._BOutputs()
         self._BIcon()
         self.update_flow()
-        self.update_flow_display()
-
+        self.__update_flow_display()
 
     def update_flow(self,a_bCheckTimeShifter=False):
         if self.m_bIsSource or (self.m_bTimeShifts and (not a_bCheckTimeShifter)):#
@@ -298,35 +309,54 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.has_flow = True
         else:
             sourceConnectors = self.diagram.GetConnectorsTo(self.block_id)
-            if len(sourceConnectors) <> len(self.block_description["InTypes"]):
+            if len(sourceConnectors) != len(self.block_description["InTypes"]):
                 self.has_flow = False
             else:
                 for connIdx in reversed(range(len(sourceConnectors))):
                     if sourceConnectors[connIdx].has_flow:
                         sourceConnectors.pop(connIdx)
-                if len(sourceConnectors) <> 0:
+                if len(sourceConnectors) != 0:
                     self.has_flow = False
                 else:
                     self.has_flow = True
+        self.__update_flow_display()
         return self.has_flow
 
+    def __update_flow_display(self):
+        t_oFocusCorrectedColor = [self.m_oBackColor[0],
+                                  self.m_oBackColor[1],
+                                  self.m_oBackColor[2],
+                                  self.m_oBackColor[3]]
+        if self.has_flow:
+            #with focus: original colors
+            t_oFocusCorrectedColor[3] = self.m_oBackColor[3]
+            self.widgets["Rect"].set(outline_color='black',
+                        fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
+        else:
+            #without focus the block background will be much more transparent
+            t_oFocusCorrectedColor[3] = 50
+            self.widgets["Rect"].set(outline_color='red',
+                        fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
+
+
     def get_input_pos(self, a_nInputID):
-        if len(self.inputPortCenters) == 0: #compute portCenters if they don't exist
+        if len(self.input_port_centers) == 0: #compute portCenters if they don't exist
             self.__compute_input_ports()
         x = 0 + self.group.get_property('x')
-        y = self.inputPortCenters[a_nInputID][1]+self.group.get_property('y')
+        y = self.input_port_centers[a_nInputID][1]+self.group.get_property('y')
         point = self.i2w(x,y)
         return (point[0],point[1])
 
-    def get_output_pos(self, a_nOutputID):
-        if len(self.outputPortCenters) == 0: #compute portCenters if they don't exist
+    def get_output_pos(self, output_id):
+        #compute portCenters if they don't exist
+        if len(self.output_port_centers) == 0:
             self.__compute_output_ports()
         x = self.width + self.group.get_property('x')
-        y = self.outputPortCenters[a_nOutputID][1]+self.group.get_property('y')
+        y = self.output_port_centers[output_id][1] + self.group.get_property('y')
         point = self.i2w(x,y)
         return (point[0],point[1])
 
-    def GetBlockPos(self):
+    def get_block_pos(self):
         return (self.group.get_property('x'),self.group.get_property('y'))
 
     def update_focus(self):
@@ -337,18 +367,6 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.__mouse_over_state(False)
             self.focus = False
 
-    def update_flow_display(self):
-        t_oFocusCorrectedColor = [self.m_oBackColor[0],
-                        self.m_oBackColor[1],
-                        self.m_oBackColor[2],
-                        self.m_oBackColor[3]]
-        if self.has_flow:
-            t_oFocusCorrectedColor[3] = self.m_oBackColor[3] #with focus: original colors
-            self.widgets["Rect"].set(outline_color='black',fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
-        else:
-            t_oFocusCorrectedColor[3] = 50 #without focus the block background will be much more transparent
-            self.widgets["Rect"].set(outline_color='red',fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
-
     def __mouse_over_state(self, state):
         if state:
             self.widgets["Rect"].set(width_units=3)
@@ -358,7 +376,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
     def __right_click(self, a_oEvent):
        GcdBlockMenu(self, a_oEvent)
 
-    def GetState(self):
+    def get_state(self):
         return self.has_flow
 
     def SetPropertiesXML_nID( self, a_oPropertiesXML ):

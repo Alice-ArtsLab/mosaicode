@@ -24,9 +24,9 @@
 #
 # ----------------------------------------------------------------------
 
-import gnomecanvas
-import GcdBlock
-import GcdConnector
+import gnomecanvas.Canvas
+import harpia.GcdBlock
+import harpia.GcdConnector
 import gtk
 import time
 
@@ -41,66 +41,60 @@ class GcDiagram(gnomecanvas.Canvas):
         self.__gobject_init__()
         gnomecanvas.Canvas.__init__(self, aa=True)
 
-        self.minWidth = 800
-        self.minHeight = 600
+        self.last_clicked_point = (None, None)
 
-        self.lastClickecPt = (None, None)
-
-        # self.set_size_request(self.width, self.height)
         # must be called everytime a block is moved or inserted with the new scroll region
         self.set_scroll_region(0, 0, 800, 600)
 
-        self.m_fPixels_per_unit = 1.0
+        self.zoom = 1.0 # pixels per unit
         self.show()
         self.blocks = {}
-        self.m_oConnectors = []
-        self.m_oCurrConnector = None
-        self.m_nSessionId = 0
+        self.connectors = []
+        self.curr_connector = None
+        self.session_id = 0
 
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
-        self.m_nConnectorCountId = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
+        self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
 
         self.set_flags(gtk.CAN_FOCUS)
         self.grab_focus()
-        # tem q ser o root() se nao ele pega os eventos antes de todu mundo! =]
         self.root().connect("event", self.canvas_root_event)
-        # tem q ser o root() se nao ele pega os eventos antes de todu mundo! =]
         self.connect("event",self.canvas_event)  
 
-        self.m_sFilename = None
-        self.m_sErrorLog = ""
+        self.file_name = None
+        self.error_log = ""
 
-        self.wbWidget = None
+        self.white_board = None
         self.UpdateWhiteBoard()
 
     def __del__(self):
         pass
 
     def canvas_event(self, widget, event=None):  # nao serve pq QUALQUER EVENTO do canvas passa por aqui
-        if self.m_oCurrConnector <> None:
+        if self.curr_connector != None:
             if event.type == gtk.gdk.MOTION_NOTIFY:  # se temos um conector aberto, atualizar sua posicao
-                t_Point = self.window_to_world(event.x,
-                                               event.y)  # as coordenadas recebidas no widget canvas estao no coord "window", passando as p/ world
-                self.m_oCurrConnector.update_tracking(t_Point)
+                # as coordenadas recebidas no widget canvas estao no coord "window", passando as p/ world
+                point = self.window_to_world(event.x,event.y)
+                self.curr_connector.update_tracking(point)
                 return False
         return False
 
     def canvas_root_event(self, widget, event=None):
         if event.type == gtk.gdk.KEY_PRESS:
             if event.keyval == gtk.keysyms.Delete:
-                currentWidget = self.get_property('focused-item')
+                current_widget = self.get_property('focused-item')
 
-                t_bSearching = True
+                searching = True
                 for blockIdx in self.blocks:
-                    if self.blocks[blockIdx].group == currentWidget:
+                    if self.blocks[blockIdx].group == current_widget:
                         self.DeleteBlock(blockIdx)
-                        t_bSearching = False
+                        searching = False
                         break
 
-                if t_bSearching:
-                    for connIdx in reversed(range(len(self.m_oConnectors))):
-                        if self.m_oConnectors[connIdx].group == currentWidget:
-                            connAtLimbo = self.m_oConnectors.pop(connIdx)
+                if searching:
+                    for connIdx in reversed(range(len(self.connectors))):
+                        if self.connectors[connIdx].group == current_widget:
+                            connAtLimbo = self.connectors.pop(connIdx)
                             connAtLimbo.group.destroy()
                             del connAtLimbo  # this line won't do much.. but helps understanding..
                             break
@@ -109,11 +103,11 @@ class GcDiagram(gnomecanvas.Canvas):
         # updating focus whenever button 1 is pressed
         if event.type == gtk.gdk.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
             if event.button == 1:
-                self.lastClickecPt = (event.x, event.y)
+                self.last_clicked_point = (event.x, event.y)
                 for blockIdx in self.blocks:
-                    self.blocks[
-                        blockIdx].update_focus()  # tricky cos we have a dict not a list (iterating through keys not elements)
-                for conn in self.m_oConnectors:
+                    # tricky cos we have a dict not a list (iterating through keys not elements)
+                    self.blocks[blockIdx].update_focus()
+                for conn in self.connectors:
                     conn.update_focus()
             else:  # event.button == 3:
                 return False
@@ -129,16 +123,16 @@ class GcDiagram(gnomecanvas.Canvas):
                 return False
         elif event.type == gtk.gdk.MOTION_NOTIFY:
             if event.state & gtk.gdk.BUTTON1_MASK:
-                for connector in self.m_oConnectors:
+                for connector in self.connectors:
                     connector.update_connectors()
                     # self.update_flows()
                 return False
         return False
 
-    def WhiteBoard_event(self, widget, event=None):
+    def __white_board_event(self, widget, event=None):
         if event.type == gtk.gdk.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
             if event.button == 1:
-                self.wbWidget.grab_focus()
+                self.white_board.grab_focus()
                 self.AbortConnection()
                 return False
         return False
@@ -150,9 +144,6 @@ class GcDiagram(gnomecanvas.Canvas):
         t_oVa.set_value(y)
 
     def UpdateScrolling(self):
-        # minX,minY = 0,0
-        # maxX,maxY = 400,400 #self.minWidth,self.minHeight
-
         t_aSr = self.get_scroll_region()
 
         # print t_aSr[0],",",t_aSr[1],",",t_aSr[2],",",t_aSr[3]
@@ -164,7 +155,7 @@ class GcDiagram(gnomecanvas.Canvas):
         maxY = t_aSr[1] + t_aSr[3]
 
         for blockIdx in self.blocks:
-            bpos = self.blocks[blockIdx].GetBlockPos()
+            bpos = self.blocks[blockIdx].get_block_pos()
             minX = min(minX, bpos[0])
             minY = min(minY, bpos[1])
 
@@ -179,23 +170,23 @@ class GcDiagram(gnomecanvas.Canvas):
         for blockIdx in self.blocks:  # self.blocks is a dict!
             self.blocks[blockIdx].redraw()
 
-    def InsertBlock(self, a_nBlockType, x=None, y=None):  # , a_oDictBlock = {}):
+    def InsertBlock(self, block_type, x=None, y=None):  # , a_oDictBlock = {}):
         if x == None:
             x_off = (self.get_hadjustment()).get_value()
             y_off = (self.get_vadjustment()).get_value()
-            if self.lastClickecPt <> (None, None):
-                x, y = self.world_to_window(self.lastClickecPt[0], self.lastClickecPt[1])
+            if self.last_clicked_point != (None, None):
+                x, y = self.world_to_window(self.last_clicked_point[0], self.last_clicked_point[1])
                 x -= x_off
                 y -= y_off
             else:
                 x, y = (100 - x_off, 100 - x_off)
-        self.InsertBlockPosId(a_nBlockType, x, y, self.block_id)
+        self.__insert_blockPosId(block_type, x, y, self.block_id)
         self.block_id += 1
         self.UpdateScrolling()
         return self.block_id - 1
 
-    def InsertBlockPosId(self, a_nBlockType, x, y, block_id):
-        new_block = GcdBlock.GcdBlock(self, a_nBlockType, block_id)
+    def __insert_blockPosId(self, block_type, x, y, block_id):
+        new_block = GcdBlock.GcdBlock(self, block_type, block_id)
 
         x_off = (self.get_hadjustment()).get_value()
         y_off = (self.get_vadjustment()).get_value()
@@ -204,18 +195,13 @@ class GcDiagram(gnomecanvas.Canvas):
         new_block.move(x_off + cPt[0] - 20.0, y_off + cPt[1] - 60.0)  # cPt[0],cPt[1])
         self.blocks[block_id] = new_block
 
-    def RemoveBlock(self, a_iBlockId=0):
-        # print "Block " + str(a_iBlockId) + " deleted"
-        self.update_flows()
-
     def InsertReadyConnector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
-        # print a_nFromId,",",a_nFromIdOut,",",a_nToId,",",a_nToIdIn
         t_oNewConn = GcdConnector.GcdConnector(self, a_nFromId, a_nFromIdOut)
         t_oNewConn.set_end(a_nToId, a_nToIdIn)
         if self.ValidConnector(t_oNewConn):
             if self.ConnectorTypesMatch(t_oNewConn):
-                self.m_oConnectors.append(t_oNewConn)  # TODO: checar se ja existe este conector
-                self.m_nConnectorCountId += 1
+                self.connectors.append(t_oNewConn)  # TODO: checar se ja existe este conector
+                self.connector_id += 1
                 self.update_flows()
             else:
                 print "Output and Input types don't match"
@@ -223,14 +209,13 @@ class GcDiagram(gnomecanvas.Canvas):
             print "Invalid Connector, not adding"
 
     def ClickedInput(self, block_id, a_nInput):  # TODO na real, pegar em tempo real aonde tah aquela porta!!
-        # print "block" + str(block_id) + "_In" + str(a_nInput)
-        if self.m_oCurrConnector <> None:
-            self.m_oCurrConnector.set_end(block_id, a_nInput)
-            if self.ValidConnector(self.m_oCurrConnector):
-                if self.ConnectorTypesMatch(self.m_oCurrConnector):
-                    self.m_oConnectors.append(self.m_oCurrConnector)  # TODO: checar se ja existe este conector
-                    self.m_nConnectorCountId += 1
-                    self.m_oCurrConnector = None
+        if self.curr_connector != None:
+            self.curr_connector.set_end(block_id, a_nInput)
+            if self.ValidConnector(self.curr_connector):
+                if self.ConnectorTypesMatch(self.curr_connector):
+                    self.connectors.append(self.curr_connector)  # TODO: checar se ja existe este conector
+                    self.connector_id += 1
+                    self.curr_connector = None
                     self.update_flows()
 
                 else:
@@ -239,7 +224,7 @@ class GcDiagram(gnomecanvas.Canvas):
             else:
                 print "Invalid Connector"
                 self.AbortConnection()
-                # print self.m_oConnectors
+                # print self.connectors
 
     def ConnectorTypesMatch(self, a_oConnector):
         outType = self.blocks[a_oConnector.from_block].block_description["OutTypes"][a_oConnector.from_block_out]
@@ -250,7 +235,7 @@ class GcDiagram(gnomecanvas.Canvas):
 
     def ValidConnector(self,
                        newCon):  # checks whether the new Cn links to a already used input (in this case, also invalidating cloned connectors)
-        for oldCon in self.m_oConnectors:
+        for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
                     and oldCon.to_block_in == newCon.to_block_in:
                 print "Cloned Connector"
@@ -263,21 +248,21 @@ class GcDiagram(gnomecanvas.Canvas):
     def ClickedOutput(self, block_id, a_nOutput):
         self.AbortConnection()  # abort any possibly running connections
         # print "block" + str(block_id) + "_Out" + str(a_nOutput)
-        self.m_oCurrConnector = GcdConnector.GcdConnector(self, block_id, a_nOutput)
+        self.curr_connector = GcdConnector.GcdConnector(self, block_id, a_nOutput)
         self.update_flows()
 
     def AbortConnection(self):
-        if self.m_oCurrConnector <> None:
-            self.m_oCurrConnector.group.destroy()  ## BUG!
-            del self.m_oCurrConnector
-            self.m_oCurrConnector = None
+        if self.curr_connector != None:
+            self.curr_connector.group.destroy()  ## BUG!
+            del self.curr_connector
+            self.curr_connector = None
 
     def DeleteBlock(self, blockCountId):
         # removing related connectors
-        for idx in reversed(range(len(self.m_oConnectors))):
-            if self.m_oConnectors[idx].from_block == blockCountId or self.m_oConnectors[idx].to_block == blockCountId:
-                self.m_oConnectors[idx].group.destroy()
-                connAtLimbo = self.m_oConnectors.pop(idx)
+        for idx in reversed(range(len(self.connectors))):
+            if self.connectors[idx].from_block == blockCountId or self.connectors[idx].to_block == blockCountId:
+                self.connectors[idx].group.destroy()
+                connAtLimbo = self.connectors.pop(idx)
                 del connAtLimbo
 
         # removing the block itself
@@ -288,13 +273,13 @@ class GcDiagram(gnomecanvas.Canvas):
         self.update_flows()
 
     def UpdateWhiteBoard(self):
-        if self.wbWidget == None:
+        if self.white_board == None:
             clr = ColorFromList([255, 255, 255, 255])
-            self.wbWidget = self.root().add(gnomecanvas.CanvasRect, x1=-10000, y1=-10000, x2=10000, y2=10000,
+            self.white_board = self.root().add(gnomecanvas.CanvasRect, x1=-10000, y1=-10000, x2=10000, y2=10000,
                                             fill_color_rgba=clr)
             # should we change this size dynamically?? or make it simply a HUGE whiteboard?
-            self.wbWidget.set_flags(gtk.CAN_FOCUS)
-            self.wbWidget.connect("event", self.WhiteBoard_event)
+            self.white_board.set_flags(gtk.CAN_FOCUS)
+            self.white_board.connect("event", self.__white_board_event)
 
     # else:
 
@@ -302,29 +287,19 @@ class GcDiagram(gnomecanvas.Canvas):
         for checkTimeShifter in [False, True]:
             prevCount = -1
             newCount = self.CountFlowingComponents()
-            while prevCount <> newCount:
+            while prevCount != newCount:
                 # print "newCount:",newCount
                 # print "prevCount:",prevCount
                 for blockIdx in self.blocks:  # self.blocks is a dict!
                     self.blocks[blockIdx].update_flow(checkTimeShifter)
-                    # print "--------"
-
-                for conn in self.m_oConnectors:
+                for conn in self.connectors:
                     conn.update_flow()
-                    # print "-----------------"
                 prevCount = newCount
                 newCount = self.CountFlowingComponents()
-        self.update_flows_displays()
-
-    def update_flows_displays(self):
-        for blockIdx in self.blocks:  # self.blocks is a dict!
-            self.blocks[blockIdx].update_flow_display()
-        for conn in self.m_oConnectors:
-            conn.update_flow_display()
 
     def GetConnectorsTo(self, a_nBlockCountId):
         result = []
-        for conn in self.m_oConnectors:
+        for conn in self.connectors:
             if conn.to_block == a_nBlockCountId:
                 result.append(conn)
         return result
@@ -334,13 +309,13 @@ class GcDiagram(gnomecanvas.Canvas):
         for blockIdx in self.blocks:
             if self.blocks[blockIdx].has_flow:
                 count += 1
-        for conn in self.m_oConnectors:
+        for conn in self.connectors:
             if conn.has_flow:
                 count += 1
         return count
 
-    def __BlockXMLOut(self, t_oBlockIdx, Properties, Network, a_bKeepNonFlowing=False):
-        if self.blocks[t_oBlockIdx].GetState() or a_bKeepNonFlowing:
+    def __block_XML_out(self, t_oBlockIdx, Properties, Network, a_bKeepNonFlowing=False):
+        if self.blocks[t_oBlockIdx].get_state() or a_bKeepNonFlowing:
             props = self.blocks[t_oBlockIdx].GetPropertiesXML()
             block_xml = props.getTagXML(props.getTagChild("properties", "block"))
 
@@ -356,9 +331,9 @@ class GcDiagram(gnomecanvas.Canvas):
 
             Network += "<outputs>\n"
             t_dConnectedOuts = {}
-            for t_oConnector in self.m_oConnectors:
+            for t_oConnector in self.connectors:
                 if t_oConnector.from_block == self.blocks[t_oBlockIdx].get_id() and (
-                    self.blocks[t_oConnector.to_block].GetState() or a_bKeepNonFlowing):
+                    self.blocks[t_oConnector.to_block].get_state() or a_bKeepNonFlowing):
                     Network += '<output id="' + str(t_oConnector.from_block_out + 1) + '" inBlock="' + str(
                         t_oConnector.to_block) + '" input="' + str(
                         t_oConnector.to_block_in + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
@@ -370,8 +345,8 @@ class GcDiagram(gnomecanvas.Canvas):
             Network += "</block>\n"
         return (Properties, Network)
 
-    def GetProcessChain(self,
-                        a_bKeepNonFlowing=False):  # frontend will get only the valid chain although saving will include the invalid ones
+    def GetProcessChain(self, a_bKeepNonFlowing=False):
+    # frontend will get only the valid chain although saving will include the invalid ones
         Properties = "<properties>\n  "
         Network = "<network>\n"
 
@@ -380,45 +355,41 @@ class GcDiagram(gnomecanvas.Canvas):
 
         for t_oBlockIdx in self.blocks:
             if self.blocks[t_oBlockIdx].m_bIsSource:
-                (Properties, Network) = self.__BlockXMLOut(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
+                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
 
         for t_oBlockIdx in self.blocks:
             if not self.blocks[t_oBlockIdx].m_bIsSource:
-                (Properties, Network) = self.__BlockXMLOut(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
+                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
 
         Properties += "</properties>\n"
         Network += "</network>\n"
 
         return Properties + Network
 
-    def SetFilename(self, a_sFilename):
-        self.m_sFilename = a_sFilename
+    def set_file_name(self, file_name):
+        self.file_name = file_name
 
-    def GetFilename(self):
-        return self.m_sFilename
+    def get_file_name(self):
+        return self.file_name
 
-    def LoadFromPopup(self, *args):
-        filename = str(raw_input("Xunxo; Enter Filename:"))
-        self.Load(filename)
-
-    def Load(self, a_sFilename=None):
-        if a_sFilename <> None:
-            self.SetFilename(a_sFilename)
+    def Load(self, file_name=None):
+        if file_name != None:
+            self.set_file_name(file_name)
         else:
-            if self.m_sFilename == None:
-                self.m_sFilename = "Cannot Load without filename"
+            if self.file_name == None:
+                self.file_name = "Cannot Load without filename"
                 return False
 
                 # reseting present diagram..
-        self.blocks, self.m_oConnectors, self.m_oCurrConnector, self.m_nSessionId = {}, [], None, 0
+        self.blocks, self.connectors, self.curr_connector, self.session_id = {}, [], None, 0
 
         # this two must be updated at each block/conn insertion
         self.block_id = 1  # since block counts are kept, render this from the saved file
-        self.m_nConnectorCountId = 1  # since connector Ids are generated from scratch, just reset it
+        self.connector_id = 1  # since connector Ids are generated from scratch, just reset it
 
-        #t_oLoad = bt.bind_file(self.m_sFilename)  # binding saved project
+        #t_oLoad = bt.bind_file(self.file_name)  # binding saved project
         #print t_oLoad.xml()
-        t_oLoad = XMLParser(self.m_sFilename)
+        t_oLoad = XMLParser(self.file_name)
 
         # loading blocks on canvas
         #GcState_root = t_oLoad.getTagChild("harpia", "GcState")
@@ -435,10 +406,7 @@ class GcDiagram(gnomecanvas.Canvas):
             x = position.getAttr("x")
             y = position.getAttr("y")
 
-            #self.InsertBlockPosId(int(block.type), float(block.position.x), float(block.position.y), int(block.id))
-            #self.block_id = max(self.block_id, int(block.id))
-
-            self.InsertBlockPosId(int(block_type), float(x), float(y), int(block_id))
+            self.__insert_blockPosId(int(block_type), float(x), float(y), int(block_id))
             self.block_id = max(self.block_id, int(block_id))
 
         self.block_id += 1
@@ -460,9 +428,8 @@ class GcDiagram(gnomecanvas.Canvas):
 
                     print conn_input, conn_inblock, conn_id
 
-                    #if connector.inBlock <> "--" and connector.input <> "--":
-                    if conn_inblock <> "--" and conn_input <> "--":
                         #self.InsertReadyConnector(int(block.id), (int(connector.id) - 1), int(connector.inBlock),
+                    if conn_inblock != "--" and conn_input != "--":
                                                   #(int(connector.input) - 1))
                         self.InsertReadyConnector(int(block_id), (int(conn_id) - 1), int(conn_inblock),
                                                   (int(conn_input) - 1))
@@ -482,19 +449,15 @@ class GcDiagram(gnomecanvas.Canvas):
             #self.blocks[int(block.id)].SetPropertiesXML(bt.bind_string(t_sBlockProperties))
             self.blocks[int(block_id)].SetPropertiesXML(XMLParser(t_sBlockProperties, fromString=True))
 
-
         self.UpdateScrolling()
-        self.GotoScrolling(0, 0);
+        self.GotoScrolling(0, 0)
         return True
 
-    def SaveFromPopup(self, *args):
-        self.Save()
-
-    def Save(self, a_sFilename=None):  # saving project
-        if a_sFilename <> None:
-            self.SetFilename(a_sFilename)
-        if self.m_sFilename == None:
-            self.m_sFilename = "Cadeia_" + str(time.time()) + ".hrp"
+    def Save(self, file_name=None):  # saving project
+        if file_name != None:
+            self.set_file_name(file_name)
+        if self.file_name == None:
+            self.file_name = "Cadeia_" + str(time.time()) + ".hrp"
 
             # saving blocks current state
         t_sGcState = "<GcState>\n"
@@ -511,10 +474,10 @@ class GcDiagram(gnomecanvas.Canvas):
 
         t_sOutFile = "<harpia>\n" + t_sGcState + t_sProcessingChain + "</harpia>\n"
 
-        if self.m_sFilename.find(".hrp") == -1:
-            self.m_sFilename += ".hrp"
+        if self.file_name.find(".hrp") == -1:
+            self.file_name += ".hrp"
 
-        t_oSaveFile = open(str(self.m_sFilename), "w")
+        t_oSaveFile = open(str(self.file_name), "w")
         t_oSaveFile.write(t_sOutFile)
         t_oSaveFile.close()
 
@@ -523,11 +486,11 @@ class GcDiagram(gnomecanvas.Canvas):
             if self.blocks[blockIdx].focus:
                 return blockIdx
 
-    def SetIDBackendSession(self, a_nSessionId):
-        self.m_nSessionId = a_nSessionId
+    def SetIDBackendSession(self, session_id):
+        self.session_id = session_id
 
     def GetIDBackendSession(self):
-        return self.m_nSessionId
+        return self.session_id
 
     def Export2Png(self, filepath="diagrama.png"):
         (x, y, t_nWidth, t_nHeight, t_nDepth) = self.window.get_geometry()
@@ -535,31 +498,31 @@ class GcDiagram(gnomecanvas.Canvas):
         t_oBuffer = t_oPixbuf.get_from_drawable(self.window, self.get_colormap(), 0, 0, 0, 0, t_nWidth, t_nHeight)
         # get_from_drawable(GdkWindow src, GdkColormap cmap, int src_x, int src_y, int dest_x, int dest_y, int width, int height);
         t_oBuffer.save(filepath, "png")
-
         # bugs:
 
     # *nao considera o que estiver fora do scroll region
-    # *da um printScreen somente então pega qlqr outra coisa q estiver no caminho (incluindo o proprio menu ali do FILE)
+    # *da um printScreen somente então pega qlqr outra coisa q estiver no caminho
+    # (incluindo o proprio menu ali do FILE)
     # *aparentemente é a maneira errada.
 
-    def SetErrorLog(self, a_sErrorLog):
-        self.m_sErrorLog = a_sErrorLog
+    def set_error_log(self, a_sErrorLog):
+        self.error_log = a_sErrorLog
 
-    def Append2ErrorLog(self, a_sErrorLog):
-        self.m_sErrorLog += a_sErrorLog
+    def append_error_log(self, a_sErrorLog):
+        self.error_log += a_sErrorLog
 
-    def GetErrorLog(self):
-        return self.m_sErrorLog
+    def get_error_log(self):
+        return self.error_log
 
-    def ZoomIn(self):
-        self.m_fPixels_per_unit *= 1.1
-        self.set_pixels_per_unit(self.m_fPixels_per_unit)
+    def zoom_in(self):
+        self.zoom *= 1.1
+        self.set_pixels_per_unit(self.zoom)
 
-    def ZoomOut(self):
-        self.m_fPixels_per_unit *= 0.9
-        self.set_pixels_per_unit(self.m_fPixels_per_unit)
+    def zoom_out(self):
+        self.zoom *= 0.9
+        self.set_pixels_per_unit(self.zoom)
 
-    def ZoomOrig(self):
-        self.m_fPixels_per_unit = 1.0
-        self.set_pixels_per_unit(self.m_fPixels_per_unit)
+    def zoom_orig(self):
+        self.zoom = 1.0
+        self.set_pixels_per_unit(self.zoom)
 

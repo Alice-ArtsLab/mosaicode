@@ -82,7 +82,7 @@ class GcdBlockMenu:
         PropertiesGUI.EditProperties(self.block.m_oPropertiesXML)
 
     def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
-        self.block.diagram.DeleteBlock(self.block.m_nBlockCountId)
+        self.block.diagram.DeleteBlock(self.block.block_id)
 
     def __print_position(self, *args):
         print "(",self.block.wGroup.get_property('x'),",",self.block.group.get_property('y'),")"
@@ -92,7 +92,7 @@ class GcdBlockMenu:
 
     def __show_image_GUI(self, *args):
         t_sPath = "/tmp/harpiaBETMP0" + str(self.block.diagram.GetIDBackendSession()) + "/block" + str(self.block.get_id()) + "_OUT.png"
-        ShowGUI = showimage.ShowImage(t_sPath, self.block.diagram.m_sErrorLog )
+        ShowGUI = showimage.ShowImage(t_sPath, self.block.diagram.get_error_log())
         ShowGUI.show()
 
 
