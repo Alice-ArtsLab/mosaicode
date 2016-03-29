@@ -1,0 +1,4 @@
++Name: RESIZEIMAGE
++Input: Image, New Rectangle
++Output: Image
++Properties: Method {CV_INTER_NN, CV_INTER_LINEAR, CV_INTER_AREA, CUBIC}

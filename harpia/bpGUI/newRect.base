@@ -1,0 +1,4 @@
++Name: NEWRECTANGLE
++Input: None
++Output: New Rectangle
++Properties: New Rectangle (x (0 - 4000), y (0 - 4000), width (0 - 4000), width (0 - 4000))

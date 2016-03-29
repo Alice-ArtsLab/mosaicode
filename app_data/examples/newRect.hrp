@@ -1,0 +1,94 @@
+<harpia>
+<GcState>
+	<block type="802" id="18">
+		<position x="346.0" y="-153.0"/>
+	</block>
+	<block type="2" id="20">
+		<position x="495.0" y="-152.0"/>
+	</block>
+	<block type="801" id="14">
+		<position x="163.0" y="-123.0"/>
+	</block>
+	<block type="0" id="22">
+		<position x="164.0" y="-214.0"/>
+	</block>
+	<block type="2" id="23">
+		<position x="497.0" y="-216.0"/>
+	</block>
+</GcState>
+<properties>
+  <block id="14" type="801">
+ <property name="state" value="true"/>
+ <property name="x0" value="100.0"/>
+ <property name="y0" value="100.0"/>
+ <property name="width" value="300.0"/>
+ <property name="height" value="300.0"/>
+</block>
+
+  <block id="22" type="00">
+ <property name="state" value="true"/>
+ <property name="type" value="file"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+ <property name="place" value="server"/>
+ <property name="camera" value="00"/>
+ <property name="size" value="640x480"/>
+ <property name="video_name" value=""/>
+ <property name="frameRate" value="20.0"/>
+</block>
+
+  <block id="18" type="802">
+ <property name="state" value="true"/>
+</block>
+
+  <block id="20" type="02">
+ <property name="state" value="true"/>
+</block>
+
+  <block id="23" type="02">
+ <property name="state" value="true"/>
+</block>
+
+  </properties>
+<network>
+<block type="801" id="14">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="18" input="2"/>
+</outputs>
+</block>
+<block type="0" id="22">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="18" input="1"/>
+<output id="1" inBlock="23" input="1"/>
+</outputs>
+</block>
+<block type="802" id="18">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="20" input="1"/>
+</outputs>
+</block>
+<block type="2" id="20">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="2" id="23">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>
