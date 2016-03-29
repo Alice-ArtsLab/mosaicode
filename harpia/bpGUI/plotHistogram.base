@@ -1,0 +1,4 @@
++Name: HISTOGRAM
++Input: Image
++Output: Image
++Properties: Image Type {All channels, Separated channels {R, G, B}}

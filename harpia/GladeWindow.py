@@ -79,8 +79,8 @@ class GladeWindow(object):
                  pull_down_dict=None):
         '''
         Constructor. 
-	The filename is simply the filename of the .glade file
-	top_window: the glade name of the top level widget (this will then
+    The filename is simply the filename of the .glade file
+    top_window: the glade name of the top level widget (this will then
            be accessible as self.top_window)
         widget_list: a list of glade names; the dictionary self.widgets
            will be created that maps these name to the actual widget object
@@ -141,7 +141,7 @@ class GladeWindow(object):
 
     def set_callback_function(self, cb_func, *cb_args, **cb_kwargs):
         '''
-	Stores the cb_func and its cb_args and cb_kwargs
+    Stores the cb_func and its cb_args and cb_kwargs
         '''
         self.cb_func = cb_func
         self.cb_args = cb_args

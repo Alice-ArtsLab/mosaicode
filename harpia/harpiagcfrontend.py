@@ -336,17 +336,14 @@ class S2iHarpiaFrontend(GladeWindow):
 
         if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-            # print "destination exists"
 
             if self.m_oGcDiagrams.has_key(self.m_oCopyBuffer[0]):
                 t_oFromDiagram = self.m_oGcDiagrams[self.m_oCopyBuffer[0]]
-                # print "source exists"
 
-                if t_oFromDiagram.m_oBlocks.has_key(self.m_oCopyBuffer[1]):
-                    newBlockId = t_oGcDiagram.InsertBlock(t_oFromDiagram.m_oBlocks[self.m_oCopyBuffer[1]].m_nBlockType)
-                    t_oGcDiagram.m_oBlocks[newBlockId].SetPropertiesXML_nID(
-                        t_oFromDiagram.m_oBlocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
-                # print "setting props"
+                if t_oFromDiagram.blocks.has_key(self.m_oCopyBuffer[1]):
+                    newBlockId = t_oGcDiagram.InsertBlock(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
+                    t_oGcDiagram.blocks[newBlockId].SetPropertiesXML_nID(
+                        t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
 
     # ----------------------------------------------------------------------
 
@@ -357,7 +354,7 @@ class S2iHarpiaFrontend(GladeWindow):
         if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
             blockId = t_oGcDiagram.GetBlockOnFocus()
-            if t_oGcDiagram.m_oBlocks.has_key(blockId):
+            if t_oGcDiagram.blocks.has_key(blockId):
                 t_oGcDiagram.DeleteBlock(blockId)
 
     # ----------------------------------------------------------------------
@@ -449,17 +446,17 @@ class S2iHarpiaFrontend(GladeWindow):
             t_oGcDiagram = self.m_oGcDiagrams[t_nCurrentPage]
 
             if len(t_oDialog.get_filename()) > 0:
-                t_oGcDiagram.SetFilename(t_oDialog.get_filename())
+                t_oGcDiagram.set_file_name(t_oDialog.get_filename())
 
         t_oDialog.destroy()
 
         if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-            if t_oGcDiagram.GetFilename() is not None:
+            if t_oGcDiagram.get_file_name() is not None:
                 if t_oGcDiagram.Load():
                     t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
                     t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
-                    t_sNewLabel = t_oGcDiagram.GetFilename().split("/").pop()
+                    t_sNewLabel = t_oGcDiagram.get_file_name().split("/").pop()
                     t_oLabel = gtk.Label(str(t_sNewLabel))
                     self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
 
@@ -472,7 +469,7 @@ class S2iHarpiaFrontend(GladeWindow):
 
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
 
-            if t_oGcDiagram.GetFilename() is None or self.SaveAs:
+            if t_oGcDiagram.get_file_name() is None or self.SaveAs:
                 self.SaveAs = False
 
                 t_oDialog = gtk.FileChooserDialog(_("Save..."),
@@ -498,19 +495,19 @@ class S2iHarpiaFrontend(GladeWindow):
 
                 t_oResponse = t_oDialog.run()
                 if t_oResponse == gtk.RESPONSE_OK:
-                    t_oGcDiagram.SetFilename(t_oDialog.get_filename())
+                    t_oGcDiagram.set_file_name(t_oDialog.get_filename())
 
                 t_oDialog.destroy()
 
-            if t_oGcDiagram.GetFilename() is not None:
-                if len(t_oGcDiagram.GetFilename()) > 0:
+            if t_oGcDiagram.get_file_name() is not None:
+                if len(t_oGcDiagram.get_file_name()) > 0:
                     t_oGcDiagram.Save()
 
                     ##update tab name
                     t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
                     t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
-                    t_sNewLabelLen = int(len(t_oGcDiagram.GetFilename().split("/")) - 1)
-                    t_sNewLabel = t_oGcDiagram.GetFilename().split("/")[t_sNewLabelLen]
+                    t_sNewLabelLen = int(len(t_oGcDiagram.get_file_name().split("/")) - 1)
+                    t_sNewLabel = t_oGcDiagram.get_file_name().split("/")[t_sNewLabelLen]
                     t_oLabel = gtk.Label(str(t_sNewLabel))
                     self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
 
@@ -651,12 +648,12 @@ class S2iHarpiaFrontend(GladeWindow):
                 self.m_oGcDiagrams[t_nPage].SetIDBackendSession(t_Sm.m_sSessionId)
 
                 # step sempre sera uma lista.. primeiro elemento eh uma mensagem, segundo eh o erro.. caso exista erro.. passar para o s2idiagram tb!
-                self.m_oGcDiagrams[t_nPage].SetErrorLog('')
+                self.m_oGcDiagrams[t_nPage].set_error_log('')
                 t_bEverythingOk = True
                 for step in t_Sm.NewInstance(t_lsProcessChain):
                     if len(step) > 1:
                         if step[1] != '' and step[1] != None:
-                            self.m_oGcDiagrams[t_nPage].Append2ErrorLog(step[1])
+                            self.m_oGcDiagrams[t_nPage].append_error_log(step[1])
                             t_bEverythingOk = False
                     self.SetStatusMessage(step[0], t_bEverythingOk)
                     # self.widgets['StatusLabel'].set_text()
@@ -761,7 +758,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_nPage = self.widgets['WorkArea'].get_current_page()
         if self.m_oGcDiagrams.has_key(t_nPage):
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.ZoomOut()
+            t_oGcDiagram.zoom_out()
 
     # ----------------------------------------------------------------------
 
@@ -772,7 +769,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_nPage = self.widgets['WorkArea'].get_current_page()
         if self.m_oGcDiagrams.has_key(t_nPage):
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.ZoomIn()
+            t_oGcDiagram.zoom_in()
 
     # ----------------------------------------------------------------------
 
@@ -783,7 +780,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_nPage = self.widgets['WorkArea'].get_current_page()
         if self.m_oGcDiagrams.has_key(t_nPage):
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.ZoomOrig()
+            t_oGcDiagram.zoom_orig()
 
     # ----------------------------------------------------------------------
 
@@ -832,8 +829,6 @@ class S2iHarpiaFrontend(GladeWindow):
         from harpia import preferences
         Prefs = preferences.Preferences(self)
         Prefs.show(center=0)
-
-    # execfile( "preferences.py", {"Editor":self} )
 
     # ----------------------------------------------------------------------
 
@@ -1038,12 +1033,12 @@ class S2iHarpiaFrontend(GladeWindow):
                 self.on_NewToolBar_clicked()  # abrindo nova pagina
                 if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
                     t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-                    t_oGcDiagram.SetFilename(example[1])
-                    if t_oGcDiagram.GetFilename() is not None:
+                    t_oGcDiagram.set_file_name(example[1])
+                    if t_oGcDiagram.get_file_name() is not None:
                         if t_oGcDiagram.Load():
                             t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
                             t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
-                            t_sNewLabel = t_oGcDiagram.GetFilename().split("/").pop()
+                            t_sNewLabel = t_oGcDiagram.get_file_name().split("/").pop()
                             t_oLabel = gtk.Label(str(t_sNewLabel))
                             self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
                         # print example[1]

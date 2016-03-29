@@ -88,7 +88,6 @@ class S2iCommonProperties:
         
 
     def on_confirm_clicked(self, *args):
-        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
         self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
         self.widgets['Properties'].destroy()
 
@@ -105,12 +104,7 @@ class S2iCommonProperties:
     #----------------------------------------------------------------------
 
     def on_BorderColorButton_clicked(self,*args):
-        t_oColor = self.RunColorSelection()
-        if t_oColor <> None:
-            self.widgets['BorderColor'].modify_bg(gtk.STATE_NORMAL,t_oColor)
-            self.m_oBorderColor[0] = t_oColor.red / 257
-            self.m_oBorderColor[1] = t_oColor.green / 257
-            self.m_oBorderColor[2] = t_oColor.blue / 257
+        pass
 
     #----------------------------------------------------------------------
 

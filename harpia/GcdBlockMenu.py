@@ -38,56 +38,61 @@ class GcdBlockMenu:
     def __init__(self, block, event):
         self.block = block
 
-        if event.type == gtk.gdk._2BUTTON_PRESS and self.block.m_nBlockType == 2:
-             self.ShowImageGUI()
+        # Double click
+        if event.type == gtk.gdk._2BUTTON_PRESS and self.block.get_type() == 2:
+             self.__show_image_GUI()
+             return
+        # Double click
+        if event.type == gtk.gdk._2BUTTON_PRESS and self.block.get_type() != 2:
+             self.__show_block_properties()
              return
 
-        t_oMenu = gtk.Menu()
+        menu = gtk.Menu()
 
-        t_oMenuItem = gtk.MenuItem("Properties")
-        t_oMenuItem.connect("activate", self.ShowBlockProperties )
-        t_oMenu.append(t_oMenuItem)
+        menu_item = gtk.MenuItem("Properties")
+        menu_item.connect("activate", self.__show_block_properties)
+        menu.append(menu_item)
 
-        if self.block.m_nBlockType == 2:
-            t_oMenuItem = gtk.MenuItem("Show Image")
-            t_oMenuItem.connect("activate", self.ShowImageGUI)
-            t_oMenu.append(t_oMenuItem)
+        if self.block.get_type() == 2:
+            menu_item = gtk.MenuItem("Show Image")
+            menu_item.connect("activate", self.__show_image_GUI)
+            menu.append(menu_item)
 
-#        t_oMenuItem = gtk.MenuItem("PrintXML")
-#        t_oMenuItem.connect("activate", self.PrintXML )
-#        t_oMenu.append(t_oMenuItem)
+#        menu_item = gtk.MenuItem("PrintXML")
+#        menu_item.connect("activate", self.__print_XML)
+#        menu.append(menu_item)
 
-#        t_oMenuItem = gtk.MenuItem("PrintPOS")
-#        t_oMenuItem.connect("activate", self.PrintPOS )
-#        t_oMenu.append(t_oMenuItem)
+#        menu_item = gtk.MenuItem("PrintPOS")
+#        menu_item.connect("activate", self.__print_position)
+#        menu.append(menu_item)
 
-        t_oMenuItem = gtk.SeparatorMenuItem()
-        t_oMenu.append(t_oMenuItem)
+        menu_item = gtk.SeparatorMenuItem()
+        menu.append(menu_item)
 
-        t_oMenuItem = gtk.MenuItem("Delete")
-        t_oMenuItem.connect("activate", self.DeleteClicked )
-        t_oMenu.append(t_oMenuItem)
+        menu_item = gtk.MenuItem("Delete")
+        menu_item.connect("activate", self.__delete_clicked)
+        menu.append(menu_item)
 
         # Shows the menu
-        t_oMenu.show_all()
-        t_oMenu.popup(None, None, None, event.button, event.time)
+        menu.show_all()
+        menu.popup(None, None, None, event.button, event.time)
 
-    def ShowBlockProperties(self, *args):
-        PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI( self.block )
-        PropertiesGUI.EditProperties( self.block.m_oPropertiesXML )
+    def __show_block_properties(self, *args):
+        PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI(self.block)
+        PropertiesGUI.EditProperties(self.block.m_oPropertiesXML)
 
-    def DeleteClicked(self, *args ): #this strongly depends on the garbage collector
-        self.block.ParentDiagram.DeleteBlock(self.block.m_nBlockCountId)
+    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
+        self.block.diagram.DeleteBlock(self.block.block_id)
 
-    def PrintPOS(self, *args):
-        print "(",self.block.wGroup.get_property('x'),",",self.block.wGroup.get_property('y'),")"
+    def __print_position(self, *args):
+        print "(",self.block.wGroup.get_property('x'),",",self.block.group.get_property('y'),")"
 
-    def PrintXML(self, *args):
+    def __print_XML(self, *args):
         print self.block.m_oPropertiesXML.getXML()
 
-    def ShowImageGUI(self, *args):
-        t_sPath = "/tmp/harpiaBETMP0" + str(self.block.ParentDiagram.GetIDBackendSession()) + "/block" + str(self.block.GetId()) + "_OUT.png"
-        ShowGUI = showimage.ShowImage(t_sPath, self.block.ParentDiagram.m_sErrorLog )
+    def __show_image_GUI(self, *args):
+        t_sPath = "/tmp/harpiaBETMP0" + str(self.block.diagram.GetIDBackendSession()) + "/block" + str(self.block.get_id()) + "_OUT.png"
+        ShowGUI = showimage.ShowImage(t_sPath, self.block.diagram.get_error_log())
         ShowGUI.show()
 
 

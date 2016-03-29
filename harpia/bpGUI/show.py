@@ -64,17 +64,15 @@ class Properties(GladeWindow, S2iCommonProperties):
             'on_BackColorButton_clicked',
             'on_BorderColorButton_clicked',
             'on_cancel_clicked',
-            'on_show_confirm_clicked'
+            'on_confirm_clicked'
         ]
 
         top_window = 'Properties'
-
         GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
 
 
         # load properties values
         # There is no properties
-
         # load block state
         t_bState = self.m_oS2iBlockProperties.GetState()
 
@@ -82,15 +80,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         self.configure()
 
-
-        # load help text
-        # t_oS2iHelp = XMLParser(self.m_sDataDir + "help/show" + _("_en.help"))
-
-        # t_oTextBuffer = gtk.TextBuffer()
-
-        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
-
-        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
 
     #----------------Help Text--------------------------------------
 
@@ -101,20 +90,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 
     def __del__(self):
         pass
-
-    # ----------------------------------------------------------------------
-
-    def on_show_confirm_clicked(self, *args):
-        if self.widgets['SHOWDisable'].get_active() == self.m_oS2iBlockProperties.GetState():
-            self.m_oS2iBlockProperties.ToggleState()
-
-        self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
-
-        self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
-
-        self.widgets['Properties'].destroy()
-
-        # ----------------------------------------------------------------------
 
 
 # ShowProperties = Properties()
@@ -156,10 +131,4 @@ def getBlock():
             "Description": _("Shows the input image on a new window."),
             "TreeGroup": _("General")
             }
-            
-def getXML():
-    return r"""<properties>
-      <block type='02' id=''>
-	<property name='state' value='true' />
-      </block>
-</properties>"""
+

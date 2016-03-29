@@ -198,93 +198,93 @@ def generate(blockTemplate):
                 ChannelValue = '1'
                 HistValue = '0'
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-        'CvHistogram * block' + blockTemplate.blockNumber + '_histogram;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_SourceCx[] = { NULL, NULL, NULL};\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_HistCx[] = { NULL, NULL, NULL};\n' + \
-        'int block' + blockTemplate.blockNumber + '_histogram_size[] = { 255, 255, 255 };\n' + \
-        'float * block' + blockTemplate.blockNumber + '_hist_ranges[] = { NULL, NULL, NULL};\n' + \
-        'float block' + blockTemplate.blockNumber + '_hist_rang[2];\n' + \
-        'float block' + blockTemplate.blockNumber + '_histBin;\n' + \
-        'float block' + blockTemplate.blockNumber + '_histMaxVal;\n' + \
-        'int block' + blockTemplate.blockNumber + '_histV;\n' + \
-        'int block' + blockTemplate.blockNumber + '_plotHistChanIter;\n' + \
-        'int block' + blockTemplate.blockNumber + '_plotHistArrIter;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1 && block' + blockTemplate.blockNumber + '_img_i1->nChannels == 3){\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,3);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_SourceCx[0] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_SourceCx[1] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_SourceCx[2] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_HistCx[0] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_HistCx[1] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_HistCx[2] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
-                                 '	cvSplit(block' + blockTemplate.blockNumber + '_img_i1,block' + blockTemplate.blockNumber + '_SourceCx[0],' + \
-                                 '	block' + blockTemplate.blockNumber + '_SourceCx[1],block' + blockTemplate.blockNumber + '_SourceCx[2], NULL);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_rang[0] = 0;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_rang[1] = 255;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_ranges[0] = block' + blockTemplate.blockNumber + '_hist_rang;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_ranges[1] = block' + blockTemplate.blockNumber + '_hist_rang;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_ranges[2] = block' + blockTemplate.blockNumber + '_hist_rang;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_histogram = cvCreateHist( 1, block' + blockTemplate.blockNumber + '_histogram_size,' + \
-                                 ' CV_HIST_ARRAY, block' + blockTemplate.blockNumber + '_hist_ranges, 1);\n' + \
-                                 '	for(block' + blockTemplate.blockNumber + '_plotHistChanIter =' + HistValue + ';block' + blockTemplate.blockNumber + '_plotHistChanIter<' + ChannelValue + ';' \
-                                                                                                                                                                                                'block' + blockTemplate.blockNumber + '_plotHistChanIter++)\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n' + \
+        'CvHistogram * block$$_histogram;\n' + \
+        'IplImage * block$$_SourceCx[] = { NULL, NULL, NULL};\n' + \
+        'IplImage * block$$_HistCx[] = { NULL, NULL, NULL};\n' + \
+        'int block$$_histogram_size[] = { 255, 255, 255 };\n' + \
+        'float * block$$_hist_ranges[] = { NULL, NULL, NULL};\n' + \
+        'float block$$_hist_rang[2];\n' + \
+        'float block$$_histBin;\n' + \
+        'float block$$_histMaxVal;\n' + \
+        'int block$$_histV;\n' + \
+        'int block$$_plotHistChanIter;\n' + \
+        'int block$$_plotHistArrIter;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1 && block$$_img_i1->nChannels == 3){\n' + \
+                                 '	block$$_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,3);\n' + \
+                                 '	block$$_SourceCx[0] = cvCreateImage(cvSize(block$$'+ \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
+                                 '	block$$_SourceCx[1] = cvCreateImage(cvSize(block$$'+ \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
+                                 '	block$$_SourceCx[2] = cvCreateImage(cvSize(block$$'+ \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
+                                 '	block$$_HistCx[0] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
+                                 '	block$$_HistCx[1] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
+                                 '	block$$_HistCx[2] = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U, 1);\n' + \
+                                 '	cvSplit(block$$_img_i1,block$$_SourceCx[0],' + \
+                                 '	block$$_SourceCx[1],block$$_SourceCx[2], NULL);\n' + \
+                                 '	block$$_hist_rang[0] = 0;\n' + \
+                                 '	block$$_hist_rang[1] = 255;\n' + \
+                                 '	block$$_hist_ranges[0] = block$$_hist_rang;\n' + \
+                                 '	block$$_hist_ranges[1] = block$$_hist_rang;\n' + \
+                                 '	block$$_hist_ranges[2] = block$$_hist_rang;\n' + \
+                                 '	block$$_histogram = cvCreateHist( 1, block$$_histogram_size,' + \
+                                 ' CV_HIST_ARRAY, block$$_hist_ranges, 1);\n' + \
+                                 '	for(block$$_plotHistChanIter =' + HistValue + ';block$$_plotHistChanIter<' + ChannelValue + ';' \
+                                                                                                                                                                                                'block$$_plotHistChanIter++)\n' + \
                                  '	{\n' + \
-                                 '		cvCalcHist( &block' + blockTemplate.blockNumber + '_SourceCx[block' + blockTemplate.blockNumber + '_plotHistChanIter],' + \
-                                 'block' + blockTemplate.blockNumber + '_histogram, 0,NULL);\n' + \
-                                 '		cvSetZero(block' + blockTemplate.blockNumber + '_HistCx[block' + blockTemplate.blockNumber + '_plotHistChanIter]);\n' + \
-                                 '		cvGetMinMaxHistValue(block' + blockTemplate.blockNumber + '_histogram,0, &block' + blockTemplate.blockNumber + '_histMaxVal, NULL,NULL);\n' + \
-                                 '		for(block' + blockTemplate.blockNumber + '_plotHistArrIter=0;block' + blockTemplate.blockNumber + '_plotHistArrIter<255;' + \
-                                 'block' + blockTemplate.blockNumber + '_plotHistArrIter++)\n' + \
+                                 '		cvCalcHist( &block$$_SourceCx[block$$_plotHistChanIter],' + \
+                                 'block$$_histogram, 0,NULL);\n' + \
+                                 '		cvSetZero(block$$_HistCx[block$$_plotHistChanIter]);\n' + \
+                                 '		cvGetMinMaxHistValue(block$$_histogram,0, &block$$_histMaxVal, NULL,NULL);\n' + \
+                                 '		for(block$$_plotHistArrIter=0;block$$_plotHistArrIter<255;' + \
+                                 'block$$_plotHistArrIter++)\n' + \
                                  '		{\n' + \
-                                 '			block' + blockTemplate.blockNumber + '_histBin = cvQueryHistValue_1D(block' + blockTemplate.blockNumber + '_histogram,' + \
-                                 'block' + blockTemplate.blockNumber + '_plotHistArrIter);\n' + \
-                                 '			block' + blockTemplate.blockNumber + '_histV=(int)((block' + blockTemplate.blockNumber + '_histBin/block' + blockTemplate.blockNumber + '_histMaxVal)*300);\n' + \
-                                 '			block' + blockTemplate.blockNumber + '_histV=block' + blockTemplate.blockNumber + '_HistCx[block' + blockTemplate.blockNumber + '_plotHistChanIter]->height - 1 - block' + blockTemplate.blockNumber + '_histV;\n' + \
-                                 '			cvLine(block' + blockTemplate.blockNumber + '_HistCx[block' + blockTemplate.blockNumber + '_plotHistChanIter], cvPoint(block' + blockTemplate.blockNumber + '_plotHistArrIter' + \
-                                 ',block' + blockTemplate.blockNumber + '_histV), cvPoint(block' + blockTemplate.blockNumber + '_plotHistArrIter,block' + blockTemplate.blockNumber + '_HistCx[block' + blockTemplate.blockNumber + '_plotHistChanIter]->height' \
+                                 '			block$$_histBin = cvQueryHistValue_1D(block$$_histogram,' + \
+                                 'block$$_plotHistArrIter);\n' + \
+                                 '			block$$_histV=(int)((block$$_histBin/block$$_histMaxVal)*300);\n' + \
+                                 '			block$$_histV=block$$_HistCx[block$$_plotHistChanIter]->height - 1 - block$$_histV;\n' + \
+                                 '			cvLine(block$$_HistCx[block$$_plotHistChanIter], cvPoint(block$$_plotHistArrIter' + \
+                                 ',block$$_histV), cvPoint(block$$_plotHistArrIter,block$$_HistCx[block$$_plotHistChanIter]->height' \
                                                                                                                                                                                                                                     ' - 1),cvScalarAll(255),1, CV_AA,0 );' + \
                                  '		}\n' + \
                                  '	}\n' + \
-                                 '	cvMerge(block' + blockTemplate.blockNumber + '_HistCx[0],' + \
-                                 'block' + blockTemplate.blockNumber + '_HistCx[1],block' + blockTemplate.blockNumber + '_HistCx[2],' + \
-                                 ' NULL,block' + blockTemplate.blockNumber + '_img_o1);\n' + \
+                                 '	cvMerge(block$$_HistCx[0],' + \
+                                 'block$$_HistCx[1],block$$_HistCx[2],' + \
+                                 ' NULL,block$$_img_o1);\n' + \
                                  '}\n' + \
                                  'else\n' + \
                                  '{\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_SourceCx[0] = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_rang[0] = 0;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_rang[1] = 255;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_hist_ranges[0] = block' + blockTemplate.blockNumber + '_hist_rang;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_histogram = cvCreateHist( 1, block' + blockTemplate.blockNumber + '_histogram_size,' + \
-                                 ' CV_HIST_ARRAY, block' + blockTemplate.blockNumber + '_hist_ranges, 1);\n' + \
-                                 '	cvCalcHist( &block' + blockTemplate.blockNumber + '_SourceCx[0], block' + blockTemplate.blockNumber + '_histogram, 0,NULL);\n' + \
-                                 '	cvSetZero(block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                                 '	cvGetMinMaxHistValue(block' + blockTemplate.blockNumber + '_histogram,0, &block' + blockTemplate.blockNumber + '_histMaxVal, NULL,NULL);\n' + \
-                                 '	for(block' + blockTemplate.blockNumber + '_plotHistArrIter=0;block' + blockTemplate.blockNumber + '_plotHistArrIter<255;block' + blockTemplate.blockNumber + '_plotHistArrIter++)\n' + \
+                                 '	block$$_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,1);\n' + \
+                                 '	block$$_SourceCx[0] = cvCreateImage(cvSize(block$$'+ \
+                                 '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
+                                 '	block$$_hist_rang[0] = 0;\n' + \
+                                 '	block$$_hist_rang[1] = 255;\n' + \
+                                 '	block$$_hist_ranges[0] = block$$_hist_rang;\n' + \
+                                 '	block$$_histogram = cvCreateHist( 1, block$$_histogram_size,' + \
+                                 ' CV_HIST_ARRAY, block$$_hist_ranges, 1);\n' + \
+                                 '	cvCalcHist( &block$$_SourceCx[0], block$$_histogram, 0,NULL);\n' + \
+                                 '	cvSetZero(block$$_img_o1);\n' + \
+                                 '	cvGetMinMaxHistValue(block$$_histogram,0, &block$$_histMaxVal, NULL,NULL);\n' + \
+                                 '	for(block$$_plotHistArrIter=0;block$$_plotHistArrIter<255;block$$_plotHistArrIter++)\n' + \
                                  '	{\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_histBin = cvQueryHistValue_1D(block' + blockTemplate.blockNumber + '_histogram, block' + blockTemplate.blockNumber + '_plotHistArrIter);\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_histV=(int)((block' + blockTemplate.blockNumber + '_histBin/block' + blockTemplate.blockNumber + '_histMaxVal)*300);\n' + \
-                                 '		block' + blockTemplate.blockNumber + '_histV=block' + blockTemplate.blockNumber + '_img_o1->height - 1 - block' + blockTemplate.blockNumber + '_histV;\n' + \
-                                 '		cvLine(block' + blockTemplate.blockNumber + '_img_o1, cvPoint(block' + blockTemplate.blockNumber + '_plotHistArrIter ,block' + blockTemplate.blockNumber + '_histV), cvPoint(block' + blockTemplate.blockNumber + '_plotHistArrIter,block' + blockTemplate.blockNumber + '_img_o1->height' \
+                                 '		block$$_histBin = cvQueryHistValue_1D(block$$_histogram, block$$_plotHistArrIter);\n' + \
+                                 '		block$$_histV=(int)((block$$_histBin/block$$_histMaxVal)*300);\n' + \
+                                 '		block$$_histV=block$$_img_o1->height - 1 - block$$_histV;\n' + \
+                                 '		cvLine(block$$_img_o1, cvPoint(block$$_plotHistArrIter ,block$$_histV), cvPoint(block$$_plotHistArrIter,block$$_img_o1->height' \
                                                                                                                                                                                                                                                                                                                    ' - 1),cvScalarAll(255),1, 0,0 );\n' + \
                                  '	}\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'if(block' + blockTemplate.blockNumber + '_SourceCx[0]) cvReleaseImage(&block' + blockTemplate.blockNumber + '_SourceCx[0]);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_SourceCx[1]) cvReleaseImage(&block' + blockTemplate.blockNumber + '_SourceCx[1]);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_SourceCx[2]) cvReleaseImage(&block' + blockTemplate.blockNumber + '_SourceCx[2]);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_HistCx[0]) cvReleaseImage(&block' + blockTemplate.blockNumber + '_HistCx[0]);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_HistCx[1]) cvReleaseImage(&block' + blockTemplate.blockNumber + '_HistCx[1]);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_HistCx[2]) cvReleaseImage(&block' + blockTemplate.blockNumber + '_HistCx[2]);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_img_i1) cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                            'if(block' + blockTemplate.blockNumber + '_img_o1) cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseHist(&block' + blockTemplate.blockNumber + '_histogram);\n'
+    blockTemplate.dealloc = 'if(block$$_SourceCx[0]) cvReleaseImage(&block$$_SourceCx[0]);\n' + \
+                            'if(block$$_SourceCx[1]) cvReleaseImage(&block$$_SourceCx[1]);\n' + \
+                            'if(block$$_SourceCx[2]) cvReleaseImage(&block$$_SourceCx[2]);\n' + \
+                            'if(block$$_HistCx[0]) cvReleaseImage(&block$$_HistCx[0]);\n' + \
+                            'if(block$$_HistCx[1]) cvReleaseImage(&block$$_HistCx[1]);\n' + \
+                            'if(block$$_HistCx[2]) cvReleaseImage(&block$$_HistCx[2]);\n' + \
+                            'if(block$$_img_i1) cvReleaseImage(&block$$_img_i1);\n' + \
+                            'if(block$$_img_o1) cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseHist(&block$$_histogram);\n'
 
 
 # ------------------------------------------------------------------------------

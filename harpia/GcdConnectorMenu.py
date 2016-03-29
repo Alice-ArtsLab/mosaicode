@@ -36,29 +36,21 @@ from harpia import showimage
 class GcdConnectorMenu:
    def __init__(self, connector, event):
       self.connector = connector
-      t_oMenu = gtk.Menu()
+      menu = gtk.Menu()
 
-#      t_oMenuItem = gtk.MenuItem("Properties")
-#      t_oMenuItem.connect("activate", self.ShowPropertiesGUI )
-#      t_oMenu.append(t_oMenuItem)
-
-      # Menu separator
-#      t_oMenuItem = gtk.SeparatorMenuItem()
-#      t_oMenu.append(t_oMenuItem)
-      
       # Excluir (delete) item
-      t_oMenuItem = gtk.MenuItem("Delete")
-      t_oMenuItem.connect("activate", self.DeleteClicked )
-      t_oMenu.append(t_oMenuItem)
+      menu_item = gtk.MenuItem("Delete")
+      menu_item.connect("activate", self.__delete_clicked )
+      menu.append(menu_item)
 
       # Shows the menu
-      t_oMenu.show_all()
-      t_oMenu.popup(None, None, None, event.button, event.time)
+      menu.show_all()
+      menu.popup(None, None, None, event.button, event.time)
 
-   def DeleteClicked(self, *args ): #this strongly depends on the garbage collector
-      for connIdx in range(len(self.connector.ParentDiagram.m_oConnectors)):
-         if self.connector.ParentDiagram.m_oConnectors[connIdx] == self.connector:
-            self.connector.ParentDiagram.m_oConnectors.pop(connIdx)
-            self.connector.wGroup.destroy()
+   def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
+      for connIdx in range(len(self.connector.diagram.connectors)):
+         if self.connector.diagram.connectors[connIdx] == self.connector:
+            self.connector.diagram.connectors.pop(connIdx)
+            self.connector.group.destroy()
             break #faster, necessary (not iteraring on reverse!)
 

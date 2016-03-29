@@ -1,3 +1,4 @@
+import s2idirectory
 
 ############################################################
 ##################### block templates ######################
@@ -15,7 +16,6 @@ class blockTemplate:
     outputsToSave = []
     weight = 1
     outTypes = []
-
 
     ###########################################################################
 
@@ -40,6 +40,8 @@ class blockTemplate:
         self.imagesIO = self.imagesIO.replace("$$", str(self.blockNumber))
         self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
         self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
+        self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
+        self.outDealloc = self.outDealloc.replace("$$", str(self.blockNumber))
         self.functionArguments = self.functionArguments.replace("$$", str(self.blockNumber))
 
         ############################ connectors ####################################

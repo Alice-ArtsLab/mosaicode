@@ -150,11 +150,8 @@ class Properties(GladeWindow, S2iCommonProperties):
 
 
         self.m_oS2iBlockProperties.SetPropertiesXML(self.m_oPropertiesXML)
-
         self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
-
         self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
-
         self.widgets['Properties'].destroy()
 
         # ----------------------------------------------------------------------

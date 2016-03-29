@@ -84,15 +84,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 
         self.configure()
 
-        # load help text
-        # t_oS2iHelp = XMLParser(self.m_sDataDir + 'help/liveDelay' + _('_en.help'))
-
-        # t_oTextBuffer = gtk.TextBuffer()
-
-        # t_oTextBuffer.set_text(unicode(str(t_oS2iHelp.getTag("help").getTag("content").getTagContent())))
-
-        # self.widgets['HelpView'].set_buffer(t_oTextBuffer)
-
     # ----------------------------------------------------------------------
     def getHelp(self):
         return "Detecta formas circulares na imagem de entrada.\
@@ -138,10 +129,10 @@ def generate(blockTemplate):
         elif propIter[0] == 'frameNumber':
             frameNumber = int(float(propIter[1]))
             frameNumber = max(frameNumber, 1)
-    blockTemplate.imagesIO = 'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-                             'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n' + \
-                             'int block' + blockTemplate.blockNumber + '_t_idx = 0;\n' + \
-                             'IplImage * block' + blockTemplate.blockNumber + '_buffer[' + str(frameNumber) + '] = {'
+    blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
+                             'IplImage * block$$_img_o1 = NULL;\n' + \
+                             'int block$$_t_idx = 0;\n' + \
+                             'IplImage * block$$_buffer[' + str(frameNumber) + '] = {'
     for idx in range(frameNumber):
         blockTemplate.imagesIO += 'NULL'
         if idx <> frameNumber - 1:
@@ -149,24 +140,24 @@ def generate(blockTemplate):
     blockTemplate.imagesIO += '};\n'
 
     for idx in range(frameNumber):
-        blockTemplate.imagesIO += 'block' + blockTemplate.blockNumber + '_buffer[' + str(
+        blockTemplate.imagesIO += 'block$$_buffer[' + str(
             idx) + '] = cvCreateImage( cvSize(640,480), 8, 3);\n'
-        blockTemplate.imagesIO += 'cvSetZero(block' + blockTemplate.blockNumber + '_buffer[' + str(idx) + ']);\n'
-    blockTemplate.imagesIO += 'block' + blockTemplate.blockNumber + '_img_o1 = block' + blockTemplate.blockNumber + '_buffer[' + str(
+        blockTemplate.imagesIO += 'cvSetZero(block$$_buffer[' + str(idx) + ']);\n'
+    blockTemplate.imagesIO += 'block$$_img_o1 = block$$_buffer[' + str(
         frameNumber - 1) + '];\n'
 
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n{\n' + \
-                                 '	cvReleaseImage(&(block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx]));\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx] = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_t_idx++;\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_t_idx %= ' + str(frameNumber) + ';\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_o1 = block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx];\n' + \
+    blockTemplate.functionCall = '\nif(block$$_img_i1)\n{\n' + \
+                                 '	cvReleaseImage(&(block$$_buffer[block$$_t_idx]));\n' + \
+                                 '	block$$_buffer[block$$_t_idx] = cvCloneImage(block$$_img_i1);\n' + \
+                                 '	block$$_t_idx++;\n' + \
+                                 '	block$$_t_idx %= ' + str(frameNumber) + ';\n' + \
+                                 '	block$$_img_o1 = block$$_buffer[block$$_t_idx];\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
-    blockTemplate.outDealloc = 'for(block' + blockTemplate.blockNumber + '_t_idx=0;block' + blockTemplate.blockNumber + '_t_idx<' + str(
-        frameNumber) + ';block' + blockTemplate.blockNumber + '_t_idx++)\n' + \
-                               '	if(block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx] != NULL)\n' + \
-                               '		cvReleaseImage(&(block' + blockTemplate.blockNumber + '_buffer[block' + blockTemplate.blockNumber + '_t_idx]));\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
+    blockTemplate.outDealloc = 'for(block$$_t_idx=0;block$$_t_idx<' + str(
+        frameNumber) + ';block$$_t_idx++)\n' + \
+                               '	if(block$$_buffer[block$$_t_idx] != NULL)\n' + \
+                               '		cvReleaseImage(&(block$$_buffer[block$$_t_idx]));\n'
 
 
 # ------------------------------------------------------------------------------
