@@ -1,0 +1,5 @@
+Name: FINDSQUARES
+Input: Image.
+Output: Rotate Image, Show Image.
+Properties: Minimum Area (0 - 9.000.000)
+	    Maximun Area (0 - 9.000.000)

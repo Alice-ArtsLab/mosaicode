@@ -1,0 +1,4 @@
+Name: FILLRECT
+Input: Image, New Rectangle
+Output: Show Image.
+Properties: Fill Color (change color)
