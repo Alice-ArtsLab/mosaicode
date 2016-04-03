@@ -24,7 +24,7 @@
 #
 # ----------------------------------------------------------------------
 
-import gnomecanvas.Canvas
+import gnomecanvas
 import harpia.GcdBlock
 import harpia.GcdConnector
 import gtk
