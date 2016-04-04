@@ -25,8 +25,8 @@
 # ----------------------------------------------------------------------
 
 import gnomecanvas
-import harpia.GcdBlock
-import harpia.GcdConnector
+import GcdBlock
+import GcdConnector
 import gtk
 import time
 
@@ -180,12 +180,12 @@ class GcDiagram(gnomecanvas.Canvas):
                 y -= y_off
             else:
                 x, y = (100 - x_off, 100 - x_off)
-        self.__insert_blockPosId(block_type, x, y, self.block_id)
+        self.insert_blockPosId(block_type, x, y, self.block_id)
         self.block_id += 1
         self.UpdateScrolling()
         return self.block_id - 1
 
-    def __insert_blockPosId(self, block_type, x, y, block_id):
+    def insert_blockPosId(self, block_type, x, y, block_id):
         new_block = GcdBlock.GcdBlock(self, block_type, block_id)
 
         x_off = (self.get_hadjustment()).get_value()
@@ -314,172 +314,11 @@ class GcDiagram(gnomecanvas.Canvas):
                 count += 1
         return count
 
-    def __block_XML_out(self, t_oBlockIdx, Properties, Network, a_bKeepNonFlowing=False):
-        if self.blocks[t_oBlockIdx].get_state() or a_bKeepNonFlowing:
-            props = self.blocks[t_oBlockIdx].GetPropertiesXML()
-            block_xml = props.getTagXML(props.getTagChild("properties", "block"))
-
-            #Properties += self.blocks[t_oBlockIdx].GetPropertiesXML().properties.block.xml() + "\n  "
-            Properties += block_xml + "\n  "
-            Network += '<block type="' + str(self.blocks[t_oBlockIdx].get_type()) + '" id="' + str(
-                self.blocks[t_oBlockIdx].get_id()) + '">\n'
-            Network += "<inputs>\n"
-            for t_nInputIdx in range(len(self.blocks[t_oBlockIdx].block_description["InTypes"])):
-                Network += '<input id="' + str(
-                    t_nInputIdx + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
-            Network += "</inputs>\n"
-
-            Network += "<outputs>\n"
-            t_dConnectedOuts = {}
-            for t_oConnector in self.connectors:
-                if t_oConnector.from_block == self.blocks[t_oBlockIdx].get_id() and (
-                    self.blocks[t_oConnector.to_block].get_state() or a_bKeepNonFlowing):
-                    Network += '<output id="' + str(t_oConnector.from_block_out + 1) + '" inBlock="' + str(
-                        t_oConnector.to_block) + '" input="' + str(
-                        t_oConnector.to_block_in + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
-                    t_dConnectedOuts[t_oConnector.from_block_out] = 1
-            for Output in range(len(self.blocks[t_oBlockIdx].block_description["OutTypes"])):
-                if not t_dConnectedOuts.has_key(Output):
-                    Network += '<output id="' + str(Output + 1) + '" inBlock="--" input="--"/>\n'
-            Network += "</outputs>\n"
-            Network += "</block>\n"
-        return (Properties, Network)
-
-    def GetProcessChain(self, a_bKeepNonFlowing=False):
-    # frontend will get only the valid chain although saving will include the invalid ones
-        Properties = "<properties>\n  "
-        Network = "<network>\n"
-
-        ##REAL TRICKY BUG solution here, source blocks must be processed in an earlier phase so assumptions as "live" or not will be valid
-        ##throughout the whole code generation
-
-        for t_oBlockIdx in self.blocks:
-            if self.blocks[t_oBlockIdx].m_bIsSource:
-                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
-
-        for t_oBlockIdx in self.blocks:
-            if not self.blocks[t_oBlockIdx].m_bIsSource:
-                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
-
-        Properties += "</properties>\n"
-        Network += "</network>\n"
-
-        return Properties + Network
-
     def set_file_name(self, file_name):
         self.file_name = file_name
 
     def get_file_name(self):
         return self.file_name
-
-    def Load(self, file_name=None):
-        if file_name != None:
-            self.set_file_name(file_name)
-        else:
-            if self.file_name == None:
-                self.file_name = "Cannot Load without filename"
-                return False
-
-                # reseting present diagram..
-        self.blocks, self.connectors, self.curr_connector, self.session_id = {}, [], None, 0
-
-        # this two must be updated at each block/conn insertion
-        self.block_id = 1  # since block counts are kept, render this from the saved file
-        self.connector_id = 1  # since connector Ids are generated from scratch, just reset it
-
-        #t_oLoad = bt.bind_file(self.file_name)  # binding saved project
-        #print t_oLoad.xml()
-        t_oLoad = XMLParser(self.file_name)
-
-        # loading blocks on canvas
-        #GcState_root = t_oLoad.getTagChild("harpia", "GcState")
-        #blocks = t_oLoad.getChildTags(GcState_root, "block")
-        blocks = t_oLoad.getTag("harpia").getTag("GcState").getChildTags("block")
-        
-        #for block in t_oLoad.harpia.GcState.block:
-        for block in blocks:
-            #block_id =  t_oLoad.getTagAttr(block, "id")
-            #block_type =  t_oLoad.getTagAttr(block, "type")
-            block_id =  block.getAttr("id")
-            block_type =  block.getAttr("type")
-            position = block.getTag("position")
-            x = position.getAttr("x")
-            y = position.getAttr("y")
-
-            self.__insert_blockPosId(int(block_type), float(x), float(y), int(block_id))
-            self.block_id = max(self.block_id, int(block_id))
-
-        self.block_id += 1
-
-        blocks = t_oLoad.getTag("harpia").getTag("network").getChildTags("block")
-
-        # loading connectors on canvas
-        try:
-            #for block in t_oLoad.harpia.network.block:
-            for block in blocks:
-                block_id =  block.getAttr("id")
-                outputs = block.getTag("outputs")
-
-                #for connector in block.outputs.output:
-                for connector in outputs.getChildTags("output"):
-                    conn_input = connector.getAttr("input")
-                    conn_inblock = connector.getAttr("inBlock")
-                    conn_id = connector.getAttr("id")
-
-                    print conn_input, conn_inblock, conn_id
-
-                        #self.InsertReadyConnector(int(block.id), (int(connector.id) - 1), int(connector.inBlock),
-                    if conn_inblock != "--" and conn_input != "--":
-                                                  #(int(connector.input) - 1))
-                        self.InsertReadyConnector(int(block_id), (int(conn_id) - 1), int(conn_inblock),
-                                                  (int(conn_input) - 1))
-                        # this "-1" are "paired" with those "+1" at line 286 (GetProcessChain:offset=14)
-        except AttributeError:
-            pass
-
-        # loading properties
-        blocks = t_oLoad.getTag("harpia").getTag("properties").getChildTags("block")
-
-        for block in blocks:
-            block_xml = str(block)
-            block_id =  block.getAttr("id")
-            #t_sBlockProperties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block.xml() + '\n</properties>\n'
-            t_sBlockProperties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block_xml + '\n</properties>\n'
-
-            #self.blocks[int(block.id)].SetPropertiesXML(bt.bind_string(t_sBlockProperties))
-            self.blocks[int(block_id)].SetPropertiesXML(XMLParser(t_sBlockProperties, fromString=True))
-
-        self.UpdateScrolling()
-        self.GotoScrolling(0, 0)
-        return True
-
-    def Save(self, file_name=None):  # saving project
-        if file_name != None:
-            self.set_file_name(file_name)
-        if self.file_name == None:
-            self.file_name = "Cadeia_" + str(time.time()) + ".hrp"
-
-            # saving blocks current state
-        t_sGcState = "<GcState>\n"
-        for blockIdx in self.blocks:
-            t_sGcState += '\t<block type="' + str(self.blocks[blockIdx].get_type()) + '" id="' + str(
-                self.blocks[blockIdx].get_id()) + '">\n'
-            t_tPos = self.blocks[blockIdx].get_position()
-            t_sGcState += '\t\t<position x="' + str(t_tPos[0]) + '" y="' + str(t_tPos[1]) + '"/>\n'
-            t_sGcState += '\t</block>\n'
-        t_sGcState += "</GcState>\n"
-
-        # saving processing chain (which includes blocks properties and conectors)
-        t_sProcessingChain = self.GetProcessChain(True)
-
-        t_sOutFile = "<harpia>\n" + t_sGcState + t_sProcessingChain + "</harpia>\n"
-
-        if self.file_name.find(".hrp") == -1:
-            self.file_name += ".hrp"
-
-        t_oSaveFile = open(str(self.file_name), "w")
-        t_oSaveFile.write(t_sOutFile)
-        t_oSaveFile.close()
 
     def GetBlockOnFocus(self):
         for blockIdx in self.blocks:
@@ -491,19 +330,6 @@ class GcDiagram(gnomecanvas.Canvas):
 
     def GetIDBackendSession(self):
         return self.session_id
-
-    def Export2Png(self, filepath="diagrama.png"):
-        (x, y, t_nWidth, t_nHeight, t_nDepth) = self.window.get_geometry()
-        t_oPixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, t_nWidth, t_nHeight)
-        t_oBuffer = t_oPixbuf.get_from_drawable(self.window, self.get_colormap(), 0, 0, 0, 0, t_nWidth, t_nHeight)
-        # get_from_drawable(GdkWindow src, GdkColormap cmap, int src_x, int src_y, int dest_x, int dest_y, int width, int height);
-        t_oBuffer.save(filepath, "png")
-        # bugs:
-
-    # *nao considera o que estiver fora do scroll region
-    # *da um printScreen somente então pega qlqr outra coisa q estiver no caminho
-    # (incluindo o proprio menu ali do FILE)
-    # *aparentemente é a maneira errada.
 
     def set_error_log(self, a_sErrorLog):
         self.error_log = a_sErrorLog

@@ -45,6 +45,7 @@ from harpia.utils.XMLUtils import XMLParser
 import s2idirectory
 
 import GcDiagram
+from diagramcontrol import DiagramControl 
 
 import s2iSessionManager
 import TipOfTheDay
@@ -453,7 +454,7 @@ class S2iHarpiaFrontend(GladeWindow):
         if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
             if t_oGcDiagram.get_file_name() is not None:
-                if t_oGcDiagram.Load():
+                if DiagramControl(t_oGcDiagram).load():
                     t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
                     t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
                     t_sNewLabel = t_oGcDiagram.get_file_name().split("/").pop()
@@ -501,7 +502,7 @@ class S2iHarpiaFrontend(GladeWindow):
 
             if t_oGcDiagram.get_file_name() is not None:
                 if len(t_oGcDiagram.get_file_name()) > 0:
-                    t_oGcDiagram.Save()
+                    DiagramControl(t_oGcDiagram).save()
 
                     ##update tab name
                     t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
@@ -872,7 +873,7 @@ class S2iHarpiaFrontend(GladeWindow):
                 del t_oDialog
                 while gtk.events_pending():
                     gtk.main_iteration(False)
-                t_oGcDiagram.Export2Png(filename)
+                DiagramControl(t_oGcDiagram).export_png(filename)
 
     # ----------------------------------------------------------------------
 
@@ -1035,7 +1036,7 @@ class S2iHarpiaFrontend(GladeWindow):
                     t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
                     t_oGcDiagram.set_file_name(example[1])
                     if t_oGcDiagram.get_file_name() is not None:
-                        if t_oGcDiagram.Load():
+                        if DiagramControl(t_oGcDiagram).load():
                             t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
                             t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
                             t_sNewLabel = t_oGcDiagram.get_file_name().split("/").pop()
