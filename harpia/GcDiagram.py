@@ -32,7 +32,6 @@ import time
 
 from exceptions import AttributeError
 
-from utils.XMLUtils import XMLParser
 from utils.graphicfunctions import *
 
 ZOOM_IN = 1.1
@@ -147,8 +146,6 @@ class GcDiagram(gnomecanvas.Canvas):
 
     def update_scrolling(self):
         t_aSr = self.get_scroll_region()
-
-        # print t_aSr[0],",",t_aSr[1],",",t_aSr[2],",",t_aSr[3]
 
         minX = t_aSr[0]
         minY = t_aSr[1]

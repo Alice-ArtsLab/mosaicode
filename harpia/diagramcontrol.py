@@ -31,8 +31,8 @@ class DiagramControl():
                 self.diagram.blocks[t_oBlockIdx].get_id()) + '">\n'
             Network += "<inputs>\n"
             for t_nInputIdx in range(len(self.diagram.blocks[t_oBlockIdx].block_description["InTypes"])):
-                Network += '<input id="' + str(
-                    t_nInputIdx + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
+                Network += '<input id="' + str(t_nInputIdx + 1) + '"/>\n'
+                # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
             Network += "</inputs>\n"
 
             Network += "<outputs>\n"
@@ -60,11 +60,11 @@ class DiagramControl():
         ##throughout the whole code generation
 
         for t_oBlockIdx in self.diagram.blocks:
-            if self.diagram.blocks[t_oBlockIdx].m_bIsSource:
+            if self.diagram.blocks[t_oBlockIdx].is_source:
                 (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
 
         for t_oBlockIdx in self.diagram.blocks:
-            if not self.diagram.blocks[t_oBlockIdx].m_bIsSource:
+            if not self.diagram.blocks[t_oBlockIdx].is_source:
                 (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network, a_bKeepNonFlowing)
 
         Properties += "</properties>\n"
@@ -80,24 +80,21 @@ class DiagramControl():
                 self.diagram.file_name = "Cannot Load without filename"
                 return False
 
-                # reseting present diagram..
-        self.diagram.blocks, self.diagram.connectors, self.diagram.curr_connector, self.diagram.session_id = {}, [], None, 0
+        # reseting present diagram..
+        self.diagram.blocks = {}
+        self.diagram.connectors = []
+        self.diagram.curr_connector = None
+        self.diagram.session_id = 0
 
         # this two must be updated at each block/conn insertion
         self.diagram.block_id = 1  # since block counts are kept, render this from the saved file
         self.diagram.connector_id = 1  # since connector Ids are generated from scratch, just reset it
 
         t_oLoad = XMLParser(self.diagram.file_name)
-
-        # loading blocks on canvas
-        #GcState_root = t_oLoad.getTagChild("harpia", "GcState")
-        #blocks = t_oLoad.getChildTags(GcState_root, "block")
         blocks = t_oLoad.getTag("harpia").getTag("GcState").getChildTags("block")
-        
+
         #for block in t_oLoad.harpia.GcState.block:
         for block in blocks:
-            #block_id =  t_oLoad.getTagAttr(block, "id")
-            #block_type =  t_oLoad.getTagAttr(block, "type")
             block_id =  block.getAttr("id")
             block_type =  block.getAttr("type")
             position = block.getTag("position")
@@ -127,9 +124,12 @@ class DiagramControl():
                     print conn_input, conn_inblock, conn_id
 
                     if conn_inblock != "--" and conn_input != "--":
-                                                  #(int(connector.input) - 1))
-                        self.diagram.insert_ready_connector(int(block_id), (int(conn_id) - 1), int(conn_inblock),
-                                                  (int(conn_input) - 1))
+                        #(int(connector.input) - 1))
+                        self.diagram.insert_ready_connector(
+                                                int(block_id),
+                                                (int(conn_id) - 1),
+                                                int(conn_inblock),
+                                                (int(conn_input) - 1))
                         # this "-1" are "paired" with those "+1" at line 286 (__get_process_chain:offset=14)
         except AttributeError:
             pass
@@ -140,9 +140,7 @@ class DiagramControl():
         for block in blocks:
             block_xml = str(block)
             block_id =  block.getAttr("id")
-            #t_sBlockProperties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block.xml() + '\n</properties>\n'
             t_sBlockProperties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block_xml + '\n</properties>\n'
-
             self.diagram.blocks[int(block_id)].SetPropertiesXML(XMLParser(t_sBlockProperties, fromString=True))
 
         self.diagram.update_scrolling()

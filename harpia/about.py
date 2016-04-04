@@ -33,44 +33,42 @@ import os
 
 ## Implements the about window in the Frontend.
 class About( GladeWindow ):
-	"""
-		The class implements the functionalities for showing the window and handles the singnals.
-		Allow the user to see information about the Harpia Project.
-		
-	"""
-	#----------------------------------------------------------------------
+    """
+        The class implements the functionalities for showing the window and handles the singnals.
+        Allow the user to see information about the Harpia Project.
+        
+    """
+    #----------------------------------------------------------------------
 
-	def __init__( self ):
-		"""
-			Sets the Glade file where the about window is defined and Connects the
-			signals and its handlers through GladeWindow __init__
-    	"""
-			
-		## Get the file with the about window
-		self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-		filename = self.m_sDataDir+'glade/about.ui'
-		## The widget list
-		widget_list = [
-        	    'about',
-	            'harpia_name',
-        	    'about_s2i_logo',
-	            'about_finep_logo'
-        	    ]
-		handlers = [            ]
-		# The top three widget
-		top_window = 'about'
-		
-		# Starts the Glade Window
-		GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
-		# Set the Icons and logos
-		self.widgets['about'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
-		self.widgets['harpia_name'].set_from_file(self.m_sDataDir+"images/harpia_name.png")
-		self.widgets['about_s2i_logo'].set_from_file(self.m_sDataDir+"images/s2ilogo.png")
-		self.widgets['about_finep_logo'].set_from_file(self.m_sDataDir+"images/finep_logo.gif")
-		#----------------------------------------------------------------------
-	def __del__(self):
-		pass
-	#---------------------------------------------------------------------- 
+    def __init__( self ):
+        """
+            Sets the Glade file where the about window is defined and Connects the
+            signals and its handlers through GladeWindow __init__
+        """
+            
+        ## Get the file with the about window
+        self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
+        filename = self.m_sDataDir+'glade/about.ui'
+        ## The widget list
+        widget_list = [
+                'about',
+                'harpia_name',
+                'about_s2i_logo',
+                'about_finep_logo'
+                ]
+        handlers = [            ]
+        # The top three widget
+        top_window = 'about'
+        
+        # Starts the Glade Window
+        GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
+        # Set the Icons and logos
+        self.widgets['about'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
+        self.widgets['harpia_name'].set_from_file(self.m_sDataDir+"images/harpia_name.png")
+        self.widgets['about_s2i_logo'].set_from_file(self.m_sDataDir+"images/s2ilogo.png")
+        self.widgets['about_finep_logo'].set_from_file(self.m_sDataDir+"images/finep_logo.gif")
+        #----------------------------------------------------------------------
+    def __del__(self):
+        pass
+    #---------------------------------------------------------------------- 
 
-#About = About()
-#About.show( center=0 )

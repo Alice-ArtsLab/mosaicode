@@ -66,14 +66,14 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.widgets = {}
         self.focus = False
         self.has_flow = False
-        self.m_bTimeShifts = False
-        self.m_bIsSource = False
+        self.time_shifts = False
+        self.is_source = False
 
         if self.block_description.has_key("IsSource"): #all data sources
-            self.m_bIsSource = self.block_description["IsSource"]
+            self.is_source = self.block_description["IsSource"]
 
         if self.block_description.has_key("TimeShifts"): #delay block
-            self.m_bTimeShifts = self.block_description["TimeShifts"]
+            self.time_shifts = self.block_description["TimeShifts"]
 
         self.m_oPropertiesXML = XMLParser(self.data_dir +
                     str(self.block_description["Path"]["Xml"]))
@@ -304,8 +304,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.__update_flow_display()
 
     def update_flow(self,a_bCheckTimeShifter=False):
-        if self.m_bIsSource or (self.m_bTimeShifts and (not a_bCheckTimeShifter)):#
-            #if all in connectors have flow
+        if self.is_source or (self.time_shifts and (not a_bCheckTimeShifter)):#
             self.has_flow = True
         else:
             sourceConnectors = self.diagram.get_connectors_to(self.block_id)
@@ -379,6 +378,32 @@ class GcdBlock( gnomecanvas.CanvasGroup):
     def get_state(self):
         return self.has_flow
 
+    def move(self, x, y):
+        self.group.move(x,y)
+
+    def redraw(self):
+        self.group.move(0,0)
+
+    def get_id(self):
+        return self.block_id
+
+    def get_type(self):
+        return self.block_type
+
+    def get_position(self):
+        return self.group.get_property('x'),self.group.get_property('y')
+
+# ---------------------------------------
+    def SetBorderColor(self, a_nColor=None):
+        print "SetBorderColor is deprecated, fix this"
+        self.m_oBackColor = a_nColor
+
+    def GetPropertiesXML(self):
+        return self.m_oPropertiesXML
+
+    def SetPropertiesXML(self, outerProps):
+        self.m_oPropertiesXML = outerProps
+
     def SetPropertiesXML_nID( self, a_oPropertiesXML ):
         myBlockId = self.m_oPropertiesXML.getTag("properties").getTag("block").getAttr("id")
         #storing this block's Block.Id
@@ -403,27 +428,3 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         if self.widgets.has_key("Rect"): #rect already drawn
             self.widgets["Rect"].set(fill_color_rgba=ColorFromList(self.m_oBackColor))
 
-    def move(self, x, y):
-        self.group.move(x,y)
-
-    def redraw(self):
-        self.group.move(0,0)
-
-    def SetBorderColor(self, a_nColor=None):
-        print "SetBorderColor is deprecated, fix this"
-        self.m_oBackColor = a_nColor
-
-    def GetPropertiesXML(self):
-        return self.m_oPropertiesXML
-
-    def SetPropertiesXML(self, outerProps):
-        self.m_oPropertiesXML = outerProps
-
-    def get_id(self):
-        return self.block_id
-
-    def get_type(self):
-        return self.block_type
-
-    def get_position(self):
-        return self.group.get_property('x'),self.group.get_property('y')
