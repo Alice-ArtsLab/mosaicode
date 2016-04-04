@@ -128,7 +128,7 @@ class DiagramControl():
 
                     if conn_inblock != "--" and conn_input != "--":
                                                   #(int(connector.input) - 1))
-                        self.diagram.InsertReadyConnector(int(block_id), (int(conn_id) - 1), int(conn_inblock),
+                        self.diagram.insert_ready_connector(int(block_id), (int(conn_id) - 1), int(conn_inblock),
                                                   (int(conn_input) - 1))
                         # this "-1" are "paired" with those "+1" at line 286 (__get_process_chain:offset=14)
         except AttributeError:
@@ -145,8 +145,8 @@ class DiagramControl():
 
             self.diagram.blocks[int(block_id)].SetPropertiesXML(XMLParser(t_sBlockProperties, fromString=True))
 
-        self.diagram.UpdateScrolling()
-        self.diagram.GotoScrolling(0, 0)
+        self.diagram.update_scrolling()
+        self.diagram.goto_scrolling(0, 0)
         return True
 
     def save(self, file_name=None):  # saving project

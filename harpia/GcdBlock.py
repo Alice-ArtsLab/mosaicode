@@ -152,12 +152,12 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                     #Cascading event resolution:
                     input_event = self.__is_input(event)
                     if input_event != -1:
-                        self.diagram.ClickedInput(self.block_id,input_event)
+                        self.diagram.clicked_input(self.block_id,input_event)
                         return True
                     else:
                         output_event = self.__is_output(event)
                         if output_event != -1:
-                            self.diagram.ClickedOutput(self.block_id,output_event)
+                            self.diagram.clicked_output(self.block_id,output_event)
                             return True
                         else:
                             self.group.grab_focus()
@@ -175,7 +175,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                             new_x = event.x
                             new_y = event.y
                             widget.move(new_x - self.remember_x, new_y - self.remember_y)
-                            self.diagram.UpdateScrolling()
+                            self.diagram.update_scrolling()
                             self.remember_x = new_x
                             self.remember_y = new_y
                             return False
@@ -308,7 +308,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             #if all in connectors have flow
             self.has_flow = True
         else:
-            sourceConnectors = self.diagram.GetConnectorsTo(self.block_id)
+            sourceConnectors = self.diagram.get_connectors_to(self.block_id)
             if len(sourceConnectors) != len(self.block_description["InTypes"]):
                 self.has_flow = False
             else:

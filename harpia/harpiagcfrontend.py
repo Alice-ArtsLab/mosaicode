@@ -44,7 +44,7 @@ from harpia.utils.XMLUtils import XMLParser
 # import s2ipngexport
 import s2idirectory
 
-import GcDiagram
+from GcDiagram import *
 from diagramcontrol import DiagramControl 
 
 import s2iSessionManager
@@ -320,7 +320,7 @@ class S2iHarpiaFrontend(GladeWindow):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
 
         self.m_oCopyBuffer = (
-        self.widgets['WorkArea'].get_current_page(), t_oGcDiagram.GetBlockOnFocus())  ##apends tuple (pageN, blockN)
+        self.widgets['WorkArea'].get_current_page(), t_oGcDiagram.get_block_on_focus())
         print self.m_oCopyBuffer
 
     # ----------------------------------------------------------------------
@@ -342,7 +342,7 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_oFromDiagram = self.m_oGcDiagrams[self.m_oCopyBuffer[0]]
 
                 if t_oFromDiagram.blocks.has_key(self.m_oCopyBuffer[1]):
-                    newBlockId = t_oGcDiagram.InsertBlock(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
+                    newBlockId = t_oGcDiagram.insert_block(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
                     t_oGcDiagram.blocks[newBlockId].SetPropertiesXML_nID(
                         t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
 
@@ -354,9 +354,9 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-            blockId = t_oGcDiagram.GetBlockOnFocus()
+            blockId = t_oGcDiagram.get_block_on_focus()
             if t_oGcDiagram.blocks.has_key(blockId):
-                t_oGcDiagram.DeleteBlock(blockId)
+                t_oGcDiagram.delete_block(blockId)
 
     # ----------------------------------------------------------------------
 
@@ -376,7 +376,7 @@ class S2iHarpiaFrontend(GladeWindow):
         """
 
         # maybe pass to a s2iView base class
-        t_oNewDiagram = GcDiagram.GcDiagram()  # created new diagram
+        t_oNewDiagram = GcDiagram()  # created new diagram
 
         t_oTable = gtk.Table(2, 2, False)
         t_oFrame = gtk.Frame()
@@ -646,7 +646,7 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_Sm = s2iSessionManager.s2iSessionManager()
 
                 ## pegando o novo ID (criado pela s2iSessionManager) e passando para o s2idiagram
-                self.m_oGcDiagrams[t_nPage].SetIDBackendSession(t_Sm.m_sSessionId)
+                self.m_oGcDiagrams[t_nPage].set_session_id(t_Sm.m_sSessionId)
 
                 # step sempre sera uma lista.. primeiro elemento eh uma mensagem, segundo eh o erro.. caso exista erro.. passar para o s2idiagram tb!
                 self.m_oGcDiagrams[t_nPage].set_error_log('')
@@ -722,7 +722,7 @@ class S2iHarpiaFrontend(GladeWindow):
             if not t_sOutputName.endswith('.c'):
                 t_sOutputName += '.c'
 
-            t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[t_nPage].GetIDBackendSession())
+            t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[t_nPage].get_session_id())
             t_sBigCodePath = "/tmp/" + t_sTmpName + "/" + t_sTmpName + ".c"
             if not os.path.exists(t_sBigCodePath):
                 # message regarding code absence
@@ -759,7 +759,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_nPage = self.widgets['WorkArea'].get_current_page()
         if self.m_oGcDiagrams.has_key(t_nPage):
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.zoom_out()
+            t_oGcDiagram.set_zoom(ZOOM_OUT)
 
     # ----------------------------------------------------------------------
 
@@ -770,7 +770,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_nPage = self.widgets['WorkArea'].get_current_page()
         if self.m_oGcDiagrams.has_key(t_nPage):
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.zoom_in()
+            t_oGcDiagram.set_zoom(ZOOM_IN)
 
     # ----------------------------------------------------------------------
 
@@ -781,7 +781,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_nPage = self.widgets['WorkArea'].get_current_page()
         if self.m_oGcDiagrams.has_key(t_nPage):
             t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.zoom_orig()
+            t_oGcDiagram.set_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
 
@@ -814,7 +814,7 @@ class S2iHarpiaFrontend(GladeWindow):
         win.resize(800, 600)
 
         t_nPage = self.widgets['WorkArea'].get_current_page()
-        t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[t_nPage].GetIDBackendSession())
+        t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[t_nPage].get_session_id())
         t_sBigCodePath = "/tmp/" + t_sTmpName + "/" + t_sTmpName + ".c"
         temp_file = open(t_sBigCodePath, 'r')
         string = temp_file.read()
@@ -930,7 +930,7 @@ class S2iHarpiaFrontend(GladeWindow):
                     if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == t_sBlockName:
                         t_nBlockType = t_oBlockTypeIter
                         break
-                t_oCurrentGcDiagram.InsertBlock(t_nBlockType)
+                t_oCurrentGcDiagram.insert_block(t_nBlockType)
 
     def on_BlocksTreeView_row_activated_pos(self, treeview, path, column, x, y):
         """
@@ -948,7 +948,7 @@ class S2iHarpiaFrontend(GladeWindow):
                     if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == t_sBlockName:
                         t_nBlockType = t_oBlockTypeIter
                         break
-                t_oCurrentGcDiagram.InsertBlock(t_nBlockType, x, y)
+                t_oCurrentGcDiagram.insert_block(t_nBlockType, x, y)
 
     # ----------------------------------------------------------------------
 
