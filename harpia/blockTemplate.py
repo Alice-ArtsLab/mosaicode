@@ -70,14 +70,6 @@ class blockTemplate:
                     self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_size_i' + x.destinationInput + ' = block' + self.blockNumber + '_size_o' + x.sourceOutput + ';// SIZE conection\n'
                 else:
                     self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
-                    # if ( (not g_bLive) or (g_flagFrame == 0) ):
-                # self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');//conection\n'
-                # elif g_flagFrame:
-                #   self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(frame);//conection\n'
-                #   global g_flagFrame
-                #   g_flagFrame = 0
-                ############################################################################
-
 
                 #############################   savers   #######################################
                 # THIS CODE IS TO SAVE IMAGES THAT WILL BE RETURNED AFTER THE IMAGE PROCESSING #
@@ -86,32 +78,4 @@ class blockTemplate:
     def saverCodeWriter(self):
         global g_bLive
         for x in self.outputsToSave:
-            # if g_bLive:
-            # self.functionCall = self.functionCall + 'cvNamedWindow("block' + self.blockNumber + '_img_o' + x +',block' + self.blockNumber + '_img_o' + x + ');\n cvShowImage("block' + self.blockNumber + '_img_o' + x +',block' + self.blockNumber + '_img_o' + x + '); \n'
-            # else:
             self.functionCall = self.functionCall + 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'
-
-    def create_XML_result(self, dirPathName):
-        for x in self.outputsToSave:
-            filename = "block" + str(self.blockNumber) + "_img_o" + x + ".png"
-            im = Image.open(tmpDir + dirPathName + "/" + filename)
-            if (im.mode == 'RGB' or im.mode == 'HSV'):
-                nChannels = 3
-            else:
-                nChannels = 1
-            depth = nChannels * 8  # Provisoriamente
-            self.xmlResult = '<result block=\"' + str(self.blockNumber) + '\" output=\"' + str(
-                x) + '\">\n<content type = \"image\">\n<filename> ' + filename + '</filename>\n<properties depth=\"' + str(
-                depth) + '\"  height= \"' + str(im.size[0]) + '\" width= \"' + str(
-                im.size[1]) + '\"  channels=\"' + str(nChannels) + '\" />\n</content>\n</result>'
-
-
-#######################EXAMPLE OF XML_RESULT###################################
-# <result block='03' output='o1'>
-#  <content type='image'>
-#    <buffer>000011111101</buffer>
-#    <properties depth='24' height='640'
-#                width='480' channels='3' />
-#  </content>
-# </result>
-################################################################################
