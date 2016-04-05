@@ -40,7 +40,6 @@ gettext.textdomain(APP)
 
 
 # ----------------------------------------------------------------------
-
 def search_file(filename, search_path):
     """ This global function find a file, when gived a search path
     """
@@ -60,7 +59,6 @@ def search_file(filename, search_path):
 
 
 # ----------------------------------------------------------------------
-## Displays a GUI
 class GladeWindow(object):
     '''A base class for displaying a GUI developed with Glade. Create a subclass
     and add any callbacks and other code. The derived class
@@ -68,14 +66,12 @@ class GladeWindow(object):
     The callbacks that start with on_ are automatically connected.'''
 
     # ----------------------------------------------------------------------
-
     def set_search_path(cls, path):
         '''This function Sets the search path for looking for the .glade files'''
         cls.search_path = path
     set_search_path = classmethod(set_search_path)
 
     # ----------------------------------------------------------------------
-
     def __init__(self, filename, top_window, widget_list, handlers,
                  pull_down_dict=None):
         '''
@@ -129,7 +125,6 @@ class GladeWindow(object):
         self.cb_func = None
 
     # ----------------------------------------------------------------------
-
     def set_top_window(self, top_window):
         ''' 
         Notebook pages that are in containers need to be able to change
@@ -139,7 +134,6 @@ class GladeWindow(object):
         self.top_window = top_window
 
     # ----------------------------------------------------------------------
-
     def set_callback_function(self, cb_func, *cb_args, **cb_kwargs):
         '''
     Stores the cb_func and its cb_args and cb_kwargs
@@ -149,7 +143,6 @@ class GladeWindow(object):
         self.cb_kwargs = cb_kwargs
 
     # ----------------------------------------------------------------------
-
     def show(self, center=1, prev_window=None, *args):
         '''
         Display the top_window widget
@@ -163,7 +156,6 @@ class GladeWindow(object):
         self.top_window.show()
 
     # ----------------------------------------------------------------------
-
     def hide(self):
         '''
         Hides the current window, shows self.prev_window

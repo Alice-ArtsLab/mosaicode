@@ -123,8 +123,7 @@ class Preferences(GladeWindow):
                 self.widgets['PREFPort'].set_value(int(Preference.value))
 
 
-                # ----------------------------------------------------------------------
-
+#----------------------------------------------------------------------
     def __del__(self):
         pass
 

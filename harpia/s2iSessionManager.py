@@ -37,16 +37,19 @@ class s2iSessionManager:
     dir_name = "harpiaBETMP0"
     old_path = ""
 
+#----------------------------------------------------------------------
     def __init__(self):
         self.session_id = str(time.time())
         self.dir_name += self.session_id
         self.old_path = os.path.realpath(os.curdir)
 
+#----------------------------------------------------------------------
     def __make_dir(self):
         os.chdir(TMPDIR)
         os.mkdir(self.dir_name)
         return
 
+#----------------------------------------------------------------------
     def __store_XML(self, a_lsXML=["<harpia></harpia>"]):
         # try:
         os.chdir(TMPDIR + '/' + self.dir_name)
@@ -57,6 +60,7 @@ class s2iSessionManager:
         # print "Problems Saving xml"
         return
 
+#----------------------------------------------------------------------
     def __run_generator(self):
         # changes dir...
         os.chdir(TMPDIR + '/' + self.dir_name)
@@ -68,6 +72,7 @@ class s2iSessionManager:
         os.chdir(self.old_path)
         return
 
+#----------------------------------------------------------------------
     def new_instance(self, a_lsXML=["<harpia></harpia>"]):
         self.__make_dir()
         self.__store_XML(a_lsXML)

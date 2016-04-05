@@ -51,6 +51,7 @@ OUTPUT_WIDTH = 24
 
 class GcdBlock( gnomecanvas.CanvasGroup):
 
+#----------------------------------------------------------------------
     def __init__( self, diagram, block_type, block_id=1):
 
         self.block_type = block_type
@@ -103,6 +104,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.group.set_flags(gtk.CAN_FOCUS)
         self.build()
 
+#----------------------------------------------------------------------
     def __is_input(self,event):
         clicked_point = (event.x - self.group.get_property('x'),
                     event.y - self.group.get_property('y'))
@@ -115,6 +117,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                 return point_index
         return -1
 
+#----------------------------------------------------------------------
     def __is_output(self,event):
         clicked_point = (event.x - self.group.get_property('x'),
                     event.y - self.group.get_property('y'))
@@ -125,6 +128,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                 return point_index
         return -1
 
+#----------------------------------------------------------------------
     def __compute_output_ports(self):
         for outputPort in range(len(self.block_description["OutTypes"])):
             self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
@@ -133,6 +137,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                      + outputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
 
+#----------------------------------------------------------------------
     def __compute_input_ports(self):
         for inputPort in range(len(self.block_description["InTypes"])):
             self.input_port_centers.append((INPUT_WIDTH/2,
@@ -141,6 +146,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                      + inputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
 
+#----------------------------------------------------------------------
     def __group_event(self, widget, event=None):
         if event.type == gtk.gdk.BUTTON_PRESS:
                 if event.button == 1:
@@ -195,9 +201,11 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                     self.__mouse_over_state(False)
                 return False #pode passar p/ cima
 
+#----------------------------------------------------------------------
     def __del__(self):
         print "GC: deleting GcdBlock:",self.block_id
 
+#----------------------------------------------------------------------
     def _BbRect(self):
         p = []
 
@@ -232,6 +240,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                     width_units=1.0)
         self.widgets["Rect"] = w1
 
+#----------------------------------------------------------------------
     def _BIcon(self):
         pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
                     self.block_description["Icon"])
@@ -242,6 +251,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                     anchor=gtk.ANCHOR_CENTER)
         self.widgets["pb"] = icon
 
+#----------------------------------------------------------------------
     def _BInputs(self):
         inPWids = []
         for x in range(len(self.block_description["InTypes"])):
@@ -259,6 +269,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             inPWids.append(t_Wid)
         self.widgets["Inputs"] = inPWids
 
+#----------------------------------------------------------------------
     def _BOutputs(self):
         outPWids = []
         for x in range(len(self.block_description["OutTypes"])):
@@ -279,6 +290,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             outPWids.append(t_Wid)
         self.widgets["Outputs"] = outPWids
 
+#----------------------------------------------------------------------
     def _BLabels(self):
         label = self.group.add(gnomecanvas.CanvasText,
                             text=self.block_description["Label"],
@@ -294,6 +306,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         label.move((self.width/2)-oldX, (self.height-10)-oldY)
         self.widgets["Label"] = label
 
+#----------------------------------------------------------------------
     def build(self):
         self._BLabels()#must be called in this order! otherwise the box rect won't have the propper width
         self._BbRect()
@@ -303,6 +316,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.update_flow()
         self.__update_flow_display()
 
+#----------------------------------------------------------------------
     def update_flow(self,a_bCheckTimeShifter=False):
         if self.is_source or (self.time_shifts and (not a_bCheckTimeShifter)):#
             self.has_flow = True
@@ -321,6 +335,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         self.__update_flow_display()
         return self.has_flow
 
+#----------------------------------------------------------------------
     def __update_flow_display(self):
         t_oFocusCorrectedColor = [self.m_oBackColor[0],
                                   self.m_oBackColor[1],
@@ -337,7 +352,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.widgets["Rect"].set(outline_color='red',
                         fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
 
-
+#----------------------------------------------------------------------
     def get_input_pos(self, a_nInputID):
         if len(self.input_port_centers) == 0: #compute portCenters if they don't exist
             self.__compute_input_ports()
@@ -346,6 +361,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         point = self.i2w(x,y)
         return (point[0],point[1])
 
+#----------------------------------------------------------------------
     def get_output_pos(self, output_id):
         #compute portCenters if they don't exist
         if len(self.output_port_centers) == 0:
@@ -355,9 +371,11 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         point = self.i2w(x,y)
         return (point[0],point[1])
 
+#----------------------------------------------------------------------
     def get_block_pos(self):
         return (self.group.get_property('x'),self.group.get_property('y'))
 
+#----------------------------------------------------------------------
     def update_focus(self):
         if self.diagram.get_property('focused-item') == self.group:
             self.__mouse_over_state(True)
@@ -366,30 +384,38 @@ class GcdBlock( gnomecanvas.CanvasGroup):
             self.__mouse_over_state(False)
             self.focus = False
 
+#----------------------------------------------------------------------
     def __mouse_over_state(self, state):
         if state:
             self.widgets["Rect"].set(width_units=3)
         else:
             self.widgets["Rect"].set(width_units=1)
 
+#----------------------------------------------------------------------
     def __right_click(self, a_oEvent):
        GcdBlockMenu(self, a_oEvent)
 
+#----------------------------------------------------------------------
     def get_state(self):
         return self.has_flow
 
+#----------------------------------------------------------------------
     def move(self, x, y):
         self.group.move(x,y)
 
+#----------------------------------------------------------------------
     def redraw(self):
         self.group.move(0,0)
 
+#----------------------------------------------------------------------
     def get_id(self):
         return self.block_id
 
+#----------------------------------------------------------------------
     def get_type(self):
         return self.block_type
 
+#----------------------------------------------------------------------
     def get_position(self):
         return self.group.get_property('x'),self.group.get_property('y')
 
@@ -398,24 +424,30 @@ class GcdBlock( gnomecanvas.CanvasGroup):
         print "SetBorderColor is deprecated, fix this"
         self.m_oBackColor = a_nColor
 
+#----------------------------------------------------------------------
     def GetPropertiesXML(self):
         return self.m_oPropertiesXML
 
+#----------------------------------------------------------------------
     def SetPropertiesXML(self, outerProps):
         self.m_oPropertiesXML = outerProps
 
+#----------------------------------------------------------------------
     def SetPropertiesXML_nID( self, a_oPropertiesXML ):
         myBlockId = self.m_oPropertiesXML.getTag("properties").getTag("block").getAttr("id")
         #storing this block's Block.Id
         self.m_oPropertiesXML = copy.deepcopy(a_oPropertiesXML)
         self.m_oPropertiesXML.getTag("properties").getTag("block").setAttr("id",myBlockId)
 
+#----------------------------------------------------------------------
     def GetBorderColor(self,*args):
         return self.m_oBorderColor
 
+#----------------------------------------------------------------------
     def GetBackColor(self,*args):
         return self.m_oBackColor
 
+#----------------------------------------------------------------------
     def SetBackColor( self, a_nColors=None ):#RGBA
         if a_nColors == None:
             a_nColors = self.block_description["Color"].split(":")

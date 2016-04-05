@@ -104,11 +104,7 @@ g_sVideoFilename = ''
 usesFindSquares = 0
 usesFindColor = 0
 
-
-####################################################################################
-
-######################### input images with different sizes must be treated ########
-
+#----------------------------------------------------------------------
 def inputSizeComply(nInputs, currentBlockN):
     if nInputs == 2:
         outPutCode = 'if(block' + str(currentBlockN) + '_img_i1->width != block' + str(
@@ -135,6 +131,7 @@ def inputSizeComply(nInputs, currentBlockN):
         return ("//Image Sizes match\n")
 
 
+#----------------------------------------------------------------------
 def __set_error_log(a_sError):
     if os.name == 'nt':
         Error = file(ErrorLog, 'wb')
@@ -143,6 +140,7 @@ def __set_error_log(a_sError):
     Error.write(a_sError)
     Error.close()
 
+#----------------------------------------------------------------------
 def parseAndGenerate(dirName, XMLChain, installDirName):
     __clean_generator()
     global g_bSaveVideo  # Passando todas as variaveis globais devolta ao default

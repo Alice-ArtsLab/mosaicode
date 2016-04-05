@@ -15,12 +15,16 @@ from utils.graphicfunctions import *
 
 
 class DiagramControl():
+
+# ----------------------------------------------------------------------
     def __init__(self, diagram):
         self.diagram = diagram
 
+# ----------------------------------------------------------------------
     def __del__(self):
         pass
 
+# ----------------------------------------------------------------------
     def __block_XML_out(self, t_oBlockIdx, Properties, Network, a_bKeepNonFlowing=False):
         if self.diagram.blocks[t_oBlockIdx].get_state() or a_bKeepNonFlowing:
             props = self.diagram.blocks[t_oBlockIdx].GetPropertiesXML()
@@ -51,6 +55,7 @@ class DiagramControl():
             Network += "</block>\n"
         return (Properties, Network)
 
+# ----------------------------------------------------------------------
     def get_process_chain(self, a_bKeepNonFlowing=False):
     # frontend will get only the valid chain although saving will include the invalid ones
         Properties = "<properties>\n  "
@@ -69,9 +74,9 @@ class DiagramControl():
 
         Properties += "</properties>\n"
         Network += "</network>\n"
-
         return Properties + Network
 
+# ----------------------------------------------------------------------
     def load(self, file_name=None):
         if file_name != None:
             self.diagram.set_file_name(file_name)
@@ -146,6 +151,7 @@ class DiagramControl():
         self.diagram.goto_scrolling(0, 0)
         return True
 
+# ----------------------------------------------------------------------
     def save(self, file_name=None):  # saving project
         if file_name != None:
             self.diagram.set_file_name(file_name)
@@ -174,6 +180,7 @@ class DiagramControl():
         t_oSaveFile.write(t_sOutFile)
         t_oSaveFile.close()
 
+# ----------------------------------------------------------------------
     def export_png(self, filepath="diagrama.png"):
         (x, y, t_nWidth, t_nHeight, t_nDepth) = self.diagram.window.get_geometry()
         t_oPixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, t_nWidth, t_nHeight)

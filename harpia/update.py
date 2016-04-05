@@ -37,92 +37,85 @@ import gtk, gobject
 
 ## Implements the about window in the Frontend.
 class Update( GladeWindow ):
-	"""
-	The class implements the functionalities for showing the window and handles the signals.
-	Presents a beautiful look to update the appropriate files from the web.
-		
-	"""
-	#----------------------------------------------------------------------
+    """
+    The class implements the functionalities for showing the window and handles the signals.
+    Presents a beautiful look to update the appropriate files from the web.
+        
+    """
+    #----------------------------------------------------------------------
+    def __init__( self ):
+        """
+            Sets the Glade file where the about window is defined and Connects the
+            signals and its handlers through GladeWindow __init__
+        """
 
-	def __init__( self ):
-		"""
-			Sets the Glade file where the about window is defined and Connects the
-			signals and its handlers through GladeWindow __init__
-    	"""
+        ## Get the file with the about window
+        filename = 'glade/update.ui'
+        ## The widget list
+        widget_list = [
+            'ProgressBarUpdate', 'note_update', 'TextViewUpdate'
+                ]
+        handlers = ['on_update_destroy_event', 'on_ok_update_clicked']
+        
+        # The top three widget
+        top_window = 'update'
+        
+        # Starts the Glade Window
+        GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
 
-		## Get the file with the about window
-		filename = 'glade/update.ui'
-		## The widget list
-		widget_list = [
-			'ProgressBarUpdate', 'note_update', 'TextViewUpdate'
-        	    ]
-		handlers = ['on_update_destroy_event', 'on_ok_update_clicked']
-		
-		# The top three widget
-		top_window = 'update'
-		
-		# Starts the Glade Window
-		GladeWindow.__init__(self, filename, top_window, widget_list, handlers)
+        # Add a timer callback to update the value of the progress bar
+        self.timer = gobject.timeout_add (50, self.progress_timeout)
 
-		# Add a timer callback to update the value of the progress bar
-		self.timer = gobject.timeout_add (50, self.progress_timeout)
+       #    self.m_oPopen = popen2.Popen3('sh ../updhrp.sh')
 
-   	#	self.m_oPopen = popen2.Popen3('sh ../updhrp.sh')
+        if os.name=="nt":        
+            self.i,self.o = os.popen4('..\updhrp.bat')
+        else:
+            self.i,self.o = os.popen4('sh ../updhrp.sh')
 
-		if os.name=="nt":		
-			self.i,self.o = os.popen4('..\updhrp.bat')
-		else:
-			self.i,self.o = os.popen4('sh ../updhrp.sh')
-
-		self.widgets['note_update'].set_current_page(0)
-		self.widgets['ProgressBarUpdate'].pulse()
-		self.widgets['ProgressBarUpdate'].pulse()
-		self.widgets['ProgressBarUpdate'].pulse()
+        self.widgets['note_update'].set_current_page(0)
+        self.widgets['ProgressBarUpdate'].pulse()
+        self.widgets['ProgressBarUpdate'].pulse()
+        self.widgets['ProgressBarUpdate'].pulse()
 
         #----------------------------------------------------------------------
+    def GetPID(self):
+        return os.getpid()
+    # Update the value of the progress bar so that we get some movement
 
-	def GetPID(self):
-		return os.getpid()
-	# Update the value of the progress bar so that we get some movement
-	def progress_timeout(self):
-		self.widgets['ProgressBarUpdate'].pulse()
+#----------------------------------------------------------------------
+    def progress_timeout(self):
+        self.widgets['ProgressBarUpdate'].pulse()
 
-	 	ss= self.o.readline()
+         ss= self.o.readline()
 
-		print ss
-		t_oTextBuffer = self.widgets['TextViewUpdate'].get_buffer()
-		t_oTextBuffer.insert_at_cursor(ss)
-		if ss == "":
-			self.widgets['note_update'].set_current_page(1)			
-			return False
-#			os.popen('sh harpia.sh')
-#			popen2.Popen3('python Harpia-Frontend.py')
+        print ss
+        t_oTextBuffer = self.widgets['TextViewUpdate'].get_buffer()
+        t_oTextBuffer.insert_at_cursor(ss)
+        if ss == "":
+            self.widgets['note_update'].set_current_page(1)            
+            return False
+#            os.popen('sh harpia.sh')
+#            popen2.Popen3('python Harpia-Frontend.py')
+        # As this is a timeout function, return TRUE so that it
+        # continues to get called
+        return True
 
-		
-		# As this is a timeout function, return TRUE so that it
-		# continues to get called
-		return True
+    #----------------------------------------------------------------------
+    def __del__(self):
+        pass
+    
+    #---------------------------------------------------------------------- 
+    def on_update_destroy_event(self,*args):
+        gobject.source_remove(self.timer)
+               self.timer = 0
+           gtk.main_quit()
+        
+    #---------------------------------------------------------------------- 
+    def on_ok_update_clicked(self,*args):
+        self.on_update_destroy_event()
 
-	#----------------------------------------------------------------------
-
-	def __del__(self):
-		pass
-	
-	#---------------------------------------------------------------------- 
-
-	def on_update_destroy_event(self,*args):
-		gobject.source_remove(self.timer)
-   	        self.timer = 0
-   		gtk.main_quit()
-		
-	#---------------------------------------------------------------------- 
-
-	def on_ok_update_clicked(self,*args):
-
-		self.on_update_destroy_event()
-
-	#---------------------------------------------------------------------- 
-	
+    #---------------------------------------------------------------------- 
 def main():
     gtk.main()
     return 0

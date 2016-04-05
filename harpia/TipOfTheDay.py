@@ -48,6 +48,7 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
     OBS_TIP = 0
     OBS_TOGGLED = 1
 
+#----------------------------------------------------------------------
     def __init__(self):
 
         self.confFile = None
@@ -122,10 +123,12 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
 
         self.__show_currTip()
 
+#----------------------------------------------------------------------
     def run(self):
         if self.showTips:
             gtk.MessageDialog.run(self)
 
+#----------------------------------------------------------------------
     def __show_currTip(self):
         self.__boundIndex2Dict()
         self.__getNofTips()
@@ -138,38 +141,44 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
                 self.btn_next.set_sensitive(False)
                 self.btn_prev.set_sensitive(False)
 
+#----------------------------------------------------------------------
     def __on_close(self, src):
         self.__saveConfFile()
         self.hide()
 
+#----------------------------------------------------------------------
     def __on_closeBtn(self, dialog, response):
         self.__saveConfFile()
         self.hide()
 
+#----------------------------------------------------------------------
     def __boundIndex2Dict(self):
         if (self.__index >= len(TIPS)):
             self.__index = 0
         if (self.__index < 0):
             self.__index = len(TIPS) - 1
 
+#----------------------------------------------------------------------
     def __getNofTips(self):
         self.nOfOkTips = 0
         for tipInstance in self.avTips.keys():
             if self.avTips[tipInstance]:
                 self.nOfOkTips += 1
 
+#----------------------------------------------------------------------
     def __on_toggleThis(self, src):
         value = src.get_active()
         self.avTips[self.__index] = not value
         # self.__getNofTips()
         # self.update_observer(self.OBS_TOGGLED, value)
 
+#----------------------------------------------------------------------
     def __on_toggleAll(self, src):
-
         value = src.get_active()
         self.showTips = value
         # self.update_observer(self.OBS_TOGGLED, value)
 
+#----------------------------------------------------------------------
     def next_tip(self, *args):
         self.__index += 1
         self.__boundIndex2Dict()
@@ -178,6 +187,7 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
             self.__boundIndex2Dict()
         self.__show_currTip()
 
+#----------------------------------------------------------------------
     def prev_tip(self, *args):
         self.__index -= 1
         self.__boundIndex2Dict()
@@ -186,6 +196,7 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
             self.__boundIndex2Dict()
         self.__show_currTip()
 
+#----------------------------------------------------------------------
     def __getTipFromConf(self):
         okTipList = []
         for tipInstance in self.avTips.keys():
@@ -199,8 +210,8 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
             randTipId = okTipList[0]
         return randTipId
 
+#----------------------------------------------------------------------
     def __loadConfFile(self):
-
         if(not os.path.exists(os.path.expanduser(self.confFilePath))):
             self.GenerateBlankConf()
 
@@ -221,6 +232,7 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
 
         print self.avTips
 
+#----------------------------------------------------------------------
     def __saveConfFile(self):
 
         conf_file = XMLParser()
@@ -233,6 +245,7 @@ class TipOfTheDay(gtk.MessageDialog):  # , Observable):
         self.confFile.write(conf_file.getXML())
         self.confFile.close()
 
+#----------------------------------------------------------------------
     def GenerateBlankConf(self):
         conf_file = XMLParser()
         conf_file.addTag("tipsOfTheDay", {"show":"True", "version":TIPS_VER})

@@ -39,6 +39,8 @@ ZOOM_OUT = 0.9
 ZOOM_ORIGINAL = 1.0
 
 class GcDiagram(gnomecanvas.Canvas):
+
+#----------------------------------------------------------------------
     def __init__(self):
         self.__gobject_init__()
         gnomecanvas.Canvas.__init__(self, aa=True)
@@ -69,9 +71,11 @@ class GcDiagram(gnomecanvas.Canvas):
         self.white_board = None
         self.__update_white_board()
 
+#----------------------------------------------------------------------
     def __del__(self):
         pass
 
+#----------------------------------------------------------------------
     def __canvas_event(self, widget, event=None):  # nao serve pq QUALQUER EVENTO do canvas passa por aqui
         if self.curr_connector != None:
             if event.type == gtk.gdk.MOTION_NOTIFY:  # se temos um conector aberto, atualizar sua posicao
@@ -81,6 +85,7 @@ class GcDiagram(gnomecanvas.Canvas):
                 return False
         return False
 
+#----------------------------------------------------------------------
     def __canvas_root_event(self, widget, event=None):
         if event.type == gtk.gdk.KEY_PRESS:
             if event.keyval == gtk.keysyms.Delete:
@@ -130,6 +135,7 @@ class GcDiagram(gnomecanvas.Canvas):
                 return False
         return False
 
+#----------------------------------------------------------------------
     def __white_board_event(self, widget, event=None):
         if event.type == gtk.gdk.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
             if event.button == 1:
@@ -138,12 +144,14 @@ class GcDiagram(gnomecanvas.Canvas):
                 return False
         return False
 
+#----------------------------------------------------------------------
     def goto_scrolling(self, x, y):
         t_oHa = self.get_hadjustment()
         t_oVa = self.get_vadjustment()
         t_oHa.set_value(x)
         t_oVa.set_value(y)
 
+#----------------------------------------------------------------------
     def update_scrolling(self):
         t_aSr = self.get_scroll_region()
 
@@ -166,6 +174,7 @@ class GcDiagram(gnomecanvas.Canvas):
         for blockIdx in self.blocks:  # self.blocks is a dict!
             self.blocks[blockIdx].redraw()
 
+#----------------------------------------------------------------------
     def insert_block(self, block_type, x=None, y=None):
         if x == None:
             x_off = (self.get_hadjustment()).get_value()
@@ -181,6 +190,7 @@ class GcDiagram(gnomecanvas.Canvas):
         self.update_scrolling()
         return self.block_id - 1
 
+#----------------------------------------------------------------------
     def insert_blockPosId(self, block_type, x, y, block_id):
         new_block = GcdBlock.GcdBlock(self, block_type, block_id)
 
@@ -191,6 +201,7 @@ class GcDiagram(gnomecanvas.Canvas):
         new_block.move(x_off + cPt[0] - 20.0, y_off + cPt[1] - 60.0)  # cPt[0],cPt[1])
         self.blocks[block_id] = new_block
 
+#----------------------------------------------------------------------
     def insert_ready_connector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
         t_oNewConn = GcdConnector.GcdConnector(self, a_nFromId, a_nFromIdOut)
         t_oNewConn.set_end(a_nToId, a_nToIdIn)
@@ -204,6 +215,7 @@ class GcDiagram(gnomecanvas.Canvas):
         else:
             pass
 
+#----------------------------------------------------------------------
     def clicked_input(self, block_id, a_nInput):  # TODO na real, pegar em tempo real aonde tah aquela porta!!
         if self.curr_connector != None:
             self.curr_connector.set_end(block_id, a_nInput)
@@ -220,6 +232,7 @@ class GcDiagram(gnomecanvas.Canvas):
                 self.__abort_connection()
                 # print self.connectors
 
+#----------------------------------------------------------------------
     def __connector_types_match(self, a_oConnector):
         outType = self.blocks[a_oConnector.from_block].block_description["OutTypes"][a_oConnector.from_block_out]
         inType = self.blocks[a_oConnector.to_block].block_description["InTypes"][a_oConnector.to_block_in]
@@ -227,6 +240,7 @@ class GcDiagram(gnomecanvas.Canvas):
             print "Types mismatch"
         return outType == inType
 
+#----------------------------------------------------------------------
     def __valid_connector(self, newCon):
         for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
@@ -238,18 +252,21 @@ class GcDiagram(gnomecanvas.Canvas):
             return False
         return True
 
+#----------------------------------------------------------------------
     def clicked_output(self, block_id, a_nOutput):
         self.__abort_connection()  # abort any possibly running connections
         # print "block" + str(block_id) + "_Out" + str(a_nOutput)
         self.curr_connector = GcdConnector.GcdConnector(self, block_id, a_nOutput)
         self.__update_flows()
 
+#----------------------------------------------------------------------
     def __abort_connection(self):
         if self.curr_connector != None:
             self.curr_connector.group.destroy()  ## BUG!
             del self.curr_connector
             self.curr_connector = None
 
+#----------------------------------------------------------------------
     def delete_block(self, blockCountId):
         # removing related connectors
         for idx in reversed(range(len(self.connectors))):
@@ -262,9 +279,9 @@ class GcDiagram(gnomecanvas.Canvas):
         blockAtLimbo = self.blocks.pop(blockCountId)
         blockAtLimbo.group.destroy()
         del blockAtLimbo
-
         self.__update_flows()
 
+#----------------------------------------------------------------------
     def __update_white_board(self):
         if self.white_board == None:
             clr = ColorFromList([255, 255, 255, 255])
@@ -274,8 +291,8 @@ class GcDiagram(gnomecanvas.Canvas):
             self.white_board.set_flags(gtk.CAN_FOCUS)
             self.white_board.connect("event", self.__white_board_event)
 
-    # else:
 
+#----------------------------------------------------------------------
     def __update_flows(self):
         for checkTimeShifter in [False, True]:
             prevCount = -1
@@ -290,6 +307,7 @@ class GcDiagram(gnomecanvas.Canvas):
                 prevCount = newCount
                 newCount = self.__count_flowing_components()
 
+#----------------------------------------------------------------------
     def get_connectors_to(self, a_nBlockCountId):
         result = []
         for conn in self.connectors:
@@ -297,6 +315,7 @@ class GcDiagram(gnomecanvas.Canvas):
                 result.append(conn)
         return result
 
+#----------------------------------------------------------------------
     def __count_flowing_components(self):
         count = 0
         for blockIdx in self.blocks:
@@ -307,32 +326,41 @@ class GcDiagram(gnomecanvas.Canvas):
                 count += 1
         return count
 
+#----------------------------------------------------------------------
     def set_file_name(self, file_name):
         self.file_name = file_name
 
+#----------------------------------------------------------------------
     def get_file_name(self):
         return self.file_name
 
+#----------------------------------------------------------------------
     def get_block_on_focus(self):
         for blockIdx in self.blocks:
             if self.blocks[blockIdx].focus:
                 return blockIdx
 
+#----------------------------------------------------------------------
     def set_session_id(self, session_id):
         self.session_id = session_id
 
+#----------------------------------------------------------------------
     def get_session_id(self):
         return self.session_id
 
+#----------------------------------------------------------------------
     def set_error_log(self, a_sErrorLog):
         self.error_log = a_sErrorLog
 
+#----------------------------------------------------------------------
     def append_error_log(self, a_sErrorLog):
         self.error_log += a_sErrorLog
 
+#----------------------------------------------------------------------
     def get_error_log(self):
         return self.error_log
 
+#----------------------------------------------------------------------
     def set_zoom(self, value):
         if value == ZOOM_ORIGINAL:
             self.zoom = ZOOM_ORIGINAL

@@ -39,6 +39,7 @@ CONNECTION_BOUNDARY = 16.0
 
 class GcdConnector(gnomecanvas.CanvasGroup):
 
+#----------------------------------------------------------------------
     def __init__( self, diagram, from_block=-1, from_block_out=-1):
         self.diagram = diagram
         self.from_block = from_block
@@ -58,9 +59,11 @@ class GcdConnector(gnomecanvas.CanvasGroup):
         self.widgets = {}
         self.update_tracking()
 
+#----------------------------------------------------------------------
     def __del__(self):
         pass
 
+#----------------------------------------------------------------------
     def __group_event(self, widget, event=None):
         if event.type == gtk.gdk.BUTTON_PRESS:
             if event.button == 1:
@@ -71,20 +74,24 @@ class GcdConnector(gnomecanvas.CanvasGroup):
                 self.__right_click_run_menu(event)
         return False
 
+#----------------------------------------------------------------------
     def __right_click_run_menu(self, a_oEvent):
         GcdConnectorMenu(self, a_oEvent)
 
+#----------------------------------------------------------------------
     def set_end(self, to_block=-1, to_block_in=-1):
         self.to_block = to_block
         self.to_block_in = to_block_in
         self.to_point = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
         self.update_tracking(self.to_point)
 
+#----------------------------------------------------------------------
     def update_connectors(self):
         self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out)
         self.to_point = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
         self.__update_draw()
 
+#----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
         if newEnd == None:
             newEnd = self.from_point
@@ -93,6 +100,7 @@ class GcdConnector(gnomecanvas.CanvasGroup):
         self.to_point = Psum(self.from_point,vec)
         self.__update_draw()
 
+#----------------------------------------------------------------------
     def __update_draw(self):
         p = []
         p.append(self.from_point[0])
@@ -115,6 +123,7 @@ class GcdConnector(gnomecanvas.CanvasGroup):
         else:
             self.widgets["Line"].set(points=p)
 
+#----------------------------------------------------------------------
     def update_focus(self):
         if self.diagram.get_property('focused-item') == self.group:
             self.focus = True
@@ -123,6 +132,7 @@ class GcdConnector(gnomecanvas.CanvasGroup):
             self.focus = False
             self.widgets["Line"].set(fill_color='black',width_units=3.0)
 
+#----------------------------------------------------------------------
     def update_flow(self):
         self.has_flow = self.diagram.blocks[self.from_block].has_flow
         if self.has_flow:

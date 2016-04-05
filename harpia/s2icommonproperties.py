@@ -52,17 +52,14 @@ class S2iCommonProperties:
     m_oColorSelectionDlg = None
     
     #----------------------------------------------------------------------
-    
     def __init__( self, *args ):
         pass
 
     #----------------------------------------------------------------------
-
     def __del__(self):
         pass
 
     #----------------------------------------------------------------------
-
     def RunColorSelection(self,*args):
         """
         This function creates a window for Color selection. This function is used to change the block back color and the border color.
@@ -81,17 +78,16 @@ class S2iCommonProperties:
             return None
             
     #----------------------------------------------------------------------
-    
     def on_cancel_clicked( self, *args ):
         self.widgets['Properties'].destroy()
         
 
+#----------------------------------------------------------------------
     def on_confirm_clicked(self, *args):
         self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
         self.widgets['Properties'].destroy()
 
     #----------------------------------------------------------------------
-
     def on_BackColorButton_clicked(self,*args):
         t_oColor = self.RunColorSelection()
         if t_oColor <> None:
@@ -101,12 +97,10 @@ class S2iCommonProperties:
             self.m_oBackColor[2] = t_oColor.blue / 257
 
     #----------------------------------------------------------------------
-
     def on_BorderColorButton_clicked(self,*args):
         pass
 
     #----------------------------------------------------------------------
-
     def configure(self):
         self.widgets['Properties'].set_icon_from_file(self.m_sDataDir+"images/harpia_ave.png")
 

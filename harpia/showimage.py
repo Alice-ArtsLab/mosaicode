@@ -49,7 +49,6 @@ class ShowImage(GladeWindow):
     """
 
     #----------------------------------------------------------------------
-
     def __init__( self, a_ImagePath, a_ErrorLog ):
         """
         Creates a window and shows the processed image.
@@ -116,16 +115,15 @@ class ShowImage(GladeWindow):
         
         
     #----------------------------------------------------------------------
-
     def __del__(self):
         pass
 
     #----------------------------------------------------------------------
-
     def show(self):
         pass
         #self.Window.show_all()
 
+#----------------------------------------------------------------------
     def on_btnShowSave_clicked(self, *args):
         #self.SaveAs = False
     
@@ -163,10 +161,11 @@ class ShowImage(GladeWindow):
         t_oDialog.destroy()
 
 
-    
+#----------------------------------------------------------------------
     def on_btnShowClose_clicked(self, *args):
         self.Window.hide()    
-        
+
+#----------------------------------------------------------------------
     def on_btnShowZoomIn_clicked(self, *args):
 
         t_iMaxHeight = 4*self.m_oOriginalImage.get_height()
@@ -177,7 +176,7 @@ class ShowImage(GladeWindow):
         self.m_oImage = self.m_oOriginalImage.scale_simple(self.CurrentWidth,self.CurrentHeight,gtk.gdk.INTERP_BILINEAR)
         self.Image.set_from_pixbuf(self.m_oImage)
         
-        
+#----------------------------------------------------------------------
     def on_btnShowZoomOut_clicked(self, *args):
         
         self.CurrentHeight = max(self.CurrentHeight * (1-self.m_fSizeIncrement),self.m_iMinSize)
@@ -186,7 +185,7 @@ class ShowImage(GladeWindow):
         self.m_oImage = self.m_oOriginalImage.scale_simple(self.CurrentWidth,self.CurrentHeight,gtk.gdk.INTERP_BILINEAR)
         self.Image.set_from_pixbuf(self.m_oImage)
         
-        
+#----------------------------------------------------------------------
     def on_btnShowZoomDefault_clicked(self, *args):
 
         self.CurrentHeight = self.m_oOriginalImage.get_height()

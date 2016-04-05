@@ -91,8 +91,8 @@ class GcdBlockMenu:
         print self.block.m_oPropertiesXML.getXML()
 
     def __show_image_GUI(self, *args):
-        t_sPath = "/tmp/harpiaBETMP0" + str(self.block.diagram.get_session_id()) + "/block" + str(self.block.get_id()) + "_OUT.png"
-        ShowGUI = showimage.ShowImage(t_sPath, self.block.diagram.get_error_log())
+        path = "/tmp/harpiaBETMP0" + str(self.block.diagram.get_session_id()) + "/block" + str(self.block.get_id()) + "_OUT.png"
+        ShowGUI = showimage.ShowImage(path, self.block.diagram.get_error_log())
         ShowGUI.show()
 
 

@@ -71,7 +71,6 @@ class S2iHarpiaFrontend(GladeWindow):
     """
 
     # ----------------------------------------------------------------------
-
     def __init__(self):
         """
         Constructor. Initializes the GladeWindow object for signal connecting, creates a dictionary for the Blocks and loads the configurations.

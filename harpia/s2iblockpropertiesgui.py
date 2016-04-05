@@ -44,7 +44,6 @@ class S2iBlockPropertiesGUI:
     """
 
     #----------------------------------------------------------------------
-
     def __init__( self, a_oS2iBlock ):
         """
         Constructor. Receives a s2iBlock and sets the member atributte s2iBlock with this argument.
@@ -54,16 +53,10 @@ class S2iBlockPropertiesGUI:
         self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
     
     #----------------------------------------------------------------------
-
     def __del__(self):
         pass
 
     #----------------------------------------------------------------------
-
-#--------S2IPROPERTIESGUI PUBLIC FUNCTIONS--------------
-    
-    #----------------------------------------------------------------------
-
     def EditProperties( self, a_oPropertiesXML ): 
         """
         This function calls the correct .glade file, based on the block type. The block type is found using the PropertiesXML argument.
@@ -82,9 +75,8 @@ class S2iBlockPropertiesGUI:
         PropertiesGUI.show( center=0 )
         
         # Executes the file based on the block name
-        
-    #----------------------------------------------------------------------
 
+    #----------------------------------------------------------------------
     def SetPropertiesXML( self, a_oPropertiesXML ): 
         """
         Sets the PropertiesXML with the propertiesXML argument.
@@ -92,7 +84,6 @@ class S2iBlockPropertiesGUI:
         self.m_oS2iBlock.SetPropertiesXML(a_oPropertiesXML)
         
     #----------------------------------------------------------------------
-
     def GetState(self):
         """
         Returns the block state.
@@ -100,7 +91,6 @@ class S2iBlockPropertiesGUI:
         return  self.m_oS2iBlock.get_state()
 
     #----------------------------------------------------------------------
-
     def GetBorderColor( self,*args ):
         """
         Returns the block border color.
@@ -109,7 +99,6 @@ class S2iBlockPropertiesGUI:
         return self.m_oS2iBlock.GetBorderColor()
 
     #----------------------------------------------------------------------
-
     def GetBackColor(self,*args):
         """
         Returns the block back color.
@@ -117,7 +106,6 @@ class S2iBlockPropertiesGUI:
         return self.m_oS2iBlock.GetBackColor()
     
     #----------------------------------------------------------------------
-
     def SetBorderColor( self, a_oBorderColor ):
         """
         Sets the border color.
@@ -125,7 +113,6 @@ class S2iBlockPropertiesGUI:
         self.m_oS2iBlock.SetBorderColor(a_oBorderColor)
 
     #----------------------------------------------------------------------
-
     def SetBackColor(self,a_oBackColor):
         """
         Sets the block BackColor.

@@ -47,6 +47,7 @@ class GcdConnectorMenu:
       menu.show_all()
       menu.popup(None, None, None, event.button, event.time)
 
+#----------------------------------------------------------------------
    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
       for connIdx in range(len(self.connector.diagram.connectors)):
          if self.connector.diagram.connectors[connIdx] == self.connector:
