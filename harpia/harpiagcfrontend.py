@@ -155,7 +155,7 @@ class S2iHarpiaFrontend(GladeWindow):
         self.diagrams = {}
         self.copy_buffer = (-1, -1)  # tuple (fromPage, [listOfBlocks]) ...listOfConns?
         self.__load_examples_menu()
-        self.__InsertBlocks()
+        self.__insert_blocks()
         self.on_CloseMenuBar_activate()  # removing the dummie page
         self.on_NewToolBar_clicked()  # creating blank page
 
@@ -168,20 +168,20 @@ class S2iHarpiaFrontend(GladeWindow):
         pass
 
     # ----------------------------------------------------------------------
-    def __InsertBlocks(self):
+    def __insert_blocks(self):
         """
         Inserts the blocks in the BlocksTree.
         """
 
-        t_oTreeStore = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_PYOBJECT)
-        t_oImage = gtk.CellRendererPixbuf()
+        tree_store = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_PYOBJECT)
+        image = gtk.CellRendererPixbuf()
 
-        for t_sItem in self.Blocks.keys():
-            t_oParent = t_oTreeStore.append(None, [t_sItem, t_oImage])
-            for t_nIndex in range(len(self.Blocks[t_sItem])):
-                t_oTreeStore.append(t_oParent, [self.Blocks[t_sItem][t_nIndex], t_oImage])
+        for item in self.Blocks.keys():
+            parent = tree_store.append(None, [item, image])
+            for index in range(len(self.Blocks[item])):
+                tree_store.append(parent, [self.Blocks[item][index], image])
 
-        self.widgets['BlocksTreeView'].set_model(t_oTreeStore)
+        self.widgets['BlocksTreeView'].set_model(tree_store)
         t_oTextRender = gtk.CellRendererText()
         t_oTextRender.set_property('editable', False)
         t_oColumn = gtk.TreeViewColumn(_("Available Blocks"), t_oTextRender, text=0)
@@ -321,23 +321,22 @@ class S2iHarpiaFrontend(GladeWindow):
         """
 
         # maybe pass to a s2iView base class
-        t_oNewDiagram = GcDiagram()  # created new diagram
+        new_diagram = GcDiagram()  # created new diagram
 
-        t_oTable = gtk.Table(2, 2, False)
-        t_oFrame = gtk.Frame()
-        t_oFrame.set_shadow_type(gtk.SHADOW_IN)
-        t_oTable.attach(t_oFrame, 0, 1, 0, 1,
+        table = gtk.Table(2, 2, False)
+        frame = gtk.Frame()
+        frame.set_shadow_type(gtk.SHADOW_IN)
+        table.attach(frame, 0, 1, 0, 1,
                         gtk.EXPAND | gtk.FILL | gtk.SHRINK,
                         gtk.EXPAND | gtk.FILL | gtk.SHRINK)
 
-        t_oFrame.add(t_oNewDiagram)
-        # t_oNewDiagram.set_scroll_region(0, 0, 400, 400) #diagrams handle this
+        frame.add(new_diagram)
 
-        t_oVAdjustment = gtk.VScrollbar(t_oNewDiagram.get_vadjustment())
-        t_oHAdjustment = gtk.HScrollbar(t_oNewDiagram.get_hadjustment())
-        t_oTable.attach(t_oVAdjustment, 1, 2, 0, 1, gtk.FILL, gtk.EXPAND | gtk.FILL | gtk.SHRINK)
-        t_oTable.attach(t_oHAdjustment, 0, 1, 1, 2, gtk.EXPAND | gtk.FILL | gtk.SHRINK, gtk.FILL)
-        t_oTable.show_all()
+        t_oVAdjustment = gtk.VScrollbar(new_diagram.get_vadjustment())
+        t_oHAdjustment = gtk.HScrollbar(new_diagram.get_hadjustment())
+        table.attach(t_oVAdjustment, 1, 2, 0, 1, gtk.FILL, gtk.EXPAND | gtk.FILL | gtk.SHRINK)
+        table.attach(t_oHAdjustment, 0, 1, 1, 2, gtk.EXPAND | gtk.FILL | gtk.SHRINK, gtk.FILL)
+        table.show_all()
 
         # tab label
         current_page = self.widgets['WorkArea'].get_current_page()
@@ -345,12 +344,12 @@ class S2iHarpiaFrontend(GladeWindow):
         label = gtk.Label(_("Unnamed ") + str(current_page + 1) + "[*]")
 
         self.widgets['WorkArea'].set_show_tabs(True)
-        self.widgets['WorkArea'].append_page(t_oTable, label)
+        self.widgets['WorkArea'].append_page(table, label)
 
         t_nSelectedPage = self.widgets['WorkArea'].get_n_pages() - 1
         self.widgets['WorkArea'].set_current_page(t_nSelectedPage)
 
-        self.diagrams[self.widgets['WorkArea'].get_current_page()] = t_oNewDiagram
+        self.diagrams[self.widgets['WorkArea'].get_current_page()] = new_diagram
 
 
     # ----------------------------------------------------------------------
@@ -373,7 +372,6 @@ class S2iHarpiaFrontend(GladeWindow):
         t_oResponse = t_oDialog.run()
 
         if t_oResponse == gtk.RESPONSE_OK:
-            ##create a new workspace
             self.on_NewToolBar_clicked()
 
             current_page = self.widgets['WorkArea'].get_current_page()
@@ -491,76 +489,69 @@ class S2iHarpiaFrontend(GladeWindow):
     # ----------------------------------------------------------------------
     def on_ProcessToolBar_clickedIneer(self):
         page = self.widgets['WorkArea'].get_current_page()
-        t_bIsLive = False
         if self.diagrams.has_key(page):
             self.UpdateStatus(0)
 
             diagram = self.diagrams[page]
 
-            t_oProcessXML = XMLParser("<harpia>" + \
+            process_XML = XMLParser("<harpia>" + \
                                            str(DiagramControl(diagram).get_process_chain()) + \
                                            "</harpia>", fromString=True)
-            #print t_oProcessXML
 
-            graph_size = len(list(t_oProcessXML.getTag("harpia").getTag("properties").getTagChildren()))
+            graph_size = len(list(process_XML.getTag("harpia").getTag("properties").getTagChildren()))
 
             if graph_size > 1:
-                blocks = t_oProcessXML.getTag("harpia").getTag("properties").getChildTags("block")
-                for t_oBlockProperties in blocks:
-                    block_properties = t_oBlockProperties.getChildTags("property")
-                    if int(t_oBlockProperties.type) == 00:  # 00 = acquisition block
+                blocks = process_XML.getTag("harpia").getTag("properties").getChildTags("block")
+                for block_properties in blocks:
+                    block_properties = block_properties.getChildTags("property")
+                    if int(block_properties.type) == 00:  # 00 = acquisition block
                         inputType = 'file'
-                        for t_oProperty in block_properties:
-                            if t_oProperty.name == 'type':
-                                print t_oProperty.name
-                                inputType = t_oProperty.value
-
-                            ###Just in case we need to know if we are dealing with a live feed or not this early
-                            # if inputType == 'video' or inputType == 'live':
-                            #	#if not t_bIsLive:
-                            #		#t_bIsLive = True
+                        for block_property in block_properties:
+                            if block_property.name == 'type':
+                                print block_property.name
+                                inputType = block_property.value
 
                             # adoção do paradigma monolítico.. nada de ficar mandando imagens por sockets!!
-                            if t_oProperty.name == 'filename' and inputType == 'file':
-                                t_oProperty.value = os.path.expanduser(t_oProperty.value)
-                                t_oProperty.value = os.path.realpath(t_oProperty.value)
-                                if (not os.path.exists(t_oProperty.value)):
-                                    errMsg = _("Bad Filename: ") + t_oProperty.value
+                            if block_property.name == 'filename' and inputType == 'file':
+                                block_property.value = os.path.expanduser(block_property.value)
+                                block_property.value = os.path.realpath(block_property.value)
+                                if (not os.path.exists(block_property.value)):
+                                    errMsg = _("Bad Filename: ") + block_property.value
                                     print(errMsg)
                                     self.SetStatusMessage(errMsg, 0)
                                     return
 
-                    if int(t_oBlockProperties.type) == 01:  # 01 => save image
-                        for t_oProperty in block_properties:
-                            if t_oProperty.name == 'filename':
-                                t_oProperty.value = os.path.realpath(t_oProperty.value)
+                    if int(block_properties.type) == 01:  # 01 => save image
+                        for block_property in block_properties:
+                            if block_property.name == 'filename':
+                                block_property.value = os.path.realpath(block_property.value)
 
 
                     # seguindo o paradigma de não mandar mais nada.. vamos testar com o haar =]
                     # não vamos mandar mais nada mas vamos traduzir o path do haarCascade pra algo real
-                    if int(t_oBlockProperties.type) == 610:  # 610 => haar detector... passando a cascade .xml
-                        for t_oProperty in block_properties:
-                            if t_oProperty.name == 'cascade_name':
-                                t_oProperty.value = os.path.realpath(t_oProperty.value)
-                                if (not os.path.exists(t_oProperty.value)):
-                                    errMsg = _("Bad Filename: ") + t_oProperty.value
+                    if int(block_properties.type) == 610:  # 610 => haar detector... passando a cascade .xml
+                        for block_property in block_properties:
+                            if block_property.name == 'cascade_name':
+                                block_property.value = os.path.realpath(block_property.value)
+                                if (not os.path.exists(block_property.value)):
+                                    errMsg = _("Bad Filename: ") + block_property.value
                                     print(errMsg)
                                     self.SetStatusMessage(errMsg, 0)
                                     return
 
                 # cpscotti standalone!!!
-                t_lsProcessChain = []  # lista pra n precisar ficar copiando prum lado e pro otro o xml inteiro
-                t_lsProcessChain.append(t_oProcessXML.getXML())
+                process_chain = []  # lista pra n precisar ficar copiando prum lado e pro otro o xml inteiro
+                process_chain.append(t_oProcessXML.getXML())
 
-                t_Sm = s2iSessionManager.s2iSessionManager()
+                session_manager = s2iSessionManager.s2iSessionManager()
 
                 ## pegando o novo ID (criado pela s2iSessionManager) e passando para o s2idiagram
-                self.diagrams[page].set_session_id(t_Sm.session_id)
+                self.diagrams[page].set_session_id(session_manager.session_id)
 
                 # step sempre sera uma lista.. primeiro elemento eh uma mensagem, segundo eh o erro.. caso exista erro.. passar para o s2idiagram tb!
                 self.diagrams[page].set_error_log('')
                 t_bEverythingOk = True
-                for step in t_Sm.new_instance(t_lsProcessChain):
+                for step in session_manager.new_instance(process_chain):
                     if len(step) > 1:
                         if step[1] != '' and step[1] != None:
                             self.diagrams[page].append_error_log(step[1])
@@ -900,15 +891,15 @@ class S2iHarpiaFrontend(GladeWindow):
 
     # ----------------------------------------------------------------------
     def __load_examples_menu(self):
-        t_lListOfExamples = glob(self.data_dir + "examples/*")
-        t_lListOfExamples.sort()
+        list_of_examples = glob(self.data_dir + "examples/*")
+        list_of_examples.sort()
 
         self.widgets['fake_separator'].destroy()
         self.widgets.pop('fake_separator')
 
-        for example in t_lListOfExamples:
-            t_oMenuItem = gtk.MenuItem(example.split("/").pop())
-            self.widgets['examples_menu'].append(t_oMenuItem)
-            t_oMenuItem.connect("activate", self.__load_example)
+        for example in list_of_examples:
+            menu_item = gtk.MenuItem(example.split("/").pop())
+            self.widgets['examples_menu'].append(menu_item)
+            menu_item.connect("activate", self.__load_example)
             self.widgets['examples_menu'].show_all()
-            self.exampleMenuItens.append((t_oMenuItem, example))
+            self.exampleMenuItens.append((menu_item, example))
