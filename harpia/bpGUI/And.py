@@ -26,10 +26,12 @@
 #
 # ----------------------------------------------------------------------
 
-from harpia.GladeWindow import GladeWindow
 import gtk
-from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 import os
+
+from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
+from harpia.GladeWindow import GladeWindow
+
 # i18n
 import gettext
 
@@ -76,14 +78,12 @@ class Properties(GladeWindow, S2iCommonProperties):
         pass
 
     # ----------------------------------------------------------------------
-
     def on_and_confirm_clicked(self, *args):
         self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
         self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
         self.widgets['Properties'].destroy()
 
         # --------------------------Help Text--------------------------------------------
-
     def getHelp(self):#Função que chama a help
         return "Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades.\
         Primeira: Executa a operação entre duas imagens ponto a ponto.\

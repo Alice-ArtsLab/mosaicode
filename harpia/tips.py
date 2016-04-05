@@ -26,9 +26,8 @@
 
 
 #i18n
+from constants import *
 import gettext
-APP='harpia'
-DIR='/usr/share/harpia/po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)

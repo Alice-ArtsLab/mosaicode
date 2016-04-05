@@ -28,14 +28,13 @@
 
 import bpGUI
 from bpGUI import *
+from constants import *
 
-#i18n
 import gettext
-APP='harpia'
-DIR='/usr/share/harpia/po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
+
 
 block = {
         00: acquisition.getBlock(),

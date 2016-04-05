@@ -31,11 +31,12 @@ import os
 import gtk
 import gtk.glade
 # i18n
-import gettext
 
+from constants import *
+import gettext
 _ = gettext.gettext
-APP = 'harpia'
-DIR = '/usr/share/harpia/po'
+gettext.bindtextdomain(APP, DIR)
+gettext.textdomain(APP)
 
 
 # ----------------------------------------------------------------------

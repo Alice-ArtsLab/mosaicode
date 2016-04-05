@@ -30,8 +30,7 @@ import time
 from harpia.utils.XMLUtils import XMLParser
 
 from gerador import *
-
-TMPDIR = "/tmp/"
+from constants import *
 
 class s2iSessionManager:
     session_id = 0

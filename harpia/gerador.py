@@ -48,12 +48,10 @@ from RunPrg import RunPrg
 
 from bpGUI import *
 from harpia.utils.XMLUtils import XMLParser
+from constants import *
 
 # i18n
 import gettext
-
-APP = 'harpia'
-DIR = '/usr/local/share/harpia/po'
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)

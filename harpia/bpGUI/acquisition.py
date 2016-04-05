@@ -186,28 +186,14 @@ class Properties( GladeWindow, S2iCommonProperties):
 
                 self.widgets['ACQUWidth'].set_value( float(value[ :value.find('x')]) )
                 self.widgets['ACQUHeight'].set_value( float( value[value.find('x')+1: ]) )
-
-
-
         self.configure()
 
-        #load help text
-        #t_oS2iHelp = bt.bind_file("../etc/acquisition/acquisition.help")
-        # t_oS2iHelp = XMLParser(self.m_sDataDir+"help/acquisition"+ _("_en.help"))
-
-        # t_oTextBuffer = gtk.TextBuffer()
-
-        # t_oTextBuffer.set_text( unicode( str( t_oS2iHelp.getTag("help").getTag("content").getTagContent()) ) )
-
-        # self.widgets['HelpView'].set_buffer( t_oTextBuffer )
 
     #----------------------------------------------------------------------
-
     def __del__(self):
         pass
 
     #----------------------------------------------------------------------
-
     def on_acquisition_confirm_clicked( self, *args ):
         self.widgets['acquisition_confirm'].grab_focus()
         t_sFilename = unicode(self.widgets['ACQUFilename'].get_text())
@@ -284,11 +270,8 @@ class Properties( GladeWindow, S2iCommonProperties):
             Property.setAttr("value", new_value)
 
         self.m_oS2iBlockProperties.SetPropertiesXML( self.m_oPropertiesXML )
-
         self.m_oS2iBlockProperties.SetBorderColor( self.m_oBorderColor )
-
         self.m_oS2iBlockProperties.SetBackColor( self.m_oBackColor )
-
         self.widgets['Properties'].destroy()
 
     #------------------------Help Text----------------------------------------------
@@ -416,7 +399,7 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         self.widgets['frameRate_Label'].set_sensitive( False )
         self.widgets['frameRate'].set_sensitive( False )
-        self.widgets['streamProperties_label'].set_sensitive( False )
+        self.widgets['streamPropon_BackColorButton_clickederties_label'].set_sensitive( False )
         self.widgets['frameRate_label2'].set_sensitive( False )
 
     #----------------------------------------------------------------------
@@ -508,10 +491,6 @@ class Properties( GladeWindow, S2iCommonProperties):
         self.widgets['streamProperties_label'].set_sensitive( True )
         self.widgets['frameRate_label2'].set_sensitive( True )
 
-    #----------------------------------------------------------------------
-
-#AcquisitionProperties = Properties( )
-#AcquisitionProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
@@ -529,7 +508,7 @@ def generate(blockTemplate):
            size = propIter[1]
            Width = size[ :size.find('x')]
            Height = size[size.find('x')+1: ]
-       if (propIter[0] == 'camera' and flag == 'live'):#(flag<>'file') and (flag<>'newimage') and (flag<>'live')):
+       if (propIter[0] == 'camon_BackColorButton_clickedera' and flag == 'live'):#(flag<>'file') and (flag<>'newimage') and (flag<>'live')):
            tmpPack = [] #contendo [ blockNumber , camNum ]
            tmpPack.append(blockTemplate.blockNumber)
            tmpPack.append(propIter[1])
@@ -551,7 +530,7 @@ def generate(blockTemplate):
        blockTemplate.functionCall = \
            'CvCapture* block' + blockTemplate.blockNumber + '_capture = NULL; \n' + \
            'IplImage* block' + blockTemplate.blockNumber + '_frame = NULL; \n' + \
-           'block' + blockTemplate.blockNumber + '_capture = cvCaptureFromCAM(' + captureCamNumber + '); \n' + \
+           'block' + blockTon_BackColorButton_clickedemplate.blockNumber + '_capture = cvCaptureFromCAM(' + captureCamNumber + '); \n' + \
            'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
            'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
            'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
