@@ -37,11 +37,11 @@ import gtk
 
 from GladeWindow import GladeWindow
 from harpia.utils.XMLUtils import XMLParser
+from harpia import preferences
 
-
+from filefilters import *
 # Harpia
 
-# import s2ipngexport
 import s2idirectory
 
 from GcDiagram import *
@@ -79,13 +79,13 @@ class S2iHarpiaFrontend(GladeWindow):
 
     def __init__(self):
         """
-        Constructor. Initializes the GladeWindow object for signal connecting, creates a dictionary for the Blocks and BlocksProperties and loads the configurations.
+        Constructor. Initializes the GladeWindow object for signal connecting, creates a dictionary for the Blocks and loads the configurations.
         """
 
         self.exampleMenuItens = []
 
-        self.m_sDataDir = os.environ['HARPIA_DATA_DIR']
-        filename = self.m_sDataDir + 'glade/harpia_gui-1.0.ui'
+        self.data_dir = os.environ['HARPIA_DATA_DIR']
+        filename = self.data_dir + 'glade/harpia_gui-1.0.ui'
 
         widget_list = [
             'HarpiaFrontend',
@@ -98,7 +98,6 @@ class S2iHarpiaFrontend(GladeWindow):
             'ProcessImage',
             'ProcessToolBar',
             'CodeToolBar',
-            'UpdateToolBar',
             'ViewSource',
             'toolbar1',
             'examples_menu',
@@ -131,7 +130,6 @@ class S2iHarpiaFrontend(GladeWindow):
             'on_Preferences_clicked',
             'on_Export_clicked',
             'on_CloseMenuBar_activate',
-            'on_UpdateToolBar_clicked',
             'on_tip_activate',
             'on_ViewSource_clicked',
             'on_reset_tip_activate'
@@ -150,36 +148,16 @@ class S2iHarpiaFrontend(GladeWindow):
         for x in s2idirectory.block:
             self.Blocks[s2idirectory.block[x]["TreeGroup"]].append(s2idirectory.block[x]["Label"])
 
-        # Blocks Properties
-        self.BlocksProperties = dict()
-
-        for x in s2idirectory.block:
-            self.BlocksProperties[s2idirectory.block[x]["Label"]] = {"Inputs": len(s2idirectory.block[x]["InTypes"]),
-                                                                     "Outputs": len(s2idirectory.block[x]["OutTypes"])}
-
-        self.widgets['HarpiaFrontend'].set_icon_from_file(self.m_sDataDir + "images/harpia_ave.png")
-        self.m_oIconUpdate = gtk.Image()
-        self.m_oIconUpdate.set_from_file(self.m_sDataDir + "images/system-software-update.png")
-        self.m_oIconUpdate.show_all()
-        self.widgets['UpdateToolBar'].set_icon_widget(self.m_oIconUpdate)
+        self.widgets['HarpiaFrontend'].set_icon_from_file(self.data_dir + "images/harpia_ave.png")
         self.g_sTreeViewPath = "0,0"
-
-        if os.name == "nt":
-            if not os.path.exists('../updhrp.bat'):
-                self.widgets['toolbar1'].remove(self.widgets['UpdateToolBar'])
-        else:
-            if not os.path.exists('../updhrp.sh'):
-                self.widgets['toolbar1'].remove(self.widgets['UpdateToolBar'])
 
         self.m_nStatus = 0
         self.SaveAs = False
 
         # Member Diagram references
-        self.m_oGcDiagrams = {}
-        self.m_oSessionIDs = {}
+        self.diagrams = {}
         self.m_oCopyBuffer = (-1, -1)  # tuple (fromPage, [listOfBlocks]) ...listOfConns?
-        self.m_nCurrentIDSession = None
-        self.LoadExamplesMenu()
+        self.__load_examples_menu()
         self.__InsertBlocks()
         self.on_CloseMenuBar_activate()  # removing the dummie page
         self.on_NewToolBar_clicked()  # creating blank page
@@ -189,12 +167,10 @@ class S2iHarpiaFrontend(GladeWindow):
         tipOfTheDayWind.run()
 
     # ----------------------------------------------------------------------
-
     def __del__(self):
         pass
 
     # ----------------------------------------------------------------------
-
     def __InsertBlocks(self):
         """
         Inserts the blocks in the BlocksTree.
@@ -204,9 +180,7 @@ class S2iHarpiaFrontend(GladeWindow):
         t_oImage = gtk.CellRendererPixbuf()
 
         for t_sItem in self.Blocks.keys():
-
             t_oParent = t_oTreeStore.append(None, [t_sItem, t_oImage])
-
             for t_nIndex in range(len(self.Blocks[t_sItem])):
                 t_oTreeStore.append(t_oParent, [self.Blocks[t_sItem][t_nIndex], t_oImage])
 
@@ -216,12 +190,6 @@ class S2iHarpiaFrontend(GladeWindow):
         t_oColumn = gtk.TreeViewColumn(_("Available Blocks"), t_oTextRender, text=0)
         self.widgets['BlocksTreeView'].append_column(t_oColumn)
 
-        #		TARGETS = [
-        #			('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
-        #			('text/plain', 0, 1),
-        #			('TEXT', 0, 2),
-        #			('STRING', 0, 3),
-        #			]
 
         # drag......
         self.widgets['BlocksTreeView'].enable_model_drag_source(gtk.gdk.BUTTON1_MASK,
@@ -234,16 +202,16 @@ class S2iHarpiaFrontend(GladeWindow):
         self.widgets['WorkArea'].connect("drag_data_received", self.drag_data_received)
         self.widgets['WorkArea'].drag_dest_set(
             gtk.DEST_DEFAULT_MOTION | gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
-            [('text/plain', gtk.TARGET_SAME_APP, 1)], gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY)
+            [('text/plain', gtk.TARGET_SAME_APP, 1)],
+            gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY)
 
+    # ----------------------------------------------------------------------
     def drag_data_received(self, widget, context, x, y, selection, targetType, time):
         # print("Shit Connected, Drop occurred at: (" + str(x) + "," + str(y) + ")")
         # erdtmann: dunno why 0, but it works (I suppose it's 'cos there's only one column in the tree)
         # path is the way to find the desired block on the treeview
         # g_iColumn = 0
-
         self.on_BlocksTreeView_row_activated_pos(self.widgets['BlocksTreeView'], self.g_sTreeViewPath, 0, x, y)
-
         return
 
     # ----------------------------------------------------------------------
@@ -255,55 +223,49 @@ class S2iHarpiaFrontend(GladeWindow):
         # necessary in order to the notebook receive the drag:
         return
 
+    # ----------------------------------------------------------------------
     def make_pb(self, tvcolumn, cell, model, iter):
         stock = model.get_value(iter, 1)
         pb = self.widgets["BlocksTreeView"].render_icon(stock, gtk.ICON_SIZE_MENU, None)
         cell.set_property('pixbuf', pb)
         return
 
+    # ----------------------------------------------------------------------
     def on_NewMenuBar_activate(self, *args):
         print "New Menu Bar Activate"
         self.on_NewToolBar_clicked()
 
     # ----------------------------------------------------------------------
-
     def on_OpenMenuBar_activate(self, *args):
-
         self.on_OpenToolBar_clicked()
 
     # ----------------------------------------------------------------------
-
     def on_SaveMenuBar_activate(self, *args):
-
         self.on_SaveToolBar_clicked()
 
     # ----------------------------------------------------------------------
-
     def on_SaveASMenuBar_activate(self, *args):
-
         self.SaveAs = True
-
         self.on_SaveToolBar_clicked()
 
     # ----------------------------------------------------------------------
-
     def on_QuitMenuBar_activate(self, *args):
         """
         Callback function that destroys the windows when quit menu bar clicked.
         """
-
         self.on_HarpiaFrontend_destroy()
 
     # ----------------------------------------------------------------------
-
     def on_tip_activate(self, *args):
         tipOfTheDayWind = TipOfTheDay.TipOfTheDay()
         tipOfTheDayWind.run()
 
+    # ----------------------------------------------------------------------
     def on_reset_tip_activate(self, *args):
         tipOfTheDayWind = TipOfTheDay.TipOfTheDay()
         tipOfTheDayWind.GenerateBlankConf()
 
+    # ----------------------------------------------------------------------
     def on_CutMenuBar_activate(self, *args):
         """
         Callback function called when CutMenuBar is activated. Copy the block an removes from the diagram.
@@ -311,20 +273,18 @@ class S2iHarpiaFrontend(GladeWindow):
         print "Cut functionality not implemented yet"
 
     # ----------------------------------------------------------------------
-
     def on_CopyMenuBar_activate(self, *args):
         """
         Callback function called when CopyMenuBar is activated. Just copy the block.
         """
-        if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-            t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
 
-        self.m_oCopyBuffer = (
-        self.widgets['WorkArea'].get_current_page(), t_oGcDiagram.get_block_on_focus())
+        self.m_oCopyBuffer = (self.widgets['WorkArea'].get_current_page(),
+                              diagram.get_block_on_focus())
         print self.m_oCopyBuffer
 
     # ----------------------------------------------------------------------
-
     def on_PasteMenuBar_activate(self, *args):
         """
         Callback function called when PasteMenuBar is activated.
@@ -335,31 +295,29 @@ class S2iHarpiaFrontend(GladeWindow):
 
         # print "pasting"
 
-        if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-            t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
 
-            if self.m_oGcDiagrams.has_key(self.m_oCopyBuffer[0]):
-                t_oFromDiagram = self.m_oGcDiagrams[self.m_oCopyBuffer[0]]
+            if self.diagrams.has_key(self.m_oCopyBuffer[0]):
+                t_oFromDiagram = self.diagrams[self.m_oCopyBuffer[0]]
 
                 if t_oFromDiagram.blocks.has_key(self.m_oCopyBuffer[1]):
-                    newBlockId = t_oGcDiagram.insert_block(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
-                    t_oGcDiagram.blocks[newBlockId].SetPropertiesXML_nID(
+                    newBlockId = diagram.insert_block(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
+                    diagram.blocks[newBlockId].SetPropertiesXML_nID(
                         t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
 
     # ----------------------------------------------------------------------
-
     def on_DeleteMenuBar_activate(self, *args):
         """
         Callback function called when DeleteMenuBar is activated. Deletes the selected item.
         """
-        if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-            t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-            blockId = t_oGcDiagram.get_block_on_focus()
-            if t_oGcDiagram.blocks.has_key(blockId):
-                t_oGcDiagram.delete_block(blockId)
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
+            blockId = diagram.get_block_on_focus()
+            if diagram.blocks.has_key(blockId):
+                diagram.delete_block(blockId)
 
     # ----------------------------------------------------------------------
-
     def on_AboutMenuBar_activate(self, *args):
         """
         Callback function called when AboutMenuBar is activated. Loads the about window.
@@ -369,7 +327,6 @@ class S2iHarpiaFrontend(GladeWindow):
         About.show(center=0)
 
     # ----------------------------------------------------------------------
-
     def on_NewToolBar_clicked(self, *args):
         """
         Callback function called when NewToolBar is clicked. Creates a new tab with an empty diagram.
@@ -395,24 +352,20 @@ class S2iHarpiaFrontend(GladeWindow):
         t_oTable.show_all()
 
         # tab label
-        t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
+        current_page = self.widgets['WorkArea'].get_current_page()
 
-        t_oLabel = gtk.Label(_("Unnamed ") + str(t_nCurrentPage + 1) + "[*]")
+        label = gtk.Label(_("Unnamed ") + str(current_page + 1) + "[*]")
 
         self.widgets['WorkArea'].set_show_tabs(True)
-        self.widgets['WorkArea'].append_page(t_oTable, t_oLabel)
+        self.widgets['WorkArea'].append_page(t_oTable, label)
 
         t_nSelectedPage = self.widgets['WorkArea'].get_n_pages() - 1
         self.widgets['WorkArea'].set_current_page(t_nSelectedPage)
 
-        self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()] = t_oNewDiagram
+        self.diagrams[self.widgets['WorkArea'].get_current_page()] = t_oNewDiagram
 
-    # self.ShowGrid( self.m_bShowGrid )
-
-    # self.SetGridInterval( self.m_nGridInterval )
 
     # ----------------------------------------------------------------------
-
     def on_OpenToolBar_clicked(self, *args):
         # Opens a dialog for file selection and opens the file.
 
@@ -427,15 +380,8 @@ class S2iHarpiaFrontend(GladeWindow):
         if os.name == 'posix':
             t_oDialog.set_current_folder(os.path.expanduser("~"))
 
-        t_oFilter = gtk.FileFilter()
-        t_oFilter.set_name(_("All Archives"))
-        t_oFilter.add_pattern("*")
-        t_oDialog.add_filter(t_oFilter)
-
-        t_oFilter = gtk.FileFilter()
-        t_oFilter.set_name(_("Harpia Files"))
-        t_oFilter.add_pattern("*.hrp")
-        t_oDialog.add_filter(t_oFilter)
+        t_oDialog.add_filter(AllFileFilter())
+        t_oDialog.add_filter(HarpiaFileFilter())
 
         t_oResponse = t_oDialog.run()
 
@@ -443,34 +389,30 @@ class S2iHarpiaFrontend(GladeWindow):
             ##create a new workspace
             self.on_NewToolBar_clicked()
 
-            t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
-            t_oGcDiagram = self.m_oGcDiagrams[t_nCurrentPage]
+            current_page = self.widgets['WorkArea'].get_current_page()
+            diagram = self.diagrams[current_page]
 
             if len(t_oDialog.get_filename()) > 0:
-                t_oGcDiagram.set_file_name(t_oDialog.get_filename())
+                diagram.set_file_name(t_oDialog.get_filename())
 
         t_oDialog.destroy()
 
-        if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-            t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-            if t_oGcDiagram.get_file_name() is not None:
-                if DiagramControl(t_oGcDiagram).load():
-                    t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
-                    t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
-                    t_sNewLabel = t_oGcDiagram.get_file_name().split("/").pop()
-                    t_oLabel = gtk.Label(str(t_sNewLabel))
-                    self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
+            if diagram.get_file_name() is not None:
+                if DiagramControl(diagram).load():
+                    new_label = diagram.get_file_name().split("/").pop()
+                    self.__update_tab_name(new_label)
 
     # ----------------------------------------------------------------------
-
     def on_SaveToolBar_clicked(self, *args):
         # Opens a dialog for file and path selection. Saves the file and if necessary updates the tab name.
 
-        if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
 
-            t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
 
-            if t_oGcDiagram.get_file_name() is None or self.SaveAs:
+            if diagram.get_file_name() is None or self.SaveAs:
                 self.SaveAs = False
 
                 t_oDialog = gtk.FileChooserDialog(_("Save..."),
@@ -484,36 +426,30 @@ class S2iHarpiaFrontend(GladeWindow):
                 if os.name == 'posix':
                     t_oDialog.set_current_folder(os.path.expanduser("~"))
 
-                t_oFilter = gtk.FileFilter()
-                t_oFilter.set_name(_("All Archives"))
-                t_oFilter.add_pattern("*")
-                t_oDialog.add_filter(t_oFilter)
-
-                t_oFilter = gtk.FileFilter()
-                t_oFilter.set_name(_("Harpia Files"))
-                t_oFilter.add_pattern("*.hrp")
-                t_oDialog.add_filter(t_oFilter)
+                t_oDialog.add_filter(AllFileFilter())
+                t_oDialog.add_filter(HarpiaFileFilter())
 
                 t_oResponse = t_oDialog.run()
                 if t_oResponse == gtk.RESPONSE_OK:
-                    t_oGcDiagram.set_file_name(t_oDialog.get_filename())
+                    diagram.set_file_name(t_oDialog.get_filename())
 
                 t_oDialog.destroy()
 
-            if t_oGcDiagram.get_file_name() is not None:
-                if len(t_oGcDiagram.get_file_name()) > 0:
-                    DiagramControl(t_oGcDiagram).save()
-
-                    ##update tab name
-                    t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
-                    t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
-                    t_sNewLabelLen = int(len(t_oGcDiagram.get_file_name().split("/")) - 1)
-                    t_sNewLabel = t_oGcDiagram.get_file_name().split("/")[t_sNewLabelLen]
-                    t_oLabel = gtk.Label(str(t_sNewLabel))
-                    self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
+            if diagram.get_file_name() is not None:
+                if len(diagram.get_file_name()) > 0:
+                    DiagramControl(diagram).save()
+                    new_label_len = int(len(diagram.get_file_name().split("/")) - 1)
+                    new_label = diagram.get_file_name().split("/")[new_label_len]
+                    self.__update_tab_name(new_label)
 
     # ----------------------------------------------------------------------
+    def __update_tab_name(self, name):
+        current_page = self.widgets['WorkArea'].get_current_page()
+        child = self.widgets['WorkArea'].get_nth_page(current_page)
+        label = gtk.Label(str(name))
+        self.widgets['WorkArea'].set_tab_label(child, label)
 
+    # ----------------------------------------------------------------------
     def UpdateStatus(self, a_nStatus):
         """
         Receives a status and shows in the StatusBar.
@@ -547,11 +483,6 @@ class S2iHarpiaFrontend(GladeWindow):
                             9: _("Save error"),
                             10: _("Code Saved")}
 
-        # if a_nStatus == 7 or a_nStatus == 10:
-        # self.widgets['ProcessImage'].set_from_stock( gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
-        # else:
-        # self.widgets['ProcessImage'].set_from_stock( gtk.STOCK_NO, gtk.ICON_SIZE_MENU  )
-
         self.widgets['StatusLabel'].set_text(t_oStatusMessage[a_nStatus])
 
         while gtk.events_pending():
@@ -572,24 +503,16 @@ class S2iHarpiaFrontend(GladeWindow):
             gtk.main_iteration(False)
 
     # ----------------------------------------------------------------------
-
-
     def on_ProcessToolBar_clickedIneer(self):
-        t_nPage = self.widgets['WorkArea'].get_current_page()
+        page = self.widgets['WorkArea'].get_current_page()
         t_bIsLive = False
-        if self.m_oGcDiagrams.has_key(t_nPage):
+        if self.diagrams.has_key(page):
             self.UpdateStatus(0)
 
-            t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            #print "PROCESS CHAIN",t_oS2iDiagram.GetProcessChain()
-            #t_oProcessXML = bt.bind_string("<harpia>" + \
-            #                               str(t_oGcDiagram.GetProcessChain()) + \
-            #                               "</harpia>")
-            #print len(list(t_oProcessXML.harpia.properties.childNodes))
-
+            diagram = self.diagrams[page]
 
             t_oProcessXML = XMLParser("<harpia>" + \
-                                           str(t_oGcDiagram.GetProcessChain()) + \
+                                           str(DiagramControl(diagram).get_process_chain()) + \
                                            "</harpia>", fromString=True)
             #print t_oProcessXML
 
@@ -646,15 +569,15 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_Sm = s2iSessionManager.s2iSessionManager()
 
                 ## pegando o novo ID (criado pela s2iSessionManager) e passando para o s2idiagram
-                self.m_oGcDiagrams[t_nPage].set_session_id(t_Sm.m_sSessionId)
+                self.diagrams[page].set_session_id(t_Sm.session_id)
 
                 # step sempre sera uma lista.. primeiro elemento eh uma mensagem, segundo eh o erro.. caso exista erro.. passar para o s2idiagram tb!
-                self.m_oGcDiagrams[t_nPage].set_error_log('')
+                self.diagrams[page].set_error_log('')
                 t_bEverythingOk = True
-                for step in t_Sm.NewInstance(t_lsProcessChain):
+                for step in t_Sm.new_instance(t_lsProcessChain):
                     if len(step) > 1:
                         if step[1] != '' and step[1] != None:
-                            self.m_oGcDiagrams[t_nPage].append_error_log(step[1])
+                            self.diagrams[page].append_error_log(step[1])
                             t_bEverythingOk = False
                     self.SetStatusMessage(step[0], t_bEverythingOk)
                     # self.widgets['StatusLabel'].set_text()
@@ -686,8 +609,8 @@ class S2iHarpiaFrontend(GladeWindow):
 
     # ----------------------------------------------------------------------
     def on_CodeToolBar_clickedIneer(self):
-        t_nPage = self.widgets['WorkArea'].get_current_page()
-        if not self.m_oGcDiagrams.has_key(t_nPage):
+        page = self.widgets['WorkArea'].get_current_page()
+        if not self.diagrams.has_key(page):
             self.widgets['CodeToolBar'].set_sensitive(True)
             # message
             self.SetStatusMessage(_("Could not find current diagram"), 1)
@@ -704,15 +627,9 @@ class S2iHarpiaFrontend(GladeWindow):
         if os.name == 'posix':
             t_oDialog.set_current_folder(os.path.expanduser("~"))
 
-        t_oFilter = gtk.FileFilter()
-        t_oFilter.set_name(_("C Code File (*.c)"))
-        t_oFilter.add_pattern("*.c")
-        t_oDialog.add_filter(t_oFilter)
+        t_oDialog.add_filter(AllFileFilter())
+        t_oDialog.add_filter(CCodeFileFilter())
 
-        t_oFilter = gtk.FileFilter()
-        t_oFilter.set_name(_("All Files"))
-        t_oFilter.add_pattern("*")
-        t_oDialog.add_filter(t_oFilter)
 
         t_oResponse = t_oDialog.run()
 
@@ -722,7 +639,7 @@ class S2iHarpiaFrontend(GladeWindow):
             if not t_sOutputName.endswith('.c'):
                 t_sOutputName += '.c'
 
-            t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[t_nPage].get_session_id())
+            t_sTmpName = "harpiaBETMP0" + str(self.diagrams[page].get_session_id())
             t_sBigCodePath = "/tmp/" + t_sTmpName + "/" + t_sTmpName + ".c"
             if not os.path.exists(t_sBigCodePath):
                 # message regarding code absence
@@ -751,55 +668,42 @@ class S2iHarpiaFrontend(GladeWindow):
 
 
     # ----------------------------------------------------------------------
-
     def on_ZoomOutToolBar_clicked(self, *args):
         """
         Just ZoomOut the current page. Exponentialy, thus preventing the "0 pixels_per_unit bug"
         """
-        t_nPage = self.widgets['WorkArea'].get_current_page()
-        if self.m_oGcDiagrams.has_key(t_nPage):
-            t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.set_zoom(ZOOM_OUT)
+        page = self.widgets['WorkArea'].get_current_page()
+        if self.diagrams.has_key(page):
+            diagram = self.diagrams[page]
+            diagram.set_zoom(ZOOM_OUT)
 
     # ----------------------------------------------------------------------
-
     def on_ZoomInToolBar_clicked(self, *args):
         """
         Just ZoomIn the current view.
         """
-        t_nPage = self.widgets['WorkArea'].get_current_page()
-        if self.m_oGcDiagrams.has_key(t_nPage):
-            t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.set_zoom(ZOOM_IN)
+        page = self.widgets['WorkArea'].get_current_page()
+        if self.diagrams.has_key(page):
+            diagram = self.diagrams[page]
+            diagram.set_zoom(ZOOM_IN)
 
     # ----------------------------------------------------------------------
-
     def on_ZoomDefaultToolBar_clicked(self, *args):
         """
         Just back to the default zoom view.
         """
-        t_nPage = self.widgets['WorkArea'].get_current_page()
-        if self.m_oGcDiagrams.has_key(t_nPage):
-            t_oGcDiagram = self.m_oGcDiagrams[t_nPage]
-            t_oGcDiagram.set_zoom(ZOOM_ORIGINAL)
+        page = self.widgets['WorkArea'].get_current_page()
+        if self.diagrams.has_key(page):
+            diagram = self.diagrams[page]
+            diagram.set_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
-
-    def on_UpdateToolBar_clicked(self, *args):
-        """
-        Callback function called when Update is clicked. Update this Harpia version with the last in the server.
-        """
-        pass
-
-        # ----------------------------------------------------------------------
-
     def on_ViewSource_clicked(self, *args):
         """
         Callback function called when ViewSource is clicked.
 
         """
         win = gtk.Window()
-        #		win.connect("delete-event", gtk.main_quit)
         sw = gtk.ScrolledWindow()
         win.add(sw)
         sw.show()
@@ -813,8 +717,8 @@ class S2iHarpiaFrontend(GladeWindow):
         win.show_all()
         win.resize(800, 600)
 
-        t_nPage = self.widgets['WorkArea'].get_current_page()
-        t_sTmpName = "harpiaBETMP0" + str(self.m_oGcDiagrams[t_nPage].get_session_id())
+        page = self.widgets['WorkArea'].get_current_page()
+        t_sTmpName = "harpiaBETMP0" + str(self.diagrams[page].get_session_id())
         t_sBigCodePath = "/tmp/" + t_sTmpName + "/" + t_sTmpName + ".c"
         temp_file = open(t_sBigCodePath, 'r')
         string = temp_file.read()
@@ -822,25 +726,22 @@ class S2iHarpiaFrontend(GladeWindow):
         textbuffer.set_text(string)
 
     # ----------------------------------------------------------------------
-
     def on_Preferences_clicked(self, *args):
         """
         Callback function called when Preferences is clicked. Loads the preferences window.
         """
-        from harpia import preferences
         Prefs = preferences.Preferences(self)
         Prefs.show(center=0)
 
     # ----------------------------------------------------------------------
-
     def on_Export_clicked(self, *args):
         """
         Callback function called when Export is clicked. Calls the Execute function in s2ipngexport class, that saves a blocks diagram in a .png file.
         """
 
-        if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
 
-            t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
             t_oDialog = gtk.FileChooserDialog(_("Export Diagram to PNG..."),
                                               None,
                                               gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -852,10 +753,7 @@ class S2iHarpiaFrontend(GladeWindow):
             if os.name == 'posix':
                 t_oDialog.set_current_folder(os.path.expanduser("~"))
 
-            t_oFilter = gtk.FileFilter()
-            t_oFilter.set_name(_("Png files"))
-            t_oFilter.add_pattern("*.png")
-            t_oDialog.add_filter(t_oFilter)
+            t_oDialog.add_filter(PNGFileFilter())
 
             t_oResponse = t_oDialog.run()
 
@@ -873,10 +771,9 @@ class S2iHarpiaFrontend(GladeWindow):
                 del t_oDialog
                 while gtk.events_pending():
                     gtk.main_iteration(False)
-                DiagramControl(t_oGcDiagram).export_png(filename)
+                DiagramControl(diagram).export_png(filename)
 
     # ----------------------------------------------------------------------
-
     def on_SearchButton_clicked(self, *args):
         """
         Callback function called when SearchButton is clicked. Search for block and shows it.
@@ -894,7 +791,6 @@ class S2iHarpiaFrontend(GladeWindow):
                 self.widgets['BlocksTreeView'].collapse_all()
                 self.widgets['BlocksTreeView'].expand_row((t_nClassIndex), True)
                 self.widgets['BlocksTreeView'].set_cursor((t_nClassIndex))
-
                 return
 
             for t_nBlockIndex, t_sBlockName in enumerate(self.Blocks[t_sClassName]):
@@ -903,15 +799,9 @@ class S2iHarpiaFrontend(GladeWindow):
                     self.widgets['BlocksTreeView'].collapse_all()
                     self.widgets['BlocksTreeView'].expand_to_path((t_nClassIndex, t_nBlockIndex))
                     self.widgets['BlocksTreeView'].set_cursor((t_nClassIndex, t_nBlockIndex))
-
                     return
 
     # ----------------------------------------------------------------------
-
-
-    # VERY WEIRD!!!!!
-    # YES, I TRYED making on_BlocksTreeView_row_activated just calling on_BlocksTreeView_row_activated_pos(...,0,0) but it didn't worked.. so.. fuck it..
-
     def on_BlocksTreeView_row_activated(self, treeview, path, column):
         """
         Callback function called when BlocksTreeView_row is activated. Loads the block in the diagram.
@@ -920,10 +810,10 @@ class S2iHarpiaFrontend(GladeWindow):
         t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewModel.get_iter(path), 0)
 
         if t_sBlockName not in self.Blocks.keys():
-            t_nPage = self.widgets['WorkArea'].get_current_page()
+            page = self.widgets['WorkArea'].get_current_page()
 
-            if self.m_oGcDiagrams.has_key(t_nPage):
-                t_oCurrentGcDiagram = self.m_oGcDiagrams[t_nPage]
+            if self.diagrams.has_key(page):
+                t_oCurrentGcDiagram = self.diagrams[page]
                 t_nBlockType = -1
 
                 for t_oBlockTypeIter in s2idirectory.block.keys():
@@ -932,6 +822,7 @@ class S2iHarpiaFrontend(GladeWindow):
                         break
                 t_oCurrentGcDiagram.insert_block(t_nBlockType)
 
+    # ----------------------------------------------------------------------
     def on_BlocksTreeView_row_activated_pos(self, treeview, path, column, x, y):
         """
         Callback function called when BlocksTreeView_row is activated. Loads the block in the diagram.
@@ -940,9 +831,9 @@ class S2iHarpiaFrontend(GladeWindow):
         t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewModel.get_iter(path), 0)
 
         if t_sBlockName not in self.Blocks.keys():
-            t_nPage = self.widgets['WorkArea'].get_current_page()
-            if self.m_oGcDiagrams.has_key(t_nPage):
-                t_oCurrentGcDiagram = self.m_oGcDiagrams[t_nPage]
+            page = self.widgets['WorkArea'].get_current_page()
+            if self.diagrams.has_key(page):
+                t_oCurrentGcDiagram = self.diagrams[page]
                 t_nBlockType = -1
                 for t_oBlockTypeIter in s2idirectory.block.keys():
                     if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == t_sBlockName:
@@ -951,7 +842,6 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_oCurrentGcDiagram.insert_block(t_nBlockType, x, y)
 
     # ----------------------------------------------------------------------
-
     def on_BlocksTreeView_cursor_changed(self, treeview):
         """
         Callback function called when BlocksTreeView cursor changed. Updates the Description.
@@ -969,17 +859,6 @@ class S2iHarpiaFrontend(GladeWindow):
                     break
 
     # ----------------------------------------------------------------------
-
-    def OnEvent(self, a_oView, a_oEvent):
-        print "OnEvent( self, a_oView, a_oEvent ) not implemented (it is distributed among diagram objects)"
-
-    # ----------------------------------------------------------------------
-
-    def fixBlockPositions(self):  # this function removes all the blocks of unreacheable states
-        print "fixBlockPositions not implemented (it is distributed among diagram objects)"
-
-    # ----------------------------------------------------------------------
-
     def on_HarpiaFrontend_destroy(self, *args):
         """
         Destroys the Harpia Window.
@@ -987,7 +866,6 @@ class S2iHarpiaFrontend(GladeWindow):
         gtk.main_quit()
 
     # ----------------------------------------------------------------------
-
     def __CopyBlock(self, a_oBlock):
         """
         Receives a block and copy.
@@ -995,23 +873,21 @@ class S2iHarpiaFrontend(GladeWindow):
         print "Copy not implemented"
 
     # ----------------------------------------------------------------------
-
     def on_CloseMenuBar_activate(self, *args):
         """
         Callback funtion called when CloseMenuBar is activated. Close the current diagram tab.
         """
-        t_nCurrentTabIndex = self.widgets['WorkArea'].get_current_page()
-        if t_nCurrentTabIndex <> -1:
-            self.widgets["WorkArea"].remove_page(t_nCurrentTabIndex)
-            if self.m_oGcDiagrams.has_key(t_nCurrentTabIndex):
-                del self.m_oGcDiagrams[t_nCurrentTabIndex]
-            t_oGcDiagrams = {}
-            for t_nTabIndex, t_nOldTabIndex in enumerate(self.m_oGcDiagrams.keys()):
-                t_oGcDiagrams[t_nTabIndex] = self.m_oGcDiagrams[t_nOldTabIndex]
-            self.m_oGcDiagrams = t_oGcDiagrams
+        current_tab_index = self.widgets['WorkArea'].get_current_page()
+        if current_tab_index <> -1:
+            self.widgets["WorkArea"].remove_page(current_tab_index)
+            if self.diagrams.has_key(current_tab_index):
+                del self.diagrams[current_tab_index]
+            diagrams = {}
+            for t_nTabIndex, t_nOldTabIndex in enumerate(self.diagrams.keys()):
+                diagrams[t_nTabIndex] = self.diagrams[t_nOldTabIndex]
+            self.diagrams = diagrams
 
     # ----------------------------------------------------------------------
-
     def ShowGrid(self, a_bShowGrid):
         """
         Shows the grid or not based on the boolean received as argument.
@@ -1019,7 +895,6 @@ class S2iHarpiaFrontend(GladeWindow):
         print "no grids"
 
     # ----------------------------------------------------------------------
-
     def SetGridInterval(self, a_nGridInterval):
         """
         Defines the Grid interval and sets the diacanvas.
@@ -1027,25 +902,21 @@ class S2iHarpiaFrontend(GladeWindow):
         print "no grids"
 
     # ----------------------------------------------------------------------
-
-    def LoadExample(self, *args):
+    def __load_example(self, *args):
         for example in self.exampleMenuItens:
             if example[0] == args[0]:
                 self.on_NewToolBar_clicked()  # abrindo nova pagina
-                if self.m_oGcDiagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-                    t_oGcDiagram = self.m_oGcDiagrams[self.widgets['WorkArea'].get_current_page()]
-                    t_oGcDiagram.set_file_name(example[1])
-                    if t_oGcDiagram.get_file_name() is not None:
-                        if DiagramControl(t_oGcDiagram).load():
-                            t_nCurrentPage = self.widgets['WorkArea'].get_current_page()
-                            t_oChild = self.widgets['WorkArea'].get_nth_page(t_nCurrentPage)
-                            t_sNewLabel = t_oGcDiagram.get_file_name().split("/").pop()
-                            t_oLabel = gtk.Label(str(t_sNewLabel))
-                            self.widgets['WorkArea'].set_tab_label(t_oChild, t_oLabel)
-                        # print example[1]
+                if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+                    diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
+                    diagram.set_file_name(example[1])
+                    if diagram.get_file_name() is not None:
+                        if DiagramControl(diagram).load():
+                            new_label = diagram.get_file_name().split("/").pop()
+                            self.__update_tab_name(new_label)
 
-    def LoadExamplesMenu(self):
-        t_lListOfExamples = glob(self.m_sDataDir + "examples/*")
+    # ----------------------------------------------------------------------
+    def __load_examples_menu(self):
+        t_lListOfExamples = glob(self.data_dir + "examples/*")
         t_lListOfExamples.sort()
 
         self.widgets['fake_separator'].destroy()
@@ -1054,6 +925,6 @@ class S2iHarpiaFrontend(GladeWindow):
         for example in t_lListOfExamples:
             t_oMenuItem = gtk.MenuItem(example.split("/").pop())
             self.widgets['examples_menu'].append(t_oMenuItem)
-            t_oMenuItem.connect("activate", self.LoadExample)
+            t_oMenuItem.connect("activate", self.__load_example)
             self.widgets['examples_menu'].show_all()
             self.exampleMenuItens.append((t_oMenuItem, example))

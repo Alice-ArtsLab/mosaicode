@@ -31,43 +31,26 @@ from harpia.utils.XMLUtils import XMLParser
 
 from gerador import *
 
+TMPDIR = "/tmp/"
 
 class s2iSessionManager:
-    m_sSessionId = 0
-    m_sDirName = "harpiaBETMP0"
-    TMPDIR = "/tmp/"
-
-    HARPIARESPONSE = """
-<harpiamessage>
-    <session value="88"/>
-	<version value="88"/>
-	<commands>
-		<command name="newsession">
-			<param name="status">completed</param>
-			<param name="session">666</param>
-			<param name="block"></param>
-			<param name="output"></param>
-			<param name="data"></param>
-		</command>
-	</commands>
-</harpiamessage>
-"""
-
-    m_sOldPath = ""
+    session_id = 0
+    dir_name = "harpiaBETMP0"
+    old_path = ""
 
     def __init__(self):
-        self.m_sSessionId = str(time.time())
-        self.m_sDirName += self.m_sSessionId
-        self.m_sOldPath = os.path.realpath(os.curdir)
+        self.session_id = str(time.time())
+        self.dir_name += self.session_id
+        self.old_path = os.path.realpath(os.curdir)
 
-    def MakeDir(self):
-        os.chdir(self.TMPDIR)
-        os.mkdir(self.m_sDirName)
+    def __make_dir(self):
+        os.chdir(TMPDIR)
+        os.mkdir(self.dir_name)
         return
 
-    def StoreXML(self, a_lsXML=["<harpia></harpia>"]):
+    def __store_XML(self, a_lsXML=["<harpia></harpia>"]):
         # try:
-        os.chdir(self.TMPDIR + '/' + self.m_sDirName)
+        os.chdir(TMPDIR + '/' + self.dir_name)
         t_oStoreFile = file('imageProcessingChain.xml', 'w')
         t_oStoreFile.write(a_lsXML[0])
         t_oStoreFile.close()
@@ -75,28 +58,20 @@ class s2iSessionManager:
         # print "Problems Saving xml"
         return
 
-    def RunGerador(self):
+    def __run_generator(self):
         # changes dir...
-        os.chdir(self.TMPDIR + '/' + self.m_sDirName)
-        # This is totally useless... it works with nothing
-        INSTALLDIR = "/"
-        # This is totally useless... it works with nothing
+        os.chdir(TMPDIR + '/' + self.dir_name)
 
-        for step in parseAndGenerate(self.m_sDirName, 'imageProcessingChain.xml', INSTALLDIR):
+        for step in parseAndGenerate(self.dir_name, 'imageProcessingChain.xml', "/"):
             yield step
 
         # comes back to original dir
-        os.chdir(self.m_sOldPath)
-
+        os.chdir(self.old_path)
         return
 
-    def ReturnResponse(self):
-        t_oResponse = XMLParser(self.HARPIARESPONSE, fromString=True)
-        return t_oResponse
-
-    def NewInstance(self, a_lsXML=["<harpia></harpia>"]):
-        self.MakeDir()
-        self.StoreXML(a_lsXML)
-        for step in self.RunGerador():
+    def new_instance(self, a_lsXML=["<harpia></harpia>"]):
+        self.__make_dir()
+        self.__store_XML(a_lsXML)
+        for step in self.__run_generator():
             yield step
         return

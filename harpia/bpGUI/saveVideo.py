@@ -31,6 +31,8 @@ import gtk
 from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
 
+from harpia.filefilters import * 
+
 # i18n
 import os
 from harpia.utils.XMLUtils import XMLParser
@@ -199,18 +201,8 @@ class Properties(GladeWindow, S2iCommonProperties):
         if os.name == 'posix':
             dialog.set_current_folder(os.path.expanduser("~"))
 
-        filter = gtk.FileFilter()
-        filter.set_name("Todos os arquivos")
-        filter.add_pattern("*")
-        dialog.add_filter(filter)
-
-        filter = gtk.FileFilter()
-        filter.set_name("videos")
-        filter.add_mime_type("*.mpeg")
-        filter.add_mime_type("*.avi")
-        filter.add_mime_type("*.mpg")
-        filter.add_mime_type("*.wmv")
-        dialog.add_filter(filter)
+        dialog.add_filter(AllFileFilter())
+        dialog.add_filter(VideoFileFilter())
 
         response = dialog.run()
         if response == gtk.RESPONSE_OK:

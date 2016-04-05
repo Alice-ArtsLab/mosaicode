@@ -51,7 +51,7 @@ class DiagramControl():
             Network += "</block>\n"
         return (Properties, Network)
 
-    def __get_process_chain(self, a_bKeepNonFlowing=False):
+    def get_process_chain(self, a_bKeepNonFlowing=False):
     # frontend will get only the valid chain although saving will include the invalid ones
         Properties = "<properties>\n  "
         Network = "<network>\n"
@@ -130,7 +130,6 @@ class DiagramControl():
                                                 (int(conn_id) - 1),
                                                 int(conn_inblock),
                                                 (int(conn_input) - 1))
-                        # this "-1" are "paired" with those "+1" at line 286 (__get_process_chain:offset=14)
         except AttributeError:
             pass
 
@@ -164,7 +163,7 @@ class DiagramControl():
         t_sGcState += "</GcState>\n"
 
         # saving processing chain (which includes blocks properties and conectors)
-        t_sProcessingChain = self.__get_process_chain(True)
+        t_sProcessingChain = self.get_process_chain(True)
 
         t_sOutFile = "<harpia>\n" + t_sGcState + t_sProcessingChain + "</harpia>\n"
 

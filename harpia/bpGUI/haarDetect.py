@@ -30,6 +30,7 @@ import gtk
 
 from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
+from harpia.filefilters import * 
 
 # i18n
 import os
@@ -158,15 +159,8 @@ class Properties(GladeWindow, S2iCommonProperties):
             dialog.set_current_folder("/home/" + str(os.getenv('USER')) + "/Desktop")
         # Scotti
 
-        filter = gtk.FileFilter()
-        filter.set_name("Haar Cascade")
-        filter.add_pattern("*")
-        dialog.add_filter(filter)
-
-        filter = gtk.FileFilter()
-        filter.set_name("images")
-        filter.add_mime_type("*.xml")
-        dialog.add_filter(filter)
+        dialog.add_filter(AllFileFilter())
+        dialog.add_filter(XMLImageFileFilter())
 
         response = dialog.run()
         if response == gtk.RESPONSE_OK:

@@ -31,6 +31,7 @@
 import os
 import gtk
 from GladeWindow import GladeWindow
+from filefilters import * 
 
 #i18n
 import gettext
@@ -137,18 +138,8 @@ class ShowImage(GladeWindow):
     
         t_oDialog.set_default_response(gtk.RESPONSE_OK)
         
-        t_oFilter = gtk.FileFilter()
-        t_oFilter.set_name("All Archives")
-        t_oFilter.add_pattern("*")
-        t_oDialog.add_filter(t_oFilter)
-
-        t_oFilter = gtk.FileFilter()
-        t_oFilter.set_name("images")
-        t_oFilter.add_mime_type("*.jpg")
-        t_oFilter.add_mime_type("*.bmp")
-        t_oFilter.add_mime_type("*.png")
-        t_oFilter.add_mime_type("*.gif")
-        t_oDialog.add_filter(t_oFilter)
+        t_oDialog.add_filter(AllFileFilter())
+        t_oDialog.add_filter(ImageFileFilter())
     
         t_oResponse = t_oDialog.run()
     
