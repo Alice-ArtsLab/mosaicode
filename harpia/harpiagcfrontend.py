@@ -38,17 +38,14 @@ import gtk
 from GladeWindow import GladeWindow
 from harpia.utils.XMLUtils import XMLParser
 from harpia import preferences
-
+from harpia import about
 from filefilters import *
-# Harpia
-
-import s2idirectory
-
 from GcDiagram import *
 from diagramcontrol import DiagramControl 
 
 import s2iSessionManager
 import TipOfTheDay
+import s2idirectory
 
 # i18n
 import gettext
@@ -149,14 +146,14 @@ class S2iHarpiaFrontend(GladeWindow):
             self.Blocks[s2idirectory.block[x]["TreeGroup"]].append(s2idirectory.block[x]["Label"])
 
         self.widgets['HarpiaFrontend'].set_icon_from_file(self.data_dir + "images/harpia_ave.png")
-        self.g_sTreeViewPath = "0,0"
+        self.tree_view_path = "0,0"
 
-        self.m_nStatus = 0
+        self.status = 0
         self.SaveAs = False
 
         # Member Diagram references
         self.diagrams = {}
-        self.m_oCopyBuffer = (-1, -1)  # tuple (fromPage, [listOfBlocks]) ...listOfConns?
+        self.copy_buffer = (-1, -1)  # tuple (fromPage, [listOfBlocks]) ...listOfConns?
         self.__load_examples_menu()
         self.__InsertBlocks()
         self.on_CloseMenuBar_activate()  # removing the dummie page
@@ -211,23 +208,16 @@ class S2iHarpiaFrontend(GladeWindow):
         # erdtmann: dunno why 0, but it works (I suppose it's 'cos there's only one column in the tree)
         # path is the way to find the desired block on the treeview
         # g_iColumn = 0
-        self.on_BlocksTreeView_row_activated_pos(self.widgets['BlocksTreeView'], self.g_sTreeViewPath, 0, x, y)
+        self.on_BlocksTreeView_row_activated_pos(self.widgets['BlocksTreeView'], self.tree_view_path, 0, x, y)
         return
 
     # ----------------------------------------------------------------------
     def drag_data_get_cb(self, treeview, context, selection, target_id, etime):
         treeselection = treeview.get_selection()
         model, iterac = treeselection.get_selected()
-        self.g_sTreeViewPath = model.get_path(iterac)
+        self.tree_view_path = model.get_path(iterac)
         selection.set('text/plain', 8, "test")
         # necessary in order to the notebook receive the drag:
-        return
-
-    # ----------------------------------------------------------------------
-    def make_pb(self, tvcolumn, cell, model, iter):
-        stock = model.get_value(iter, 1)
-        pb = self.widgets["BlocksTreeView"].render_icon(stock, gtk.ICON_SIZE_MENU, None)
-        cell.set_property('pixbuf', pb)
         return
 
     # ----------------------------------------------------------------------
@@ -279,10 +269,9 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
-
-        self.m_oCopyBuffer = (self.widgets['WorkArea'].get_current_page(),
+        self.copy_buffer = (self.widgets['WorkArea'].get_current_page(),
                               diagram.get_block_on_focus())
-        print self.m_oCopyBuffer
+        print self.copy_buffer
 
     # ----------------------------------------------------------------------
     def on_PasteMenuBar_activate(self, *args):
@@ -290,7 +279,7 @@ class S2iHarpiaFrontend(GladeWindow):
         Callback function called when PasteMenuBar is activated.
         Paste the copied block(s) in the diagram.
         """
-        if self.m_oCopyBuffer[0] == -1:  # nothing copied
+        if self.copy_buffer[0] == -1:  # nothing copied
             return
 
         # print "pasting"
@@ -298,13 +287,13 @@ class S2iHarpiaFrontend(GladeWindow):
         if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
             diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
 
-            if self.diagrams.has_key(self.m_oCopyBuffer[0]):
-                t_oFromDiagram = self.diagrams[self.m_oCopyBuffer[0]]
+            if self.diagrams.has_key(self.copy_buffer[0]):
+                t_oFromDiagram = self.diagrams[self.copy_buffer[0]]
 
-                if t_oFromDiagram.blocks.has_key(self.m_oCopyBuffer[1]):
-                    newBlockId = diagram.insert_block(t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].get_type())
+                if t_oFromDiagram.blocks.has_key(self.copy_buffer[1]):
+                    newBlockId = diagram.insert_block(t_oFromDiagram.blocks[self.copy_buffer[1]].get_type())
                     diagram.blocks[newBlockId].SetPropertiesXML_nID(
-                        t_oFromDiagram.blocks[self.m_oCopyBuffer[1]].GetPropertiesXML())
+                        t_oFromDiagram.blocks[self.copy_buffer[1]].GetPropertiesXML())
 
     # ----------------------------------------------------------------------
     def on_DeleteMenuBar_activate(self, *args):
@@ -322,7 +311,6 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         Callback function called when AboutMenuBar is activated. Loads the about window.
         """
-        from harpia import about
         About = about.About()
         About.show(center=0)
 
@@ -374,7 +362,6 @@ class S2iHarpiaFrontend(GladeWindow):
                                           gtk.FILE_CHOOSER_ACTION_OPEN,
                                           (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                            gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-
         t_oDialog.set_default_response(gtk.RESPONSE_OK)
 
         if os.name == 'posix':
@@ -420,7 +407,6 @@ class S2iHarpiaFrontend(GladeWindow):
                                                   gtk.FILE_CHOOSER_ACTION_SAVE,
                                                   (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                                    gtk.STOCK_SAVE, gtk.RESPONSE_OK))
-
                 t_oDialog.set_default_response(gtk.RESPONSE_OK)
 
                 if os.name == 'posix':
@@ -468,7 +454,7 @@ class S2iHarpiaFrontend(GladeWindow):
         # 9 - Save error
         # 10 - Code retrieved
 
-        self.m_nStatus = a_nStatus
+        self.status = a_nStatus
 
         t_oStatusMessage = {0: _("Processing..."),
                             # cpscotti.. connecting nao tem nada a ver com a ideia... tah outdated
@@ -657,7 +643,7 @@ class S2iHarpiaFrontend(GladeWindow):
         #	self.on_ProcessToolBar_clicked(self, *args)
 
         self.SetStatusMessage(_("Saving the last generated code"), 0)
-        if self.m_nStatus != 7:
+        if self.status != 7:
             self.on_ProcessToolBar_clicked()
 
         self.on_CodeToolBar_clickedIneer()
@@ -754,9 +740,7 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_oDialog.set_current_folder(os.path.expanduser("~"))
 
             t_oDialog.add_filter(PNGFileFilter())
-
             t_oResponse = t_oDialog.run()
-
             filename = t_oDialog.get_filename()
 
             if not filename.endswith(".png"):
