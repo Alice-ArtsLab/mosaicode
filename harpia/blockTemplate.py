@@ -35,7 +35,7 @@ class blockTemplate:
         ModName = str(s2idirectory.block[int(self.blockType)]["Path"]["Python"])
         #from spam.ham import eggs" results in "
         harpia_bpGUI_Mod = __import__(PkgName, globals(), locals(), [ModName])
-        guiMod = getattr(harpia_bpGUI_Mod, ModName)        
+        guiMod = getattr(harpia_bpGUI_Mod, ModName)
         guiMod.generate(self)
         self.imagesIO = self.imagesIO.replace("$$", str(self.blockNumber))
         self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))

@@ -34,15 +34,12 @@
 
 #############################INCLUDES AND DECLARATIONS##############################
 import os
-
 import gtk
 
 ####################################INCLUDES OF CLASS##########################################
 
 from connection import connection
-
 from blockTemplate import blockTemplate
-
 from RunPrg import RunPrg
 
 
@@ -80,7 +77,7 @@ else:
     tmpDir = "/tmp/"
 
 
-def cleanGenerator():
+def __clean_generator():
     global arguments, images, functionCalls, deallocations, outDeallocations, blockList
     arguments = []
     images = []
@@ -140,26 +137,7 @@ def inputSizeComply(nInputs, currentBlockN):
         return ("//Image Sizes match\n")
 
 
-
-
-def cleanTmpDir(dir):
-    dirList = os.listdir(tmpDir + dir)
-    for x in dirList:
-        os.remove(tmpDir + dir + '/' + x)
-    os.rmdir(tmpDir + dir)
-
-
-def GetErrorLog():
-    if os.name == 'nt':
-        Error = file(ErrorLog, 'rb')
-    else:
-        Error = file(ErrorLog, 'r')
-    Erro = Error.read()
-    Error.close()
-    return Erro
-
-
-def SetErrorLog(a_sError):
+def __set_error_log(a_sError):
     if os.name == 'nt':
         Error = file(ErrorLog, 'wb')
     else:
@@ -168,7 +146,7 @@ def SetErrorLog(a_sError):
     Error.close()
 
 def parseAndGenerate(dirName, XMLChain, installDirName):
-    cleanGenerator()
+    __clean_generator()
     global g_bSaveVideo  # Passando todas as variaveis globais devolta ao default
     global g_bLive
     global g_bVideo
@@ -724,7 +702,7 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
         for element in errorList:
             Error = Error + element
 
-        SetErrorLog(Error)
+        __set_error_log(Error)
 
         o.readlines()
         o.close()
@@ -769,7 +747,7 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
             Error += element
 
         yield [_("Leaving.."), Error]
-        SetErrorLog(CompilingErrors + Error)
+        __set_error_log(CompilingErrors + Error)
 
         o.close()
         i.close()
