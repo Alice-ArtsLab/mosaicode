@@ -499,9 +499,9 @@ class S2iHarpiaFrontend(GladeWindow):
 
             if graph_size > 1:
                 blocks = process_XML.getTag("harpia").getTag("properties").getChildTags("block")
-                for block_properties in blocks:
-                    block_properties = block_properties.getChildTags("property")
-                    if int(block_properties.type) == 00:  # 00 = acquisition block
+                for t_oBlockProperties in blocks:
+                    block_properties = t_oBlockProperties.getChildTags("property")
+                    if int(t_oBlockProperties.type) == 00:  # 00 = acquisition block
                         inputType = 'file'
                         for block_property in block_properties:
                             if block_property.name == 'type':
@@ -518,7 +518,7 @@ class S2iHarpiaFrontend(GladeWindow):
                                     self.SetStatusMessage(errMsg, 0)
                                     return
 
-                    if int(block_properties.type) == 01:  # 01 => save image
+                    if int(t_oBlockProperties.type) == 01:  # 01 => save image
                         for block_property in block_properties:
                             if block_property.name == 'filename':
                                 block_property.value = os.path.realpath(block_property.value)
@@ -526,7 +526,7 @@ class S2iHarpiaFrontend(GladeWindow):
 
                     # seguindo o paradigma de não mandar mais nada.. vamos testar com o haar =]
                     # não vamos mandar mais nada mas vamos traduzir o path do haarCascade pra algo real
-                    if int(block_properties.type) == 610:  # 610 => haar detector... passando a cascade .xml
+                    if int(t_oBlockProperties.type) == 610:  # 610 => haar detector... passando a cascade .xml
                         for block_property in block_properties:
                             if block_property.name == 'cascade_name':
                                 block_property.value = os.path.realpath(block_property.value)
@@ -538,7 +538,7 @@ class S2iHarpiaFrontend(GladeWindow):
 
                 # cpscotti standalone!!!
                 process_chain = []  # lista pra n precisar ficar copiando prum lado e pro otro o xml inteiro
-                process_chain.append(t_oProcessXML.getXML())
+                process_chain.append(process_XML.getXML())
 
                 session_manager = s2iSessionManager.s2iSessionManager()
 
