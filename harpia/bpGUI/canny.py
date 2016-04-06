@@ -150,8 +150,11 @@ class Properties(GladeWindow, S2iCommonProperties):
 
 
         self.m_oS2iBlockProperties.SetPropertiesXML(self.m_oPropertiesXML)
+
         self.m_oS2iBlockProperties.SetBorderColor(self.m_oBorderColor)
+
         self.m_oS2iBlockProperties.SetBackColor(self.m_oBackColor)
+
         self.widgets['Properties'].destroy()
 
         # ----------------------------------------------------------------------
@@ -179,26 +182,26 @@ def generate(blockTemplate):
         elif propIter[0] == 'threshold1':
             threshold1Value = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\nIplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
+        'IplImage * block$$_img_i1 = NULL;\nIplImage * block$$_img_o1 = NULL;\n'
     blockTemplate.functionArguments = \
-        'int block' + blockTemplate.blockNumber + '_arg_threshold2 = ' + threshold2Value + \
-        ';\nint block' + blockTemplate.blockNumber + '_arg_aperture_size = ' + apertureSizeValue + \
-        ';\nint block' + blockTemplate.blockNumber + '_arg_threshold1 = ' + threshold1Value + ';\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n IplImage * tmpImg' + blockTemplate.blockNumber + \
-                                 ' = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),8,1);\n if(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->nChannels == 3)\n {cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1,tmpImg' + blockTemplate.blockNumber + \
-                                 ',CV_RGB2GRAY);}\n else\n{tmpImg' + blockTemplate.blockNumber + ' = block' + blockTemplate.blockNumber + \
-                                 '_img_i1 = NULL;}\n cvCanny(tmpImg' + blockTemplate.blockNumber + ', tmpImg' + blockTemplate.blockNumber + \
-                                 ', block' + blockTemplate.blockNumber + '_arg_threshold1, block' + blockTemplate.blockNumber + \
-                                 '_arg_threshold2, block' + blockTemplate.blockNumber + '_arg_aperture_size);\n' + \
-                                 'if(block' + blockTemplate.blockNumber + '_img_i1->nChannels == 3)\n{cvCvtColor(tmpImg' + blockTemplate.blockNumber + \
-                                 ', block' + blockTemplate.blockNumber + '_img_o1,CV_GRAY2RGB);}\nelse\n{cvCopyImage(tmpImg' + blockTemplate.blockNumber + \
-                                 ', block' + blockTemplate.blockNumber + '_img_o1);}\ncvReleaseImage(&tmpImg' + blockTemplate.blockNumber + ');}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+        'int block$$_arg_threshold2 = ' + threshold2Value + \
+        ';\nint block$$_arg_aperture_size = ' + apertureSizeValue + \
+        ';\nint block$$_arg_threshold1 = ' + threshold1Value + ';\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+                                 '_img_i1->width,block$$_img_i1->height),block$$' + \
+                                 '_img_i1->depth,block$$_img_i1->nChannels);\n IplImage * tmpImg$$' + \
+                                 ' = cvCreateImage(cvGetSize(block$$_img_i1),8,1);\n if(block$$'+ \
+                                 '_img_i1->nChannels == 3)\n {cvCvtColor(block$$_img_i1,tmpImg$$' + \
+                                 ',CV_RGB2GRAY);}\n else\n{tmpImg$$ = block$$' + \
+                                 '_img_i1 = NULL;}\n cvCanny(tmpImg$$, tmpImg$$' + \
+                                 ', block$$_arg_threshold1, block$$' + \
+                                 '_arg_threshold2, block$$_arg_aperture_size);\n' + \
+                                 'if(block$$_img_i1->nChannels == 3)\n{cvCvtColor(tmpImg$$' + \
+                                 ', block$$_img_o1,CV_GRAY2RGB);}\nelse\n{cvCopyImage(tmpImg$$' + \
+                                 ', block$$_img_o1);}\ncvReleaseImage(&tmpImg$$);}\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------

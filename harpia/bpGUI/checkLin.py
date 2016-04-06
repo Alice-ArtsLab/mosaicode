@@ -193,50 +193,50 @@ def generate(blockTemplate):
             disDraw = propIter[1]
 
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t1 = NULL;\n' + \
-        'CvSeq * block' + blockTemplate.blockNumber + '_lines = NULL;\n' + \
-        'CvMemStorage * block' + blockTemplate.blockNumber + '_storage = NULL;\n' + \
-        'int block' + blockTemplate.blockNumber + '_it;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o2 = NULL;\n' + \
-        'double block' + blockTemplate.blockNumber + '_double_o1;\n' + \
-        'int b' + blockTemplate.blockNumber + 'dX,b' + blockTemplate.blockNumber + 'dY;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_storage = cvCreateMemStorage(0);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_t1 = cvCreateImage(cvGetSize(block' + blockTemplate.blockNumber + '_img_i1),8,1);\n' + \
-                                 '	if(block' + blockTemplate.blockNumber + '_img_i1->nChannels != 1)\n' + \
-                                 '		cvCvtColor(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t1, CV_BGR2GRAY);\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_t1 = NULL;\n' + \
+        'CvSeq * block$$_lines = NULL;\n' + \
+        'CvMemStorage * block$$_storage = NULL;\n' + \
+        'int block$$_it;\n' + \
+        'IplImage * block$$_img_o2 = NULL;\n' + \
+        'double block$$_double_o1;\n' + \
+        'int b$$dX,b$$dY;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 '	block$$_storage = cvCreateMemStorage(0);\n' + \
+                                 '	block$$_img_t1 = cvCreateImage(cvGetSize(block$$_img_i1),8,1);\n' + \
+                                 '	if(block$$_img_i1->nChannels != 1)\n' + \
+                                 '		cvCvtColor(block$$_img_i1, block$$_img_t1, CV_BGR2GRAY);\n' + \
                                  '	else\n' + \
-                                 '		cvCopyImage(block' + blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_t1);\n' + \
-                                 '	cvCanny(block' + blockTemplate.blockNumber + '_img_t1, block' + blockTemplate.blockNumber + '_img_t1, 50, 200, 3);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_lines = cvHoughLines2( block' + blockTemplate.blockNumber + '_img_t1, block' + blockTemplate.blockNumber + '_storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, ' + qThresh + ', ' + minC + ', ' + maxG + ' );\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_double_o1 = 0;\n' + \
-                                 '	for(block' + blockTemplate.blockNumber + '_it = 0; block' + blockTemplate.blockNumber + '_it < block' + blockTemplate.blockNumber + '_lines->total;block' + blockTemplate.blockNumber + '_it++)\n' + \
+                                 '		cvCopyImage(block$$_img_i1, block$$_img_t1);\n' + \
+                                 '	cvCanny(block$$_img_t1, block$$_img_t1, 50, 200, 3);\n' + \
+                                 '	block$$_lines = cvHoughLines2( block$$_img_t1, block$$_storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, ' + qThresh + ', ' + minC + ', ' + maxG + ' );\n' + \
+                                 '	block$$_double_o1 = 0;\n' + \
+                                 '	for(block$$_it = 0; block$$_it < block$$_lines->total;block$$_it++)\n' + \
                                  '	{\n' + \
-                                 '		CvPoint* line = (CvPoint*)cvGetSeqElem( block' + blockTemplate.blockNumber + '_lines, block' + blockTemplate.blockNumber + '_it );\n' + \
-                                 '		b' + blockTemplate.blockNumber + 'dX = line[0].x - ' + aX + ';\n' + \
-                                 '		b' + blockTemplate.blockNumber + 'dY = line[0].y - ' + aY + ';\n' + \
-                                 '		if((int)cvSqrt((float)(b' + blockTemplate.blockNumber + 'dX*b' + blockTemplate.blockNumber + 'dX + b' + blockTemplate.blockNumber + 'dY*b' + blockTemplate.blockNumber + 'dY)) <= ' + aR + ')\n' + \
+                                 '		CvPoint* line = (CvPoint*)cvGetSeqElem( block$$_lines, block$$_it );\n' + \
+                                 '		b$$dX = line[0].x - ' + aX + ';\n' + \
+                                 '		b$$dY = line[0].y - ' + aY + ';\n' + \
+                                 '		if((int)cvSqrt((float)(b$$dX*b$$dX + b$$dY*b$$dY)) <= ' + aR + ')\n' + \
                                  '		{\n' + \
-                                 '			b' + blockTemplate.blockNumber + 'dX = line[1].x - ' + bX + ';\n' + \
-                                 '			b' + blockTemplate.blockNumber + 'dY = line[1].y - ' + bY + ';\n' + \
-                                 '			if((int)cvSqrt((float)(b' + blockTemplate.blockNumber + 'dX*b' + blockTemplate.blockNumber + 'dX + b' + blockTemplate.blockNumber + 'dY*b' + blockTemplate.blockNumber + 'dY)) <= ' + bR + ')\n' + \
-                                 '				block' + blockTemplate.blockNumber + '_double_o1 = 1.0;\n' + \
+                                 '			b$$dX = line[1].x - ' + bX + ';\n' + \
+                                 '			b$$dY = line[1].y - ' + bY + ';\n' + \
+                                 '			if((int)cvSqrt((float)(b$$dX*b$$dX + b$$dY*b$$dY)) <= ' + bR + ')\n' + \
+                                 '				block$$_double_o1 = 1.0;\n' + \
                                  '		}\n' + \
                                  '	}\n'
     if disDraw == "no":
-        blockTemplate.functionCall += '	block' + blockTemplate.blockNumber + '_img_o2 = cvCloneImage(block' + blockTemplate.blockNumber + '_img_i1);\n' + \
-                                      '	for(block' + blockTemplate.blockNumber + '_it = 0; block' + blockTemplate.blockNumber + '_it < block' + blockTemplate.blockNumber + '_lines->total;block' + blockTemplate.blockNumber + '_it++)\n	{\n' + \
-                                      '		CvPoint* line = (CvPoint*)cvGetSeqElem( block' + blockTemplate.blockNumber + '_lines, block' + blockTemplate.blockNumber + '_it );\n' + \
-                                      '		cvLine( block' + blockTemplate.blockNumber + '_img_o2, line[0], line[1], CV_RGB(255,0,0), 2, 8, 0);\n' + \
+        blockTemplate.functionCall += '	block$$_img_o2 = cvCloneImage(block$$_img_i1);\n' + \
+                                      '	for(block$$_it = 0; block$$_it < block$$_lines->total;block$$_it++)\n	{\n' + \
+                                      '		CvPoint* line = (CvPoint*)cvGetSeqElem( block$$_lines, block$$_it );\n' + \
+                                      '		cvLine( block$$_img_o2, line[0], line[1], CV_RGB(255,0,0), 2, 8, 0);\n' + \
                                       '	}\n'
 
     blockTemplate.functionCall += '}\n'
 
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o2);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
-                            'cvReleaseMemStorage(&block' + blockTemplate.blockNumber + '_storage);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o2);\n' + \
+                            'cvReleaseImage(&block$$_img_t1);\n' + \
+                            'cvReleaseMemStorage(&block$$_storage);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------
