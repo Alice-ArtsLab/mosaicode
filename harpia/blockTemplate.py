@@ -50,9 +50,6 @@ class blockTemplate:
         # It works simply by copying all the content resulting from it's processing to feed another image.
 
     def connectorCodeWriter(self):
-        global g_bLive
-        global g_flagFrame
-        global g_bSaveVideo
         for x in self.myConnections:
             if x.destinationNumber <> '--':
                 ##### cpscotti typed connections..
@@ -76,6 +73,5 @@ class blockTemplate:
                 ################################################################################
 
     def saverCodeWriter(self):
-        global g_bLive
         for x in self.outputsToSave:
             self.functionCall = self.functionCall + 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'
