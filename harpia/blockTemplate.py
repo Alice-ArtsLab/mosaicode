@@ -7,8 +7,6 @@ class blockTemplate:
     blockNumber = 'NA'
     imagesIO = ''
     functionArguments = ''
-    outputCopy = ''
-    xmlResult = ''
     dealloc = ''
     outDealloc = ''
     properties = []
@@ -51,22 +49,26 @@ class blockTemplate:
 
     def connectorCodeWriter(self):
         for x in self.myConnections:
-            if x.destinationNumber <> '--':
-                ##### cpscotti typed connections..
+            if x.destinationNumber != '--':
                 if x.connType == "HRP_IMAGE":
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
+                    self.functionCall += 'block$dn$_img_i$di$ = cvCloneImage(block$bn$_img_o$so$);// IMG conection\n'
                 elif x.connType == "HRP_INT":
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_int_i' + x.destinationInput + ' = block' + self.blockNumber + '_int_o' + x.sourceOutput + ';// INT conection\n'
+                    self.functionCall += 'block$dn$_int_i$di$ = block$bn$_int_o$so$;// INT conection\n'
                 elif x.connType == "HRP_POINT":
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_point_i' + x.destinationInput + ' = block' + self.blockNumber + '_point_o' + x.sourceOutput + ';// POINT conection\n'
+                    self.functionCall += 'block$dn$_point_i$di$ = block$bn$_point_o$so$;// POINT conection\n'
                 elif x.connType == "HRP_RECT":
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_rect_i' + x.destinationInput + ' = block' + self.blockNumber + '_rect_o' + x.sourceOutput + ';// RECT conection\n'
+                    self.functionCall += 'block$dn$_rect_i$di$ = block$bn$_rect_o$so$;// RECT conection\n'
                 elif x.connType == "HRP_DOUBLE":
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_double_i' + x.destinationInput + ' = block' + self.blockNumber + '_double_o' + x.sourceOutput + ';// DOUBLE conection\n'
+                    self.functionCall += 'block$dn$_double_i$di$ = block$bn$_double_o$so$;// DOUBLE conection\n'
                 elif x.connType == "HRP_SIZE":
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_size_i' + x.destinationInput + ' = block' + self.blockNumber + '_size_o' + x.sourceOutput + ';// SIZE conection\n'
+                    self.functionCall += 'block$dn$_size_i$di$ = block$bn$_size_o$so$;// SIZE conection\n'
                 else:
-                    self.functionCall = self.functionCall + 'block' + x.destinationNumber + '_img_i' + x.destinationInput + ' = cvCloneImage(block' + self.blockNumber + '_img_o' + x.sourceOutput + ');// IMAGE conection\n'
+                    self.functionCall += 'block$dn$_img_i$di$ = cvCloneImage(block$bn$_img_o$so$);// IMG conection\n'
+
+                self.functionCall = self.functionCall.replace("$dn$", str(x.destinationNumber))
+                self.functionCall = self.functionCall.replace("$di$", str(x.destinationInput))
+                self.functionCall = self.functionCall.replace("$bn$", str(self.blockNumber))
+                self.functionCall = self.functionCall.replace("$so$", str(x.sourceOutput))
 
                 #############################   savers   #######################################
                 # THIS CODE IS TO SAVE IMAGES THAT WILL BE RETURNED AFTER THE IMAGE PROCESSING #
@@ -74,4 +76,4 @@ class blockTemplate:
 
     def saverCodeWriter(self):
         for x in self.outputsToSave:
-            self.functionCall = self.functionCall + 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'
+            self.functionCall += 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'

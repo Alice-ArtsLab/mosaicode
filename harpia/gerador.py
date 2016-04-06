@@ -97,38 +97,31 @@ g_bSaveVideo = []
 
 g_bFrameRate = 0.1
 
-g_sCaptureLive = '0'
-g_sVideoFilename = ''
-# g_flagFrame = 1
-
 usesFindSquares = 0
 usesFindColor = 0
 
 #----------------------------------------------------------------------
-def inputSizeComply(nInputs, currentBlockN):
+def inputSizeComply(nInputs, block_number):
     if nInputs == 2:
-        outPutCode = 'if(block' + str(currentBlockN) + '_img_i1->width != block' + str(
-            currentBlockN) + '_img_i2->width || ' + \
-                     'block' + str(currentBlockN) + '_img_i1->height != block' + str(
-            currentBlockN) + '_img_i2->height)\n{\n' + \
+        output_code = 'if(block$bn$_img_i1->width != block$bn$_img_i2->width || ' + \
+                     'block$bn$_img_i1->height != block$bn$_img_i2->height)\n{\n' + \
                      '	int minW,minH;\n' + \
-                     '	if(block' + str(currentBlockN) + '_img_i1->width > block' + str(
-            currentBlockN) + '_img_i2->width)\n' + \
-                     '		minW = block' + str(currentBlockN) + '_img_i2->width;\n' + \
+                     '	if(block$bn$_img_i1->width > block$bn$_img_i2->width)\n' + \
+                     '		minW = block$bn$_img_i2->width;\n' + \
                      '	else \n' + \
-                     '		minW = block' + str(currentBlockN) + '_img_i1->width;\n\n' + \
-                     '	if(block' + str(currentBlockN) + '_img_i1->height > block' + str(
-            currentBlockN) + '_img_i2->height)\n' + \
-                     '		minH = block' + str(currentBlockN) + '_img_i2->height;\n' + \
+                     '		minW = block$bn$_img_i1->width;\n\n' + \
+                     '	if(block$bn$_img_i1->height > block$bn$_img_i2->height)\n' + \
+                     '		minH = block$bn$_img_i2->height;\n' + \
                      '	else \n' + \
-                     '		minH = block' + str(currentBlockN) + '_img_i1->height;\n\n' + \
-                     '	cvSetImageROI(block' + str(currentBlockN) + '_img_i2, cvRect( 0, 0, minW, minH ));\n' + \
-                     '	cvSetImageROI(block' + str(currentBlockN) + '_img_i1, cvRect( 0, 0, minW, minH ));\n' + \
-                     '	cvSetImageROI(block' + str(currentBlockN) + '_img_o1, cvRect( 0, 0, minW, minH ));\n' + \
+                     '		minH = block$bn$_img_i1->height;\n\n' + \
+                     '	cvSetImageROI(block$bn$_img_i2, cvRect( 0, 0, minW, minH ));\n' + \
+                     '	cvSetImageROI(block$bn$_img_i1, cvRect( 0, 0, minW, minH ));\n' + \
+                     '	cvSetImageROI(block$bn$_img_o1, cvRect( 0, 0, minW, minH ));\n' + \
                      '}\n'
-        return (outPutCode)
+        output_code = output_code.replace("$bn$", str(block_number))
+        return output_code
     else:
-        return ("//Image Sizes match\n")
+        return "//Image Sizes match\n"
 
 
 #----------------------------------------------------------------------
@@ -139,6 +132,22 @@ def __set_error_log(a_sError):
         Error = file(ErrorLog, 'w')
     Error.write(a_sError)
     Error.close()
+
+def applyWeightsOnConnections(listOfBlocks):
+    ##For each block on listt:
+    returnList = []
+    for block in listOfBlocks:
+        ##Put the connections on returnList
+        for connection in block.myConnections:
+            ##and apply the weight on this connection
+            for tmpBlock in blockList:
+                if tmpBlock.blockNumber == connection.destinationNumber:
+                    tmpBlock.weight += block.weight
+                    if tmpBlock not in returnList:
+                        # if tmpBlock not in RollinList:
+                        returnList.append(tmpBlock)
+                    # RollinList.append(tmpBlock)
+    return returnList
 
 #----------------------------------------------------------------------
 def parseAndGenerate(dirName, XMLChain, installDirName):
@@ -224,34 +233,17 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     ###################################################################################
 
     weights = []
-    # Apply the weights on each connection of each block in listOfBlocks, then return a list with its connections
-    def applyWeightsOnConnections(listOfBlocks):
-        # def applyWeightsOnConnections(listOfBlocks,RollinList):
-        ##For each block on listt:
-        returnList = []
-        for block in listOfBlocks:
-            ##Put the connections on returnList
-            for connection in block.myConnections:
-                ##and apply the weight on this connection
-                for tmpBlock in blockList:
-                    if tmpBlock.blockNumber == connection.destinationNumber:
-                        tmpBlock.weight += block.weight
-                        if tmpBlock not in returnList:
-                            # if tmpBlock not in RollinList:
-                            returnList.append(tmpBlock)
-                        # RollinList.append(tmpBlock)
-        return returnList
 
     for block in blockList:
         # cpscotti..
         # if block.blockType == '00':
-        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) <> 0:
+        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) != 0:
             tmpList = []
             # RollinPathList = []
             tmpList.append(block)
             # RollinPathList.append(block)
             organizedChain = applyWeightsOnConnections(tmpList)  # ,RollinPathList)
-            while organizedChain <> []:
+            while organizedChain != []:
                 organizedChain = applyWeightsOnConnections(organizedChain)  # ,RollinPathList)
             ###Recursive tests... future functionality
             # print "Start: "
@@ -348,11 +340,7 @@ CvSeq* findSquares4( IplImage* img, CvMemStorage* storage, int minArea, int maxA
 		tgray = cvCreateImage( sz, 8, 1 );
 		
 		// find squares in every color plane of the image
-		for( c = 0; c < 3; c++ )
-
-
-
-		{
+		for( c = 0; c < 3; c++ ){
 				// extract the c-th color plane
 				cvSetImageCOI( timg, c+1 );
 				cvCopy( timg, tgray, 0 );
@@ -593,15 +581,14 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
 
     declaration = "\n\t//declaration block\n"
 
-    for x in arguments:
-        declaration = declaration + x
+    for argument in arguments:
+        declaration += argument
 
-    for x in images:
-        declaration = declaration + x
+    for image in images:
+        declaration += image
 
     if g_bLive:
-        declaration += \
-            'int end;  end = 0; int key; \n'
+        declaration += 'int end;  end = 0; int key; \n'
         for aCapture in g_bVideo:
             declaration += 'CvCapture * block' + aCapture[0] + '_capture = NULL; \n IplImage * block' + aCapture[
                 0] + '_frame = NULL; \n block' + aCapture[0] + '_capture = cvCreateFileCapture("' + aCapture[
@@ -668,8 +655,7 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
     # Assembly of "necessary" makefiles
     # ...windows..
     makeFilename = 'Makefile' + dirName + '.bat'
-    makeFileEntry = '"' + installDirName + '\\bin\\gcc.exe" ' + codeFilename + " -o " + codeFilename[
-                                                                                        :-2] + ".exe -lcv -lcxcore -lhighgui"
+    makeFileEntry = '"' + installDirName + '\\bin\\gcc.exe" ' + codeFilename + " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
     makeFile = open(makeFilename, 'w')
     makeFile.write(makeFileEntry)
     makeFile.close()
