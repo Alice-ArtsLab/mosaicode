@@ -24,9 +24,7 @@
 #
 #----------------------------------------------------------------------
 
-
 import gobject
-import pango
 import gtk
 import math
 import gnomecanvas
@@ -34,8 +32,6 @@ import sys
 
 from GcdConnectorMenu import GcdConnectorMenu
 from utils.graphicfunctions import *
-
-CONNECTION_BOUNDARY = 16.0
 
 class GcdConnector(gnomecanvas.CanvasGroup):
 
@@ -105,6 +101,14 @@ class GcdConnector(gnomecanvas.CanvasGroup):
         p = []
         p.append(self.from_point[0])
         p.append(self.from_point[1])
+
+# Futuramente permitir linhas curvas
+#        p.append((self.to_point[0] + self.from_point[0]) / 2)
+#        p.append(self.from_point[1])
+
+#        p.append((self.to_point[0] + self.from_point[0]) / 2)
+#        p.append(self.to_point[1])
+
         p.append(self.to_point[0])
         p.append(self.to_point[1])
         if not self.widgets.has_key("Line"):
