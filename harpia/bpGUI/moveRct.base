@@ -1,0 +1,8 @@
+->Entrada: hrp_point, retangulo
+
+->Saida: retengulo
+
+->Propriedades:
+-->Deslocamento do ponto de entrada para o ponto de saída(opção padrao (0,0))
+
+
