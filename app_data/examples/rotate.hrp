@@ -1,16 +1,22 @@
 <harpia>
 <GcState>
 	<block type="607" id="12">
-		<position x="377.0" y="188.0"/>
+		<position x="357.0" y="128.0"/>
 	</block>
 	<block type="0" id="13">
-		<position x="130.0" y="169.0"/>
+		<position x="110.0" y="109.0"/>
 	</block>
 	<block type="701" id="14">
-		<position x="158.0" y="246.0"/>
+		<position x="138.0" y="186.0"/>
 	</block>
 	<block type="2" id="15">
-		<position x="581.0" y="175.0"/>
+		<position x="561.0" y="115.0"/>
+	</block>
+	<block type="607" id="16">
+		<position x="540.0" y="272.0"/>
+	</block>
+	<block type="2" id="17">
+		<position x="692.0" y="269.0"/>
 	</block>
 </GcState>
 <properties>
@@ -43,6 +49,19 @@
  <property name="state" value="true"/>
 </block>
 
+  <block id="16" type="607">
+ <property name="state" value="true"/>
+ <property name="isCenter" value="true"/>
+ <property name="isScalling" value="true"/>
+ <property name="isFilling" value="true"/>
+ <property name="xC" value="20"/>
+ <property name="yC" value="20"/>
+</block>
+
+  <block id="17" type="02">
+ <property name="state" value="true"/>
+</block>
+
   </properties>
 <network>
 <block type="0" id="13">
@@ -57,6 +76,7 @@
 </inputs>
 <outputs>
 <output id="1" inBlock="12" input="2"/>
+<output id="1" inBlock="16" input="2"/>
 </outputs>
 </block>
 <block type="607" id="12">
@@ -66,9 +86,27 @@
 </inputs>
 <outputs>
 <output id="1" inBlock="15" input="1"/>
+<output id="1" inBlock="16" input="1"/>
 </outputs>
 </block>
 <block type="2" id="15">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="607" id="16">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="17" input="1"/>
+</outputs>
+</block>
+<block type="2" id="17">
 <inputs>
 <input id="1"/>
 </inputs>
