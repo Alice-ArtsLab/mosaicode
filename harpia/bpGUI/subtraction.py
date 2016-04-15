@@ -112,6 +112,10 @@ class Properties(GladeWindow, S2iCommonProperties):
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
     import harpia.gerador
+    if harpia.gerador.usesAdjustImage == 0:
+        harpia.gerador.usesAdjustImage = 1
+        blockTemplate.header += harpia.gerador.adjust_images_size()
+
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_i2 = NULL;\n' + \
@@ -120,7 +124,8 @@ def generate(blockTemplate):
                                  'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
                                  '_img_i1->width,block$$_img_i1->height),block$$' + \
                                  '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
-                                 harpia.gerador.inputSizeComply(2, blockTemplate.blockNumber) + 'cvSub(block$$' + \
+                                 'adjust_images_size(block$$_img_i1, block$$_img_i2, block$$_img_o1);\n' + \
+                                 'cvSub(block$$' + \
                                  '_img_i1, block$$_img_i2, block$$' + \
                                  '_img_o1,0);\n cvResetImageROI(block$$_img_o1);}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
