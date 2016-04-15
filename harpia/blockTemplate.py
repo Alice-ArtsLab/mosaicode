@@ -15,7 +15,6 @@ class blockTemplate:
     weight = 1
     outTypes = []
     header = ''
-    usesFindColor = ''
 
     ###########################################################################
     def __init__(self, block_type, block_id):

@@ -318,7 +318,7 @@ class S2iHarpiaFrontend(GladeWindow):
         """
 
         # maybe pass to a s2iView base class
-        new_diagram = GcDiagram()  # created new diagram
+        new_diagram = GcDiagram(self)  # created new diagram
 
         table = gtk.Table(2, 2, False)
         frame = gtk.Frame()
@@ -359,6 +359,7 @@ class S2iHarpiaFrontend(GladeWindow):
                                           (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                            gtk.STOCK_OPEN, gtk.RESPONSE_OK))
         t_oDialog.set_default_response(gtk.RESPONSE_OK)
+        file_name = ''
 
         if os.name == 'posix':
             t_oDialog.set_current_folder(os.path.expanduser("~"))
@@ -370,21 +371,13 @@ class S2iHarpiaFrontend(GladeWindow):
 
         if t_oResponse == gtk.RESPONSE_OK:
             self.on_NewToolBar_clicked()
-
             current_page = self.widgets['WorkArea'].get_current_page()
             diagram = self.diagrams[current_page]
-
             if len(t_oDialog.get_filename()) > 0:
-                diagram.set_file_name(t_oDialog.get_filename())
-
+                file_name = t_oDialog.get_filename()
         t_oDialog.destroy()
 
-        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
-            if diagram.get_file_name() is not None:
-                if DiagramControl(diagram).load():
-                    new_label = diagram.get_file_name().split("/").pop()
-                    self.__update_tab_name(new_label)
+        self.open_diagram(file_name)
 
     # ----------------------------------------------------------------------
     def on_SaveToolBar_clicked(self, *args):
@@ -436,19 +429,6 @@ class S2iHarpiaFrontend(GladeWindow):
         Receives a status and shows in the StatusBar.
         """
 
-        # a_nStatus
-        # 0 - Connecting...
-        # 1 - could not connect to server
-        # 2 - Processing...
-        # 3 - could not create a new session ID
-        # 4 - could not send images to server
-        # 5 - could not send process file to server
-        # 6 - Process error
-        # 7 - Process complete
-        # 8 - Nothing to process
-        # 9 - Save error
-        # 10 - Code retrieved
-
         self.status = a_nStatus
 
         t_oStatusMessage = {0: _("Processing..."),
@@ -470,7 +450,7 @@ class S2iHarpiaFrontend(GladeWindow):
             gtk.main_iteration(False)
 
     # ----------------------------------------------------------------------
-    def SetStatusMessage(self, a_sStatus, a_bGood):
+    def __set_status_message(self, a_sStatus, a_bGood):
         """
         Receives a status message and shows it in the StatusBar.
         """
@@ -515,7 +495,7 @@ class S2iHarpiaFrontend(GladeWindow):
                                 if (not os.path.exists(block_property.value)):
                                     errMsg = _("Bad Filename: ") + block_property.value
                                     print(errMsg)
-                                    self.SetStatusMessage(errMsg, 0)
+                                    self.__set_status_message(errMsg, 0)
                                     return
 
                     if int(t_oBlockProperties.type) == 01:  # 01 => save image
@@ -533,7 +513,7 @@ class S2iHarpiaFrontend(GladeWindow):
                                 if (not os.path.exists(block_property.value)):
                                     errMsg = _("Bad Filename: ") + block_property.value
                                     print(errMsg)
-                                    self.SetStatusMessage(errMsg, 0)
+                                    self.__set_status_message(errMsg, 0)
                                     return
 
                 # cpscotti standalone!!!
@@ -553,7 +533,7 @@ class S2iHarpiaFrontend(GladeWindow):
                         if step[1] != '' and step[1] != None:
                             self.diagrams[page].append_error_log(step[1])
                             t_bEverythingOk = False
-                    self.SetStatusMessage(step[0], t_bEverythingOk)
+                    self.__set_status_message(step[0], t_bEverythingOk)
                     # self.widgets['StatusLabel'].set_text()
                     # print t_bEverythingOk
                     print step[0]
@@ -587,7 +567,7 @@ class S2iHarpiaFrontend(GladeWindow):
         if not self.diagrams.has_key(page):
             self.widgets['CodeToolBar'].set_sensitive(True)
             # message
-            self.SetStatusMessage(_("Could not find current diagram"), 1)
+            self.__set_status_message(_("Could not find current diagram"), 1)
             return
 
         t_oDialog = gtk.FileChooserDialog(_("Save Program Source..."),
@@ -617,7 +597,7 @@ class S2iHarpiaFrontend(GladeWindow):
             t_sBigCodePath = "/tmp/" + t_sTmpName + "/" + t_sTmpName + ".c"
             if not os.path.exists(t_sBigCodePath):
                 # message regarding code absence
-                self.SetStatusMessage(_("Could not save code"), 1)
+                self.__set_status_message(_("Could not save code"), 1)
             else:
                 # t_oOriginalFile = open(t_sBigCodePath)#abrindo o arquivo original la no /tmp
                 shutil.copy(t_sBigCodePath, t_sOutputName)
@@ -630,7 +610,7 @@ class S2iHarpiaFrontend(GladeWindow):
         self.widgets['CodeToolBar'].set_sensitive(False)
         #	self.on_ProcessToolBar_clicked(self, *args)
 
-        self.SetStatusMessage(_("Saving the last generated code"), 0)
+        self.__set_status_message(_("Saving the last generated code"), 0)
         if self.status != 7:
             self.on_ProcessToolBar_clicked()
 
@@ -765,9 +745,9 @@ class S2iHarpiaFrontend(GladeWindow):
                 self.widgets['BlocksTreeView'].set_cursor((t_nClassIndex))
                 return
 
-            for t_nBlockIndex, t_sBlockName in enumerate(self.Blocks[t_sClassName]):
-                t_sBlockName = t_sBlockName.lower()
-                if t_sBlockName.find(t_sSearchValue) != -1:
+            for t_nBlockIndex, block_name in enumerate(self.Blocks[t_sClassName]):
+                block_name = block_name.lower()
+                if block_name.find(t_sSearchValue) != -1:
                     self.widgets['BlocksTreeView'].collapse_all()
                     self.widgets['BlocksTreeView'].expand_to_path((t_nClassIndex, t_nBlockIndex))
                     self.widgets['BlocksTreeView'].set_cursor((t_nClassIndex, t_nBlockIndex))
@@ -778,10 +758,10 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         Callback function called when BlocksTreeView_row is activated. Loads the block in the diagram.
         """
-        t_oTreeViewModel = treeview.get_model()
-        t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewModel.get_iter(path), 0)
+        tree_view_model = treeview.get_model()
+        block_name = tree_view_model.get_value(tree_view_model.get_iter(path), 0)
 
-        if t_sBlockName not in self.Blocks.keys():
+        if block_name not in self.Blocks.keys():
             page = self.widgets['WorkArea'].get_current_page()
 
             if self.diagrams.has_key(page):
@@ -789,7 +769,7 @@ class S2iHarpiaFrontend(GladeWindow):
                 t_nBlockType = -1
 
                 for t_oBlockTypeIter in s2idirectory.block.keys():
-                    if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == t_sBlockName:
+                    if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == block_name:
                         t_nBlockType = t_oBlockTypeIter
                         break
                 t_oCurrentGcDiagram.insert_block(t_nBlockType)
@@ -799,16 +779,16 @@ class S2iHarpiaFrontend(GladeWindow):
         """
         Callback function called when BlocksTreeView_row is activated. Loads the block in the diagram.
         """
-        t_oTreeViewModel = treeview.get_model()
-        t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewModel.get_iter(path), 0)
+        tree_view_model = treeview.get_model()
+        block_name = tree_view_model.get_value(tree_view_model.get_iter(path), 0)
 
-        if t_sBlockName not in self.Blocks.keys():
+        if block_name not in self.Blocks.keys():
             page = self.widgets['WorkArea'].get_current_page()
             if self.diagrams.has_key(page):
                 t_oCurrentGcDiagram = self.diagrams[page]
                 t_nBlockType = -1
                 for t_oBlockTypeIter in s2idirectory.block.keys():
-                    if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == t_sBlockName:
+                    if s2idirectory.block[int(t_oBlockTypeIter)]["Label"] == block_name:
                         t_nBlockType = t_oBlockTypeIter
                         break
                 t_oCurrentGcDiagram.insert_block(t_nBlockType, x, y)
@@ -820,11 +800,11 @@ class S2iHarpiaFrontend(GladeWindow):
         """
 
         t_oTreeViewSelection = treeview.get_selection()
-        (t_oTreeViewModel, t_oTreeViewIter) = t_oTreeViewSelection.get_selected()
+        (tree_view_model, t_oTreeViewIter) = t_oTreeViewSelection.get_selected()
         if t_oTreeViewIter != None:
-            t_sBlockName = t_oTreeViewModel.get_value(t_oTreeViewIter, 0)
+            block_name = tree_view_model.get_value(t_oTreeViewIter, 0)
             for x in s2idirectory.block:
-                if s2idirectory.block[x]["Label"] == t_sBlockName:
+                if s2idirectory.block[x]["Label"] == block_name:
                     t_oTextBuffer = gtk.TextBuffer()
                     t_oTextBuffer.set_text(s2idirectory.block[x]["Description"])
                     self.widgets['BlockDescription'].set_buffer(t_oTextBuffer)
@@ -878,13 +858,16 @@ class S2iHarpiaFrontend(GladeWindow):
         for example in self.exampleMenuItens:
             if example[0] == args[0]:
                 self.on_NewToolBar_clicked()  # abrindo nova pagina
-                if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
-                    diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
-                    diagram.set_file_name(example[1])
-                    if diagram.get_file_name() is not None:
-                        if DiagramControl(diagram).load():
-                            new_label = diagram.get_file_name().split("/").pop()
-                            self.__update_tab_name(new_label)
+                self.open_diagram(example[1])
+
+    # ----------------------------------------------------------------------
+    def open_diagram(self, diagram_name):
+        if self.diagrams.has_key(self.widgets['WorkArea'].get_current_page()):
+            diagram = self.diagrams[self.widgets['WorkArea'].get_current_page()]
+            diagram.set_file_name(diagram_name)
+            if DiagramControl(diagram).load():
+                new_label = diagram.get_file_name().split("/").pop()
+                self.__update_tab_name(new_label)
 
     # ----------------------------------------------------------------------
     def __load_examples_menu(self):

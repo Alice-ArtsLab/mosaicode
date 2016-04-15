@@ -102,7 +102,6 @@ class GcdConnector(gnomecanvas.CanvasGroup):
         p.append(self.from_point[0])
         p.append(self.from_point[1])
 
-# Futuramente permitir linhas curvas
 #        p.append((self.to_point[0] + self.from_point[0]) / 2)
 #        p.append(self.from_point[1])
 
@@ -122,10 +121,12 @@ class GcdConnector(gnomecanvas.CanvasGroup):
                      arrow_shape_a=4.0,
                      arrow_shape_b=8.0,
                      arrow_shape_c=4.0,
-                     smooth=True)
+                     smooth=True
+                     )
             self.widgets["Line"] = widget
         else:
             self.widgets["Line"].set(points=p)
+        self.diagram.update_now()
 
 #----------------------------------------------------------------------
     def update_focus(self):
@@ -143,4 +144,5 @@ class GcdConnector(gnomecanvas.CanvasGroup):
             self.widgets["Line"].set(width_units=3.0)
         else:
             self.widgets["Line"].set(width_units=1.0)
+        self.diagram.update_now()
         return self.has_flow

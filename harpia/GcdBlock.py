@@ -234,7 +234,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
         self.SetBackColor()
         w1 = self.group.add(gnomecanvas.CanvasPolygon,
-                    points=p,# y1=y1, x2=x2, y2=y2,
+                    points=p,
                     fill_color_rgba=ColorFromList(self.m_oBackColor),
                     outline_color='black',
                     width_units=1.0)
@@ -262,7 +262,10 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                 pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
                             s2idirectory.icons["IconInput"])
 
-            t_Wid = self.group.add(gnomecanvas.CanvasPixbuf, pixbuf=pb,x=0,y=(RADIUS # upper border
+            t_Wid = self.group.add(gnomecanvas.CanvasPixbuf,
+                                pixbuf=pb,
+                                x=0,
+                                y=(RADIUS # upper border
                               + (x*5) # spacing betwen ports
                               + x*INPUT_HEIGHT), #previous ports
                               anchor=gtk.ANCHOR_NORTH_WEST)

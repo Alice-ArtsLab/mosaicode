@@ -41,13 +41,12 @@ ZOOM_ORIGINAL = 1.0
 class GcDiagram(gnomecanvas.Canvas):
 
 #----------------------------------------------------------------------
-    def __init__(self):
+    def __init__(self, main_window):
         self.__gobject_init__()
         gnomecanvas.Canvas.__init__(self, aa=True)
 
         self.last_clicked_point = (None, None)
-
-        # must be called everytime a block is moved or inserted with the new scroll region
+        self.main_window = main_window
         self.set_scroll_region(0, 0, 800, 600)
 
         self.zoom = 1.0 # pixels per unit
@@ -285,7 +284,11 @@ class GcDiagram(gnomecanvas.Canvas):
     def __update_white_board(self):
         if self.white_board == None:
             clr = ColorFromList([255, 255, 255, 255])
-            self.white_board = self.root().add(gnomecanvas.CanvasRect, x1=-10000, y1=-10000, x2=10000, y2=10000,
+            self.white_board = self.root().add(gnomecanvas.CanvasRect,
+                                            x1=-10000,
+                                            y1=-10000,
+                                            x2=10000,
+                                            y2=10000,
                                             fill_color_rgba=clr)
             # should we change this size dynamically?? or make it simply a HUGE whiteboard?
             self.white_board.set_flags(gtk.CAN_FOCUS)
