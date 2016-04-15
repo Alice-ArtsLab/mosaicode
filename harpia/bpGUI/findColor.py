@@ -40,7 +40,6 @@ _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-
 # ----------------------------------------------------------------------
 
 class Properties(GladeWindow, S2iCommonProperties):
@@ -194,6 +193,168 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
+    import harpia.gerador
+    if harpia.gerador.usesFindColor == 0:
+        harpia.gerador.usesFindColor = 1
+        blockTemplate.header += r"""
+
+int GetColor(IplImage * imagem, int x, int y)
+{
+	return   (int)(((uchar*)(imagem->imageData + imagem->widthStep*y))[x]);
+}
+
+void SetColor(IplImage * imagem, int x, int y, uchar color)
+{
+	((uchar*)(imagem->imageData + imagem->widthStep*y))[x] = color;
+}
+
+
+void CheckImg(IplImage * img, uchar c_value, uchar tolerance)
+{
+	uchar min,max;
+	int y_It,x_It;
+	if((int)c_value < (int)tolerance)
+		tolerance = c_value;
+
+	if(((int)c_value+(int)tolerance) > 255)
+		tolerance = 255 - c_value;
+
+	min = c_value - tolerance;
+	max = c_value + tolerance;
+
+	for(y_It=0;y_It<(img->height);y_It++)
+		for(x_It=0;x_It<(img->width);x_It++)
+		{
+				uchar val;
+				val = GetColor(img,x_It,y_It);
+				if(val >= min && val <= max)
+					SetColor(img,x_It,y_It,255);
+				else
+					SetColor(img,x_It,y_It,0);
+		}
+}
+
+CvPoint GetCenter(IplImage * src, long int * nOfPts)//, long int * numOfPoints)
+{
+	long int numOfMatchingPoints;
+	long int posXsum;
+	long int posYsum;
+	int x_It, y_It;
+	CvPoint Center;
+	
+	posXsum = 0;
+	posYsum = 0;
+	numOfMatchingPoints = 0;
+
+	for(y_It=0;y_It<(src->height);y_It++)
+		for(x_It=0;x_It<(src->width);x_It++)
+			if(GetColor(src,x_It,y_It))
+			{
+				posXsum += x_It;
+				posYsum += y_It;
+				numOfMatchingPoints++;
+			}
+
+	if(numOfMatchingPoints > 0)
+	{
+		Center.x = (int)(posXsum/numOfMatchingPoints);
+		Center.y = (int)(posYsum/numOfMatchingPoints);
+	}
+	else
+		numOfMatchingPoints = -1;
+// 	(*numOfPoints) = numOfMatchingPoints;
+	if(nOfPts)
+		*nOfPts = numOfMatchingPoints;
+
+	return Center;
+}
+
+
+double dist22Points(CvPoint a, CvPoint b)
+{
+	int xD,yD;
+	xD = a.x - b.x;
+	yD = a.y - b.y;
+
+	xD = (xD>0)?xD:-xD;
+	yD = (yD>0)?yD:-yD;
+
+	return (double)(xD*xD + yD*yD);
+}
+
+double GetVariance(IplImage * src,CvPoint center)//, long int * numOfPoints)
+{
+	long int numOfMatchingPoints;
+	double distSquaresSum;
+	double variance;
+	int x_It,y_It;
+
+	numOfMatchingPoints = 0;
+	distSquaresSum = 0.0;
+
+
+	for(y_It=0;y_It<(src->height);y_It++)
+		for(x_It=0;x_It<(src->width);x_It++)
+			if(GetColor(src,x_It,y_It))
+			{
+				numOfMatchingPoints++;
+				distSquaresSum += dist22Points(center,cvPoint(x_It,y_It));
+			}
+
+	if(numOfMatchingPoints)
+		variance = distSquaresSum/numOfMatchingPoints;
+	else
+		variance = -1;
+
+
+	return variance;
+}
+
+long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * tolerance, CvPoint * pointCenter, double * variance)
+{
+	uchar B,B_T,G,G_T,R,R_T;
+	int i;
+	long int numOfPoints;
+	CvPoint centro;
+	IplImage * m_pChans[3] = {NULL,NULL,NULL};
+
+	numOfPoints = 0;
+
+	B = c_value[0];
+	G = c_value[1];
+	R = c_value[2];
+
+	B_T = tolerance[0];
+	G_T = tolerance[1];
+	R_T = tolerance[2];
+
+	for(i=0;i<3;i++)
+		m_pChans[i] = cvCreateImage(cvGetSize(src),IPL_DEPTH_8U, 1);
+
+	cvSplit(src,m_pChans[0],m_pChans[1],m_pChans[2], NULL);
+
+	CheckImg(m_pChans[0],B,B_T);
+	CheckImg(m_pChans[1],G,G_T);
+	CheckImg(m_pChans[2],R,R_T);
+
+	cvAnd(m_pChans[0], m_pChans[1], dst, NULL );
+	cvAnd(m_pChans[2], dst, dst, NULL );
+
+	centro = GetCenter(dst,&numOfPoints);//,&numOfPoints);
+
+	if(numOfPoints != -1)
+		*variance = GetVariance(dst,centro);
+
+	pointCenter->x = centro.x;
+	pointCenter->y = centro.y;
+
+	cvReleaseImage( &m_pChans[0] );
+	cvReleaseImage( &m_pChans[1] );
+	cvReleaseImage( &m_pChans[2] );
+
+	return numOfPoints;
+}
+			"""
     for propIter in blockTemplate.properties:
         if propIter[0] == '_B':
             c_B = propIter[1]
@@ -208,8 +369,6 @@ def generate(blockTemplate):
         elif propIter[0] == '_R_T':
             c_R_T = propIter[1]
 
-    global usesFindColor
-    usesFindColor = 1
     # o1 - pto
     # o2 - numOfPoints
     # o3 - variance

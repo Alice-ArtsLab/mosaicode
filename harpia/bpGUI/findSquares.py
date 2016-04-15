@@ -40,7 +40,6 @@ _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-
 # ----------------------------------------------------------------------
 
 class Properties(GladeWindow, S2iCommonProperties):
@@ -160,8 +159,127 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    global usesFindSquares
-    usesFindSquares = 1
+    import harpia.gerador
+    if harpia.gerador.usesFindSquares == 0:
+        harpia.gerador.usesFindSquares = 1
+        blockTemplate.header += r"""
+
+//Routines to findSquares
+double angle( CvPoint* pt1, CvPoint* pt2, CvPoint* pt0 )
+{
+		double dx1 = pt1->x - pt0->x;
+		double dy1 = pt1->y - pt0->y;
+		double dx2 = pt2->x - pt0->x;
+		double dy2 = pt2->y - pt0->y;
+		return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
+}
+
+CvSeq* findSquares4( IplImage* img, CvMemStorage* storage, int minArea, int maxArea)
+{
+		CvSeq* contours;
+		int i, c, l, N = 11;
+		int thresh = 50;
+		CvSize sz = cvSize( img->width & -2, img->height & -2 );
+		IplImage* timg = cvCloneImage( img ); // make a copy of input image
+		IplImage* gray = cvCreateImage( sz, 8, 1 ); 
+		IplImage* pyr = cvCreateImage( cvSize(sz.width/2, sz.height/2), 8, 3 );
+		IplImage* tgray;
+		CvSeq* result;
+		double s, t;
+
+		if(minArea == -1)
+			minArea = 0;
+		if(maxArea == -1)
+			maxArea = (img->width * img->height);
+
+		CvSeq* squares = cvCreateSeq( 0, sizeof(CvSeq), sizeof(CvPoint), storage );
+		
+
+		cvSetImageROI( timg, cvRect( 0, 0, sz.width, sz.height ));
+		
+		// down-scale and upscale the image to filter out the noise
+		cvPyrDown( timg, pyr, CV_GAUSSIAN_5x5 );
+		cvPyrUp( pyr, timg, CV_GAUSSIAN_5x5 );
+		tgray = cvCreateImage( sz, 8, 1 );
+		
+		// find squares in every color plane of the image
+		for( c = 0; c < 3; c++ ){
+				// extract the c-th color plane
+				cvSetImageCOI( timg, c+1 );
+				cvCopy( timg, tgray, 0 );
+				for( l = 0; l < N; l++ )
+				{
+						if( l == 0 )
+						{
+								cvCanny( tgray, gray, 0, thresh, 5 );
+								cvDilate( gray, gray, 0, 1 );
+						}
+						else
+						{
+								cvThreshold( tgray, gray, (l+1)*255/N, 255, CV_THRESH_BINARY );
+						}
+						cvFindContours( gray, storage, &contours, sizeof(CvContour),
+								CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0) );
+						while( contours )
+						{
+								result = cvApproxPoly( contours, sizeof(CvContour), storage,
+										CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0 );
+								if( result->total == 4 &&
+										fabs(cvContourArea(result,CV_WHOLE_SEQ)) > minArea &&
+										fabs(cvContourArea(result,CV_WHOLE_SEQ)) < maxArea &&
+										cvCheckContourConvexity(result) )
+								{
+										s = 0;
+										
+										for( i = 0; i < 5; i++ )
+										{
+												if( i >= 2 )
+												{
+														t = fabs(angle(
+														(CvPoint*)cvGetSeqElem( result, i ),
+														(CvPoint*)cvGetSeqElem( result, i-2 ),
+														(CvPoint*)cvGetSeqElem( result, i-1 )));
+														s = s > t ? s : t;
+												}
+										}
+										if( s < 0.3 )
+												for( i = 0; i < 4; i++ )
+														cvSeqPush( squares,
+																(CvPoint*)cvGetSeqElem( result, i ));
+								}
+								contours = contours->h_next;
+						}
+				}
+		}
+		cvReleaseImage( &gray );
+		cvReleaseImage( &pyr );
+		cvReleaseImage( &tgray );
+		cvReleaseImage( &timg );
+		return squares;
+}
+
+double drawSquares( IplImage* cpy, CvSeq* squares )
+{
+		CvSeqReader reader;
+		int i;
+		cvStartReadSeq( squares, &reader, 0 );
+		for( i = 0; i < squares->total; i += 4 )
+		{
+				CvPoint pt[4], *rect = pt;
+				int count = 4;
+				CV_READ_SEQ_ELEM( pt[0], reader );
+				CV_READ_SEQ_ELEM( pt[1], reader );
+				CV_READ_SEQ_ELEM( pt[2], reader );
+				CV_READ_SEQ_ELEM( pt[3], reader );
+				cvPolyLine( cpy, &rect, &count, 1, 1, CV_RGB(0,255,0), 3, CV_AA, 0 );
+		}
+	return (double)squares->total;
+}
+
+//End of routines to findSquares
+
+			"""
+
     for propIter in blockTemplate.properties:
         if propIter[0] == 'enMin':
             enMin = (propIter[1] == "True")

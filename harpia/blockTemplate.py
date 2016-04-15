@@ -14,6 +14,8 @@ class blockTemplate:
     outputsToSave = []
     weight = 1
     outTypes = []
+    header = ''
+    usesFindColor = ''
 
     ###########################################################################
     def __init__(self, block_type, block_id):
@@ -22,6 +24,7 @@ class blockTemplate:
         self.properties = []
         self.myConnections = []
         self.outputsToSave = []
+
     ######################################################3
     #### Added by cpscotti. blockTemplate needs its outputTypes even "before" its code.. here it is
     def getBlockOutputTypes(self):
@@ -30,9 +33,6 @@ class blockTemplate:
         except:
             self.outTypes = "HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE"
 
-        ############################### processors #################################
-        # THIS CODE IS TO CREATE THE C LINES FROM THE XML PARSING                  #
-        ############################################################################
     def blockCodeWriter(self):
         PkgName = 'harpia.bpGUI.'
         ModName = str(s2idirectory.block[int(self.blockType)]["Path"]["Python"])
@@ -42,7 +42,6 @@ class blockTemplate:
         guiMod.generate(self)
         self.imagesIO = self.imagesIO.replace("$$", str(self.blockNumber))
         self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
-        self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
         self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
         self.outDealloc = self.outDealloc.replace("$$", str(self.blockNumber))
         self.functionArguments = self.functionArguments.replace("$$", str(self.blockNumber))
@@ -75,10 +74,7 @@ class blockTemplate:
                 self.functionCall = self.functionCall.replace("$bn$", str(self.blockNumber))
                 self.functionCall = self.functionCall.replace("$so$", str(x.sourceOutput))
 
-                #############################   savers   #######################################
-                # THIS CODE IS TO SAVE IMAGES THAT WILL BE RETURNED AFTER THE IMAGE PROCESSING #
-                ################################################################################
-
     def saverCodeWriter(self):
         for x in self.outputsToSave:
-            self.functionCall += 'cvSaveImage("block' + self.blockNumber + '_img_o' + x + '.png" ,block' + self.blockNumber + '_img_o' + x + ');\n'
+            self.functionCall += 'cvSaveImage("block$$_img_o' + x + '.png" ,block$$_img_o' + x + ');\n'
+        self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
