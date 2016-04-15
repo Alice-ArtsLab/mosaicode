@@ -1,23 +1,23 @@
 <harpia>
 <GcState>
 	<block type="0" id="1">
-		<position x="-39.0" y="80.0"/>
+		<position x="-59.0" y="20.0"/>
 	</block>
 	<block type="802" id="2">
-		<position x="293.0" y="81.0"/>
+		<position x="273.0" y="21.0"/>
 	</block>
 	<block type="2" id="3">
-		<position x="575.0" y="70.0"/>
+		<position x="555.0" y="10.0"/>
 	</block>
 	<block type="801" id="7">
-		<position x="-7.0" y="175.0"/>
+		<position x="-27.0" y="115.0"/>
 	</block>
 </GcState>
 <properties>
   <block id="1" type="00">
  <property name="state" value="true"/>
  <property name="type" value="file"/>
- <property name="filename" value="/home/carlosmagno/harpia/app_data/images/harpia_foto.jpg"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
  <property name="place" value="server"/>
  <property name="camera" value="0"/>
  <property name="size" value="640x480"/>

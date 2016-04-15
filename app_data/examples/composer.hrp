@@ -1,35 +1,35 @@
 <harpia>
 <GcState>
 	<block type="7" id="5">
-		<position x="151.0" y="-21.0"/>
+		<position x="131.0" y="-81.0"/>
 	</block>
 	<block type="0" id="6">
-		<position x="-29.0" y="-31.0"/>
+		<position x="-49.0" y="-91.0"/>
 	</block>
 	<block type="2" id="7">
-		<position x="353.0" y="19.0"/>
+		<position x="333.0" y="-41.0"/>
 	</block>
 	<block type="0" id="8">
-		<position x="-34.0" y="62.0"/>
+		<position x="-54.0" y="2.0"/>
 	</block>
 	<block type="0" id="9">
-		<position x="-28.0" y="148.0"/>
+		<position x="-48.0" y="88.0"/>
 	</block>
 	<block type="2" id="10">
-		<position x="318.0" y="138.0"/>
+		<position x="298.0" y="78.0"/>
 	</block>
 	<block type="2" id="11">
-		<position x="258.0" y="268.0"/>
+		<position x="238.0" y="208.0"/>
 	</block>
 	<block type="2" id="12">
-		<position x="392.0" y="-37.0"/>
+		<position x="372.0" y="-97.0"/>
 	</block>
 </GcState>
 <properties>
   <block id="6" type="00">
  <property name="state" value="true"/>
  <property name="type" value="file"/>
- <property name="filename" value="/home/carlosmagno/harpia/app_data/images/lenna.png"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
  <property name="place" value="server"/>
  <property name="camera" value="0"/>
  <property name="size" value="640x480"/>
@@ -40,7 +40,7 @@
   <block id="8" type="00">
  <property name="state" value="true"/>
  <property name="type" value="file"/>
- <property name="filename" value="/home/carlosmagno/harpia/app_data/images/harpia_foto.jpg"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
  <property name="place" value="server"/>
  <property name="camera" value="0"/>
  <property name="size" value="640x480"/>
@@ -51,7 +51,7 @@
   <block id="9" type="00">
  <property name="state" value="true"/>
  <property name="type" value="file"/>
- <property name="filename" value="/home/carlosmagno/harpia/app_data/images/aviao.png"/>
+ <property name="filename" value="/usr/share/harpia/images/aviao.png"/>
  <property name="place" value="server"/>
  <property name="camera" value="0"/>
  <property name="size" value="640x480"/>
