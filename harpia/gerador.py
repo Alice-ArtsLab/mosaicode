@@ -64,6 +64,7 @@ functionCalls = []
 deallocations = []
 outDeallocations = []
 blockList = []
+g_bSaveVideo = []
 
 ErrorLog = 'ErrorLog'
 
@@ -83,7 +84,7 @@ def __clean_generator():
     deallocations = []
     outDeallocations = []
     blockList = []
-
+    g_bSaveVideo = []
 
 # Global variable to indicate overall behavior of the code generator
 
@@ -93,7 +94,6 @@ g_ShowCount = 0
 
 g_bCameras = []
 g_bVideo = []  # default eh live!!
-g_bSaveVideo = []
 
 g_bFrameRate = 0.1
 
@@ -152,14 +152,14 @@ def applyWeightsOnConnections(listOfBlocks):
 #----------------------------------------------------------------------
 def parseAndGenerate(dirName, XMLChain, installDirName):
     __clean_generator()
-    global g_bSaveVideo  # Passando todas as variaveis globais devolta ao default
     global g_bLive
     global g_bVideo
     global g_bCameras
     global g_bFrameRate
     global g_ShowCount
-    g_ShowCount = 0
+    global g_bSaveVideo
     g_bSaveVideo = []
+    g_ShowCount = 0
     g_bVideo = []
     g_bCameras = []
     g_bFrameRate = 0.1
@@ -182,12 +182,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     for blockIter in blocks:
         # print str(100.0*(t_nItCount/t_nBlockCount)) + "%"
         # t_nItCount += 1.0
-        tmpBlock = blockTemplate()
-        tmpBlock.blockType = blockIter.type
-        tmpBlock.blockNumber = blockIter.id
-        tmpBlock.properties = []
-        tmpBlock.myConnections = []
-        tmpBlock.outputsToSave = []
+        tmpBlock = blockTemplate(blockIter.type, blockIter.id)
         try:
             block_properties = blockIter.getChildTags("property")
             for propIter in block_properties:
@@ -229,6 +224,8 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         tmpBlock.blockCodeWriter()
         tmpBlock.connectorCodeWriter()
         tmpBlock.saverCodeWriter()
+        # Some code tricks to allow global variables
+
         blockList.append(tmpBlock)
     ###################################################################################
 
@@ -613,7 +610,6 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
         execution += '\n\tcvNamedWindow("Control Window",CV_WINDOW_AUTOSIZE );'
     if g_bLive:
         execution += '\n\tkey = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n if(key != -1)\n end = 1;'
-
         deallocating = "\n\t//deallocation block\n"
         for x in deallocations:
             deallocating += x
@@ -636,12 +632,13 @@ long int CheckForColor(IplImage * src, IplImage * dst, uchar * c_value, uchar * 
         for aCamera in g_bCameras:
             closing += 'cvReleaseCapture(&block' + aCamera[0] + '_capture);\n'
     for vWriter in g_bSaveVideo:
-        closing += 'cvReleaseVideoWriter(&block' + vWriter + '_vidWriter);\n'
+        closing += 'cvReleaseVideoWriter(&block' + vWriter + '_vidWriter); // SaveVideo\n'
     closing += "return 0;\n } //closing main()\n"
 
 
     # Final code assembly
     entireCode = header + declaration + execution + deallocating + closing
+
 
     yield [_("Saving Code")]
     # saving code file

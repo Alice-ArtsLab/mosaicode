@@ -27,13 +27,13 @@
 #----------------------------------------------------------------------
 
 from harpia.GladeWindow import  GladeWindow
-
-import gtk
+from harpia.utils.XMLUtils import XMLParser
 from harpia.s2icommonproperties import S2iCommonProperties,APP, DIR
 from harpia.filefilters import * 
+
+import gtk
 #i18n
 import os
-from harpia.utils.XMLUtils import XMLParser
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -399,7 +399,7 @@ class Properties( GladeWindow, S2iCommonProperties):
 
         self.widgets['frameRate_Label'].set_sensitive( False )
         self.widgets['frameRate'].set_sensitive( False )
-        self.widgets['streamPropon_BackColorButton_clickederties_label'].set_sensitive( False )
+        self.widgets['streamProperties_label'].set_sensitive( False )
         self.widgets['frameRate_label2'].set_sensitive( False )
 
     #----------------------------------------------------------------------
@@ -500,7 +500,7 @@ def generate(blockTemplate):
    for propIter in blockTemplate.properties:
        if propIter[0] == 'type':
            flag = propIter[1]
-           if ( (flag == 'live') or (flag == 'video')): # (propIter[0] == 'live' and (flag<>'file') and (flag<>'camera')):
+           if ( (flag == 'live') or (flag == 'video')):
                harpia.gerador.g_bLive = True
        if ( (propIter[0] == 'filename') and (flag == 'file') ):
            argFilename = propIter[1]
@@ -508,12 +508,12 @@ def generate(blockTemplate):
            size = propIter[1]
            Width = size[ :size.find('x')]
            Height = size[size.find('x')+1: ]
-       if (propIter[0] == 'camon_BackColorButton_clickedera' and flag == 'live'):#(flag<>'file') and (flag<>'newimage') and (flag<>'live')):
-           tmpPack = [] #contendo [ blockNumber , camNum ]
+       if (propIter[0] == 'camon_BackColorButton_clickedera' and flag == 'live'):
+           tmpPack = []
            tmpPack.append(blockTemplate.blockNumber)
            tmpPack.append(propIter[1])
            harpia.gerador.g_bCameras.append(tmpPack)
-       if (propIter[0] == 'camera' and flag == 'camera'):#(flag<>'file') and (flag<>'newimage') and (flag<>'live')):
+       if (propIter[0] == 'camera' and flag == 'camera'):
            captureCamNumber = propIter[1]
        if(propIter[0] == 'video_name' and flag == 'video'):
            tmpPack = []
@@ -524,35 +524,39 @@ def generate(blockTemplate):
            if float(propIter[1]) > harpia.gerador.g_bFrameRate:
             harpia.gerador.g_bFrameRate = float(propIter[1])
    blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL; //Capture\n'
+        'IplImage * block$$_img_o1 = NULL; //Capture\n'
    if flag == 'camera':
        #global g_bCameras #pegaremos o segundo elemento da ultima lista anexada a a lista g_bCameras (isso eh o numero da ultima camera)
        blockTemplate.functionCall = \
-           'CvCapture* block' + blockTemplate.blockNumber + '_capture = NULL; \n' + \
-           'IplImage* block' + blockTemplate.blockNumber + '_frame = NULL; \n' + \
-           'block' + blockTon_BackColorButton_clickedemplate.blockNumber + '_capture = cvCaptureFromCAM(' + captureCamNumber + '); \n' + \
-           'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
-           'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
-           'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
-           'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
-           'if( !cvGrabFrame( block' + blockTemplate.blockNumber + '_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
-           'block' + blockTemplate.blockNumber + '_frame = cvRetrieveFrame( block' + blockTemplate.blockNumber + '_capture ); ' + \
-           'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage( block' + blockTemplate.blockNumber + '_frame );\n'
+           'CvCapture* block$$_capture = NULL; \n' + \
+           'IplImage* block$$_frame = NULL; \n' + \
+           'block$$_capture = cvCaptureFromCAM(' + captureCamNumber + '); \n' + \
+           'if( !cvGrabFrame( block$$_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
+           'block$$_frame = cvRetrieveFrame( block$$_capture ); ' + \
+           'if( !cvGrabFrame( block$$_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
+           'block$$_frame = cvRetrieveFrame( block$$_capture ); ' + \
+           'if( !cvGrabFrame( block$$_capture ) \n ) { printf("Cannot Grab Image from camera '+ captureCamNumber +'"); }' + \
+           'block$$_frame = cvRetrieveFrame( block$$_capture ); ' + \
+           'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
    if flag == 'video':
-       blockTemplate.functionCall = '// Video Mode \n' + 'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage( block' + blockTemplate.blockNumber + '_frame );\n'
+       blockTemplate.functionCall = '// Video Mode \n' + \
+           'IplImage* block$$_frame = NULL; \n' + \
+           'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
    if flag == 'file':
        blockTemplate.functionArguments = \
-        'char block' + blockTemplate.blockNumber + '_arg_Filename[] = "' + argFilename + '";\n'
+        'char block$$_arg_Filename[] = "' + argFilename + '";\n'
        blockTemplate.functionCall = \
-           'block' + blockTemplate.blockNumber + '_img_o1 = cvLoadImage(block' + blockTemplate.blockNumber + '_arg_Filename,-1);\n'
+           'block$$_img_o1 = cvLoadImage(block$$_arg_Filename,-1);\n'
    if flag == 'live':
-       blockTemplate.functionCall = '// Live Mode \n' + 'block' + blockTemplate.blockNumber + '_img_o1 = cvCloneImage( block' + blockTemplate.blockNumber + '_frame );\n'
+       blockTemplate.functionCall = '// Live Mode \n' + \
+           'IplImage* block$$_frame = NULL; \n' + \
+           'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
    if flag == 'newimage':
        blockTemplate.functionCall = \
             'CvSize size = cvSize(' + Width +','+ Height +');\n' + \
-            'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
-            'cvSetZero(block' + blockTemplate.blockNumber + '_img_o1);\n'
-   blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n'
+            'block$$_img_o1 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
+            'cvSetZero(block$$_img_o1);\n'
+   blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n'
 
 # ------------------------------------------------------------------------------
 # Block Setup

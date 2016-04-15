@@ -16,7 +16,12 @@ class blockTemplate:
     outTypes = []
 
     ###########################################################################
-
+    def __init__(self, block_type, block_id):
+        self.blockType = block_type
+        self.blockNumber = block_id
+        self.properties = []
+        self.myConnections = []
+        self.outputsToSave = []
     ######################################################3
     #### Added by cpscotti. blockTemplate needs its outputTypes even "before" its code.. here it is
     def getBlockOutputTypes(self):

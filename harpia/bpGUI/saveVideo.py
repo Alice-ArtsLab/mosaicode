@@ -30,12 +30,11 @@ import gtk
 
 from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-
 from harpia.filefilters import * 
+from harpia.utils.XMLUtils import XMLParser
 
 # i18n
 import os
-from harpia.utils.XMLUtils import XMLParser
 import gettext
 
 _ = gettext.gettext
@@ -223,8 +222,8 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    global g_bSaveVideo
-    g_bSaveVideo.append(blockTemplate.blockNumber)
+    import harpia.gerador
+    harpia.gerador.g_bSaveVideo.append(blockTemplate.blockNumber)
     for propIter in blockTemplate.properties:
         if propIter[0] == 'filename':
             videoFilename = os.path.expanduser(propIter[1])
@@ -257,7 +256,7 @@ def generate(blockTemplate):
                                  '	cvWriteFrame( block$$_vidWriter, block$$_img_i1);\n' + \
                                  '	block$$_img_o1 = block$$_img_i1;\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1); // SaveVideo Dealloc\n'
 
 
 # ------------------------------------------------------------------------------
