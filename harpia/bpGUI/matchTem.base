@@ -1,0 +1,8 @@
+->Entrada: 2 imagens
+
+->Saida: imagem
+
+->Propriedades:
+-->Method (CV_TM_SQDIFF)
+-->Scale Factor (Opção padrão 6)
+

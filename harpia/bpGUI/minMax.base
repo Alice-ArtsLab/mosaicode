@@ -1,0 +1,13 @@
+-->Entrada: imagem
+
+-->Saida: hrp_point, double
+
+-->Propriedades:
+-->Feature to Search (Minimum)
+-->Min x: 0
+-->Max X: 500
+-->Min Y: 0
+-->Max y: 500
+--->Min: 0
+--->Max: 500
+
