@@ -100,7 +100,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
     import harpia.gerador
-    harpia.gerador.g_ShowCount += 1
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
@@ -111,7 +110,8 @@ def generate(blockTemplate):
     else:
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      ' block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-                                     'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n cvShowImage("block$$_img_o1",block$$_img_i1);} \n'
+                                     'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n' + \
+                                     'cvShowImage("block$$_img_o1",block$$_img_i1);} \n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                             'cvReleaseImage(&block$$_img_i1);\n'
 

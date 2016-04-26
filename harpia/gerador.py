@@ -58,7 +58,6 @@ gettext.textdomain(APP)
 
 # Global variable to indicate overall behavior of the code generator
 g_bLive = False  # default eh live!!
-g_ShowCount = 0
 g_bFrameRate = 0.1
 usesFindSquares = 0
 g_bCameras = []
@@ -165,10 +164,8 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     global g_bVideo
     global g_bCameras
     global g_bFrameRate
-    global g_ShowCount
     global g_bSaveVideo
     g_bSaveVideo = []
-    g_ShowCount = 0
     g_bVideo = []
     g_bCameras = []
     g_bFrameRate = 0.1
@@ -320,8 +317,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     execution = "\n\t//execution block\n"
     for x in functionCalls:
         execution += x
-    if g_ShowCount == 0:
-        execution += '\n\tcvNamedWindow("Control Window",CV_WINDOW_AUTOSIZE );'
     if g_bLive:
         execution += '\n\tkey = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n if(key != -1)\n end = 1;'
         deallocating = "\n\t//deallocation block\n"
