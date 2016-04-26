@@ -176,7 +176,7 @@ def generate(blockTemplate):
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
-    blockTemplate.functionArguments = \
+    blockTemplate.imagesIO += \
         'int block$$_arg_threshold = ' + thresholdValue + ';\n' + \
         'int block$$_arg_maxValue = ' + maxValue + ';\n' + \
         'int block$$_arg_thresholdType = ' + thresholdType + ';\n'

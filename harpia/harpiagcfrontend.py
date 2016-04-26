@@ -219,7 +219,6 @@ class S2iHarpiaFrontend(GladeWindow):
 
     # ----------------------------------------------------------------------
     def on_NewMenuBar_activate(self, *args):
-        print "New Menu Bar Activate"
         self.on_NewToolBar_clicked()
 
     # ----------------------------------------------------------------------

@@ -129,6 +129,7 @@ def generate(blockTemplate):
         elif propIter[0] == 'frameNumber':
             frameNumber = int(float(propIter[1]))
             frameNumber = max(frameNumber, 1)
+
     blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
                              'IplImage * block$$_img_o1 = NULL;\n' + \
                              'int block$$_t_idx = 0;\n' + \
@@ -159,8 +160,8 @@ def generate(blockTemplate):
                                '	if(block$$_buffer[block$$_t_idx] != NULL)\n' + \
                                '		cvReleaseImage(&(block$$_buffer[block$$_t_idx]));\n'
 
-
 # ------------------------------------------------------------------------------
+
 # Block Setup
 # ------------------------------------------------------------------------------
 def getBlock():

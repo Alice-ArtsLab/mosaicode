@@ -6,7 +6,6 @@ class blockTemplate:
     blockType = 'NA'
     blockNumber = 'NA'
     imagesIO = ''
-    functionArguments = ''
     dealloc = ''
     outDealloc = ''
     properties = []
@@ -43,12 +42,6 @@ class blockTemplate:
         self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
         self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
         self.outDealloc = self.outDealloc.replace("$$", str(self.blockNumber))
-        self.functionArguments = self.functionArguments.replace("$$", str(self.blockNumber))
-
-        ############################ connectors ####################################
-        # THIS CODE IS RESPONSIBLE FOR CREATING THE ASSIGNMENTS BETWEEN THE IMAGES #
-        ############################################################################
-        # It works simply by copying all the content resulting from it's processing to feed another image.
 
     def connectorCodeWriter(self):
         for x in self.myConnections:

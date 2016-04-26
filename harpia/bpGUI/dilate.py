@@ -162,7 +162,7 @@ def generate(blockTemplate):
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
-    blockTemplate.functionArguments = 'int block$$_arg_iterations = ' + iterationsValue + \
+    blockTemplate.imagesIO += 'int block$$_arg_iterations = ' + iterationsValue + \
                                       ';\nIplConvKernel * block$$_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
                                       maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \

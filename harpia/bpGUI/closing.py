@@ -136,8 +136,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 
     def getHelp(self):
         return"Operação de morfologia matemática para realizar a fechamento da imagem de acordo com o elemento estruturante. Equivale a aplicação de uma dilatação seguida de uma erosão."
-# ClosingProperties = Properties()
-# ClosingProperties.show( center=0 )
 
 # ------------------------------------------------------------------------------
 # Code generation
@@ -149,7 +147,7 @@ def generate(blockTemplate):
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
-    blockTemplate.functionArguments = 'IplConvKernel * block$$' +\
+    blockTemplate.imagesIO += 'IplConvKernel * block$$' +\
                                       '_arg_mask = cvCreateStructuringElementEx(' + maskSizeValue[0] + ' , ' + \
                                       maskSizeValue[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \

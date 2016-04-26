@@ -183,7 +183,7 @@ def generate(blockTemplate):
             threshold1Value = propIter[1]
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\nIplImage * block$$_img_o1 = NULL;\n'
-    blockTemplate.functionArguments = \
+    blockTemplate.imagesIO += \
         'int block$$_arg_threshold2 = ' + threshold2Value + \
         ';\nint block$$_arg_aperture_size = ' + apertureSizeValue + \
         ';\nint block$$_arg_threshold1 = ' + threshold1Value + ';\n'

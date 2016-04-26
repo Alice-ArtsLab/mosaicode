@@ -564,7 +564,7 @@ def generate(blockTemplate):
            'IplImage* block$$_frame = NULL; \n' + \
            'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
    if flag == 'file':
-       blockTemplate.functionArguments = \
+       blockTemplate.imagesIO += \
         'char block$$_arg_Filename[] = "' + argFilename + '";\n'
        blockTemplate.functionCall = \
            'block$$_img_o1 = cvLoadImage(block$$_arg_Filename,-1);\n'

@@ -64,7 +64,6 @@ usesFindSquares = 0
 g_bCameras = []
 g_bVideo = []  # default eh live!!
 headers = []
-arguments = []
 images = []
 functionCalls = []
 deallocations = []
@@ -88,7 +87,6 @@ else:
 #----------------------------------------------------------------------
 def __clean_generator():
     global headers
-    global arguments
     global images
     global functionCalls
     global deallocations
@@ -99,7 +97,6 @@ def __clean_generator():
     global usesAdjustImage
     global usesRads
     headers = []
-    arguments = []
     images = []
     functionCalls = []
     deallocations = []
@@ -182,8 +179,8 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     ########################Create the blocks from XMLChain############################
 
     ##################################################################################
-    #				in the future we may want to show some kind of progress bar..
-    #							the next few comented lines implement a progress counter.. this could be thrown up to the GUI via yields =]
+    # in the future we may want to show some kind of progress bar..
+    # the next few comented lines implement a progress counter.. this could be thrown up to the GUI via yields =]
     ##################################################################################
     # t_nBlockCount = 0.0
     # for block in (doc.harpia.properties.block):
@@ -241,16 +238,12 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     weights = []
 
     for block in blockList:
-        # cpscotti..
-        # if block.blockType == '00':
         if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) != 0:
             tmpList = []
-            # RollinPathList = []
             tmpList.append(block)
-            # RollinPathList.append(block)
-            organizedChain = __apply_weights_on_connections(tmpList)  # ,RollinPathList)
+            organizedChain = __apply_weights_on_connections(tmpList)
             while organizedChain != []:
-                organizedChain = __apply_weights_on_connections(organizedChain)  # ,RollinPathList)
+                organizedChain = __apply_weights_on_connections(organizedChain)
 
     biggestWeight = -1
     for block in blockList:
@@ -262,7 +255,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         for block in blockList:
             if block.weight == activeWeight:
                 headers.append(block.header)
-                arguments.append(block.functionArguments)
                 images.append(block.imagesIO)
                 functionCalls.append("//Weight: " + str(block.weight) + "\n")
                 functionCalls.append(block.functionCall)
@@ -302,9 +294,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     header += "\nint main(int argc, char ** argv)\n{"
 
     declaration = "\n\t//declaration block\n"
-
-    for argument in arguments:
-        declaration += argument
 
     for image in images:
         declaration += image
