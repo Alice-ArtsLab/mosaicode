@@ -159,10 +159,7 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    import harpia.gerador
-    if harpia.gerador.usesFindSquares == 0:
-        harpia.gerador.usesFindSquares = 1
-        blockTemplate.header += r"""
+    blockTemplate.header += r"""
 
 //Routines to findSquares
 double angle( CvPoint* pt1, CvPoint* pt2, CvPoint* pt0 )
@@ -298,13 +295,14 @@ double drawSquares( IplImage* cpy, CvSeq* squares )
         'IplImage * block$$_img_o2 = NULL;\n' + \
         'double block$$_double_o1;\n' + \
         'CvMemStorage * block$$_storage = NULL;\n'
+
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                  '	block$$_img_o2 = cvCloneImage(block$$_img_i1);\n' + \
                                  '	block$$_storage = cvCreateMemStorage(0);\n' + \
-                                 '	block$$_double_o1 = (double)drawSquares( block$$_img_o2, findSquares4( block$$_img_o2, block$$_storage , ' + str(
-        minVal) + ', ' + str(maxVal) + ') );\n' + \
+                                 '	block$$_double_o1 = (double)drawSquares( block$$_img_o2, findSquares4( block$$_img_o2, block$$_storage , ' + str(minVal) + ', ' + str(maxVal) + ') );\n' + \
                                  '	cvClearMemStorage( block$$_storage );\n' + \
                                  '}\n'
+
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o2);\n' + \
                             'cvReleaseImage(&block$$_img_i1);\n' + \
                             'cvReleaseMemStorage(&block$$_storage );\n'

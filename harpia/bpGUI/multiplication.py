@@ -111,9 +111,7 @@ class Properties(GladeWindow, S2iCommonProperties):
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
     import harpia.gerador
-    if harpia.gerador.usesAdjustImage == 0:
-        harpia.gerador.usesAdjustImage = 1
-        blockTemplate.header += harpia.gerador.adjust_images_size()
+    blockTemplate.header += harpia.gerador.adjust_images_size()
 
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \

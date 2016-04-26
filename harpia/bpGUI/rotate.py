@@ -172,16 +172,10 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    import harpia.gerador
-    if harpia.gerador.usesRads == 0:
-        harpia.gerador.usesRads = 1
-        blockTemplate.header += r"""
-            #define PI 3.1415926535898
-            double rads(double degs)
-            {
-            	return (PI/180 * degs);
-            }
-            """
+    blockTemplate.header += "#define PI 3.1415926535898\n"
+    blockTemplate.header += "double rads(double degs){\n"
+    blockTemplate.header += "   return (PI/180 * degs);\n"
+    blockTemplate.header += "}\n\n"
 
     for propIter in blockTemplate.properties:
         if propIter[0] == 'xC':

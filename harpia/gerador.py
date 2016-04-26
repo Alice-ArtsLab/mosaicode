@@ -57,20 +57,14 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 # Global variable to indicate overall behavior of the code generator
-g_bLive = []  # default eh live!!
+g_bLive = []
 g_bFrameRate = 0.1
-usesFindSquares = 0
 headers = []
 images = []
 functionCalls = []
 deallocations = []
 outDeallocations = []
 blockList = []
-usesFindSquares = 0
-usesFindColor = 0
-usesAdjustImage = 0
-usesRads = 0
-
 ErrorLog = 'ErrorLog'
 
 if os.name == "nt":
@@ -88,21 +82,15 @@ def __clean_generator():
     global deallocations
     global outDeallocations
     global blockList
-    global usesFindSquares
-    global usesFindColor
-    global usesAdjustImage
-    global usesRads
+
+    global g_bLive
     headers = []
     images = []
     functionCalls = []
     deallocations = []
     outDeallocations = []
     blockList = []
-    usesFindSquares = 0
-    usesFindColor = 0
-    usesAdjustImage = 0
-    usesRads = 0
-
+    g_bLive = []
 #----------------------------------------------------------------------
 def adjust_images_size():
     return r"""
@@ -159,7 +147,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     global g_bLive
     global g_bFrameRate
     g_bFrameRate = 0.1
-    g_bLive = False  # this shall be a list containing the "blockNumbers" for each live acquisition block; len(g_bLive) works just like it is now..
     yield [_("Starting Up Generator")]
     #doc = binderytools.bind_file(XMLChain)
     doc = XMLParser(XMLChain)
@@ -275,7 +262,13 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
 
 		"""
 
+    # Adds only if it does not contains
+    temp_header = []
     for header_code in headers:
+        if header_code not in temp_header:
+            temp_header.append(header_code)
+
+    for header_code in temp_header:
         header += header_code
 
     header += "\nint main(int argc, char ** argv)\n{"
@@ -291,17 +284,17 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         declaration += 'while(!end) \n {\t \n'
 
         for value in g_bLive:
-            declaration += 'cvGrabFrame(block' + aCapture[0] + '_capture);\n' + \
-                'block' + aCapture[0] + '_frame = cvRetrieveFrame (block' + aCapture[0] + '_capture);\n'
+            declaration += 'cvGrabFrame(block' + value[0] + '_capture);\n' + \
+                'block' + value[0] + '_frame = cvRetrieveFrame (block' + value[0] + '_capture);\n'
 
     execution = "\n\t//execution block\n"
     for x in functionCalls:
         execution += x
 
     if len(g_bLive) > 0:
-        execution += 'key = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n' + \
-            'if(key != -1)\n' + \ 
-            'end = 1;'
+        execution += 'key = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n'
+        execution += 'if(key != -1)\n'
+        execution += 'end = 1;\n'
 
     deallocating = "\n\t//deallocation block\n"
     for x in deallocations:
@@ -341,8 +334,9 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
 
     # ...posix..
     makeFilename = 'Makefile.' + dirName
-    makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + installDirName + "/lib/; export PKG_CONFIG_PATH=" + installDirName + "/lib/pkgconfig/;g++ " + codeFilename + " -o " + codeFilename[
-                                                                                                                                                                                       :-2] + " `pkg-config --cflags --libs opencv`"
+    makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:" + installDirName + "/lib/;"
+    makeFileEntry += "export PKG_CONFIG_PATH=" + installDirName + "/lib/pkgconfig/;"
+    makeFileEntry += "g++ " + codeFilename + " -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`"
     makeFile = open(makeFilename, 'w')
     makeFile.write(makeFileEntry)
     makeFile.close()

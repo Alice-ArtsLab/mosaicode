@@ -193,10 +193,7 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    import harpia.gerador
-    if harpia.gerador.usesFindColor == 0:
-        harpia.gerador.usesFindColor = 1
-        blockTemplate.header += r"""
+    blockTemplate.header += r"""
 
 int GetColor(IplImage * imagem, int x, int y)
 {
