@@ -57,11 +57,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 # Global variable to indicate overall behavior of the code generator
-g_bLive = False  # default eh live!!
+g_bLive = []  # default eh live!!
 g_bFrameRate = 0.1
 usesFindSquares = 0
-g_bCameras = []
-g_bVideo = []  # default eh live!!
 headers = []
 images = []
 functionCalls = []
@@ -159,11 +157,7 @@ def __apply_weights_on_connections(listOfBlocks):
 def parseAndGenerate(dirName, XMLChain, installDirName):
     __clean_generator()
     global g_bLive
-    global g_bVideo
-    global g_bCameras
     global g_bFrameRate
-    g_bVideo = []
-    g_bCameras = []
     g_bFrameRate = 0.1
     g_bLive = False  # this shall be a list containing the "blockNumbers" for each live acquisition block; len(g_bLive) works just like it is now..
     yield [_("Starting Up Generator")]
@@ -291,51 +285,36 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     for image in images:
         declaration += image
 
-    if g_bLive:
-        declaration += 'int end;  end = 0; int key; \n'
-        for aCapture in g_bVideo:
-            declaration += 'CvCapture * block' + aCapture[0] + '_capture = NULL; \n IplImage * block' + aCapture[
-                0] + '_frame = NULL; \n block' + aCapture[0] + '_capture = cvCreateFileCapture("' + aCapture[
-                               1] + '"); \n'
-        for aCamera in g_bCameras:
-            declaration += 'CvCapture * block' + aCamera[0] + '_capture = NULL; \n IplImage * block' + aCamera[
-                0] + '_frame = NULL; \n block' + aCamera[0] + '_capture = cvCaptureFromCAM(' + aCamera[1] + '); \n'
+    if len(g_bLive) > 0:
+        declaration += 'int end = 0;\n'
+        declaration += 'int key;\n'
         declaration += 'while(!end) \n {\t \n'
 
-        for aCapture in g_bVideo:
-            declaration += 'cvGrabFrame (block' + aCapture[0] + '_capture); \n block' + aCapture[
-                0] + '_frame = cvRetrieveFrame (block' + aCapture[0] + '_capture); \n'
-
-        for aCamera in g_bCameras:
-            declaration += 'cvGrabFrame (block' + aCamera[0] + '_capture); \n block' + aCamera[
-                0] + '_frame = cvRetrieveFrame (block' + aCamera[0] + '_capture); \n'
+        for value in g_bLive:
+            declaration += 'cvGrabFrame(block' + aCapture[0] + '_capture);\n' + \
+                'block' + aCapture[0] + '_frame = cvRetrieveFrame (block' + aCapture[0] + '_capture);\n'
 
     execution = "\n\t//execution block\n"
     for x in functionCalls:
         execution += x
-    if g_bLive:
-        execution += '\n\tkey = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n if(key != -1)\n end = 1;'
-        deallocating = "\n\t//deallocation block\n"
-        for x in deallocations:
-            deallocating += x
 
+    if len(g_bLive) > 0:
+        execution += 'key = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n' + \
+            'if(key != -1)\n' + \ 
+            'end = 1;'
+
+    deallocating = "\n\t//deallocation block\n"
+    for x in deallocations:
+        deallocating += x
+
+    if len(g_bLive) > 0:
         deallocating += "}"
-
-    else:
-        deallocating = "\n\t//deallocation block\n"
-
-        for x in deallocations:
-            deallocating += x
 
     closing = ""
     closing += "\n"
     for outDea in outDeallocations:
         closing += outDea
-    if g_bLive:
-        for aCapture in g_bVideo:
-            closing += 'cvReleaseCapture(&block' + aCapture[0] + '_capture);\n'
-        for aCamera in g_bCameras:
-            closing += 'cvReleaseCapture(&block' + aCamera[0] + '_capture);\n'
+
     closing += "return 0;\n } //closing main()\n"
 
 
@@ -407,7 +386,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         o.close()
         i.close()
 
-        if g_bLive:
+        if len(g_bLive) > 0:
             yield [_("Running, press any key (on the video output window) to terminate."), CompilingErrors]
         else:
             yield [_("Running ..."), CompilingErrors]
