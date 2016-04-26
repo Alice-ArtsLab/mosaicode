@@ -68,7 +68,6 @@ functionCalls = []
 deallocations = []
 outDeallocations = []
 blockList = []
-g_bSaveVideo = []
 usesFindSquares = 0
 usesFindColor = 0
 usesAdjustImage = 0
@@ -101,7 +100,6 @@ def __clean_generator():
     deallocations = []
     outDeallocations = []
     blockList = []
-    g_bSaveVideo = []
     usesFindSquares = 0
     usesFindColor = 0
     usesAdjustImage = 0
@@ -164,8 +162,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     global g_bVideo
     global g_bCameras
     global g_bFrameRate
-    global g_bSaveVideo
-    g_bSaveVideo = []
     g_bVideo = []
     g_bCameras = []
     g_bFrameRate = 0.1
@@ -340,8 +336,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
             closing += 'cvReleaseCapture(&block' + aCapture[0] + '_capture);\n'
         for aCamera in g_bCameras:
             closing += 'cvReleaseCapture(&block' + aCamera[0] + '_capture);\n'
-    for vWriter in g_bSaveVideo:
-        closing += 'cvReleaseVideoWriter(&block' + vWriter + '_vidWriter); // SaveVideo\n'
     closing += "return 0;\n } //closing main()\n"
 
 

@@ -222,8 +222,6 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    import harpia.gerador
-    harpia.gerador.g_bSaveVideo.append(blockTemplate.blockNumber)
     for propIter in blockTemplate.properties:
         if propIter[0] == 'filename':
             videoFilename = os.path.expanduser(propIter[1])
@@ -250,14 +248,17 @@ def generate(blockTemplate):
     blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
                              'IplImage * block$$_img_o1 = NULL;\n' + \
                              'CvVideoWriter* block$$_vidWriter = NULL;\n'
+
     blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                  '	if(block$$_vidWriter == NULL)//video writer not started up yet!\n' + \
                                  '		block$$_vidWriter = cvCreateVideoWriter( "' + videoFilename + '", ' + codecMacro + ',' + frameRate + ', cvGetSize(block$$_img_i1), 1 );\n' + \
                                  '	cvWriteFrame( block$$_vidWriter, block$$_img_i1);\n' + \
                                  '	block$$_img_o1 = block$$_img_i1;\n' + \
                                  '}\n'
+
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1); // SaveVideo Dealloc\n'
 
+    blockTemplate.outDealloc = 'cvReleaseVideoWriter(&block$$_vidWriter); // SaveVideo\n'
 
 # ------------------------------------------------------------------------------
 # Block Setup
