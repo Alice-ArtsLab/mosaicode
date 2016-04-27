@@ -159,22 +159,22 @@ def generate(blockTemplate):
             scaleFactor = propIter[1]
 
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i2 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_t1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1 && block' + blockTemplate.blockNumber + '_img_i2)\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_i2 = NULL;\n' + \
+        'IplImage * block$$_img_t1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1 && block$$_img_i2)\n' + \
                                  '{\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_t1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + '_img_i1->width - block' + blockTemplate.blockNumber + '_img_i2->width +1,block' + blockTemplate.blockNumber + '_img_i1->height - block' + blockTemplate.blockNumber + '_img_i2->height +1),32,1);\n' + \
-                                 '	block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + '_img_i1->width - block' + blockTemplate.blockNumber + '_img_i2->width +1,block' + blockTemplate.blockNumber + '_img_i1->height - block' + blockTemplate.blockNumber + '_img_i2->height +1),8,1);\n' + \
-                                 '	cvMatchTemplate(block' + blockTemplate.blockNumber + '_img_i1 , block' + blockTemplate.blockNumber + '_img_i2, block' + blockTemplate.blockNumber + '_img_t1, ' + interMethod + ');\n' + \
-                                 '	cvConvertScale(block' + blockTemplate.blockNumber + '_img_t1,block' + blockTemplate.blockNumber + '_img_o1, ' + str(
+                                 '	block$$_img_t1 = cvCreateImage(cvSize(block$$_img_i1->width - block$$_img_i2->width +1,block$$_img_i1->height - block$$_img_i2->height +1),32,1);\n' + \
+                                 '	block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width - block$$_img_i2->width +1,block$$_img_i1->height - block$$_img_i2->height +1),8,1);\n' + \
+                                 '	cvMatchTemplate(block$$_img_i1 , block$$_img_i2, block$$_img_t1, ' + interMethod + ');\n' + \
+                                 '	cvConvertScale(block$$_img_t1,block$$_img_o1, ' + str(
         10 ** -(int(float(scaleFactor)))) + ',0);\n' + \
                                  '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_t1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i2);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_t1);\n' + \
+                            'cvReleaseImage(&block$$_img_i2);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------

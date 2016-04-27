@@ -1,0 +1,24 @@
+<harpia>
+<GcState>
+	<block type="901" id="1">
+		<position x="20.0" y="60.0"/>
+	</block>
+</GcState>
+<properties>
+  <block id="1" type="901">
+ <property name="state" value="true"/>
+ <property name="x0" value="1"/>
+ <property name="y0" value="1"/>
+</block>
+
+  </properties>
+<network>
+<block type="901" id="1">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>

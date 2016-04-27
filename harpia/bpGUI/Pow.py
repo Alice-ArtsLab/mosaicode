@@ -133,16 +133,16 @@ def generate(blockTemplate):
         if propIter[0] == 'exponent':
             exponent = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL;\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                 'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                 '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-                                 '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\ncvPow(block' + \
-                                 blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1,' + str(
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'IplImage * block$$_img_o1 = NULL;\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+                                 'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                 '_img_i1->width,block$$_img_i1->height),block' + blockTemplate.blockNumber + \
+                                 '_img_i1->depth,block$$_img_i1->nChannels);\ncvPow(block' + \
+                                 blockTemplate.blockNumber + '_img_i1, block$$_img_o1,' + str(
         exponent) + ');}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n' + \
-                            'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
+                            'cvReleaseImage(&block$$_img_i1);\n'
     blockTemplate.functionCall += '\n // Valney esteve aqui \n'
 
 
