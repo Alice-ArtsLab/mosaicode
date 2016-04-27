@@ -568,7 +568,6 @@ def generate(blockTemplate):
 
    if flag == 'video':
        blockTemplate.functionCall = '// Video Mode \n' + \
-           'IplImage* block$$_frame = NULL;\n' + \
            'block$$_img_o1 = cvCloneImage(block$$_frame);\n'
        blockTemplate.outDealloc += 'cvReleaseCapture(&block$$_capture);\n'
 
@@ -580,7 +579,6 @@ def generate(blockTemplate):
 
    if flag == 'live':
        blockTemplate.functionCall = '// Live Mode \n' + \
-           'IplImage* block$$_frame = NULL; \n' + \
            'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
        blockTemplate.outDealloc += 'cvReleaseCapture(&block$$_capture);\n'
 

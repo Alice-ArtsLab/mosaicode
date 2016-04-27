@@ -26,25 +26,12 @@
 #    For further information, check the COPYING file distributed with this software.
 #
 # ----------------------------------------------------------------------
-
-################################WARNING!!###########################################
-#                      DO NOT MANUALLY EDIT THIS FILE                              #
-# LET THE MODIFICATIONS BE INSERTED BY THE TOOLS PROVIDED WITH HARPIA SYSTEM       #
-####################################################################################
-
-#############################INCLUDES AND DECLARATIONS##############################
 import os
 import gtk
-
-####################################INCLUDES OF CLASS##########################################
 
 from harpia.connection import connection
 from harpia.blockTemplate import blockTemplate
 from harpia.RunPrg import RunPrg
-
-###############################################################################################
-# from popen2 import Popen4
-
 from harpia.bpGUI import *
 from harpia.utils.XMLUtils import XMLParser
 from harpia.constants import *
@@ -59,12 +46,6 @@ gettext.textdomain(APP)
 # Global variable to indicate overall behavior of the code generator
 g_bLive = []
 g_bFrameRate = 0.1
-headers = []
-images = []
-functionCalls = []
-deallocations = []
-outDeallocations = []
-blockList = []
 ErrorLog = 'ErrorLog'
 
 if os.name == "nt":
@@ -74,23 +55,6 @@ if os.name == "nt":
 else:
     tmpDir = "/tmp/"
 
-#----------------------------------------------------------------------
-def __clean_generator():
-    global headers
-    global images
-    global functionCalls
-    global deallocations
-    global outDeallocations
-    global blockList
-
-    global g_bLive
-    headers = []
-    images = []
-    functionCalls = []
-    deallocations = []
-    outDeallocations = []
-    blockList = []
-    g_bLive = []
 #----------------------------------------------------------------------
 def adjust_images_size():
     return r"""
@@ -125,8 +89,7 @@ def __set_error_log(a_sError):
     Error.close()
 
 #----------------------------------------------------------------------
-def __apply_weights_on_connections(listOfBlocks):
-    ##For each block on listt:
+def __apply_weights_on_connections(listOfBlocks, blockList):
     returnList = []
     for block in listOfBlocks:
         ##Put the connections on returnList
@@ -143,12 +106,18 @@ def __apply_weights_on_connections(listOfBlocks):
 
 #----------------------------------------------------------------------
 def parseAndGenerate(dirName, XMLChain, installDirName):
-    __clean_generator()
+    blockList = []
+    outDeallocations = []
+    functionCalls = []
+    headers = []
+    images = []
+    deallocations = []
     global g_bLive
+    g_bLive = []
     global g_bFrameRate
     g_bFrameRate = 0.1
+
     yield [_("Starting Up Generator")]
-    #doc = binderytools.bind_file(XMLChain)
     doc = XMLParser(XMLChain)
     ########################Create the blocks from XMLChain############################
 
@@ -163,8 +132,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     yield [_("Generating Code")]
     blocks = doc.getTag("harpia").getTag("properties").getChildTags("block")
     for blockIter in blocks:
-        # print str(100.0*(t_nItCount/t_nBlockCount)) + "%"
-        # t_nItCount += 1.0
         tmpBlock = blockTemplate(blockIter.type, blockIter.id)
         try:
             block_properties = blockIter.getChildTags("property")
@@ -172,42 +139,30 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
                 tmpBlock.properties.append((propIter.name, propIter.value))
         except AttributeError:
             pass
-        ID = tmpBlock.blockNumber
         tmpBlock.getBlockOutputTypes()
 
         net_blocks = doc.getTag("harpia").getTag("network").getChildTags("block")
         for block in net_blocks:
-            if (block.id == ID and int(block.type) <> 10):
-                portCount = -1
-                outputs = block.getTag("outputs").getChildTags("output")
-                for output in outputs:
-                    tmpConnection = connection()
-                    portCount += 1
-                    if output.inBlock != '--':
-                        tmpConnection.sourceOutput = output.id
-                        tmpConnection.destinationInput = output.input
-                        tmpConnection.destinationNumber = output.inBlock
-                        tmpConnection.connType = tmpBlock.outTypes[int(tmpConnection.sourceOutput) - 1]
-                        tmpBlock.myConnections.append(tmpConnection)
-                    else:
-                        tmpConnection.destinationNumber = '--'
-                        tmpBlock.myConnections.append(tmpConnection)
-                    try:
-                        if output.grab == 'True':
-                            tmpBlock.outputsToSave.append(output.id)
-                    except:
-                        pass
-                    ###################################################################################
-                    # ADDING TO EACH BLOCK OBJECT THE RESULTING CODE , THEN ADDING THE BLOCK IN A LIST #
-                    ###################################################################################
-                    ##Please, do not change the sequence
+            if (block.id != blockIter.id):
+                continue
+            outputs = block.getTag("outputs").getChildTags("output")
+            for output in outputs:
+                tmpConnection = connection()
+                if output.inBlock != '--':
+                    tmpConnection.sourceOutput = output.id
+                    tmpConnection.destinationInput = output.input
+                    tmpConnection.destinationNumber = output.inBlock
+                    tmpConnection.connType = tmpBlock.outTypes[int(tmpConnection.sourceOutput) - 1]
+                    tmpBlock.myConnections.append(tmpConnection)
+                else:
+                    tmpConnection.destinationNumber = '--'
+                    tmpBlock.myConnections.append(tmpConnection)
+        #######################################################################
+        ##Please, do not change the sequence
         tmpBlock.blockCodeWriter()
         tmpBlock.connectorCodeWriter()
-        tmpBlock.saverCodeWriter()
-        # Some code tricks to allow global variables
-
         blockList.append(tmpBlock)
-    ###################################################################################
+        #######################################################################
 
     weights = []
 
@@ -215,9 +170,9 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) != 0:
             tmpList = []
             tmpList.append(block)
-            organizedChain = __apply_weights_on_connections(tmpList)
+            organizedChain = __apply_weights_on_connections(tmpList, blockList)
             while organizedChain != []:
-                organizedChain = __apply_weights_on_connections(organizedChain)
+                organizedChain = __apply_weights_on_connections(organizedChain, blockList)
 
     biggestWeight = -1
     for block in blockList:
@@ -273,7 +228,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
 
     header += "\nint main(int argc, char ** argv)\n{"
 
-    declaration = "\n\t//declaration block\n"
+    declaration = "\n//declaration block\n"
 
     for image in images:
         declaration += image
@@ -369,7 +324,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         CompilingErrors = ''
         CerrorList = o.readlines()
 
-        if len(CerrorList) <> 0:
+        if len(CerrorList) != 0:
             CompilingErrors += "Something was detected while compiling the source code.\n" + \
                                "There is a huge chance you've found a bug, please report to scotti@das.ufsc.br \n" + \
                                "sending the processing chain (.hrp), this error message and some description on what you were doing.\n" + \

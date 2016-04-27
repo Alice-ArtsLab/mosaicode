@@ -24,13 +24,13 @@ class blockTemplate:
         self.outputsToSave = []
 
     ######################################################3
-    #### Added by cpscotti. blockTemplate needs its outputTypes even "before" its code.. here it is
     def getBlockOutputTypes(self):
         try:
             self.outTypes = s2idirectory.block[int(self.blockType)]["OutTypes"]
         except:
             self.outTypes = "HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE"
 
+    ######################################################3
     def blockCodeWriter(self):
         PkgName = 'harpia.bpGUI.'
         ModName = str(s2idirectory.block[int(self.blockType)]["Path"]["Python"])
@@ -43,6 +43,7 @@ class blockTemplate:
         self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))
         self.outDealloc = self.outDealloc.replace("$$", str(self.blockNumber))
 
+    ######################################################3
     def connectorCodeWriter(self):
         for x in self.myConnections:
             if x.destinationNumber != '--':
@@ -66,7 +67,3 @@ class blockTemplate:
                 self.functionCall = self.functionCall.replace("$bn$", str(self.blockNumber))
                 self.functionCall = self.functionCall.replace("$so$", str(x.sourceOutput))
 
-    def saverCodeWriter(self):
-        for x in self.outputsToSave:
-            self.functionCall += 'cvSaveImage("block$$_img_o' + x + '.png" ,block$$_img_o' + x + ');\n'
-        self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))

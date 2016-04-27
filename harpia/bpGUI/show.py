@@ -92,9 +92,6 @@ class Properties(GladeWindow, S2iCommonProperties):
         pass
 
 
-# ShowProperties = Properties()
-# ShowProperties.show( center=0 )
-
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
@@ -103,15 +100,15 @@ def generate(blockTemplate):
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \
         'IplImage * block$$_img_o1 = NULL;\n'
-    if (not harpia.gerador.g_bLive):
+    if (len(harpia.gerador.g_bLive) > 0):
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     ' block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-                                     'cvSaveImage("block$$_OUT.png" ,block$$_img_i1);}\n'
+                         'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+                         'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n' + \
+                         'cvShowImage("block$$_img_o1",block$$_img_i1);\n} \n'
     else:
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     ' block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-                                     'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n' + \
-                                     'cvShowImage("block$$_img_o1",block$$_img_i1);} \n'
+                        'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+                        'cvSaveImage("block$$_OUT.png" ,block$$_img_i1);\n}\n'
     blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                             'cvReleaseImage(&block$$_img_i1);\n'
 
