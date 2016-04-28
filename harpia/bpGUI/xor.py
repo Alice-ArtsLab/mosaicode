@@ -87,8 +87,8 @@ class Properties(GladeWindow, S2iCommonProperties):
 # Code generation
 # ------------------------------------------------------------------------------
 def generate(blockTemplate):
-    import harpia.gerador
-    blockTemplate.header += harpia.gerador.adjust_images_size()
+    import opencvcommon
+    blockTemplate.header += opencvcommon.adjust_images_size()
 
     blockTemplate.imagesIO = \
         'IplImage * block$$_img_i1 = NULL;\n' + \

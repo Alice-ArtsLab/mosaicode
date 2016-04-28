@@ -1,6 +1,6 @@
 def adjust_images_size():
     return r"""
-// And, Xor, Division, subtraction, sum and multiplication need images with the same size
+// And, Xor, Division, subtraction, sum, or, multiplication need images with the same size
 void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
     if(img1->width != img2->width || img1->height != img2->height){
 	int minW,minH;
