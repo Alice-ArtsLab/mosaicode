@@ -142,7 +142,6 @@ def generate(blockTemplate):
     blockTemplate.functionCall = 'block$$_rect_o1 = block$$_rect_i1;\n' + \
                                  'block$$_rect_o1.x = block$$_point_i2.x + ' + offset_x + ';\n' + \
                                  'block$$_rect_o1.y = block$$_point_i2.y + ' + offset_y + ';\n'
-    blockTemplate.dealloc = ''
 
 
 # ------------------------------------------------------------------------------

@@ -118,11 +118,10 @@ def generate(blockTemplate):
 
     blockTemplate.functionCall = "\n\n // NOT Execution Block\n"
     blockTemplate.functionCall += 'if(block$$_img_i1){\n' + \
-                                  'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                  '_img_i1->width,block$$_img_i1->height),block' + blockTemplate.blockNumber + \
+                                  'block$$_img_o1 = cvCreateImage(cvSize(block$$'  + \
+                                  '_img_i1->width,block$$_img_i1->height),block$$'  + \
                                   '_img_i1->depth,block$$_img_i1->nChannels);\n'
-    blockTemplate.functionCall += 'cvNot(block' + \
-                                  blockTemplate.blockNumber + '_img_i1, block$$_img_o1);\n}\n'
+    blockTemplate.functionCall += 'cvNot(block$$_img_i1, block$$_img_o1);\n}\n'
 
     blockTemplate.dealloc = '// NOT dealloc block '
     blockTemplate.dealloc += 'cvReleaseImage(&block$$_img_o1);\n'

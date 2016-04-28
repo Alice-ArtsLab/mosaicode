@@ -96,7 +96,6 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     yield [_("Starting Up Generator")]
     doc = XMLParser(XMLChain)
     ########################Create the blocks from XMLChain############################
-
     ##################################################################################
     # in the future we may want to show some kind of progress bar..
     # the next few comented lines implement a progress counter.. this could be thrown up to the GUI via yields =]
@@ -143,12 +142,15 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     weights = []
 
     for block in blockList:
-        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) != 0:
-            tmpList = []
-            tmpList.append(block)
-            organizedChain = __apply_weights_on_connections(tmpList, blockList)
-            while organizedChain != []:
-                organizedChain = __apply_weights_on_connections(organizedChain, blockList)
+        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) != 0:
+            continue
+        if len(s2idirectory.block[int(block.blockType)]["OutTypes"]) == 0:
+            continue
+        tmpList = []
+        tmpList.append(block)
+        organizedChain = __apply_weights_on_connections(tmpList, blockList)
+        while organizedChain != []:
+            organizedChain = __apply_weights_on_connections(organizedChain, blockList)
 
     biggestWeight = -1
     for block in blockList:
