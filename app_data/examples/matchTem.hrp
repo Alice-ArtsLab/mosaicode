@@ -1,0 +1,83 @@
+<harpia>
+<GcState>
+	<block type="605" id="1">
+		<position x="290.0" y="149.0"/>
+	</block>
+	<block type="0" id="2">
+		<position x="22.0" y="92.0"/>
+	</block>
+	<block type="0" id="3">
+		<position x="22.0" y="173.0"/>
+	</block>
+	<block type="2" id="5">
+		<position x="531.0" y="151.0"/>
+	</block>
+</GcState>
+<properties>
+  <block id="2" type="00">
+ <property name="state" value="true"/>
+ <property name="type" value="file"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+ <property name="place" value="server"/>
+ <property name="camera" value="00"/>
+ <property name="size" value="640x480"/>
+ <property name="video_name" value=""/>
+ <property name="frameRate" value="20.0"/>
+</block>
+
+  <block id="3" type="00">
+ <property name="state" value="true"/>
+ <property name="type" value="file"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+ <property name="place" value="server"/>
+ <property name="camera" value="00"/>
+ <property name="size" value="640x480"/>
+ <property name="video_name" value=""/>
+ <property name="frameRate" value="20.0"/>
+</block>
+
+  <block id="1" type="605">
+ <property name="state" value="true"/>
+ <property name="method" value="CV_TM_SQDIFF"/>
+ <property name="scaleFactor" value="6"/>
+</block>
+
+  <block id="5" type="02">
+ <property name="state" value="true"/>
+</block>
+
+  </properties>
+<network>
+<block type="0" id="2">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="1" input="1"/>
+</outputs>
+</block>
+<block type="0" id="3">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="1" input="2"/>
+</outputs>
+</block>
+<block type="605" id="1">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="1"/>
+</outputs>
+</block>
+<block type="2" id="5">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>

@@ -136,12 +136,12 @@ def generate(blockTemplate):
             offset_x = propIter[1]
         if propIter[0] == 'offset_y':
             offset_y = propIter[1]
-    blockTemplate.imagesIO = 'CvRect block' + blockTemplate.blockNumber + '_rect_i1;\n' + \
-                             'CvPoint block' + blockTemplate.blockNumber + '_point_i2;\n' + \
-                             'CvRect block' + blockTemplate.blockNumber + '_rect_o1;\n'
-    blockTemplate.functionCall = 'block' + blockTemplate.blockNumber + '_rect_o1 = block' + blockTemplate.blockNumber + '_rect_i1;\n' + \
-                                 'block' + blockTemplate.blockNumber + '_rect_o1.x = block' + blockTemplate.blockNumber + '_point_i2.x + ' + offset_x + ';\n' + \
-                                 'block' + blockTemplate.blockNumber + '_rect_o1.y = block' + blockTemplate.blockNumber + '_point_i2.y + ' + offset_y + ';\n'
+    blockTemplate.imagesIO = 'CvRect block$$_rect_i1;\n' + \
+                             'CvPoint block$$_point_i2;\n' + \
+                             'CvRect block$$_rect_o1;\n'
+    blockTemplate.functionCall = 'block$$_rect_o1 = block$$_rect_i1;\n' + \
+                                 'block$$_rect_o1.x = block$$_point_i2.x + ' + offset_x + ';\n' + \
+                                 'block$$_rect_o1.y = block$$_point_i2.y + ' + offset_y + ';\n'
     blockTemplate.dealloc = ''
 
 

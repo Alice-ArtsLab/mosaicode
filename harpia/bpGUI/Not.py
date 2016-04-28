@@ -112,21 +112,21 @@ class Properties(GladeWindow, S2iCommonProperties):
 def generate(blockTemplate):
     blockTemplate.imagesIO = "\n //NOT input and output \n"
     blockTemplate.imagesIO += \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL; // NOT input\n' + \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_o1 = NULL; // NOT output\n'
+        'IplImage * block$$_img_i1 = NULL; // NOT input\n' + \
+        'IplImage * block$$_img_o1 = NULL; // NOT output\n'
     blockTemplate.imagesIO += "\n\n"
 
     blockTemplate.functionCall = "\n\n // NOT Execution Block\n"
-    blockTemplate.functionCall += 'if(block' + blockTemplate.blockNumber + '_img_i1){\n' + \
-                                  'block' + blockTemplate.blockNumber + '_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
-                                  '_img_i1->width,block' + blockTemplate.blockNumber + '_img_i1->height),block' + blockTemplate.blockNumber + \
-                                  '_img_i1->depth,block' + blockTemplate.blockNumber + '_img_i1->nChannels);\n'
+    blockTemplate.functionCall += 'if(block$$_img_i1){\n' + \
+                                  'block$$_img_o1 = cvCreateImage(cvSize(block' + blockTemplate.blockNumber + \
+                                  '_img_i1->width,block$$_img_i1->height),block' + blockTemplate.blockNumber + \
+                                  '_img_i1->depth,block$$_img_i1->nChannels);\n'
     blockTemplate.functionCall += 'cvNot(block' + \
-                                  blockTemplate.blockNumber + '_img_i1, block' + blockTemplate.blockNumber + '_img_o1);\n}\n'
+                                  blockTemplate.blockNumber + '_img_i1, block$$_img_o1);\n}\n'
 
     blockTemplate.dealloc = '// NOT dealloc block '
-    blockTemplate.dealloc += 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_o1);\n'
-    blockTemplate.dealloc += 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc += 'cvReleaseImage(&block$$_img_o1);\n'
+    blockTemplate.dealloc += 'cvReleaseImage(&block$$_img_i1);\n'
     blockTemplate.dealloc = '\n'
 
 

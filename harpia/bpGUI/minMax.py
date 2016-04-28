@@ -191,28 +191,28 @@ def generate(blockTemplate):
         elif propIter[0] == 'criteria':
             checkCrit = propIter[1]
     blockTemplate.imagesIO = \
-        'IplImage * block' + blockTemplate.blockNumber + '_img_i1 = NULL;\n' + \
-        'double block' + blockTemplate.blockNumber + '_double_o1;\n' + \
-        'CvPoint block' + blockTemplate.blockNumber + '_point_o2 = cvPoint(0,0);\n'
-    blockTemplate.functionCall = '\nif(block' + blockTemplate.blockNumber + '_img_i1)\n{\n' + \
+        'IplImage * block$$_img_i1 = NULL;\n' + \
+        'double block$$_double_o1;\n' + \
+        'CvPoint block$$_point_o2 = cvPoint(0,0);\n'
+    blockTemplate.functionCall = '\nif(block$$_img_i1)\n{\n' + \
                         '	double minVal,maxVal;\n' + \
                         '	CvPoint minP,maxP;\n' + \
-                        '	block' + blockTemplate.blockNumber + '_double_o1 = 0;\n' + \
-                        '	cvMinMaxLoc(block' + blockTemplate.blockNumber + '_img_i1, &minVal, &maxVal, &minP, &maxP, NULL);\n'
+                        '	block$$_double_o1 = 0;\n' + \
+                        '	cvMinMaxLoc(block$$_img_i1, &minVal, &maxVal, &minP, &maxP, NULL);\n'
     if minORmax == 'max':
         blockTemplate.functionCall += '	minP = maxP;\n	minVal = maxVal;\n'
 
-    blockTemplate.functionCall += '	block' + blockTemplate.blockNumber + '_point_o2 = minP;\n'
+    blockTemplate.functionCall += '	block$$_point_o2 = minP;\n'
 
     if checkCrit == "pos":
         blockTemplate.functionCall += '	if(minP.x >= ' + minX + ' && minP.x <= ' + maxX + ')\n' + \
                              '		if(minP.y >= ' + minY + ' && minP.y <= ' + maxY + ')\n' + \
-                             '			block' + blockTemplate.blockNumber + '_double_o1 = 1.0;\n'
+                             '			block$$_double_o1 = 1.0;\n'
     elif checkCrit == "val":
         blockTemplate.functionCall += '	if(minVal >= ' + minVal + ' && minVal <= ' + maxVal + ')\n' + \
-                             '		block' + blockTemplate.blockNumber + '_double_o1 = 1.0;\n'
+                             '		block$$_double_o1 = 1.0;\n'
     blockTemplate.functionCall += '}\n'
-    blockTemplate.dealloc = 'cvReleaseImage(&block' + blockTemplate.blockNumber + '_img_i1);\n'
+    blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
 
 
 # ------------------------------------------------------------------------------

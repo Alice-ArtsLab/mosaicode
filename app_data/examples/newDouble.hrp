@@ -1,0 +1,23 @@
+<harpia>
+<GcState>
+	<block type="701" id="3">
+		<position x="38.0" y="83.0"/>
+	</block>
+</GcState>
+<properties>
+  <block id="3" type="701">
+ <property name="state" value="true"/>
+ <property name="doubleVal" value="1.000"/>
+</block>
+
+  </properties>
+<network>
+<block type="701" id="3">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>
