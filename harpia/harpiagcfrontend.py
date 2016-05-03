@@ -40,7 +40,7 @@ from harpia.utils.XMLUtils import XMLParser
 from harpia import preferences
 from harpia import about
 from filefilters import *
-from GcDiagram import *
+from GUI.diagram import *
 from diagramcontrol import DiagramControl 
 
 import s2iSessionManager

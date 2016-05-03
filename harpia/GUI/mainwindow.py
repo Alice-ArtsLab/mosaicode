@@ -12,7 +12,7 @@ from maincontrol import MainControl
 from blockstreeview import BlocksTreeView
 from blockdescription import BlockDescription
 from status import Status
-from diagram import Diagram
+from workarea import WorkArea
 
 class MainWindow(Gtk.Window):
 
@@ -27,7 +27,7 @@ class MainWindow(Gtk.Window):
         self.search = SearchBar(self)
         self.blocks_tree_view = BlocksTreeView(self)
         self.block_description = BlockDescription(self)
-        self.diagram = Diagram(self)
+        self.work_area = WorkArea(self)
         self.status = Status(self)
 
         # vbox main 
@@ -63,11 +63,11 @@ class MainWindow(Gtk.Window):
 
         # hpaned_work_area
         # -----------------------------------------------------
-        # | vbox_left      ||   diagram
+        # | vbox_left      ||   work_area
         # -----------------------------------------------------
         vbox_left = Gtk.VBox(False, 0)
         hpaned_work_area.add1(vbox_left)
-        hpaned_work_area.add2(self.diagram)
+        hpaned_work_area.add2(self.work_area)
 
         # vbox_left
         # -----------------------------------------------------
@@ -92,6 +92,8 @@ class MainWindow(Gtk.Window):
         vpaned_left.add2(self.__create_frame(self.block_description))
         vpaned_left.set_position(300)
 
+        self.connect("delete-event", self.quit)
+
         self.block_description.set_text("123 testando\n\n Novidades")
         self.status.append_text("Eu tu ele \n Nós vós eles")
         self.blocks_tree_view.add_item("Teste", "Nostradamus")
@@ -104,12 +106,16 @@ class MainWindow(Gtk.Window):
         self.blocks_tree_view.add_item("Subtração", "Aritmética")
         self.blocks_tree_view.add_item("Romance", "Aritmética")
 
-        self.diagram.add_tab("Teste 1")
-        self.diagram.add_tab("Teste 2")
-        self.diagram.add_tab("Teste 3")
-        self.diagram.add_tab("Capricórnio bovino")
+        self.work_area.add_tab("Teste 1")
+        self.work_area.add_tab("Teste 2")
+        self.work_area.add_tab("Teste 3")
+        self.work_area.add_tab("Capricórnio bovino")
 
         self.menu.add_example("123 mudar")
+        self.menu.add_example("/home/flavio/teste123")
+
+        self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest.hrp")
+        self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest2.hrp")
 
     def __create_frame(self, widget):
         frame = Gtk.Frame()
@@ -118,8 +124,11 @@ class MainWindow(Gtk.Window):
         frame.set_property("border-width", 4)
         return frame
 
+    def quit(self, widget, data):
+        print "Bye"
+        Gtk.main_quit()
+
 if __name__ == "__main__":
     win = MainWindow()
-    win.connect("delete-event", Gtk.main_quit)
     win.show_all()
     Gtk.main()

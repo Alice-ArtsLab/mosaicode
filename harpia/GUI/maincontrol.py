@@ -7,16 +7,14 @@ class MainControl():
         self.main_window = main_window
 
     def new(self):
-        self.main_window.diagram.add_tab("Untitled")
+        self.main_window.work_area.add_tab("Untitled")
 
-    def open(self):
-        print "Open from control"
+    def open(self, file_name):
+        self.main_window.work_area.add_tab(file_name)
+        print "Open from control " + file_name
 
     def close(self):
-        self.main_window.diagram.close_tab()
-
-    def recent(self):
-        print "Recent from control"
+        self.main_window.work_area.close_tab()
 
     def save(self):
         print "Save from control"
@@ -28,7 +26,7 @@ class MainControl():
         print "Export from control"
 
     def exit(self):
-        print "Exit from control"
+        self.main_window.quit(None, None)
 
     def cut(self):
         print "Cut from control"
@@ -65,9 +63,6 @@ class MainControl():
 
     def tips(self):
         print "Tips from control"
-
-    def example(self):
-        print "Example from control"
 
     def about(self):
         print "About from control"

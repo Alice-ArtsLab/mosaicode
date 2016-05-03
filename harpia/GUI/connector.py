@@ -24,13 +24,17 @@
 #
 #----------------------------------------------------------------------
 
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+
 import gobject
-import gtk
 import math
 import gnomecanvas
 import sys
 
-from GcdConnectorMenu import GcdConnectorMenu
+from connectormenu import ConnectorMenu
 from utils.graphicfunctions import *
 
 class GcdConnector(gnomecanvas.CanvasGroup):

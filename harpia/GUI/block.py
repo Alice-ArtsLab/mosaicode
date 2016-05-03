@@ -24,15 +24,15 @@
 #
 #----------------------------------------------------------------------
 
-import pango
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
 import math
-import gnomecanvas
 import os
 
-from GcdBlockMenu import GcdBlockMenu
-import s2idirectory
-import s2iblockpropertiesgui
+from blockmenu import BlockMenu
+from harpia.s2idirectory import *
 from utils.XMLUtils import XMLParser
 from utils.graphicfunctions import *
 
@@ -49,7 +49,7 @@ OUTPUT_HEIGHT = 24
 OUTPUT_WIDTH = 24
 
 
-class GcdBlock( gnomecanvas.CanvasGroup):
+class Block(gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __init__( self, diagram, block_type, block_id=1):
@@ -187,7 +187,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
                             return False
 
         elif event.type == gtk.gdk._2BUTTON_PRESS:
-            GcdBlockMenu(self, event)
+            BlockMenu(self, event)
             return True
 
         elif event.type == gtk.gdk.ENTER_NOTIFY:
@@ -203,7 +203,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __del__(self):
-        print "GC: deleting GcdBlock:",self.block_id
+        print "GC: deleting Block:",self.block_id
 
 #----------------------------------------------------------------------
     def _BbRect(self):
@@ -396,7 +396,7 @@ class GcdBlock( gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __right_click(self, a_oEvent):
-       GcdBlockMenu(self, a_oEvent)
+       BlockMenu(self, a_oEvent)
 
 #----------------------------------------------------------------------
     def get_state(self):

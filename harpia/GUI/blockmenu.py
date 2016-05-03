@@ -24,13 +24,11 @@
 #
 #----------------------------------------------------------------------
 
-import pango
-import gtk
-import math
-import gnomecanvas
-import os
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
-import s2iblockpropertiesgui
+from harpia.s2iblockpropertiesgui import *
 from harpia import showimage
 
 class GcdBlockMenu:
