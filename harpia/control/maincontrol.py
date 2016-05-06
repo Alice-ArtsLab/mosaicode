@@ -9,9 +9,11 @@ class MainControl():
     def new(self):
         self.main_window.work_area.add_tab("Untitled")
 
+    def select_open(self):
+        self.open("/home/flavio/helloworld.hrp")
+
     def open(self, file_name):
-        self.main_window.work_area.add_tab(file_name)
-        print "Open from control " + file_name
+        self.main_window.work_area.open_diagram(file_name)
 
     def close(self):
         self.main_window.work_area.close_tab()

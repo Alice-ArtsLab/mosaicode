@@ -28,10 +28,10 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.s2iblockpropertiesgui import *
-from harpia import showimage
+#from harpia.s2iblockpropertiesgui import *
+#from harpia import showimage
 
-class GcdBlockMenu:
+class BlockMenu:
 
     def __init__(self, block, event):
         self.block = block
@@ -76,8 +76,9 @@ class GcdBlockMenu:
         menu.popup(None, None, None, event.button, event.time)
 
     def __show_block_properties(self, *args):
-        PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI(self.block)
-        PropertiesGUI.EditProperties(self.block.m_oPropertiesXML)
+#        PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI(self.block)
+#        PropertiesGUI.EditProperties(self.block.m_oPropertiesXML)
+        pass
 
     def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
         self.block.diagram.delete_block(self.block.block_id)
@@ -89,8 +90,9 @@ class GcdBlockMenu:
         print self.block.m_oPropertiesXML.getXML()
 
     def __show_image_GUI(self, *args):
-        path = "/tmp/harpiaBETMP0" + str(self.block.diagram.get_session_id()) + "/block" + str(self.block.get_id()) + "_OUT.png"
-        ShowGUI = showimage.ShowImage(path, self.block.diagram.get_error_log())
-        ShowGUI.show()
+#        path = "/tmp/harpiaBETMP0" + str(self.block.diagram.get_session_id()) + "/block" + str(self.block.get_id()) + "_OUT.png"
+#        ShowGUI = showimage.ShowImage(path, self.block.diagram.get_error_log())
+#        ShowGUI.show()
+        pass
 
 

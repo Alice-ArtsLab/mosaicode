@@ -14,6 +14,9 @@ then procede with instalation
 #: sudo apt-get install python-pip
 #: sudo pip install BeautifulSoup4
 
+libgoocanvas-2.0-common
+gir1.2-goocanvas-2.0
+
 to uninstall
 #: sudo ./uninstall.sh
 

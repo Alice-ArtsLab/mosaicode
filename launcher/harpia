@@ -1,36 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# [HARPIA PROJECT]
-#
-# CLASS:
-# []
-#
-# FILE:
-# Harpia-new-Frontend.py
-#
-# MODULE:
-# [Module Frontend]
-#
-# PURPOUSE:
-# [ Make Frontend more quickly - File with main funtion do not generate .pyc - See python documentation ]
-#
-# AUTHOR:
-# [Clovis Peruchi Scotti (cpscotti) - scotti -at- ieee.org]
-#
-# USAGE:
-# [Executable]
-#
-# STATUS:
-# [Finished]
-# 
-# VERSIONS:
-# [21/3/2009, re-implementation from Harpia-Frontend (cpscotti)]
-#
-#----------------------------------------------------------------------
 
 # Libraries 
-from harpia import harpiagcfrontend
-import gtk
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+
+from harpia.GUI.mainwindow import MainWindow
+
 import sys
 import os
 
@@ -39,25 +17,24 @@ import os
 #---------------------------------------------------
 
 def main(argv):
-	"""
-			The Harpia-Frontend class is where the main function starts the system.
-			It initializes the interface. 
-	"""
-	
-	#export data folder's path
-	
-	#if os.getcwd() == '/home/nofx/pkgHarpia/harpia':
-		#os.environ['HARPIA_DATA_DIR'] = "app_data/"
-	#else:
-	os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
-	
-	
-	## Initialize the Frontend
-	HarpiaFrontend = harpiagcfrontend.S2iHarpiaFrontend()
-	HarpiaFrontend.show( center=0 )
-	gtk.main()
-	
-	#----------------------------------------------------------------------
+    """
+            The Harpia-Frontend class is where the main function starts the system.
+            It initializes the interface. 
+    """
+    
+    #export data folder's path
+    
+    #if os.getcwd() == '/home/nofx/pkgHarpia/harpia':
+        #os.environ['HARPIA_DATA_DIR'] = "app_data/"
+    #else:
+    os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
+    
+    
+    ## Initialize the Frontend
+    win = MainWindow()
+    win.show_all()
+    Gtk.main()
+    #----------------------------------------------------------------------
 
 if __name__ == '__main__':
     main(sys.argv)

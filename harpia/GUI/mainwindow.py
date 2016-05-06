@@ -5,10 +5,12 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+import os
+
 from menu import Menu
 from toolbar import Toolbar
 from searchbar import SearchBar
-from maincontrol import MainControl
+from harpia.control.maincontrol import MainControl
 from blockstreeview import BlocksTreeView
 from blockdescription import BlockDescription
 from status import Status
@@ -17,7 +19,7 @@ from workarea import WorkArea
 class MainWindow(Gtk.Window):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title="Mandragora")
+        Gtk.Window.__init__(self, title="Harpia")
         self.set_default_size(800,600)
         self.main_control = MainControl(self)
 
@@ -106,11 +108,6 @@ class MainWindow(Gtk.Window):
         self.blocks_tree_view.add_item("Subtração", "Aritmética")
         self.blocks_tree_view.add_item("Romance", "Aritmética")
 
-        self.work_area.add_tab("Teste 1")
-        self.work_area.add_tab("Teste 2")
-        self.work_area.add_tab("Teste 3")
-        self.work_area.add_tab("Capricórnio bovino")
-
         self.menu.add_example("123 mudar")
         self.menu.add_example("/home/flavio/teste123")
 
@@ -127,8 +124,3 @@ class MainWindow(Gtk.Window):
     def quit(self, widget, data):
         print "Bye"
         Gtk.main_quit()
-
-if __name__ == "__main__":
-    win = MainWindow()
-    win.show_all()
-    Gtk.main()

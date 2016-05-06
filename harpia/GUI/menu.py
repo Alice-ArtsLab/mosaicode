@@ -19,7 +19,7 @@ class Menu(Gtk.MenuBar):
         file_menu = Gtk.Menu()
         self.recent_files_menu = Gtk.Menu()
         self.__create_menu("New", file_menu, self.main_window.main_control.new)
-        self.__create_menu("Open", file_menu, self.main_window.main_control.open)
+        self.__create_menu("Open", file_menu, self.main_window.main_control.select_open)
         self.__create_menu("Close", file_menu, self.main_window.main_control.close)
         recents = self.__create_menu("Recents", file_menu, None)
         recents.set_submenu(self.recent_files_menu)

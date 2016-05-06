@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 
-import gnomecanvas
-import GcdBlock
-import GcdConnector
-import GcDiagram
-import gtk
-import time
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GooCanvas
 
 from exceptions import AttributeError
 
-from utils.XMLUtils import XMLParser
-from utils.graphicfunctions import *
+from harpia.utils.XMLUtils import XMLParser
+from harpia.utils.graphicfunctions import *
 
 
 class DiagramControl():

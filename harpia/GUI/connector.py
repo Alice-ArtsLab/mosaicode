@@ -26,18 +26,19 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GooCanvas
 
 
-import gobject
 import math
-import gnomecanvas
 import sys
 
-from connectormenu import ConnectorMenu
-from utils.graphicfunctions import *
+#from connectormenu import ConnectorMenu
+from harpia.utils.graphicfunctions import *
 
-class GcdConnector(gnomecanvas.CanvasGroup):
+class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __init__( self, diagram, from_block=-1, from_block_out=-1):
@@ -76,7 +77,8 @@ class GcdConnector(gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __right_click_run_menu(self, a_oEvent):
-        GcdConnectorMenu(self, a_oEvent)
+#        GcdConnectorMenu(self, a_oEvent)
+        pass
 
 #----------------------------------------------------------------------
     def set_end(self, to_block=-1, to_block_in=-1):

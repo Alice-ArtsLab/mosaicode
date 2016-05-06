@@ -26,15 +26,19 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import GooCanvas
 
 import math
 import os
 
 from blockmenu import BlockMenu
 from harpia.s2idirectory import *
-from utils.XMLUtils import XMLParser
-from utils.graphicfunctions import *
+from harpia.utils.XMLUtils import XMLParser
+from harpia.utils.graphicfunctions import *
 
 import copy
 
@@ -49,18 +53,22 @@ OUTPUT_HEIGHT = 24
 OUTPUT_WIDTH = 24
 
 
-class Block(gnomecanvas.CanvasGroup):
+class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __init__( self, diagram, block_type, block_id=1):
-
+        GooCanvas.CanvasGroup.__init__(self)
         self.block_type = block_type
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
-        if s2idirectory.block.has_key(block_type):
-            self.block_description = s2idirectory.block[block_type]
+        
+        self.remember_x = 0
+        self.remember_y = 0
+        
+        if block.has_key(block_type):
+            self.block_description = block[block_type]
         else:
-            self.block_description = s2idirectory.block[0]
+            self.block_description = block[0]
             print "Bad block type.. assuming 00"
 
         self.block_id = block_id
@@ -98,11 +106,22 @@ class Block(gnomecanvas.CanvasGroup):
                           +(t_nMaxIO * INPUT_HEIGHT),#adicionando a altura de cada port
                           HEIGHT_DEFAULT)
 
-        self.__gobject_init__()
-        self.group = self.diagram.root().add(self,x=0,y=0)
-        self.group.connect("event", self.__group_event)
-        self.group.set_flags(gtk.CAN_FOCUS)
+#        self.group = self.diagram.get_root_item().add(self,x=0,y=0)
+        self.connect("button-press-event", self.__on_button_press)
+        self.connect("motion-notify-event", self.__on_motion_notify)
+#        self.group.set_flags(gtk.CAN_FOCUS)
         self.build()
+        self.set_parent(diagram.get_root_item())
+
+        label = GooCanvas.CanvasText(parent=self,
+                            text="Hello World",
+                            fill_color='black',
+                            anchor=GooCanvas.CanvasAnchorType.CENTER,
+                            x=0,
+                            y=0)
+         
+        self.props.x = 0
+        self.props.y = 0
 
 #----------------------------------------------------------------------
     def __is_input(self,event):
@@ -147,55 +166,63 @@ class Block(gnomecanvas.CanvasGroup):
                      + INPUT_HEIGHT/2)))#going to the port's center
 
 #----------------------------------------------------------------------
-    def __group_event(self, widget, event=None):
-        if event.type == gtk.gdk.BUTTON_PRESS:
-                if event.button == 1:
-                    # Remember starting position.
-                    # if event resolution got here, the diagram event resolution routine didn't matched with any ports.. so..
-                    self.remember_x = event.x
-                    self.remember_y = event.y
+    def __on_button_press(self, canvas_item, target_item, event):
+        print str(canvas_item) + " on button press"
+        if event.button == 1:
+            # Remember starting position.
+            # if event resolution got here, the diagram event resolution routine didn't matched with any ports.. so..
+            self.remember_x = event.x
+            self.remember_y = event.y
 
-                    #Cascading event resolution:
-                    input_event = self.__is_input(event)
-                    if input_event != -1:
-                        self.diagram.clicked_input(self.block_id,input_event)
-                        return True
-                    else:
-                        output_event = self.__is_output(event)
-                        if output_event != -1:
-                            self.diagram.clicked_output(self.block_id,output_event)
-                            return True
-                        else:
-                            self.group.grab_focus()
-                            self.update_focus()
-                            return False
+            #Cascading event resolution:
+            input_event = self.__is_input(event)
+            if input_event != -1:
+                self.diagram.clicked_input(self.block_id,input_event)
+                return True
+            else:
+                output_event = self.__is_output(event)
+                if output_event != -1:
+                    self.diagram.clicked_output(self.block_id,output_event)
+                    return True
+                else:
+                    self.group.grab_focus()
+                    self.update_focus()
                     return False
-                elif event.button == 3:
-                    self.__right_click(event)
-                    return True #explicitly returns true so that diagram won't catch this event
-        elif event.type == gtk.gdk.MOTION_NOTIFY:
-                if event.state & gtk.gdk.BUTTON1_MASK:
-                    if self.diagram.curr_connector == None:
-                        if(widget == self.group):#make sure we're not moving somebody else!
-                            # Get the new position and move by the difference
-                            new_x = event.x
-                            new_y = event.y
-                            widget.move(new_x - self.remember_x, new_y - self.remember_y)
-                            self.diagram.update_scrolling()
-                            self.remember_x = new_x
-                            self.remember_y = new_y
-                            return False
+            return False
+        elif event.button == 3:
+            self.__right_click(event)
+            return True #explicitly returns true so that diagram won't catch this event
 
-        elif event.type == gtk.gdk._2BUTTON_PRESS:
+#----------------------------------------------------------------------
+    def __on_motion_notify(self, canvas_item, target_item, event=None):
+        if event.state & Gdk.ModifierType.BUTTON1_MASK:
+            if self.diagram.curr_connector == None:
+                # Get the new position and move by the difference
+                new_x = event.x
+                new_y = event.y
+                print "on motion notify - " + str(self.remember_x) + " - " + str(new_x) + " - " + str(canvas_item.props.x)
+                canvas_item.translate(new_x, new_y)
+                canvas_item.props.x = new_x # - self.remember_x
+                canvas_item.props.y = new_y #- self.remember_y
+
+                self.diagram.update_scrolling()
+                self.remember_x = new_x
+                self.remember_y = new_y
+                return False
+
+
+#----------------------------------------------------------------------
+    def __group_event(self, widget, event=None):
+        if event.type == Gdk.EventType._2BUTTON_PRESS:
             BlockMenu(self, event)
             return True
 
-        elif event.type == gtk.gdk.ENTER_NOTIFY:
+        elif event.type == Gdk.EventType.ENTER_NOTIFY:
                 # Make the outline wide.
                 self.__mouse_over_state(True)
                 return False #pode propagar p/ cima
 
-        elif event.type == gtk.gdk.LEAVE_NOTIFY:
+        elif event.type == Gdk.EventType.LEAVE_NOTIFY:
                 # Make the outline thin.
                 if not self.focus:
                     self.__mouse_over_state(False)
@@ -207,37 +234,16 @@ class Block(gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def _BbRect(self):
-        p = []
-
-        arc0 = MakeArc(radius=RADIUS, edges=5, q=0)
-        arc1 = MakeArc(radius=RADIUS, edges=5, q=1)
-        arc2 = MakeArc(radius=RADIUS, edges=5, q=2)
-        arc3 = MakeArc(radius=RADIUS, edges=5, q=3)
-
-        pf = []
-        #cw
-
-        #linha superior.. p/ referencia
-        pf.append((RADIUS,0))
-        pf.append((self.width-RADIUS,0))
-        pf.extend(AlterArc(arc3,self.width-RADIUS,RADIUS))##canto superior direito
-        pf.extend(AlterArc(arc0,self.width-RADIUS,self.height-RADIUS))##canto inferior direito
-        pf.extend(AlterArc(arc1,RADIUS,self.height-RADIUS))##canto inferior esquerdo
-        pf.extend(AlterArc(arc2,RADIUS,RADIUS))##canto superior esquerdo
-
-        p = []
-
-        #takes a list of points(tuples)(pf) to produce a list of points in form [x1,y1,x2,y2,x3,y3....,xn,yn] (p)
-        for n in pf:
-            for e in n:
-                p.append(e)
-
         self.SetBackColor()
-        w1 = self.group.add(gnomecanvas.CanvasPolygon,
-                    points=p,
-                    fill_color_rgba=ColorFromList(self.m_oBackColor),
-                    outline_color='black',
-                    width_units=1.0)
+        w1 = GooCanvas.CanvasRect(parent=self,
+                    x=0,
+                    y=0,
+                    width=self.width,
+                    height=self.width,
+                    stroke_color="white",
+                    fill_color_rgba=ColorFromList(self.m_oBackColor)
+                    )
+        self.add_child(w1, -1)
         self.widgets["Rect"] = w1
 
 #----------------------------------------------------------------------
@@ -257,10 +263,10 @@ class Block(gnomecanvas.CanvasGroup):
         for x in range(len(self.block_description["InTypes"])):
             try:
                 pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
-                            s2idirectory.typeIconsIn[self.block_description["InTypes"][x]])
+                            harpia.s2idirectory.typeIconsIn[self.block_description["InTypes"][x]])
             except:
                 pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
-                            s2idirectory.icons["IconInput"])
+                            harpia.s2idirectory.icons["IconInput"])
 
             t_Wid = self.group.add(gnomecanvas.CanvasPixbuf,
                                 pixbuf=pb,
@@ -278,7 +284,7 @@ class Block(gnomecanvas.CanvasGroup):
         for x in range(len(self.block_description["OutTypes"])):
             try:
                 pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
-                            s2idirectory.typeIconsOut[
+                            harpia.s2idirectory.typeIconsOut[
                             self.block_description["OutTypes"][x]])
             except:
                 pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
@@ -295,29 +301,28 @@ class Block(gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def _BLabels(self):
-        label = self.group.add(gnomecanvas.CanvasText,
+        label = GooCanvas.CanvasText(parent=self,
                             text=self.block_description["Label"],
                             fill_color='black',
-                            anchor=gtk.ANCHOR_CENTER,
-                            weight=pango.WEIGHT_BOLD,
-                            size_points=9,
+                            anchor=GooCanvas.CanvasAnchorType.CENTER,
                             x=(self.width/2),
                             y=(self.height-10))
-        text_width = label.get_property('text-width')
-        oldX,oldY = ((self.width/2),(self.height-10))
-        self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
-        label.move((self.width/2)-oldX, (self.height-10)-oldY)
+         
+#        text_width = label.get_property('text-width')
+#        oldX,oldY = ((self.width/2),(self.height-10))
+#        self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
+#        label.move((self.width/2)-oldX, (self.height-10)-oldY)
         self.widgets["Label"] = label
-
+        self.add_child(label, -1)
 #----------------------------------------------------------------------
     def build(self):
         self._BLabels()#must be called in this order! otherwise the box rect won't have the propper width
         self._BbRect()
-        self._BInputs()
-        self._BOutputs()
-        self._BIcon()
-        self.update_flow()
-        self.__update_flow_display()
+#        self._BInputs()
+#        self._BOutputs()
+#        self._BIcon()
+#        self.update_flow()
+#        self.__update_flow_display()
 
 #----------------------------------------------------------------------
     def update_flow(self,a_bCheckTimeShifter=False):
@@ -389,10 +394,12 @@ class Block(gnomecanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __mouse_over_state(self, state):
-        if state:
-            self.widgets["Rect"].set(width_units=3)
-        else:
-            self.widgets["Rect"].set(width_units=1)
+#        if state:
+#            self.widgets["Rect"].set(width_units=3)
+#        else:
+#            self.widgets["Rect"].set(width_units=1)
+        print "Mouse over State"
+        pass
 
 #----------------------------------------------------------------------
     def __right_click(self, a_oEvent):

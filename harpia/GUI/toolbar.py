@@ -20,7 +20,7 @@ class Toolbar(Gtk.Toolbar):
                         self.main_window.main_control.new)
         self.__create_button(Gtk.STOCK_OPEN,
                         "Open Project",
-                        self.main_window.main_control.open)
+                        self.main_window.main_control.select_open)
         self.__create_button(Gtk.STOCK_SAVE,
                         "Save Project",
                         self.main_window.main_control.save)
