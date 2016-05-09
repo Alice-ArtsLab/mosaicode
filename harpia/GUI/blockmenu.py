@@ -27,6 +27,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 #from harpia.s2iblockpropertiesgui import *
 #from harpia import showimage
@@ -37,17 +38,17 @@ class BlockMenu:
         self.block = block
 
         # Double click
-        if event.type == gtk.gdk._2BUTTON_PRESS and self.block.get_type() == 2:
+        if event.type == Gdk.EventType._2BUTTON_PRESS and self.block.get_type() == 2:
              self.__show_image_GUI()
              return
         # Double click
-        if event.type == gtk.gdk._2BUTTON_PRESS and self.block.get_type() != 2:
+        if event.type == Gdk.EventType._2BUTTON_PRESS and self.block.get_type() != 2:
              self.__show_block_properties()
              return
 
-        menu = gtk.Menu()
+        menu = Gtk.Menu()
 
-        menu_item = gtk.MenuItem("Properties")
+        menu_item = Gtk.MenuItem("Properties")
         menu_item.connect("activate", self.__show_block_properties)
         menu.append(menu_item)
 
@@ -64,10 +65,10 @@ class BlockMenu:
 #        menu_item.connect("activate", self.__print_position)
 #        menu.append(menu_item)
 
-        menu_item = gtk.SeparatorMenuItem()
+        menu_item = Gtk.SeparatorMenuItem()
         menu.append(menu_item)
 
-        menu_item = gtk.MenuItem("Delete")
+        menu_item = Gtk.MenuItem("Delete")
         menu_item.connect("activate", self.__delete_clicked)
         menu.append(menu_item)
 

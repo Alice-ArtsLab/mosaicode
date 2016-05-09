@@ -31,11 +31,13 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GooCanvas
+from gi.repository import GdkPixbuf
 
 import math
 import os
 
 from blockmenu import BlockMenu
+import harpia.s2idirectory
 from harpia.s2idirectory import *
 from harpia.utils.XMLUtils import XMLParser
 from harpia.utils.graphicfunctions import *
@@ -106,22 +108,19 @@ class Block(GooCanvas.CanvasGroup):
                           +(t_nMaxIO * INPUT_HEIGHT),#adicionando a altura de cada port
                           HEIGHT_DEFAULT)
 
-#        self.group = self.diagram.get_root_item().add(self,x=0,y=0)
-        self.connect("button-press-event", self.__on_button_press)
-        self.connect("motion-notify-event", self.__on_motion_notify)
-#        self.group.set_flags(gtk.CAN_FOCUS)
         self.build()
         self.set_parent(diagram.get_root_item())
 
-        label = GooCanvas.CanvasText(parent=self,
-                            text="Hello World",
-                            fill_color='black',
-                            anchor=GooCanvas.CanvasAnchorType.CENTER,
-                            x=0,
-                            y=0)
-         
+        self.connect("button-press-event", self.__on_button_press)
+        self.connect("motion-notify-event", self.__on_motion_notify)
+        self.connect("enter-notify-event", self.__on_enter_notify)
+        self.connect("leave-notify-event", self.__on_leave_notify)
+
+
         self.props.x = 0
         self.props.y = 0
+
+
 
 #----------------------------------------------------------------------
     def __is_input(self,event):
@@ -167,7 +166,6 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
-        print str(canvas_item) + " on button press"
         if event.button == 1:
             # Remember starting position.
             # if event resolution got here, the diagram event resolution routine didn't matched with any ports.. so..
@@ -193,6 +191,10 @@ class Block(GooCanvas.CanvasGroup):
             self.__right_click(event)
             return True #explicitly returns true so that diagram won't catch this event
 
+        if event.type == Gdk.EventType._2BUTTON_PRESS:
+            BlockMenu(self, event)
+            return True
+
 #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
@@ -200,7 +202,6 @@ class Block(GooCanvas.CanvasGroup):
                 # Get the new position and move by the difference
                 new_x = event.x
                 new_y = event.y
-                print "on motion notify - " + str(self.remember_x) + " - " + str(new_x) + " - " + str(canvas_item.props.x)
                 canvas_item.translate(new_x, new_y)
                 canvas_item.props.x = new_x # - self.remember_x
                 canvas_item.props.y = new_y #- self.remember_y
@@ -212,21 +213,19 @@ class Block(GooCanvas.CanvasGroup):
 
 
 #----------------------------------------------------------------------
-    def __group_event(self, widget, event=None):
-        if event.type == Gdk.EventType._2BUTTON_PRESS:
-            BlockMenu(self, event)
-            return True
+    def __on_enter_notify(self, canvas_item, target_item, event=None):
+        if event.type == Gdk.EventType.ENTER_NOTIFY:
+            # Make the outline wide.
+            self.__mouse_over_state(True)
+            return False #pode propagar p/ cima
 
-        elif event.type == Gdk.EventType.ENTER_NOTIFY:
-                # Make the outline wide.
-                self.__mouse_over_state(True)
-                return False #pode propagar p/ cima
-
-        elif event.type == Gdk.EventType.LEAVE_NOTIFY:
-                # Make the outline thin.
-                if not self.focus:
-                    self.__mouse_over_state(False)
-                return False #pode passar p/ cima
+#----------------------------------------------------------------------
+    def __on_leave_notify(self, canvas_item, target_item, event=None):
+        if event.type == Gdk.EventType.LEAVE_NOTIFY:
+            # Make the outline thin.
+            if not self.focus:
+                self.__mouse_over_state(False)
+            return False #pode passar p/ cima
 
 #----------------------------------------------------------------------
     def __del__(self):
@@ -240,7 +239,7 @@ class Block(GooCanvas.CanvasGroup):
                     y=0,
                     width=self.width,
                     height=self.width,
-                    stroke_color="white",
+                    stroke_color="black",
                     fill_color_rgba=ColorFromList(self.m_oBackColor)
                     )
         self.add_child(w1, -1)
@@ -248,56 +247,60 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def _BIcon(self):
-        pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
-                    self.block_description["Icon"])
-        icon = self.group.add(gnomecanvas.CanvasPixbuf,
-                    pixbuf=pb,
-                    x=(self.width/2),
-                    y=(self.height/2),
-                    anchor=gtk.ANCHOR_CENTER)
-        self.widgets["pb"] = icon
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                self.block_description["Icon"])
+        image = GooCanvas.CanvasImage(parent=self,
+                pixbuf=pixbuf,
+                x=(self.width/2),
+                y=(self.height/2))
+        self.widgets["Icon"] = image
 
 #----------------------------------------------------------------------
     def _BInputs(self):
-        inPWids = []
+        ins = []
         for x in range(len(self.block_description["InTypes"])):
             try:
-                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
-                            harpia.s2idirectory.typeIconsIn[self.block_description["InTypes"][x]])
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                            harpia.s2idirectory.typeIconsIn[
+                            self.block_description["InTypes"][x]])
             except:
-                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
                             harpia.s2idirectory.icons["IconInput"])
 
-            t_Wid = self.group.add(gnomecanvas.CanvasPixbuf,
-                                pixbuf=pb,
-                                x=0,
-                                y=(RADIUS # upper border
-                              + (x*5) # spacing betwen ports
-                              + x*INPUT_HEIGHT), #previous ports
-                              anchor=gtk.ANCHOR_NORTH_WEST)
-            inPWids.append(t_Wid)
-        self.widgets["Inputs"] = inPWids
+            image = GooCanvas.CanvasImage(parent=self,
+                        pixbuf=pixbuf,
+                        x=0,
+                        y=(RADIUS # upper border
+                      + (x*5) # spacing betwen ports
+                      + x*INPUT_HEIGHT) #previous ports
+                        )
+            self.add_child(image, -1)
+            ins.append(t_Wid)
+        self.widgets["Inputs"] = ins
 
 #----------------------------------------------------------------------
     def _BOutputs(self):
-        outPWids = []
+        outs = []
         for x in range(len(self.block_description["OutTypes"])):
             try:
-                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir + 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
                             harpia.s2idirectory.typeIconsOut[
                             self.block_description["OutTypes"][x]])
             except:
-                pb = gtk.gdk.pixbuf_new_from_file(self.data_dir +
-                            s2idirectory.icons["IconOutput"])
-            t_Wid = self.group.add(gnomecanvas.CanvasPixbuf,
-                            pixbuf=pb,
-                            x=(self.width-OUTPUT_WIDTH),
-                            y=(RADIUS # upper border
-                            + (x*5) # spacing betwen ports
-                            + x*OUTPUT_HEIGHT), #previous ports
-                      anchor=gtk.ANCHOR_NORTH_WEST)
-            outPWids.append(t_Wid)
-        self.widgets["Outputs"] = outPWids
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                            harpia.s2idirectory.icons["IconOutput"])
+
+            image = GooCanvas.CanvasImage(parent=self,
+                        pixbuf=pixbuf,
+                        x=(self.width-OUTPUT_WIDTH),
+                        y=(RADIUS # upper border
+                      + (x*5) # spacing betwen ports
+                      + x*OUTPUT_HEIGHT) #previous ports
+                        )
+
+            self.add_child(image, -1)
+            outs.append(image)
+        self.widgets["Outputs"] = outs
 
 #----------------------------------------------------------------------
     def _BLabels(self):
@@ -307,22 +310,22 @@ class Block(GooCanvas.CanvasGroup):
                             anchor=GooCanvas.CanvasAnchorType.CENTER,
                             x=(self.width/2),
                             y=(self.height-10))
-         
-#        text_width = label.get_property('text-width')
-#        oldX,oldY = ((self.width/2),(self.height-10))
-#        self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
-#        label.move((self.width/2)-oldX, (self.height-10)-oldY)
+
+        text_width = label.get_property('width')
+        oldX,oldY = ((self.width/2),(self.height-10))
+        self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
+        label.translate((self.width/2)-oldX, (self.height-10)-oldY)
         self.widgets["Label"] = label
         self.add_child(label, -1)
 #----------------------------------------------------------------------
     def build(self):
         self._BLabels()#must be called in this order! otherwise the box rect won't have the propper width
         self._BbRect()
-#        self._BInputs()
-#        self._BOutputs()
-#        self._BIcon()
-#        self.update_flow()
-#        self.__update_flow_display()
+        self._BInputs()
+        self._BOutputs()
+        self._BIcon()
+        self.update_flow()
+        self.__update_flow_display()
 
 #----------------------------------------------------------------------
     def update_flow(self,a_bCheckTimeShifter=False):
@@ -340,7 +343,6 @@ class Block(GooCanvas.CanvasGroup):
                     self.has_flow = False
                 else:
                     self.has_flow = True
-        self.__update_flow_display()
         return self.has_flow
 
 #----------------------------------------------------------------------
@@ -352,13 +354,13 @@ class Block(GooCanvas.CanvasGroup):
         if self.has_flow:
             #with focus: original colors
             t_oFocusCorrectedColor[3] = self.m_oBackColor[3]
-            self.widgets["Rect"].set(outline_color='black',
-                        fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
+            self.widgets["Rect"].set_property("stroke_color",'black')
+            self.widgets["Rect"].set_property("fill_color_rgba",ColorFromList(t_oFocusCorrectedColor))
         else:
             #without focus the block background will be much more transparent
             t_oFocusCorrectedColor[3] = 50
-            self.widgets["Rect"].set(outline_color='red',
-                        fill_color_rgba=ColorFromList(t_oFocusCorrectedColor))
+            self.widgets["Rect"].set_property("stroke_color",'red')
+            self.widgets["Rect"].set_property("fill_color_rgba",ColorFromList(t_oFocusCorrectedColor))
 
 #----------------------------------------------------------------------
     def get_input_pos(self, a_nInputID):
@@ -394,11 +396,10 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __mouse_over_state(self, state):
-#        if state:
-#            self.widgets["Rect"].set(width_units=3)
-#        else:
-#            self.widgets["Rect"].set(width_units=1)
-        print "Mouse over State"
+        if state:
+            self.widgets["Rect"].set_property("line-width",3)
+        else:
+            self.widgets["Rect"].set_property("line-width",1)
         pass
 
 #----------------------------------------------------------------------

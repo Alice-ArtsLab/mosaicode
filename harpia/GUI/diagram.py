@@ -194,7 +194,7 @@ class Diagram(GooCanvas.Canvas):
         y_off = (self.get_vadjustment()).get_value()
         new_block.translate(x_off - 20.0, y_off - 60.0)  # cPt[0],cPt[1])
         self.blocks[block_id] = new_block
-         
+        self.get_root_item().add_child(new_block, -1)
 #----------------------------------------------------------------------
     def insert_ready_connector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
         new_connection = Connector(self, a_nFromId, a_nFromIdOut)
