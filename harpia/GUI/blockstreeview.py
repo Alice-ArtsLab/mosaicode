@@ -88,7 +88,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def __drag_data(self, treeview, context, selection, target_id, etime):
         treeselection = treeview.get_selection()
         model, iterac = treeselection.get_selected()
-        self.tree_view_path = model.get_path(iterac)
-        selection.set('text/plain', 8, "test")
+        tree_view_path = model.get_path(iterac)
+        selection.set('text/plain', 8, tree_view_path)
         return    
 # ----------------------------------------------------------------------

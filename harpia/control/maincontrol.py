@@ -76,4 +76,8 @@ class MainControl():
         self.main_window.search.show_search_bar()
         
     def set_help(self, block_name):
-        self.main_window.block_description.set_text(block_name)
+#        self.main_window.block_properties.set_help(block_name)
+        pass
+
+    def append_status_log(self, text):
+        self.main_window.status.append_text(text)

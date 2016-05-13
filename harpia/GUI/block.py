@@ -275,7 +275,7 @@ class Block(GooCanvas.CanvasGroup):
                       + x*INPUT_HEIGHT) #previous ports
                         )
             self.add_child(image, -1)
-            ins.append(t_Wid)
+            ins.append(image)
         self.widgets["Inputs"] = ins
 
 #----------------------------------------------------------------------

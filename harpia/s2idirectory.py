@@ -37,14 +37,14 @@ gettext.textdomain(APP)
 
 
 block = {
-        00: {"Label":_("Image"),
+        01: {"Label":_("Luan"),
          "Path":{"Python":"acquisition",
                  "Glade":"glade/acquisition.ui",
                  "Xml":"xml/acquisition.xml"},
          "Icon":"images/acquisition.png",
          "Color":"50:100:200:150",
-                 "InTypes":"",
-                 "OutTypes":{0:"HRP_IMAGE"},
+                 "InTypes":{0:"HRP_IMAGE", 1:"HRP_IMAGE"},
+                 "OutTypes":{0:"HRP_IMAGE", 1:"HRP_IMAGE", 2:"HRP_IMAGE"},
                  "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
                  "TreeGroup":_("General"),
                  "IsSource":True #optional argument, if key doesn't exist, admit false

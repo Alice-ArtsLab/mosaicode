@@ -12,7 +12,7 @@ from toolbar import Toolbar
 from searchbar import SearchBar
 from harpia.control.maincontrol import MainControl
 from blockstreeview import BlocksTreeView
-from blockdescription import BlockDescription
+from blockproperties import BlockProperties
 from status import Status
 from workarea import WorkArea
 
@@ -28,7 +28,7 @@ class MainWindow(Gtk.Window):
         self.toolbar = Toolbar(self)
         self.search = SearchBar(self)
         self.blocks_tree_view = BlocksTreeView(self)
-        self.block_description = BlockDescription(self)
+        self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
 
@@ -91,12 +91,13 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
 
         vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
-        vpaned_left.add2(self.__create_frame(self.block_description))
+        vpaned_left.add2(self.__create_frame(self.block_properties))
         vpaned_left.set_position(300)
 
         self.connect("delete-event", self.quit)
 
-        self.block_description.set_text("123 testando\n\n Novidades")
+        self.main_control.append_status_log("123 \n test")
+        self.main_control.set_help("123 testando\n\n Novidades")
         self.status.append_text("Eu tu ele \n Nós vós eles")
         self.blocks_tree_view.add_item("Teste", "Nostradamus")
         self.blocks_tree_view.add_item("Teste 2", "Nostradamus")
