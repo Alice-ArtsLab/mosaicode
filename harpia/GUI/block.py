@@ -66,7 +66,7 @@ class Block(GooCanvas.CanvasGroup):
         
         self.remember_x = 0
         self.remember_y = 0
-        
+
         if block.has_key(block_type):
             self.block_description = block[block_type]
         else:
@@ -111,40 +111,12 @@ class Block(GooCanvas.CanvasGroup):
         self.build()
         self.set_parent(diagram.get_root_item())
 
+        self.__compute_output_ports()
+        self.__compute_input_ports()
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
-
-
-        self.props.x = 0
-        self.props.y = 0
-
-
-
-#----------------------------------------------------------------------
-    def __is_input(self,event):
-        clicked_point = (event.x - self.group.get_property('x'),
-                    event.y - self.group.get_property('y'))
-        input_port_centers = []
-        #compute portCenters if they don't exist
-        if len(self.input_port_centers) == 0:
-            self.__compute_input_ports()
-        for point_index in range(len(self.input_port_centers)):
-            if Dist(self.input_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
-                return point_index
-        return -1
-
-#----------------------------------------------------------------------
-    def __is_output(self,event):
-        clicked_point = (event.x - self.group.get_property('x'),
-                    event.y - self.group.get_property('y'))
-        if len(self.output_port_centers) == 0: #compute portCenters if they don't exist
-            self.__compute_output_ports()
-        for point_index in range(len(self.output_port_centers)):
-            if Dist(self.output_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
-                return point_index
-        return -1
 
 #----------------------------------------------------------------------
     def __compute_output_ports(self):
@@ -154,6 +126,7 @@ class Block(GooCanvas.CanvasGroup):
                      + (outputPort*5) # spacing betwen ports
                      + outputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
+        print self.output_port_centers                     
 
 #----------------------------------------------------------------------
     def __compute_input_ports(self):
@@ -163,6 +136,24 @@ class Block(GooCanvas.CanvasGroup):
                      + (inputPort*5) # spacing betwen ports
                      + inputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
+
+#----------------------------------------------------------------------
+    def __is_input(self, event):
+        clicked_point = (event.x - self.group.get_property('x'),
+                    event.y - self.group.get_property('y'))
+        for point_index in range(len(self.input_port_centers)):
+            if Dist(self.input_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
+                return point_index
+        return -1
+
+#----------------------------------------------------------------------
+    def __is_output(self, event):
+        clicked_point = (event.x - self.group.get_property('x'),
+                    event.y - self.group.get_property('y'))
+        for point_index in range(len(self.output_port_centers)):
+            if Dist(self.output_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
+                return point_index
+        return -1
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -203,12 +194,10 @@ class Block(GooCanvas.CanvasGroup):
                 new_x = event.x
                 new_y = event.y
                 canvas_item.translate(new_x, new_y)
-                canvas_item.props.x = new_x # - self.remember_x
-                canvas_item.props.y = new_y #- self.remember_y
 
                 self.diagram.update_scrolling()
-                self.remember_x = new_x
-                self.remember_y = new_y
+                self.remember_x = self.remember_x + new_x
+                self.remember_y = self.remember_y + new_y
                 return False
 
 
@@ -242,7 +231,6 @@ class Block(GooCanvas.CanvasGroup):
                     stroke_color="black",
                     fill_color_rgba=ColorFromList(self.m_oBackColor)
                     )
-        self.add_child(w1, -1)
         self.widgets["Rect"] = w1
 
 #----------------------------------------------------------------------
@@ -274,7 +262,6 @@ class Block(GooCanvas.CanvasGroup):
                       + (x*5) # spacing betwen ports
                       + x*INPUT_HEIGHT) #previous ports
                         )
-            self.add_child(image, -1)
             ins.append(image)
         self.widgets["Inputs"] = ins
 
@@ -297,8 +284,6 @@ class Block(GooCanvas.CanvasGroup):
                       + (x*5) # spacing betwen ports
                       + x*OUTPUT_HEIGHT) #previous ports
                         )
-
-            self.add_child(image, -1)
             outs.append(image)
         self.widgets["Outputs"] = outs
 
@@ -316,7 +301,7 @@ class Block(GooCanvas.CanvasGroup):
         self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
         label.translate((self.width/2)-oldX, (self.height-10)-oldY)
         self.widgets["Label"] = label
-        self.add_child(label, -1)
+
 #----------------------------------------------------------------------
     def build(self):
         self._BLabels()#must be called in this order! otherwise the box rect won't have the propper width
@@ -363,23 +348,16 @@ class Block(GooCanvas.CanvasGroup):
             self.widgets["Rect"].set_property("fill_color_rgba",ColorFromList(t_oFocusCorrectedColor))
 
 #----------------------------------------------------------------------
-    def get_input_pos(self, a_nInputID):
-        if len(self.input_port_centers) == 0: #compute portCenters if they don't exist
-            self.__compute_input_ports()
-        x = 0 + self.group.get_property('x')
-        y = self.input_port_centers[a_nInputID][1]+self.group.get_property('y')
-        point = self.i2w(x,y)
-        return (point[0],point[1])
+    def get_input_pos(self, input_id):
+        x = self.input_port_centers[input_id][0] + self.remember_x + self.width
+        y = self.input_port_centers[input_id][1] + self.remember_y + self.height
+        return (x, y)
 
 #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
-        #compute portCenters if they don't exist
-        if len(self.output_port_centers) == 0:
-            self.__compute_output_ports()
-        x = self.width + self.group.get_property('x')
-        y = self.output_port_centers[output_id][1] + self.group.get_property('y')
-        point = self.i2w(x,y)
-        return (point[0],point[1])
+        x = self.output_port_centers[output_id][0] + self.remember_x
+        y = self.output_port_centers[output_id][1] + self.remember_y + self.height
+        return (x,y)
 
 #----------------------------------------------------------------------
     def get_block_pos(self):

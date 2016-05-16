@@ -126,10 +126,7 @@ class DiagramControl():
                     conn_inblock = connector.getAttr("inBlock")
                     conn_id = connector.getAttr("id")
 
-                    print conn_input, conn_inblock, conn_id
-
                     if conn_inblock != "--" and conn_input != "--":
-                        #(int(connector.input) - 1))
                         self.diagram.insert_ready_connector(
                                                 int(block_id),
                                                 (int(conn_id) - 1),

@@ -42,22 +42,24 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __init__( self, diagram, from_block=-1, from_block_out=-1):
+        GooCanvas.CanvasGroup.__init__(self)
+
         self.diagram = diagram
         self.from_block = from_block
         self.from_block_out = from_block_out
         self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out) 
+
         self.to_point = (0,0)
-        self.to_block = -1#a_nTo
-        self.to_block_in = -1#a_nToIn
+        self.to_block = -1
+        self.to_block_in = -1
         self.focus = False
         self.has_flow = False
 
-        self.__gobject_init__()
-
-        self.group = self.diagram.root().add(self,x=0,y=0)
-        self.group.connect("event", self.__group_event)
-        self.group.set_flags(gtk.CAN_FOCUS)
+#        self.group = self.diagram.root().add(self,x=0,y=0)
+#        self.group.connect("event", self.__group_event)
+#        self.group.set_flags(gtk.CAN_FOCUS)
         self.widgets = {}
+
         self.update_tracking()
 
 #----------------------------------------------------------------------
@@ -104,35 +106,23 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __update_draw(self):
-        p = []
-        p.append(self.from_point[0])
-        p.append(self.from_point[1])
+        p = GooCanvas.CanvasPoints.new(4)
+        p.set_point(0, self.from_point[0],self.from_point[1])
+        p.set_point(1, (self.to_point[0] + self.from_point[0]) / 2, self.from_point[1])
+        p.set_point(2, (self.to_point[0] + self.from_point[0]) / 2, self.to_point[1])
+        p.set_point(3, self.to_point[0], self.to_point[1])
 
-#        p.append((self.to_point[0] + self.from_point[0]) / 2)
-#        p.append(self.from_point[1])
-
-#        p.append((self.to_point[0] + self.from_point[0]) / 2)
-#        p.append(self.to_point[1])
-
-        p.append(self.to_point[0])
-        p.append(self.to_point[1])
         if not self.widgets.has_key("Line"):
-            widget = self.group.add(
-                     gnomecanvas.CanvasLine,
+            widget = GooCanvas.CanvasPolyline(
+                     parent=self,
                      points=p,
-                     fill_color='black',
-                     width_units=1.0,
-                     first_arrowhead=False,
-                     last_arrowhead=True,
-                     arrow_shape_a=4.0,
-                     arrow_shape_b=8.0,
-                     arrow_shape_c=4.0,
-                     smooth=True
+                     width=1.0,
+                     start_arrow = True,
+                     close_path = False
                      )
             self.widgets["Line"] = widget
         else:
-            self.widgets["Line"].set(points=p)
-        self.diagram.update_now()
+            self.widgets["Line"].set_property("points",p)
 
 #----------------------------------------------------------------------
     def update_focus(self):
@@ -147,8 +137,7 @@ class Connector(GooCanvas.CanvasGroup):
     def update_flow(self):
         self.has_flow = self.diagram.blocks[self.from_block].has_flow
         if self.has_flow:
-            self.widgets["Line"].set(width_units=3.0)
+            self.widgets["Line"].set_property("width",3.0)
         else:
-            self.widgets["Line"].set(width_units=1.0)
-        self.diagram.update_now()
+            self.widgets["Line"].set_property("width",1.0)
         return self.has_flow

@@ -190,9 +190,10 @@ class Diagram(GooCanvas.Canvas):
     def insert_blockPosId(self, block_type, x, y, block_id):
         pass
         new_block = Block(self, block_type, block_id)
-        x_off = (self.get_hadjustment()).get_value()
-        y_off = (self.get_vadjustment()).get_value()
-        new_block.translate(x_off - 20.0, y_off - 60.0)  # cPt[0],cPt[1])
+#        x_off = (self.get_hadjustment()).get_value()
+#        y_off = (self.get_vadjustment()).get_value()
+#        new_block.translate(x_off - 20.0, y_off - 60.0)
+        new_block.translate(x, y)
         self.blocks[block_id] = new_block
         self.get_root_item().add_child(new_block, -1)
 #----------------------------------------------------------------------
@@ -204,6 +205,7 @@ class Diagram(GooCanvas.Canvas):
                 self.connectors.append(new_connection)  # TODO: checar se ja existe este conector
                 self.connector_id += 1
                 self.__update_flows()
+                self.get_root_item().add_child(new_connection, -1)
             else:
                 pass
         else:
@@ -224,7 +226,7 @@ class Diagram(GooCanvas.Canvas):
                     self.__abort_connection()
             else:
                 self.__abort_connection()
-                # print self.connectors
+
 
 #----------------------------------------------------------------------
     def __connector_types_match(self, a_oConnector):

@@ -44,7 +44,7 @@ class Save(Plugin):
                 }
                 
     def set_properties(self, data):
-        self.file_name         = data["0-file_name"]
+        self.file_name = data["0-file_name"]
 
     def get_properties(self):
         #Ler do XML

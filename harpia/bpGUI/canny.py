@@ -163,13 +163,6 @@ class Properties(GladeWindow, S2iCommonProperties):
         return "Operacão de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.\nPropriedades\nLimiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas."
 
 
-
-# CannyProperties = Properties()
-# CannyProperties.show( center=0 )
-
-
-#GetHelp generation
-
 # ------------------------------------------------------------------------------
 # Code generation
 # ------------------------------------------------------------------------------
