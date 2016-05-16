@@ -4,33 +4,24 @@
 from plugins.plugin import Plugin
 from constants import *
 
-Plugin = Save()
+PLUGIN = Save()
 
 class Save(Plugin):
 
     def __init__(self):
-        self.titulo = "Meu Titulo"
-        self.autor = ""
-        self.editora = ""
-        self.qtde_paginas = 0
-        self.ano = 2016
-        self.preco = 49.99
-        pass
+        self.file_name = ""
 
     # ------------------------------------------------------------------------------
     # Code generation
     # ------------------------------------------------------------------------------
-    def generate(blockTemplate):
-        for propIter in blockTemplate.properties:
-            if propIter[0] == 'filename':
-                saveFilename = os.path.expanduser(propIter[1])
+    def generate(self, blockTemplate):
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.functionCall = \
             'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
             '\nif(block$$_img_i1)\n' + \
-            'cvSaveImage("' + saveFilename + '" ,block$$_img_i1);\n'
+            'cvSaveImage("' + self.file_name + '" ,block$$_img_i1);\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n'
 
@@ -51,3 +42,18 @@ class Save(Plugin):
                 "Description": "Save image on a file indicated by the user.",
                 "TreeGroup": "General"
                 }
+                
+    def set_properties(self, data):
+        self.file_name         = data["0-file_name"]
+
+    def get_properties(self):
+        #Ler do XML
+        return {"0-file_name":{"name": "File Name",
+                            "type": HARPIA_STRING,
+                            "value": self.file_name}
+                }
+
+    def getHelp(self):
+        return "Operacão de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.\nPropriedades\nLimiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas."
+
+                
