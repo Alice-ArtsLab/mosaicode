@@ -126,7 +126,6 @@ class Block(GooCanvas.CanvasGroup):
                      + (outputPort*5) # spacing betwen ports
                      + outputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
-        print self.output_port_centers                     
 
 #----------------------------------------------------------------------
     def __compute_input_ports(self):
@@ -139,8 +138,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __is_input(self, event):
-        clicked_point = (event.x - self.group.get_property('x'),
-                    event.y - self.group.get_property('y'))
+        clicked_point = (event.x , event.y )
         for point_index in range(len(self.input_port_centers)):
             if Dist(self.input_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
                 return point_index
@@ -148,8 +146,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __is_output(self, event):
-        clicked_point = (event.x - self.group.get_property('x'),
-                    event.y - self.group.get_property('y'))
+        clicked_point = (event.x , event.y )
         for point_index in range(len(self.output_port_centers)):
             if Dist(self.output_port_centers[point_index],clicked_point) < PORT_SENSITIVITY:
                 return point_index
@@ -157,30 +154,31 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
-        if event.button == 1:
-            # Remember starting position.
-            # if event resolution got here, the diagram event resolution routine didn't matched with any ports.. so..
+
+        if event.button.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
 
-            #Cascading event resolution:
-            input_event = self.__is_input(event)
+            input_event = self.__is_input(event.button)
             if input_event != -1:
+                print "Is Input"
                 self.diagram.clicked_input(self.block_id,input_event)
                 return True
-            else:
-                output_event = self.__is_output(event)
-                if output_event != -1:
-                    self.diagram.clicked_output(self.block_id,output_event)
-                    return True
-                else:
-                    self.group.grab_focus()
-                    self.update_focus()
-                    return False
+
+            output_event = self.__is_output(event.button)
+            if output_event != -1:
+                print "Is Output"
+                self.diagram.clicked_output(self.block_id,output_event)
+                return True
+
+            print "Not input neither output"
+            self.update_focus()
             return False
-        elif event.button == 3:
+
+        elif event.button.button == 3:
+            print "Click 3"
             self.__right_click(event)
-            return True #explicitly returns true so that diagram won't catch this event
+            return True
 
         if event.type == Gdk.EventType._2BUTTON_PRESS:
             BlockMenu(self, event)
@@ -193,11 +191,8 @@ class Block(GooCanvas.CanvasGroup):
                 # Get the new position and move by the difference
                 new_x = event.x
                 new_y = event.y
-                canvas_item.translate(new_x, new_y)
-
+                self.translate(new_x, new_y)
                 self.diagram.update_scrolling()
-                self.remember_x = self.remember_x + new_x
-                self.remember_y = self.remember_y + new_y
                 return False
 
 
@@ -349,14 +344,14 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
-        x = self.input_port_centers[input_id][0] + self.remember_x + self.width
-        y = self.input_port_centers[input_id][1] + self.remember_y + self.height
+        x = self.input_port_centers[input_id][0] + self.get_simple_transform().x - PORT_SENSITIVITY
+        y = self.input_port_centers[input_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY
         return (x, y)
 
 #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
-        x = self.output_port_centers[output_id][0] + self.remember_x
-        y = self.output_port_centers[output_id][1] + self.remember_y + self.height
+        x = self.output_port_centers[output_id][0] + self.get_simple_transform().x + PORT_SENSITIVITY
+        y = self.output_port_centers[output_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY
         return (x,y)
 
 #----------------------------------------------------------------------
@@ -365,12 +360,8 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def update_focus(self):
-        if self.diagram.get_property('focused-item') == self.group:
-            self.__mouse_over_state(True)
-            self.focus = True
-        else:
-            self.__mouse_over_state(False)
-            self.focus = False
+        self.__mouse_over_state(False)
+        self.focus = False
 
 #----------------------------------------------------------------------
     def __mouse_over_state(self, state):

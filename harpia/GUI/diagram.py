@@ -82,9 +82,9 @@ class Diagram(GooCanvas.Canvas):
 #----------------------------------------------------------------------
     def __canvas_event(self, widget, event=None):  # nao serve pq QUALQUER EVENTO do canvas passa por aqui
         if self.curr_connector != None:
-            if event.type == gtk.gdk.MOTION_NOTIFY:  # se temos um conector aberto, atualizar sua posicao
+            if event.type == Gdk.EventType.MOTION_NOTIFY:  # se temos um conector aberto, atualizar sua posicao
                 # as coordenadas recebidas no widget canvas estao no coord "window", passando as p/ world
-                point = self.window_to_world(event.x,event.y)
+                point = (event.x,event.y)
                 self.curr_connector.update_tracking(point)
                 return False
         return False
@@ -193,7 +193,7 @@ class Diagram(GooCanvas.Canvas):
 #        x_off = (self.get_hadjustment()).get_value()
 #        y_off = (self.get_vadjustment()).get_value()
 #        new_block.translate(x_off - 20.0, y_off - 60.0)
-        new_block.translate(x, y)
+        new_block.translate(x - 20.0, y - 60.0)
         self.blocks[block_id] = new_block
         self.get_root_item().add_child(new_block, -1)
 #----------------------------------------------------------------------
@@ -212,12 +212,12 @@ class Diagram(GooCanvas.Canvas):
             pass
 
 #----------------------------------------------------------------------
-    def clicked_input(self, block_id, a_nInput):  # TODO na real, pegar em tempo real aonde tah aquela porta!!
+    def clicked_input(self, block_id, a_nInput):
         if self.curr_connector != None:
             self.curr_connector.set_end(block_id, a_nInput)
             if self.__valid_connector(self.curr_connector):
                 if self.__connector_types_match(self.curr_connector):
-                    self.connectors.append(self.curr_connector)  # TODO: checar se ja existe este conector
+                    self.connectors.append(self.curr_connector)
                     self.connector_id += 1
                     self.curr_connector = None
                     self.__update_flows()
@@ -251,14 +251,14 @@ class Diagram(GooCanvas.Canvas):
 #----------------------------------------------------------------------
     def clicked_output(self, block_id, a_nOutput):
         self.__abort_connection()  # abort any possibly running connections
-        # print "block" + str(block_id) + "_Out" + str(a_nOutput)
-        self.curr_connector = connector.Connector(self, block_id, a_nOutput)
+        print "block" + str(block_id) + "_Out" + str(a_nOutput)
+        self.curr_connector = Connector(self, block_id, a_nOutput)
+        print self.curr_connector
         self.__update_flows()
 
 #----------------------------------------------------------------------
     def __abort_connection(self):
         if self.curr_connector != None:
-            self.curr_connector.group.destroy()  ## BUG!
             del self.curr_connector
             self.curr_connector = None
 
@@ -305,8 +305,6 @@ class Diagram(GooCanvas.Canvas):
             prevCount = -1
             newCount = self.__count_flowing_components()
             while prevCount != newCount:
-                # print "newCount:",newCount
-                # print "prevCount:",prevCount
                 for blockIdx in self.blocks:  # self.blocks is a dict!
                     self.blocks[blockIdx].update_flow(checkTimeShifter)
                 for conn in self.connectors:

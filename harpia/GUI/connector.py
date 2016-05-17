@@ -55,9 +55,7 @@ class Connector(GooCanvas.CanvasGroup):
         self.focus = False
         self.has_flow = False
 
-#        self.group = self.diagram.root().add(self,x=0,y=0)
-#        self.group.connect("event", self.__group_event)
-#        self.group.set_flags(gtk.CAN_FOCUS)
+        self.connect("button-press-event", self.__on_button_press)
         self.widgets = {}
 
         self.update_tracking()
@@ -67,18 +65,17 @@ class Connector(GooCanvas.CanvasGroup):
         pass
 
 #----------------------------------------------------------------------
-    def __group_event(self, widget, event=None):
-        if event.type == gtk.gdk.BUTTON_PRESS:
-            if event.button == 1:
-                self.group.grab_focus()
-                self.update_focus()
-                return False
-            elif event.button == 3:
-                self.__right_click_run_menu(event)
-        return False
+    def __on_button_press(self, canvas_item, target_item, event):
+        if event.button.button == 1:
+            self.update_focus()
+            return False
+        elif event.button.button == 3:
+            self.__right_click_run_menu(event)
+            return False
 
 #----------------------------------------------------------------------
     def __right_click_run_menu(self, a_oEvent):
+        print "Connection Menu"
 #        GcdConnectorMenu(self, a_oEvent)
         pass
 
@@ -117,7 +114,8 @@ class Connector(GooCanvas.CanvasGroup):
                      parent=self,
                      points=p,
                      width=1.0,
-                     start_arrow = True,
+                     start_arrow = False,
+                     end_arrow = True,
                      close_path = False
                      )
             self.widgets["Line"] = widget
@@ -126,12 +124,14 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def update_focus(self):
-        if self.diagram.get_property('focused-item') == self.group:
+        if self.diagram.focused_item == self:
             self.focus = True
-            self.widgets["Line"].set(fill_color='red',width_units=5.0)
+            self.widgets["Line"].set_property("stroke_color",'red')
+            self.widgets["Line"].set_property("width",5.0)
         else:
             self.focus = False
-            self.widgets["Line"].set(fill_color='black',width_units=3.0)
+            self.widgets["Line"].set_property("stroke_color",'black')
+            self.widgets["Line"].set_property("width",3.0)
 
 #----------------------------------------------------------------------
     def update_flow(self):
