@@ -56,6 +56,8 @@ class Connector(GooCanvas.CanvasGroup):
         self.has_flow = False
 
         self.connect("button-press-event", self.__on_button_press)
+        self.connect("enter-notify-event", self.__on_enter_notify)
+        self.connect("leave-notify-event", self.__on_leave_notify)
         self.widgets = {}
 
         self.update_tracking()
@@ -67,11 +69,22 @@ class Connector(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         if event.button.button == 1:
-            self.update_focus()
             return False
         elif event.button.button == 3:
             self.__right_click_run_menu(event)
             return False
+
+#----------------------------------------------------------------------
+    def __on_enter_notify(self, canvas_item, target_item, event=None):
+        self.__mouse_over_state(True)
+        return False
+
+#----------------------------------------------------------------------
+    def __on_leave_notify(self, canvas_item, target_item, event=None):
+        if self.focus:
+            return False
+        self.__mouse_over_state(False)
+        return False
 
 #----------------------------------------------------------------------
     def __right_click_run_menu(self, a_oEvent):
@@ -96,48 +109,60 @@ class Connector(GooCanvas.CanvasGroup):
     def update_tracking(self, newEnd=None):
         if newEnd == None:
             newEnd = self.from_point
-        vec = Psub(newEnd,self.from_point)
+        vec = Psub(newEnd, self.from_point)
         vec = CordModDec(vec)
-        self.to_point = Psum(self.from_point,vec)
+        self.to_point = Psum(self.from_point, vec)
         self.__update_draw()
 
 #----------------------------------------------------------------------
     def __update_draw(self):
-        p = GooCanvas.CanvasPoints.new(4)
-        p.set_point(0, self.from_point[0],self.from_point[1])
-        p.set_point(1, (self.to_point[0] + self.from_point[0]) / 2, self.from_point[1])
-        p.set_point(2, (self.to_point[0] + self.from_point[0]) / 2, self.to_point[1])
-        p.set_point(3, self.to_point[0], self.to_point[1])
+#        p = GooCanvas.CanvasPoints.new(4)
+#        p.set_point(0, self.from_point[0],self.from_point[1])
+#        p.set_point(1, (self.to_point[0] + self.from_point[0]) / 2, self.from_point[1])
+#        p.set_point(2, (self.to_point[0] + self.from_point[0]) / 2, self.to_point[1])
+#        p.set_point(3, self.to_point[0], self.to_point[1])
+
+        # svg M L bezier curve
+        path = "M " + str(self.from_point[0]) + " " + str(self.from_point[1])
+        path += " C" +  str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.from_point[1])
+        path += " " + str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.to_point[1])
+        path += " " + str(self.to_point[0]) + " " + str(self.to_point[1])
+
 
         if not self.widgets.has_key("Line"):
-            widget = GooCanvas.CanvasPolyline(
-                     parent=self,
-                     points=p,
-                     width=1.0,
-                     start_arrow = False,
-                     end_arrow = True,
-                     close_path = False
-                     )
+            widget = GooCanvas.CanvasPath(
+                    parent = self,
+                    data = path
+            )
+#            widget = GooCanvas.CanvasPolyline(
+#                     parent=self,
+#                     points=p,
+#                     width=2.0,
+#                     start_arrow = False,
+#                     end_arrow = True,
+#                     close_path = False,
+#                     stroke_color = "black"
+#                     )
+
+            
             self.widgets["Line"] = widget
         else:
-            self.widgets["Line"].set_property("points",p)
-
+#            self.widgets["Line"].set_property("points",p)
+            self.widgets["Line"].set_property("data",path)
 #----------------------------------------------------------------------
-    def update_focus(self):
-        if self.diagram.focused_item == self:
-            self.focus = True
-            self.widgets["Line"].set_property("stroke_color",'red')
-            self.widgets["Line"].set_property("width",5.0)
+    def __mouse_over_state(self, state):
+        if state:
+            self.widgets["Line"].set_property("line-width",3)
         else:
-            self.focus = False
-            self.widgets["Line"].set_property("stroke_color",'black')
-            self.widgets["Line"].set_property("width",3.0)
+            self.widgets["Line"].set_property("line-width",2)
 
 #----------------------------------------------------------------------
     def update_flow(self):
         self.has_flow = self.diagram.blocks[self.from_block].has_flow
         if self.has_flow:
-            self.widgets["Line"].set_property("width",3.0)
+            self.widgets["Line"].set_property("width",2)
+            self.widgets["Line"].set_property("stroke-color","black")
         else:
-            self.widgets["Line"].set_property("width",1.0)
+            self.widgets["Line"].set_property("width",3)
+            self.widgets["Line"].set_property("stroke-color","red")
         return self.has_flow

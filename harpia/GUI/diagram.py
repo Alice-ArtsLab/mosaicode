@@ -66,8 +66,9 @@ class Diagram(GooCanvas.Canvas):
 
 #        self.set_flags(gtk.CAN_FOCUS)
 #        self.grab_focus()
-        self.connect("event", self.__canvas_root_event)
-        self.connect("event",self.__canvas_event)  
+        self.connect("motion-notify-event", self.__on_motion_notify)
+        self.connect("key-press-event", self.__on_key_press)
+        self.connect("button_press_event", self.__on_button_press)
 
         self.file_name = None
         self.error_log = ""
@@ -80,63 +81,51 @@ class Diagram(GooCanvas.Canvas):
         pass
 
 #----------------------------------------------------------------------
-    def __canvas_event(self, widget, event=None):  # nao serve pq QUALQUER EVENTO do canvas passa por aqui
-        if self.curr_connector != None:
-            if event.type == Gdk.EventType.MOTION_NOTIFY:  # se temos um conector aberto, atualizar sua posicao
-                # as coordenadas recebidas no widget canvas estao no coord "window", passando as p/ world
-                point = (event.x,event.y)
-                self.curr_connector.update_tracking(point)
-                return False
+    def __on_motion_notify(self, canvas_item, event=None):
+        if event.state & Gdk.ModifierType.BUTTON1_MASK:
+            for connector in self.connectors:
+                connector.update_connectors()
+
+        if self.curr_connector == None:
+            return False
+        point = (event.x,event.y)
+        self.curr_connector.update_tracking(point)
         return False
 
 #----------------------------------------------------------------------
-    def __canvas_root_event(self, widget, event=None):
-        if event.type == Gdk.EventType.KEY_PRESS:
-            if event.keyval == gtk.keysyms.Delete:
-                current_widget = self.get_property('focused-item')
+    def __on_key_press(self, widget, event=None):
+        if event.keyval == gtk.keysyms.Delete:
+            current_widget = self.focused_item
 
-                searching = True
-                for blockIdx in self.blocks:
-                    if self.blocks[blockIdx].group == current_widget:
-                        self.delete_block(blockIdx)
-                        searching = False
+            searching = True
+            for blockIdx in self.blocks:
+                if self.blocks[blockIdx].group == current_widget:
+                    self.delete_block(blockIdx)
+                    searching = False
+                    break
+
+            if searching:
+                for connIdx in reversed(range(len(self.connectors))):
+                    if self.connectors[connIdx].group == current_widget:
+                        connAtLimbo = self.connectors.pop(connIdx)
+                        connAtLimbo.group.destroy()
+                        del connAtLimbo  # this line won't do much.. but helps understanding..
                         break
+            self.__update_flows()
 
-                if searching:
-                    for connIdx in reversed(range(len(self.connectors))):
-                        if self.connectors[connIdx].group == current_widget:
-                            connAtLimbo = self.connectors.pop(connIdx)
-                            connAtLimbo.group.destroy()
-                            del connAtLimbo  # this line won't do much.. but helps understanding..
-                            break
-                self.__update_flows()
-
-        # updating focus whenever button 1 is pressed
-        if event.type == Gdk.EventType.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
-            if event.button == 1:
-                self.last_clicked_point = (event.x, event.y)
-                for blockIdx in self.blocks:
-                    # tricky cos we have a dict not a list (iterating through keys not elements)
-                    self.blocks[blockIdx].update_focus()
-                for conn in self.connectors:
-                    conn.update_focus()
-            else:  # event.button == 3:
-                return False
-                # print "right button nowhere"
-                # self.RightClick(event)
-
-        if event.type == Gdk.EventType.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
-            if event.button == 1:
-                self.grab_focus()
-                # print "aborting conn on root"
-                self.__abort_connection()
-                self.__update_flows()
-                return False
-        elif event.type == Gdk.EventType.MOTION_NOTIFY:
-            if event.state & Gdk.ModifierType.BUTTON1_MASK:
-                for connector in self.connectors:
-                    connector.update_connectors()
-                return False
+#----------------------------------------------------------------------
+    def __on_button_press(self, widget, event=None):
+        if event.button == 1:
+            self.last_clicked_point = (event.x, event.y)
+            for blockIdx in self.blocks:
+                # tricky cos we have a dict not a list (iterating through keys not elements)
+                self.blocks[blockIdx].update_focus()
+            for conn in self.connectors:
+                conn.update_flow()
+            print "Button Press"
+            self.__abort_connection()
+            self.__update_flows()
+            return False
         return False
 
 #----------------------------------------------------------------------
@@ -157,7 +146,7 @@ class Diagram(GooCanvas.Canvas):
 #        maxY = t_aSr[1] + t_aSr[3]
 
 #        for blockIdx in self.blocks:
-#            bpos = self.blocks[blockIdx].get_block_pos()
+#            bpos = self.blocks[blockIdx].get_position()
 #            minX = min(minX, bpos[0])
 #            minY = min(minY, bpos[1])
 
@@ -188,14 +177,11 @@ class Diagram(GooCanvas.Canvas):
 
 #----------------------------------------------------------------------
     def insert_blockPosId(self, block_type, x, y, block_id):
-        pass
         new_block = Block(self, block_type, block_id)
-#        x_off = (self.get_hadjustment()).get_value()
-#        y_off = (self.get_vadjustment()).get_value()
-#        new_block.translate(x_off - 20.0, y_off - 60.0)
         new_block.translate(x - 20.0, y - 60.0)
         self.blocks[block_id] = new_block
         self.get_root_item().add_child(new_block, -1)
+
 #----------------------------------------------------------------------
     def insert_ready_connector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
         new_connection = Connector(self, a_nFromId, a_nFromIdOut)
@@ -213,19 +199,20 @@ class Diagram(GooCanvas.Canvas):
 
 #----------------------------------------------------------------------
     def clicked_input(self, block_id, a_nInput):
-        if self.curr_connector != None:
-            self.curr_connector.set_end(block_id, a_nInput)
-            if self.__valid_connector(self.curr_connector):
-                if self.__connector_types_match(self.curr_connector):
-                    self.connectors.append(self.curr_connector)
-                    self.connector_id += 1
-                    self.curr_connector = None
-                    self.__update_flows()
+        if self.curr_connector == None:
+            return
+        self.curr_connector.set_end(block_id, a_nInput)
+        if not self.__valid_connector(self.curr_connector):
+            self.__abort_connection()
+            return
+        if not self.__connector_types_match(self.curr_connector):
+            self.__abort_connection()
+            return
+        self.connectors.append(self.curr_connector)
 
-                else:
-                    self.__abort_connection()
-            else:
-                self.__abort_connection()
+        self.connector_id += 1
+        self.curr_connector = None
+        self.__update_flows()
 
 
 #----------------------------------------------------------------------
@@ -249,18 +236,19 @@ class Diagram(GooCanvas.Canvas):
         return True
 
 #----------------------------------------------------------------------
-    def clicked_output(self, block_id, a_nOutput):
+    def clicked_output(self, block_id, output):
         self.__abort_connection()  # abort any possibly running connections
-        print "block" + str(block_id) + "_Out" + str(a_nOutput)
-        self.curr_connector = Connector(self, block_id, a_nOutput)
-        print self.curr_connector
+        self.curr_connector = Connector(self, block_id, output)
+        self.get_root_item().add_child(self.curr_connector, -1)
         self.__update_flows()
 
 #----------------------------------------------------------------------
     def __abort_connection(self):
-        if self.curr_connector != None:
-            del self.curr_connector
-            self.curr_connector = None
+        if self.curr_connector == None:
+            return
+        self.get_root_item().remove_child(self.get_root_item().get_n_children() - 1)
+        del self.curr_connector
+        self.curr_connector = None
 
 #----------------------------------------------------------------------
     def delete_block(self, blockCountId):
@@ -300,6 +288,17 @@ class Diagram(GooCanvas.Canvas):
         pass
 
 #----------------------------------------------------------------------
+    def __count_flowing_components(self):
+        count = 0
+        for blockIdx in self.blocks:
+            if self.blocks[blockIdx].has_flow:
+                count += 1
+        for conn in self.connectors:
+            if conn.has_flow:
+                count += 1
+        return count
+
+#----------------------------------------------------------------------
     def __update_flows(self):
         for checkTimeShifter in [False, True]:
             prevCount = -1
@@ -319,17 +318,6 @@ class Diagram(GooCanvas.Canvas):
             if conn.to_block == a_nBlockCountId:
                 result.append(conn)
         return result
-
-#----------------------------------------------------------------------
-    def __count_flowing_components(self):
-        count = 0
-        for blockIdx in self.blocks:
-            if self.blocks[blockIdx].has_flow:
-                count += 1
-        for conn in self.connectors:
-            if conn.has_flow:
-                count += 1
-        return count
 
 #----------------------------------------------------------------------
     def set_file_name(self, file_name):
