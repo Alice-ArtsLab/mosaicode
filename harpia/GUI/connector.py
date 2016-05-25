@@ -116,15 +116,11 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __update_draw(self):
-#        p = GooCanvas.CanvasPoints.new(4)
-#        p.set_point(0, self.from_point[0],self.from_point[1])
-#        p.set_point(1, (self.to_point[0] + self.from_point[0]) / 2, self.from_point[1])
-#        p.set_point(2, (self.to_point[0] + self.from_point[0]) / 2, self.to_point[1])
-#        p.set_point(3, self.to_point[0], self.to_point[1])
 
         # svg M L bezier curve
         path = "M " + str(self.from_point[0]) + " " + str(self.from_point[1])
-        path += " C" +  str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.from_point[1])
+        path += " L" +  str(self.from_point[0] + 10) + " " + str(self.from_point[1])
+        path += " C " +  str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.from_point[1])
         path += " " + str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.to_point[1])
         path += " " + str(self.to_point[0]) + " " + str(self.to_point[1])
 
@@ -134,20 +130,9 @@ class Connector(GooCanvas.CanvasGroup):
                     parent = self,
                     data = path
             )
-#            widget = GooCanvas.CanvasPolyline(
-#                     parent=self,
-#                     points=p,
-#                     width=2.0,
-#                     start_arrow = False,
-#                     end_arrow = True,
-#                     close_path = False,
-#                     stroke_color = "black"
-#                     )
-
             
             self.widgets["Line"] = widget
         else:
-#            self.widgets["Line"].set_property("points",p)
             self.widgets["Line"].set_property("data",path)
 #----------------------------------------------------------------------
     def __mouse_over_state(self, state):

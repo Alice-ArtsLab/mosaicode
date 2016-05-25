@@ -5,6 +5,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from glob import glob # To load examples
 import os
 
 from menu import Menu
@@ -15,6 +16,9 @@ from blockstreeview import BlocksTreeView
 from blockproperties import BlockProperties
 from status import Status
 from workarea import WorkArea
+
+from harpia.constants import *
+from harpia import s2idirectory
 
 class MainWindow(Gtk.Window):
 
@@ -96,21 +100,17 @@ class MainWindow(Gtk.Window):
 
         self.connect("delete-event", self.quit)
 
-        self.main_control.append_status_log("123 \n test")
-        self.main_control.set_help("123 testando\n\n Novidades")
-        self.status.append_text("Eu tu ele \n Nós vós eles")
-        self.blocks_tree_view.add_item("Teste", "Nostradamus")
-        self.blocks_tree_view.add_item("Teste 2", "Nostradamus")
-        self.blocks_tree_view.add_item("Teste 3", "Nostradamus")
-        self.blocks_tree_view.add_item("Ficção", "Éramos 6")
-        self.blocks_tree_view.add_item("Romance", "Éramos 6")
-        self.blocks_tree_view.add_item("Multiplicação", "Aritmética")
-        self.blocks_tree_view.add_item("Divisão", "Aritmética")
-        self.blocks_tree_view.add_item("Subtração", "Aritmética")
-        self.blocks_tree_view.add_item("Romance", "Aritmética")
+        # Load blocks
+        for x in s2idirectory.block:
+            self.blocks_tree_view.add_block(s2idirectory.block[x],x)
 
-        self.menu.add_example("123 mudar")
-        self.menu.add_example("/home/flavio/teste123")
+        # Load Examples
+        list_of_examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
+        list_of_examples.sort()
+
+        for example in list_of_examples:
+            self.menu.add_example(example)
+
 
         self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest.hrp")
         self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest2.hrp")

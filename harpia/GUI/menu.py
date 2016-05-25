@@ -91,9 +91,6 @@ class Menu(Gtk.MenuBar):
     def __menu_clicked(self, widget, data):
         self.actions[widget]()
 
-    def __load_example(self, widget, data):
-        self.main_window.main_control.open(self.list_of_examples[int(data)])
-
     def __load_recent(self, widget, data):
         self.main_window.main_control.open(widget.get_label())
 
@@ -103,6 +100,9 @@ class Menu(Gtk.MenuBar):
         self.example_menu.append(menu_item)
         menu_item.connect("activate", self.__load_example, len(self.list_of_examples) - 1)
         self.example_menu.show_all()
+
+    def __load_example(self, widget, data):
+        self.main_window.main_control.open(self.list_of_examples[int(data)])
  
     def add_recent_file(self, recent_file):
         menu_item = Gtk.MenuItem(recent_file)

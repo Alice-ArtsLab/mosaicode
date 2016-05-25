@@ -28,8 +28,14 @@
 
 # Used Libraries
 import os
-import gtk
-import gtk.glade
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GooCanvas
+from gi.repository import GdkPixbuf
 # i18n
 
 from constants import *

@@ -26,14 +26,15 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         view.add_attribute(cellrenderertext, "text", 0)
 
         self.blocks_tree_view.set_enable_search(False)
-        self.blocks_tree_view.connect("cursor-changed", self.__on_tree_selection_changed)
         self.blocks_tree_view.connect("row-activated", self.__on_row_activated)
+        self.blocks_tree_view.connect("cursor-changed", self.__on_tree_selection_changed)
 
         self.blocks_tree_view.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK,
                                                                 [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
                                                                 Gdk.DragAction.DEFAULT |
                                                                 Gdk.DragAction.COPY)
         self.blocks_tree_view.connect("drag-data-get", self.__drag_data)
+        self.blocks = {}
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
@@ -70,7 +71,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             self.main_window.main_control.set_help(block_name)
 
     # ----------------------------------------------------------------------
-    def add_item(self, item, category_name):
+    def add_block(self, block, id):
+        self.__add_item(block["Label"], block["TreeGroup"])
+        self.blocks[id] = block
+
+    # ----------------------------------------------------------------------
+    def __add_item(self, item, category_name):
         category = self.__contains_category(category_name)
         self.tree_store.append(category, [item])
 
@@ -82,13 +88,25 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_row_activated(self, tree_view, path, column):
-        print "Selection"
+        tree_view_model = tree_view.get_model()
+        block_name = tree_view_model.get_value(tree_view_model.get_iter(path), 0)
+        x = self.get_selected_block()
+        if x != None:
+            self.main_window.main_control.add_block(x)
 
-
+    # ----------------------------------------------------------------------
     def __drag_data(self, treeview, context, selection, target_id, etime):
-        treeselection = treeview.get_selection()
+        x = self.get_selected_block()
+        selection.set_text(self.blocks[x]["Label"], -1)
+        return
+
+    def get_selected_block(self):
+        treeselection = self.blocks_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
-        tree_view_path = model.get_path(iterac)
-        selection.set('text/plain', 8, tree_view_path)
-        return    
+        path = model.get_path(iterac)
+        block_name = model.get_value(model.get_iter(path), 0)
+        for x in self.blocks:
+            if self.blocks[x]["Label"] == block_name:
+                return x
+        return None
 # ----------------------------------------------------------------------

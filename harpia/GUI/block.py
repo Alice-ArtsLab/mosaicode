@@ -42,6 +42,8 @@ from harpia.s2idirectory import *
 from harpia.utils.XMLUtils import XMLParser
 from harpia.utils.graphicfunctions import *
 
+from harpia import s2idirectory
+
 import copy
 
 WIDTH_2_TEXT_OFFSET = 22
@@ -61,19 +63,19 @@ class Block(GooCanvas.CanvasGroup):
     def __init__( self, diagram, block_type, block_id=1):
         GooCanvas.CanvasGroup.__init__(self)
         self.block_type = block_type
+        self.block_id = block_id
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
         
         self.remember_x = 0
         self.remember_y = 0
 
-        if block.has_key(block_type):
-            self.block_description = block[block_type]
+        if s2idirectory.block.has_key(block_type):
+            self.block_description = s2idirectory.block[block_type]
         else:
-            self.block_description = block[0]
+            self.block_description = s2idirectory.block[0]
             print "Bad block type.. assuming 00"
 
-        self.block_id = block_id
         self.widgets = {}
         self.focus = False
         self.has_flow = False
@@ -146,7 +148,7 @@ class Block(GooCanvas.CanvasGroup):
             return False
 
         elif event.button.button == 3:
-            self.__right_click(event)
+            BlockMenu(self, event)
             return True
 
         if event.type == Gdk.EventType._2BUTTON_PRESS:
@@ -336,13 +338,15 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def update_focus(self):
+        print self.diagram.focused_item
         if self.diagram.focused_item == self:
             self.__mouse_over_state(True)
             self.focus = True
+            print "Focus"
         else:
             self.__mouse_over_state(False)
             self.focus = False
-
+            print " NOt Focus"
 #----------------------------------------------------------------------
     def __mouse_over_state(self, state):
         if state:
@@ -350,10 +354,6 @@ class Block(GooCanvas.CanvasGroup):
         else:
             self.widgets["Rect"].set_property("line-width",1)
         pass
-
-#----------------------------------------------------------------------
-    def __right_click(self, a_oEvent):
-       BlockMenu(self, a_oEvent)
 
 #----------------------------------------------------------------------
     def get_state(self):

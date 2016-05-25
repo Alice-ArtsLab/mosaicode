@@ -35,18 +35,18 @@ from gi.repository import GooCanvas
 
 from block import Block
 from connector import Connector
+
+from harpia.constants import *
+
 #import time
 
 from exceptions import AttributeError
 from harpia.utils.graphicfunctions import *
 
-ZOOM_IN = 1.1
-ZOOM_OUT = 0.9
-ZOOM_ORIGINAL = 1.0
 
 class Diagram(GooCanvas.Canvas):
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __init__(self, main_window):
         GooCanvas.Canvas.__init__(self)
 
@@ -70,17 +70,24 @@ class Diagram(GooCanvas.Canvas):
         self.connect("key-press-event", self.__on_key_press)
         self.connect("button_press_event", self.__on_button_press)
 
+        self.connect("drag_data_received", self.drag_data_received)
+        self.drag_dest_set(
+            Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
+            [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
+            Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
+
+
         self.file_name = None
         self.error_log = ""
 
         self.white_board = None
         self.__update_white_board()
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __del__(self):
         pass
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, event=None):
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
             for connector in self.connectors:
@@ -92,7 +99,7 @@ class Diagram(GooCanvas.Canvas):
         self.curr_connector.update_tracking(point)
         return False
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
         if event.keyval == gtk.keysyms.Delete:
             current_widget = self.focused_item
@@ -113,7 +120,7 @@ class Diagram(GooCanvas.Canvas):
                         break
             self.__update_flows()
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
         if event.button == 1:
             self.last_clicked_point = (event.x, event.y)
@@ -128,14 +135,23 @@ class Diagram(GooCanvas.Canvas):
             return False
         return False
 
-#----------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------
+    def drag_data_received(self, widget, context, x, y, selection, targetType, time):
+        block = self.main_window.main_control.get_selected_block()
+        if block != None:
+            self.insert_block(block, x, y)
+        return
+
+
+    #----------------------------------------------------------------------
     def goto_scrolling(self, x, y):
         t_oHa = self.get_hadjustment()
         t_oVa = self.get_vadjustment()
         t_oHa.set_value(x)
         t_oVa.set_value(y)
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def update_scrolling(self):
 #        t_aSr = self.get_scroll_region()
 
@@ -159,13 +175,13 @@ class Diagram(GooCanvas.Canvas):
 #            self.blocks[blockIdx].redraw()
         pass
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def insert_block(self, block_type, x=None, y=None):
         if x == None:
             x_off = (self.get_hadjustment()).get_value()
             y_off = (self.get_vadjustment()).get_value()
             if self.last_clicked_point != (None, None):
-                x, y = self.world_to_window(self.last_clicked_point[0], self.last_clicked_point[1])
+                x, y = (self.last_clicked_point[0], self.last_clicked_point[1])
                 x -= x_off
                 y -= y_off
             else:
@@ -175,14 +191,14 @@ class Diagram(GooCanvas.Canvas):
         self.update_scrolling()
         return self.block_id - 1
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def insert_blockPosId(self, block_type, x, y, block_id):
         new_block = Block(self, block_type, block_id)
         new_block.translate(x - 20.0, y - 60.0)
         self.blocks[block_id] = new_block
         self.get_root_item().add_child(new_block, -1)
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def insert_ready_connector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
         new_connection = Connector(self, a_nFromId, a_nFromIdOut)
         new_connection.set_end(a_nToId, a_nToIdIn)
@@ -197,7 +213,7 @@ class Diagram(GooCanvas.Canvas):
         else:
             pass
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def clicked_input(self, block_id, a_nInput):
         if self.curr_connector == None:
             return
@@ -215,7 +231,7 @@ class Diagram(GooCanvas.Canvas):
         self.__update_flows()
 
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __connector_types_match(self, a_oConnector):
         outType = self.blocks[a_oConnector.from_block].block_description["OutTypes"][a_oConnector.from_block_out]
         inType = self.blocks[a_oConnector.to_block].block_description["InTypes"][a_oConnector.to_block_in]
@@ -223,7 +239,7 @@ class Diagram(GooCanvas.Canvas):
             print "Types mismatch"
         return outType == inType
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __valid_connector(self, newCon):
         for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
@@ -235,14 +251,14 @@ class Diagram(GooCanvas.Canvas):
             return False
         return True
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def clicked_output(self, block_id, output):
         self.__abort_connection()  # abort any possibly running connections
         self.curr_connector = Connector(self, block_id, output)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.__update_flows()
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __abort_connection(self):
         if self.curr_connector == None:
             return
@@ -250,7 +266,7 @@ class Diagram(GooCanvas.Canvas):
         del self.curr_connector
         self.curr_connector = None
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def delete_block(self, blockCountId):
         # removing related connectors
         for idx in reversed(range(len(self.connectors))):
@@ -265,7 +281,7 @@ class Diagram(GooCanvas.Canvas):
         del blockAtLimbo
         self.__update_flows()
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __white_board_event(self, widget, event=None):
         if event.type == Gdk.EventType.BUTTON_PRESS:  # se temos um clique nao pego por ngm, abortar a conexao
             if event.button == 1:
@@ -274,7 +290,7 @@ class Diagram(GooCanvas.Canvas):
                 return False
         return False
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __update_white_board(self):
         if self.white_board == None:
             self.white_board = GooCanvas.CanvasRect(parent=self.get_root_item(),
@@ -287,7 +303,7 @@ class Diagram(GooCanvas.Canvas):
             self.white_board.connect("focus-in-event", self.__white_board_event)
         pass
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __count_flowing_components(self):
         count = 0
         for blockIdx in self.blocks:
@@ -298,7 +314,7 @@ class Diagram(GooCanvas.Canvas):
                 count += 1
         return count
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __update_flows(self):
         for checkTimeShifter in [False, True]:
             prevCount = -1
@@ -311,7 +327,7 @@ class Diagram(GooCanvas.Canvas):
                 prevCount = newCount
                 newCount = self.__count_flowing_components()
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_connectors_to(self, a_nBlockCountId):
         result = []
         for conn in self.connectors:
@@ -319,45 +335,45 @@ class Diagram(GooCanvas.Canvas):
                 result.append(conn)
         return result
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def set_file_name(self, file_name):
         self.file_name = file_name
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_file_name(self):
         return self.file_name
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_block_on_focus(self):
         for blockIdx in self.blocks:
             if self.blocks[blockIdx].focus:
                 return blockIdx
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def set_session_id(self, session_id):
         self.session_id = session_id
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_session_id(self):
         return self.session_id
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def set_error_log(self, a_sErrorLog):
         self.error_log = a_sErrorLog
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def append_error_log(self, a_sErrorLog):
         self.error_log += a_sErrorLog
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_error_log(self):
         return self.error_log
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def set_zoom(self, value):
         if value == ZOOM_ORIGINAL:
             self.zoom = ZOOM_ORIGINAL
         else:
             self.zoom *= value
-        self.set_pixels_per_unit(self.zoom)
+        self.set_scale(self.zoom)
         self.update_scrolling()
