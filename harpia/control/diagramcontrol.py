@@ -5,6 +5,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GooCanvas
 
@@ -173,21 +175,23 @@ class DiagramControl():
         if self.diagram.file_name.find(".hrp") == -1:
             self.diagram.file_name += ".hrp"
 
-        t_oSaveFile = open(str(self.diagram.file_name), "w")
-        t_oSaveFile.write(t_sOutFile)
-        t_oSaveFile.close()
+        try:
+            save_file = open(str(self.diagram.file_name), "w")
+            save_file.write(t_sOutFile)
+            save_file.close()
+        except IOError as e:
+            return False,e.strerror
+        return True,"Success"
 
 # ----------------------------------------------------------------------
     def export_png(self, filepath="diagrama.png"):
-        (x, y, t_nWidth, t_nHeight, t_nDepth) = self.diagram.window.get_geometry()
-        t_oPixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, t_nWidth, t_nHeight)
-        t_oBuffer = t_oPixbuf.get_from_drawable(self.diagram.window, self.diagram.get_colormap(), 0, 0, 0, 0, t_nWidth, t_nHeight)
-        # get_from_drawable(GdkWindow src, GdkColormap cmap, int src_x, int src_y, int dest_x, int dest_y, int width, int height);
-        t_oBuffer.save(filepath, "png")
-        # bugs:
+        (x, y, width, height) = self.diagram.get_parent_window().get_geometry()
+        pixbuf = Gdk.pixbuf_get_from_window(
+                self.diagram.get_parent_window(), x, y, width, height)
 
-    # *nao considera o que estiver fora do scroll region
-    # *da um printScreen somente então pega qlqr outra coisa q estiver no caminho
-    # (incluindo o proprio menu ali do FILE)
-    # *aparentemente é a maneira errada.
+        test, tmp_buffer = pixbuf.save_to_bufferv("png",  [], [])
+
+        save_file = open(filepath, "w")
+        save_file.write(tmp_buffer)
+        save_file.close()
 

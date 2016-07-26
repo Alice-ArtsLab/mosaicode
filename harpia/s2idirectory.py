@@ -35,6 +35,11 @@ _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
+def load():
+#    # Load Examples
+#    list_of_examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
+#    list_of_examples.sort()
+    pass
 
 block = {
         00: acquisition.getBlock(),

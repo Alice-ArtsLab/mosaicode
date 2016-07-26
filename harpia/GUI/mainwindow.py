@@ -23,6 +23,7 @@ from harpia import s2idirectory
 class MainWindow(Gtk.Window):
 
     def __init__(self):
+        s2idirectory.load()
         Gtk.Window.__init__(self, title="Harpia")
         self.set_default_size(800,600)
         self.main_control = MainControl(self)
@@ -110,7 +111,6 @@ class MainWindow(Gtk.Window):
 
         for example in list_of_examples:
             self.menu.add_example(example)
-
 
         self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest.hrp")
         self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest2.hrp")

@@ -140,11 +140,13 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
-
+        self.diagram.current_widget = self
+        Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
             self.update_focus()
+            print "Button press"
             return False
 
         elif event.button.button == 3:
@@ -182,6 +184,10 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __del__(self):
         print "GC: deleting Block:",self.block_id
+
+#----------------------------------------------------------------------
+    def delete(self):
+        self.diagram.delete_block(self.block_id)
 
 #----------------------------------------------------------------------
     def _BbRect(self):
@@ -300,17 +306,17 @@ class Block(GooCanvas.CanvasGroup):
         self.__update_flow_display()
 
 #----------------------------------------------------------------------
-    def update_flow(self,a_bCheckTimeShifter=False):
-        if self.is_source or (self.time_shifts and (not a_bCheckTimeShifter)):#
+    def update_flow(self,check_time_shifter=False):
+        if self.is_source or (self.time_shifts and (not check_time_shifter)):#
             self.has_flow = True
         else:
             sourceConnectors = self.diagram.get_connectors_to(self.block_id)
             if len(sourceConnectors) != len(self.block_description["InTypes"]):
                 self.has_flow = False
             else:
-                for connIdx in reversed(range(len(sourceConnectors))):
-                    if sourceConnectors[connIdx].has_flow:
-                        sourceConnectors.pop(connIdx)
+#                for connIdx in reversed(range(len(sourceConnectors))):
+#                    if sourceConnectors[connIdx].has_flow:
+#                        sourceConnectors.pop(connIdx)
                 if len(sourceConnectors) != 0:
                     self.has_flow = False
                 else:
@@ -338,7 +344,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def update_focus(self):
-        print self.diagram.focused_item
+        print "self.diagram.focused_item"
         if self.diagram.focused_item == self:
             self.__mouse_over_state(True)
             self.focus = True
@@ -377,7 +383,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_position(self):
-        return self.group.get_property('x'),self.group.get_property('y')
+        return self.get_simple_transform().x,self.get_simple_transform().y
 
 #----------------------------------------------------------------------
     def GetPropertiesXML(self):

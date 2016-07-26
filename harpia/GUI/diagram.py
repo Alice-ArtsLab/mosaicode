@@ -59,23 +59,22 @@ class Diagram(GooCanvas.Canvas):
         self.blocks = {}
         self.connectors = []
         self.curr_connector = None
+        self.current_widget = None
         self.session_id = 0
 
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
         self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
 
-#        self.set_flags(gtk.CAN_FOCUS)
-#        self.grab_focus()
+        Gtk.Widget.grab_focus(self)
         self.connect("motion-notify-event", self.__on_motion_notify)
-        self.connect("key-press-event", self.__on_key_press)
         self.connect("button_press_event", self.__on_button_press)
+        self.connect("key-press-event", self.__on_key_press)
 
         self.connect("drag_data_received", self.drag_data_received)
         self.drag_dest_set(
             Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
             [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
-
 
         self.file_name = None
         self.error_log = ""
@@ -101,27 +100,15 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.keyval == gtk.keysyms.Delete:
-            current_widget = self.focused_item
-
-            searching = True
-            for blockIdx in self.blocks:
-                if self.blocks[blockIdx].group == current_widget:
-                    self.delete_block(blockIdx)
-                    searching = False
-                    break
-
-            if searching:
-                for connIdx in reversed(range(len(self.connectors))):
-                    if self.connectors[connIdx].group == current_widget:
-                        connAtLimbo = self.connectors.pop(connIdx)
-                        connAtLimbo.group.destroy()
-                        del connAtLimbo  # this line won't do much.. but helps understanding..
-                        break
-            self.__update_flows()
+        if event.keyval == Gdk.KEY_Delete:
+            if self.current_widget != None:
+                print "Deleting " , self.current_widget
+                self.current_widget.delete()
+                self.__update_flows()
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
+        Gtk.Widget.grab_focus(self)
         if event.button == 1:
             self.last_clicked_point = (event.x, event.y)
             for blockIdx in self.blocks:
@@ -230,7 +217,6 @@ class Diagram(GooCanvas.Canvas):
         self.curr_connector = None
         self.__update_flows()
 
-
     #----------------------------------------------------------------------
     def __connector_types_match(self, a_oConnector):
         outType = self.blocks[a_oConnector.from_block].block_description["OutTypes"][a_oConnector.from_block_out]
@@ -267,18 +253,21 @@ class Diagram(GooCanvas.Canvas):
         self.curr_connector = None
 
     #----------------------------------------------------------------------
-    def delete_block(self, blockCountId):
+    def delete_connection(self, connection):
+        conn = self.connectors.remove(connection)
+        conn.remove()
+        del conn  # this line won't do much.. but helps understanding..
+
+    #----------------------------------------------------------------------
+    def delete_block(self, block_id):
         # removing related connectors
         for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].from_block == blockCountId or self.connectors[idx].to_block == blockCountId:
-                self.connectors[idx].group.destroy()
-                connAtLimbo = self.connectors.pop(idx)
-                del connAtLimbo
+            if self.connectors[idx].from_block == block_id or self.connectors[idx].to_block == block_id:
+                self.delete_connection(self.connectors[idx])
 
         # removing the block itself
-        blockAtLimbo = self.blocks.pop(blockCountId)
-        blockAtLimbo.group.destroy()
-        del blockAtLimbo
+        self.blocks[block_id].remove()
+        del self.blocks[block_id]
         self.__update_flows()
 
     #----------------------------------------------------------------------
@@ -304,34 +293,18 @@ class Diagram(GooCanvas.Canvas):
         pass
 
     #----------------------------------------------------------------------
-    def __count_flowing_components(self):
-        count = 0
-        for blockIdx in self.blocks:
-            if self.blocks[blockIdx].has_flow:
-                count += 1
-        for conn in self.connectors:
-            if conn.has_flow:
-                count += 1
-        return count
-
-    #----------------------------------------------------------------------
     def __update_flows(self):
         for checkTimeShifter in [False, True]:
-            prevCount = -1
-            newCount = self.__count_flowing_components()
-            while prevCount != newCount:
-                for blockIdx in self.blocks:  # self.blocks is a dict!
-                    self.blocks[blockIdx].update_flow(checkTimeShifter)
-                for conn in self.connectors:
-                    conn.update_flow()
-                prevCount = newCount
-                newCount = self.__count_flowing_components()
+            for blockIdx in self.blocks:  # self.blocks is a dict!
+                self.blocks[blockIdx].update_flow(checkTimeShifter)
+            for conn in self.connectors:
+                conn.update_flow()
 
     #----------------------------------------------------------------------
-    def get_connectors_to(self, a_nBlockCountId):
+    def get_connectors_to(self, block_id):
         result = []
         for conn in self.connectors:
-            if conn.to_block == a_nBlockCountId:
+            if conn.to_block == block_id:
                 result.append(conn)
         return result
 

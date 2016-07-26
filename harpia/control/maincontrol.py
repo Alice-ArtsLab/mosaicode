@@ -3,6 +3,7 @@
 
 from harpia.constants import *
 from harpia.GUI.dialog import Dialog
+from harpia.GUI.about import About
 from harpia.control.diagramcontrol import DiagramControl
 
 import os
@@ -10,6 +11,7 @@ import os
 
 class MainControl():
 
+    # ----------------------------------------------------------------------
     def __init__(self, main_window):
         self.main_window = main_window
 
@@ -17,15 +19,24 @@ class MainControl():
     def new(self):
         self.main_window.work_area.add_tab("Untitled")
 
+    # ----------------------------------------------------------------------
     def select_open(self):
-        pass
+        name = Dialog().open_dialog("Open", self.main_window)
+        self.main_window.work_area.add_tab(name)
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
+        DiagramControl(diagram).load(name)
 
+    # ----------------------------------------------------------------------
     def open(self, file_name):
         self.main_window.work_area.open_diagram(file_name)
 
+    # ----------------------------------------------------------------------
     def close(self):
         self.main_window.work_area.close_tab()
 
+    # ----------------------------------------------------------------------
     def save(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
@@ -34,17 +45,28 @@ class MainControl():
             name = Dialog().save_dialog("Save", self.main_window)
             diagram.set_file_name(name)
 
+        result, message = False,""
         if diagram.get_file_name() is not None:
             if len(diagram.get_file_name()) > 0:
-                DiagramControl(diagram).save()
+                result, message = DiagramControl(diagram).save()
+        if not result:
+            Dialog().message_dialog("Error",
+                    message,
+                    self.main_window)
 
-
+    # ----------------------------------------------------------------------
     def save_as(self):
         print "Save As from control"
 
     def export_diagram(self):
-        print "Export from control"
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
+        name = Dialog().save_png_dialog("Save", self.main_window)
+        if name != None:
+            DiagramControl(diagram).export_png(name)
 
+    # ----------------------------------------------------------------------
     def exit(self):
         self.main_window.quit(None, None)
 
@@ -76,25 +98,31 @@ class MainControl():
         print "Tips from control"
 
     def about(self):
-        print "About from control"
+        About(self.main_window).show_all()
 
+    # ----------------------------------------------------------------------
     def search(self, query):
         self.main_window.blocks_tree_view.search(query)
 
+    # ----------------------------------------------------------------------
     def show_search_bar(self):
         self.main_window.search.show_search_bar()
-        
+
+    # ----------------------------------------------------------------------
     def set_help(self, block_name):
 #        self.main_window.block_properties.set_help(block_name)
         pass
 
+    # ----------------------------------------------------------------------
     def append_status_log(self, text):
         self.main_window.status.append_text(text)
-        
+
+    # ----------------------------------------------------------------------
     def add_block(self, id):
         if self.main_window.work_area.get_current_diagram() != None:
             self.main_window.work_area.get_current_diagram().insert_block(id)
 
+    # ----------------------------------------------------------------------
     def get_selected_block(self):
         return self.main_window.blocks_tree_view.get_selected_block()
 

@@ -74,7 +74,7 @@ class BlockMenu:
 
         # Shows the menu
         menu.show_all()
-        menu.popup(None, None, None, event.button, event.time)
+        menu.popup(None, None, None, None, event.button, event.time)
 
     def __show_block_properties(self, *args):
 #        PropertiesGUI = s2iblockpropertiesgui.S2iBlockPropertiesGUI(self.block)

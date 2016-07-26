@@ -53,7 +53,6 @@ class Connector(GooCanvas.CanvasGroup):
         self.to_block = -1
         self.to_block_in = -1
         self.focus = False
-        self.has_flow = False
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("enter-notify-event", self.__on_enter_notify)
@@ -68,7 +67,10 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
+        Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
+            self.focus = True
+            self.diagram.current_widget = self
             return False
         elif event.button.button == 3:
             self.__right_click_run_menu(event)
@@ -82,7 +84,7 @@ class Connector(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         if self.focus:
-            return False
+            self.focus = False
         self.__mouse_over_state(False)
         return False
 
@@ -116,7 +118,6 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __update_draw(self):
-
         # svg M L bezier curve
         path = "M " + str(self.from_point[0]) + " " + str(self.from_point[1])
         path += " L" +  str(self.from_point[0] + 10) + " " + str(self.from_point[1])
@@ -143,11 +144,13 @@ class Connector(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def update_flow(self):
-        self.has_flow = self.diagram.blocks[self.from_block].has_flow
-        if self.has_flow:
-            self.widgets["Line"].set_property("width",2)
+        if not self.focus:
+            self.widgets["Line"].set_property("line-width",2)
             self.widgets["Line"].set_property("stroke-color","black")
         else:
-            self.widgets["Line"].set_property("width",3)
+            self.widgets["Line"].set_property("line-width",3)
             self.widgets["Line"].set_property("stroke-color","red")
-        return self.has_flow
+
+#----------------------------------------------------------------------
+    def delete(self):
+        self.diagram.delete_connection(self)

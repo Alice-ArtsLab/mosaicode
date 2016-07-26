@@ -26,12 +26,15 @@
 #
 # ----------------------------------------------------------------------
 
-import gtk
-
 from harpia.GladeWindow import GladeWindow
 from harpia.s2icommonproperties import S2iCommonProperties, APP, DIR
-from harpia.filefilters import * 
+from harpia.GUI.filefilters import * 
 from harpia.utils.XMLUtils import XMLParser
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
+from gi.repository import Gtk
 
 # i18n
 import os
