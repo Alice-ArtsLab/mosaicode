@@ -79,14 +79,10 @@ class Block(GooCanvas.CanvasGroup):
         self.widgets = {}
         self.focus = False
         self.has_flow = False
-        self.time_shifts = False
         self.is_source = False
 
         if self.block_description.has_key("IsSource"): #all data sources
             self.is_source = self.block_description["IsSource"]
-
-        if self.block_description.has_key("TimeShifts"): #delay block
-            self.time_shifts = self.block_description["TimeShifts"]
 
         self.m_oPropertiesXML = XMLParser(self.data_dir +
                     str(self.block_description["Path"]["Xml"]))
@@ -140,13 +136,18 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
-        self.diagram.current_widget = self
+        print "Button press - block"
+
+        if self.diagram.current_widget == self:
+            self.diagram.current_widget = None
+        else:
+            self.diagram.current_widget = self
+
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
             self.update_focus()
-            print "Button press"
             return False
 
         elif event.button.button == 3:
@@ -156,7 +157,14 @@ class Block(GooCanvas.CanvasGroup):
         if event.type == Gdk.EventType._2BUTTON_PRESS:
             BlockMenu(self, event)
             return True
-
+#----------------------------------------------------------------------
+    def update_focus(self):
+        if self.diagram.current_widget == self:
+            self.__mouse_over_state(True)
+            self.focus = True
+        else:
+            self.__mouse_over_state(False)
+            self.focus = False
 #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
@@ -182,18 +190,26 @@ class Block(GooCanvas.CanvasGroup):
         return False
 
 #----------------------------------------------------------------------
-    def __del__(self):
-        print "GC: deleting Block:",self.block_id
+    def __mouse_over_state(self, state):
+        if state:
+            self.widgets["Rect"].set_property("line-width",3)
+        else:
+            self.widgets["Rect"].set_property("line-width",1)
+        pass
 
+#----------------------------------------------------------------------
+    def __del__(self):
+        pass
+        
 #----------------------------------------------------------------------
     def delete(self):
         self.diagram.delete_block(self.block_id)
 
 #----------------------------------------------------------------------
-    def _BbRect(self):
+    def __draw_rect(self):
         color = self.block_description["Color"].split(":")
         back_color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
-        w1 = GooCanvas.CanvasRect(parent=self,
+        rect = GooCanvas.CanvasRect(parent=self,
                     x=0,
                     y=0,
                     width=self.width,
@@ -201,20 +217,21 @@ class Block(GooCanvas.CanvasGroup):
                     stroke_color="black",
                     fill_color_rgba=ColorFromList(back_color)
                     )
-        self.widgets["Rect"] = w1
+        self.widgets["Rect"] = rect
 
 #----------------------------------------------------------------------
-    def _BIcon(self):
+    def __draw_icon(self):
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
                 self.block_description["Icon"])
         image = GooCanvas.CanvasImage(parent=self,
                 pixbuf=pixbuf,
                 x=(self.width/2),
-                y=(self.height/2))
+                y=(self.height/2)
+                )
         self.widgets["Icon"] = image
 
 #----------------------------------------------------------------------
-    def _BInputs(self):
+    def __draw_inputs(self):
         ins = []
         for x in range(len(self.block_description["InTypes"])):
             try:
@@ -232,15 +249,14 @@ class Block(GooCanvas.CanvasGroup):
                       + (x*5) # spacing betwen ports
                       + x*INPUT_HEIGHT) #previous ports
                        )
-            image.connect("button-press-event", self.on_input_press, x)
+            image.connect("button-press-event", self.__on_input_press, x)
             image.connect("button-release-event", self.__on_input_release, x)
             ins.append(image)
         self.widgets["Inputs"] = ins
 
 #----------------------------------------------------------------------
-    def on_input_press(self, canvas_item, target_item, event, args):
+    def __on_input_press(self, canvas_item, target_item, event, args):
         self.diagram.clicked_input(self.block_id, args)
-        print "On input press"
         return True
 
 #----------------------------------------------------------------------
@@ -248,7 +264,7 @@ class Block(GooCanvas.CanvasGroup):
         return True
 
 #----------------------------------------------------------------------
-    def _BOutputs(self):
+    def __draw_outputs(self):
         outs = []
         for x in range(len(self.block_description["OutTypes"])):
             try:
@@ -281,7 +297,7 @@ class Block(GooCanvas.CanvasGroup):
         return True
 
 #----------------------------------------------------------------------
-    def _BLabels(self):
+    def __draw_label(self):
         label = GooCanvas.CanvasText(parent=self,
                             text=self.block_description["Label"],
                             fill_color='black',
@@ -291,44 +307,40 @@ class Block(GooCanvas.CanvasGroup):
 
         text_width = label.get_property('width')
         oldX,oldY = ((self.width/2),(self.height-10))
-        self.width = max(text_width + WIDTH_2_TEXT_OFFSET,self.width)
-        label.translate((self.width/2)-oldX, (self.height-10)-oldY)
+        self.width = max(text_width + WIDTH_2_TEXT_OFFSET, self.width)
+        label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
         self.widgets["Label"] = label
 
 #----------------------------------------------------------------------
     def build(self):
-        self._BLabels()#must be called in this order! otherwise the box rect won't have the propper width
-        self._BbRect()
-        self._BInputs()
-        self._BOutputs()
-        self._BIcon()
+        self.__draw_label()#must be called in this order! otherwise the box rect won't have the propper width
+        self.__draw_rect()
+        self.__draw_inputs()
+        self.__draw_outputs()
+        self.__draw_icon()
         self.update_flow()
-        self.__update_flow_display()
 
 #----------------------------------------------------------------------
-    def update_flow(self,check_time_shifter=False):
-        if self.is_source or (self.time_shifts and (not check_time_shifter)):#
+    def update_flow(self):
+        if self.is_source :#
             self.has_flow = True
         else:
             sourceConnectors = self.diagram.get_connectors_to(self.block_id)
             if len(sourceConnectors) != len(self.block_description["InTypes"]):
                 self.has_flow = False
             else:
-#                for connIdx in reversed(range(len(sourceConnectors))):
-#                    if sourceConnectors[connIdx].has_flow:
-#                        sourceConnectors.pop(connIdx)
-                if len(sourceConnectors) != 0:
-                    self.has_flow = False
-                else:
-                    self.has_flow = True
+                self.has_flow = True
+        self.__update_flow_display()
         return self.has_flow
 
 #----------------------------------------------------------------------
     def __update_flow_display(self):
         if self.has_flow:
-            self.widgets["Rect"].set_property("stroke_color",'black')
+#            self.widgets["Rect"].set_property("stroke_color",'black')
+            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
         else:
-            self.widgets["Rect"].set_property("stroke_color",'red')
+#            self.widgets["Rect"].set_property("stroke_color",'red')
+            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 10.0)))
 
 #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
@@ -341,25 +353,6 @@ class Block(GooCanvas.CanvasGroup):
         x = self.output_port_centers[output_id][0] + self.get_simple_transform().x + PORT_SENSITIVITY
         y = self.output_port_centers[output_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY
         return (x,y)
-
-#----------------------------------------------------------------------
-    def update_focus(self):
-        print "self.diagram.focused_item"
-        if self.diagram.focused_item == self:
-            self.__mouse_over_state(True)
-            self.focus = True
-            print "Focus"
-        else:
-            self.__mouse_over_state(False)
-            self.focus = False
-            print " NOt Focus"
-#----------------------------------------------------------------------
-    def __mouse_over_state(self, state):
-        if state:
-            self.widgets["Rect"].set_property("line-width",3)
-        else:
-            self.widgets["Rect"].set_property("line-width",1)
-        pass
 
 #----------------------------------------------------------------------
     def get_state(self):

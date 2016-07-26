@@ -66,15 +66,22 @@ class Connector(GooCanvas.CanvasGroup):
         pass
 
 #----------------------------------------------------------------------
+    def delete(self):
+        self.diagram.delete_connection(self)
+
+#----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         Gtk.Widget.grab_focus(self.diagram)
-        if event.button.button == 1:
-            self.focus = True
-            self.diagram.current_widget = self
-            return False
-        elif event.button.button == 3:
+        if event.button.button == 3:
             self.__right_click_run_menu(event)
-            return False
+        self.focus = not self.focus
+
+        if self.diagram.current_widget == self:
+            self.diagram.current_widget = None
+        else:
+            self.diagram.current_widget = self
+        self.update_flow()
+        return False
 
 #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
@@ -87,6 +94,12 @@ class Connector(GooCanvas.CanvasGroup):
             self.focus = False
         self.__mouse_over_state(False)
         return False
+#----------------------------------------------------------------------
+    def __mouse_over_state(self, state):
+        if state:
+            self.widgets["Line"].set_property("line-width",3)
+        else:
+            self.widgets["Line"].set_property("line-width",2)
 
 #----------------------------------------------------------------------
     def __right_click_run_menu(self, a_oEvent):
@@ -131,16 +144,16 @@ class Connector(GooCanvas.CanvasGroup):
                     parent = self,
                     data = path
             )
-            
             self.widgets["Line"] = widget
+
         else:
             self.widgets["Line"].set_property("data",path)
-#----------------------------------------------------------------------
-    def __mouse_over_state(self, state):
-        if state:
-            self.widgets["Line"].set_property("line-width",3)
+
+        if  self.to_block_in == -1:
+            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
         else:
-            self.widgets["Line"].set_property("line-width",2)
+            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
+        
 
 #----------------------------------------------------------------------
     def update_flow(self):
@@ -151,6 +164,3 @@ class Connector(GooCanvas.CanvasGroup):
             self.widgets["Line"].set_property("line-width",3)
             self.widgets["Line"].set_property("stroke-color","red")
 
-#----------------------------------------------------------------------
-    def delete(self):
-        self.diagram.delete_connection(self)

@@ -116,7 +116,7 @@ class Diagram(GooCanvas.Canvas):
                 self.blocks[blockIdx].update_focus()
             for conn in self.connectors:
                 conn.update_flow()
-            print "Button Press"
+            print "Button Press - diagram"
             self.__abort_connection()
             self.__update_flows()
             return False
@@ -294,11 +294,10 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def __update_flows(self):
-        for checkTimeShifter in [False, True]:
-            for blockIdx in self.blocks:  # self.blocks is a dict!
-                self.blocks[blockIdx].update_flow(checkTimeShifter)
-            for conn in self.connectors:
-                conn.update_flow()
+        for blockIdx in self.blocks:  # self.blocks is a dict!
+            self.blocks[blockIdx].update_flow()
+        for conn in self.connectors:
+            conn.update_flow()
 
     #----------------------------------------------------------------------
     def get_connectors_to(self, block_id):
