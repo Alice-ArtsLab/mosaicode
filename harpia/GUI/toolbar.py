@@ -12,6 +12,7 @@ class Toolbar(Gtk.Toolbar):
         self.main_window = main_window
         self.set_style(Gtk.ToolbarStyle.BOTH)
         self.set_hexpand(False)
+        self.set_property("expand", False)
 
         self.actions = {}
 

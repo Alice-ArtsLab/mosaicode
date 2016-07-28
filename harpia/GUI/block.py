@@ -48,7 +48,7 @@ import copy
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
-HEIGHT_DEFAULT = 56
+HEIGHT_DEFAULT = 112
 PORT_SENSITIVITY = 12
 RADIUS = 15
 INPUT_WIDTH = 24
@@ -60,9 +60,9 @@ OUTPUT_WIDTH = 24
 class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
-    def __init__( self, diagram, block_type, block_id=1):
+    def __init__( self, diagram, block, block_id=1):
         GooCanvas.CanvasGroup.__init__(self)
-        self.block_type = block_type
+        self.block = block
         self.block_id = block_id
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
@@ -70,11 +70,7 @@ class Block(GooCanvas.CanvasGroup):
         self.remember_x = 0
         self.remember_y = 0
 
-        if s2idirectory.block.has_key(block_type):
-            self.block_description = s2idirectory.block[block_type]
-        else:
-            self.block_description = s2idirectory.block[0]
-            print "Bad block type.. assuming 00"
+        self.block_description = self.block.get_block()
 
         self.widgets = {}
         self.focus = False
@@ -136,35 +132,26 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
-        print "Button press - block"
 
         if self.diagram.current_widget == self:
             self.diagram.current_widget = None
         else:
             self.diagram.current_widget = self
 
+   
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
-            self.update_focus()
-            return False
 
         elif event.button.button == 3:
             BlockMenu(self, event)
             return True
 
-        if event.type == Gdk.EventType._2BUTTON_PRESS:
-            BlockMenu(self, event)
-            return True
-#----------------------------------------------------------------------
-    def update_focus(self):
-        if self.diagram.current_widget == self:
-            self.__mouse_over_state(True)
-            self.focus = True
-        else:
-            self.__mouse_over_state(False)
-            self.focus = False
+        self.diagram.update_flows()
+
+        return True
+
 #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
@@ -180,22 +167,15 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
-        self.__mouse_over_state(True)
+        self.focus = True
+        self.diagram.update_flows()
         return False
 
 #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
-        if not self.focus:
-            self.__mouse_over_state(False)
+        self.focus = False
+        self.diagram.update_flows()
         return False
-
-#----------------------------------------------------------------------
-    def __mouse_over_state(self, state):
-        if state:
-            self.widgets["Rect"].set_property("line-width",3)
-        else:
-            self.widgets["Rect"].set_property("line-width",1)
-        pass
 
 #----------------------------------------------------------------------
     def __del__(self):
@@ -204,6 +184,7 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def delete(self):
         self.diagram.delete_block(self.block_id)
+        self.diagram.update_flows()
 
 #----------------------------------------------------------------------
     def __draw_rect(self):
@@ -213,7 +194,7 @@ class Block(GooCanvas.CanvasGroup):
                     x=0,
                     y=0,
                     width=self.width,
-                    height=self.width,
+                    height=self.height,
                     stroke_color="black",
                     fill_color_rgba=ColorFromList(back_color)
                     )
@@ -330,17 +311,8 @@ class Block(GooCanvas.CanvasGroup):
                 self.has_flow = False
             else:
                 self.has_flow = True
-        self.__update_flow_display()
+        self.__update_state()
         return self.has_flow
-
-#----------------------------------------------------------------------
-    def __update_flow_display(self):
-        if self.has_flow:
-#            self.widgets["Rect"].set_property("stroke_color",'black')
-            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
-        else:
-#            self.widgets["Rect"].set_property("stroke_color",'red')
-            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 10.0)))
 
 #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
@@ -360,11 +332,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def move(self, x, y):
-        self.group.move(x,y)
-
-#----------------------------------------------------------------------
-    def redraw(self):
-        self.group.move(0,0)
+        self.translate(x, y)
 
 #----------------------------------------------------------------------
     def get_id(self):
@@ -372,7 +340,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_type(self):
-        return self.block_type
+        return self.block.get_block()["Id"]
 
 #----------------------------------------------------------------------
     def get_position(self):
@@ -385,6 +353,23 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def SetPropertiesXML(self, outerProps):
         self.m_oPropertiesXML = outerProps
+
+#----------------------------------------------------------------------
+    def __update_state(self):
+        if self.has_flow:
+            self.widgets["Rect"].set_property("stroke_color",'black')
+        else:
+            self.widgets["Rect"].set_property("stroke_color",'red')
+
+        if self.focus:
+            self.widgets["Rect"].set_property("line-width",3)
+        else:
+            self.widgets["Rect"].set_property("line-width",1)
+
+        if self.diagram.current_widget == self:
+            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
+        else:
+            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
 #----------------------------------------------------------------------
     def SetPropertiesXML_nID( self, a_oPropertiesXML ):

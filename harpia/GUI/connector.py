@@ -35,7 +35,7 @@ from gi.repository import GooCanvas
 import math
 import sys
 
-#from connectormenu import ConnectorMenu
+from connectormenu import ConnectorMenu
 from harpia.utils.graphicfunctions import *
 
 class Connector(GooCanvas.CanvasGroup):
@@ -68,44 +68,33 @@ class Connector(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def delete(self):
         self.diagram.delete_connection(self)
+        self.diagram.update_flows()
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 3:
-            self.__right_click_run_menu(event)
-        self.focus = not self.focus
+            ConnectorMenu(self, event)
 
         if self.diagram.current_widget == self:
             self.diagram.current_widget = None
         else:
             self.diagram.current_widget = self
-        self.update_flow()
-        return False
+
+        self.diagram.update_flows()
+        return True
 
 #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
-        self.__mouse_over_state(True)
+        self.focus = True
+        self.diagram.update_flows()
         return False
 
 #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
-        if self.focus:
-            self.focus = False
-        self.__mouse_over_state(False)
+        self.focus = False
+        self.diagram.update_flows()
         return False
-#----------------------------------------------------------------------
-    def __mouse_over_state(self, state):
-        if state:
-            self.widgets["Line"].set_property("line-width",3)
-        else:
-            self.widgets["Line"].set_property("line-width",2)
-
-#----------------------------------------------------------------------
-    def __right_click_run_menu(self, a_oEvent):
-        print "Connection Menu"
-#        GcdConnectorMenu(self, a_oEvent)
-        pass
 
 #----------------------------------------------------------------------
     def set_end(self, to_block=-1, to_block_in=-1):
@@ -115,7 +104,7 @@ class Connector(GooCanvas.CanvasGroup):
         self.update_tracking(self.to_point)
 
 #----------------------------------------------------------------------
-    def update_connectors(self):
+    def __update_connectors(self):
         self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out)
         self.to_point = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
         self.__update_draw()
@@ -149,18 +138,26 @@ class Connector(GooCanvas.CanvasGroup):
         else:
             self.widgets["Line"].set_property("data",path)
 
-        if  self.to_block_in == -1:
-            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
-        else:
-            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
-        
+        self.__update_state()
 
 #----------------------------------------------------------------------
     def update_flow(self):
-        if not self.focus:
-            self.widgets["Line"].set_property("line-width",2)
-            self.widgets["Line"].set_property("stroke-color","black")
-        else:
+        self.__update_connectors()
+
+#----------------------------------------------------------------------
+    def __update_state(self):
+        if self.focus:
             self.widgets["Line"].set_property("line-width",3)
+        else:
+            self.widgets["Line"].set_property("line-width",2)
+
+        if self.diagram.current_widget == self:
+            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
+        else:
+            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
+
+        if  self.to_block_in == -1:
             self.widgets["Line"].set_property("stroke-color","red")
+        else:
+            self.widgets["Line"].set_property("stroke-color","black")
 

@@ -52,7 +52,6 @@ class Diagram(GooCanvas.Canvas):
 
         self.last_clicked_point = (None, None)
         self.main_window = main_window
-#        self.set_scroll_region(0, 0, 800, 600)
 
         self.zoom = 1.0 # pixels per unit
         self.show()
@@ -67,7 +66,8 @@ class Diagram(GooCanvas.Canvas):
 
         Gtk.Widget.grab_focus(self)
         self.connect("motion-notify-event", self.__on_motion_notify)
-        self.connect("button_press_event", self.__on_button_press)
+        # Must be after block button press to allow connection
+        self.connect_after("button_press_event", self.__on_button_press)
         self.connect("key-press-event", self.__on_key_press)
 
         self.connect("drag_data_received", self.drag_data_received)
@@ -90,7 +90,7 @@ class Diagram(GooCanvas.Canvas):
     def __on_motion_notify(self, canvas_item, event=None):
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
             for connector in self.connectors:
-                connector.update_connectors()
+                connector.update_flow()
 
         if self.curr_connector == None:
             return False
@@ -102,9 +102,8 @@ class Diagram(GooCanvas.Canvas):
     def __on_key_press(self, widget, event=None):
         if event.keyval == Gdk.KEY_Delete:
             if self.current_widget != None:
-                print "Deleting " , self.current_widget
                 self.current_widget.delete()
-                self.__update_flows()
+                self.update_flows()
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
@@ -113,12 +112,12 @@ class Diagram(GooCanvas.Canvas):
             self.last_clicked_point = (event.x, event.y)
             for blockIdx in self.blocks:
                 # tricky cos we have a dict not a list (iterating through keys not elements)
-                self.blocks[blockIdx].update_focus()
+                self.blocks[blockIdx].update_flow()
             for conn in self.connectors:
                 conn.update_flow()
-            print "Button Press - diagram"
+            self.current_widget = None
             self.__abort_connection()
-            self.__update_flows()
+            self.update_flows()
             return False
         return False
 
@@ -140,30 +139,38 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def update_scrolling(self):
-#        t_aSr = self.get_scroll_region()
+        min_x = 0
+        min_y = 0
 
-#        minX = t_aSr[0]
-#        minY = t_aSr[1]
+        limit_x = self.white_board.get_property("width")
+        limit_y = self.white_board.get_property("height")
 
-#        maxX = t_aSr[0] + t_aSr[2]
-#        maxY = t_aSr[1] + t_aSr[3]
+        for blockIdx in self.blocks:
+            bpos = self.blocks[blockIdx].get_position()
+            if bpos[0] < min_x:
+                min_x = bpos[0]
+            if bpos[1] < min_y:
+                min_y = bpos[1]
 
-#        for blockIdx in self.blocks:
-#            bpos = self.blocks[blockIdx].get_position()
-#            minX = min(minX, bpos[0])
-#            minY = min(minY, bpos[1])
+        if min_x < 0:
+            for blockIdx in self.blocks:
+                bpos = self.blocks[blockIdx].move(abs(min_x),0)
 
-#            maxX = max(maxX, bpos[0] + self.blocks[blockIdx].width)
-#            maxY = max(maxY, bpos[1] + self.blocks[blockIdx].height)
+        if min_y < 0:
+            for blockIdx in self.blocks:
+                bpos = self.blocks[blockIdx].move(0, abs(min_y))
 
-#        self.set_scroll_region(minX, minY, maxX - minX, maxY - minY)
+        for blockIdx in self.blocks:
+            bpos = self.blocks[blockIdx].get_position()
+            if bpos[0] > limit_x - self.blocks[blockIdx].width:
+                self.blocks[blockIdx].move(limit_x - bpos[0] - self.blocks[blockIdx].width,0)
+            if bpos[1] > limit_y - self.blocks[blockIdx].height:
+                self.blocks[blockIdx].move(0, limit_y - bpos[1] - self.blocks[blockIdx].height)
 
-#        for blockIdx in self.blocks:  # self.blocks is a dict!
-#            self.blocks[blockIdx].redraw()
-        pass
+        self.update_flows()
 
     #----------------------------------------------------------------------
-    def insert_block(self, block_type, x=None, y=None):
+    def insert_block(self, block, x=None, y=None):
         if x == None:
             x_off = (self.get_hadjustment()).get_value()
             y_off = (self.get_vadjustment()).get_value()
@@ -173,14 +180,14 @@ class Diagram(GooCanvas.Canvas):
                 y -= y_off
             else:
                 x, y = (100 - x_off, 100 - x_off)
-        self.insert_blockPosId(block_type, x, y, self.block_id)
+        self.insert_blockPosId(block, x, y, self.block_id)
         self.block_id += 1
         self.update_scrolling()
         return self.block_id - 1
 
     #----------------------------------------------------------------------
-    def insert_blockPosId(self, block_type, x, y, block_id):
-        new_block = Block(self, block_type, block_id)
+    def insert_blockPosId(self, block, x, y, block_id):
+        new_block = Block(self, block, block_id)
         new_block.translate(x - 20.0, y - 60.0)
         self.blocks[block_id] = new_block
         self.get_root_item().add_child(new_block, -1)
@@ -193,7 +200,7 @@ class Diagram(GooCanvas.Canvas):
             if self.__connector_types_match(new_connection):
                 self.connectors.append(new_connection)  # TODO: checar se ja existe este conector
                 self.connector_id += 1
-                self.__update_flows()
+                self.update_flows()
                 self.get_root_item().add_child(new_connection, -1)
             else:
                 pass
@@ -215,7 +222,7 @@ class Diagram(GooCanvas.Canvas):
 
         self.connector_id += 1
         self.curr_connector = None
-        self.__update_flows()
+        self.update_flows()
 
     #----------------------------------------------------------------------
     def __connector_types_match(self, a_oConnector):
@@ -242,7 +249,7 @@ class Diagram(GooCanvas.Canvas):
         self.__abort_connection()  # abort any possibly running connections
         self.curr_connector = Connector(self, block_id, output)
         self.get_root_item().add_child(self.curr_connector, -1)
-        self.__update_flows()
+        self.update_flows()
 
     #----------------------------------------------------------------------
     def __abort_connection(self):
@@ -254,9 +261,8 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def delete_connection(self, connection):
-        conn = self.connectors.remove(connection)
-        conn.remove()
-        del conn  # this line won't do much.. but helps understanding..
+        connection.remove()
+        self.connectors.remove(connection)
 
     #----------------------------------------------------------------------
     def delete_block(self, block_id):
@@ -268,7 +274,7 @@ class Diagram(GooCanvas.Canvas):
         # removing the block itself
         self.blocks[block_id].remove()
         del self.blocks[block_id]
-        self.__update_flows()
+        self.update_flows()
 
     #----------------------------------------------------------------------
     def __white_board_event(self, widget, event=None):
@@ -282,18 +288,19 @@ class Diagram(GooCanvas.Canvas):
     #----------------------------------------------------------------------
     def __update_white_board(self):
         if self.white_board == None:
-            self.white_board = GooCanvas.CanvasRect(parent=self.get_root_item(),
+            self.white_board = GooCanvas.CanvasRect(
+                            parent=self.get_root_item(),
                             x=0,
                             y=0,
-                            width=10000,
-                            height=10000,
+                            width=1000,
+                            height=1000,
                             stroke_color="white",
                             fill_color="white")
             self.white_board.connect("focus-in-event", self.__white_board_event)
         pass
 
     #----------------------------------------------------------------------
-    def __update_flows(self):
+    def update_flows(self):
         for blockIdx in self.blocks:  # self.blocks is a dict!
             self.blocks[blockIdx].update_flow()
         for conn in self.connectors:

@@ -101,10 +101,6 @@ class MainWindow(Gtk.Window):
 
         self.connect("delete-event", self.quit)
 
-        # Load blocks
-        for x in s2idirectory.block:
-            self.blocks_tree_view.add_block(s2idirectory.block[x],x)
-
         # Load Examples
         list_of_examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
         list_of_examples.sort()

@@ -20,7 +20,7 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def add_tab(self, name):
-        frame = Gtk.Frame()
+        frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         diagram = Diagram(self.main_window)  # created new diagram
         frame.add(diagram)

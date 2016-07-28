@@ -28,33 +28,26 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import pango
-import math
-import gnomecanvas
-import os
+class ConnectorMenu(Gtk.Menu):
 
-import s2iblockpropertiesgui
-from harpia import showimage
+    def __init__(self, connector, event):
+        Gtk.Notebook.__init__(self)
+        self.connector = connector
 
-class GcdConnectorMenu:
-   def __init__(self, connector, event):
-      self.connector = connector
-      menu = gtk.Menu()
+        # Excluir (delete) item
+        menu_item = Gtk.MenuItem("Delete")
+        menu_item.connect("activate", self.__delete_clicked )
+        self.append(menu_item)
 
-      # Excluir (delete) item
-      menu_item = gtk.MenuItem("Delete")
-      menu_item.connect("activate", self.__delete_clicked )
-      menu.append(menu_item)
-
-      # Shows the menu
-      menu.show_all()
-      menu.popup(None, None, None, event.button, event.time)
+        # Shows the menu
+        self.show_all()
+        self.popup(None, None, None, None, event.button.button, event.time)
 
 #----------------------------------------------------------------------
-   def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
-      for connIdx in range(len(self.connector.diagram.connectors)):
-         if self.connector.diagram.connectors[connIdx] == self.connector:
-            self.connector.diagram.connectors.pop(connIdx)
-            self.connector.group.destroy()
-            break #faster, necessary (not iteraring on reverse!)
+    def __del__(self):
+        pass
 
+#----------------------------------------------------------------------
+    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
+        self.connector.delete()
+        return True

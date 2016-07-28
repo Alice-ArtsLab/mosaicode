@@ -10,6 +10,7 @@ from propertywindow import PropertyWindow
 
 class BlockProperties(Gtk.Notebook):
 
+# ----------------------------------------------------------------------
     def __init__(self, main_window):
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
@@ -33,14 +34,10 @@ class BlockProperties(Gtk.Notebook):
         help_scrolled_window.add(self.help)
         self.append_page(help_scrolled_window, Gtk.Label("Help"))
         self.set_properties(None)
-        
+
+# ----------------------------------------------------------------------
     def set_block(self, block):
         self.help.get_buffer().set_text(block.get_help())
         self.property_window.set_block(block)
 
-    def on_changed(self, selection):
-        # get the model and the iterator that points at the data in the model
-        (model, iter) = selection.get_selected()
-        # set the label to a new value depending on the selection
-        print model[iter][0] + model[iter][1]
-        return True
+# ----------------------------------------------------------------------

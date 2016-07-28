@@ -109,8 +109,8 @@ class MainControl():
         self.main_window.search.show_search_bar()
 
     # ----------------------------------------------------------------------
-    def set_help(self, block_name):
-#        self.main_window.block_properties.set_help(block_name)
+    def set_block(self, block):
+        self.main_window.block_properties.set_block(block)
         pass
 
     # ----------------------------------------------------------------------
@@ -118,9 +118,9 @@ class MainControl():
         self.main_window.status.append_text(text)
 
     # ----------------------------------------------------------------------
-    def add_block(self, id):
+    def add_block(self, block):
         if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().insert_block(id)
+            self.main_window.work_area.get_current_diagram().insert_block(block)
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
