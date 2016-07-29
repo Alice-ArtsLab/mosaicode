@@ -338,7 +338,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_type(self):
-        return self.block.get_description()["Id"]
+        return self.block.get_description()["Type"]
 
 #----------------------------------------------------------------------
     def get_position(self):

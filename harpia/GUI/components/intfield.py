@@ -18,15 +18,16 @@ class IntField(Field, Gtk.HBox):
         self.add(label)
 
 	#coloca os valores em variáveis e passa as que existem pro Adjustment
-        adjustment = Gtk.Adjustment(value=data["value"],
-                                lower=data["lower"],
-                                upper=data["upper"],
-                                step_incr=data["step"],
-                                page_incr=0,#[(upper-lower)/10]?
-                                page_size=0)
+        adjustment = Gtk.Adjustment(value = float(data["value"]),
+                                    lower = int(data["lower"]),
+                                    upper = int(data["upper"]),
+                                    step_incr = int(data["step"]),
+                                    page_incr=0,#[(upper-lower)/10]?
+                                    page_size=0)
         self.field = Gtk.SpinButton()
         self.field.set_adjustment(adjustment)
-        self.field.set_value(data["value"])
+        self.field.set_value(float(data["value"]))
+        self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()
 

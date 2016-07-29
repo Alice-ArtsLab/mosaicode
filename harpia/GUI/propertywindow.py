@@ -41,7 +41,6 @@ class PropertyWindow(Gtk.VBox):
         self.__recursive_search(self)
         # we have a returnable dictionary, call the callback method
         self.plugin.set_properties(self.properties)
-        print "changed!"
 
 # ----------------------------------------------------------------------
     def __recursive_search(self, container):

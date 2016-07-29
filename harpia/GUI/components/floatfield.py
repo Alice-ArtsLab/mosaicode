@@ -28,6 +28,7 @@ class FloatField(Field, Gtk.HBox):
         self.field = Gtk.SpinButton()
         self.field.configure(adjustment, 0.0, data["digits"])
         self.field.set_value(data["value"])
+        self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()
 
