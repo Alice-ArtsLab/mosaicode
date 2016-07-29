@@ -46,61 +46,7 @@ def load():
         module = __import__("harpia.plugins." + modname, fromlist="dummy")
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj):
-                block[obj().get_description()["Id"]] = obj
-
-#block = {
-#        00: acquisition.getBlock(),
-#        01: save.getBlock(),
-#        02: show.getBlock(),
-#        03: plotHistogram.getBlock(),
-#        04: equalizeHistogram.getBlock(),
-#        06: colorConversion.getBlock(),
-#        07: composeRGB.getBlock(),
-#        8: decomposeRGB.getBlock(),
-#        9: fill.getBlock(),
-#        10: comment.getBlock(),
-#        11: saveVideo.getBlock(),
-#        12: liveDelay.getBlock(),
-#        13: getSize.getBlock(),
-#        14: fillRect.getBlock(),
-#        20: Sum.getBlock(),
-#        21: subtraction.getBlock(),
-#        22: multiplication.getBlock(),
-#        23: division.getBlock(),
-#        40: Not.getBlock(),
-#        41: And.getBlock(),     
-#        42: Or.getBlock(),     
-#        43: xor.getBlock(),     
-#        60: Pow.getBlock(),     
-#        61: exp.getBlock(),     
-#        62: log.getBlock(),
-#        80: sobel.getBlock(),     
-#        81: laplace.getBlock(),     
-#        82: smooth.getBlock(),     
-#        83: canny.getBlock(),
-#        100: erode.getBlock(),
-#        101: dilate.getBlock(),
-#        102: opening.getBlock(),
-#        103: closing.getBlock(),
-#        120: threshold.getBlock(),
-#        601: runCmd.getBlock(),
-#        602: checkCir.getBlock(),
-#        603: checkLin.getBlock(),
-#        604: resize.getBlock(),
-#        605: matchTem.getBlock(),
-#        606: minMax.getBlock(),
-#        607: rotate.getBlock(),
-#        608: findSquares.getBlock(),
-#        609: findColor.getBlock(),
-#        610: haarDetect.getBlock(),
-#        611: stereoCorr.getBlock(),
-#        701: newDouble.getBlock(),
-#        801: newRect.getBlock(),
-#        802: cropImage.getBlock(),
-#        803: moveRct.getBlock(),
-#        901: newPoint.getBlock(),
-#        902: isOnRect.getBlock()
-#}
+                block[obj().get_description()["Type"]] = obj
 
 
 #HERE: ADD TYPED ICONS for inputs and outputs

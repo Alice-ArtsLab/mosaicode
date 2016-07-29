@@ -9,12 +9,12 @@ class Save():
     def __init__(self):
         self.file_name = ""
         self.id = -1
+        self.type = "01"
 
 # ------------------------------------------------------------------------------
     def get_description(self):
-        return {"Id":"01",
+        return {"Type": str(self.type),
                 "Label": "Save Image",
-                "Path": {"Python": "save"},
                 "Icon": "images/save.png",
                 "Color": "50:100:200:150",
                 "InTypes": {0: "HRP_IMAGE"},
@@ -42,19 +42,21 @@ class Save():
 # ------------------------------------------------------------------------------
     def get_properties(self):
         return {"filename":{"name": "File Name",
-                            "type": HARPIA_STRING,
+                            "type": HARPIA_SAVE_FILE,
                             "value": self.file_name}
                 }
 
 # ------------------------------------------------------------------------------
     def get_help(self):
-        return "Operacão de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.\nPropriedades\nLimiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas."
+        return "Salva uma imagem em uma mídia indicada pelo usuário.\
+        Atualmente a imagem é salva como PNG por padrão." 
+
 
 # ------------------------------------------------------------------------------
     def get_xml(self):
         return """
          <properties>
-      <block type='01' id='"""+ str(self.id) + """'>
+      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
         <property name='filename' value='""" + str(self.file_name) +"""' />
       </block>
         </properties>

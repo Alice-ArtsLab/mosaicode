@@ -148,5 +148,4 @@ class MainControl():
     # ----------------------------------------------------------------------
     def set_selected_block(self, block):
         self.main_window.block_properties.set_block(block)
-        print block.id
 # ----------------------------------------------------------------------
