@@ -46,7 +46,7 @@ def load():
         module = __import__("harpia.plugins." + modname, fromlist="dummy")
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj):
-                block[obj().get_block()["Id"]] = obj()
+                block[obj().get_description()["Id"]] = obj
 
 #block = {
 #        00: acquisition.getBlock(),

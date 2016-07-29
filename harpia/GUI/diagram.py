@@ -98,12 +98,17 @@ class Diagram(GooCanvas.Canvas):
         self.curr_connector.update_tracking(point)
         return False
 
+    # ---------------------------------------------------------------------
+    def delete(self):
+        if self.current_widget != None:
+            self.current_widget.delete()
+            self.current_widget = None
+            self.update_flows()
+
     #----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
         if event.keyval == Gdk.KEY_Delete:
-            if self.current_widget != None:
-                self.current_widget.delete()
-                self.update_flows()
+            self.delete()
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
@@ -128,14 +133,6 @@ class Diagram(GooCanvas.Canvas):
         if block != None:
             self.insert_block(block, x, y)
         return
-
-
-    #----------------------------------------------------------------------
-    def goto_scrolling(self, x, y):
-        t_oHa = self.get_hadjustment()
-        t_oVa = self.get_vadjustment()
-        t_oHa.set_value(x)
-        t_oVa.set_value(y)
 
     #----------------------------------------------------------------------
     def update_scrolling(self):
@@ -356,3 +353,9 @@ class Diagram(GooCanvas.Canvas):
             self.zoom *= value
         self.set_scale(self.zoom)
         self.update_scrolling()
+
+    #----------------------------------------------------------------------
+    def set_selected_block(self, block):
+        self.main_window.main_control.set_selected_block(block)
+
+#----------------------------------------------------------------------

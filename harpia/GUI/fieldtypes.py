@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-block = {}
-
 HARPIA_NONE = "None"
 HARPIA_STRING = "String"
 HARPIA_COMMENT = "Comment"

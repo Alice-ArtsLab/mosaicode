@@ -39,8 +39,8 @@ import os
 from blockmenu import BlockMenu
 import harpia.s2idirectory
 from harpia.s2idirectory import *
-from harpia.utils.XMLUtils import XMLParser
 from harpia.utils.graphicfunctions import *
+from harpia.utils.XMLUtils import XMLParser
 
 from harpia import s2idirectory
 
@@ -62,6 +62,7 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __init__( self, diagram, block, block_id=1):
         GooCanvas.CanvasGroup.__init__(self)
+        block.id = block_id
         self.block = block
         self.block_id = block_id
         self.diagram = diagram
@@ -70,7 +71,7 @@ class Block(GooCanvas.CanvasGroup):
         self.remember_x = 0
         self.remember_y = 0
 
-        self.block_description = self.block.get_block()
+        self.block_description = self.block.get_description()
 
         self.widgets = {}
         self.focus = False
@@ -79,10 +80,6 @@ class Block(GooCanvas.CanvasGroup):
 
         if self.block_description.has_key("IsSource"): #all data sources
             self.is_source = self.block_description["IsSource"]
-
-        self.m_oPropertiesXML = XMLParser(self.data_dir +
-                    str(self.block_description["Path"]["Xml"]))
-        self.m_oPropertiesXML.getTag("properties").getTag("block").setAttr("id",str(self.block_id))
 
         self.m_oBorderColor = [ 0, 0, 0, 255 ]
         self.m_oBackColor = [0,0,0,150]
@@ -138,7 +135,8 @@ class Block(GooCanvas.CanvasGroup):
         else:
             self.diagram.current_widget = self
 
-   
+        self.diagram.set_selected_block(self.block)
+
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
             self.remember_x = event.x
@@ -340,19 +338,23 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_type(self):
-        return self.block.get_block()["Id"]
+        return self.block.get_description()["Id"]
 
 #----------------------------------------------------------------------
     def get_position(self):
         return self.get_simple_transform().x,self.get_simple_transform().y
 
 #----------------------------------------------------------------------
-    def GetPropertiesXML(self):
-        return self.m_oPropertiesXML
+    def get_xml(self):
+        return XMLParser(self.block.get_xml(), fromString=True)
 
 #----------------------------------------------------------------------
-    def SetPropertiesXML(self, outerProps):
-        self.m_oPropertiesXML = outerProps
+    def set_xml(self, xml):
+        properties = {}
+        block_properties = xml.getTag("properties").getTag("block").getChildTags("property")
+        for prop in block_properties:
+            properties[prop.name] = prop.value
+        self.block.set_properties(properties)
 
 #----------------------------------------------------------------------
     def __update_state(self):
@@ -372,9 +374,9 @@ class Block(GooCanvas.CanvasGroup):
             self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
 #----------------------------------------------------------------------
-    def SetPropertiesXML_nID( self, a_oPropertiesXML ):
-        myBlockId = self.m_oPropertiesXML.getTag("properties").getTag("block").getAttr("id")
+    def SetPropertiesXML_nID( self, propertiesXML ):
+        myBlockId = self.propertiesXML.getTag("properties").getTag("block").getAttr("id")
         #storing this block's Block.Id
-        self.m_oPropertiesXML = copy.deepcopy(a_oPropertiesXML)
-        self.m_oPropertiesXML.getTag("properties").getTag("block").setAttr("id",myBlockId)
+        self.propertiesXML = copy.deepcopy(propertiesXML)
+        self.propertiesXML.getTag("properties").getTag("block").setAttr("id",myBlockId)
 

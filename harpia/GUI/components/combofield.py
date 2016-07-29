@@ -3,11 +3,11 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from harpia.GUI.components.field import Field
-from harpia.GUI.constants import *
+from harpia.GUI.fieldtypes import *
 
 class ComboField(Field, Gtk.HBox):
 
-    def __init__(self, data):
+    def __init__(self, data, event):
         if not isinstance(data,dict):
             return
         self.value = data["value"]

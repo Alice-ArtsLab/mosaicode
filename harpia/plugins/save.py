@@ -8,14 +8,13 @@ class Save():
 # ------------------------------------------------------------------------------
     def __init__(self):
         self.file_name = ""
+        self.id = -1
 
 # ------------------------------------------------------------------------------
-    def get_block(self):
+    def get_description(self):
         return {"Id":"01",
                 "Label": "Save Image",
-                "Path": {"Python": "save",
-                         "Glade": "glade/save.ui",
-                         "Xml": "xml/save.xml"},
+                "Path": {"Python": "save"},
                 "Icon": "images/save.png",
                 "Color": "50:100:200:150",
                 "InTypes": {0: "HRP_IMAGE"},
@@ -38,11 +37,11 @@ class Save():
 
 # ------------------------------------------------------------------------------
     def set_properties(self, data):
-        self.file_name = data["0-file_name"]
+        self.file_name = data["filename"]
 
 # ------------------------------------------------------------------------------
     def get_properties(self):
-        return {"0-file_name":{"name": "File Name",
+        return {"filename":{"name": "File Name",
                             "type": HARPIA_STRING,
                             "value": self.file_name}
                 }
@@ -51,4 +50,13 @@ class Save():
     def get_help(self):
         return "Operacão de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.\nPropriedades\nLimiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas."
 
+# ------------------------------------------------------------------------------
+    def get_xml(self):
+        return """
+         <properties>
+      <block type='01' id='"""+ str(self.id) + """'>
+        <property name='filename' value='""" + str(self.file_name) +"""' />
+      </block>
+        </properties>
+    """
 # ------------------------------------------------------------------------------

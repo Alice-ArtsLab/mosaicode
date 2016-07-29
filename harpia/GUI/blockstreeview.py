@@ -40,9 +40,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
         # Load blocks
         for x in s2idirectory.block:
-            block = s2idirectory.block[x]
-            self.__add_item(block.get_block()["Label"], block.get_block()["TreeGroup"])
-            self.blocks[id] = block
+            block = s2idirectory.block[x]()
+            self.__add_item(block.get_description()["Label"], block.get_description()["TreeGroup"])
+            self.blocks[id] = s2idirectory.block[x]
 
     # ----------------------------------------------------------------------
     def __add_item(self, item, category_name):
@@ -100,7 +100,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __drag_data(self, treeview, context, selection, target_id, etime):
         block = self.get_selected_block()
-        selection.set_text(block.get_block()["Label"], -1)
+        selection.set_text(block.get_description()["Label"], -1)
         return
 
     # ----------------------------------------------------------------------
@@ -110,7 +110,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
         block_name = model.get_value(model.get_iter(path), 0)
         for x in self.blocks:
-            if self.blocks[x].get_block()["Label"] == block_name:
-                return self.blocks[x]
+            block = self.blocks[x]()
+            if block.get_description()["Label"] == block_name:
+                return block
         return None
 # ----------------------------------------------------------------------

@@ -1,12 +1,12 @@
-from harpia.GUI.constants import *
+from harpia.GUI.fieldtypes import *
 
 class Field(object):
 
+    def __init__(self, data, event):
+        pass
+
     def get_type(self):
         return HARPIA_NONE
-
-    def __init__(self, data):
-        pass
 
     def get_value(self):
         return 0

@@ -58,6 +58,7 @@ class MainControl():
     def save_as(self):
         print "Save As from control"
 
+    # ----------------------------------------------------------------------
     def export_diagram(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
@@ -79,8 +80,10 @@ class MainControl():
     def paste(self):
         print "Paste from control"
 
+    # ----------------------------------------------------------------------
     def delete(self):
-        print "Delete from control"
+        if self.main_window.work_area.get_current_diagram() != None:
+            self.main_window.work_area.get_current_diagram().delete()
 
     def preferences(self):
         print "Preferences from control"
@@ -97,6 +100,7 @@ class MainControl():
     def tips(self):
         print "Tips from control"
 
+    # ----------------------------------------------------------------------
     def about(self):
         About(self.main_window).show_all()
 
@@ -141,4 +145,8 @@ class MainControl():
         if self.main_window.work_area.get_current_diagram() != None:
             self.main_window.work_area.get_current_diagram().set_zoom(ZOOM_ORIGINAL)
 
+    # ----------------------------------------------------------------------
+    def set_selected_block(self, block):
+        self.main_window.block_properties.set_block(block)
+        print block.id
 # ----------------------------------------------------------------------
