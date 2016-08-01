@@ -10,25 +10,24 @@ gettext.textdomain(APP)
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
-class GetSize(Plugin):
+class NewDouble(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
         self.id = -1
-        self.type = "13"
+        self.type = "701"
+        self.doubleVal = 1
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
-        return "Extracts the input image size"
+        return "Creates new literal value (Double)"
+
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
-                                 'CvRect block$$_rect_o1 = cvRect( 0, 0, 1, 1);\n'
-
-        blockTemplate.functionCall = '\nif(block$$_img_i1)\n{\n' + \
-                                     '	block$$_rect_o1 = cvRect( 0, 0, block$$_img_i1->width, block$$_img_i1->height);\n' + \
-                                     '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
+        blockTemplate.imagesIO = '\ndouble  block$$_double_o1;\n'
+        blockTemplate.functionCall = '	block$$_double_o1 = ' + str(
+            float(self.doubleVal)) + ';\n'
+        blockTemplate.dealloc = ''
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -37,19 +36,26 @@ class GetSize(Plugin):
     # ----------------------------------------------------------------------
     def get_description(self):
         return {"Type": str(self.type),
-            'Label': _('Get Size'),
-            'Icon': 'images/getSize.xpm',
-            'Color': '250:20:30:150',
-            'InTypes': {0: 'HRP_IMAGE'},
-            'OutTypes': {0: 'HRP_RECT'},
-            'Description': _('Extracts the input image size'),
-            'TreeGroup': _('Experimental'),
-            'TimeShifts': False
+            'Label': _('New Double'),
+            'Icon': 'images/newDouble.png',
+            'Color': '50:50:200:150',
+            'InTypes': "",
+            'OutTypes': {0: 'HRP_DOUBLE'},
+            'Description': _('Creates new literal value (Double)'),
+            'TreeGroup': _('Basic Data Type'),
+            "IsSource": True
             }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {}
+        return {
+            "doubleVal":{"name": "Value",
+                        "type": HARPIA_FLOAT,
+                        "value": self.doubleVal,
+                        "lower":0,
+                        "upper":65535,
+                        "step":1
+                            }
+        }
 
 # ------------------------------------------------------------------------------
-

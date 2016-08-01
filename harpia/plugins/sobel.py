@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Sobel():
+class Sobel(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -54,12 +55,6 @@ class Sobel():
             }
 
     # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        self.masksize = data["masksize"]
-        self.xorder = data["xorder"]
-        self.yorder = data["yorder"]
-
-    # ----------------------------------------------------------------------
     def get_properties(self):
         return {"xorder":{"name": "X Axis Derivate Order",
                             "type": HARPIA_INT,
@@ -84,15 +79,4 @@ class Sobel():
                             }
                  }
 
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-        <property name='masksize' value='"""+ str(self.masksize) + """' />
-        <property name='xorder' value='"""+ str(self.xorder) + """' />
-        <property name='yorder' value='"""+ str(self.yorder) + """' />
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------

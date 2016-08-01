@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Division():
+class Canny(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -62,12 +63,6 @@ class Division():
             "Description": _("Filtering operation that employs the Canny algorithm to detect edges."),
             "TreeGroup": _("Gradients, Edges and Corners")
             }
-    # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        self.apertureSize = data["apertureSize"]
-        self.threshold1 = data["threshold1"]
-        self.threshold2 = data["threshold2"]
-
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -93,16 +88,5 @@ class Division():
                             "step":1
                             }
                 }
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-    <property name='threshold1' value='"""+ str(self.threshold1) + """' />
-    <property name='threshold2' value='"""+ str(self.threshold2) + """' />
-    <property name='apertureSize' value='"""+ str(self.apertureSize) + """' />
-    </block>
-</properties>
-    """
-# ------------------------------------------------------------------------------
 
+# ------------------------------------------------------------------------------

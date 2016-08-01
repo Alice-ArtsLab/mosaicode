@@ -10,17 +10,19 @@ gettext.textdomain(APP)
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
-class Log(Plugin):
+class Smooth(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
         self.id = -1
-        self.type = "62"
+        self.type = "82"
+        self.type = "CV_GAUSSIAN"
+        self.param1 = 7
+        self.param2 = 9
 
     # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "aplica a função logarítmica a uma imagem, ou seja,\
-        calcula o logarítmo natural do valor de intensidade luminosa de cada ponto da imagem."
+    def get_help(self):
+        return "Aplicação de um filtro de suavização. Suaviza os contornos de objetos na imagem, borrando-os levemente."
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
@@ -29,19 +31,12 @@ class Log(Plugin):
             'IplImage * block$$_img_o1 = NULL;\n' + \
             'IplImage * block$$_img_t = NULL;\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     'block$$_img_t = cvCreateImage(cvSize(block$$' + \
-                                     '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$' + \
+                                     'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth,block$$' + \
                                      '_img_i1->nChannels);\n' + \
-                                     'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
-                                     '_img_i1->width,block$$_img_i1->height),block$$' + \
-                                     '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
-                                     'cvConvertScale(block$$_img_i1,block$$_img_t,(1/93.8092),0);\n' + \
-                                     'cvLog(block$$_img_t, block$$_img_t);\n' + \
-                                     'cvConvertScale(block$$_img_t,block$$_img_o1,255.0,0);}\n'
+                                     'cvSmooth(block$$_img_i1, block$$_img_o1 ,' + self.type + ',' + self.param1 + ',' + self.param2 + ',0,0);}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n' + \
                                 'cvReleaseImage(&block$$_img_t);\n'
-
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -50,18 +45,36 @@ class Log(Plugin):
     # ----------------------------------------------------------------------
     def get_description(self):
         return {"Type": str(self.type),
-            "Label": _("Log"),
-            "Icon": "images/log.png",
-            "Color": "230:230:60:150",
+            "Label": _("Smooth"),
+            "Icon": "images/smooth.png",
+            "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Return the image made from the neperian logarithm of each one of the image pixels."),
-            "TreeGroup": _("Math Functions")
+            "Description": _("Operação de filtragem destinada suavizar uma imagem"),
+            "TreeGroup": _("Filters and Color Conversion")
             }
-
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {}
+        return {
+        "type":{"name": "Type",
+                    "type": HARPIA_COMBO,
+                    "value": self.type,
+                    "values": ["CV_GAUSSIAN", "CV_BLUR", "CV_MEDIAN"]
+                    },
+        "param1":{"name": "Parameter 1",
+                    "type": HARPIA_INT,
+                    "value": self.param1,
+                    "lower":0,
+                    "upper":99,
+                    "step":1
+                    },
+        "param2":{"name": "Parameter 2",
+                    "type": HARPIA_INT,
+                    "value": self.param2,
+                    "lower":0,
+                    "upper":99,
+                    "step":1
+                    }
+        }
 
 # ------------------------------------------------------------------------------
-

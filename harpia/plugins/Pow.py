@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Pow():
+class Pow(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -48,9 +49,6 @@ class Pow():
             "Description": _("Power each pixel value to a fixed value."),
             "TreeGroup": _("Math Functions")
             }
-    # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        self.exponent = data["exponent"]
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -63,14 +61,5 @@ class Pow():
                             }
                 }
 
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-        <property name='exponent' value='""" + str(self.exponent) +"""' />
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------
 

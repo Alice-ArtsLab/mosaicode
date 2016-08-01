@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Exp():
+class Exp(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -52,21 +53,9 @@ class Exp():
 				 "Description":_("Return the image made from the neperian constant (e) powered to each one of the image pixels."),
 				 "TreeGroup":_("Math Functions")
          }
-    # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        pass
 
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {}
 
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------
-

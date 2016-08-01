@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Rotate():
+class Rotate(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -82,14 +83,6 @@ class Rotate():
             }
 
     # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        self.isCenter = data["isCenter"]
-        self.isScalling = data["isScalling"]
-        self.isFilling = data["isFilling"]
-        self.xC = data["xC"]
-        self.yC = data["yC"]
-
-    # ----------------------------------------------------------------------
     def get_properties(self):
         return {
         "isCenter":{"name": "Use Image Center",
@@ -108,30 +101,17 @@ class Rotate():
                     "type": HARPIA_INT,
                     "value": self.xC,
                     "lower":0,
-                    "upper":500,
+                    "upper":65535,
                     "step":1
                     },
         "yC":{"name": "Point Y",
                     "type": HARPIA_INT,
                     "value": self.yC,
                     "lower":0,
-                    "upper":6000,
+                    "upper":65535,
                     "step":1
-                    },
+                    }
         }
 
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-		<property name="isCenter" value='"""+ str(self.isCenter) + """' />
-		<property name="isScalling" value='"""+ str(self.isScalling) + """' />
-		<property name="isFilling" value='"""+ str(self.isFilling) + """' />
-		<property name="xC" value='"""+ str(self.xC) + """' />
-		<property name="yC" value='"""+ str(self.yC) + """' />
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------
 

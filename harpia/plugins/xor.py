@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Xor():
+class Xor(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -56,21 +57,10 @@ class Xor():
             "Description": _("Logical XOR (exclusive-or) operation between two images."),
             "TreeGroup": _("Arithmetic and logical operations")
             }
-    # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        pass
 
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {}
 
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------
 

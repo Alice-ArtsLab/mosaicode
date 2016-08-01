@@ -10,34 +10,38 @@ gettext.textdomain(APP)
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
-class Show(Plugin):
+class Fill(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
         self.id = -1
-        self.type = "02"
+        self.type = "09"
+        self.color = "#0000ffff0000"
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
-        return "Mostra uma imagem da cadeia de processamento de imagens."
+        return "Preenche toda a imagem de uma cor."
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        import harpia.gerador
+        red = self.color[1:5]
+        green = self.color[5:9]
+        blue = self.color[9:13]
+
+        red = int(red, 16) / 257
+        green = int(green, 16) / 257
+        blue = int(blue, 16) / 257
+
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n'
-        if (len(harpia.gerador.g_bLive) > 0):
-            blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                             'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-                             'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n' + \
-                             'cvShowImage("block$$_img_o1",block$$_img_i1);\n} \n'
-        else:
-            blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                            'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-                            'cvSaveImage("block$$_OUT.png" ,block$$_img_i1);\n}\n'
+        blockTemplate.functionCall = \
+            '\nif(block$$_img_i1){\n' + \
+            'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
+            '\nCvScalar color = cvScalar('+ blue +','+ green +','+ red+',0);\n' + \
+            '\ncvSet(block$$_img_o1,color,NULL);}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
-                                'cvReleaseImage(&block$$_img_i1);\n'
+          'cvReleaseImage(&block$$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -46,17 +50,22 @@ class Show(Plugin):
     # ----------------------------------------------------------------------
     def get_description(self):
         return {"Type": str(self.type),
-            "Label": _("Show Image"),
-            "Icon": "images/show.png",
-            "Color": "50:100:200:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Shows the input image on a new window."),
-            "TreeGroup": _("General")
-            }
+        "Label":_("Fill image"),
+        "Icon":"images/fill.png",
+        "Color":"50:100:200:150",
+        "InTypes":{0:"HRP_IMAGE"},
+        "OutTypes":{0:"HRP_IMAGE"},
+        "Description":_("Fill an image with the desired color."),
+        "TreeGroup":_("General")
+      }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {}
+        return {
+            "color":{"name": "Color",
+                     "type": HARPIA_COLOR,
+                     "value": self.color
+                    }
+        }
 
 # ------------------------------------------------------------------------------

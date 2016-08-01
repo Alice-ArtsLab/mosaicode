@@ -2,15 +2,16 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class And():
+class And(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
         self.id = -1
         self.type = "41"
 
-        # --------------------------Help Text--------------------------------------------
+    # --------------------------Help Text--------------------------------------------
     def get_help(self):#Função que chama a help
         return "Permite a operação lógica 'E' entre as duas entradas. Para esse bloco há duas possibilidades.\
         Primeira: Executa a operação entre duas imagens ponto a ponto.\
@@ -53,19 +54,7 @@ class And():
                 }
 
     # ------------------------------------------------------------------------------
-    def set_properties(self, data):
-        pass
-
-    # ------------------------------------------------------------------------------
     def get_properties(self):
         return {}
 
-# ------------------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='41' id='"""+ str(self.id) + """'>
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------

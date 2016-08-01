@@ -2,14 +2,15 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Save():
+class Save(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        self.file_name = ""
         self.id = -1
         self.type = "01"
+        self.filename = ""
 
 # ------------------------------------------------------------------------------
     def get_description(self):
@@ -36,14 +37,10 @@ class Save():
                                 'cvReleaseImage(&block$$_img_i1);\n'
 
 # ------------------------------------------------------------------------------
-    def set_properties(self, data):
-        self.file_name = data["filename"]
-
-# ------------------------------------------------------------------------------
     def get_properties(self):
         return {"filename":{"name": "File Name",
                             "type": HARPIA_SAVE_FILE,
-                            "value": self.file_name}
+                            "value": self.filename}
                 }
 
 # ------------------------------------------------------------------------------
@@ -51,14 +48,4 @@ class Save():
         return "Salva uma imagem em uma mídia indicada pelo usuário.\
         Atualmente a imagem é salva como PNG por padrão." 
 
-
-# ------------------------------------------------------------------------------
-    def get_xml(self):
-        return """
-         <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-        <property name='filename' value='""" + str(self.file_name) +"""' />
-      </block>
-        </properties>
-    """
 # ------------------------------------------------------------------------------

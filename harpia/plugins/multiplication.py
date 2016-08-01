@@ -8,8 +8,9 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-class Multiplication():
+class Multiplication(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -54,21 +55,10 @@ class Multiplication():
             "Description": _("Multiplies two images"),
             "TreeGroup": _("Arithmetic and logical operations")
             }
-    # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        pass
 
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {}
 
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        return """
- <properties>
-      <block type='"""+ str(self.type) + """' id='"""+ str(self.id) + """'>
-      </block>
-</properties>
-    """
 # ------------------------------------------------------------------------------
 
