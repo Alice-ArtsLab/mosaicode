@@ -44,6 +44,7 @@ class WorkArea(Gtk.Notebook):
         button.set_relief(Gtk.ReliefStyle.NONE)
         button.connect('clicked', self.__on_button_clicked, frame)
         label = Gtk.Label(text)
+        label.set_name("label")
         box.add(label)
         box.add(button)
         box.show_all()
@@ -52,14 +53,13 @@ class WorkArea(Gtk.Notebook):
     # ----------------------------------------------------------------------
     def __on_button_clicked(self, widget, args):
         self.close_tab()
-        
+
     # ----------------------------------------------------------------------
     def open_diagram(self, diagram_name):
         self.add_tab(diagram_name)
         diagram = self.diagrams[self.get_current_page()]
         diagram.set_file_name(diagram_name)
         DiagramControl(diagram).load()
-        self.get_current_page()
 
     # ----------------------------------------------------------------------
     def get_current_diagram(self):
@@ -68,4 +68,12 @@ class WorkArea(Gtk.Notebook):
         else:
             return None
 
+    # ----------------------------------------------------------------------
+    def set_diagram_name(self, name):
+        position = self.get_current_page()
+        page = self.get_nth_page(position)
+        hbox = self.get_tab_label(page)
+        for widget in hbox.get_children():
+            if widget.get_name() == "label":
+                widget.set_text(name)
 # ----------------------------------------------------------------------            

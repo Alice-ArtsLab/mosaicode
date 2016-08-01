@@ -22,6 +22,8 @@ class MainControl():
     # ----------------------------------------------------------------------
     def select_open(self):
         name = Dialog().open_dialog("Open", self.main_window)
+        if name == None or name == "":
+            return
         self.main_window.work_area.add_tab(name)
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
@@ -37,18 +39,22 @@ class MainControl():
         self.main_window.work_area.close_tab()
 
     # ----------------------------------------------------------------------
-    def save(self):
+    def save(self, save_as = False):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        if diagram.get_file_name() is None:
+
+        if diagram.get_file_name() is None or save_as:
             name = Dialog().save_dialog("Save", self.main_window)
             diagram.set_file_name(name)
+            self.main_window.work_area.set_diagram_name(name)
 
         result, message = False,""
+
         if diagram.get_file_name() is not None:
             if len(diagram.get_file_name()) > 0:
                 result, message = DiagramControl(diagram).save()
+
         if not result:
             Dialog().message_dialog("Error",
                     message,
@@ -56,7 +62,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save_as(self):
-        print "Save As from control"
+        self.save(save_as = True)
 
     # ----------------------------------------------------------------------
     def export_diagram(self):
