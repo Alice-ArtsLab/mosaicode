@@ -1,51 +1,49 @@
-# -*- coding: utf-8 -*-
-# [HARPIA PROJECT]
-#
-#
-# S2i - Intelligent Industrial Systems
-# DAS - Automation and Systems Department
-# UFSC - Federal University of Santa Catarina
-# Copyright: 2006 - 2007 Luis Carlos Dill Junges (lcdjunges@yahoo.com.br), Clovis Peruchi Scotti (scotti@ieee.org),
-#                        Guilherme Augusto Rutzen (rutzen@das.ufsc.br), Mathias Erdtmann (erdtmann@gmail.com) and S2i (www.s2i.das.ufsc.br)
-#            2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org), S2i (www.s2i.das.ufsc.br)
-#
-#
-#    This program is free software: you can redistribute it and/or modify it
-#    under the terms of the GNU General Public License version 3, as published
-#    by the Free Software Foundation.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranties of
-#    MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-#    PURPOSE.  See the GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#    For further information, check the COPYING file distributed with this software.
-#
-#----------------------------------------------------------------------
+#!/usr/bin/env python
+ # -*- coding: utf-8 -*-
 
-from harpia.GladeWindow import  GladeWindow
-from harpia.utils.XMLUtils import XMLParser
-from harpia.s2icommonproperties import S2iCommonProperties,APP, DIR
-from harpia.GUI.filefilters import * 
-
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GooCanvas', '2.0')
-from gi.repository import Gtk
-
-#i18n
-import os
+from harpia.s2icommonproperties import APP, DIR
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
+from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 
-from glob import glob
+class Acquisition(Plugin):
 
+# ------------------------------------------------------------------------------
+    def __init__(self):
+        self.id = -1
+        self.type = "00"
+
+    # ----------------------------------------------------------------------
+    def get_help(self):
+
+    # ----------------------------------------------------------------------
+    def generate(self, blockTemplate):
+
+    # ----------------------------------------------------------------------
+    def __del__(self):
+        pass
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return {"Type": str(self.type),
+         "Label":_("Image"),
+         "Icon":"images/acquisition.png",
+         "Color":"50:100:200:150",
+                 "InTypes":"",
+                 "OutTypes":{0:"HRP_IMAGE"},
+                 "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
+                 "TreeGroup":_("General"),
+                 "IsSource":True
+         }
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return {}
+
+# ------------------------------------------------------------------------------
 #----------------------------------------------------------------------
 
 class Properties( GladeWindow, S2iCommonProperties):
@@ -607,5 +605,5 @@ def getBlock():
                  "OutTypes":{0:"HRP_IMAGE"},
                  "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
                  "TreeGroup":_("General"),
-                 "IsSource":True #optional argument, if key doesn't exist, admit false
+                 "IsSource":True
          }
