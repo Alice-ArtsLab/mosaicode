@@ -277,12 +277,16 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __draw_label(self):
+        text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + self.block_description["Label"] + "</span>"
+
         label = GooCanvas.CanvasText(parent=self,
-                            text=self.block_description["Label"],
+                            text=text_label,
                             fill_color='black',
                             anchor=GooCanvas.CanvasAnchorType.CENTER,
                             x=(self.width/2),
-                            y=(self.height-10))
+                            y=(self.height-10),
+                            use_markup=True
+                            )
 
         text_width = label.get_property('width')
         oldX,oldY = ((self.width/2),(self.height-10))
