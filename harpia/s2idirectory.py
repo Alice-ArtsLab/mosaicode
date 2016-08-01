@@ -45,7 +45,7 @@ def load():
     for importer, modname, ispkg in pkgutil.iter_modules(harpia.plugins.__path__):
         module = __import__("harpia.plugins." + modname, fromlist="dummy")
         for name, obj in inspect.getmembers(module):
-            if inspect.isclass(obj):
+            if inspect.isclass(obj) and "Type" in obj().get_description():
                 block[obj().get_description()["Type"]] = obj
 
 

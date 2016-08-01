@@ -17,12 +17,12 @@ class ComboField(Field, Gtk.HBox):
 
         self.field = Gtk.ComboBoxText()
         self.field.set_entry_text_column(0)
-        self.field.connect("changed", event)
         for value in data["values"]:
             self.field.append_text(value)
         if self.value in data["values"]:
             index = data["values"].index(self.value)
             self.field.set_active(index)
+        self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()
 

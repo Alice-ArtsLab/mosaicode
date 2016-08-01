@@ -15,8 +15,14 @@ class CheckField(Field, Gtk.HBox):
         self.add(label)
 
         self.field = Gtk.Switch()
-        print data["value"] , bool(data["value"])
-        self.field.set_active(bool(data["value"]))
+        if isinstance(data["value"], str) or isinstance(data["value"], unicode):
+            if data["value"] == "True":
+                self.field.set_active(True)
+            else:
+                self.field.set_active(False)
+        elif isinstance(data["value"], bool):
+            self.field.set_active(data["value"])
+
         self.field.connect("notify::active", event)
         self.add(self.field)
         self.show_all()

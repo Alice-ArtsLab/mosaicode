@@ -80,11 +80,15 @@ class DiagramControl():
         blocks = xml_loader.getTag("harpia").getTag("GcState").getChildTags("block")
 
         for block in blocks:
+            if block.getAttr("type") not in harpia.s2idirectory.block:
+                continue
             block_id =  block.getAttr("id")
             block_type =  block.getAttr("type")
             position = block.getTag("position")
             x = position.getAttr("x")
             y = position.getAttr("y")
+
+
             self.diagram.insert_blockPosId(harpia.s2idirectory.block[block_type](), float(x), float(y), int(block_id))
             self.diagram.block_id = max(self.diagram.block_id, int(block_id))
 
@@ -95,6 +99,9 @@ class DiagramControl():
         try:
             #for block in xml_loader.harpia.network.block:
             for block in blocks:
+                if block.getAttr("type") not in harpia.s2idirectory.block:
+                    
+                    continue
                 block_id =  block.getAttr("id")
                 outputs = block.getTag("outputs")
 

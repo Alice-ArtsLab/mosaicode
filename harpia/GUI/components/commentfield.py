@@ -15,8 +15,11 @@ class CommentField(Field, Gtk.VBox):
         self.set_spacing(10)
         scrolled_window = Gtk.ScrolledWindow()
 
-        scrolled_window.set_min_content_height(data["height"])
-        scrolled_window.set_min_content_width(data["width"])
+        if "height" in data:
+            scrolled_window.set_min_content_height(data["height"])
+
+        if "width" in data:
+            scrolled_window.set_min_content_width(data["width"])
 
         label = Gtk.Label(data["name"])
         self.add(label)
@@ -25,7 +28,7 @@ class CommentField(Field, Gtk.VBox):
         self.field.set_left_margin(10)
         self.field.set_right_margin(10)
         self.field.set_wrap_mode(Gtk.WrapMode.WORD)
-        self.field.connect("changed", event)
+        self.field.connect("focus-out-event", event)
 
         self.text_buffer = self.field.get_buffer()
         self.text_buffer.set_text(data["value"])

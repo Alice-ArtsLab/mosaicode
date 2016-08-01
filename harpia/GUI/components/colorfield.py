@@ -9,11 +9,12 @@ from harpia.GUI.fieldtypes import *
 class ColorField(Field, Gtk.HBox):
 
     def __init__(self, data, event):
+        Gtk.HBox.__init__(self, True)
+        self.event = event
         if not isinstance(data,dict):
             return
         if "value" in data:
             self.color = Gdk.color_parse(data["value"])
-            Gtk.HBox.__init__(self, True)
         if "name" in data:
             label = Gtk.Label(data["name"])
             self.add(label)
@@ -29,13 +30,13 @@ class ColorField(Field, Gtk.HBox):
 
     def on_choose_color(self, widget):
         color_selection_dialog = Gtk.ColorSelectionDialog("Select color")
+        color_selection_dialog.connect("destroy", self.event)
         color_selection = color_selection_dialog.get_color_selection()
         color_selection.set_current_color(self.color)
         response = color_selection_dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            color = color_selection.get_current_color()
-            self.color = color
+            self.color = color_selection.get_current_color()
             self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         color_selection_dialog.destroy()
 

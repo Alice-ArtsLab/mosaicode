@@ -26,7 +26,10 @@ class FloatField(Field, Gtk.HBox):
                                 page_incr=0,
                                 page_size=0)
         self.field = Gtk.SpinButton()
-        self.field.configure(adjustment, 0.0, data["digits"])
+        if "digits" in data:
+            self.field.configure(adjustment, 0.0, data["digits"])
+        else:
+            self.field.configure(adjustment, 0.0, 2)
         self.field.set_value(data["value"])
         self.field.connect("changed", event)
         self.add(self.field)
