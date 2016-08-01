@@ -26,13 +26,12 @@
 #
 #----------------------------------------------------------------------
 
-from harpia.bpGUI import *
+import harpia.plugins
 from harpia.constants import *
 
 import pkgutil # For dynamic package load
 import inspect # For module inspect
 
-import harpia.plugins
 
 import gettext
 _ = gettext.gettext
