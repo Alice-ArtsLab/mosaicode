@@ -1,7 +1,7 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.s2icommonproperties import APP, DIR
+from harpia.constants import *
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)

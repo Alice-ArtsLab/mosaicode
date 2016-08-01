@@ -1,7 +1,7 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.s2icommonproperties import APP, DIR
+from harpia.constants import *
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -40,7 +40,7 @@ class Pow(Plugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type":"41",
+        return {"Type": str(self.type),
             "Label": _("Pow"),
             "Icon": "images/pow.png",
             "Color": "230:230:60:150",

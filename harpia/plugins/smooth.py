@@ -1,7 +1,7 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.s2icommonproperties import APP, DIR
+from harpia.constants import *
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -16,7 +16,7 @@ class Smooth(Plugin):
     def __init__(self):
         self.id = -1
         self.type = "82"
-        self.type = "CV_GAUSSIAN"
+        self.smooth_type = "CV_GAUSSIAN"
         self.param1 = 7
         self.param2 = 9
 
@@ -33,7 +33,7 @@ class Smooth(Plugin):
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth,block$$' + \
                                      '_img_i1->nChannels);\n' + \
-                                     'cvSmooth(block$$_img_i1, block$$_img_o1 ,' + self.type + ',' + self.param1 + ',' + self.param2 + ',0,0);}\n'
+                                     'cvSmooth(block$$_img_i1, block$$_img_o1 ,' + self.smooth_type + ',' + self.param1 + ',' + self.param2 + ',0,0);}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n' + \
                                 'cvReleaseImage(&block$$_img_t);\n'
@@ -56,9 +56,9 @@ class Smooth(Plugin):
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {
-        "type":{"name": "Type",
+        "smooth_type":{"name": "Type",
                     "type": HARPIA_COMBO,
-                    "value": self.type,
+                    "value": self.smooth_type,
                     "values": ["CV_GAUSSIAN", "CV_BLUR", "CV_MEDIAN"]
                     },
         "param1":{"name": "Parameter 1",
