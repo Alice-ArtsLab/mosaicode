@@ -1,75 +1,45 @@
 <harpia>
 <GcState>
-	<block type="0" id="2">
-		<position x="81.0" y="-2.0"/>
+	<block type="02" id="8">
+		<position x="627.83984375" y="25.9347229004"/>
 	</block>
-	<block type="0" id="3">
-		<position x="-62.0" y="96.0"/>
-	</block>
-	<block type="2" id="4">
-		<position x="403.0" y="45.0"/>
+	<block type="15" id="9">
+		<position x="92.348876953" y="0.0"/>
 	</block>
 	<block type="100" id="5">
-		<position x="76.0" y="96.0"/>
+		<position x="274.621643066" y="109.736694336"/>
 	</block>
 	<block type="41" id="7">
-		<position x="242.0" y="34.0"/>
+		<position x="481.721496582" y="26.221862793"/>
 	</block>
 </GcState>
 <properties>
-  <block id="2" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
- <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="0"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
+  <block id="9" type="15">
+ <property name="filename" value="/home/flavio/Pictures/Captura de tela de 2012-10-23 01:32:17.png"/>
 </block>
 
-  <block id="3" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
- <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="0"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
-</block>
-
-  <block id="4" type="02">
- <property name="state" value="true"/>
+  <block id="8" type="02">
 </block>
 
   <block id="5" type="100">
- <property name="state" value="true"/>
  <property name="masksize" value="3x3"/>
  <property name="iterations" value="1"/>
 </block>
 
   <block id="7" type="41">
- <property name="state" value="true"/>
 </block>
 
   </properties>
 <network>
-<block type="0" id="2">
-<inputs>
-</inputs>
-<outputs>
-<output id="1" inBlock="7" input="1"/>
-</outputs>
-</block>
-<block type="0" id="3">
+<block type="15" id="9">
 <inputs>
 </inputs>
 <outputs>
 <output id="1" inBlock="5" input="1"/>
+<output id="1" inBlock="7" input="1"/>
 </outputs>
 </block>
-<block type="2" id="4">
+<block type="02" id="8">
 <inputs>
 <input id="1"/>
 </inputs>
@@ -91,7 +61,7 @@
 <input id="2"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="4" input="1"/>
+<output id="1" inBlock="8" input="1"/>
 </outputs>
 </block>
 </network>
