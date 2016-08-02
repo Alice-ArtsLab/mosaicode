@@ -28,8 +28,8 @@
 
 import time
 from harpia.utils.XMLUtils import XMLParser
+import os
 
-from gerador import *
 from constants import *
 
 class s2iSessionManager:
@@ -64,6 +64,8 @@ class s2iSessionManager:
     def __run_generator(self):
         # changes dir...
         os.chdir(TMPDIR + '/' + self.dir_name)
+
+        from harpia.gerador import *
 
         for step in parseAndGenerate(self.dir_name, 'imageProcessingChain.xml', "/"):
             yield step

@@ -8,7 +8,7 @@ class blockTemplate:
     imagesIO = ''
     dealloc = ''
     outDealloc = ''
-    properties = []
+    properties = {}
     myConnections = []
     outputsToSave = []
     weight = 1
@@ -19,7 +19,7 @@ class blockTemplate:
     def __init__(self, block_type, block_id):
         self.blockType = block_type
         self.blockNumber = block_id
-        self.properties = []
+        self.properties = {}
         self.myConnections = []
         self.outputsToSave = []
 
@@ -32,12 +32,9 @@ class blockTemplate:
 
     ######################################################3
     def blockCodeWriter(self):
-        PkgName = 'harpia.bpGUI.'
-        ModName = str(s2idirectory.block[int(self.blockType)]["Path"]["Python"])
-        #from spam.ham import eggs" results in "
-        harpia_bpGUI_Mod = __import__(PkgName, globals(), locals(), [ModName])
-        guiMod = getattr(harpia_bpGUI_Mod, ModName)
-        guiMod.generate(self)
+        plugin = s2idirectory.block[self.blockType]()
+        plugin.set_properties(self.properties)
+        plugin.generate(self)
         self.imagesIO = self.imagesIO.replace("$$", str(self.blockNumber))
         self.functionCall = self.functionCall.replace("$$", str(self.blockNumber))
         self.dealloc = self.dealloc.replace("$$", str(self.blockNumber))

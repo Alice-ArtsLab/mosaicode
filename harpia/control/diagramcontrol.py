@@ -30,6 +30,24 @@ class DiagramControl():
         pass
 
 # ----------------------------------------------------------------------
+    def get_process_chain(self):
+        # saving processing chain (which includes blocks properties and conectors)
+        Properties = "<properties>\n  "
+        Network = "<network>\n"
+
+        for t_oBlockIdx in self.diagram.blocks:
+            if self.diagram.blocks[t_oBlockIdx].is_source:
+                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
+
+        for t_oBlockIdx in self.diagram.blocks:
+            if not self.diagram.blocks[t_oBlockIdx].is_source:
+                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
+
+        Properties += "</properties>\n"
+        Network += "</network>\n"
+        return  Properties + Network
+
+# ----------------------------------------------------------------------
     def __block_XML_out(self, t_oBlockIdx, Properties, Network):
         props = self.diagram.blocks[t_oBlockIdx].get_xml()
         block_xml = props.getTagXML(props.getTagChild("properties", "block"))
@@ -147,21 +165,7 @@ class DiagramControl():
             t_sGcState += '\t</block>\n'
         t_sGcState += "</GcState>\n"
 
-        # saving processing chain (which includes blocks properties and conectors)
-        Properties = "<properties>\n  "
-        Network = "<network>\n"
-
-        for t_oBlockIdx in self.diagram.blocks:
-            if self.diagram.blocks[t_oBlockIdx].is_source:
-                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
-
-        for t_oBlockIdx in self.diagram.blocks:
-            if not self.diagram.blocks[t_oBlockIdx].is_source:
-                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
-
-        Properties += "</properties>\n"
-        Network += "</network>\n"
-        t_sProcessingChain =  Properties + Network
+        t_sProcessingChain =  self.get_process_chain()
 
         t_sOutFile = "<harpia>\n" + t_sGcState + t_sProcessingChain + "</harpia>\n"
 

@@ -27,7 +27,11 @@
 #
 # ----------------------------------------------------------------------
 import os
-import gtk
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
 
 from harpia.connection import connection
 from harpia.blockTemplate import blockTemplate
@@ -36,6 +40,9 @@ from harpia.bpGUI import *
 from harpia.utils.XMLUtils import XMLParser
 from harpia.constants import *
 import s2idirectory
+
+from harpia.control.diagramcontrol import DiagramControl 
+import s2iSessionManager
 
 # i18n
 import gettext
@@ -54,6 +61,74 @@ if os.name == "nt":
         os.makedirs(tmpDir, mode=0700)
 else:
     tmpDir = "/tmp/"
+
+
+#----------------------------------------------------------------------
+def gerar(diagram):
+    process_XML = XMLParser("<harpia>" + \
+                                   str(DiagramControl(diagram).get_process_chain()) + \
+                                   "</harpia>", fromString=True)
+
+    print process_XML
+    graph_size = len(list(process_XML.getTag("harpia").getTag("properties").getTagChildren()))
+
+    if graph_size > 1:
+        blocks = process_XML.getTag("harpia").getTag("properties").getChildTags("block")
+        for t_oBlockProperties in blocks:
+            block_properties = t_oBlockProperties.getChildTags("property")
+            if int(t_oBlockProperties.type) == 00:  # 00 = acquisition block
+                inputType = 'file'
+                for block_property in block_properties:
+                    if block_property.name == 'type':
+                        print block_property.name
+                        inputType = block_property.value
+
+                    # adoção do paradigma monolítico.. nada de ficar mandando imagens por sockets!!
+                    if block_property.name == 'filename' and inputType == 'file':
+                        block_property.value = os.path.expanduser(block_property.value)
+                        block_property.value = os.path.realpath(block_property.value)
+                        if (not os.path.exists(block_property.value)):
+                            errMsg = _("Bad Filename: ") + block_property.value
+                            print(errMsg)
+                            return
+
+            if int(t_oBlockProperties.type) == 01:  # 01 => save image
+                for block_property in block_properties:
+                    if block_property.name == 'filename':
+                        block_property.value = os.path.realpath(block_property.value)
+
+            # seguindo o paradigma de não mandar mais nada.. vamos testar com o haar =]
+            # não vamos mandar mais nada mas vamos traduzir o path do haarCascade pra algo real
+            if int(t_oBlockProperties.type) == 610:  # 610 => haar detector... passando a cascade .xml
+                for block_property in block_properties:
+                    if block_property.name == 'cascade_name':
+                        block_property.value = os.path.realpath(block_property.value)
+                        if (not os.path.exists(block_property.value)):
+                            errMsg = _("Bad Filename: ") + block_property.value
+                            print(errMsg)
+                            return
+
+        # cpscotti standalone!!!
+        process_chain = []  # lista pra n precisar ficar copiando prum lado e pro otro o xml inteiro
+        process_chain.append(process_XML.getXML())
+
+        session_manager = s2iSessionManager.s2iSessionManager()
+
+        ## pegando o novo ID (criado pela s2iSessionManager) e passando para o s2idiagram
+        diagram.set_session_id(session_manager.session_id)
+
+        # step sempre sera uma lista.. primeiro elemento eh uma mensagem, segundo eh o erro.. caso exista erro.. passar para o s2idiagram tb!
+        diagram.set_error_log('')
+        t_bEverythingOk = True
+        for step in session_manager.new_instance(process_chain):
+            if len(step) > 1:
+                if step[1] != '' and step[1] != None:
+                    diagram.append_error_log(step[1])
+                    t_bEverythingOk = False
+            print step[0]
+        # yield step#util caso se resolva usar a interface "lenta" ou se descubra como atualizar rapidamente a GUI
+
+
 
 #----------------------------------------------------------------------
 def __set_error_log(a_sError):
@@ -112,7 +187,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         try:
             block_properties = blockIter.getChildTags("property")
             for propIter in block_properties:
-                tmpBlock.properties.append((propIter.name, propIter.value))
+                tmpBlock.properties[propIter.name] = propIter.value
         except AttributeError:
             pass
         tmpBlock.getBlockOutputTypes()
@@ -143,7 +218,7 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     weights = []
 
     for block in blockList:
-        if len(s2idirectory.block[int(block.blockType)]["InTypes"]) == 0 and len(s2idirectory.block[int(block.blockType)]["OutTypes"]) != 0:
+        if len(s2idirectory.block[block.blockType]().get_description()["InTypes"]) == 0 and len(s2idirectory.block[block.blockType]().get_description()["OutTypes"]) != 0:
             tmpList = []
             tmpList.append(block)
             organizedChain = __apply_weights_on_connections(tmpList, blockList)
@@ -209,30 +284,27 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
     for image in images:
         declaration += image
 
-    if len(g_bLive) > 0:
-        declaration += 'int end = 0;\n'
-        declaration += 'int key;\n'
-        declaration += 'while(!end) \n {\t \n'
+    declaration += 'int end = 0;\n'
+    declaration += 'int key;\n'
+    declaration += 'while(!end) \n {\t \n'
 
-        for value in g_bLive:
-            declaration += 'cvGrabFrame(block' + value[0] + '_capture);\n' + \
-                'block' + value[0] + '_frame = cvRetrieveFrame (block' + value[0] + '_capture);\n'
+    for value in g_bLive:
+        declaration += 'cvGrabFrame(block' + value[0] + '_capture);\n' + \
+            'block' + value[0] + '_frame = cvRetrieveFrame (block' + value[0] + '_capture);\n'
 
     execution = "\n\t//execution block\n"
     for x in functionCalls:
         execution += x
 
-    if len(g_bLive) > 0:
-        execution += 'key = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n'
-        execution += 'if(key != -1)\n'
-        execution += 'end = 1;\n'
+    execution += 'key = cvWaitKey (' + str(int((1.0 / g_bFrameRate) * 1000.0)) + ');\n'
+    execution += 'if(key != -1)\n'
+    execution += 'end = 1;\n'
 
     deallocating = "\n\t//deallocation block\n"
     for x in deallocations:
         deallocating += x
 
-    if len(g_bLive) > 0:
-        deallocating += "}"
+    deallocating += "}"
 
     closing = ""
     closing += "\n"
@@ -320,8 +392,8 @@ def parseAndGenerate(dirName, XMLChain, installDirName):
         t_oPrg.start()
         while t_oPrg.isAlive():
             t_oPrg.join(0.4)
-            while gtk.events_pending():
-                gtk.main_iteration(False)
+            while Gtk.events_pending():
+                Gtk.main_iteration()
 
         ## ERROR LOG
         o = open("RunErrorLog", "r")
