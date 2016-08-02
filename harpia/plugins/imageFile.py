@@ -26,9 +26,9 @@ class ImageFile(Plugin):
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
 
-        blockTemplate.imagesIO += 'IplImage * block$$_img_o1 = NULL; //Capture\n'
-
+        blockTemplate.imagesIO = 'IplImage * block$$_img_o1 = NULL; //Capture\n'
         blockTemplate.imagesIO += 'char block$$_arg_Filename[] = "' + self.filename + '";\n'
+
         blockTemplate.functionCall = 'block$$_img_o1 = cvLoadImage(block$$_arg_Filename,-1);\n'
 
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n'
@@ -43,11 +43,11 @@ class ImageFile(Plugin):
          "Label":_("Image File"),
          "Icon":"images/acquisition.png",
          "Color":"50:100:200:150",
-                 "InTypes":"",
-                 "OutTypes":{0:"HRP_IMAGE"},
-                 "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
-                 "TreeGroup":_("General"),
-                 "IsSource":True
+         "InTypes":"",
+         "OutTypes":{0:"HRP_IMAGE"},
+         "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
+         "TreeGroup":_("General"),
+         "IsSource":True
          }
 
 

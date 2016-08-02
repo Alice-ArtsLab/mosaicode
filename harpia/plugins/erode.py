@@ -31,7 +31,7 @@ class Erode(Plugin):
             'IplImage * block$$_img_o1 = NULL; // ERODE output\n'
         blockTemplate.imagesIO += '\n\n'
 
-        blockTemplate.imagesIO += 'int block$$_arg_iterations = ' +  self.iterations + ';\n'
+        blockTemplate.imagesIO += 'int block$$_arg_iterations = ' +  str(self.iterations) + ';\n'
         blockTemplate.imagesIO += 'IplConvKernel * block$$'  + \
                                            '_arg_mask = cvCreateStructuringElementEx(' + self.masksize[0] + \
                                            ' , ' + self.masksize[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
