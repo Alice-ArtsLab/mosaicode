@@ -5,6 +5,7 @@ from harpia.constants import *
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.control.diagramcontrol import DiagramControl
+from harpia.gerador import *
 
 import os
 
@@ -94,9 +95,12 @@ class MainControl():
     def preferences(self):
         print "Preferences from control"
 
+    # ----------------------------------------------------------------------
     def run(self):
-        print "Run from control"
+        diagram = self.main_window.work_area.get_current_diagram()
+        gerar(diagram)
 
+    # ----------------------------------------------------------------------
     def save_source(self):
         print "Save from control"
 

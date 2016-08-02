@@ -36,7 +36,7 @@ class WorkArea(Gtk.Notebook):
         self.diagrams.pop(position)
 
     # ----------------------------------------------------------------------
-    def __create_tab_label(self,text, frame):
+    def __create_tab_label(self, text, frame):
         box = Gtk.HBox()
         button = Gtk.Button()
         image = Gtk.Image().new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
