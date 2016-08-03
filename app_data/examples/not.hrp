@@ -1,0 +1,51 @@
+<harpia>
+<GcState>
+	<block type="15" id="2">
+		<position x="50.4721679688" y="65.6286010742"/>
+	</block>
+	<block type="40" id="4">
+		<position x="238.0" y="192.0"/>
+	</block>
+	<block type="02" id="5">
+		<position x="431.043670654" y="212.172485352"/>
+	</block>
+</GcState>
+<properties>
+  <block id="2" type="15">
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+</block>
+
+  <block id="4" type="40">
+</block>
+
+  <block id="5" type="02">
+ <property name="title" value="My Image"/>
+</block>
+
+  </properties>
+<network>
+<block type="15" id="2">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="4" input="1"/>
+</outputs>
+</block>
+<block type="40" id="4">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="1"/>
+</outputs>
+</block>
+<block type="02" id="5">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+</network>
+</harpia>
