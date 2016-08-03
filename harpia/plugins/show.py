@@ -16,6 +16,7 @@ class Show(Plugin):
     def __init__(self):
         self.id = -1
         self.type = "02"
+        self.title = "My Image"
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -23,15 +24,14 @@ class Show(Plugin):
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        import harpia.gerador
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                          'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-                         'cvNamedWindow("block$$_img_o1",CV_WINDOW_AUTOSIZE );\n' + \
-                         'cvShowImage("block$$_img_o1",block$$_img_i1);\n' + \
-                         'cvSaveImage("block$$_OUT.png" ,block$$_img_i1);\n}\n'
+                         'cvNamedWindow("' + self.title + '",CV_WINDOW_AUTOSIZE );\n' + \
+                         'cvShowImage("' + self.title + '",block$$_img_i1);\n' + \
+                         '\n}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n'
 
@@ -53,6 +53,11 @@ class Show(Plugin):
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {}
+        return {
+        "title":{"name": "Window Title",
+                    "type": HARPIA_STRING,
+                    "value": self.title
+                    }
+        }
 
 # ------------------------------------------------------------------------------

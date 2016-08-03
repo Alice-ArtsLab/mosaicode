@@ -39,6 +39,7 @@ class Rotate(Plugin):
                                  'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += '\n\n'
 
+
         blockTemplate.functionCall = '\n	if(block$$_img_i1)\n	{\n' + \
                                      '		double scale;\n	int H;\n	int W;\n' + \
                                      '		W = block$$_img_i1->width;\n' + \

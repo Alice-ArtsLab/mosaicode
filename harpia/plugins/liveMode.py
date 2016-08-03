@@ -26,12 +26,14 @@ class LiveMode(Plugin):
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
         import harpia.gerador
+        camera = self.camera[10:]
         tmpPack = [] #contendo [ blockNumber , camNum ]
         tmpPack.append(blockTemplate.blockNumber)
         harpia.gerador.g_bLive.append(tmpPack)
+
         blockTemplate.imagesIO += 'CvCapture * block$$_capture = NULL;\n' + \
                 'IplImage * block$$_frame = NULL;\n' + \
-                'block$$_capture = cvCaptureFromCAM(' + self.camera + ');\n'
+                'block$$_capture = cvCaptureFromCAM(' + camera + ');\n'
 
         blockTemplate.imagesIO += 'IplImage * block$$_img_o1 = NULL; //Capture\n'
 
@@ -57,7 +59,7 @@ class LiveMode(Plugin):
                  "InTypes":"",
                  "OutTypes":{0:"HRP_IMAGE"},
                  "Description":_("Load image from a camera."),
-                 "TreeGroup":_("General"),
+                 "TreeGroup":_("Image Source"),
                  "IsSource":True
          }
 

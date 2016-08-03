@@ -47,7 +47,7 @@ class NewImage(Plugin):
                  "InTypes":"",
                  "OutTypes":{0:"HRP_IMAGE"},
                  "Description":_("Create a new image."),
-                 "TreeGroup":_("General"),
+                 "TreeGroup":_("Image Source"),
                  "IsSource":True
          }
 

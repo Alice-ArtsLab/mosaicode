@@ -38,7 +38,7 @@ class Fill(Plugin):
         blockTemplate.functionCall = \
             '\nif(block$$_img_i1){\n' + \
             'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
-            '\nCvScalar color = cvScalar('+ blue +','+ green +','+ red+',0);\n' + \
+            '\nCvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red) + ',0);\n' + \
             '\ncvSet(block$$_img_o1,color,NULL);}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
           'cvReleaseImage(&block$$_img_i1);\n'
