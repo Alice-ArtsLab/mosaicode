@@ -25,9 +25,9 @@ class MainWindow(Gtk.Window):
     def __init__(self):
         s2idirectory.load()
         Gtk.Window.__init__(self, title="Harpia")
-        self.set_default_size(800,600)
+        #self.set_default_size(800,600)
         self.set_property("height_request", 500)
-#        self.maximize()
+        self.maximize()
         self.main_control = MainControl(self)
         self.connect("check-resize", self.__resize)
 
