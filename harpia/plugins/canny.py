@@ -29,9 +29,9 @@ class Canny(Plugin):
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\nIplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += \
-            'int block$$_arg_threshold2 = ' + self.threshold2 + \
-            ';\nint block$$_arg_aperture_size = ' + self.apertureSize + \
-            ';\nint block$$_arg_threshold1 = ' + self.threshold1 + ';\n'
+            'int block$$_arg_threshold2 = ' + str(self.threshold2) + \
+            ';\nint block$$_arg_aperture_size = ' + str(self.apertureSize) + \
+            ';\nint block$$_arg_threshold1 = ' + str(self.threshold1) + ';\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
                                      '_img_i1->width,block$$_img_i1->height),block$$' + \

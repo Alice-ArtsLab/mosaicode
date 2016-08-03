@@ -20,7 +20,7 @@ class And(Plugin):
     # ------------------------------------------------------------------------------
     def generate(self, blockTemplate):
         import opencvcommon
-        blockTemplate.header += opencvcommon.adjust_images_size()
+        blockTemplate.header = opencvcommon.adjust_images_size()
 
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \

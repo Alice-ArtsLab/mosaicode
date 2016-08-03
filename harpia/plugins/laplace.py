@@ -32,7 +32,7 @@ class Laplace(Plugin):
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
                                      '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$_img_i1->nChannels);\n' + \
-                                     'cvLaplace(block$$_img_i1, block$$_img_o1 ,' + self.masksize + ' );}\n'
+                                     'cvLaplace(block$$_img_i1, block$$_img_o1 ,' + str(self.masksize) + ' );}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n' + \
                                 'cvReleaseImage(&block$$_img_t);\n'

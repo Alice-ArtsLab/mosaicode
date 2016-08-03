@@ -34,7 +34,7 @@ class Rotate(Plugin):
         blockTemplate.header += "}\n\n"
 
 
-        blockTemplate.imagesIO = '\nIplImage * block$$_img_i1 = NULL;\n' + \
+        blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
                                  'double block$$_double_i2;\n' + \
                                  'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += '\n\n'
