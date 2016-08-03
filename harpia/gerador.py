@@ -36,7 +36,6 @@ from gi.repository import Gtk
 from harpia.connection import connection
 from harpia.blockTemplate import blockTemplate
 from harpia.RunPrg import RunPrg
-from harpia.bpGUI import *
 from harpia.utils.XMLUtils import XMLParser
 from harpia.constants import *
 import s2idirectory
