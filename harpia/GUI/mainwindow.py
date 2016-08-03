@@ -26,7 +26,10 @@ class MainWindow(Gtk.Window):
         s2idirectory.load()
         Gtk.Window.__init__(self, title="Harpia")
         self.set_default_size(800,600)
+        self.set_property("height_request", 500)
+#        self.maximize()
         self.main_control = MainControl(self)
+        self.connect("check-resize", self.__resize)
 
         #GUI components
         self.menu = Menu(self)
@@ -52,8 +55,8 @@ class MainWindow(Gtk.Window):
         self.add(vbox_main)
         vbox_main.pack_start(self.menu, False, True, 0)
         vbox_main.pack_start(self.toolbar, False, False, 0)
-        vpaned_bottom = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
-        vbox_main.add(vpaned_bottom)
+        self.vpaned_bottom = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
+        vbox_main.add(self.vpaned_bottom)
 
 
         # vpaned_bottom 
@@ -64,9 +67,9 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
 
         hpaned_work_area = Gtk.HPaned()
-        vpaned_bottom.add1(hpaned_work_area)
-        vpaned_bottom.add2(self.__create_frame(self.status))
-        vpaned_bottom.set_position(420)
+        self.vpaned_bottom.add1(hpaned_work_area)
+        self.vpaned_bottom.add2(self.__create_frame(self.status))
+        self.vpaned_bottom.set_position(420)
 
         # hpaned_work_area
         # -----------------------------------------------------
@@ -84,8 +87,8 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
 
         vbox_left.pack_start(self.search, False, False, 0)
-        vpaned_left = Gtk.VPaned()
-        vbox_left.pack_start(vpaned_left, True, True, 0)
+        self.vpaned_left = Gtk.VPaned()
+        vbox_left.pack_start(self.vpaned_left, True, True, 0)
 
 
         # vpaned_left
@@ -95,9 +98,9 @@ class MainWindow(Gtk.Window):
         # |vpaned_left
         # -----------------------------------------------------
 
-        vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
-        vpaned_left.add2(self.__create_frame(self.block_properties))
-        vpaned_left.set_position(300)
+        self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
+        self.vpaned_left.add2(self.__create_frame(self.block_properties))
+        self.vpaned_left.set_position(300)
 
         self.connect("delete-event", self.quit)
 
@@ -117,6 +120,15 @@ class MainWindow(Gtk.Window):
         frame.add(widget)
         frame.set_property("border-width", 4)
         return frame
+
+    def __resize(self, data):
+        width, height = self.get_size()
+        self.vpaned_left.set_position(height / 3 - 67)
+        self.vpaned_bottom.set_position(height/ 1.2 - 67)
+        print height , height / 3 , height / 1.2
+        self.work_area.resize(data)
+
+
 
     def quit(self, widget, data):
         print "Bye"
