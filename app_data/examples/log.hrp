@@ -1,38 +1,30 @@
 <harpia>
 <GcState>
 	<block type="62" id="1">
-		<position x="221.0" y="49.0"/>
+		<position x="279.9140625" y="119.137878418"/>
 	</block>
-	<block type="0" id="2">
-		<position x="-97.0" y="12.0"/>
+	<block type="02" id="2">
+		<position x="422.407043457" y="94.5780944824"/>
 	</block>
-	<block type="2" id="3">
-		<position x="491.0" y="3.0"/>
+	<block type="15" id="3">
+		<position x="46.0" y="86.0"/>
 	</block>
 </GcState>
 <properties>
-  <block id="2" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
+  <block id="3" type="15">
  <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="00"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
 </block>
 
   <block id="1" type="62">
- <property name="state" value="true"/>
 </block>
 
-  <block id="3" type="02">
- <property name="state" value="true"/>
+  <block id="2" type="02">
+ <property name="title" value="My Image"/>
 </block>
 
   </properties>
 <network>
-<block type="0" id="2">
+<block type="15" id="3">
 <inputs>
 </inputs>
 <outputs>
@@ -44,10 +36,10 @@
 <input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="3" input="1"/>
+<output id="1" inBlock="2" input="1"/>
 </outputs>
 </block>
-<block type="2" id="3">
+<block type="02" id="2">
 <inputs>
 <input id="1"/>
 </inputs>
