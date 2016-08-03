@@ -28,7 +28,10 @@ class Plugin():
     # ----------------------------------------------------------------------
     def set_properties(self, data):
         for key in self.get_properties():
-            self.__dict__[key] = data[key]
+            if key in self.__dict__ and key in data:
+                self.__dict__[key] = data[key]
+            else:
+                print "Plugin.set_property ERROR: key ", key , "not present" 
 
     # ----------------------------------------------------------------------
     def get_properties(self):

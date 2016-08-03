@@ -40,7 +40,6 @@ from harpia.constants import *
 
 #import time
 
-from exceptions import AttributeError
 from harpia.utils.graphicfunctions import *
 
 
@@ -55,11 +54,10 @@ class Diagram(GooCanvas.Canvas):
 
         self.zoom = 1.0 # pixels per unit
         self.show()
-        self.blocks = {}
+        self.blocks = {} # GUI blocks
         self.connectors = []
         self.curr_connector = None
         self.current_widget = None
-        self.session_id = 0
 
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
         self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
@@ -77,7 +75,6 @@ class Diagram(GooCanvas.Canvas):
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
 
         self.file_name = None
-        self.error_log = ""
 
         self.white_board = None
         self.__update_white_board()
@@ -324,26 +321,6 @@ class Diagram(GooCanvas.Canvas):
         for blockIdx in self.blocks:
             if self.blocks[blockIdx].focus:
                 return blockIdx
-
-    #----------------------------------------------------------------------
-    def set_session_id(self, session_id):
-        self.session_id = session_id
-
-    #----------------------------------------------------------------------
-    def get_session_id(self):
-        return self.session_id
-
-    #----------------------------------------------------------------------
-    def set_error_log(self, a_sErrorLog):
-        self.error_log = a_sErrorLog
-
-    #----------------------------------------------------------------------
-    def append_error_log(self, a_sErrorLog):
-        self.error_log += a_sErrorLog
-
-    #----------------------------------------------------------------------
-    def get_error_log(self):
-        return self.error_log
 
     #----------------------------------------------------------------------
     def set_zoom(self, value):
