@@ -32,7 +32,7 @@ class Save(Plugin):
         blockTemplate.functionCall = \
             'block$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
             '\nif(block$$_img_i1)\n' + \
-            'cvSaveImage("' + self.file_name + '" ,block$$_img_i1);\n'
+            'cvSaveImage("' + self.filename + '" ,block$$_img_i1);\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n'
 

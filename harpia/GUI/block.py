@@ -48,7 +48,7 @@ import copy
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
-HEIGHT_DEFAULT = 112
+HEIGHT_DEFAULT = 60
 PORT_SENSITIVITY = 12
 RADIUS = 15
 INPUT_WIDTH = 24
@@ -60,10 +60,10 @@ OUTPUT_WIDTH = 24
 class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
-    def __init__( self, diagram, block, block_id=1):
+    def __init__( self, diagram, plugin, block_id=1):
         GooCanvas.CanvasGroup.__init__(self)
-        block.id = block_id
-        self.block = block
+        self.plugin = plugin
+        self.plugin.id = block_id
         self.block_id = block_id
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
@@ -71,7 +71,7 @@ class Block(GooCanvas.CanvasGroup):
         self.remember_x = 0
         self.remember_y = 0
 
-        self.block_description = self.block.get_description()
+        self.block_description = self.plugin.get_description()
 
         self.widgets = {}
         self.focus = False
@@ -135,7 +135,7 @@ class Block(GooCanvas.CanvasGroup):
         else:
             self.diagram.current_widget = self
 
-        self.diagram.set_selected_block(self.block)
+        self.diagram.set_selected_block(self.plugin)
 
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
@@ -204,8 +204,8 @@ class Block(GooCanvas.CanvasGroup):
                 self.block_description["Icon"])
         image = GooCanvas.CanvasImage(parent=self,
                 pixbuf=pixbuf,
-                x=(self.width/2),
-                y=(self.height/2)
+                x=(self.width/2) - (pixbuf.props.width / 2),
+                y=(self.height/2)  - (pixbuf.props.height / 2)
                 )
         self.widgets["Icon"] = image
 
@@ -342,7 +342,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_type(self):
-        return self.block.get_description()["Type"]
+        return self.plugin.get_description()["Type"]
 
 #----------------------------------------------------------------------
     def get_position(self):
@@ -350,7 +350,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_xml(self):
-        return XMLParser(self.block.get_xml(), fromString=True)
+        return XMLParser(self.plugin.get_xml(), fromString=True)
 
 #----------------------------------------------------------------------
     def set_xml(self, xml):
@@ -358,7 +358,7 @@ class Block(GooCanvas.CanvasGroup):
         block_properties = xml.getTag("properties").getTag("block").getChildTags("property")
         for prop in block_properties:
             properties[prop.name] = prop.value
-        self.block.set_properties(properties)
+        self.plugin.set_properties(properties)
 
 #----------------------------------------------------------------------
     def __update_state(self):

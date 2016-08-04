@@ -25,10 +25,12 @@ class VideoFile(Plugin):
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
+        import harpia.gerador
         tmpPack = []
         tmpPack.append(blockTemplate.blockNumber)
         harpia.gerador.g_bLive.append(tmpPack)
-        blockTemplate.imagesIO += 'CvCapture * block$$_capture = NULL;\n'+ \
+
+        blockTemplate.imagesIO = 'CvCapture * block$$_capture = NULL;\n'+ \
                 'IplImage * block$$_frame = NULL;\n' + \
                 'block$$_capture = cvCreateFileCapture("' + self.filename + '");\n'
 
@@ -54,7 +56,7 @@ class VideoFile(Plugin):
                  "InTypes":"",
                  "OutTypes":{0:"HRP_IMAGE"},
                  "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
-                 "TreeGroup":_("General"),
+                 "TreeGroup":_("Image Source"),
                  "IsSource":True
          }
 

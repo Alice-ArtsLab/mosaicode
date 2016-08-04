@@ -46,12 +46,14 @@ class Connector(GooCanvas.CanvasGroup):
 
         self.diagram = diagram
         self.from_block = from_block
-        self.from_block_out = from_block_out
-        self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out) 
-
-        self.to_point = (0,0)
         self.to_block = -1
+
+        self.from_block_out = from_block_out
         self.to_block_in = -1
+
+        self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out) 
+        self.to_point = (0,0)
+
         self.focus = False
 
         self.connect("button-press-event", self.__on_button_press)

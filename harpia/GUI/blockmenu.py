@@ -45,11 +45,3 @@ class BlockMenu(Gtk.Menu):
 
     def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
         self.block.delete()
-
-    def __show_image_GUI(self, *args):
-#        path = "/tmp/harpiaBETMP0" + str(self.block.diagram.get_session_id()) + "/block" + str(self.block.get_id()) + "_OUT.png"
-#        ShowGUI = showimage.ShowImage(path, self.block.diagram.get_error_log())
-#        ShowGUI.show()
-        pass
-
-

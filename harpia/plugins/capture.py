@@ -26,22 +26,24 @@ class Capture(Plugin):
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
+        camera = self.camera[10:]
 
-        blockTemplate.imagesIO += 'IplImage * block$$_img_o1 = NULL; //Capture\n'
 
-        blockTemplate.functionCall = \
+        blockTemplate.imagesIO = 'IplImage * block$$_img_o1 = NULL; //Capture\n' + \
            'CvCapture* block$$_capture = NULL; \n' + \
            'IplImage* block$$_frame = NULL; \n' + \
-           'block$$_capture = cvCaptureFromCAM(' + self.camera + '); \n' + \
-           'if( !cvGrabFrame( block$$_capture ) \n ) { printf("Cannot Grab Image from camera '+ self.camera +'"); }' + \
-           'block$$_frame = cvRetrieveFrame( block$$_capture ); ' + \
-           'if( !cvGrabFrame( block$$_capture ) \n ) { printf("Cannot Grab Image from camera '+ self.camera +'"); }' + \
-           'block$$_frame = cvRetrieveFrame( block$$_capture ); ' + \
-           'if( !cvGrabFrame( block$$_capture ) \n ) { printf("Cannot Grab Image from camera '+ self.camera +'"); }' + \
-           'block$$_frame = cvRetrieveFrame( block$$_capture ); ' + \
-           'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
+           'int counter = 0;\n'
+           
+        blockTemplate.functionCall = \
+           'if (counter == 0){\n' + \
+           'block$$_capture = cvCaptureFromCAM(' + camera + '); \n' + \
+           'if( !cvGrabFrame( block$$_capture ) ) \n{ printf("Cannot Grab Image from camera '+ camera +'"); }\n' + \
+           'block$$_frame = cvRetrieveFrame( block$$_capture ); \n' + \
+           'block$$_img_o1 = cvCloneImage( block$$_frame );\n' + \
+           'counter++;\n' + \
+           '}\n'
 
-        blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n'
+        blockTemplate.outDeallocations = 'cvReleaseImage(&block$$_img_o1);\n'
 
 
     # ----------------------------------------------------------------------
@@ -57,7 +59,7 @@ class Capture(Plugin):
                  "InTypes":"",
                  "OutTypes":{0:"HRP_IMAGE"},
                  "Description":_("Create a new image from a camera."),
-                 "TreeGroup":_("General"),
+                 "TreeGroup":_("Image Source"),
                  "IsSource":True
          }
     # ----------------------------------------------------------------------

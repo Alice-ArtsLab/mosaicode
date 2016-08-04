@@ -36,12 +36,7 @@ class DiagramControl():
         Network = "<network>\n"
 
         for t_oBlockIdx in self.diagram.blocks:
-            if self.diagram.blocks[t_oBlockIdx].is_source:
-                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
-
-        for t_oBlockIdx in self.diagram.blocks:
-            if not self.diagram.blocks[t_oBlockIdx].is_source:
-                (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
+            (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
 
         Properties += "</properties>\n"
         Network += "</network>\n"
@@ -85,14 +80,6 @@ class DiagramControl():
                 self.diagram.file_name = "Cannot Load without filename"
                 return False
 
-        # reseting present diagram..
-#        self.diagram.blocks = {}
-#        self.diagram.connectors = []
-#        self.diagram.curr_connector = None
-#        self.diagram.session_id = 0
-#        self.diagram.block_id = 1  # since block counts are kept, render this from the saved file
-#        self.diagram.connector_id = 1  # since connector Ids are generated from scratch, just reset it
-
         # load the diagram
         xml_loader = XMLParser(self.diagram.file_name)
         blocks = xml_loader.getTag("harpia").getTag("GcState").getChildTags("block")
@@ -107,10 +94,10 @@ class DiagramControl():
             y = position.getAttr("y")
 
 
-            self.diagram.insert_blockPosId(harpia.s2idirectory.block[block_type](), float(x), float(y), int(block_id))
-            self.diagram.block_id = max(self.diagram.block_id, int(block_id))
+            self.diagram.insert_blockPosId(harpia.s2idirectory.block[block_type](), float(x), float(y), block_id)
+            self.diagram.block_id = max(self.diagram.block_id, block_id)
 
-        self.diagram.block_id += 1
+        self.diagram.block_id = int(self.diagram.block_id) + 1
 
         # loading connectors on canvas
         blocks = xml_loader.getTag("harpia").getTag("network").getChildTags("block")
@@ -131,9 +118,9 @@ class DiagramControl():
 
                     if conn_inblock != "--" and conn_input != "--":
                         self.diagram.insert_ready_connector(
-                                                int(block_id),
+                                                block_id,
                                                 (int(conn_id) - 1),
-                                                int(conn_inblock),
+                                                conn_inblock,
                                                 (int(conn_input) - 1))
         except AttributeError:
             pass
@@ -144,7 +131,11 @@ class DiagramControl():
             block_xml = str(block)
             block_id =  block.getAttr("id")
             t_sBlockProperties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block_xml + '\n</properties>\n'
-            self.diagram.blocks[int(block_id)].set_xml(XMLParser(t_sBlockProperties, fromString=True))
+            if block_id in self.diagram.blocks:
+                self.diagram.blocks[block_id].set_xml(XMLParser(t_sBlockProperties, fromString=True))
+            else:
+                self.diagram.main_window.status.append_text("Block not found!")
+                self.diagram.main_window.status.append_text(str(block_id))
 
         self.diagram.update_scrolling()
         return True

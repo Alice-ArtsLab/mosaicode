@@ -19,8 +19,8 @@ class Or(Plugin):
 
     # ------------------------------------------------------------------------------
     def generate(self, blockTemplate):
-        import harpia.gerador
-        blockTemplate.header += harpia.gerador.adjust_images_size()
+        import opencvcommon
+        blockTemplate.header += opencvcommon.adjust_images_size()
 
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \

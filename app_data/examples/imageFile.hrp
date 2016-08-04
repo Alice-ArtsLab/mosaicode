@@ -1,13 +1,10 @@
 <harpia>
 <GcState>
-	<block type="102" id="1">
-		<position x="205.0" y="86.0"/>
+	<block type="02" id="1">
+		<position x="406.380706787" y="206.773849487"/>
 	</block>
 	<block type="15" id="2">
-		<position x="16.0" y="45.0"/>
-	</block>
-	<block type="02" id="3">
-		<position x="394.573852539" y="50.2732543945"/>
+		<position x="116.395355225" y="195.20880127"/>
 	</block>
 </GcState>
 <properties>
@@ -15,11 +12,7 @@
  <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
 </block>
 
-  <block id="1" type="102">
- <property name="masksize" value="3x3"/>
-</block>
-
-  <block id="3" type="02">
+  <block id="1" type="02">
  <property name="title" value="My Image"/>
 </block>
 
@@ -32,15 +25,7 @@
 <output id="1" inBlock="1" input="1"/>
 </outputs>
 </block>
-<block type="102" id="1">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="3" input="1"/>
-</outputs>
-</block>
-<block type="02" id="3">
+<block type="02" id="1">
 <inputs>
 <input id="1"/>
 </inputs>

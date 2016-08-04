@@ -1,111 +1,54 @@
 <harpia>
 <GcState>
-	<block type="7" id="5">
-		<position x="131.0" y="-81.0"/>
+	<block type="07" id="2">
+		<position x="336.584777832" y="38.0305786133"/>
 	</block>
-	<block type="0" id="6">
-		<position x="-49.0" y="-91.0"/>
+	<block type="15" id="3">
+		<position x="34.7286376953" y="65.252166748"/>
 	</block>
-	<block type="2" id="7">
-		<position x="333.0" y="-41.0"/>
+	<block type="102" id="5">
+		<position x="195.010498047" y="126.395690918"/>
 	</block>
-	<block type="0" id="8">
-		<position x="-54.0" y="2.0"/>
+	<block type="100" id="6">
+		<position x="163.563659668" y="222.857727051"/>
 	</block>
-	<block type="0" id="9">
-		<position x="-48.0" y="88.0"/>
-	</block>
-	<block type="2" id="10">
-		<position x="298.0" y="78.0"/>
-	</block>
-	<block type="2" id="11">
-		<position x="238.0" y="208.0"/>
-	</block>
-	<block type="2" id="12">
-		<position x="372.0" y="-97.0"/>
+	<block type="02" id="7">
+		<position x="469.007507324" y="30.2474060059"/>
 	</block>
 </GcState>
 <properties>
-  <block id="6" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
+  <block id="3" type="15">
  <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="0"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
 </block>
 
-  <block id="8" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
- <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="0"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
+  <block id="2" type="07">
 </block>
 
-  <block id="9" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
- <property name="filename" value="/usr/share/harpia/images/aviao.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="0"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
+  <block id="5" type="102">
+ <property name="masksize" value="7x7"/>
 </block>
 
-  <block id="5" type="07">
- <property name="state" value="true"/>
+  <block id="6" type="100">
+ <property name="masksize" value="7x7"/>
+ <property name="iterations" value="1.0"/>
 </block>
 
   <block id="7" type="02">
- <property name="state" value="true"/>
-</block>
-
-  <block id="10" type="02">
- <property name="state" value="true"/>
-</block>
-
-  <block id="11" type="02">
- <property name="state" value="true"/>
-</block>
-
-  <block id="12" type="02">
- <property name="state" value="true"/>
+ <property name="title" value="My Image"/>
 </block>
 
   </properties>
 <network>
-<block type="0" id="6">
+<block type="15" id="3">
 <inputs>
 </inputs>
 <outputs>
+<output id="1" inBlock="2" input="1"/>
 <output id="1" inBlock="5" input="1"/>
-<output id="1" inBlock="12" input="1"/>
+<output id="1" inBlock="6" input="1"/>
 </outputs>
 </block>
-<block type="0" id="8">
-<inputs>
-</inputs>
-<outputs>
-<output id="1" inBlock="5" input="2"/>
-<output id="1" inBlock="11" input="1"/>
-</outputs>
-</block>
-<block type="0" id="9">
-<inputs>
-</inputs>
-<outputs>
-<output id="1" inBlock="5" input="3"/>
-<output id="1" inBlock="10" input="1"/>
-</outputs>
-</block>
-<block type="7" id="5">
+<block type="07" id="2">
 <inputs>
 <input id="1"/>
 <input id="2"/>
@@ -115,31 +58,23 @@
 <output id="1" inBlock="7" input="1"/>
 </outputs>
 </block>
-<block type="2" id="7">
+<block type="102" id="5">
 <inputs>
 <input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="--" input="--"/>
+<output id="1" inBlock="2" input="2"/>
 </outputs>
 </block>
-<block type="2" id="10">
+<block type="100" id="6">
 <inputs>
 <input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="--" input="--"/>
+<output id="1" inBlock="2" input="3"/>
 </outputs>
 </block>
-<block type="2" id="11">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
-<block type="2" id="12">
+<block type="02" id="7">
 <inputs>
 <input id="1"/>
 </inputs>

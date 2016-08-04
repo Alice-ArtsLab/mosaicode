@@ -16,7 +16,7 @@ class ImageFile(Plugin):
     def __init__(self):
         self.id = -1
         self.type = "15"
-        self.filename = ""
+        self.filename = "/usr/share/harpia/images/lenna.png"
 
     # ----------------------------------------------------------------------
     def get_help(self):
@@ -46,7 +46,7 @@ class ImageFile(Plugin):
          "InTypes":"",
          "OutTypes":{0:"HRP_IMAGE"},
          "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
-         "TreeGroup":_("General"),
+         "TreeGroup":_("Image Source"),
          "IsSource":True
          }
 

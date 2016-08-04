@@ -22,20 +22,22 @@ class Sum(Plugin):
         return "Realiza a soma de duas imagens."
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        import harpia.gerador
-        blockTemplate.header += harpia.gerador.adjust_images_size()
+        import opencvcommon
+        blockTemplate.header += opencvcommon.adjust_images_size()
 
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
             'IplImage * block$$_img_i2 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n'
+
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
-                                     '_img_i1->width,block$$_img_i1->height),block$$' + \
+                                     '_img_i1->width, block$$_img_i1->height), block$$' + \
                                      '_img_i1->depth,block$$_img_i1->nChannels);\n' + \
                                      'adjust_images_size(block$$_img_i1, block$$_img_i2, block$$_img_o1);\n' + \
-                                     'cvAdd(block$$_img_i1, block$$_img_i2, block$$' + \
-                                     '_img_o1,0);\ncvResetImageROI(block$$_img_o1);}\n'
+                                     'cvAdd(block$$_img_i1, block$$_img_i2, block$$_img_o1,0);\n' + \
+                                     'cvResetImageROI(block$$_img_o1);}\n'
+
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n' + \
                                 'cvReleaseImage(&block$$_img_i2);\n'

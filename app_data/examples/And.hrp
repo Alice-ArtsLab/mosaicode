@@ -1,16 +1,16 @@
 <harpia>
 <GcState>
-	<block type="02" id="8">
-		<position x="627.83984375" y="25.9347229004"/>
-	</block>
 	<block type="15" id="9">
-		<position x="92.348876953" y="0.0"/>
+		<position x="72.348876953" y="0.0"/>
+	</block>
+	<block type="02" id="8">
+		<position x="607.83984375" y="25.9347229004"/>
 	</block>
 	<block type="100" id="5">
-		<position x="274.621643066" y="109.736694336"/>
+		<position x="254.621643066" y="109.736694336"/>
 	</block>
 	<block type="41" id="7">
-		<position x="481.721496582" y="26.221862793"/>
+		<position x="461.721496582" y="26.221862793"/>
 	</block>
 </GcState>
 <properties>
@@ -19,6 +19,7 @@
 </block>
 
   <block id="8" type="02">
+ <property name="title" value="My Image"/>
 </block>
 
   <block id="5" type="100">
