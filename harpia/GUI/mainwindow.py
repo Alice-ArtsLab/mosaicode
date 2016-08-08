@@ -28,6 +28,7 @@ class MainWindow(Gtk.Window):
         #self.set_default_size(800,600)
         self.set_property("height_request", 500)
         self.maximize()
+        self.set_size_request(500,700) #Controla o tamanho minimo
         self.main_control = MainControl(self)
         self.connect("check-resize", self.__resize)
 
@@ -70,6 +71,7 @@ class MainWindow(Gtk.Window):
         self.vpaned_bottom.add1(hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
         self.vpaned_bottom.set_position(420)
+        
 
         # hpaned_work_area
         # -----------------------------------------------------
@@ -78,6 +80,7 @@ class MainWindow(Gtk.Window):
         vbox_left = Gtk.VBox(False, 0)
         hpaned_work_area.add1(vbox_left)
         hpaned_work_area.add2(self.work_area)
+        
 
         # vbox_left
         # -----------------------------------------------------
@@ -89,6 +92,8 @@ class MainWindow(Gtk.Window):
         vbox_left.pack_start(self.search, False, False, 0)
         self.vpaned_left = Gtk.VPaned()
         vbox_left.pack_start(self.vpaned_left, True, True, 0)
+        vbox_left.set_size_request(300,300)
+
 
 
         # vpaned_left
@@ -127,7 +132,6 @@ class MainWindow(Gtk.Window):
         self.vpaned_bottom.set_position(height/ 1.2 - 67)
         print height , height / 3 , height / 1.2
         self.work_area.resize(data)
-
 
 
     def quit(self, widget, data):
