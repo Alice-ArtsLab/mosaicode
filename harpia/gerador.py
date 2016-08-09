@@ -49,9 +49,8 @@ gettext.textdomain(APP)
 
 # Global variable to indicate overall behavior of the code generator
 g_bLive = []
-FRAMERATE = 25
-ErrorLog = 'ErrorLog'
 
+FRAMERATE = 25
 
 
 #----------------------------------------------------------------------
@@ -61,21 +60,19 @@ def gerar(diagram):
         print "Nothing to generate"
         return
 
-    dir_name = "harpiaBETMP0" + str(time.time())
+    dir_name = DIRNAME + str(time.time())
     old_path = os.path.realpath(os.curdir)
     os.chdir(TMPDIR)
     os.mkdir(dir_name)
     os.chdir(TMPDIR + '/' + dir_name)
    
-    print "Starting"
+    s2idirectory.Log.log("Starting")
     entireCode = __parseAndGenerate(dir_name, diagram)
-    print "Parse And Generate Ok"
+    s2idirectory.Log.log("Saving Code")
     codeFilename = __save_code(dir_name, entireCode)
-    print "Save Code Ok"
-    __build_makefile(dir_name, codeFilename)
-    print "Build Makefile Ok"
+    s2idirectory.Log.log("Compiling Code")
     __execute_code(dir_name, codeFilename)
-    print "Compile Code Ok"
+    s2idirectory.Log.log("Running Code")
 
     os.chdir(old_path)
 
@@ -223,28 +220,14 @@ def __save_code(dirName, entireCode):
     return codeFilename
 
 #----------------------------------------------------------------------
-def __build_makefile(dirName, codeFilename):
-    # Assembly of "necessary" makefiles
-    # ...windows..
-    makeFilename = 'Makefile' + dirName + '.bat'
-    makeFileEntry = '"/\\bin\\gcc.exe" ' + codeFilename + " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
-    makeFile = open(makeFilename, 'w')
-    makeFile.write(makeFileEntry)
-    makeFile.close()
-
-    # ...posix..
-    makeFilename = 'Makefile.' + dirName
-    makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib/;\n"
-    makeFileEntry += "export PKG_CONFIG_PATH=/lib/pkgconfig/;\n"
-    makeFileEntry += "g++ " + codeFilename + " -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`\n"
-    makeFile = open(makeFilename, 'w')
-    makeFile.write(makeFileEntry)
-    makeFile.close()
-
-
-#----------------------------------------------------------------------
 def __execute_code(dirName, codeFilename):
     if os.name == "nt":
+        makeFilename = 'Makefile' + dirName + '.bat'
+        makeFileEntry = '"/\\bin\\gcc.exe" ' + codeFilename + " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
+        makeFile = open(makeFilename, 'w')
+        makeFile.write(makeFileEntry)
+        makeFile.close()
+
         i, o = os.popen4('Makefile' + dirName + '.bat')
 
         o.readlines()
@@ -265,6 +248,14 @@ def __execute_code(dirName, codeFilename):
         o.close()
         i.close()
     else:
+        makeFilename = 'Makefile.' + dirName
+        makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib/;\n"
+        makeFileEntry += "export PKG_CONFIG_PATH=/lib/pkgconfig/;\n"
+        makeFileEntry += "g++ " + codeFilename + " -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`\n"
+        makeFile = open(makeFilename, 'w')
+        makeFile.write(makeFileEntry)
+        makeFile.close()
+
         i, o = os.popen4("sh " + 'Makefile.' + dirName)
 
         ## appending compile errors too.. helps finding bugs! =]
@@ -274,34 +265,34 @@ def __execute_code(dirName, codeFilename):
         o.close()
         i.close()
 
-    print "Running"
-    t_oPrg = RunPrg("LD_LIBRARY_PATH=/lib/ ./" + codeFilename[:-2])
-    t_oPrg.start()
-    while t_oPrg.isAlive():
-        t_oPrg.join(0.4)
-        while Gtk.events_pending():
-            Gtk.main_iteration()
+        t_oPrg = RunPrg("LD_LIBRARY_PATH=/lib/ ./" + codeFilename[:-2])
+        t_oPrg.start()
+        while t_oPrg.isAlive():
+            t_oPrg.join(0.4)
+            while Gtk.events_pending():
+                Gtk.main_iteration()
 
-    ## ERROR LOG
     o = open("RunErrorLog", "r")
+
     Error = ''
     errorList = o.readlines()
     for element in errorList:
         Error += element
 
+
     print _("Leaving.."), Error
     __set_error_log(str(CompilingErrors) + Error)
 
     o.close()
-    i.close()
-        
+
 #----------------------------------------------------------------------
-def __set_error_log(a_sError):
+def __set_error_log(error):
     if os.name == 'nt':
-        Error = file(ErrorLog, 'wb')
+        Error = file(ERROR_LOG_FILE, 'wb')
     else:
-        Error = file(ErrorLog, 'w')
-    Error.write(a_sError)
+        Error = file(ERROR_LOG_FILE, 'w')
+    s2idirectory.Log.log(error)
+    Error.write(error)
     Error.close()
 
 #----------------------------------------------------------------------

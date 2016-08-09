@@ -1,21 +1,21 @@
 <harpia>
 <GcState>
 	<block type="15" id="9">
-		<position x="72.348876953" y="0.0"/>
+		<position x="52.348876953" y="0.0"/>
 	</block>
 	<block type="02" id="8">
-		<position x="607.83984375" y="25.9347229004"/>
+		<position x="533.5" y="8.33923339844"/>
 	</block>
 	<block type="100" id="5">
-		<position x="254.621643066" y="109.736694336"/>
+		<position x="234.621643066" y="109.736694336"/>
 	</block>
 	<block type="41" id="7">
-		<position x="461.721496582" y="26.221862793"/>
+		<position x="396.721496582" y="15.221862793"/>
 	</block>
 </GcState>
 <properties>
   <block id="9" type="15">
- <property name="filename" value="/home/flavio/Pictures/Captura de tela de 2012-10-23 01:32:17.png"/>
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
 </block>
 
   <block id="8" type="02">
@@ -51,6 +51,7 @@
 <block type="100" id="5">
 <inputs>
 <input id="1"/>
+<input id="2"/>
 </inputs>
 <outputs>
 <output id="1" inBlock="7" input="2"/>

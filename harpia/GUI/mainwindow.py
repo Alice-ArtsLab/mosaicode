@@ -36,6 +36,7 @@ class MainWindow(Gtk.Window):
         self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
+        s2idirectory.Log = self.status
 
         # vbox main 
         # -----------------------------------------------------

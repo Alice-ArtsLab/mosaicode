@@ -5,3 +5,7 @@ TMPDIR = "/tmp/"
 ZOOM_IN = 1.1
 ZOOM_OUT = 0.9
 ZOOM_ORIGINAL = 1.0
+
+DIRNAME = "harpia."
+ERROR_LOG_FILE = 'ErrorLog'
+
