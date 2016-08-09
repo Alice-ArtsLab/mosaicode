@@ -106,7 +106,7 @@ class MainWindow(Gtk.Window):
         self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
         self.vpaned_left.add2(self.__create_frame(self.block_properties))
         self.vpaned_left.set_position(300)
-        self.vpaned_left.set_size_request(50,50)
+        #self.vpaned_left.set_size_request(50,50)
         #self.vpaned_left.set_property("min-position",150)
 
         self.connect("delete-event", self.quit)
