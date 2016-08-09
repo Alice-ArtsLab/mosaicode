@@ -340,7 +340,7 @@ class Diagram(GooCanvas.Canvas):
     # ----------------------------------------------------------------------
     def resize(self, data):
         print "RESIZE DO CANVAS"
-#        self.set_property("x2", self.main_window.get_size()[0])
+        self.set_property("x2", self.main_window.get_size()[0])
         self.white_board.set_property("width", self.main_window.get_size()[0])
 
 #----------------------------------------------------------------------

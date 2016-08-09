@@ -28,7 +28,7 @@ class MainWindow(Gtk.Window):
         #self.set_default_size(800,600)
         self.set_property("height_request", 500)
         self.maximize()
-        self.set_size_request(500,700) #Controla o tamanho minimo
+        self.set_size_request(900,500) #Controla o tamanho minimo
         self.main_control = MainControl(self)
         self.connect("check-resize", self.__resize)
 
@@ -72,6 +72,7 @@ class MainWindow(Gtk.Window):
         self.vpaned_bottom.add1(hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
         self.vpaned_bottom.set_position(420)
+        self.vpaned_bottom.set_size_request(50,50)
 
         # hpaned_work_area
         # -----------------------------------------------------
@@ -105,6 +106,7 @@ class MainWindow(Gtk.Window):
         self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
         self.vpaned_left.add2(self.__create_frame(self.block_properties))
         self.vpaned_left.set_position(300)
+        self.vpaned_left.set_size_request(50,50)
         #self.vpaned_left.set_property("min-position",150)
 
         self.connect("delete-event", self.quit)
