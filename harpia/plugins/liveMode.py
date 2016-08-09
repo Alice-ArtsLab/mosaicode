@@ -28,7 +28,7 @@ class LiveMode(Plugin):
         import harpia.gerador
         camera = self.camera[10:]
         tmpPack = [] #contendo [ blockNumber , camNum ]
-        tmpPack.append(blockTemplate.blockNumber)
+        tmpPack.append(blockTemplate.plugin.id)
         harpia.gerador.g_bLive.append(tmpPack)
 
         blockTemplate.imagesIO += 'CvCapture * block$$_capture = NULL;\n' + \

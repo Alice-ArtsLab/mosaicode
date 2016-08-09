@@ -28,10 +28,11 @@ class Erode(Plugin):
         blockTemplate.imagesIO = "// ERODE input and output\n"
         blockTemplate.imagesIO += \
             'IplImage * block$$_img_i1 = NULL; // ERODE input\n' + \
+            'int block$$_int_i2 = ' + str(self.iterations) + '; // ERODE iterarions\n' + \
             'IplImage * block$$_img_o1 = NULL; // ERODE output\n'
         blockTemplate.imagesIO += '\n\n'
 
-        blockTemplate.imagesIO += 'int block$$_arg_iterations = ' +  str(self.iterations) + ';\n'
+
         blockTemplate.imagesIO += 'IplConvKernel * block$$'  + \
                                            '_arg_mask = cvCreateStructuringElementEx(' + self.masksize[0] + \
                                            ' , ' + self.masksize[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
@@ -41,8 +42,7 @@ class Erode(Plugin):
                                      '_img_i1->width, block$$_img_i1->height), block$$' + \
                                      '_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
                                      '\ncvErode(block$$_img_i1,block$$' + \
-                                     '_img_o1,block$$_arg_mask,block$$' + \
-                                     '_arg_iterations);\n}\n'
+                                     '_img_o1,block$$_arg_mask,block$$_int_i2);\n}\n'
 
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1); // ERODE input\n' + \
                                 'cvReleaseImage(&block$$_img_i1); // ERODE output\n'
@@ -58,7 +58,7 @@ class Erode(Plugin):
             "Label": _("Erosion"),
             "Icon": "images/erode.png",
             "Color": "180:230:220:150",
-            "InTypes": {0: "HRP_IMAGE"},
+            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
             "Description": _("Morphological operation that erodes the objects of the image, reducing their size."),
             "TreeGroup": _("Morphological Operations")
