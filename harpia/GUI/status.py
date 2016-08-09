@@ -23,3 +23,6 @@ class Status(Gtk.ScrolledWindow):
 
     def append_text(self, text):
         self.status.get_buffer().insert_at_cursor(text, len(text))
+
+    def log(self, text):
+        self.append_text(text + "\n")
