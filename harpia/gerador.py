@@ -74,7 +74,7 @@ def gerar(diagram):
     print "Save Code Ok"
     __build_makefile(dir_name, codeFilename)
     print "Build Makefile Ok"
-    __compile_code(dir_name, codeFilename)
+    __execute_code(dir_name, codeFilename)
     print "Compile Code Ok"
 
     os.chdir(old_path)
@@ -101,9 +101,9 @@ def __parseAndGenerate(dirName, diagram):
             tmpConnection.sourceOutput = int (connection.from_block_out) + 1
             tmpConnection.destinationInput = int(connection.to_block_in ) + 1
             tmpConnection.destinationNumber = connection.to_block
-            tmpConnection.connType = block_template.outTypes[int(tmpConnection.sourceOutput) - 1]
+            tmpConnection.connType = block.plugin.get_description()["OutTypes"][connection.from_block_out]
             block_template.myConnections.append(tmpConnection)
-        
+
         block_template.generate_block_code()
         blockList.append(block_template)
 
@@ -187,7 +187,7 @@ def __parseAndGenerate(dirName, diagram):
 
     for value in g_bLive:
         declaration += 'cvGrabFrame(block' + value[0] + '_capture);\n' + \
-            'block' + value[0] + '_frame = cvRetrieveFrame (block' + value[0] + '_capture);\n'
+            'block' + str(value[0]) + '_frame = cvRetrieveFrame (block' + str(value[0]) + '_capture);\n'
 
     execution = "\n\t//execution block\n"
     for x in functionCalls:
@@ -236,14 +236,14 @@ def __build_makefile(dirName, codeFilename):
     makeFilename = 'Makefile.' + dirName
     makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib/;\n"
     makeFileEntry += "export PKG_CONFIG_PATH=/lib/pkgconfig/;\n"
-    makeFileEntry += "g++ " + codeFilename + " -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`"
+    makeFileEntry += "g++ " + codeFilename + " -o " + codeFilename[:-2] + " `pkg-config --cflags --libs opencv`\n"
     makeFile = open(makeFilename, 'w')
     makeFile.write(makeFileEntry)
     makeFile.close()
 
 
 #----------------------------------------------------------------------
-def __compile_code(dirName, codeFilename):
+def __execute_code(dirName, codeFilename):
     if os.name == "nt":
         i, o = os.popen4('Makefile' + dirName + '.bat')
 

@@ -92,7 +92,7 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
         # |blocks_tree_view
         # =====================================================
-        # |vpaned_left
+        # | block_properties
         # -----------------------------------------------------
 
         vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
