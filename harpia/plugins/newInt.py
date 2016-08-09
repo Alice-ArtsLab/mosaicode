@@ -10,23 +10,24 @@ gettext.textdomain(APP)
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
-class NewDouble(Plugin):
+class NewInt(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
         self.id = -1
-        self.type = "701"
-        self.doubleVal = 1
+        self.type = "702"
+        self.intVal = 1
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
-        return "Creates new literal value (Double)"
+        return "Creates new literal value (Int)"
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'double  block$$_double_o1; // New Double Out\n'
 
-        blockTemplate.functionCall = 'block$$_double_o1 = ' + str(float(self.doubleVal)) + ';\n'
+        blockTemplate.imagesIO = 'int  block$$_int_o1 = ' + str(int(float(self.intVal))) + '; // New Int Out\n'
+
+        blockTemplate.functionCall = ''
 
         blockTemplate.dealloc = ''
 
@@ -37,12 +38,12 @@ class NewDouble(Plugin):
     # ----------------------------------------------------------------------
     def get_description(self):
         return {"Type": str(self.type),
-            'Label': _('New Double'),
+            'Label': _('New Int'),
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
-            'OutTypes': {0: 'HRP_DOUBLE'},
-            'Description': _('Creates new literal value (Double)'),
+            'OutTypes': {0: 'HRP_INT'},
+            'Description': _('Creates new literal value (int)'),
             'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }
@@ -50,9 +51,9 @@ class NewDouble(Plugin):
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {
-            "doubleVal":{"name": "Value",
-                        "type": HARPIA_FLOAT,
-                        "value": self.doubleVal,
+            "intVal":{"name": "Value",
+                        "type": HARPIA_INT,
+                        "value": self.intVal,
                         "lower":0,
                         "upper":65535,
                         "step":1

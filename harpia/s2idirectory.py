@@ -38,6 +38,8 @@ _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
+Log = None
+
 block = {}
 
 def load():

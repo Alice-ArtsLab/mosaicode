@@ -40,6 +40,7 @@ class MainWindow(Gtk.Window):
         self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
+        s2idirectory.Log = self.status
 
         # vbox main 
         # -----------------------------------------------------
@@ -98,7 +99,7 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
         # |blocks_tree_view
         # =====================================================
-        # |blocks_properties
+        # | block_properties
         # -----------------------------------------------------
 
         self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))

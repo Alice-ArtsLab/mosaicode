@@ -35,7 +35,7 @@ from gi.repository import GooCanvas
 
 from block import Block
 from connector import Connector
-
+import harpia.s2idirectory
 from harpia.constants import *
 
 #import time
@@ -225,7 +225,7 @@ class Diagram(GooCanvas.Canvas):
         outType = self.blocks[a_oConnector.from_block].block_description["OutTypes"][a_oConnector.from_block_out]
         inType = self.blocks[a_oConnector.to_block].block_description["InTypes"][a_oConnector.to_block_in]
         if not outType == inType:
-            print "Types mismatch"
+            s2idirectory.Log.log("Connection Types mismatch")
         return outType == inType
 
     #----------------------------------------------------------------------

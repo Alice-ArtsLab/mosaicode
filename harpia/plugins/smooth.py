@@ -33,7 +33,7 @@ class Smooth(Plugin):
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), block$$_img_i1->depth,block$$' + \
                                      '_img_i1->nChannels);\n' + \
-                                     'cvSmooth(block$$_img_i1, block$$_img_o1 ,' + self.smooth_type + ',' + self.param1 + ',' + self.param2 + ',0,0);}\n'
+                                     'cvSmooth(block$$_img_i1, block$$_img_o1 ,' + self.smooth_type + ',' + str(self.param1) + ',' + str(self.param2) + ',0,0);}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n' + \
                                 'cvReleaseImage(&block$$_img_t);\n'

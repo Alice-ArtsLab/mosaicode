@@ -319,13 +319,13 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
         x = self.input_port_centers[input_id][0] + self.get_simple_transform().x - PORT_SENSITIVITY
-        y = self.input_port_centers[input_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY
+        y = self.input_port_centers[input_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY + 3
         return (x, y)
 
 #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
         x = self.output_port_centers[output_id][0] + self.get_simple_transform().x + PORT_SENSITIVITY
-        y = self.output_port_centers[output_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY
+        y = self.output_port_centers[output_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY + 3
         return (x,y)
 
 #----------------------------------------------------------------------

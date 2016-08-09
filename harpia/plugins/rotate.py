@@ -21,6 +21,7 @@ class Rotate(Plugin):
         self.isFilling = True
         self.xC = 20
         self.yC = 20
+        self.angle = 0
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -35,7 +36,7 @@ class Rotate(Plugin):
 
 
         blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
-                                 'double block$$_double_i2;\n' + \
+                                 'double block$$_double_i2 = ' + str(self.angle) + ';\n' + \
                                  'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += '\n\n'
 
@@ -110,6 +111,13 @@ class Rotate(Plugin):
                     "value": self.yC,
                     "lower":0,
                     "upper":65535,
+                    "step":1
+                    },
+        "angle":{"name": "Angle",
+                    "type": HARPIA_FLOAT,
+                    "value": self.angle,
+                    "lower":0,
+                    "upper":360,
                     "step":1
                     }
         }

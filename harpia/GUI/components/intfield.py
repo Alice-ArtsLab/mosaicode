@@ -28,6 +28,8 @@ class IntField(Field, Gtk.HBox):
             self.field.set_adjustment(adjustment)
         self.field.set_value(float(data["value"]))
         self.field.connect("changed", event)
+        self.field.connect("value-changed", event)
+        self.field.connect("change-value", event)
         self.add(self.field)
         self.show_all()
 

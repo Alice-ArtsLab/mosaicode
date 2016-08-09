@@ -30,9 +30,9 @@ class Threshold(Plugin):
             'IplImage * block$$_img_i1 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += \
-            'int block$$_arg_threshold = ' + self.threshold + ';\n' + \
-            'int block$$_arg_maxValue = ' + self.maxValue + ';\n' + \
-            'int block$$_arg_thresholdType = ' + self.thresholdType + ';\n'
+            'int block$$_arg_threshold = ' + str(self.threshold) + ';\n' + \
+            'int block$$_arg_maxValue = ' + str(self.maxValue) + ';\n' + \
+            'int block$$_arg_thresholdType = ' + str(self.thresholdType) + ';\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
                                      '_img_i1->width,block$$_img_i1->height),block$$' + \
