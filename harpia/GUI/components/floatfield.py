@@ -32,6 +32,8 @@ class FloatField(Field, Gtk.HBox):
             self.field.configure(adjustment, 0.0, 2)
         self.field.set_value(data["value"])
         self.field.connect("changed", event)
+        self.field.connect("value-changed", event)
+        self.field.connect("change-value", event)
         self.add(self.field)
         self.show_all()
 

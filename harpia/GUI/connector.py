@@ -123,12 +123,20 @@ class Connector(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __update_draw(self):
         # svg M L bezier curve
-        path = "M " + str(self.from_point[0]) + " " + str(self.from_point[1])
-        path += " L" +  str(self.from_point[0] + 10) + " " + str(self.from_point[1])
-        path += " C " +  str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.from_point[1])
-        path += " " + str((self.to_point[0] + self.from_point[0]) / 2) + " " + str(self.to_point[1])
-        path += " " + str(self.to_point[0]) + " " + str(self.to_point[1])
+        path = ""
+        x0 = self.from_point[0]
+        y0 = self.from_point[1]
+        x1 = self.to_point[0]
+        y1 = self.to_point[1]
 
+        path += "M " + str(x0) + " " + str(y0)
+        path += " C " +  str((x1 + x0) / 2) + " " + str(y0)
+        path += " " + str((x1 + x0) / 2) + " " + str(y1)
+        path += " " + str(x1) + " " + str(y1)
+
+        path += "L " + str(x1 - 3) + " " + str(y1 - 3)
+        path += "L " + str(x1 - 3) + " " + str(y1 + 3)
+        path += "L " + str(x1) + " " + str(y1)
 
         if not self.widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(

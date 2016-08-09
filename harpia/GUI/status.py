@@ -22,7 +22,8 @@ class Status(Gtk.ScrolledWindow):
         self.status.get_buffer().set_text("")
 
     def append_text(self, text):
+        text = "Data e hora " + text + "\n"
         self.status.get_buffer().insert_at_cursor(text, len(text))
 
     def log(self, text):
-        self.append_text(text + "\n")
+        self.append_text(text)

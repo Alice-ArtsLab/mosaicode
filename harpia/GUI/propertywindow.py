@@ -3,6 +3,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 import pkgutil # For dynamic package load
 import inspect # For module inspect
@@ -21,6 +22,8 @@ class PropertyWindow(Gtk.VBox):
         self.properties = {}
         Gtk.VBox.__init__(self)
         self.set_homogeneous(False)
+        self.set_property("border-width", 0)
+        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(1, 1, 1, 1))
         self.show_all()
 
 # ----------------------------------------------------------------------
@@ -33,7 +36,7 @@ class PropertyWindow(Gtk.VBox):
         #Search plugin properties to create GUI
         for component in self.plugin.get_properties() :
             field = self._generate_field(component, self.plugin.get_properties()[component])
-            self.add(field)
+            self.pack_start(field, False, False, 0)
 
 # ----------------------------------------------------------------------
     def notify(self, widget = None, data = None):

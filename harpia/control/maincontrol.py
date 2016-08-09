@@ -9,7 +9,6 @@ from harpia.gerador import *
 
 import os
 
-
 class MainControl():
 
     # ----------------------------------------------------------------------
@@ -103,7 +102,6 @@ class MainControl():
     # ----------------------------------------------------------------------
     def save_source(self):
         print "Save from control"
-        a = b / 0
 
     def view_source(self):
         print "View Source from control"
