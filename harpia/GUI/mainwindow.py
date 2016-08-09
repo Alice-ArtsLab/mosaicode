@@ -71,7 +71,6 @@ class MainWindow(Gtk.Window):
         self.vpaned_bottom.add1(hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
         self.vpaned_bottom.set_position(420)
-        
 
         # hpaned_work_area
         # -----------------------------------------------------
@@ -80,7 +79,7 @@ class MainWindow(Gtk.Window):
         vbox_left = Gtk.VBox(False, 0)
         hpaned_work_area.add1(vbox_left)
         hpaned_work_area.add2(self.work_area)
-        
+
 
         # vbox_left
         # -----------------------------------------------------
@@ -92,7 +91,6 @@ class MainWindow(Gtk.Window):
         vbox_left.pack_start(self.search, False, False, 0)
         self.vpaned_left = Gtk.VPaned()
         vbox_left.pack_start(self.vpaned_left, True, True, 0)
-        vbox_left.set_size_request(300,300)
 
 
 
@@ -100,12 +98,13 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
         # |blocks_tree_view
         # =====================================================
-        # |vpaned_left
+        # |blocks_properties
         # -----------------------------------------------------
 
         self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
         self.vpaned_left.add2(self.__create_frame(self.block_properties))
         self.vpaned_left.set_position(300)
+        #self.vpaned_left.set_property("min-position",150)
 
         self.connect("delete-event", self.quit)
 
@@ -131,8 +130,9 @@ class MainWindow(Gtk.Window):
         self.vpaned_left.set_position(height / 3 - 67)
         self.vpaned_bottom.set_position(height/ 1.2 - 67)
         print height , height / 3 , height / 1.2
+        # print "Width"
+        # print width , width / 3 , width / 1.2
         self.work_area.resize(data)
-
 
     def quit(self, widget, data):
         print "Bye"
