@@ -77,6 +77,8 @@ class Diagram(GooCanvas.Canvas):
         self.file_name = None
 
         self.white_board = None
+#        self.set_property("x2", self.main_window.get_size()[0])
+        self.set_property("expand", True)
         self.__update_white_board()
 
     #----------------------------------------------------------------------
@@ -286,7 +288,7 @@ class Diagram(GooCanvas.Canvas):
                             parent=self.get_root_item(),
                             x=0,
                             y=0,
-                            width=1000,
+                            width=self.main_window.get_size()[0],
                             height=1000,
                             stroke_color="white",
                             fill_color="white")
@@ -335,4 +337,12 @@ class Diagram(GooCanvas.Canvas):
     def set_selected_block(self, block):
         self.main_window.main_control.set_selected_block(block)
 
+    # ----------------------------------------------------------------------
+    def resize(self, data):
+        print "RESIZE DO CANVAS"
+        self.set_property("x2", self.main_window.get_size()[0])
+        self.white_board.set_property("width", self.main_window.get_size()[0])
+
 #----------------------------------------------------------------------
+
+    
