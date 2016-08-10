@@ -49,7 +49,7 @@ class Toolbar(Gtk.Toolbar):
 
     def __create_button(self, stock, name, action):
         button = Gtk.ToolButton.new_from_stock(stock)
-        button.set_expand(True)
+        button.set_expand(False)
         button.set_label(name)
         button.set_is_important(True)
         button.connect("clicked", self.__button_clicked, None)
