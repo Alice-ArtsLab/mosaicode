@@ -109,7 +109,7 @@ class MainWindow(Gtk.Window):
         #self.vpaned_left.set_size_request(50,50)
         #self.vpaned_left.set_property("min-position",150)
 
-        self.connect("delete-event", self.quit)
+        self.connect("delete-event", self.main_control.exit)
 
         # Load Examples
         list_of_examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
@@ -137,6 +137,3 @@ class MainWindow(Gtk.Window):
         # print width , width / 3 , width / 1.2
         self.work_area.resize(data)
 
-    def quit(self, widget, data):
-        print "Bye"
-        Gtk.main_quit()
