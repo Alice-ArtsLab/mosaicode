@@ -81,22 +81,20 @@ class Block(GooCanvas.CanvasGroup):
         if self.block_description.has_key("IsSource"): #all data sources
             self.is_source = self.block_description["IsSource"]
 
-        self.m_oBorderColor = [ 0, 0, 0, 255 ]
-        self.m_oBackColor = [0,0,0,150]
         self.input_port_centers = []
         self.output_port_centers = []
         self.width = WIDTH_DEFAULT
 
-        t_nMaxIO = max(len(self.block_description["InTypes"]), len(self.block_description["OutTypes"]))
+        maxIO = max(len(self.block_description["InTypes"]), len(self.block_description["OutTypes"]))
 
         ## Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
-        if not t_nMaxIO:
-            t_nMaxIO = 1
+        if not maxIO:
+            maxIO = 1
 
-        self.height = max( ((t_nMaxIO-1)* 5 ) #espacamento entre ports = 5
+        self.height = max( ((maxIO-1)* 5 ) #espacamento entre ports = 5
                           +(RADIUS*2 ) #tirando a margem superior e inferior
-                          +(t_nMaxIO * INPUT_HEIGHT),#adicionando a altura de cada port
+                          +(maxIO * INPUT_HEIGHT),#adicionando a altura de cada port
                           HEIGHT_DEFAULT)
 
         self.build()
