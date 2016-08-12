@@ -54,6 +54,7 @@ FRAMERATE = 25
 
 class CodeGenerator():
 
+    #----------------------------------------------------------------------
     def __init__(self, diagram):
         self.diagram = diagram
         self.dir_name = DIRNAME + str(time.time())
@@ -80,7 +81,6 @@ class CodeGenerator():
         harpia.s2idirectory.Log.log("Parsing Code")
         blockList = []
         outDeallocations = []
-
         functionCalls = []
         headers = []
         images = []
@@ -295,7 +295,7 @@ class CodeGenerator():
         self.__return_to_old_directory()
 
     #----------------------------------------------------------------------
-    def __set_error_log(error):
+    def __set_error_log(self, error):
         if os.name == 'nt':
             Error = file(ERROR_LOG_FILE, 'wb')
         else:

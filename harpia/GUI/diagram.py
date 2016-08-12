@@ -64,8 +64,8 @@ class Diagram(GooCanvas.Canvas):
 
         Gtk.Widget.grab_focus(self)
         self.connect("motion-notify-event", self.__on_motion_notify)
-        # Must be after block button press to allow connection
         self.connect_after("button_press_event", self.__on_button_press)
+        self.connect_after("button_release_event", self.__on_button_release)
         self.connect("key-press-event", self.__on_key_press)
 
         self.connect("drag_data_received", self.drag_data_received)
@@ -110,13 +110,19 @@ class Diagram(GooCanvas.Canvas):
             self.delete()
 
     #----------------------------------------------------------------------
+    def __on_button_release(self, widget, event=None):
+        release_point = (event.x, event.y)
+#        harpia.s2idirectory.Log.log("Button release: " + str(self.release_point))
+
+    #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
         Gtk.Widget.grab_focus(self)
         if event.button == 1:
             self.last_clicked_point = (event.x, event.y)
-            for blockIdx in self.blocks:
+#            harpia.s2idirectory.Log.log("last_clicked_point: " + str(self.last_clicked_point))
+            for block_id in self.blocks:
                 # tricky cos we have a dict not a list (iterating through keys not elements)
-                self.blocks[blockIdx].update_flow()
+                self.blocks[block_id].update_flow()
             for conn in self.connectors:
                 conn.update_flow()
             self.current_widget = None
@@ -141,27 +147,27 @@ class Diagram(GooCanvas.Canvas):
         limit_x = self.white_board.get_property("width")
         limit_y = self.white_board.get_property("height")
 
-        for blockIdx in self.blocks:
-            bpos = self.blocks[blockIdx].get_position()
+        for block_id in self.blocks:
+            bpos = self.blocks[block_id].get_position()
             if bpos[0] < min_x:
                 min_x = bpos[0]
             if bpos[1] < min_y:
                 min_y = bpos[1]
 
         if min_x < 0:
-            for blockIdx in self.blocks:
-                bpos = self.blocks[blockIdx].move(abs(min_x),0)
+            for block_id in self.blocks:
+                bpos = self.blocks[block_id].move(abs(min_x),0)
 
         if min_y < 0:
-            for blockIdx in self.blocks:
-                bpos = self.blocks[blockIdx].move(0, abs(min_y))
+            for block_id in self.blocks:
+                bpos = self.blocks[block_id].move(0, abs(min_y))
 
-        for blockIdx in self.blocks:
-            bpos = self.blocks[blockIdx].get_position()
-            if bpos[0] > limit_x - self.blocks[blockIdx].width:
-                self.blocks[blockIdx].move(limit_x - bpos[0] - self.blocks[blockIdx].width,0)
-            if bpos[1] > limit_y - self.blocks[blockIdx].height:
-                self.blocks[blockIdx].move(0, limit_y - bpos[1] - self.blocks[blockIdx].height)
+        for block_id in self.blocks:
+            bpos = self.blocks[block_id].get_position()
+            if bpos[0] > limit_x - self.blocks[block_id].width:
+                self.blocks[block_id].move(limit_x - bpos[0] - self.blocks[block_id].width,0)
+            if bpos[1] > limit_y - self.blocks[block_id].height:
+                self.blocks[block_id].move(0, limit_y - bpos[1] - self.blocks[block_id].height)
 
         self.update_flows()
 
@@ -297,8 +303,8 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def update_flows(self):
-        for blockIdx in self.blocks:  # self.blocks is a dict!
-            self.blocks[blockIdx].update_flow()
+        for block_id in self.blocks:  # self.blocks is a dict!
+            self.blocks[block_id].update_flow()
         for conn in self.connectors:
             conn.update_flow()
 
@@ -320,9 +326,9 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def get_block_on_focus(self):
-        for blockIdx in self.blocks:
-            if self.blocks[blockIdx].focus:
-                return blockIdx
+        for block_id in self.blocks:
+            if self.blocks[block_id].focus:
+                return block_id
 
     #----------------------------------------------------------------------
     def set_zoom(self, value):
@@ -334,12 +340,11 @@ class Diagram(GooCanvas.Canvas):
         self.update_scrolling()
 
     #----------------------------------------------------------------------
-    def set_selected_block(self, block):
-        self.main_window.main_control.set_selected_block(block)
+    def show_block_property(self, block):
+        self.main_window.main_control.show_block_property(block)
 
     # ----------------------------------------------------------------------
     def resize(self, data):
-       # print "RESIZE DO CANVAS"
         self.set_property("x2", self.main_window.get_size()[0])
         self.white_board.set_property("width", self.main_window.get_size()[0])
 

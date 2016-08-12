@@ -26,7 +26,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def select_open(self):
-        name = Dialog().open_dialog("Open", self.main_window)
+        name = Dialog().open_dialog("Open Diagram", self.main_window)
         if name == None or name == "":
             return
         self.main_window.work_area.add_tab(name)
@@ -79,16 +79,18 @@ class MainControl():
             DiagramControl(diagram).export_png(name)
 
     # ----------------------------------------------------------------------
-    def exit(self, widget, data):
-        print "Bye"
+    def exit(self, widget = None, data = None):
         Gtk.main_quit()
 
+    # ----------------------------------------------------------------------
     def cut(self):
         print "Cut from control"
 
+    # ----------------------------------------------------------------------
     def copy(self):
         print "Copy from control"
 
+    # ----------------------------------------------------------------------
     def paste(self):
         print "Paste from control"
 
@@ -100,7 +102,6 @@ class MainControl():
     def delete(self):
         if self.main_window.work_area.get_current_diagram() != None:
             self.main_window.work_area.get_current_diagram().delete()
-
 
     # ----------------------------------------------------------------------
     def run(self):
@@ -168,6 +169,6 @@ class MainControl():
             self.main_window.work_area.get_current_diagram().set_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
-    def set_selected_block(self, block):
+    def show_block_property(self, block):
         self.main_window.block_properties.set_block(block)
 # ----------------------------------------------------------------------

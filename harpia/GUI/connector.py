@@ -36,7 +36,6 @@ import math
 import sys
 
 from connectormenu import ConnectorMenu
-from harpia.utils.graphicfunctions import *
 
 class Connector(GooCanvas.CanvasGroup):
 
@@ -115,9 +114,19 @@ class Connector(GooCanvas.CanvasGroup):
     def update_tracking(self, newEnd=None):
         if newEnd == None:
             newEnd = self.from_point
-        vec = Psub(newEnd, self.from_point)
-        vec = CordModDec(vec)
-        self.to_point = Psum(self.from_point, vec)
+        a = newEnd[0] - self.from_point[0]
+        b = newEnd[1] - self.from_point[1]
+        if a > 0:
+            a -= 1
+        else:
+            a += 1
+
+        if b > 0:
+            b -= 1
+        else:
+            b += 1
+
+        self.to_point = self.from_point[0] + a, self.from_point[1] + b
         self.__update_draw()
 
 #----------------------------------------------------------------------

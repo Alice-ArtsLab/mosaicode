@@ -8,6 +8,7 @@ from gi.repository import Gtk
 
 class Menu(Gtk.MenuBar):
 
+    # ----------------------------------------------------------------------
     def __init__(self, main_window):
         Gtk.MenuBar.__init__(self)
         self.main_window = main_window
@@ -73,7 +74,7 @@ class Menu(Gtk.MenuBar):
         help_menu.append(Gtk.SeparatorMenuItem())
         self.__add_menu_category("Help", help_menu)
 
-
+    # ----------------------------------------------------------------------
     def __create_menu(self, name, menu, action):
         item = Gtk.MenuItem(name)
         menu.append(item)
@@ -82,18 +83,22 @@ class Menu(Gtk.MenuBar):
             self.actions[item] = action
         return item
 
+    # ----------------------------------------------------------------------
     def __add_menu_category(self, name, submenu):
         menu_item = Gtk.MenuItem(name)
         menu_item.show()
         menu_item.set_submenu(submenu)
         self.append(menu_item)
 
+    # ----------------------------------------------------------------------
     def __menu_clicked(self, widget, data):
         self.actions[widget]()
 
+    # ----------------------------------------------------------------------
     def __load_recent(self, widget, data):
         self.main_window.main_control.open(widget.get_label())
 
+    # ----------------------------------------------------------------------
     def add_example(self, example):
         self.list_of_examples.append(example)
         menu_item = Gtk.MenuItem(example.split("/").pop())
@@ -101,9 +106,11 @@ class Menu(Gtk.MenuBar):
         menu_item.connect("activate", self.__load_example, len(self.list_of_examples) - 1)
         self.example_menu.show_all()
 
+    # ----------------------------------------------------------------------
     def __load_example(self, widget, data):
         self.main_window.main_control.open(self.list_of_examples[int(data)])
- 
+
+    # ----------------------------------------------------------------------
     def add_recent_file(self, recent_file):
         menu_item = Gtk.MenuItem(recent_file)
         self.recent_files_menu.append(menu_item)

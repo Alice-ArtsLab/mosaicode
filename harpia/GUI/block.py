@@ -39,7 +39,6 @@ import os
 from blockmenu import BlockMenu
 import harpia.s2idirectory
 from harpia.s2idirectory import *
-from harpia.utils.graphicfunctions import *
 from harpia.utils.XMLUtils import XMLParser
 
 from harpia import s2idirectory
@@ -133,7 +132,7 @@ class Block(GooCanvas.CanvasGroup):
         else:
             self.diagram.current_widget = self
 
-        self.diagram.set_selected_block(self.plugin)
+        self.diagram.show_block_property(self.plugin)
 
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
@@ -185,14 +184,18 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __draw_rect(self):
         color = self.block_description["Color"].split(":")
-        back_color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
+        color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
+        color = int(color[0])*0x1000000 + \
+                int(color[1])*0x10000 + \
+                int(color[2])*0x100 + \
+                int(color[3])*0x01
         rect = GooCanvas.CanvasRect(parent=self,
                     x=0,
                     y=0,
                     width=self.width,
                     height=self.height,
                     stroke_color="black",
-                    fill_color_rgba=ColorFromList(back_color)
+                    fill_color_rgba=color
                     )
         self.widgets["Rect"] = rect
 
