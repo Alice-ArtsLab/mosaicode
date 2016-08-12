@@ -132,7 +132,7 @@ class MainWindow(Gtk.Window):
         width, height = self.get_size()
         self.vpaned_left.set_position(height / 3 - 67)
         self.vpaned_bottom.set_position(height/ 1.2 - 67)
-        print height , height / 3 , height / 1.2
+       # print height , height / 3 , height / 1.2
         # print "Width"
         # print width , width / 3 , width / 1.2
         self.work_area.resize(data)
