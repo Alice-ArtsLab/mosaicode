@@ -120,10 +120,6 @@ class MainControl():
         CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------
-    def tips(self):
-        print "Tips from control"
-
-    # ----------------------------------------------------------------------
     def about(self):
         About(self.main_window).show_all()
 

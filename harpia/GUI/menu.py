@@ -63,15 +63,10 @@ class Menu(Gtk.MenuBar):
         #Cria sub menu
         help_menu = Gtk.Menu()
         self.example_menu = Gtk.Menu()
-
-        #Cria o items com o nome fornecido
-        self.__create_menu("Tips of The Day", help_menu, self.main_window.main_control.tips)
-        help_menu.append(Gtk.SeparatorMenuItem())
         examples = self.__create_menu("Example", help_menu, None)
         examples.set_submenu(self.example_menu)
         help_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu("About", help_menu, self.main_window.main_control.about)
-        help_menu.append(Gtk.SeparatorMenuItem())
         self.__add_menu_category("Help", help_menu)
 
     # ----------------------------------------------------------------------
