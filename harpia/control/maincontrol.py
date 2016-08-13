@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
 from harpia.constants import *
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
+from harpia.GUI.codewindow import CodeWindow
 from harpia.control.diagramcontrol import DiagramControl
-from harpia.gerador import *
+from harpia.control.codegenerator import CodeGenerator
 
 import os
 
@@ -75,8 +80,9 @@ class MainControl():
             DiagramControl(diagram).export_png(name)
 
     # ----------------------------------------------------------------------
-    def exit(self):
-        self.main_window.quit(None, None)
+    def exit(self, widget, data):
+        print "Bye"
+        Gtk.main_quit()
 
     def cut(self):
         print "Cut from control"
@@ -88,25 +94,32 @@ class MainControl():
         print "Paste from control"
 
     # ----------------------------------------------------------------------
-    def delete(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().delete()
-
     def preferences(self):
         print "Preferences from control"
 
     # ----------------------------------------------------------------------
+    def delete(self):
+        if self.main_window.work_area.get_current_diagram() != None:
+            self.main_window.work_area.get_current_diagram().delete()
+
+
+    # ----------------------------------------------------------------------
     def run(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        gerar(diagram)
+        CodeGenerator(diagram).execute_code()
 
     # ----------------------------------------------------------------------
     def save_source(self):
-        print "Save from control"
+        diagram = self.main_window.work_area.get_current_diagram()
+        CodeGenerator(diagram).save_code()
 
+    # ----------------------------------------------------------------------
     def view_source(self):
-        print "View Source from control"
+        diagram = self.main_window.work_area.get_current_diagram()
+        code = CodeGenerator(diagram).generate_code()
+        CodeWindow(self.main_window, code)
 
+    # ----------------------------------------------------------------------
     def tips(self):
         print "Tips from control"
 
