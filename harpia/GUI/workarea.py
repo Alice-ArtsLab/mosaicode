@@ -31,6 +31,7 @@ class WorkArea(Gtk.Notebook):
  
     # ----------------------------------------------------------------------
     def close_tab(self):
+        print "Close tab - workArea"
         position = self.get_current_page()
         self.remove_page(position)
         self.diagrams.pop(position)

@@ -104,10 +104,12 @@ class Diagram(GooCanvas.Canvas):
             self.current_widget = None
             self.update_flows()
 
+
     #----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
         if event.keyval == Gdk.KEY_Delete:
             self.delete()
+            print "Fui deletado"
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
@@ -122,6 +124,7 @@ class Diagram(GooCanvas.Canvas):
             self.current_widget = None
             self.__abort_connection()
             self.update_flows()
+            print "Fui deletado"
             return False
         return False
 

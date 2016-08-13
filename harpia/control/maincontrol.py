@@ -17,6 +17,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def new(self):
+        print "nova janela"
         self.main_window.work_area.add_tab("Untitled")
 
     # ----------------------------------------------------------------------
