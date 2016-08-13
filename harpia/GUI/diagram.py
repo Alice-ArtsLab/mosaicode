@@ -38,19 +38,16 @@ from connector import Connector
 import harpia.s2idirectory
 from harpia.constants import *
 
-#import time
-
-from harpia.utils.graphicfunctions import *
-
-
 class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
-    def __init__(self, main_window):
+    def __init__(self, main_window, work_area):
         GooCanvas.Canvas.__init__(self)
 
         self.last_clicked_point = (None, None)
         self.main_window = main_window
+        self.work_area = work_area
+        self.tab_index = -1
 
         self.zoom = 1.0 # pixels per unit
         self.show()
@@ -77,7 +74,6 @@ class Diagram(GooCanvas.Canvas):
         self.file_name = None
 
         self.white_board = None
-#        self.set_property("x2", self.main_window.get_size()[0])
         self.set_property("expand", True)
         self.__update_white_board()
 
@@ -319,6 +315,7 @@ class Diagram(GooCanvas.Canvas):
     #----------------------------------------------------------------------
     def set_file_name(self, file_name):
         self.file_name = file_name
+        self.work_area.rename_diagram(self)
 
     #----------------------------------------------------------------------
     def get_file_name(self):

@@ -13,7 +13,6 @@ from gi.repository import GooCanvas
 from exceptions import AttributeError
 
 from harpia.utils.XMLUtils import XMLParser
-from harpia.utils.graphicfunctions import *
 
 from harpia.s2idirectory import *
 
@@ -27,19 +26,6 @@ class DiagramControl():
 # ----------------------------------------------------------------------
     def __del__(self):
         pass
-
-# ----------------------------------------------------------------------
-    def get_process_chain(self):
-        # saving processing chain (which includes blocks properties and conectors)
-        properties = "<properties>\n  "
-        network = "<network>\n"
-
-        for block_id in self.diagram.blocks:
-            (properties, Network) = self.__block_XML_out(block_id, properties, Network)
-
-        properties += "</properties>\n"
-        network += "</network>\n"
-        return  properties + network
 
 # ----------------------------------------------------------------------
     def __block_XML_out(self, block_id, properties, network):
@@ -158,7 +144,18 @@ class DiagramControl():
             state += '\t</block>\n'
         state += "</GcState>\n"
 
-        out_file = "<harpia>\n" + state + self.get_process_chain() + "</harpia>\n"
+        # saving processing chain (which includes blocks properties and conectors)
+        properties = "<properties>\n  "
+        network = "<network>\n"
+
+        for block_id in self.diagram.blocks:
+            (properties, network) = self.__block_XML_out(block_id, properties, network)
+
+        properties += "</properties>\n"
+        network += "</network>\n"
+
+
+        out_file = "<harpia>\n" + state + properties + network + "</harpia>\n"
 
         if self.diagram.file_name.find(".hrp") == -1:
             self.diagram.file_name += ".hrp"

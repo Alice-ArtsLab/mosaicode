@@ -275,10 +275,10 @@ class CodeGenerator():
             o.close()
             i.close()
 
-            t_oPrg = RunPrg("LD_LIBRARY_PATH=/lib/ ./" + self.dir_name)
-            t_oPrg.start()
-            while t_oPrg.isAlive():
-                t_oPrg.join(0.4)
+            program = RunPrg("LD_LIBRARY_PATH=/lib/ ./" + self.dir_name)
+            program.start()
+            while program.isAlive():
+                program.join(0.4)
                 while Gtk.events_pending():
                     Gtk.main_iteration()
 

@@ -22,16 +22,15 @@ class WorkArea(Gtk.Notebook):
     def add_tab(self, name):
         frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
-        diagram = Diagram(self.main_window)  # created new diagram
+        diagram = Diagram(self.main_window, self)  # created new diagram
         frame.add(diagram)
-        self.append_page(frame, self.__create_tab_label(name, frame))
+        index = self.append_page(frame, self.__create_tab_label(name, frame))
         self.show_all()
         self.diagrams.append(diagram)
         self.set_current_page(self.get_n_pages() - 1)
  
     # ----------------------------------------------------------------------
-    def close_tab(self):
-        position = self.get_current_page()
+    def close_tab(self, position):
         self.remove_page(position)
         self.diagrams.pop(position)
 
@@ -42,7 +41,7 @@ class WorkArea(Gtk.Notebook):
         image = Gtk.Image().new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
         button.set_image(image)
         button.set_relief(Gtk.ReliefStyle.NONE)
-        button.connect('clicked', self.__on_button_clicked, frame)
+        button.connect('clicked', self.__on_close_button_clicked, frame)
         label = Gtk.Label(text)
         box.add(label)
         box.add(button)
@@ -50,9 +49,14 @@ class WorkArea(Gtk.Notebook):
         return box
 
     # ----------------------------------------------------------------------
-    def __on_button_clicked(self, widget, args):
-        self.close_tab()
-        
+    def __on_close_button_clicked(self, widget, frame):
+        index = -1
+        for tab in self.get_children():
+            index += 1
+            if tab == frame:
+                break
+        self.close_tab(index)
+
     # ----------------------------------------------------------------------
     def open_diagram(self, diagram_name):
         self.add_tab(diagram_name)
@@ -67,6 +71,18 @@ class WorkArea(Gtk.Notebook):
             return self.diagrams[self.get_current_page()]
         else:
             return None
+
+    # ----------------------------------------------------------------------
+    def rename_diagram(self, diagram):
+        index = -1
+        for tab in self.get_children():
+            index += 1
+            if tab.get_children()[0] == diagram:
+                break
+        tab = self.get_nth_page(index)
+        hbox = self.get_tab_label(tab)
+        label = hbox.get_children()[0]
+        label.set_text(diagram.get_file_name())
 
     # ----------------------------------------------------------------------
     def resize(self, data):
