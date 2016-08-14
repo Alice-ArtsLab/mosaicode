@@ -13,15 +13,13 @@ from gi.repository import GooCanvas
 from exceptions import AttributeError
 
 from harpia.utils.XMLUtils import XMLParser
-from harpia.utils.graphicfunctions import *
 
-import harpia.s2idirectory
 from harpia.s2idirectory import *
 
 
 class DiagramControl():
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __init__(self, diagram):
         self.diagram = diagram
 
@@ -31,46 +29,33 @@ class DiagramControl():
         pass
 
 # ----------------------------------------------------------------------
-    def get_process_chain(self):
-        # saving processing chain (which includes blocks properties and conectors)
-        Properties = "<properties>\n  "
-        Network = "<network>\n"
-
-        for t_oBlockIdx in self.diagram.blocks:
-            (Properties, Network) = self.__block_XML_out(t_oBlockIdx, Properties, Network)
-
-        Properties += "</properties>\n"
-        Network += "</network>\n"
-        return  Properties + Network
-
-# ----------------------------------------------------------------------
-    def __block_XML_out(self, t_oBlockIdx, Properties, Network):
-        props = self.diagram.blocks[t_oBlockIdx].get_xml()
+    def __block_XML_out(self, block_id, properties, network):
+        props = self.diagram.blocks[block_id].get_xml()
         block_xml = props.getTagXML(props.getTagChild("properties", "block"))
 
-        Properties += block_xml + "\n  "
-        Network += '<block type="' + str(self.diagram.blocks[t_oBlockIdx].get_type()) + '" id="' + str(
-            self.diagram.blocks[t_oBlockIdx].get_id()) + '">\n'
-        Network += "<inputs>\n"
-        for t_nInputIdx in range(len(self.diagram.blocks[t_oBlockIdx].block_description["InTypes"])):
-            Network += '<input id="' + str(t_nInputIdx + 1) + '"/>\n'
+        properties += block_xml + "\n  "
+        network += '<block type="' + str(self.diagram.blocks[block_id].get_type()) + '" id="' + str(
+            self.diagram.blocks[block_id].get_id()) + '">\n'
+        network += "<inputs>\n"
+        for t_nInputIdx in range(len(self.diagram.blocks[block_id].block_description["InTypes"])):
+            network += '<input id="' + str(t_nInputIdx + 1) + '"/>\n'
             # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
-        Network += "</inputs>\n"
+        network += "</inputs>\n"
 
-        Network += "<outputs>\n"
-        t_dConnectedOuts = {}
-        for t_oConnector in self.diagram.connectors:
-            if t_oConnector.from_block == self.diagram.blocks[t_oBlockIdx].get_id():
-                Network += '<output id="' + str(t_oConnector.from_block_out + 1) + '" inBlock="' + str(
-                    t_oConnector.to_block) + '" input="' + str(
-                    t_oConnector.to_block_in + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
-                t_dConnectedOuts[t_oConnector.from_block_out] = 1
-        for Output in range(len(self.diagram.blocks[t_oBlockIdx].block_description["OutTypes"])):
-            if not t_dConnectedOuts.has_key(Output):
-                Network += '<output id="' + str(Output + 1) + '" inBlock="--" input="--"/>\n'
-        Network += "</outputs>\n"
-        Network += "</block>\n"
-        return (Properties, Network)
+        network += "<outputs>\n"
+        connected_outs = {}
+        for connector in self.diagram.connectors:
+            if connector.from_block == self.diagram.blocks[block_id].get_id():
+                network += '<output id="' + str(connector.from_block_out + 1) + '" inBlock="' + str(
+                    connector.to_block) + '" input="' + str(
+                    connector.to_block_in + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
+                connected_outs[connector.from_block_out] = 1
+        for Output in range(len(self.diagram.blocks[block_id].block_description["OutTypes"])):
+            if not connected_outs.has_key(Output):
+                network += '<output id="' + str(Output + 1) + '" inBlock="--" input="--"/>\n'
+        network += "</outputs>\n"
+        network += "</block>\n"
+        return (properties, network)
 
 # ----------------------------------------------------------------------
     def load(self, file_name=None):
@@ -106,7 +91,7 @@ class DiagramControl():
             #for block in xml_loader.harpia.network.block:
             for block in blocks:
                 if block.getAttr("type") not in harpia.s2idirectory.block:
-                    
+                    harpia.s2idirectory.Log.log("Block not found: " + block.getAttr("type"))
                     continue
                 block_id =  block.getAttr("id")
                 outputs = block.getTag("outputs")
@@ -131,9 +116,9 @@ class DiagramControl():
         for block in blocks:
             block_xml = str(block)
             block_id =  block.getAttr("id")
-            t_sBlockProperties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block_xml + '\n</properties>\n'
+            block_properties = '<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n' + block_xml + '\n</properties>\n'
             if block_id in self.diagram.blocks:
-                self.diagram.blocks[block_id].set_xml(XMLParser(t_sBlockProperties, fromString=True))
+                self.diagram.blocks[block_id].set_xml(XMLParser(block_properties, fromString=True))
             else:
                 self.diagram.main_window.status.append_text("Block not found!")
                 self.diagram.main_window.status.append_text(str(block_id))
@@ -149,25 +134,37 @@ class DiagramControl():
             self.diagram.file_name = "Cadeia_" + str(time.time()) + ".hrp"
 
         # saving blocks current state
-        t_sGcState = "<GcState>\n"
+        state = "<GcState>\n"
         for blockIdx in self.diagram.blocks:
-            t_sGcState += '\t<block type="' + str(self.diagram.blocks[blockIdx].get_type()) + '" id="' + str(self.diagram.blocks[blockIdx].get_id()) + '">\n'
-            t_tPos = self.diagram.blocks[blockIdx].get_position()
-            t_sGcState += '\t\t<position x="' + str(t_tPos[0]) + '" y="' + str(t_tPos[1]) + '"/>\n'
-            t_sGcState += '\t</block>\n'
-        t_sGcState += "</GcState>\n"
+            state += '\t<block type="' + \
+                    str(self.diagram.blocks[blockIdx].get_type()) + \
+                    '" id="' + str(self.diagram.blocks[blockIdx].get_id()) + \
+                    '">\n'
+            pos = self.diagram.blocks[blockIdx].get_position()
+            state += '\t\t<position x="' + str(pos[0]) + '" y="' + str(pos[1]) + '"/>\n'
+            state += '\t</block>\n'
+        state += "</GcState>\n"
 
-        t_sProcessingChain =  self.get_process_chain()
+        # saving processing chain (which includes blocks properties and conectors)
+        properties = "<properties>\n  "
+        network = "<network>\n"
 
-        t_sOutFile = "<harpia>\n" + t_sGcState + t_sProcessingChain + "</harpia>\n"
+        for block_id in self.diagram.blocks:
+            (properties, network) = self.__block_XML_out(block_id, properties, network)
+
+        properties += "</properties>\n"
+        network += "</network>\n"
+
+
+        out_file = "<harpia>\n" + state + properties + network + "</harpia>\n"
 
         if self.diagram.file_name.find(".hrp") == -1:
             self.diagram.file_name += ".hrp"
 
         try:
             save_file = open(str(self.diagram.file_name), "w")
-            t_sOutFile = t_sOutFile.encode('utf-8')
-            save_file.write(t_sOutFile)
+            out_file = out_file.encode('utf-8')
+            save_file.write(out_file)
             save_file.close()
         except IOError as e:
             return False,e.strerror

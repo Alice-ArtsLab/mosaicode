@@ -36,7 +36,6 @@ import math
 import sys
 
 from connectormenu import ConnectorMenu
-from harpia.utils.graphicfunctions import *
 
 class Connector(GooCanvas.CanvasGroup):
 
@@ -79,10 +78,10 @@ class Connector(GooCanvas.CanvasGroup):
         if event.button.button == 3:
             ConnectorMenu(self, event)
 
-        if self.diagram.current_widget == self:
-            self.diagram.current_widget = None
+        if self in self.diagram.current_widgets:
+            self.diagram.current_widgets = []
         else:
-            self.diagram.current_widget = self
+            self.diagram.current_widgets.append(self)
 
         self.diagram.update_flows()
         return True
@@ -116,9 +115,19 @@ class Connector(GooCanvas.CanvasGroup):
     def update_tracking(self, newEnd=None):
         if newEnd == None:
             newEnd = self.from_point
-        vec = Psub(newEnd, self.from_point)
-        vec = CordModDec(vec)
-        self.to_point = Psum(self.from_point, vec)
+        a = newEnd[0] - self.from_point[0]
+        b = newEnd[1] - self.from_point[1]
+        if a > 0:
+            a -= 1
+        else:
+            a += 1
+
+        if b > 0:
+            b -= 1
+        else:
+            b += 1
+
+        self.to_point = self.from_point[0] + a, self.from_point[1] + b
         self.__update_draw()
 
 #----------------------------------------------------------------------
@@ -162,7 +171,7 @@ class Connector(GooCanvas.CanvasGroup):
         else:
             self.widgets["Line"].set_property("line-width",2)
 
-        if self.diagram.current_widget == self:
+        if self in self.diagram.current_widgets:
             self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
         else:
             self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-class Plugin():
+class Plugin(object):
 
     def __init__(self):
         self.type = -1

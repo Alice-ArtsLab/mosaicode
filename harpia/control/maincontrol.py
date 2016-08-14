@@ -27,14 +27,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def select_open(self):
-        name = Dialog().open_dialog("Open", self.main_window)
-        if name == None or name == "":
+        file_name = Dialog().open_dialog("Open Diagram", self.main_window)
+        if file_name == None or file_name == "":
             return
-        self.main_window.work_area.add_tab(name)
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
-            return
-        DiagramControl(diagram).load(name)
+        self.open(file_name)
 
     # ----------------------------------------------------------------------
     def open(self, file_name):
@@ -53,7 +49,6 @@ class MainControl():
         if diagram.get_file_name() is None or save_as:
             name = Dialog().save_dialog("Save", self.main_window)
             diagram.set_file_name(name)
-            self.main_window.work_area.set_diagram_name(name)
 
         result, message = False,""
 
@@ -80,16 +75,25 @@ class MainControl():
             DiagramControl(diagram).export_png(name)
 
     # ----------------------------------------------------------------------
-    def exit(self, widget, data):
-        print "Bye"
+    def exit(self, widget = None, data = None):
         Gtk.main_quit()
 
+    # ----------------------------------------------------------------------
+    def select_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
+        diagram.select_all()
+
+    # ----------------------------------------------------------------------
     def cut(self):
         print "Cut from control"
 
+    # ----------------------------------------------------------------------
     def copy(self):
         print "Copy from control"
 
+    # ----------------------------------------------------------------------
     def paste(self):
         print "Paste from control"
 
@@ -99,29 +103,31 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def delete(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().delete()
-
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().delete()
 
     # ----------------------------------------------------------------------
     def run(self):
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
         diagram = self.main_window.work_area.get_current_diagram()
         CodeGenerator(diagram).execute_code()
 
     # ----------------------------------------------------------------------
     def save_source(self):
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
         diagram = self.main_window.work_area.get_current_diagram()
         CodeGenerator(diagram).save_code()
 
     # ----------------------------------------------------------------------
     def view_source(self):
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
         diagram = self.main_window.work_area.get_current_diagram()
         code = CodeGenerator(diagram).generate_code()
         CodeWindow(self.main_window, code)
-
-    # ----------------------------------------------------------------------
-    def tips(self):
-        print "Tips from control"
 
     # ----------------------------------------------------------------------
     def about(self):
@@ -169,6 +175,6 @@ class MainControl():
             self.main_window.work_area.get_current_diagram().set_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
-    def set_selected_block(self, block):
+    def show_block_property(self, block):
         self.main_window.block_properties.set_block(block)
 # ----------------------------------------------------------------------
