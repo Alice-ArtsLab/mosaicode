@@ -127,10 +127,10 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
 
-        if self.diagram.current_widget == self:
-            self.diagram.current_widget = None
+        if self in self.diagram.current_widgets:
+            self.diagram.current_widgets = []
         else:
-            self.diagram.current_widget = self
+            self.diagram.current_widgets.append(self)
 
         self.diagram.show_block_property(self.plugin)
 
@@ -373,7 +373,7 @@ class Block(GooCanvas.CanvasGroup):
         else:
             self.widgets["Rect"].set_property("line-width",1)
 
-        if self.diagram.current_widget == self:
+        if self in self.diagram.current_widgets:
             self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
         else:
             self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))

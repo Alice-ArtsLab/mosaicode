@@ -54,7 +54,7 @@ class Diagram(GooCanvas.Canvas):
         self.blocks = {} # GUI blocks
         self.connectors = []
         self.curr_connector = None
-        self.current_widget = None
+        self.current_widgets = []
 
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
         self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
@@ -63,7 +63,7 @@ class Diagram(GooCanvas.Canvas):
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect_after("button_press_event", self.__on_button_press)
         self.connect_after("button_release_event", self.__on_button_release)
-        self.connect("key-press-event", self.__on_key_press)
+        self.connect_after("key-press-event", self.__on_key_press)
 
         self.connect("drag_data_received", self.drag_data_received)
         self.drag_dest_set(
@@ -95,33 +95,39 @@ class Diagram(GooCanvas.Canvas):
 
     # ---------------------------------------------------------------------
     def delete(self):
-        if self.current_widget != None:
-            self.current_widget.delete()
-            self.current_widget = None
-            self.update_flows()
+        for widget in self.current_widgets:
+            widget.delete()
+        self.current_widgets = []
+        self.update_flows()
 
-    #----------------------------------------------------------------------
+    #-------------------------------------------------------[0---------------
     def __on_key_press(self, widget, event=None):
+        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+            if event.keyval == Gdk.KEY_a:
+                self.select_all()
+                return
         if event.keyval == Gdk.KEY_Delete:
             self.delete()
+            return
+        if event.keyval == Gdk.KEY_Up:
+            self.move_selected_blocks(0,-1)
+        if event.keyval == Gdk.KEY_Down:
+            self.move_selected_blocks(0,1)
+        if event.keyval == Gdk.KEY_Left:
+            self.move_selected_blocks(-1,0)
+        if event.keyval == Gdk.KEY_Right:
+            self.move_selected_blocks(1,0)
 
     #----------------------------------------------------------------------
     def __on_button_release(self, widget, event=None):
         release_point = (event.x, event.y)
-#        harpia.s2idirectory.Log.log("Button release: " + str(self.release_point))
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
         Gtk.Widget.grab_focus(self)
         if event.button == 1:
             self.last_clicked_point = (event.x, event.y)
-#            harpia.s2idirectory.Log.log("last_clicked_point: " + str(self.last_clicked_point))
-            for block_id in self.blocks:
-                # tricky cos we have a dict not a list (iterating through keys not elements)
-                self.blocks[block_id].update_flow()
-            for conn in self.connectors:
-                conn.update_flow()
-            self.current_widget = None
+            self.current_widgets = []
             self.__abort_connection()
             self.update_flows()
             return False
@@ -345,6 +351,19 @@ class Diagram(GooCanvas.Canvas):
         self.set_property("x2", self.main_window.get_size()[0])
         self.white_board.set_property("width", self.main_window.get_size()[0])
 
-#----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
+    def select_all(self):
+        self.current_widgets = []
+        for block_id in self.blocks:
+            self.current_widgets.append(self.blocks[block_id])
+        for conn in self.connectors:
+            self.current_widgets.append(conn)
+        self.update_flows()
 
-    
+    # ----------------------------------------------------------------------
+    def move_selected_blocks(self, x, y):
+        for block_id in self.blocks:
+            if self.blocks[block_id] in self.current_widgets:
+                self.blocks[block_id].move(x,y)
+        self.update_flows()
+#----------------------------------------------------------------------

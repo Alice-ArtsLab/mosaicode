@@ -77,10 +77,10 @@ class Connector(GooCanvas.CanvasGroup):
         if event.button.button == 3:
             ConnectorMenu(self, event)
 
-        if self.diagram.current_widget == self:
-            self.diagram.current_widget = None
+        if self in self.diagram.current_widgets:
+            self.diagram.current_widgets = []
         else:
-            self.diagram.current_widget = self
+            self.diagram.current_widgets.append(self)
 
         self.diagram.update_flows()
         return True
@@ -170,7 +170,7 @@ class Connector(GooCanvas.CanvasGroup):
         else:
             self.widgets["Line"].set_property("line-width",2)
 
-        if self.diagram.current_widget == self:
+        if self in self.diagram.current_widgets:
             self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
         else:
             self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))

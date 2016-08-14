@@ -35,6 +35,7 @@ class Menu(Gtk.MenuBar):
 
         # -------------------------- Edit --------------------------------------
         edit_menu = Gtk.Menu()
+        self.__create_menu("Select All", edit_menu, self.main_window.main_control.select_all)
         self.__create_menu("Cut", edit_menu, self.main_window.main_control.cut)
         self.__create_menu("Copy", edit_menu, self.main_window.main_control.copy)
         self.__create_menu("Paste", edit_menu, self.main_window.main_control.paste)

@@ -78,6 +78,13 @@ class MainControl():
         Gtk.main_quit()
 
     # ----------------------------------------------------------------------
+    def select_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
+        diagram.select_all()
+
+    # ----------------------------------------------------------------------
     def cut(self):
         print "Cut from control"
 
