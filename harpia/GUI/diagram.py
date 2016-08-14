@@ -100,9 +100,9 @@ class Diagram(GooCanvas.Canvas):
         self.current_widgets = []
         self.update_flows()
 
-  #-------------------------------------------------------[0---------------
+    #-------------------------------------------------------[0---------------
     def __on_key_press(self, widget, event=None):
-        if event.state == Gdk.ModifierType.CONTROL_MASK Gdk.ModifierType.MOD2_MASK:
+        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_a:
                 self.select_all()
                 return
@@ -120,7 +120,7 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def __on_button_release(self, widget, event=None):
-		release_point = (event.x, event.y)
+        release_point = (event.x, event.y)
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
@@ -130,7 +130,6 @@ class Diagram(GooCanvas.Canvas):
             self.current_widgets = []
             self.__abort_connection()
             self.update_flows()
-            print "Fui deletado"
             return False
         return False
 
