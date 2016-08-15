@@ -127,4 +127,6 @@ class MainWindow(Gtk.Window):
         self.vpaned_bottom.set_position(height/ 1.2 - 67)
         self.work_area.resize(data)
 
+    def set_title(self, title):
+        Gtk.Window.set_title(self, "Harpia (" + title + ")")
 #----------------------------------------------------------------------

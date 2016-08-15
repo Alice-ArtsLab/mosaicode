@@ -167,6 +167,8 @@ class DiagramControl():
             save_file.close()
         except IOError as e:
             return False,e.strerror
+
+        self.diagram.set_modified(False)
         return True,"Success"
 
 # ----------------------------------------------------------------------

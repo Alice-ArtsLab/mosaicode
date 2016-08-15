@@ -35,9 +35,9 @@ class MainControl():
     # ----------------------------------------------------------------------
     def open(self, file_name):
         diagram = Diagram(self.main_window)
-        diagram.set_file_name(file_name)
-        DiagramControl(diagram).load()
         self.main_window.work_area.add_diagram(diagram)
+        DiagramControl(diagram).load(file_name)
+        diagram.set_modified(False)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -60,9 +60,7 @@ class MainControl():
                 result, message = DiagramControl(diagram).save()
 
         if not result:
-            Dialog().message_dialog("Error",
-                    message,
-                    self.main_window)
+            Dialog().message_dialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
     def save_as(self):
@@ -79,7 +77,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def exit(self, widget = None, data = None):
-        Gtk.main_quit()
+        if self.main_window.work_area.close_tabs():
+            Gtk.main_quit()
+        else:
+            return True
 
     # ----------------------------------------------------------------------
     def select_all(self):

@@ -7,6 +7,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from diagram import Diagram
+from harpia.GUI.dialog import Dialog
 from harpia.control.diagramcontrol import DiagramControl
 
 
@@ -17,13 +18,24 @@ class WorkArea(Gtk.Notebook):
         self.main_window = main_window
         self.set_scrollable(True)
         self.diagrams = []
+        self.connect("switch-page", self.__on_switch_page)
+        self.connect("page-removed", self.__on_page_removed)
+
+    #----------------------------------------------------------------------
+    def __on_page_removed(self, notebook, child, page_num):
+        if self.get_n_pages() == 0:
+            self.main_window.set_title("")
+
+    #----------------------------------------------------------------------
+    def __on_switch_page(self, notebook, child, page_num):
+        self.main_window.set_title(child.get_children()[0].get_file_name())
 
     # ----------------------------------------------------------------------
     def add_diagram(self, diagram):
         frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.add(diagram)
-        name = diagram.get_file_name()
+        name = diagram.get_patch_name()
         index = self.append_page(frame, self.__create_tab_label(name, frame))
         self.show_all()
         self.diagrams.append(diagram)
@@ -33,8 +45,21 @@ class WorkArea(Gtk.Notebook):
     def close_tab(self, position=None):
         if position == None:
             position = self.get_current_page()
+        tab = self.get_nth_page(position)
+        diagram = tab.get_children()[0]
+        
+        if diagram.get_modified():
+            dialog = Dialog().confirm_dialog("Diagram " + \
+                        diagram.get_file_name() + \
+                        " is not saved. \nIf you close it, changes will be lost.\nConfirm?", self.main_window)
+            result = dialog.run() 
+            dialog.destroy()
+            if result ==  Gtk.ResponseType.CANCEL:
+                return False
+
         self.remove_page(position)
         self.diagrams.pop(position)
+        return True
 
     # ----------------------------------------------------------------------
     def __create_tab_label(self, text, frame):
@@ -69,19 +94,29 @@ class WorkArea(Gtk.Notebook):
     # ----------------------------------------------------------------------
     def rename_diagram(self, diagram):
         index = -1
-        for tab in self.get_children():
+        for scrolled_window in self.get_children():
             index += 1
-            if tab.get_children()[0] == diagram:
+            tab = scrolled_window.get_children()[0]
+            if tab == diagram:
                 break
         tab = self.get_nth_page(index)
         if tab == None:
             return
         hbox = self.get_tab_label(tab)
         label = hbox.get_children()[0]
-        label.set_text(diagram.get_file_name())
+        label.set_text(diagram.get_patch_name())
+        self.main_window.set_title(diagram.get_file_name())
 
     # ----------------------------------------------------------------------
     def resize(self, data):
         for diagram in self.diagrams:
             diagram.resize(data)
+
+    # ----------------------------------------------------------------------
+    def close_tabs(self):
+        n_pages = self.get_n_pages()
+        for i in range(n_pages):
+            if not self.close_tab(0):
+                return False
+        return True
 # ----------------------------------------------------------------------            

@@ -179,11 +179,6 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __del__(self):
         pass
-        
-#----------------------------------------------------------------------
-    def delete(self):
-        self.diagram.delete_block(self.block_id)
-        self.diagram.update_flows()
 
 #----------------------------------------------------------------------
     def __draw_rect(self):
@@ -323,8 +318,9 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
-        x = self.input_port_centers[input_id][0] + self.get_simple_transform().x - PORT_SENSITIVITY
-        y = self.input_port_centers[input_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY + 3
+        isSet, x, y, scale, rotation = self.get_simple_transform()
+        x = self.input_port_centers[input_id][0] + x - PORT_SENSITIVITY
+        y = self.input_port_centers[input_id][1] + y - PORT_SENSITIVITY + 3
         return (x, y)
 
 #----------------------------------------------------------------------
@@ -339,7 +335,13 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def move(self, x, y):
+        self.diagram.set_modified(True)
         self.translate(x, y)
+
+#----------------------------------------------------------------------
+    def delete(self):
+        self.diagram.delete_block(self.block_id)
+        self.diagram.update_flows()
 
 #----------------------------------------------------------------------
     def get_id(self):
@@ -351,7 +353,8 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_position(self):
-        return self.get_simple_transform().x,self.get_simple_transform().y
+        isSet, x, y, scale, rotation = self.get_simple_transform()
+        return x,y
 
 #----------------------------------------------------------------------
     def get_xml(self):
