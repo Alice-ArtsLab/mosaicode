@@ -8,6 +8,7 @@ from gi.repository import Gtk
 from harpia.constants import *
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
+from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
@@ -22,7 +23,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def new(self):
-        self.main_window.work_area.add_tab("Untitled")
+        self.main_window.work_area.add_diagram(Diagram(self.main_window))
 
     # ----------------------------------------------------------------------
     def select_open(self):
@@ -33,7 +34,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def open(self, file_name):
-        self.main_window.work_area.open_diagram(file_name)
+        diagram = Diagram(self.main_window)
+        diagram.set_file_name(file_name)
+        DiagramControl(diagram).load()
+        self.main_window.work_area.add_diagram(diagram)
 
     # ----------------------------------------------------------------------
     def close(self):

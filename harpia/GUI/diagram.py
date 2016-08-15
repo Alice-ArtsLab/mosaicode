@@ -41,12 +41,11 @@ from harpia.constants import *
 class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
-    def __init__(self, main_window, work_area):
+    def __init__(self, main_window):
         GooCanvas.Canvas.__init__(self)
 
         self.last_clicked_point = (None, None)
         self.main_window = main_window
-        self.work_area = work_area
         self.tab_index = -1
 
         self.zoom = 1.0 # pixels per unit
@@ -71,7 +70,7 @@ class Diagram(GooCanvas.Canvas):
             [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
 
-        self.file_name = None
+        self.__file_name = "Untitled"
 
         self.white_board = None
         self.set_property("expand", True)
@@ -93,30 +92,44 @@ class Diagram(GooCanvas.Canvas):
         self.curr_connector.update_tracking(point)
         return False
 
-    # ---------------------------------------------------------------------
-    def delete(self):
-        for widget in self.current_widgets:
-            widget.delete()
-        self.current_widgets = []
-        self.update_flows()
-
     #-------------------------------------------------------[0---------------
     def __on_key_press(self, widget, event=None):
         if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_a:
                 self.select_all()
-                return
+                return True
+            if event.keyval == Gdk.KEY_Up:
+                self.move_selected_blocks(0,-5)
+                return True
+            if event.keyval == Gdk.KEY_Down:
+                self.move_selected_blocks(0,5)
+                return True
+            if event.keyval == Gdk.KEY_Left:
+                self.move_selected_blocks(-5,0)
+                return True
+            if event.keyval == Gdk.KEY_Right:
+                self.move_selected_blocks(5,0)
+                return True
+            if event.keyval == Gdk.KEY_w:
+                self.main_window.work_area.close_tab()
+
         if event.keyval == Gdk.KEY_Delete:
             self.delete()
-            return
+            return True
+
         if event.keyval == Gdk.KEY_Up:
             self.move_selected_blocks(0,-1)
+            return True
         if event.keyval == Gdk.KEY_Down:
             self.move_selected_blocks(0,1)
+            return True
         if event.keyval == Gdk.KEY_Left:
             self.move_selected_blocks(-1,0)
+            return True
         if event.keyval == Gdk.KEY_Right:
             self.move_selected_blocks(1,0)
+            return True
+
 
     #----------------------------------------------------------------------
     def __on_button_release(self, widget, event=None):
@@ -320,12 +333,12 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def set_file_name(self, file_name):
-        self.file_name = file_name
-        self.work_area.rename_diagram(self)
+        self.__file_name = file_name
+        self.main_window.work_area.rename_diagram(self)
 
     #----------------------------------------------------------------------
     def get_file_name(self):
-        return self.file_name
+        return self.__file_name
 
     #----------------------------------------------------------------------
     def get_block_on_focus(self):
@@ -366,4 +379,13 @@ class Diagram(GooCanvas.Canvas):
             if self.blocks[block_id] in self.current_widgets:
                 self.blocks[block_id].move(x,y)
         self.update_flows()
+
+    # ---------------------------------------------------------------------
+    def delete(self):
+        for widget in self.current_widgets:
+            widget.delete()
+        self.current_widgets = []
+        self.update_flows()
+
+
 #----------------------------------------------------------------------

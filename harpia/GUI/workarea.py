@@ -19,23 +19,25 @@ class WorkArea(Gtk.Notebook):
         self.diagrams = []
 
     # ----------------------------------------------------------------------
-    def add_tab(self, name):
+    def add_diagram(self, diagram):
         frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
-        diagram = Diagram(self.main_window, self)  # created new diagram
         frame.add(diagram)
+        name = diagram.get_file_name()
         index = self.append_page(frame, self.__create_tab_label(name, frame))
         self.show_all()
         self.diagrams.append(diagram)
         self.set_current_page(self.get_n_pages() - 1)
- 
+
     # ----------------------------------------------------------------------
-    def close_tab(self, position):
+    def close_tab(self, position=None):
+        if position == None:
+            position = self.get_current_page()
         self.remove_page(position)
         self.diagrams.pop(position)
 
     # ----------------------------------------------------------------------
-    def __create_tab_label(self,text, frame):
+    def __create_tab_label(self, text, frame):
         box = Gtk.HBox()
         button = Gtk.Button()
         image = Gtk.Image().new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
@@ -58,14 +60,6 @@ class WorkArea(Gtk.Notebook):
         self.close_tab(index)
 
     # ----------------------------------------------------------------------
-    def open_diagram(self, diagram_name):
-        self.add_tab(diagram_name)
-        diagram = self.diagrams[self.get_current_page()]
-        diagram.set_file_name(diagram_name)
-        DiagramControl(diagram).load()
-        self.get_current_page()
-
-    # ----------------------------------------------------------------------
     def get_current_diagram(self):
         if self.get_current_page() > -1:
             return self.diagrams[self.get_current_page()]
@@ -80,6 +74,8 @@ class WorkArea(Gtk.Notebook):
             if tab.get_children()[0] == diagram:
                 break
         tab = self.get_nth_page(index)
+        if tab == None:
+            return
         hbox = self.get_tab_label(tab)
         label = hbox.get_children()[0]
         label.set_text(diagram.get_file_name())

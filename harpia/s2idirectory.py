@@ -32,6 +32,9 @@ from harpia.constants import *
 import pkgutil # For dynamic package load
 import inspect # For module inspect
 
+from glob import glob # To load examples
+import os
+import copy
 
 import gettext
 _ = gettext.gettext
@@ -41,6 +44,8 @@ gettext.textdomain(APP)
 Log = None
 
 block = {}
+list_of_examples = []
+recent_files = []
 
 def load():
     for importer, modname, ispkg in pkgutil.iter_modules(harpia.plugins.__path__):
@@ -48,6 +53,16 @@ def load():
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj) and "Type" in obj().get_description():
                 block[obj().get_description()["Type"]] = obj
+
+    # Load Examples
+    examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
+    for example in examples:
+        list_of_examples.append(example)
+    list_of_examples.sort()
+
+    recent_files.append("/home/flavio/Desktop/harpiaTest.hrp")
+    recent_files.append("/home/flavio/Desktop/harpiaTest2.hrp")
+
 
 
 #HERE: ADD TYPED ICONS for inputs and outputs
