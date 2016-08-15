@@ -351,7 +351,8 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_position(self):
-        return self.get_simple_transform().x,self.get_simple_transform().y
+        isSet, x, y, scale, rotation = self.get_simple_transform()
+        return x,y
 
 #----------------------------------------------------------------------
     def get_xml(self):
