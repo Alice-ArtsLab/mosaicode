@@ -41,25 +41,24 @@ from harpia.constants import *
 class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
-    def __init__(self, main_window, work_area):
+    def __init__(self, main_window):
         GooCanvas.Canvas.__init__(self)
+        self.set_property("expand", True)
 
         self.last_clicked_point = (None, None)
         self.main_window = main_window
-        self.work_area = work_area
-        self.tab_index = -1
 
         self.zoom = 1.0 # pixels per unit
-        self.show()
         self.blocks = {} # GUI blocks
         self.connectors = []
         self.curr_connector = None
         self.current_widgets = []
+        self.__modified = False
 
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
         self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
 
-        Gtk.Widget.grab_focus(self)
+        self.grab_focus()
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect_after("button_press_event", self.__on_button_press)
         self.connect_after("button_release_event", self.__on_button_release)
@@ -71,11 +70,11 @@ class Diagram(GooCanvas.Canvas):
             [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
 
-        self.file_name = None
+        self.__file_name = "Untitled"
 
         self.white_board = None
-        self.set_property("expand", True)
         self.__update_white_board()
+        self.show()
 
     #----------------------------------------------------------------------
     def __del__(self):
@@ -93,30 +92,41 @@ class Diagram(GooCanvas.Canvas):
         self.curr_connector.update_tracking(point)
         return False
 
-    # ---------------------------------------------------------------------
-    def delete(self):
-        for widget in self.current_widgets:
-            widget.delete()
-        self.current_widgets = []
-        self.update_flows()
-
     #-------------------------------------------------------[0---------------
     def __on_key_press(self, widget, event=None):
         if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
-            if event.keyval == Gdk.KEY_a:
-                self.select_all()
-                return
+            if event.keyval == Gdk.KEY_Up:
+                self.move_selected_blocks(0,-5)
+                return True
+            if event.keyval == Gdk.KEY_Down:
+                self.move_selected_blocks(0,5)
+                return True
+            if event.keyval == Gdk.KEY_Left:
+                self.move_selected_blocks(-5,0)
+                return True
+            if event.keyval == Gdk.KEY_Right:
+                self.move_selected_blocks(5,0)
+                return True
+            if event.keyval == Gdk.KEY_w:
+                self.main_window.work_area.close_tab()
+
         if event.keyval == Gdk.KEY_Delete:
             self.delete()
-            return
+            return True
+
         if event.keyval == Gdk.KEY_Up:
             self.move_selected_blocks(0,-1)
+            return True
         if event.keyval == Gdk.KEY_Down:
             self.move_selected_blocks(0,1)
+            return True
         if event.keyval == Gdk.KEY_Left:
             self.move_selected_blocks(-1,0)
+            return True
         if event.keyval == Gdk.KEY_Right:
             self.move_selected_blocks(1,0)
+            return True
+
 
     #----------------------------------------------------------------------
     def __on_button_release(self, widget, event=None):
@@ -195,6 +205,7 @@ class Diagram(GooCanvas.Canvas):
         new_block.translate(x - 20.0, y - 60.0)
         self.blocks[block_id] = new_block
         self.get_root_item().add_child(new_block, -1)
+        self.set_modified(True)
 
     #----------------------------------------------------------------------
     def insert_ready_connector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
@@ -241,10 +252,10 @@ class Diagram(GooCanvas.Canvas):
         for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
                     and oldCon.to_block_in == newCon.to_block_in:
-                print "Cloned Connector"
+                s2idirectory.Log.log("Cloned Connector")
                 return False
         if newCon.to_block == newCon.from_block:
-            print "Recursive \"from future\" connector"
+            s2idirectory.Log.log("Recursive \"from future\" connector")
             return False
         return True
 
@@ -262,23 +273,6 @@ class Diagram(GooCanvas.Canvas):
         self.get_root_item().remove_child(self.get_root_item().get_n_children() - 1)
         del self.curr_connector
         self.curr_connector = None
-
-    #----------------------------------------------------------------------
-    def delete_connection(self, connection):
-        connection.remove()
-        self.connectors.remove(connection)
-
-    #----------------------------------------------------------------------
-    def delete_block(self, block_id):
-        # removing related connectors
-        for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].from_block == block_id or self.connectors[idx].to_block == block_id:
-                self.delete_connection(self.connectors[idx])
-
-        # removing the block itself
-        self.blocks[block_id].remove()
-        del self.blocks[block_id]
-        self.update_flows()
 
     #----------------------------------------------------------------------
     def __white_board_event(self, widget, event=None):
@@ -320,12 +314,19 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def set_file_name(self, file_name):
-        self.file_name = file_name
-        self.work_area.rename_diagram(self)
+        self.__file_name = file_name
+        self.main_window.work_area.rename_diagram(self)
 
     #----------------------------------------------------------------------
     def get_file_name(self):
-        return self.file_name
+        return self.__file_name
+
+    #----------------------------------------------------------------------
+    def get_patch_name(self):
+        if self.__modified:
+            return "* " + self.__file_name.split("/").pop()
+        else:
+            return self.__file_name.split("/").pop()
 
     #----------------------------------------------------------------------
     def get_block_on_focus(self):
@@ -341,6 +342,7 @@ class Diagram(GooCanvas.Canvas):
             self.zoom *= value
         self.set_scale(self.zoom)
         self.update_scrolling()
+        self.set_modified(True)
 
     #----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -366,4 +368,45 @@ class Diagram(GooCanvas.Canvas):
             if self.blocks[block_id] in self.current_widgets:
                 self.blocks[block_id].move(x,y)
         self.update_flows()
+        self.set_modified(True)
+
+    # ---------------------------------------------------------------------
+    def delete(self):
+        for widget in self.current_widgets:
+            widget.delete()
+        self.current_widgets = []
+        self.update_flows()
+        self.set_modified(True)
+
+    #----------------------------------------------------------------------
+    def delete_connection(self, connection):
+        self.connectors.remove(connection)
+        connection.remove()
+        self.set_modified(True)
+
+    #----------------------------------------------------------------------
+    def delete_block(self, block_id):
+        # removing related connectors
+        for idx in reversed(range(len(self.connectors))):
+            if self.connectors[idx].from_block == block_id or self.connectors[idx].to_block == block_id:
+                self.delete_connection(self.connectors[idx])
+
+        # removing the block itself
+        self.blocks[block_id].remove()
+        del self.blocks[block_id]
+        self.update_flows()
+        self.set_modified(True)
+
+    # ---------------------------------------------------------------------
+    def set_modified(self, state):
+        self.__modified = state
+        self.main_window.work_area.rename_diagram(self)
+
+    # ---------------------------------------------------------------------
+    def get_modified(self):
+        return self.__modified
+
+    # ---------------------------------------------------------------------
+    def grab_focus(self):
+        Gtk.Widget.grab_focus(self)
 #----------------------------------------------------------------------

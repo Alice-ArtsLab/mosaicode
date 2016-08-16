@@ -8,8 +8,9 @@ from gi.repository import Gtk
 
 
 from harpia.GUI.mainwindow import MainWindow
+from harpia.control.maincontrol import MainControl
 
-import sys
+import sys, argparse
 import os
 
 #---------------------------------------------------
@@ -30,11 +31,18 @@ def main(argv):
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
     
 
-    if (len(argv) == 1):
-        ## Initialize the Frontend
-        win = MainWindow()
-        win.show_all()
-        Gtk.main()
+	## Initialize the Frontend
+    win = MainWindow()
+    win.show_all()
+
+	## Parameter passing
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o", "--open", help="Open file")
+    args = parser.parse_args()
+    if args.open:
+        win.main_control.open(args.open)
+
+    Gtk.main()
     #----------------------------------------------------------------------
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ from gi.repository import Gtk
 from harpia.constants import *
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
+from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
@@ -22,7 +23,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def new(self):
-        self.main_window.work_area.add_tab("Untitled")
+        self.main_window.work_area.add_diagram(Diagram(self.main_window))
 
     # ----------------------------------------------------------------------
     def select_open(self):
@@ -33,7 +34,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def open(self, file_name):
-        self.main_window.work_area.open_diagram(file_name)
+        diagram = Diagram(self.main_window)
+        self.main_window.work_area.add_diagram(diagram)
+        DiagramControl(diagram).load(file_name)
+        diagram.set_modified(False)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -56,9 +60,7 @@ class MainControl():
                 result, message = DiagramControl(diagram).save()
 
         if not result:
-            Dialog().message_dialog("Error",
-                    message,
-                    self.main_window)
+            Dialog().message_dialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
     def save_as(self):
@@ -75,7 +77,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def exit(self, widget = None, data = None):
-        Gtk.main_quit()
+        if self.main_window.work_area.close_tabs():
+            Gtk.main_quit()
+        else:
+            return True
 
     # ----------------------------------------------------------------------
     def select_all(self):
@@ -83,6 +88,7 @@ class MainControl():
         if diagram == None:
             return
         diagram.select_all()
+        diagram.grab_focus()
 
     # ----------------------------------------------------------------------
     def cut(self):

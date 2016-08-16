@@ -4,9 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from glob import glob # To load examples
-import os
+from gi.repository import Gdk
 
 from menu import Menu
 from toolbar import Toolbar
@@ -106,21 +104,24 @@ class MainWindow(Gtk.Window):
         self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
         self.vpaned_left.add2(self.__create_frame(self.block_properties))
         self.vpaned_left.set_position(300)
-        #self.vpaned_left.set_size_request(50,50)
-        #self.vpaned_left.set_property("min-position",150)
 
         self.connect("delete-event", self.main_control.exit)
+        self.connect("key-press-event", self.__on_key_press)
 
-        # Load Examples
-        list_of_examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
-        list_of_examples.sort()
-
-        for example in list_of_examples:
+        for example in s2idirectory.list_of_examples:
             self.menu.add_example(example)
 
-        self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest.hrp")
-        self.menu.add_recent_file("/home/flavio/Desktop/harpiaTest2.hrp")
+        for recent_file in s2idirectory.recent_files:
+            self.menu.add_recent_file(recent_file)
 
+    #----------------------------------------------------------------------
+    def __on_key_press(self, widget, event=None):
+        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+            if event.keyval == Gdk.KEY_a:
+                self.main_control.select_all()
+                return True
+
+    #----------------------------------------------------------------------
     def __create_frame(self, widget):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
@@ -128,12 +129,13 @@ class MainWindow(Gtk.Window):
         frame.set_property("border-width", 4)
         return frame
 
+    #----------------------------------------------------------------------
     def __resize(self, data):
         width, height = self.get_size()
         self.vpaned_left.set_position(height / 3 - 67)
         self.vpaned_bottom.set_position(height/ 1.2 - 67)
-       # print height , height / 3 , height / 1.2
-        # print "Width"
-        # print width , width / 3 , width / 1.2
         self.work_area.resize(data)
 
+    def set_title(self, title):
+        Gtk.Window.set_title(self, "Harpia (" + title + ")")
+#----------------------------------------------------------------------

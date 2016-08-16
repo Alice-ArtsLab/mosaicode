@@ -80,8 +80,6 @@ class Block(GooCanvas.CanvasGroup):
         if self.block_description.has_key("IsSource"): #all data sources
             self.is_source = self.block_description["IsSource"]
 
-        self.input_port_centers = []
-        self.output_port_centers = []
         self.width = WIDTH_DEFAULT
 
         maxIO = max(len(self.block_description["InTypes"]), len(self.block_description["OutTypes"]))
@@ -99,24 +97,7 @@ class Block(GooCanvas.CanvasGroup):
         self.build()
         self.set_parent(diagram.get_root_item())
 
-        self.__compute_output_ports()
-        self.__compute_input_ports()
-        self.connect("button-press-event", self.__on_button_press)
-        self.connect("motion-notify-event", self.__on_motion_notify)
-        self.connect("enter-notify-event", self.__on_enter_notify)
-        self.connect("leave-notify-event", self.__on_leave_notify)
-
-#----------------------------------------------------------------------
-    def __compute_output_ports(self):
-        for outputPort in range(len(self.block_description["OutTypes"])):
-            self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
-                     (RADIUS # upper border
-                     + (outputPort*5) # spacing betwen ports
-                     + outputPort*INPUT_HEIGHT #previous ports
-                     + INPUT_HEIGHT/2)))#going to the port's center
-
-#----------------------------------------------------------------------
-    def __compute_input_ports(self):
+        self.input_port_centers = []
         for inputPort in range(len(self.block_description["InTypes"])):
             self.input_port_centers.append((INPUT_WIDTH/2,
                      (RADIUS # upper border
@@ -124,13 +105,34 @@ class Block(GooCanvas.CanvasGroup):
                      + inputPort*INPUT_HEIGHT #previous ports
                      + INPUT_HEIGHT/2)))#going to the port's center
 
+        self.output_port_centers = []
+        for outputPort in range(len(self.block_description["OutTypes"])):
+            self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
+                     (RADIUS # upper border
+                     + (outputPort*5) # spacing betwen ports
+                     + outputPort*INPUT_HEIGHT #previous ports
+                     + INPUT_HEIGHT/2)))#going to the port's center
+
+        self.connect("button-press-event", self.__on_button_press)
+        self.connect("motion-notify-event", self.__on_motion_notify)
+        self.connect("enter-notify-event", self.__on_enter_notify)
+        self.connect("leave-notify-event", self.__on_leave_notify)
+
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
+        # with Shift
+        if event.state == Gdk.ModifierType.SHIFT_MASK | Gdk.ModifierType.MOD2_MASK:
+            if self in self.diagram.current_widgets:
+                self.diagram.current_widgets.remove(self)
+            else:
+                self.diagram.current_widgets.append(self)
 
-        if self in self.diagram.current_widgets:
-            self.diagram.current_widgets = []
         else:
-            self.diagram.current_widgets.append(self)
+            if self in self.diagram.current_widgets:
+                self.diagram.current_widgets = []
+            else:
+                self.diagram.current_widgets = []
+                self.diagram.current_widgets.append(self)
 
         self.diagram.show_block_property(self.plugin)
 
@@ -156,7 +158,9 @@ class Block(GooCanvas.CanvasGroup):
         # Get the new position and move by the difference
         new_x = event.x - self.remember_x
         new_y = event.y - self.remember_y
-        self.translate(new_x, new_y)
+        for widget in self.diagram.current_widgets:
+            if widget.__class__ == Block:
+                widget.move(new_x, new_y)
         self.diagram.update_scrolling()
         return False
 
@@ -175,11 +179,6 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __del__(self):
         pass
-        
-#----------------------------------------------------------------------
-    def delete(self):
-        self.diagram.delete_block(self.block_id)
-        self.diagram.update_flows()
 
 #----------------------------------------------------------------------
     def __draw_rect(self):
@@ -319,8 +318,9 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
-        x = self.input_port_centers[input_id][0] + self.get_simple_transform().x - PORT_SENSITIVITY
-        y = self.input_port_centers[input_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY + 3
+        isSet, x, y, scale, rotation = self.get_simple_transform()
+        x = self.input_port_centers[input_id][0] + x - PORT_SENSITIVITY
+        y = self.input_port_centers[input_id][1] + y - PORT_SENSITIVITY + 3
         return (x, y)
 
 #----------------------------------------------------------------------
@@ -335,7 +335,13 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def move(self, x, y):
+        self.diagram.set_modified(True)
         self.translate(x, y)
+
+#----------------------------------------------------------------------
+    def delete(self):
+        self.diagram.delete_block(self.block_id)
+        self.diagram.update_flows()
 
 #----------------------------------------------------------------------
     def get_id(self):
@@ -347,7 +353,8 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_position(self):
-        return self.get_simple_transform().x,self.get_simple_transform().y
+        isSet, x, y, scale, rotation = self.get_simple_transform()
+        return x,y
 
 #----------------------------------------------------------------------
     def get_xml(self):
@@ -363,25 +370,22 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __update_state(self):
+        # Not connected: Color = red
         if self.has_flow:
             self.widgets["Rect"].set_property("stroke_color",'black')
         else:
             self.widgets["Rect"].set_property("stroke_color",'red')
 
+        # in focus: Line width = 3
         if self.focus:
             self.widgets["Rect"].set_property("line-width",3)
         else:
             self.widgets["Rect"].set_property("line-width",1)
 
+        # selected: Line = dashed
         if self in self.diagram.current_widgets:
-            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((1.0, 1.0)))
+            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:
             self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
 #----------------------------------------------------------------------
-    def SetPropertiesXML_nID( self, propertiesXML ):
-        myBlockId = self.propertiesXML.getTag("properties").getTag("block").getAttr("id")
-        #storing this block's Block.Id
-        self.propertiesXML = copy.deepcopy(propertiesXML)
-        self.propertiesXML.getTag("properties").getTag("block").setAttr("id",myBlockId)
-

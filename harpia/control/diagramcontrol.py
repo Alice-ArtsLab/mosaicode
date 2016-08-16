@@ -62,12 +62,12 @@ class DiagramControl():
         if file_name != None:
             self.diagram.set_file_name(file_name)
         else:
-            if self.diagram.file_name == None:
-                self.diagram.file_name = "Cannot Load without filename"
+            if self.diagram.get_file_name() == None:
+                harpia.s2idirectory.Log.log("Cannot Load without filename")
                 return False
 
         # load the diagram
-        xml_loader = XMLParser(self.diagram.file_name)
+        xml_loader = XMLParser(self.diagram.get_file_name())
         blocks = xml_loader.getTag("harpia").getTag("GcState").getChildTags("block")
 
         for block in blocks:
@@ -130,8 +130,8 @@ class DiagramControl():
     def save(self, file_name=None):  # saving project
         if file_name != None:
             self.diagram.set_file_name(file_name)
-        if self.diagram.file_name == None:
-            self.diagram.file_name = "Cadeia_" + str(time.time()) + ".hrp"
+        if self.diagram.get_file_name() == None:
+            self.diagram.set_file_name("Cadeia_" + str(time.time()) + ".hrp")
 
         # saving blocks current state
         state = "<GcState>\n"
@@ -158,16 +158,18 @@ class DiagramControl():
 
         out_file = "<harpia>\n" + state + properties + network + "</harpia>\n"
 
-        if self.diagram.file_name.find(".hrp") == -1:
-            self.diagram.file_name += ".hrp"
+        if self.diagram.get_file_name().find(".hrp") == -1:
+            self.diagram.set_file_name(self.diagram.get_file_name() + ".hrp")
 
         try:
-            save_file = open(str(self.diagram.file_name), "w")
+            save_file = open(str(self.diagram.get_file_name()), "w")
             out_file = out_file.encode('utf-8')
             save_file.write(out_file)
             save_file.close()
         except IOError as e:
             return False,e.strerror
+
+        self.diagram.set_modified(False)
         return True,"Success"
 
 # ----------------------------------------------------------------------

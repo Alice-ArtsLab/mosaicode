@@ -76,3 +76,11 @@ class Dialog():
         dialog.destroy()
 
 # ----------------------------------------------------------------------
+    def confirm_dialog(self, message, main_window):
+        dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                 Gtk.STOCK_OK, Gtk.ResponseType.OK),  "")
+        dialog.format_secondary_text(message)
+        return dialog
+
+# ----------------------------------------------------------------------
