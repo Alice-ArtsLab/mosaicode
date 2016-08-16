@@ -4,6 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from menu import Menu
 from toolbar import Toolbar
@@ -105,12 +106,20 @@ class MainWindow(Gtk.Window):
         self.vpaned_left.set_position(300)
 
         self.connect("delete-event", self.main_control.exit)
+        self.connect("key-press-event", self.__on_key_press)
 
         for example in s2idirectory.list_of_examples:
             self.menu.add_example(example)
 
         for recent_file in s2idirectory.recent_files:
             self.menu.add_recent_file(recent_file)
+
+    #----------------------------------------------------------------------
+    def __on_key_press(self, widget, event=None):
+        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+            if event.keyval == Gdk.KEY_a:
+                self.main_control.select_all()
+                return True
 
     #----------------------------------------------------------------------
     def __create_frame(self, widget):

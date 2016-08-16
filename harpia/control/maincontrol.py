@@ -88,6 +88,7 @@ class MainControl():
         if diagram == None:
             return
         diagram.select_all()
+        diagram.grab_focus()
 
     # ----------------------------------------------------------------------
     def cut(self):

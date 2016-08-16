@@ -58,7 +58,7 @@ class Diagram(GooCanvas.Canvas):
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
         self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
 
-        Gtk.Widget.grab_focus(self)
+        self.grab_focus()
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect_after("button_press_event", self.__on_button_press)
         self.connect_after("button_release_event", self.__on_button_release)
@@ -95,9 +95,6 @@ class Diagram(GooCanvas.Canvas):
     #-------------------------------------------------------[0---------------
     def __on_key_press(self, widget, event=None):
         if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
-            if event.keyval == Gdk.KEY_a:
-                self.select_all()
-                return True
             if event.keyval == Gdk.KEY_Up:
                 self.move_selected_blocks(0,-5)
                 return True
@@ -383,8 +380,8 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def delete_connection(self, connection):
-        connection.remove()
         self.connectors.remove(connection)
+        connection.remove()
         self.set_modified(True)
 
     #----------------------------------------------------------------------
@@ -409,4 +406,7 @@ class Diagram(GooCanvas.Canvas):
     def get_modified(self):
         return self.__modified
 
+    # ---------------------------------------------------------------------
+    def grab_focus(self):
+        Gtk.Widget.grab_focus(self)
 #----------------------------------------------------------------------
