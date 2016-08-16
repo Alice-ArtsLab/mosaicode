@@ -2,6 +2,7 @@
 # ----------------------------------------------------------------------
 
 import gi
+import os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -30,8 +31,32 @@ class Dialog():
         dialog.destroy()
         return file_name
 
+#------------------------------------------------------------------------------
+
+    def confirm_overwrite(self,name,main_window):
+        msg = "Already exists a file with the same name in this folder. Do you want to continue?"
+        if os.path.exists(name) !=True:
+            name=(("%s"+".hrp")%name)
+            if os.path.exists(name) == True:
+                dialog2 = Dialog().confirm_dialog(msg,main_window)
+                result = dialog2.run() 
+                dialog2.destroy()
+                if result ==  Gtk.ResponseType.OK:
+                    pass
+                if result ==  Gtk.ResponseType.CANCEL:
+                    dialog.destroy()
+        elif os.path.exists(name) == True:
+                dialog2 = Dialog().confirm_dialog(msg,main_window)
+                result = dialog2.run() 
+                dialog2.destroy()
+                if result ==  Gtk.ResponseType.OK:
+                    pass
+                if result ==  Gtk.ResponseType.CANCEL:
+                    dialog.destroy()
+
 # ----------------------------------------------------------------------
     def save_dialog(self, title, main_window):
+        diagram = main_window.work_area.get_current_diagram()
         dialog = Gtk.FileChooserDialog(title, main_window,
                     Gtk.FileChooserAction.SAVE,
                     (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -42,6 +67,9 @@ class Dialog():
 
         response = dialog.run()
         file_name = ""
+        name=dialog.get_filename()
+        self.confirm_overwrite(name,main_window)
+
         if response == Gtk.ResponseType.OK:
             file_name = dialog.get_filename()
         elif response == Gtk.ResponseType.CANCEL:
