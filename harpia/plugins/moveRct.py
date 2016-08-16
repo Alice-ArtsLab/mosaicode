@@ -27,9 +27,10 @@ class MoveRct(Plugin):
         blockTemplate.imagesIO = 'CvRect block$$_rect_i1;\n' + \
                                  'CvPoint block$$_point_i2;\n' + \
                                  'CvRect block$$_rect_o1;\n'
-        blockTemplate.functionCall = 'block$$_rect_o1 = block$$_rect_i1;\n' + \
-                                     'block$$_rect_o1.x = block$$_point_i2.x + ' + self.offset_x + ';\n' + \
-                                     'block$$_rect_o1.y = block$$_point_i2.y + ' + self.offset_y + ';\n'
+        blockTemplate.functionCall = \
+                'block$$_rect_o1 = block$$_rect_i1;\n' + \
+                'block$$_rect_o1.x = block$$_point_i2.x + ' + str(self.offset_x) + ';\n' + \
+                'block$$_rect_o1.y = block$$_point_i2.y + ' + str(self.offset_y) + ';\n'
         blockTemplate.dealloc = ''
 
     # ----------------------------------------------------------------------
