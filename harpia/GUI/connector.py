@@ -70,6 +70,7 @@ class Connector(GooCanvas.CanvasGroup):
     def delete(self):
         self.diagram.delete_connection(self)
         self.diagram.update_flows()
+        print "Fui deletado"
 
 #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):

@@ -45,17 +45,20 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save(self, save_as = False):
+
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
 
         if diagram.get_file_name() is None or save_as:
+
             name = Dialog().save_dialog("Save", self.main_window)
             diagram.set_file_name(name)
 
         result, message = False,""
 
         if diagram.get_file_name() is not None:
+
             if len(diagram.get_file_name()) > 0:
                 result, message = DiagramControl(diagram).save()
 
