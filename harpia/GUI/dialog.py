@@ -67,8 +67,10 @@ class Dialog():
 
         response = dialog.run()
         file_name = ""
+        name=None
         name=dialog.get_filename()
-        self.confirm_overwrite(name,main_window)
+        if name != None:
+        	self.confirm_overwrite(name,main_window)
 
         if response == Gtk.ResponseType.OK:
             file_name = dialog.get_filename()
