@@ -33,26 +33,24 @@ class Dialog():
 
 #------------------------------------------------------------------------------
 
-    def confirm_overwrite(self,name,main_window):
+    def confirm_overwrite(self, name, main_window):
+    	print name
+        if not name.endswith("hrp"):
+        	name=(("%s"+".hrp")%name)
+
+        print name
+        if os.path.exists(name) == False:
+        	return True
+
         msg = "Already exists a file with the same name in this folder. Do you want to continue?"
-        if os.path.exists(name) !=True:
-            name=(("%s"+".hrp")%name)
-            if os.path.exists(name) == True:
-                dialog2 = Dialog().confirm_dialog(msg,main_window)
-                result = dialog2.run() 
-                dialog2.destroy()
-                if result ==  Gtk.ResponseType.OK:
-                    pass
-                if result ==  Gtk.ResponseType.CANCEL:
-                    dialog.destroy()
-        elif os.path.exists(name) == True:
-                dialog2 = Dialog().confirm_dialog(msg,main_window)
-                result = dialog2.run() 
-                dialog2.destroy()
-                if result ==  Gtk.ResponseType.OK:
-                    pass
-                if result ==  Gtk.ResponseType.CANCEL:
-                    dialog.destroy()
+        print msg
+        dialog = Dialog().confirm_dialog(msg,main_window)
+        result = dialog.run() 
+        dialog.destroy()
+        if result ==  Gtk.ResponseType.OK:
+            return True
+        if result ==  Gtk.ResponseType.CANCEL:
+            return False
 
 # ----------------------------------------------------------------------
     def save_dialog(self, title, main_window):
@@ -67,10 +65,6 @@ class Dialog():
 
         response = dialog.run()
         file_name = ""
-        name=None
-        name=dialog.get_filename()
-        if name != None:
-        	self.confirm_overwrite(name,main_window)
 
         if response == Gtk.ResponseType.OK:
             file_name = dialog.get_filename()

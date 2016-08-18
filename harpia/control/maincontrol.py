@@ -50,10 +50,15 @@ class MainControl():
         if diagram == None:
             return
 
-        if diagram.get_file_name() is None or save_as:
 
-            name = Dialog().save_dialog("Save", self.main_window)
-            diagram.set_file_name(name)
+
+        if diagram.get_file_name() is None or save_as:
+            while True:
+                name = Dialog().save_dialog("Save", self.main_window)
+                if Dialog().confirm_overwrite(name, self.main_window):
+                    diagram.set_file_name(name)
+                    break
+        
 
         result, message = False,""
 
@@ -160,8 +165,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().insert_block(block)
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().insert_block(block)
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
