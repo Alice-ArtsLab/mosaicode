@@ -13,8 +13,9 @@ class SaveFileField(Field, Gtk.HBox):
             return
         self.file = data["value"]
         Gtk.HBox.__init__(self, False)
-        label = Gtk.Label(data["name"])
-        self.add(label)
+        self.label = Gtk.Label(data["name"])
+        self.label.set_property("halign", Gtk.Align.START)
+        self.add(self.label)
 
         self.field = Gtk.Entry()
         self.field.set_text(self.file)
