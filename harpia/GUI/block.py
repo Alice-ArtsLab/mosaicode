@@ -66,7 +66,7 @@ class Block(GooCanvas.CanvasGroup):
         self.block_id = block_id
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
-        
+
         self.remember_x = 0
         self.remember_y = 0
 
@@ -193,6 +193,8 @@ class Block(GooCanvas.CanvasGroup):
                     y=0,
                     width=self.width,
                     height=self.height,
+                    radius_x = 10,
+                    radius_y = 10,
                     stroke_color="black",
                     fill_color_rgba=color
                     )
@@ -200,7 +202,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __draw_icon(self):
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                 self.block_description["Icon"])
         image = GooCanvas.CanvasImage(parent=self,
                 pixbuf=pixbuf,
@@ -214,11 +216,11 @@ class Block(GooCanvas.CanvasGroup):
         ins = []
         for x in range(len(self.block_description["InTypes"])):
             try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.typeIconsIn[
                             self.block_description["InTypes"][x]])
             except:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.icons["IconInput"])
 
             image = GooCanvas.CanvasImage(parent=self,
@@ -247,11 +249,11 @@ class Block(GooCanvas.CanvasGroup):
         outs = []
         for x in range(len(self.block_description["OutTypes"])):
             try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.typeIconsOut[
                             self.block_description["OutTypes"][x]])
             except:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir + 
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.icons["IconOutput"])
 
             image = GooCanvas.CanvasImage(parent=self,

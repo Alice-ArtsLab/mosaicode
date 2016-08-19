@@ -52,6 +52,7 @@ class Dialog():
         if result ==  Gtk.ResponseType.CANCEL:
             return False
 
+
 # ----------------------------------------------------------------------
     def save_dialog(self, title, main_window):
         diagram = main_window.work_area.get_current_diagram()
