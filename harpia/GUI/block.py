@@ -327,8 +327,9 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
-        x = self.output_port_centers[output_id][0] + self.get_simple_transform().x + PORT_SENSITIVITY
-        y = self.output_port_centers[output_id][1] + self.get_simple_transform().y - PORT_SENSITIVITY + 3
+        isSet, x, y, scale, rotation = self.get_simple_transform()
+        x = self.output_port_centers[output_id][0] + x + PORT_SENSITIVITY
+        y = self.output_port_centers[output_id][1] + y - PORT_SENSITIVITY + 3
         return (x,y)
 
 #----------------------------------------------------------------------
