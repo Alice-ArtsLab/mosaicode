@@ -12,8 +12,9 @@ class ComboField(Field, Gtk.HBox):
             return
         self.value = data["value"]
         Gtk.HBox.__init__(self, True)
-        label = Gtk.Label(data["name"])
-        self.add(label)
+        self.label = Gtk.Label(data["name"])
+        self.label.set_property("halign", Gtk.Align.START)
+        self.add(self.label)
 
         self.field = Gtk.ComboBoxText()
         self.field.set_entry_text_column(0)
