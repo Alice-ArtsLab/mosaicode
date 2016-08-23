@@ -5,7 +5,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from propertywindow import PropertyWindow
+from propertybox import PropertyBox
 
 
 class BlockProperties(Gtk.Notebook):
@@ -19,8 +19,8 @@ class BlockProperties(Gtk.Notebook):
         properties_scrolled_window = Gtk.ScrolledWindow()
         properties_scrolled_window.set_border_width(10)
         properties_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        self.property_window = PropertyWindow()
-        properties_scrolled_window.add(self.property_window)
+        self.property_box = PropertyBox()
+        properties_scrolled_window.add(self.property_box)
         self.append_page(properties_scrolled_window, Gtk.Label("Properties"))
 
         # Help tab
@@ -38,6 +38,6 @@ class BlockProperties(Gtk.Notebook):
 # ----------------------------------------------------------------------
     def set_block(self, block):
         self.help.get_buffer().set_text(block.get_help())
-        self.property_window.set_block(block)
+        self.property_box.set_block(block)
 
 # ----------------------------------------------------------------------
