@@ -1,41 +1,33 @@
 <harpia>
 <GcState>
 	<block type="120" id="1">
-		<position x="251.0" y="215.0"/>
+		<position x="273.0" y="61.8931274414"/>
 	</block>
-	<block type="0" id="2">
-		<position x="71.0" y="220.0"/>
+	<block type="15" id="2">
+		<position x="80.0" y="40.0"/>
 	</block>
-	<block type="2" id="4">
-		<position x="442.0" y="209.0"/>
+	<block type="02" id="3">
+		<position x="498.39276123" y="37.6410827637"/>
 	</block>
 </GcState>
 <properties>
-  <block id="2" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
+  <block id="2" type="15">
  <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="00"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
 </block>
 
   <block id="1" type="120">
- <property name="state" value="true"/>
  <property name="threshold" value="122"/>
- <property name="maxValue" value="255"/>
  <property name="thresholdType" value="CV_THRESH_BINARY"/>
+ <property name="maxValue" value="255"/>
 </block>
 
-  <block id="4" type="02">
- <property name="state" value="true"/>
+  <block id="3" type="02">
+ <property name="title" value="My Image"/>
 </block>
 
   </properties>
 <network>
-<block type="0" id="2">
+<block type="15" id="2">
 <inputs>
 </inputs>
 <outputs>
@@ -47,10 +39,10 @@
 <input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="4" input="1"/>
+<output id="1" inBlock="3" input="1"/>
 </outputs>
 </block>
-<block type="2" id="4">
+<block type="02" id="3">
 <inputs>
 <input id="1"/>
 </inputs>

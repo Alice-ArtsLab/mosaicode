@@ -1,9 +1,0 @@
-<properties>
-	<block type='608' id=''>
-		<property name='state' value='true' />
-		<property name='enMin' value='True' />
-		<property name='enMax' value='True' />
-		<property name='maxVal' value='30000' />
-		<property name='minVal' value='1000' />
-	</block>
-</properties>

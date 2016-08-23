@@ -1,5 +1,0 @@
-Name: FINDCOLOR
-Input: Image,New Rectangle (for "Move Rectangle").
-Output: Move Rectangle, Rotate Image, Rotate Image, Resize Image, Show Image.
-Properties: Color (RGB): R (0-255), G (0-255), B(0-255)
-	    Max. Error (RGB): R (0-255), G (0-255), B(0-255)

@@ -1,70 +1,42 @@
 <harpia>
 <GcState>
-	<block type="607" id="12">
-		<position x="357.0" y="128.0"/>
+	<block type="15" id="17">
+		<position x="57.0" y="49.0"/>
 	</block>
-	<block type="0" id="13">
-		<position x="110.0" y="109.0"/>
+	<block type="02" id="18">
+		<position x="472.616394043" y="102.317932129"/>
+	</block>
+	<block type="607" id="12">
+		<position x="309.0" y="107.000305176"/>
 	</block>
 	<block type="701" id="14">
-		<position x="138.0" y="186.0"/>
-	</block>
-	<block type="2" id="15">
-		<position x="561.0" y="115.0"/>
-	</block>
-	<block type="607" id="16">
-		<position x="540.0" y="272.0"/>
-	</block>
-	<block type="2" id="17">
-		<position x="692.0" y="269.0"/>
+		<position x="56.0" y="204.000305176"/>
 	</block>
 </GcState>
 <properties>
-  <block id="13" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
+  <block id="17" type="15">
  <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="00"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
 </block>
 
   <block id="14" type="701">
- <property name="state" value="true"/>
- <property name="doubleVal" value="1.000"/>
+ <property name="doubleVal" value="1.0"/>
+</block>
+
+  <block id="18" type="02">
+ <property name="title" value="My Image"/>
 </block>
 
   <block id="12" type="607">
- <property name="state" value="true"/>
- <property name="isCenter" value="true"/>
- <property name="isScalling" value="true"/>
- <property name="isFilling" value="true"/>
- <property name="xC" value="20"/>
+ <property name="isFilling" value="True"/>
  <property name="yC" value="20"/>
-</block>
-
-  <block id="15" type="02">
- <property name="state" value="true"/>
-</block>
-
-  <block id="16" type="607">
- <property name="state" value="true"/>
- <property name="isCenter" value="true"/>
- <property name="isScalling" value="true"/>
- <property name="isFilling" value="true"/>
+ <property name="isCenter" value="True"/>
+ <property name="isScalling" value="True"/>
  <property name="xC" value="20"/>
- <property name="yC" value="20"/>
-</block>
-
-  <block id="17" type="02">
- <property name="state" value="true"/>
 </block>
 
   </properties>
 <network>
-<block type="0" id="13">
+<block type="15" id="17">
 <inputs>
 </inputs>
 <outputs>
@@ -76,7 +48,14 @@
 </inputs>
 <outputs>
 <output id="1" inBlock="12" input="2"/>
-<output id="1" inBlock="16" input="2"/>
+</outputs>
+</block>
+<block type="02" id="18">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
 </outputs>
 </block>
 <block type="607" id="12">
@@ -85,33 +64,7 @@
 <input id="2"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="15" input="1"/>
-<output id="1" inBlock="16" input="1"/>
-</outputs>
-</block>
-<block type="2" id="15">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
-<block type="607" id="16">
-<inputs>
-<input id="1"/>
-<input id="2"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="17" input="1"/>
-</outputs>
-</block>
-<block type="2" id="17">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
+<output id="1" inBlock="18" input="1"/>
 </outputs>
 </block>
 </network>
