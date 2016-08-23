@@ -21,8 +21,9 @@ class CommentField(Field, Gtk.VBox):
         if "width" in data:
             scrolled_window.set_min_content_width(data["width"])
 
-        label = Gtk.Label(data["name"])
-        self.add(label)
+        self.label = Gtk.Label(data["name"])
+        self.label.set_property("halign", Gtk.Align.START)
+        self.add(self.label)
 
         self.field = Gtk.TextView()
         self.field.set_left_margin(10)

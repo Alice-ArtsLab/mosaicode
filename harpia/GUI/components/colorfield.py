@@ -16,8 +16,9 @@ class ColorField(Field, Gtk.HBox):
         if "value" in data:
             self.color = Gdk.color_parse(data["value"])
         if "name" in data:
-            label = Gtk.Label(data["name"])
-            self.add(label)
+            self.label = Gtk.Label(data["name"])
+            self.add(self.label)
+            self.label.set_property("halign", Gtk.Align.START)
 
         self.color_block = Gtk.DrawingArea()
         self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)

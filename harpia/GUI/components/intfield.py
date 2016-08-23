@@ -14,8 +14,9 @@ class IntField(Field, Gtk.HBox):
         if not isinstance(data,dict):
             return
         Gtk.HBox.__init__(self, True)
-        label = Gtk.Label(data["name"])
-        self.add(label)
+        self.label = Gtk.Label(data["name"])
+        self.label.set_property("halign", Gtk.Align.START)
+        self.add(self.label)
 
         self.field = Gtk.SpinButton()
         if "value" in data and "lower" in data and "upper" in data and "step" in data:
