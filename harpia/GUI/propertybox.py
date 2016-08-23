@@ -12,7 +12,7 @@ import harpia.GUI.components
 
 component_list = {} #Dynamic list to store components
 
-class PropertyWindow(Gtk.VBox):
+class PropertyBox(Gtk.VBox):
 
 # ----------------------------------------------------------------------
     def __init__(self):

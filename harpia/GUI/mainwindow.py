@@ -92,8 +92,6 @@ class MainWindow(Gtk.Window):
         self.vpaned_left = Gtk.VPaned()
         vbox_left.pack_start(self.vpaned_left, True, True, 0)
 
-
-
         # vpaned_left
         # -----------------------------------------------------
         # |blocks_tree_view

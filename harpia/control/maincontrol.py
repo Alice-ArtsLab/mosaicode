@@ -10,8 +10,11 @@ from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
+from harpia.GUI.harpiapropertywindow import HarpiaPropertyWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
+
+from harpia.s2idirectory import *
 
 import os
 
@@ -38,6 +41,7 @@ class MainControl():
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
+        harpia.s2idirectory.properties.add_recent_file(file_name)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -51,14 +55,12 @@ class MainControl():
             return
 
         if diagram.get_file_name() is None or save_as:
-
             name = Dialog().save_dialog("Save", self.main_window)
             diagram.set_file_name(name)
 
         result, message = False,""
 
         if diagram.get_file_name() is not None:
-
             if len(diagram.get_file_name()) > 0:
                 result, message = DiagramControl(diagram).save()
 
@@ -107,7 +109,8 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def preferences(self):
-        print "Preferences from control"
+        HarpiaPropertyWindow(self.main_window, harpia.s2idirectory.properties)
+
 
     # ----------------------------------------------------------------------
     def delete(self):

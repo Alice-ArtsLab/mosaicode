@@ -65,12 +65,16 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def __change_directory(self):
-        os.chdir(TMPDIR)
+        try:
+            os.makedirs(harpia.s2idirectory.properties.get_default_directory())
+        except:
+            pass
+        os.chdir(harpia.s2idirectory.properties.get_default_directory())
         try:
             os.makedirs(self.dir_name)
         except:
             pass
-        os.chdir(TMPDIR + '/' + self.dir_name)
+        os.chdir(harpia.s2idirectory.properties.get_default_directory() + '/' + self.dir_name)
 
     #----------------------------------------------------------------------
     def __return_to_old_directory(self):
@@ -297,9 +301,9 @@ class CodeGenerator():
     #----------------------------------------------------------------------
     def __set_error_log(self, error):
         if os.name == 'nt':
-            Error = file(ERROR_LOG_FILE, 'wb')
+            Error = file(harpia.s2idirectory.properties.get_error_log_file(), 'wb')
         else:
-            Error = file(ERROR_LOG_FILE, 'w')
+            Error = file(harpia.s2idirectory.properties.get_error_log_file(), 'w')
         harpia.s2idirectory.Log.log(error)
         Error.write(error)
         Error.close()
