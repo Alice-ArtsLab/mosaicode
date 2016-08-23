@@ -73,6 +73,7 @@ class Diagram(GooCanvas.Canvas):
         self.__file_name = "Untitled"
 
         self.white_board = None
+        self.select_rect = None
         self.__update_white_board()
         self.show()
 
@@ -82,6 +83,53 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, event=None):
+        # Select elements
+        if self.select_rect != None:
+            xi = 0
+            xf = 0
+            yi = 0
+            yf = 0
+            if event.x > self.last_clicked_point[0]:
+                xi = self.last_clicked_point[0]
+                xf = event.x
+            else:
+                xi = event.x
+                xf = self.last_clicked_point[0]
+            if event.y > self.last_clicked_point[1]:
+                yi = self.last_clicked_point[1]
+                yf = event.y
+            else:
+                yi = event.y
+                yf = self.last_clicked_point[1]
+
+            self.select_rect.set_property("x", xi)
+            self.select_rect.set_property("width", xf - xi)
+            self.select_rect.set_property("y", yi)
+            self.select_rect.set_property("height", yf - yi)
+
+            for block_id in self.blocks:
+                block = self.blocks[block_id]
+                if block.get_position()[0] > xi \
+                    and block.get_position()[0] + block.width < xf \
+                    and block.get_position()[1] > yi \
+                    and block.get_position()[1] + block.height < yf:
+                        self.current_widgets.append(block)
+                elif block in self.current_widgets:
+                    self.current_widgets.remove(block)
+                block.update_flow()
+
+            for conn in self.connectors:
+                if conn.from_point[0] > xi \
+                    and conn.to_point[0] < xf \
+                    and conn.from_point[1] > yi \
+                    and conn.to_point[1] < yf:
+                        self.current_widgets.append(conn)
+                elif conn in self.current_widgets:
+                    self.current_widgets.remove(conn)
+                conn.update_flow()
+
+            return True #Abort other events
+
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
             for connector in self.connectors:
                 connector.update_flow()
@@ -130,7 +178,10 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def __on_button_release(self, widget, event=None):
-        release_point = (event.x, event.y)
+        if self.select_rect != None:
+            self.select_rect.remove()
+            del self.select_rect
+            self.select_rect = None
 
     #----------------------------------------------------------------------
     def __on_button_press(self, widget, event=None):
@@ -140,8 +191,23 @@ class Diagram(GooCanvas.Canvas):
             self.current_widgets = []
             self.__abort_connection()
             self.update_flows()
+            self.__start_select()
             return False
         return False
+
+    #----------------------------------------------------------------------
+    def __start_select(self):
+        if self.select_rect == None:
+            self.select_rect = GooCanvas.CanvasRect(
+                            parent=self.get_root_item(),
+                            x = self.last_clicked_point[0],
+                            y = self.last_clicked_point[1],
+                            width=0,
+                            height=0,
+                            stroke_color="black",
+                            fill_color=None,
+                            line_dash = GooCanvas.CanvasLineDash.newv((4.0, 2.0))
+                            )
 
 
     # ----------------------------------------------------------------------
@@ -295,7 +361,6 @@ class Diagram(GooCanvas.Canvas):
                             stroke_color="white",
                             fill_color="white")
             self.white_board.connect("focus-in-event", self.__white_board_event)
-        pass
 
     #----------------------------------------------------------------------
     def update_flows(self):
@@ -380,6 +445,8 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def delete_connection(self, connection):
+        if connection not in self.connectors:
+            return
         self.connectors.remove(connection)
         connection.remove()
         self.set_modified(True)
@@ -388,10 +455,12 @@ class Diagram(GooCanvas.Canvas):
     def delete_block(self, block_id):
         # removing related connectors
         for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].from_block == block_id or self.connectors[idx].to_block == block_id:
-                self.delete_connection(self.connectors[idx])
+            if self.connectors[idx].from_block == block_id \
+                or self.connectors[idx].to_block == block_id:
+                    self.delete_connection(self.connectors[idx])
 
-        # removing the block itself
+        if block_id not in self.blocks:
+            return
         self.blocks[block_id].remove()
         del self.blocks[block_id]
         self.update_flows()

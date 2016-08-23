@@ -54,6 +54,8 @@ class Connector(GooCanvas.CanvasGroup):
         self.to_point = (0,0)
 
         self.focus = False
+        self.width = 0
+        self.height = 0
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("enter-notify-event", self.__on_enter_notify)
@@ -70,9 +72,8 @@ class Connector(GooCanvas.CanvasGroup):
     def delete(self):
         self.diagram.delete_connection(self)
         self.diagram.update_flows()
-        print "Fui deletado"
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 3:
