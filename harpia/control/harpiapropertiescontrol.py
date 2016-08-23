@@ -18,7 +18,10 @@ class HarpiaPropertiesControl():
     # ----------------------------------------------------------------------
     def load(self):
         # load the diagram
-        xml_loader = XMLParser(os.path.expanduser(self.hp.conf_file_path))
+        file_name = os.path.expanduser(self.hp.conf_file_path)
+        if os.path.exists(file_name) == False:
+            return
+        xml_loader = XMLParser(file_name)
         properties = xml_loader.getTag("HarpiaProperties").getChildTags("property")
 
         for prop in properties:
