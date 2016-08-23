@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Libraries 
+# Libraries
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -20,16 +20,16 @@ import os
 def main(argv):
     """
             The Harpia-Frontend class is where the main function starts the system.
-            It initializes the interface. 
+            It initializes the interface.
     """
-    
+
     #export data folder's path
-    
+
     #if os.getcwd() == '/home/nofx/pkgHarpia/harpia':
         #os.environ['HARPIA_DATA_DIR'] = "app_data/"
     #else:
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
-    
+
 
 	## Initialize the Frontend
     win = MainWindow()
@@ -39,6 +39,8 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", "--open", help="Open file")
     args = parser.parse_args()
+    if len(sys.argv) == 1:
+        win.main_control.new()
     if args.open:
         win.main_control.open(args.open)
 
