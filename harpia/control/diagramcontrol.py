@@ -30,13 +30,15 @@ class DiagramControl():
 # ----------------------------------------------------------------------
     def __block_XML_out(self, block_id, properties, network):
         props = self.diagram.blocks[block_id].get_xml()
+        if isinstance(props, (str, unicode)):
+            props = XMLParser(props, fromString=True)
         block_xml = props.getTagXML(props.getTagChild("properties", "block"))
 
         properties += block_xml + "\n  "
         network += '<block type="' + str(self.diagram.blocks[block_id].get_type()) + '" id="' + str(
             self.diagram.blocks[block_id].get_id()) + '">\n'
         network += "<inputs>\n"
-        for t_nInputIdx in range(len(self.diagram.blocks[block_id].block_description["InTypes"])):
+        for t_nInputIdx in range(len(self.diagram.blocks[block_id].get_description()["InTypes"])):
             network += '<input id="' + str(t_nInputIdx + 1) + '"/>\n'
             # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
         network += "</inputs>\n"
@@ -49,7 +51,7 @@ class DiagramControl():
                     connector.to_block) + '" input="' + str(
                     connector.to_block_in + 1) + '"/>\n'  # +1 pois o range eh de 0..x (precisamos do id 1...x+1)
                 connected_outs[connector.from_block_out] = 1
-        for Output in range(len(self.diagram.blocks[block_id].block_description["OutTypes"])):
+        for Output in range(len(self.diagram.blocks[block_id].get_description()["OutTypes"])):
             if not connected_outs.has_key(Output):
                 network += '<output id="' + str(Output + 1) + '" inBlock="--" input="--"/>\n'
         network += "</outputs>\n"

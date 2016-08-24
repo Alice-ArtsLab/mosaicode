@@ -35,13 +35,15 @@ from gi.repository import GooCanvas
 import math
 import sys
 
+from harpia.model.connectionmodel import ConnectionModel
 from connectormenu import ConnectorMenu
 
-class Connector(GooCanvas.CanvasGroup):
+class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     #----------------------------------------------------------------------
     def __init__( self, diagram, from_block=-1, from_block_out=-1):
         GooCanvas.CanvasGroup.__init__(self)
+        ConnectionModel.__init__(self)
 
         self.diagram = diagram
         self.from_block = from_block

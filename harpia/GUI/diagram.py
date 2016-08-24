@@ -36,27 +36,23 @@ from gi.repository import GooCanvas
 from block import Block
 from connector import Connector
 import harpia.s2idirectory
+from harpia.model.diagrammodel import DiagramModel
 from harpia.constants import *
 
-class Diagram(GooCanvas.Canvas):
+class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __init__(self, main_window):
         GooCanvas.Canvas.__init__(self)
+        DiagramModel.__init__(self)
         self.set_property("expand", True)
 
         self.last_clicked_point = (None, None)
         self.main_window = main_window
 
         self.zoom = 1.0 # pixels per unit
-        self.blocks = {} # GUI blocks
-        self.connectors = []
         self.curr_connector = None
         self.current_widgets = []
-        self.__modified = False
-
-        self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
-        self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
 
         self.grab_focus()
         self.connect("motion-notify-event", self.__on_motion_notify)
@@ -69,8 +65,6 @@ class Diagram(GooCanvas.Canvas):
             Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
             [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
-
-        self.__file_name = "Untitled"
 
         self.white_board = None
         self.select_rect = None
@@ -379,19 +373,8 @@ class Diagram(GooCanvas.Canvas):
 
     #----------------------------------------------------------------------
     def set_file_name(self, file_name):
-        self.__file_name = file_name
+        DiagramModel.set_file_name(self, file_name)
         self.main_window.work_area.rename_diagram(self)
-
-    #----------------------------------------------------------------------
-    def get_file_name(self):
-        return self.__file_name
-
-    #----------------------------------------------------------------------
-    def get_patch_name(self):
-        if self.__modified:
-            return "* " + self.__file_name.split("/").pop()
-        else:
-            return self.__file_name.split("/").pop()
 
     #----------------------------------------------------------------------
     def get_block_on_focus(self):
@@ -468,12 +451,8 @@ class Diagram(GooCanvas.Canvas):
 
     # ---------------------------------------------------------------------
     def set_modified(self, state):
-        self.__modified = state
+        DiagramModel.set_modified(self, state)
         self.main_window.work_area.rename_diagram(self)
-
-    # ---------------------------------------------------------------------
-    def get_modified(self):
-        return self.__modified
 
     # ---------------------------------------------------------------------
     def grab_focus(self):
