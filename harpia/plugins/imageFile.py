@@ -14,6 +14,7 @@ class ImageFile(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "15"
         self.filename = "/usr/share/harpia/images/lenna.png"

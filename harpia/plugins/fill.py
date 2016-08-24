@@ -14,6 +14,7 @@ class Fill(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "09"
         self.color = "#0000ffff0000"

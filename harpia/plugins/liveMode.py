@@ -15,6 +15,7 @@ class LiveMode(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "17"
         self.camera = "/dev/video0"

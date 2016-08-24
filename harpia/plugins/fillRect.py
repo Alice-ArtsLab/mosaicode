@@ -14,6 +14,7 @@ class FillRect(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "14"
         self.color = "#0000ffff0000"

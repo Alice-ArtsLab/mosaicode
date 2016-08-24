@@ -14,6 +14,7 @@ class Resize(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "604"
         self.method = "CV_INTER_LINEAR"

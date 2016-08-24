@@ -14,6 +14,7 @@ class Canny(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "83"
         self.apertureSize = 3

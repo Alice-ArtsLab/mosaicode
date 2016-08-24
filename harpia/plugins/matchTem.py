@@ -14,6 +14,7 @@ class MatchTem(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "605"
         self.method = 'CV_TM_SQDIFF'

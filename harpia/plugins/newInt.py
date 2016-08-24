@@ -14,6 +14,7 @@ class NewInt(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "702"
         self.intVal = 1

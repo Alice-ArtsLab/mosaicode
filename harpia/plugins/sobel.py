@@ -14,6 +14,7 @@ class Sobel(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
+        Plugin.__init__(self)
         self.id = -1
         self.type = "80"
         self.masksize = 3
