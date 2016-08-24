@@ -30,12 +30,12 @@ def main(argv):
         intypes = obj.get_description()["InTypes"]
         diagram = DiagramModel()
         cont = 0
+        lenna = s2idirectory.block["15"]()
+        diagram.add_block(lenna)
+        diagram.add_block(obj)
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
-                lenna = s2idirectory.block["15"]()
-                diagram.add_block(lenna)
-                diagram.add_block(obj)
-                diagram.connect_blocks(lenna,1, obj, cont)
+                diagram.connect_blocks(lenna, 0, obj, cont)
             cont = cont + 1
         diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
         control = DiagramControl(diagram)
