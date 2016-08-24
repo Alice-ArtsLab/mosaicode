@@ -181,6 +181,10 @@ class Block(GooCanvas.CanvasGroup):
         pass
 
 #----------------------------------------------------------------------
+    def get_description(self):
+        return self.plugin.get_description()
+    
+#----------------------------------------------------------------------
     def __draw_rect(self):
         color = self.block_description["Color"].split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
