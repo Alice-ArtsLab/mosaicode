@@ -26,11 +26,16 @@ class Closing(Plugin):
     def generate(self, blockTemplate):
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
-            'IplImage * block$$_img_o1 = NULL;\n'
-        blockTemplate.imagesIO += 'IplConvKernel * block$$' +\
-                                          '_arg_mask = cvCreateStructuringElementEx(' + self.masksize[0] + ' , ' + \
-                                          self.masksize[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
+            'int block$$_int_i2 = ' + self.masksize[0] + ';\n' + \
+            'int block$$_int_i3 = ' + self.masksize[2] + ';\n' + \
+            'IplImage * block$$_img_o1 = NULL;\n' + \
+	    'IplConvKernel * block$$_arg_mask = NULL;\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
+					'if (block$$_int_i2 %2 ==0) block$$_int_i2++;' + \
+					'if (block$$_int_i3 %2 ==0) block$$_int_i3++;' + \
+        				'block$$_arg_mask = ' + \
+					'cvCreateStructuringElementEx(block$$_int_i2 ,' + \
+					'block$$_int_i3, 1, 1,CV_SHAPE_RECT,NULL);\n' + \
                                      'IplImage * block$$_auxImg;' + \
                                      'block$$_img_o1 = cvCreateImage(cvSize(block$$' +\
                                      '_img_i1->width, block$$_img_i1->height), block$$' +\
@@ -54,7 +59,7 @@ class Closing(Plugin):
             "Label": _("Closing"),
             "Icon": "images/closing.png",
             "Color": "180:230:220:150",
-            "InTypes": {0: "HRP_IMAGE"},
+            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2: "HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
             "Description": _("Morphological operation that connects objects on an image."),
             "TreeGroup": _("Morphological Operations")
