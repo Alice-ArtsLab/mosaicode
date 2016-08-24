@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Libraries
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+
+from harpia import s2idirectory
+from harpia.model.diagrammodel import DiagramModel
+from harpia.model.connectionmodel import ConnectionModel
+from harpia.control.diagramcontrol import DiagramControl
+
+
+import sys, argparse
+import os
+
+#---------------------------------------------------
+#--------HARPIA FRONTEND MAIN FUNCTION--------------
+#---------------------------------------------------
+
+def main(argv):
+
+    os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
+    s2idirectory.load()
+    
+    for key in s2idirectory.block:
+        obj = s2idirectory.block[key]()
+        intypes = obj.get_description()["InTypes"]
+        diagram = DiagramModel()
+        cont = 0
+        for inkey in intypes:
+            if intypes[inkey] == "HRP_IMAGE":
+                lenna = s2idirectory.block["15"]()
+                diagram.add_block(lenna)
+                diagram.add_block(obj)
+                diagram.connect_blocks(lenna,1, obj, cont)
+            cont = cont + 1
+        diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
+        control = DiagramControl(diagram)
+        control.save()
+                
+            
+        
+
+    #----------------------------------------------------------------------
+
+if __name__ == '__main__':
+    main(sys.argv)
+
+    #----------------------------------------------------------------------
