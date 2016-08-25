@@ -1,7 +1,0 @@
- <properties>
-      <block type='100' id=''>
-        <property name='state' value='true' />
-        <property name='masksize' value='3x3' />
-        <property name='iterations' value='1' />
-      </block>
-</properties>

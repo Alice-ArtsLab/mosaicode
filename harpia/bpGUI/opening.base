@@ -1,4 +1,0 @@
-+Name: OPENING
-+Input: Image
-+Output: Image
-+Properties: Structuring Element {3x3, 5x5, 7x7}

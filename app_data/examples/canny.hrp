@@ -1,48 +1,81 @@
 <harpia>
 <GcState>
-	<block type="0" id="1">
-		<position x="-33.0" y="3.0"/>
-	</block>
-	<block type="2" id="3">
-		<position x="478.0" y="95.0"/>
+	<block type="1702" id="10">
+		<position x="7.6298828125" y="303.386367798"/>
 	</block>
 	<block type="83" id="5">
-		<position x="248.0" y="69.0"/>
+		<position x="223.970977783" y="81.015075684"/>
+	</block>
+	<block type="02" id="7">
+		<position x="471.40524292" y="18.5286865234"/>
+	</block>
+	<block type="15" id="6">
+		<position x="5.9460144043" y="0.0"/>
+	</block>
+	<block type="1702" id="9">
+		<position x="0.0" y="214.769836426"/>
+	</block>
+	<block type="1702" id="8">
+		<position x="12.9460144043" y="130.0"/>
 	</block>
 </GcState>
 <properties>
-  <block id="1" type="00">
- <property name="state" value="true"/>
- <property name="type" value="file"/>
- <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
- <property name="place" value="server"/>
- <property name="camera" value="00"/>
- <property name="size" value="640x480"/>
- <property name="video_name" value=""/>
- <property name="frameRate" value="20.0"/>
-</block>
-
-  <block id="3" type="02">
- <property name="state" value="true"/>
+  <block id="10" type="1702">
+ <property name="maxVal" value="500.0"/>
+ <property name="window_name" value="My Image"/>
+ <property name="intVal" value="3.0"/>
+ <property name="label" value="Aperture"/>
 </block>
 
   <block id="5" type="83">
- <property name="state" value="true"/>
  <property name="threshold1" value="16"/>
  <property name="threshold2" value="33"/>
  <property name="apertureSize" value="3"/>
 </block>
 
+  <block id="7" type="02">
+ <property name="title" value="My Image"/>
+</block>
+
+  <block id="6" type="15">
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+</block>
+
+  <block id="9" type="1702">
+ <property name="maxVal" value="500.0"/>
+ <property name="window_name" value="My Image"/>
+ <property name="intVal" value="16.0"/>
+ <property name="label" value="threshold2"/>
+</block>
+
+  <block id="8" type="1702">
+ <property name="maxVal" value="500.0"/>
+ <property name="window_name" value="My Image"/>
+ <property name="intVal" value="16.0"/>
+ <property name="label" value="threshold1"/>
+</block>
+
   </properties>
 <network>
-<block type="0" id="1">
+<block type="1702" id="10">
 <inputs>
 </inputs>
 <outputs>
-<output id="1" inBlock="5" input="1"/>
+<output id="1" inBlock="5" input="4"/>
 </outputs>
 </block>
-<block type="2" id="3">
+<block type="83" id="5">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+<input id="3"/>
+<input id="4"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="7" input="1"/>
+</outputs>
+</block>
+<block type="02" id="7">
 <inputs>
 <input id="1"/>
 </inputs>
@@ -50,12 +83,25 @@
 <output id="1" inBlock="--" input="--"/>
 </outputs>
 </block>
-<block type="83" id="5">
+<block type="15" id="6">
 <inputs>
-<input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="3" input="1"/>
+<output id="1" inBlock="5" input="1"/>
+</outputs>
+</block>
+<block type="1702" id="9">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="3"/>
+</outputs>
+</block>
+<block type="1702" id="8">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="2"/>
 </outputs>
 </block>
 </network>

@@ -1,8 +1,0 @@
- <properties>
-      <block type='14' id=''>
-	<property name='state' value='true' />
-    <property name='red' value='150' />
-    <property name='green' value='60' />
-    <property name='blue' value='170' />
-      </block>
-</properties>

@@ -40,7 +40,7 @@ from harpia.utils.XMLUtils import XMLParser
 from harpia import preferences
 from harpia import about
 from filefilters import *
-from GcDiagram import *
+from GUI.diagram import *
 from diagramcontrol import DiagramControl 
 
 import s2iSessionManager
@@ -502,7 +502,6 @@ class S2iHarpiaFrontend(GladeWindow):
                             if block_property.name == 'filename':
                                 block_property.value = os.path.realpath(block_property.value)
 
-
                     # seguindo o paradigma de não mandar mais nada.. vamos testar com o haar =]
                     # não vamos mandar mais nada mas vamos traduzir o path do haarCascade pra algo real
                     if int(t_oBlockProperties.type) == 610:  # 610 => haar detector... passando a cascade .xml
@@ -522,15 +521,15 @@ class S2iHarpiaFrontend(GladeWindow):
                 session_manager = s2iSessionManager.s2iSessionManager()
 
                 ## pegando o novo ID (criado pela s2iSessionManager) e passando para o s2idiagram
-                self.diagrams[page].set_session_id(session_manager.session_id)
+                diagram.set_session_id(session_manager.session_id)
 
                 # step sempre sera uma lista.. primeiro elemento eh uma mensagem, segundo eh o erro.. caso exista erro.. passar para o s2idiagram tb!
-                self.diagrams[page].set_error_log('')
+                diagram.set_error_log('')
                 t_bEverythingOk = True
                 for step in session_manager.new_instance(process_chain):
                     if len(step) > 1:
                         if step[1] != '' and step[1] != None:
-                            self.diagrams[page].append_error_log(step[1])
+                            diagram.append_error_log(step[1])
                             t_bEverythingOk = False
                     self.__set_status_message(step[0], t_bEverythingOk)
                     # self.widgets['StatusLabel'].set_text()

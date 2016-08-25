@@ -1,9 +1,0 @@
-<harpiamessage>
-    <session value="" />
-	<version value="" />
-	<commands>
-		<command name="storeipchain">
-			<param name="ipchainFile"> FrontendXML </param>
-		</command>
-	</commands>
-</harpiamessage>

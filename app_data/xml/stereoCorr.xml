@@ -1,6 +1,0 @@
-<properties>
-	<block type='611' id=''>
-		<property name='state' value='true' />
-		<property name="maxDist" value="60" />
-	</block>
-</properties>

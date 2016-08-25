@@ -1,7 +1,0 @@
- <properties>
-      <block type='605' id=''>
-	<property name='state' value='true' />
-        <property name='method' value='CV_TM_SQDIFF' />
-				<property name='scaleFactor' value='6' />
-      </block>
-</properties>

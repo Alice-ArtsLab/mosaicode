@@ -1,8 +1,70 @@
 <harpia>
 <GcState>
+	<block type="1702" id="8">
+		<position x="24.9914550781" y="168.738220215"/>
+	</block>
+	<block type="02" id="3">
+		<position x="345.253417969" y="41.6516418452"/>
+	</block>
+	<block type="15" id="2">
+		<position x="0.7602539062" y="0.0"/>
+	</block>
+	<block type="81" id="5">
+		<position x="167.760253906" y="39.0"/>
+	</block>
 </GcState>
 <properties>
+  <block id="8" type="1702">
+ <property name="maxVal" value="31.0"/>
+ <property name="window_name" value="My Image"/>
+ <property name="intVal" value="1.0"/>
+ <property name="label" value="Value"/>
+</block>
+
+  <block id="3" type="02">
+ <property name="title" value="My Image"/>
+</block>
+
+  <block id="2" type="15">
+ <property name="filename" value="/usr/share/harpia/images/lenna.png"/>
+</block>
+
+  <block id="5" type="81">
+ <property name="masksize" value="3"/>
+</block>
+
   </properties>
 <network>
+<block type="1702" id="8">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="2"/>
+</outputs>
+</block>
+<block type="02" id="3">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="15" id="2">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="1"/>
+</outputs>
+</block>
+<block type="81" id="5">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="3" input="1"/>
+</outputs>
+</block>
 </network>
 </harpia>

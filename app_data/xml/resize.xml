@@ -1,6 +1,0 @@
- <properties>
-      <block type='604' id=''>
-	<property name='state' value='true' />
-        <property name='method' value='CV_INTER_LINEAR' />
-      </block>
-</properties>

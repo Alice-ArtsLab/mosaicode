@@ -1,8 +1,0 @@
- <properties>
-      <block type='80' id=''>
-	<property name='state' value='true' />
-        <property name='masksize' value='3' />
-        <property name='xorder' value='1' />
-        <property name='yorder' value='1' />
-      </block>
-</properties>
