@@ -48,8 +48,6 @@ class Or(Plugin):
     def get_description(self):
         return {"Type": str(self.type),
             "Label": "Or",
-            "Inputs": 2,
-            "Outputs": 1,
             "Icon": "images/or.png",
             "Color": "10:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},

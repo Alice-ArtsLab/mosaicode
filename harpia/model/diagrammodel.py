@@ -1,7 +1,7 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.model.connection import ConnectionModel as ConnectionModel
+from harpia.model.connectionmodel import ConnectionModel as ConnectionModel
 
 class DiagramModel(object):
 
