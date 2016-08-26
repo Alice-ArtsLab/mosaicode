@@ -11,6 +11,7 @@ from harpia import s2idirectory
 from harpia.model.diagrammodel import DiagramModel
 from harpia.model.connectionmodel import ConnectionModel
 from harpia.control.diagramcontrol import DiagramControl
+from harpia.control.codegenerator import CodeGenerator
 
 
 import sys, argparse
@@ -20,29 +21,38 @@ import os
 #--------HARPIA FRONTEND MAIN FUNCTION--------------
 #---------------------------------------------------
 
+class Log(object):
+    def log(self, msg):
+        print msg
+
 def main(argv):
 
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
     s2idirectory.load()
-    
+    s2idirectory.Log = Log()
+
     for key in s2idirectory.block:
         obj = s2idirectory.block[key]()
-        intypes = obj.get_description()["InTypes"]
         diagram = DiagramModel()
-        cont = 0
         lenna = s2idirectory.block["15"]()
         diagram.add_block(lenna)
         diagram.add_block(obj)
+ 
+        cont = 0
+        intypes = obj.get_description()["InTypes"]
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
                 diagram.connect_blocks(lenna, 0, obj, cont)
             cont = cont + 1
+
+        # Save Examples
         diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
         control = DiagramControl(diagram)
         control.save()
-                
-            
-        
+
+        # Compile Examples
+        generator = CodeGenerator(diagram)
+        generator.compile()
 
     #----------------------------------------------------------------------
 
