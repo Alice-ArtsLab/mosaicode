@@ -55,6 +55,10 @@ class Plugin(object):
         return {}
 
     # ----------------------------------------------------------------------
+    def get_plugin(self):
+        return self
+
+    # ----------------------------------------------------------------------
     def get_xml(self):
         xml = "<properties>\n"
         xml += "<block type='" + str(self.type) + "' id='" + str(self.id) + "'>\n"

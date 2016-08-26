@@ -301,8 +301,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __connector_types_match(self, a_oConnector):
-        outType = self.blocks[a_oConnector.from_block].block_description["OutTypes"][a_oConnector.from_block_out]
-        inType = self.blocks[a_oConnector.to_block].block_description["InTypes"][a_oConnector.to_block_in]
+        outType = self.blocks[a_oConnector.from_block].get_description()["OutTypes"][a_oConnector.from_block_out]
+        inType = self.blocks[a_oConnector.to_block].get_description()["InTypes"][a_oConnector.to_block_in]
         if not outType == inType:
             s2idirectory.Log.log("Connection Types mismatch")
         return outType == inType

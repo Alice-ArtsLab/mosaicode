@@ -61,8 +61,8 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __init__( self, diagram, plugin, block_id=1):
         GooCanvas.CanvasGroup.__init__(self)
-        self.plugin = plugin
-        self.plugin.id = block_id
+        self.__plugin = plugin
+        self.__plugin.id = block_id
         self.block_id = block_id
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
@@ -70,19 +70,17 @@ class Block(GooCanvas.CanvasGroup):
         self.remember_x = 0
         self.remember_y = 0
 
-        self.block_description = self.plugin.get_description()
-
         self.widgets = {}
         self.focus = False
         self.has_flow = False
         self.is_source = False
 
-        if self.block_description.has_key("IsSource"): #all data sources
-            self.is_source = self.block_description["IsSource"]
+        if self.get_description().has_key("IsSource"): #all data sources
+            self.is_source = self.get_description()["IsSource"]
 
         self.width = WIDTH_DEFAULT
 
-        maxIO = max(len(self.block_description["InTypes"]), len(self.block_description["OutTypes"]))
+        maxIO = max(len(self.get_description()["InTypes"]), len(self.get_description()["OutTypes"]))
 
         ## Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
@@ -98,7 +96,7 @@ class Block(GooCanvas.CanvasGroup):
         self.set_parent(diagram.get_root_item())
 
         self.input_port_centers = []
-        for inputPort in range(len(self.block_description["InTypes"])):
+        for inputPort in range(len(self.get_description()["InTypes"])):
             self.input_port_centers.append((INPUT_WIDTH/2,
                      (RADIUS # upper border
                      + (inputPort*5) # spacing betwen ports
@@ -106,7 +104,7 @@ class Block(GooCanvas.CanvasGroup):
                      + INPUT_HEIGHT/2)))#going to the port's center
 
         self.output_port_centers = []
-        for outputPort in range(len(self.block_description["OutTypes"])):
+        for outputPort in range(len(self.get_description()["OutTypes"])):
             self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
                      (RADIUS # upper border
                      + (outputPort*5) # spacing betwen ports
@@ -134,7 +132,7 @@ class Block(GooCanvas.CanvasGroup):
                 self.diagram.current_widgets = []
                 self.diagram.current_widgets.append(self)
 
-        self.diagram.show_block_property(self.plugin)
+        self.diagram.show_block_property(self.__plugin)
 
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
@@ -181,12 +179,16 @@ class Block(GooCanvas.CanvasGroup):
         pass
 
 #----------------------------------------------------------------------
+    def get_plugin(self):
+        return self.__plugin
+
+#----------------------------------------------------------------------
     def get_description(self):
-        return self.plugin.get_description()
+        return self.__plugin.get_description()
     
 #----------------------------------------------------------------------
     def __draw_rect(self):
-        color = self.block_description["Color"].split(":")
+        color = self.get_description()["Color"].split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
         color = int(color[0])*0x1000000 + \
                 int(color[1])*0x10000 + \
@@ -207,7 +209,7 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __draw_icon(self):
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                self.block_description["Icon"])
+                self.get_description()["Icon"])
         image = GooCanvas.CanvasImage(parent=self,
                 pixbuf=pixbuf,
                 x=(self.width/2) - (pixbuf.props.width / 2),
@@ -218,11 +220,11 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __draw_inputs(self):
         ins = []
-        for x in range(len(self.block_description["InTypes"])):
+        for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.typeIconsIn[
-                            self.block_description["InTypes"][x]])
+                            self.get_description()["InTypes"][x]])
             except:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.icons["IconInput"])
@@ -251,11 +253,11 @@ class Block(GooCanvas.CanvasGroup):
 #----------------------------------------------------------------------
     def __draw_outputs(self):
         outs = []
-        for x in range(len(self.block_description["OutTypes"])):
+        for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.typeIconsOut[
-                            self.block_description["OutTypes"][x]])
+                            self.get_description()["OutTypes"][x]])
             except:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.icons["IconOutput"])
@@ -283,7 +285,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def __draw_label(self):
-        text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + self.block_description["Label"] + "</span>"
+        text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + self.get_description()["Label"] + "</span>"
 
         label = GooCanvas.CanvasText(parent=self,
                             text=text_label,
@@ -315,7 +317,7 @@ class Block(GooCanvas.CanvasGroup):
             self.has_flow = True
         else:
             sourceConnectors = self.diagram.get_connectors_to(self.block_id)
-            if len(sourceConnectors) != len(self.block_description["InTypes"]):
+            if len(sourceConnectors) != len(self.get_description()["InTypes"]):
                 self.has_flow = False
             else:
                 self.has_flow = True
@@ -356,7 +358,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_type(self):
-        return self.plugin.get_description()["Type"]
+        return self.__plugin.get_description()["Type"]
 
 #----------------------------------------------------------------------
     def get_position(self):
@@ -365,7 +367,7 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_xml(self):
-        return XMLParser(self.plugin.get_xml(), fromString=True)
+        return XMLParser(self.__plugin.get_xml(), fromString=True)
 
 #----------------------------------------------------------------------
     def set_xml(self, xml):
@@ -373,7 +375,7 @@ class Block(GooCanvas.CanvasGroup):
         block_properties = xml.getTag("properties").getTag("block").getChildTags("property")
         for prop in block_properties:
             properties[prop.name] = prop.value
-        self.plugin.set_properties(properties)
+        self.__plugin.set_properties(properties)
 
 #----------------------------------------------------------------------
     def __update_state(self):
