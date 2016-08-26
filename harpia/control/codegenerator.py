@@ -105,13 +105,13 @@ class CodeGenerator():
             blockList.append(block_template)
 
         # ajusta o peso de cada bloco
-        for block in blockList:
-            if len(block.plugin.get_description()["InTypes"]) != 0:
+        for block_template in blockList:
+            if len(block_template.plugin.get_description()["InTypes"]) != 0:
                 continue
-            if len(block.plugin.get_description()["OutTypes"]) == 0:
+            if len(block_template.plugin.get_description()["OutTypes"]) == 0:
                 continue
             tmpList = []
-            tmpList.append(block)
+            tmpList.append(block_template)
             organizedChain = self.__apply_weights_on_connections(tmpList, blockList)
             while organizedChain != []:
                 organizedChain = self.__apply_weights_on_connections(organizedChain, blockList)
@@ -179,7 +179,9 @@ class CodeGenerator():
         for image in images:
             declaration += image
 
-        declaration += 'while(1) \n {\t \n'
+        declaration += 'while(((char)cvWaitKey(' + \
+                str(int((1.0 / FRAMERATE) * 1000.0)) + \
+                ')) != 27) \n {\t \n'
 
         execution = "\n\t//execution block\n"
         for x in functionCalls:
@@ -188,10 +190,6 @@ class CodeGenerator():
         deallocating = "\n\t//deallocation block\n"
         for x in deallocations:
             deallocating += x
-
-        deallocating += 'char key = cvWaitKey(' + str(int((1.0 / FRAMERATE) * 1000.0)) + ');\n'
-        deallocating += 'if(key == 27)\n'
-        deallocating += '  break;\n'
 
         deallocating += "}"
 
@@ -234,26 +232,12 @@ class CodeGenerator():
         self.__return_to_old_directory()
 
     #----------------------------------------------------------------------
-    def execute_code(self):
+    def compile(self):
         harpia.s2idirectory.Log.log("Executing Code")
         self.save_code()
         self.__change_directory()
         if os.name == "nt":
             i, o = os.popen4('Makefile' + self.dir_name + '.bat')
-
-            o.readlines()
-            o.close()
-            i.close()
-
-            i, o = os.popen4(codeFilename[:-2] + '.exe')
-
-            ## ERROR LOG
-            Error = ''
-            errorList = o.readlines()
-            for element in errorList:
-                Error = Error + element
-
-            __set_error_log(Error)
 
             o.readlines()
             o.close()
@@ -268,6 +252,23 @@ class CodeGenerator():
             o.close()
             i.close()
 
+        self.__return_to_old_directory()
+
+    #----------------------------------------------------------------------
+    def execute_code(self):
+        harpia.s2idirectory.Log.log("Executing Code")
+        self.compile()
+        self.__change_directory()
+        if os.name == "nt":
+            i, o = os.popen4(codeFilename[:-2] + '.exe')
+            ## ERROR LOG
+            Error = ''
+            errorList = o.readlines()
+            for element in errorList:
+                Error = Error + element
+            o.close()
+            i.close()
+        else:
             program = RunPrg("LD_LIBRARY_PATH=/lib/ ./" + self.dir_name)
             program.start()
             while program.isAlive():
@@ -282,8 +283,6 @@ class CodeGenerator():
             Error += element
 
         print _("Leaving.."), Error
-        self.__set_error_log(str(CompilingErrors) + Error)
-
         o.close()
         self.__return_to_old_directory()
 
@@ -300,17 +299,15 @@ class CodeGenerator():
     #----------------------------------------------------------------------
     def __apply_weights_on_connections(self, listOfBlocks, blockList):
         returnList = []
-        for block in listOfBlocks:
+        for block_template in listOfBlocks:
             ##Put the connections on returnList
-            for connection in block.myConnections:
+            for connection in block_template.myConnections:
                 ##and apply the weight on this connection
-                for tmpBlock in blockList:
-                    if tmpBlock.plugin.id == connection.destinationNumber:
-                        tmpBlock.weight += block.weight
-                        if tmpBlock not in returnList:
-                            # if tmpBlock not in RollinList:
-                            returnList.append(tmpBlock)
-                        # RollinList.append(tmpBlock)
+                for tmp_block_template in blockList:
+                    if tmp_block_template.plugin.id == connection.destinationNumber:
+                        tmp_block_template.weight += block_template.weight
+                        if tmp_block_template not in returnList:
+                            returnList.append(tmp_block_template)
         return returnList
 
 

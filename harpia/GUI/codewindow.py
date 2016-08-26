@@ -7,14 +7,16 @@ from gi.repository import Gtk
 
 from harpia.constants import *
 
-class CodeWindow(Gtk.Window):
+class CodeWindow(Gtk.Dialog):
 
     def __init__(self, main_window, code):
-        Gtk.Window.__init__(self, title="Harpia")
-        self.set_parent(main_window)
+        Gtk.Dialog.__init__(self, "Code Window", main_window,
+                0,(Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
+        self.set_default_size(800, 600)
         sw = Gtk.ScrolledWindow()
-        self.add(sw)
+        box = self.get_content_area()
+        box.pack_start(sw, True, True, 0)
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         textview = Gtk.TextView()
@@ -25,7 +27,8 @@ class CodeWindow(Gtk.Window):
         sw.add(textview)
         textview.show()
         self.show_all()
-        self.resize(800, 600)
+        response = self.run()
 
-
+        if response == Gtk.ResponseType.OK:
+            self.close()
 
