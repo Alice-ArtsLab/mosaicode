@@ -50,11 +50,13 @@ class SaveVideo(Plugin):
                                  'CvVideoWriter* block$$_vidWriter = NULL;\n'
 
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     '	if(block$$_vidWriter == NULL)//video writer not started up yet!\n' + \
-                                     '		block$$_vidWriter = cvCreateVideoWriter( "' + self.filename + '", ' + codecMacro + ',' + self.frameRate + ', cvGetSize(block$$_img_i1), 1 );\n' + \
-                                     '	cvWriteFrame( block$$_vidWriter, block$$_img_i1);\n' + \
-                                     '	block$$_img_o1 = block$$_img_i1;\n' + \
-                                     '}\n'
+                '	if(block$$_vidWriter == NULL)//video writer not started up yet!\n' + \
+                '		block$$_vidWriter = cvCreateVideoWriter( "' + \
+                self.filename + '", ' + codecMacro + ',' + str(self.framerate) + \
+                ', cvGetSize(block$$_img_i1), 1 );\n' + \
+                '	cvWriteFrame( block$$_vidWriter, block$$_img_i1);\n' + \
+                '	block$$_img_o1 = block$$_img_i1;\n' + \
+                '}\n'
 
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1); // SaveVideo Dealloc\n'
 

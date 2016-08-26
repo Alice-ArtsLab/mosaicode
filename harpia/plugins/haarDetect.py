@@ -35,53 +35,56 @@ class HaarDetect(Plugin):
             'static CvMemStorage* block$$_storage = 0;\n' + \
             'static CvHaarClassifierCascade* block$$_cascade = 0;\n' + \
             'const char* block$$_cascade_name = "' + self.cascade_name + '";\n'
+
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     '	double scale = 1.3;\n' + \
-                                     '	block$$_cascade = (CvHaarClassifierCascade*)cvLoad( block$$_cascade_name, 0, 0, 0 );\n' + \
-                                     '	IplImage* gray = cvCreateImage( cvSize(block$$_img_i1->width,block$$_img_i1->height), 8, 1 );\n' + \
-                                     '	IplImage* small_img = cvCreateImage( cvSize( cvRound (block$$_img_i1->width/scale), cvRound (block$$_img_i1->height/scale)),8, 1 );\n' + \
-                                     '	cvCvtColor( block$$_img_i1, gray, CV_BGR2GRAY );\n' + \
-                                     '	cvResize( gray, small_img, CV_INTER_LINEAR );\n' + \
-                                     '	cvEqualizeHist( small_img, small_img );\n' + \
-                                     '	if(!block$$_img_o3)\n' + \
-                                     '	block$$_img_o3 = cvCloneImage(block$$_img_i1);\n' + \
-                                     '	cvCopy(block$$_img_i1,block$$_img_o3,0);\n' + \
-                                     '	block$$_storage = cvCreateMemStorage(0);\n' + \
-                                     '	cvClearMemStorage( block$$_storage );\n' + \
-                                     '	block$$_rect_o2 = cvRect( 0, 0, 1, 1);\n' + \
-                                     '	CvSeq* faces = cvHaarDetectObjects( small_img, block$$_cascade, block$$_storage,1.1, ' + self.min_neighbors + ', 0/*CV_HAAR_DO_CANNY_PRUNING*/,cvSize(30, 30) );\n' + \
-                                     '	block$$_double_o4 = faces->total;\n' + \
-                                     '	if(faces)\n' + \
-                                     '	{\n' + \
-                                     '		int i;\n' + \
-                                     '		for( i = 0; i < (faces ? faces->total : 0); i++ )\n' + \
-                                     '		{\n' + \
-                                     '		CvRect* r = (CvRect*)cvGetSeqElem( faces, i );\n' + \
-                                     '			if(r)\n' + \
-                                     '			{\n' + \
-                                     '				CvPoint center;\n' + \
-                                     '				int radius;\n' + \
-                                     '				center.x = cvRound((r->x + r->width*0.5)*scale);\n' + \
-                                     '				center.y = cvRound((r->y + r->height*0.5)*scale);\n' + \
-                                     '				radius = cvRound((r->width + r->height)*0.25*scale);\n' + \
-                                     '				cvCircle( block$$_img_o3, center, radius, cvScalarAll(0), 3, 8, 0 );\n' + \
-                                     '				if(i == 0)\n' + \
-                                     '				{\n' + \
-                                     '					block$$_point_o1 = center;\n' + \
-                                     '					block$$_rect_o2.x = (r->x)*scale;\n' + \
-                                     '					block$$_rect_o2.y = (r->y)*scale;\n' + \
-                                     '					block$$_rect_o2.width = (r->width)*scale;\n' + \
-                                     '					block$$_rect_o2.height = (r->height)*scale;\n' + \
-                                     '				}\n' + \
-                                     '			}\n' + \
-                                     '		}\n' + \
-                                     '	}\n' + \
-                                     '	cvReleaseImage( &gray );\n' + \
-                                     '	cvReleaseImage( &small_img );\n' + \
-                                     '}\n'
+               '	double scale = 1.3;\n' + \
+               '	block$$_cascade = (CvHaarClassifierCascade*)cvLoad( block$$_cascade_name, 0, 0, 0 );\n' + \
+               '	IplImage* gray = cvCreateImage( cvSize(block$$_img_i1->width,block$$_img_i1->height), 8, 1 );\n' + \
+               '	IplImage* small_img = cvCreateImage( cvSize( cvRound (block$$_img_i1->width/scale), cvRound (block$$_img_i1->height/scale)),8, 1 );\n' + \
+               '	cvCvtColor( block$$_img_i1, gray, CV_BGR2GRAY );\n' + \
+               '	cvResize( gray, small_img, CV_INTER_LINEAR );\n' + \
+               '	cvEqualizeHist( small_img, small_img );\n' + \
+               '	if(!block$$_img_o3)\n' + \
+               '	block$$_img_o3 = cvCloneImage(block$$_img_i1);\n' + \
+               '	cvCopy(block$$_img_i1,block$$_img_o3,0);\n' + \
+               '	block$$_storage = cvCreateMemStorage(0);\n' + \
+               '	cvClearMemStorage( block$$_storage );\n' + \
+               '	block$$_rect_o2 = cvRect( 0, 0, 1, 1);\n' + \
+               '	CvSeq* faces = cvHaarDetectObjects(small_img, ' + \
+               'block$$_cascade, block$$_storage,1.1, ' + \
+               str(self.min_neighbors) + ', 0/*CV_HAAR_DO_CANNY_PRUNING*/,cvSize(30, 30) );\n' + \
+               '	block$$_double_o4 = faces->total;\n' + \
+               '	if(faces)\n' + \
+               '	{\n' + \
+               '		int i;\n' + \
+               '		for( i = 0; i < (faces ? faces->total : 0); i++ )\n' + \
+               '		{\n' + \
+               '		CvRect* r = (CvRect*)cvGetSeqElem( faces, i );\n' + \
+               '			if(r)\n' + \
+               '			{\n' + \
+               '				CvPoint center;\n' + \
+               '				int radius;\n' + \
+               '				center.x = cvRound((r->x + r->width*0.5)*scale);\n' + \
+               '				center.y = cvRound((r->y + r->height*0.5)*scale);\n' + \
+               '				radius = cvRound((r->width + r->height)*0.25*scale);\n' + \
+               '				cvCircle( block$$_img_o3, center, radius, cvScalarAll(0), 3, 8, 0 );\n' + \
+               '				if(i == 0)\n' + \
+               '				{\n' + \
+               '					block$$_point_o1 = center;\n' + \
+               '					block$$_rect_o2.x = (r->x)*scale;\n' + \
+               '					block$$_rect_o2.y = (r->y)*scale;\n' + \
+               '					block$$_rect_o2.width = (r->width)*scale;\n' + \
+               '					block$$_rect_o2.height = (r->height)*scale;\n' + \
+               '				}\n' + \
+               '			}\n' + \
+               '		}\n' + \
+               '	}\n' + \
+               '	cvReleaseImage( &gray );\n' + \
+               '	cvReleaseImage( &small_img );\n' + \
+               '}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o3);\n' + \
-                                'cvReleaseImage(&block$$_img_i1);\n' + \
-                                'cvReleaseMemStorage(&block$$_storage);\n'
+               'cvReleaseImage(&block$$_img_i1);\n' + \
+               'cvReleaseMemStorage(&block$$_storage);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

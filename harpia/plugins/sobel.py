@@ -31,10 +31,12 @@ class Sobel(Plugin):
             'IplImage * block$$_img_o1 = NULL;\n' + \
             'IplImage * block$$_img_t = NULL;\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
-                                     '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$' + \
-                                     '_img_i1->nChannels);\n' + \
-                                     'cvSobel(block$$_img_i1, block$$_img_o1 ,' + self.xorder + ',' + self.yorder + ',' + self.masksize + ' );}\n'
+            'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
+            '_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$' + \
+            '_img_i1->nChannels);\n' + \
+            'cvSobel(block$$_img_i1, block$$_img_o1 ,' + \
+            str(self.xorder) + ',' + str(self.yorder) + \
+            ',' + str(self.masksize) + ' );}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n' + \
                                 'cvReleaseImage(&block$$_img_t);\n'

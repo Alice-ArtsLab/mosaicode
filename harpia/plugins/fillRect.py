@@ -41,7 +41,7 @@ class FillRect(Plugin):
             '\nif(block$$_img_i1)\n{\n' + \
             '\tblock$$_img_o1 = cvCloneImage(block$$_img_i1);\n' + \
             '\tcvSetImageROI(block$$_img_o1 , block$$_rect_i2);\n' + \
-            '\tCvScalar color = cvScalar('+blue +','+ green +','+ red+',0);\n' + \
+            '\tCvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red)+',0);\n' + \
             '\tcvSet(block$$_img_o1,color,NULL);\n' + \
             '\tcvResetImageROI(block$$_img_o1);\n' + \
             '}\n'
@@ -61,7 +61,7 @@ class FillRect(Plugin):
                 "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
                 "OutTypes":{0:"HRP_IMAGE"},
                 "Description":_("Fill the input rectangle on the input image with the desired color."),
-                "TreeGroup":_("General")
+                "TreeGroup":_("Basic Shapes")
          }
 
     # ----------------------------------------------------------------------

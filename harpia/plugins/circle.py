@@ -11,8 +11,8 @@ class Circle(Plugin):
         Plugin.__init__(self)
         self.id = -1
         self.type = "4100"
-	self.x0 = 100
-	self.y0 = 100
+        self.x0 = 100
+        self.y0 = 100
         self.color = "#0000ffff0000"
 
     # --------------------------Help Text--------------------------------------------

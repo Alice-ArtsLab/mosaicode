@@ -43,17 +43,21 @@ class MinMax(Plugin):
                             '	block$$_double_o1 = 0;\n' + \
                             '	cvMinMaxLoc(block$$_img_i1, &minVal, &maxVal, &minP, &maxP, NULL);\n'
         if self.minORmax == 'max':
-            blockTemplate.functionCall += '	minP = maxP;\n	minVal = maxVal;\n'
+            blockTemplate.functionCall += '	minP = maxP;\n' + \
+                    '	minVal = maxVal;\n'
 
         blockTemplate.functionCall += '	block$$_point_o2 = minP;\n'
 
         if self.criteria == "pos":
-            blockTemplate.functionCall += '	if(minP.x >= ' + self.minX + ' && minP.x <= ' + self.maxX + ')\n' + \
-                                 '        if(minP.y >= ' + self.minY + ' && minP.y <= ' + self.maxY + ')\n' + \
-                                 '        	block$$_double_o1 = 1.0;\n'
+            blockTemplate.functionCall += '	if(minP.x >= ' + str(self.minX) + \
+                        ' && minP.x <= ' + str(self.maxX) + ')\n' + \
+                        '        if(minP.y >= ' + str(self.minY) + \
+                        ' && minP.y <= ' + str(self.maxY) + ')\n' + \
+                        '        	block$$_double_o1 = 1.0;\n'
         elif self.criteria == "val":
-            blockTemplate.functionCall += '	if(minVal >= ' + self.minVal + ' && minVal <= ' + self.maxVal + ')\n' + \
-                                 '        block$$_double_o1 = 1.0;\n'
+            blockTemplate.functionCall += '	if(minVal >= ' + str(self.minVal) + \
+                        ' && minVal <= ' + str(self.maxVal) + ')\n' + \
+                        '        block$$_double_o1 = 1.0;\n'
         blockTemplate.functionCall += '}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
 
