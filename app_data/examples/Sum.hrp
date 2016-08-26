@@ -1,39 +1,31 @@
 <harpia>
 <GcState>
-	<block type="18" id="7">
-		<position x="14.7633666992" y="196.513000488"/>
-	</block>
-	<block type="02" id="8">
-		<position x="518.788696289" y="232.617034912"/>
-	</block>
-	<block type="02" id="9">
-		<position x="536.458190918" y="105.614654541"/>
-	</block>
 	<block type="02" id="10">
-		<position x="515.613220215" y="376.293060303"/>
+		<position x="567.288391113" y="316.293060303"/>
+	</block>
+	<block type="17" id="10">
+		<position x="46.350982666" y="187.875976562"/>
 	</block>
 	<block type="102" id="5">
-		<position x="168.731445312" y="332.028015137"/>
+		<position x="220.40661621" y="272.028015137"/>
 	</block>
 	<block type="20" id="6">
-		<position x="334.532348633" y="246.834228516"/>
+		<position x="386.207519531" y="186.834228516"/>
+	</block>
+	<block type="02" id="9">
+		<position x="588.133361816" y="45.614654541"/>
+	</block>
+	<block type="02" id="8">
+		<position x="570.463867187" y="172.617034912"/>
 	</block>
 </GcState>
 <properties>
-  <block id="7" type="18">
- <property name="camera" value="/dev/video0"/>
-</block>
-
-  <block id="8" type="02">
- <property name="title" value="Sum"/>
-</block>
-
-  <block id="9" type="02">
- <property name="title" value="Original"/>
-</block>
-
   <block id="10" type="02">
  <property name="title" value="Opening"/>
+</block>
+
+  <block id="10" type="17">
+ <property name="camera" value="/dev/video0"/>
 </block>
 
   <block id="5" type="102">
@@ -43,39 +35,31 @@
   <block id="6" type="20">
 </block>
 
+  <block id="9" type="02">
+ <property name="title" value="Original"/>
+</block>
+
+  <block id="8" type="02">
+ <property name="title" value="Sum"/>
+</block>
+
   </properties>
 <network>
-<block type="18" id="7">
-<inputs>
-</inputs>
-<outputs>
-<output id="1" inBlock="5" input="1"/>
-<output id="1" inBlock="6" input="1"/>
-<output id="1" inBlock="9" input="1"/>
-</outputs>
-</block>
-<block type="02" id="8">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
-<block type="02" id="9">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
 <block type="02" id="10">
 <inputs>
 <input id="1"/>
 </inputs>
 <outputs>
 <output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="17" id="10">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="6" input="1"/>
+<output id="1" inBlock="5" input="1"/>
+<output id="1" inBlock="9" input="1"/>
 </outputs>
 </block>
 <block type="102" id="5">
@@ -94,6 +78,22 @@
 </inputs>
 <outputs>
 <output id="1" inBlock="8" input="1"/>
+</outputs>
+</block>
+<block type="02" id="9">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="02" id="8">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
 </outputs>
 </block>
 </network>
