@@ -18,14 +18,18 @@ class HarpiaProperties(object):
 
     # ----------------------------------------------------------------------
     def set_recent_files(self, recent_files):
+        self.__recent_files = []
         self.__recent_files = recent_files
         self.control.save()
 
+
     # ----------------------------------------------------------------------
     def add_recent_file(self, file_name):
-        if len(self.__recent_files) > 5:
+        if file_name in self.__recent_files:
+            self.__recent_files.remove(file_name)
+        self.__recent_files.insert(0,file_name)
+        if len(self.__recent_files) > 10:
             self.__recent_files.pop()
-        self.__recent_files.append(file_name)
         self.control.save()
 
     # ----------------------------------------------------------------------

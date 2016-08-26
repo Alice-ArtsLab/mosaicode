@@ -42,6 +42,7 @@ class MainControl():
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
         harpia.s2idirectory.properties.add_recent_file(file_name)
+        self.main_window.menu.update_recent_file()
 
     # ----------------------------------------------------------------------
     def close(self):

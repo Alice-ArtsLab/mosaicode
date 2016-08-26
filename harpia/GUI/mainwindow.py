@@ -108,9 +108,7 @@ class MainWindow(Gtk.Window):
 
         for example in s2idirectory.list_of_examples:
             self.menu.add_example(example)
-
-        for recent_file in s2idirectory.recent_files:
-            self.menu.add_recent_file(recent_file)
+        self.menu.update_recent_file()
 
     #----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):

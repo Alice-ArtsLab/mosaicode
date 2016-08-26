@@ -5,6 +5,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from harpia.s2idirectory import *
 
 class Menu(Gtk.MenuBar):
 
@@ -113,7 +114,14 @@ class Menu(Gtk.MenuBar):
         self.main_window.main_control.open(self.list_of_examples[int(data)])
 
     # ----------------------------------------------------------------------
-    def add_recent_file(self, recent_file):
+    def update_recent_file(self):
+        for widget in self.recent_files_menu.get_children():
+            self.recent_files_menu.remove(widget)
+        for recent_file in harpia.s2idirectory.properties.get_recent_files():
+            self.__add_recent_file(recent_file)
+
+    # ----------------------------------------------------------------------
+    def __add_recent_file(self, recent_file):
         menu_item = Gtk.MenuItem(recent_file)
         self.recent_files_menu.append(menu_item)
         menu_item.connect("activate", self.__load_recent, None)

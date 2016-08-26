@@ -3,7 +3,7 @@
 
 from harpia.utils.XMLUtils import XMLParser
 import os
-
+import ast
 
 class HarpiaPropertiesControl():
 
@@ -26,7 +26,7 @@ class HarpiaPropertiesControl():
 
         for prop in properties:
             if prop.getAttr("name") == "recent_files":
-                self.hp.set_recent_files(list(prop.getAttr("value")))
+                self.hp.set_recent_files(ast.literal_eval(prop.getAttr("value")))
             if prop.getAttr("name") == "default_directory":
                 self.hp.set_default_directory(prop.getAttr("value"))
             if prop.getAttr("name") == "error_log_file":
@@ -36,7 +36,7 @@ class HarpiaPropertiesControl():
     # ----------------------------------------------------------------------
     def save(self):
         conf = "<HarpiaProperties>\n"
-        conf += "<property name='recent_files' value='" + str(self.hp.get_recent_files()) + "'/>\n"
+        conf += "<property name='recent_files' value=\"" + str(map(str, self.hp.get_recent_files())) + "\"/>\n"
         conf += "<property name='default_directory' value='" + self.hp.get_default_directory() + "'/>\n"
         conf += "<property name='error_log_file' value='" + self.hp.get_error_log_file() + "'/>\n"
         conf += "</HarpiaProperties>\n"
