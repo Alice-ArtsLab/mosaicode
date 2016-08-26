@@ -1,64 +1,86 @@
 <harpia>
 <GcState>
-	<block type="17" id="1">
-		<position x="80.9664306641" y="80.474395752"/>
+	<block type="103" id="10">
+		<position x="516.012756348" y="0.323577880859"/>
 	</block>
-	<block type="08" id="2">
-		<position x="245.243103027" y="58.4858398438"/>
+	<block type="17" id="1">
+		<position x="1.4141235352" y="43.4824829102"/>
 	</block>
 	<block type="07" id="3">
-		<position x="550.558898926" y="73.7161560059"/>
+		<position x="741.098632813" y="17.7228088379"/>
 	</block>
-	<block type="12" id="4">
-		<position x="399.876831055" y="36.9919128418"/>
+	<block type="08" id="2">
+		<position x="165.690795898" y="21.493927002"/>
 	</block>
 	<block type="12" id="5">
-		<position x="416.864929199" y="200.223968506"/>
+		<position x="337.31262207" y="163.232055664"/>
+	</block>
+	<block type="12" id="4">
+		<position x="320.324523926" y="0.0"/>
 	</block>
 	<block type="02" id="6">
-		<position x="677.011657715" y="69.8072814941"/>
+		<position x="892.328430176" y="17.8736267089"/>
+	</block>
+	<block type="102" id="9">
+		<position x="494.310791016" y="158.138641357"/>
+	</block>
+	<block type="100" id="8">
+		<position x="514.118469238" y="246.025482178"/>
 	</block>
 </GcState>
 <properties>
-  <block id="1" type="17">
- <property name="camera" value="/dev/video0"/>
+  <block id="10" type="103">
+ <property name="masksize" value="7x7"/>
 </block>
 
-  <block id="2" type="08">
+  <block id="1" type="17">
+ <property name="camera" value="/dev/video0"/>
 </block>
 
   <block id="3" type="07">
 </block>
 
-  <block id="4" type="12">
- <property name="frameNumber" value="5"/>
+  <block id="2" type="08">
 </block>
 
   <block id="5" type="12">
- <property name="frameNumber" value="5.0"/>
+ <property name="frameNumber" value="3"/>
+</block>
+
+  <block id="4" type="12">
+ <property name="frameNumber" value="7"/>
 </block>
 
   <block id="6" type="02">
  <property name="title" value="My Image"/>
 </block>
 
+  <block id="9" type="102">
+ <property name="masksize" value="7x7"/>
+</block>
+
+  <block id="8" type="100">
+ <property name="masksize" value="7x7"/>
+ <property name="iterations" value="3.0"/>
+</block>
+
   </properties>
 <network>
+<block type="103" id="10">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+<input id="3"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="3" input="1"/>
+</outputs>
+</block>
 <block type="17" id="1">
 <inputs>
 </inputs>
 <outputs>
 <output id="1" inBlock="2" input="1"/>
-</outputs>
-</block>
-<block type="08" id="2">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="4" input="1"/>
-<output id="2" inBlock="5" input="1"/>
-<output id="3" inBlock="3" input="3"/>
 </outputs>
 </block>
 <block type="07" id="3">
@@ -71,12 +93,14 @@
 <output id="1" inBlock="6" input="1"/>
 </outputs>
 </block>
-<block type="12" id="4">
+<block type="08" id="2">
 <inputs>
 <input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="3" input="1"/>
+<output id="1" inBlock="4" input="1"/>
+<output id="2" inBlock="5" input="1"/>
+<output id="3" inBlock="8" input="1"/>
 </outputs>
 </block>
 <block type="12" id="5">
@@ -84,7 +108,15 @@
 <input id="1"/>
 </inputs>
 <outputs>
-<output id="1" inBlock="3" input="2"/>
+<output id="1" inBlock="9" input="1"/>
+</outputs>
+</block>
+<block type="12" id="4">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="10" input="1"/>
 </outputs>
 </block>
 <block type="02" id="6">
@@ -93,6 +125,23 @@
 </inputs>
 <outputs>
 <output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="102" id="9">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="3" input="2"/>
+</outputs>
+</block>
+<block type="100" id="8">
+<inputs>
+<input id="1"/>
+<input id="2"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="3" input="3"/>
 </outputs>
 </block>
 </network>

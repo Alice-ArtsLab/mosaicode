@@ -30,6 +30,7 @@ class BlockTemplate:
             if x.destinationNumber == '--':
                 continue
             if x.connType == "HRP_IMAGE":
+                self.functionCall += 'if(block$bn$_img_o$so$)// IMG conection\n'
                 self.functionCall += 'block$dn$_img_i$di$ = cvCloneImage(block$bn$_img_o$so$);// IMG conection\n'
             elif x.connType == "HRP_INT":
                 self.functionCall += 'block$dn$_int_i$di$ = block$bn$_int_o$so$;// INT conection\n'

@@ -24,22 +24,23 @@ class LiveDelay(Plugin):
         return "Inserts a delay inside a live stream"
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
+        self.frameNumber = int(round(float(self.frameNumber)))
         blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
                                  'IplImage * block$$_img_o1 = NULL;\n' + \
                                  'int block$$_t_idx = 0;\n' + \
                                  'IplImage * block$$_buffer[' + str(self.frameNumber) + '] = {'
-        for idx in range(int(float(self.frameNumber))):
+        for idx in range(self.frameNumber):
             blockTemplate.imagesIO += 'NULL'
-            if idx != int(float(self.frameNumber)) - 1:
+            if idx != self.frameNumber - 1:
                 blockTemplate.imagesIO += ','
         blockTemplate.imagesIO += '};\n'
 
-        for idx in range(int(float(self.frameNumber))):
+        for idx in range(self.frameNumber):
             blockTemplate.imagesIO += 'block$$_buffer[' + str(
                 idx) + '] = cvCreateImage( cvSize(640,480), 8, 3);\n'
             blockTemplate.imagesIO += 'cvSetZero(block$$_buffer[' + str(idx) + ']);\n'
 
-        blockTemplate.imagesIO += 'block$$_img_o1 = block$$_buffer[' + str(int(float(self.frameNumber)) - 1) + '];\n'
+        blockTemplate.imagesIO += 'block$$_img_o1 = block$$_buffer[' + str(self.frameNumber - 1) + '];\n'
 
         blockTemplate.functionCall = '\nif(block$$_img_i1)\n{\n' + \
                                      '	cvReleaseImage(&(block$$_buffer[block$$_t_idx]));\n' + \
@@ -80,7 +81,7 @@ class LiveDelay(Plugin):
                         "lower":1,
                         "upper":200,
                         "step":1
-                            }
+                        }
         }
 
 # ------------------------------------------------------------------------------

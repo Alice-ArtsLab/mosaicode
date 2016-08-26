@@ -47,9 +47,6 @@ _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
-# Global variable to indicate overall behavior of the code generator
-g_bLive = []
-
 FRAMERATE = 25
 
 class CodeGenerator():
@@ -89,8 +86,6 @@ class CodeGenerator():
         headers = []
         images = []
         deallocations = []
-        global g_bLive
-        g_bLive = []
 
         # Configura as propriedades dos blocos no blocktemplate
         for block_key in self.diagram.blocks:
@@ -184,25 +179,19 @@ class CodeGenerator():
         for image in images:
             declaration += image
 
-        declaration += 'int end = 0;\n'
-        declaration += 'int key;\n'
-        declaration += 'while(!end) \n {\t \n'
-
-        for value in g_bLive:
-            declaration += 'cvGrabFrame(block' + value[0] + '_capture);\n' + \
-                'block' + str(value[0]) + '_frame = cvRetrieveFrame (block' + str(value[0]) + '_capture);\n'
+        declaration += 'while(1) \n {\t \n'
 
         execution = "\n\t//execution block\n"
         for x in functionCalls:
             execution += x
 
-        execution += 'key = cvWaitKey (' + str(int((1.0 / FRAMERATE) * 1000.0)) + ');\n'
-        execution += 'if(key != -1)\n'
-        execution += 'end = 1;\n'
-
         deallocating = "\n\t//deallocation block\n"
         for x in deallocations:
             deallocating += x
+
+        deallocating += 'char key = cvWaitKey(' + str(int((1.0 / FRAMERATE) * 1000.0)) + ');\n'
+        deallocating += 'if(key == 27)\n'
+        deallocating += '  break;\n'
 
         deallocating += "}"
 

@@ -1,28 +1,80 @@
 <harpia>
 <GcState>
+	<block type="12" id="3">
+		<position x="231.567810059" y="5.27035522461"/>
+	</block>
+	<block type="12" id="4">
+		<position x="224.199859619" y="107.906616211"/>
+	</block>
+	<block type="02" id="5">
+		<position x="382.752166748" y="108.210357666"/>
+	</block>
+	<block type="16" id="6">
+		<position x="66.7392578125" y="107.738952637"/>
+	</block>
 	<block type="02" id="1">
-		<position x="267.410003662" y="80.3948364254"/>
+		<position x="389.749725342" y="7.63009643515"/>
 	</block>
 	<block type="17" id="2">
-		<position x="62.4958801267" y="42.3742675781"/>
+		<position x="51.7209777829" y="3.28788757324"/>
 	</block>
 </GcState>
 <properties>
-  <block id="2" type="17">
- <property name="camera" value="/dev/video0"/>
+  <block id="3" type="12">
+ <property name="frameNumber" value="5"/>
+</block>
+
+  <block id="4" type="12">
+ <property name="frameNumber" value="5"/>
+</block>
+
+  <block id="5" type="02">
+ <property name="title" value="My Image 2"/>
+</block>
+
+  <block id="6" type="16">
+ <property name="filename" value="/usr/share/harpia/images/vLeft.mpg"/>
 </block>
 
   <block id="1" type="02">
  <property name="title" value="My Image"/>
 </block>
 
+  <block id="2" type="17">
+ <property name="camera" value="/dev/video0"/>
+</block>
+
   </properties>
 <network>
-<block type="17" id="2">
+<block type="12" id="3">
 <inputs>
+<input id="1"/>
 </inputs>
 <outputs>
 <output id="1" inBlock="1" input="1"/>
+</outputs>
+</block>
+<block type="12" id="4">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="5" input="1"/>
+</outputs>
+</block>
+<block type="02" id="5">
+<inputs>
+<input id="1"/>
+</inputs>
+<outputs>
+<output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="16" id="6">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="4" input="1"/>
 </outputs>
 </block>
 <block type="02" id="1">
@@ -31,6 +83,13 @@
 </inputs>
 <outputs>
 <output id="1" inBlock="--" input="--"/>
+</outputs>
+</block>
+<block type="17" id="2">
+<inputs>
+</inputs>
+<outputs>
+<output id="1" inBlock="3" input="1"/>
 </outputs>
 </block>
 </network>

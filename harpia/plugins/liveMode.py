@@ -26,25 +26,23 @@ class LiveMode(Plugin):
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        import harpia.gerador
         camera = self.camera[10:]
-        tmpPack = [] #contendo [ blockNumber , camNum ]
-        tmpPack.append(blockTemplate.plugin.id)
-        harpia.gerador.g_bLive.append(tmpPack)
 
-        blockTemplate.imagesIO += 'CvCapture * block$$_capture = NULL;\n' + \
+        blockTemplate.imagesIO = '// Live Mode Cam \n' + \
+                'CvCapture * block$$_capture = NULL;\n' + \
+                'block$$_capture = cvCaptureFromCAM(' + camera + ');\n' + \
                 'IplImage * block$$_frame = NULL;\n' + \
-                'block$$_capture = cvCaptureFromCAM(' + camera + ');\n'
-
-        blockTemplate.imagesIO += 'IplImage * block$$_img_o1 = NULL; //Capture\n'
+                'IplImage * block$$_img_o1 = NULL;\n'
 
         blockTemplate.functionCall = '// Live Mode \n' + \
-           'block$$_img_o1 = cvCloneImage( block$$_frame );\n'
-
-        blockTemplate.outDealloc += 'cvReleaseCapture(&block$$_capture);\n'
-
+                'int value = cvGrabFrame(block$$_capture);\n' + \
+                'block$$_frame = cvRetrieveFrame(block$$_capture);\n' + \
+                'if(!block$$_frame){\ncontinue;\n}\n'+\
+                'block$$_img_o1 = cvCloneImage(block$$_frame);\n'
 
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n'
+
+        blockTemplate.outDealloc = 'cvReleaseCapture(&block$$_capture);\n'
 
 
     # ----------------------------------------------------------------------

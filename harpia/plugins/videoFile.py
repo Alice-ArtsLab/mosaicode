@@ -17,7 +17,7 @@ class VideoFile(Plugin):
         Plugin.__init__(self)
         self.id = -1
         self.type = "16"
-        self.filename = ""
+        self.filename = "/usr/share/harpia/images/vLeft.mpg"
 
     # ----------------------------------------------------------------------
     def get_help(self):
@@ -26,10 +26,6 @@ class VideoFile(Plugin):
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        import harpia.gerador
-        tmpPack = []
-        tmpPack.append(blockTemplate.plugin.id)
-        harpia.gerador.g_bLive.append(tmpPack)
 
         blockTemplate.imagesIO = 'CvCapture * block$$_capture = NULL;\n'+ \
                 'IplImage * block$$_frame = NULL;\n' + \
@@ -38,10 +34,17 @@ class VideoFile(Plugin):
         blockTemplate.imagesIO += 'IplImage * block$$_img_o1 = NULL; //Capture\n'
 
         blockTemplate.functionCall = '// Video Mode \n' + \
-           'block$$_img_o1 = cvCloneImage(block$$_frame);\n'
-        blockTemplate.outDealloc += 'cvReleaseCapture(&block$$_capture);\n'
+                'cvGrabFrame(block$$_capture);\n' + \
+                'block$$_frame = cvRetrieveFrame (block$$_capture);\n' + \
+                'if(!block$$_frame){\n'+\
+                'cvSetCaptureProperty(block$$_capture, CV_CAP_PROP_POS_AVI_RATIO , 0);\n' + \
+                'continue;\n' + \
+                '}\n' + \
+                'block$$_img_o1 = cvCloneImage(block$$_frame);\n'
 
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n'
+
+        blockTemplate.outDealloc = 'cvReleaseCapture(&block$$_capture);\n'
 
 
     # ----------------------------------------------------------------------
