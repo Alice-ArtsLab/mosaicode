@@ -90,15 +90,15 @@ class CodeGenerator():
         # Configura as propriedades dos blocos no blocktemplate
         for block_key in self.diagram.blocks:
             block = self.diagram.blocks[block_key]
-            block_template = BlockTemplate(block.plugin)
+            block_template = BlockTemplate(block.get_plugin())
             for connection in self.diagram.connectors:
-                if connection.from_block != block.plugin.id:
+                if connection.from_block != block.get_plugin().id:
                     continue
                 tmpConnection = Connection()
                 tmpConnection.sourceOutput = int (connection.from_block_out) + 1
                 tmpConnection.destinationInput = int(connection.to_block_in ) + 1
                 tmpConnection.destinationNumber = connection.to_block
-                tmpConnection.connType = block.plugin.get_description()["OutTypes"][connection.from_block_out]
+                tmpConnection.connType = block.get_description()["OutTypes"][connection.from_block_out]
                 block_template.myConnections.append(tmpConnection)
 
             block_template.generate_block_code()
