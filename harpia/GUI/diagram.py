@@ -330,7 +330,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __abort_connection(self):
         if self.curr_connector == None:
             return
-        self.get_root_item().remove_child(self.get_root_item().get_n_children() - 1)
+        connector_number = self.get_root_item().find_child(self.curr_connector)
+        self.get_root_item().remove_child(connector_number)
         del self.curr_connector
         self.curr_connector = None
 
