@@ -11,6 +11,7 @@ from harpia.constants import *
 
 class CodeWindow(Gtk.Dialog):
 
+    # ----------------------------------------------------------------------
     def __init__(self, main_window, code):
         Gtk.Dialog.__init__(self, "Code Window", main_window,
                 0,(Gtk.STOCK_OK, Gtk.ResponseType.OK))
@@ -35,3 +36,4 @@ class CodeWindow(Gtk.Dialog):
             self.close()
             self.destroy()
 
+# ----------------------------------------------------------------------

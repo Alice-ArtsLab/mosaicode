@@ -45,6 +45,8 @@ class Menu(Gtk.MenuBar):
         self.__create_menu("Paste", "<Control>V", edit_menu, self.main_window.main_control.paste)
         self.__create_menu("Delete", "Delete", edit_menu, self.main_window.main_control.delete)
         edit_menu.append(Gtk.SeparatorMenuItem())
+        self.__create_menu("Clear Console", "<Control>L", edit_menu, self.main_window.main_control.clear_console)
+        edit_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu("Preferences", None, edit_menu, self.main_window.main_control.preferences)
         self.__add_menu_category("Edit", edit_menu)
 

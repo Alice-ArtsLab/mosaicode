@@ -10,6 +10,7 @@ import datetime
 
 class Status(Gtk.ScrolledWindow):
 
+    # ----------------------------------------------------------------------
     def __init__(self, main_window):
         Gtk.ScrolledWindow.__init__(self)
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -20,15 +21,18 @@ class Status(Gtk.ScrolledWindow):
         self.status.set_editable(False)
         self.status.set_left_margin(2)
         self.add(self.status)
+
         textbuffer = self.status.get_buffer()
         self.tag_bold = textbuffer.create_tag("bold", weight=Pango.Weight.BOLD)
         self.tag = textbuffer.create_tag("red", weight=Pango.Weight.NORMAL)
         self.tag_red = textbuffer.create_tag("normal", background="red")
 
 
+    # ----------------------------------------------------------------------
     def clear(self):
         self.status.get_buffer().set_text("")
 
+    # ----------------------------------------------------------------------
     def append_text(self, text):
         textbuffer = self.status.get_buffer()
         end_iter = textbuffer.get_end_iter()
@@ -40,5 +44,8 @@ class Status(Gtk.ScrolledWindow):
         textbuffer.insert_with_tags(end_iter, msg, self.tag)
         self.status.scroll_to_mark(textbuffer.get_insert(), 0.0, True, 0.5, 0.5)
 
+    # ----------------------------------------------------------------------
     def log(self, text):
         self.append_text(text)
+
+# ----------------------------------------------------------------------

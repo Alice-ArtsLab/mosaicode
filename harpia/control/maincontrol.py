@@ -194,4 +194,9 @@ class MainControl():
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
         self.main_window.block_properties.set_block(block)
+
+    # ----------------------------------------------------------------------
+    def clear_console(self):
+        self.main_window.status.clear()
+
 # ----------------------------------------------------------------------
