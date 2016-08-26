@@ -4,6 +4,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+gi.require_version('GtkSource', '3.0')
+from gi.repository import GtkSource
 
 from harpia.constants import *
 
@@ -19,7 +21,8 @@ class CodeWindow(Gtk.Dialog):
         box.pack_start(sw, True, True, 0)
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        textview = Gtk.TextView()
+        textview = GtkSource.View()
+        textview.set_show_line_numbers(True)
         textview.set_left_margin(10)
         textview.set_right_margin(10)
         textview.get_buffer().set_text(code)
