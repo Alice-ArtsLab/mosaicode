@@ -4,9 +4,8 @@
 class BlockModel(object):
 
     #----------------------------------------------------------------------
-    def __init__(self, plugin, block_id):
+    def __init__(self, plugin):
         self.__plugin = plugin
-        self.__plugin.id = block_id
 
     #----------------------------------------------------------------------
     def get_id(self):

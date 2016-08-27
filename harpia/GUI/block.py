@@ -59,9 +59,9 @@ OUTPUT_WIDTH = 24
 class Block(GooCanvas.CanvasGroup, BlockModel):
 
 #----------------------------------------------------------------------
-    def __init__(self, diagram, plugin, block_id=1):
+    def __init__(self, diagram, plugin):
         GooCanvas.CanvasGroup.__init__(self)
-        BlockModel.__init__(self, plugin, block_id)
+        BlockModel.__init__(self, plugin)
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
 
@@ -113,6 +113,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
+        self.move(self.get_plugin().x - 20.0, self.get_plugin().y - 60.0)
 
     #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):

@@ -48,7 +48,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_property("expand", True)
 
         self.last_clicked_point = (None, None)
-        self.main_window = main_window
+        self.__main_window = main_window
 
         self.curr_connector = None
         self.current_widgets = []
@@ -59,7 +59,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.connect_after("button_release_event", self.__on_button_release)
         self.connect_after("key-press-event", self.__on_key_press)
 
-        self.connect("drag_data_received", self.drag_data_received)
+        self.connect("drag_data_received", self.__drag_data_received)
         self.drag_dest_set(
             Gtk.DestDefaults.MOTION | Gtk.DestDefaults.HIGHLIGHT | Gtk.DestDefaults.DROP,
             [Gtk.TargetEntry.new('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
@@ -148,8 +148,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if event.keyval == Gdk.KEY_Right:
                 self.move_selected_blocks(5,0)
                 return True
-            if event.keyval == Gdk.KEY_w:
-                self.main_window.work_area.close_tab()
 
         if event.keyval == Gdk.KEY_Delete:
             self.delete()
@@ -204,8 +202,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
 
     # ----------------------------------------------------------------------
-    def drag_data_received(self, widget, context, x, y, selection, targetType, time):
-        block = self.main_window.main_control.get_selected_block()
+    def __drag_data_received(self, widget, context, x, y, selection, targetType, time):
+        block = self.__main_window.main_control.get_selected_block()
         if block != None:
             self.insert_block(block, x, y)
         return
@@ -253,16 +251,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 y -= y_off
             else:
                 x, y = (100 - x_off, 100 - x_off)
-        self.insert_blockPosId(block, x, y, self.block_id)
+        block.set_id(self.block_id)
+        self.load_block(block, x, y)
         self.block_id += 1
         self.update_scrolling()
         return self.block_id - 1
 
     #----------------------------------------------------------------------
-    def insert_blockPosId(self, block, x, y, block_id):
-        new_block = Block(self, block, block_id)
-        new_block.translate(x - 20.0, y - 60.0)
-        self.blocks[block_id] = new_block
+    def load_block(self, block):
+        new_block = Block(self, block)
+        self.blocks[block.get_id()] = new_block
         self.get_root_item().add_child(new_block, -1)
         self.set_modified(True)
 
@@ -350,7 +348,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                             parent=self.get_root_item(),
                             x=0,
                             y=0,
-                            width=self.main_window.get_size()[0],
+                            width=self.__main_window.get_size()[0],
                             height=1000,
                             stroke_color="white",
                             fill_color="white")
@@ -374,13 +372,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     #----------------------------------------------------------------------
     def set_file_name(self, file_name):
         DiagramModel.set_file_name(self, file_name)
-        self.main_window.work_area.rename_diagram(self)
-
-    #----------------------------------------------------------------------
-    def get_block_on_focus(self):
-        for block_id in self.blocks:
-            if self.blocks[block_id].focus:
-                return block_id
+        self.__main_window.work_area.rename_diagram(self)
 
     #----------------------------------------------------------------------
     def __apply_zoom(self):
@@ -407,12 +399,12 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def show_block_property(self, block):
-        self.main_window.main_control.show_block_property(block)
+        self.__main_window.main_control.show_block_property(block)
 
     # ----------------------------------------------------------------------
     def resize(self, data):
-        self.set_property("x2", self.main_window.get_size()[0])
-        self.white_board.set_property("width", self.main_window.get_size()[0])
+        self.set_property("x2", self.__main_window.get_size()[0])
+        self.white_board.set_property("width", self.__main_window.get_size()[0])
 
     # ----------------------------------------------------------------------
     def select_all(self):
@@ -466,7 +458,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def set_modified(self, state):
         DiagramModel.set_modified(self, state)
-        self.main_window.work_area.rename_diagram(self)
+        self.__main_window.work_area.rename_diagram(self)
 
     # ---------------------------------------------------------------------
     def grab_focus(self):

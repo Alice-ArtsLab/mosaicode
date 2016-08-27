@@ -13,7 +13,7 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def get_position(self):
         return (self.x, self.y)
-    
+
     # ----------------------------------------------------------------------
     def get_type(self):
         return self.type
