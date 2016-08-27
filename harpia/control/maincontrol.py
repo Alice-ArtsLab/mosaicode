@@ -102,15 +102,21 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def cut(self):
-        print "Cut from control"
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().cut()
 
     # ----------------------------------------------------------------------
     def copy(self):
-        print "Copy from control"
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().copy()
 
     # ----------------------------------------------------------------------
     def paste(self):
-        print "Paste from control"
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().paste()
 
     # ----------------------------------------------------------------------
     def preferences(self):
@@ -180,7 +186,6 @@ class MainControl():
     def zoom_in(self):
         if self.main_window.work_area.get_current_diagram() != None:
             self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_IN)
-            print ZOOM_IN
 
     # ----------------------------------------------------------------------
     def zoom_out(self):

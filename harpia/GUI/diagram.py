@@ -32,6 +32,7 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GooCanvas
 
+import copy
 
 from block import Block
 from connector import Connector
@@ -52,6 +53,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         self.curr_connector = None
         self.current_widgets = []
+        self.clipboard = []
 
         self.grab_focus()
         self.connect("motion-notify-event", self.__on_motion_notify)
@@ -205,7 +207,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __drag_data_received(self, widget, context, x, y, selection, targetType, time):
         block = self.__main_window.main_control.get_selected_block()
         if block != None:
-            self.insert_block(block, x, y)
+            block.x = x
+            block.y = y
+            self.insert_block(block)
         return
 
     #----------------------------------------------------------------------
@@ -217,45 +221,36 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         limit_y = self.white_board.get_property("height")
 
         for block_id in self.blocks:
-            bpos = self.blocks[block_id].get_position()
-            if bpos[0] < min_x:
-                min_x = bpos[0]
-            if bpos[1] < min_y:
-                min_y = bpos[1]
+            x,y = self.blocks[block_id].get_position()
+            if x < min_x:
+                min_x = x
+            if y < min_y:
+                min_y = y
 
         if min_x < 0:
             for block_id in self.blocks:
-                bpos = self.blocks[block_id].move(abs(min_x),0)
+                self.blocks[block_id].move(abs(min_x),0)
 
         if min_y < 0:
             for block_id in self.blocks:
-                bpos = self.blocks[block_id].move(0, abs(min_y))
+                self.blocks[block_id].move(0, abs(min_y))
 
         for block_id in self.blocks:
-            bpos = self.blocks[block_id].get_position()
-            if bpos[0] > limit_x - self.blocks[block_id].width:
-                self.blocks[block_id].move(limit_x - bpos[0] - self.blocks[block_id].width,0)
-            if bpos[1] > limit_y - self.blocks[block_id].height:
-                self.blocks[block_id].move(0, limit_y - bpos[1] - self.blocks[block_id].height)
+            x,y = self.blocks[block_id].get_position()
+            if x > limit_x - self.blocks[block_id].width:
+                self.blocks[block_id].move(limit_x - x - self.blocks[block_id].width,0)
+            if y > limit_y - self.blocks[block_id].height:
+                self.blocks[block_id].move(0, limit_y - y - self.blocks[block_id].height)
 
         self.update_flows()
 
     #----------------------------------------------------------------------
-    def insert_block(self, block, x=None, y=None):
-        if x == None:
-            x_off = (self.get_hadjustment()).get_value()
-            y_off = (self.get_vadjustment()).get_value()
-            if self.last_clicked_point != (None, None):
-                x, y = (self.last_clicked_point[0], self.last_clicked_point[1])
-                x -= x_off
-                y -= y_off
-            else:
-                x, y = (100 - x_off, 100 - x_off)
+    def insert_block(self, block):
         block.set_id(self.block_id)
-        self.load_block(block, x, y)
+        self.load_block(block)
         self.block_id += 1
         self.update_scrolling()
-        return self.block_id - 1
+        return block.get_id()
 
     #----------------------------------------------------------------------
     def load_block(self, block):
@@ -274,10 +269,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 self.connector_id += 1
                 self.update_flows()
                 self.get_root_item().add_child(new_connection, -1)
-            else:
-                pass
-        else:
-            pass
+        return new_connection
 
     #----------------------------------------------------------------------
     def clicked_input(self, block, a_nInput):
@@ -430,6 +422,51 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.current_widgets = []
         self.update_flows()
         self.set_modified(True)
+
+    # ---------------------------------------------------------------------
+    def paste(self):
+        replace = {}
+        self.current_widgets = []
+        # interact into blocks, add blocks and change their id
+        for widget in self.clipboard:
+            if isinstance(widget, Block):
+                old_id = widget.get_id()
+                plugin = copy.deepcopy(widget.get_plugin())
+                new_id = self.insert_block(plugin)
+                replace[old_id] = new_id
+                self.current_widgets.append(self.blocks[new_id])
+        # interact into connections changing block ids
+        for widget in self.clipboard:
+            if isinstance(widget, Connector):
+                # if a connector is copied without blocks
+                if widget.from_block not in replace:
+                    continue
+                if widget.to_block not in replace:
+                    continue
+                from_block = replace[widget.from_block]
+                from_block_out = widget.from_block_out
+                to_block = replace[widget.to_block]
+                to_block_in = widget.to_block_in
+                new_connection = self.insert_ready_connector(
+                            from_block,
+                            from_block_out,
+                            to_block,
+                            to_block_in)
+                self.current_widgets.append(new_connection)
+        self.update_flows()
+
+    # ---------------------------------------------------------------------
+    def copy(self):
+        self.clipboard = []
+        for widget in self.current_widgets:
+            self.clipboard.append(widget)
+
+    # ---------------------------------------------------------------------
+    def cut(self):
+        self.clipboard = []
+        for widget in self.current_widgets:
+            self.clipboard.append(widget)
+            widget.delete()
 
     #----------------------------------------------------------------------
     def delete_connection(self, connection):

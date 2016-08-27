@@ -344,7 +344,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         return x,y
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def set_properties(self, data):
         self.get_plugin().set_properties(data)
         self.diagram.set_modified(True)
