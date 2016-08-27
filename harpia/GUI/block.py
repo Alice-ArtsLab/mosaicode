@@ -41,6 +41,7 @@ import harpia.s2idirectory
 from harpia.s2idirectory import *
 
 from harpia import s2idirectory
+from harpia.model.blockmodel import BlockModel
 
 import copy
 
@@ -55,14 +56,12 @@ OUTPUT_HEIGHT = 24
 OUTPUT_WIDTH = 24
 
 
-class Block(GooCanvas.CanvasGroup):
+class Block(GooCanvas.CanvasGroup, BlockModel):
 
 #----------------------------------------------------------------------
-    def __init__( self, diagram, plugin, block_id=1):
+    def __init__(self, diagram, plugin, block_id=1):
         GooCanvas.CanvasGroup.__init__(self)
-        self.__plugin = plugin
-        self.__plugin.id = block_id
-        self.block_id = block_id
+        BlockModel.__init__(self, plugin, block_id)
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
 
@@ -115,7 +114,7 @@ class Block(GooCanvas.CanvasGroup):
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         # with Shift
         if event.state == Gdk.ModifierType.SHIFT_MASK | Gdk.ModifierType.MOD2_MASK:
@@ -146,7 +145,7 @@ class Block(GooCanvas.CanvasGroup):
 
         return True
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
             return False
@@ -161,31 +160,23 @@ class Block(GooCanvas.CanvasGroup):
         self.diagram.update_scrolling()
         return False
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
         self.focus = True
         self.diagram.update_flows()
         return False
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         self.focus = False
         self.diagram.update_flows()
         return False
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __del__(self):
         pass
 
-#----------------------------------------------------------------------
-    def get_plugin(self):
-        return self.__plugin
-
-#----------------------------------------------------------------------
-    def get_description(self):
-        return self.__plugin.get_description()
-    
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __draw_rect(self):
         color = self.get_description()["Color"].split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
@@ -205,7 +196,7 @@ class Block(GooCanvas.CanvasGroup):
                     )
         self.widgets["Rect"] = rect
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __draw_icon(self):
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                 self.get_description()["Icon"])
@@ -216,7 +207,7 @@ class Block(GooCanvas.CanvasGroup):
                 )
         self.widgets["Icon"] = image
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __draw_inputs(self):
         ins = []
         for x in range(len(self.get_description()["InTypes"])):
@@ -240,16 +231,16 @@ class Block(GooCanvas.CanvasGroup):
             ins.append(image)
         self.widgets["Inputs"] = ins
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, args):
-        self.diagram.clicked_input(self.block_id, args)
+        self.diagram.clicked_input(self, args)
         return True
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_input_release(self, canvas_item, target_item, event, args):
         return True
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __draw_outputs(self):
         outs = []
         for x in range(len(self.get_description()["OutTypes"])):
@@ -273,16 +264,16 @@ class Block(GooCanvas.CanvasGroup):
             outs.append(image)
         self.widgets["Outputs"] = outs
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
-        self.diagram.clicked_output(self.block_id, args)
+        self.diagram.clicked_output(self, args)
         return True
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __on_output_release(self, canvas_item, target_item, event, args):
         return True
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def __draw_label(self):
         text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + self.get_description()["Label"] + "</span>"
 
@@ -296,26 +287,26 @@ class Block(GooCanvas.CanvasGroup):
                             )
 
         text_width = label.get_property('width')
-        oldX,oldY = ((self.width/2),(self.height-10))
+        oldX, oldY = ((self.width/2),(self.height-10))
         self.width = max(text_width + WIDTH_2_TEXT_OFFSET, self.width)
         label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
         self.widgets["Label"] = label
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def build(self):
-        self.__draw_label()#must be called in this order! otherwise the box rect won't have the propper width
+        self.__draw_label()
         self.__draw_rect()
         self.__draw_inputs()
         self.__draw_outputs()
         self.__draw_icon()
         self.update_flow()
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def update_flow(self):
         if self.is_source :#
             self.has_flow = True
         else:
-            sourceConnectors = self.diagram.get_connectors_to(self.block_id)
+            sourceConnectors = self.diagram.get_connectors_to(self)
             if len(sourceConnectors) != len(self.get_description()["InTypes"]):
                 self.has_flow = False
             else:
@@ -323,65 +314,45 @@ class Block(GooCanvas.CanvasGroup):
         self.__update_state()
         return self.has_flow
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = self.input_port_centers[input_id][0] + x - PORT_SENSITIVITY
         y = self.input_port_centers[input_id][1] + y - PORT_SENSITIVITY + 3
         return (x, y)
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = self.output_port_centers[output_id][0] + x + PORT_SENSITIVITY
         y = self.output_port_centers[output_id][1] + y - PORT_SENSITIVITY + 3
         return (x,y)
 
-#----------------------------------------------------------------------
-    def get_state(self):
-        return self.has_flow
-
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def move(self, x, y):
         self.diagram.set_modified(True)
         self.translate(x, y)
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def delete(self):
-        self.diagram.delete_block(self.block_id)
+        self.diagram.delete_block(self)
         self.diagram.update_flows()
 
-#----------------------------------------------------------------------
-    def get_id(self):
-        return self.block_id
-
-#----------------------------------------------------------------------
-    def get_type(self):
-        return self.__plugin.get_description()["Type"]
-
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
     def get_position(self):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         return x,y
 
 #----------------------------------------------------------------------
-    def get_xml(self):
-        return self.__plugin.get_xml()
-
-#----------------------------------------------------------------------
-    def get_help(self):
-        return self.__plugin.get_help()
-
-#----------------------------------------------------------------------
-    def get_properties(self):
-        return self.__plugin.get_properties()
-
-#----------------------------------------------------------------------
     def set_properties(self, data):
-        self.__plugin.set_properties(data)
+        self.get_plugin().set_properties(data)
         self.diagram.set_modified(True)
 
-#----------------------------------------------------------------------
+    #----------------------------------------------------------------------
+    def get_properties(self):
+        return BlockModel.get_properties(self)
+
+    #----------------------------------------------------------------------
     def __update_state(self):
         # Not connected: Color = red
         if self.has_flow:

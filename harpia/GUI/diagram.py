@@ -282,10 +282,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             pass
 
     #----------------------------------------------------------------------
-    def clicked_input(self, block_id, a_nInput):
+    def clicked_input(self, block, a_nInput):
         if self.curr_connector == None:
             return
-        self.curr_connector.set_end(block_id, a_nInput)
+        self.curr_connector.set_end(block.get_id(), a_nInput)
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return
@@ -319,9 +319,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         return True
 
     #----------------------------------------------------------------------
-    def clicked_output(self, block_id, output):
+    def clicked_output(self, block, output):
         self.__abort_connection()  # abort any possibly running connections
-        self.curr_connector = Connector(self, block_id, output)
+        self.curr_connector = Connector(self, block.get_id(), output)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
@@ -364,10 +364,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             conn.update_flow()
 
     #----------------------------------------------------------------------
-    def get_connectors_to(self, block_id):
+    def get_connectors_to(self, block):
         result = []
         for conn in self.connectors:
-            if conn.to_block == block_id:
+            if conn.to_block == block.get_id():
                 result.append(conn)
         return result
 
@@ -448,7 +448,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_modified(True)
 
     #----------------------------------------------------------------------
-    def delete_block(self, block_id):
+    def delete_block(self, block):
+        block_id = block.get_id()
         # removing related connectors
         for idx in reversed(range(len(self.connectors))):
             if self.connectors[idx].from_block == block_id \
