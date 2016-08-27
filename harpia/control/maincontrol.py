@@ -160,10 +160,6 @@ class MainControl():
         self.main_window.blocks_tree_view.search(query)
 
     # ----------------------------------------------------------------------
-    def show_search_bar(self):
-        self.main_window.search.show_search_bar()
-
-    # ----------------------------------------------------------------------
     def set_block(self, block):
         self.main_window.block_properties.set_block(block)
         pass
