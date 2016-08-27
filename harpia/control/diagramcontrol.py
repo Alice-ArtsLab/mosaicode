@@ -36,6 +36,9 @@ class DiagramControl():
             if self.diagram.get_file_name() == None:
                 harpia.s2idirectory.Log.log("Cannot Load without filename")
                 return False
+        if not os.path.exists(self.diagram.get_file_name()):
+            harpia.s2idirectory.Log.log("File '" + self.diagram.get_file_name() + "' does not exist!")
+            return False
 
         # load the diagram
         xml_loader = XMLParser(self.diagram.get_file_name())
@@ -43,8 +46,7 @@ class DiagramControl():
         # test for old version
         blocks = xml_loader.getTag("harpia").getTag("GcState").getChildTags("block")
         if len(blocks) > 0:
-            self.__load_old(xml_loader)
-            return True
+            return self.__load_old(xml_loader)
 
         zoom = xml_loader.getTag("harpia").getTag("zoom").getAttr("value")
         self.diagram.set_zoom(float(zoom))
@@ -65,7 +67,10 @@ class DiagramControl():
                 props[prop.name] = prop.value
             new_block = harpia.s2idirectory.block[block_type]()
             new_block.set_properties(props)
-            self.diagram.insert_blockPosId(new_block, float(x), float(y), block_id)
+            new_block.set_id(block_id)
+            new_block.x = float(x)
+            new_block.y = float(y)
+            self.diagram.load_block(new_block)
             self.diagram.block_id = max(self.diagram.block_id, block_id)
         self.diagram.block_id = int(self.diagram.block_id) + 1
 
@@ -94,7 +99,11 @@ class DiagramControl():
             position = block.getTag("position")
             x = position.getAttr("x")
             y = position.getAttr("y")
-            self.diagram.insert_blockPosId(harpia.s2idirectory.block[block_type](), float(x), float(y), block_id)
+            new_block = harpia.s2idirectory.block[block_type]()
+            new_block.set_id(block_id)
+            new_block.x = float(x)
+            new_block.y = float(y)
+            self.diagram.load_block(new_block)
             self.diagram.block_id = max(self.diagram.block_id, block_id)
 
         self.diagram.block_id = int(self.diagram.block_id) + 1
