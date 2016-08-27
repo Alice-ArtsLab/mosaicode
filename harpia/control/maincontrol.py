@@ -179,17 +179,18 @@ class MainControl():
     # ----------------------------------------------------------------------
     def zoom_in(self):
         if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().set_zoom(ZOOM_IN)
+            self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_IN)
+            print ZOOM_IN
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
         if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().set_zoom(ZOOM_OUT)
+            self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_OUT)
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
         if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().set_zoom(ZOOM_ORIGINAL)
+            self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):

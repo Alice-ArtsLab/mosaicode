@@ -50,7 +50,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.last_clicked_point = (None, None)
         self.main_window = main_window
 
-        self.zoom = 1.0 # pixels per unit
         self.curr_connector = None
         self.current_widgets = []
 
@@ -384,14 +383,27 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 return block_id
 
     #----------------------------------------------------------------------
-    def set_zoom(self, value):
-        if value == ZOOM_ORIGINAL:
-            self.zoom = ZOOM_ORIGINAL
-        else:
-            self.zoom *= value
-        self.set_scale(self.zoom)
+    def __apply_zoom(self):
+        self.set_scale(self.get_zoom())
         self.update_scrolling()
         self.set_modified(True)
+
+    #----------------------------------------------------------------------
+    def set_zoom(self, zoom):
+        DiagramModel.set_zoom(self, zoom)
+        self.__apply_zoom()
+
+    #----------------------------------------------------------------------
+    def change_zoom(self, value):
+        zoom = self.get_zoom()
+        if value == ZOOM_ORIGINAL:
+            zoom = ZOOM_ORIGINAL
+        elif value == ZOOM_IN:
+            zoom = zoom + 0.1
+        elif value == ZOOM_OUT:
+            zoom = zoom - 0.1
+        DiagramModel.set_zoom(self, zoom)
+        self.__apply_zoom()
 
     #----------------------------------------------------------------------
     def show_block_property(self, block):

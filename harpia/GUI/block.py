@@ -39,7 +39,6 @@ import os
 from blockmenu import BlockMenu
 import harpia.s2idirectory
 from harpia.s2idirectory import *
-from harpia.utils.XMLUtils import XMLParser
 
 from harpia import s2idirectory
 
@@ -132,7 +131,7 @@ class Block(GooCanvas.CanvasGroup):
                 self.diagram.current_widgets = []
                 self.diagram.current_widgets.append(self)
 
-        self.diagram.show_block_property(self.__plugin)
+        self.diagram.show_block_property(self)
 
         Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 1:
@@ -367,15 +366,20 @@ class Block(GooCanvas.CanvasGroup):
 
 #----------------------------------------------------------------------
     def get_xml(self):
-        return XMLParser(self.__plugin.get_xml(), fromString=True)
+        return self.__plugin.get_xml()
 
 #----------------------------------------------------------------------
-    def set_xml(self, xml):
-        properties = {}
-        block_properties = xml.getTag("properties").getTag("block").getChildTags("property")
-        for prop in block_properties:
-            properties[prop.name] = prop.value
-        self.__plugin.set_properties(properties)
+    def get_help(self):
+        return self.__plugin.get_help()
+
+#----------------------------------------------------------------------
+    def get_properties(self):
+        return self.__plugin.get_properties()
+
+#----------------------------------------------------------------------
+    def set_properties(self, data):
+        self.__plugin.set_properties(data)
+        self.diagram.set_modified(True)
 
 #----------------------------------------------------------------------
     def __update_state(self):

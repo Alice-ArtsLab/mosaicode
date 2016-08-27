@@ -11,6 +11,7 @@ class DiagramModel(object):
         self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
         self.blocks = {} # GUI blocks
         self.connectors = []
+        self.__zoom = 1.0 # pixels per unit
         self.__file_name = "Untitled"
         self.__modified = False
 
@@ -51,4 +52,12 @@ class DiagramModel(object):
     # ---------------------------------------------------------------------
     def get_modified(self):
         return self.__modified
+
+    # ---------------------------------------------------------------------
+    def set_zoom(self, zoom):
+        self.__zoom = zoom
+
+    # ---------------------------------------------------------------------
+    def get_zoom(self):
+        return self.__zoom
 

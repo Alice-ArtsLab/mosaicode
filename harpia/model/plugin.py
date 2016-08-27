@@ -60,12 +60,9 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_xml(self):
-        xml = "<properties>\n"
-        xml += "<block type='" + str(self.type) + "' id='" + str(self.id) + "'>\n"
+        xml = ""
         for key in self.get_properties():
-            xml += "<property name='" + key + "' value='" + str(self.__dict__[key]) + "' />\n"
-        xml += "</block>\n"
-        xml += "</properties>\n"
+            xml += "\t\t<property name='" + key + "' value='" + str(self.__dict__[key]) + "' />\n"
         return xml
 
 # ------------------------------------------------------------------------------
