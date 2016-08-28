@@ -35,5 +35,4 @@ class CodeWindow(Gtk.Dialog):
         if self.run() == Gtk.ResponseType.OK:
             self.close()
             self.destroy()
-
 # ----------------------------------------------------------------------

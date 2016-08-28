@@ -40,6 +40,9 @@ class Menu(Gtk.MenuBar):
 
         # -------------------------- Edit --------------------------------------
         edit_menu = Gtk.Menu()
+        self.__create_menu("Undo", "<Control>Z", edit_menu, mc.undo)
+        self.__create_menu("Redo", "<Shift><Control>Z", edit_menu, mc.redo)
+        edit_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu("Select All", "<Control>A", edit_menu, mc.select_all)
         self.__create_menu("Cut", "<Control>X", edit_menu, mc.cut)
         self.__create_menu("Copy", "<Control>C", edit_menu, mc.copy)

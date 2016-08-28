@@ -201,4 +201,14 @@ class MainControl():
     def clear_console(self):
         self.main_window.status.clear()
 
+    # ----------------------------------------------------------------------
+    def undo(self):
+        if self.main_window.work_area.get_current_diagram() != None:
+            self.main_window.work_area.get_current_diagram().undo()
+
+    # ----------------------------------------------------------------------
+    def redo(self):
+        if self.main_window.work_area.get_current_diagram() != None:
+            self.main_window.work_area.get_current_diagram().redo()
+
 # ----------------------------------------------------------------------

@@ -91,7 +91,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                           HEIGHT_DEFAULT)
 
         self.build()
-        self.set_parent(diagram.get_root_item())
 
         self.input_port_centers = []
         for inputPort in range(len(self.get_description()["InTypes"])):
@@ -113,7 +112,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
-        self.move(self.get_plugin().x - 20.0, self.get_plugin().y - 60.0)
+        self.translate(self.x, self.y)
 
     #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -331,8 +330,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def move(self, x, y):
-        self.diagram.set_modified(True)
+        self.diagram.do("Move block")
         self.translate(x, y)
+        self.diagram.set_modified(True)
 
     #----------------------------------------------------------------------
     def delete(self):
@@ -346,6 +346,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def set_properties(self, data):
+        self.diagram.do("Set block property")
         self.get_plugin().set_properties(data)
         self.diagram.set_modified(True)
 
