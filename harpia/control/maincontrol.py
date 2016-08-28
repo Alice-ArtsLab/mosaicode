@@ -58,7 +58,7 @@ class MainControl():
         
 
         if diagram.get_file_name() is "Untitled" or save_as:
-            print(("Valor %s Save_as %s")%(diagram.get_file_name(),save_as))
+           
             while True:
                 name = Dialog().save_dialog("Save", self.main_window)
                 if Dialog().confirm_overwrite(name, self.main_window):
