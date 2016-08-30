@@ -216,26 +216,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def update_scrolling(self):
-#        min_x = 0
-#        min_y = 0
-
-#        limit_x = self.white_board.get_property("width")
-#        limit_y = self.white_board.get_property("height")
-
-#        for block_id in self.blocks:
-#            x,y = self.blocks[block_id].get_position()
-#            if x < min_x:
-#                min_x = x
-#            if y < min_y:
-#                min_y = y
-
-#        if min_x < 0:
-#            for block_id in self.blocks:
-#                self.blocks[block_id].move(abs(min_x),0)
-
-#        if min_y < 0:
-#            for block_id in self.blocks:
-#                self.blocks[block_id].move(0, abs(min_y))
 
 #        for block_id in self.blocks:
 #            x,y = self.blocks[block_id].get_position()
@@ -556,4 +536,25 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.connectors = connectors
         self.redraw()
 
+    # ---------------------------------------------------------------------
+    def get_min_max(self):
+        min_x = 32000
+        min_y = 32000
+
+        max_x = 0
+        max_y = 0
+
+        for block_id in self.blocks:
+            block = self.blocks[block_id]
+            x,y = block.get_position()
+            if x < min_x:
+                min_x = x
+            if y < min_y:
+                min_y = y
+            if x + block.width > max_x:
+                max_x = x + block.width
+            if y + block.height > max_y:
+                max_y = y + block.height
+
+        return min_x, min_y, max_x - min_x, max_y - min_y
 #----------------------------------------------------------------------

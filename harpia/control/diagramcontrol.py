@@ -199,14 +199,21 @@ class DiagramControl():
         return True, "Success"
 
 # ----------------------------------------------------------------------
-    def export_png(self, filepath="diagrama.png"):
-        (x, y, width, height) = self.diagram.get_parent_window().get_geometry()
+    def export_png(self, file_name="diagrama.png"):
+        if file_name != None:
+            file_name = "diagrama.png"
+        if file_name.find(".png") == -1:
+            file_name = file_name + ".png"
+
+        x, y, width, height = self.diagram.get_min_max()
+
+        print x, y, width, height
         pixbuf = Gdk.pixbuf_get_from_window(
                 self.diagram.get_parent_window(), x, y, width, height)
 
         test, tmp_buffer = pixbuf.save_to_bufferv("png",  [], [])
 
-        save_file = open(filepath, "w")
+        save_file = open(file_name, "w")
         save_file.write(tmp_buffer)
         save_file.close()
 
