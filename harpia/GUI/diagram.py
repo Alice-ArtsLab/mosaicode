@@ -79,6 +79,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __del__(self):
         pass
 
+    #----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
         self.scrolled_window = frame
 
@@ -219,6 +220,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def update_scrolling(self):
+        x, y, width, height = self.get_min_max()
+        for block_id in self.blocks:
+            block = self.blocks[block_id]
+            block.move(0 - x, 0 - y)
         self.update_flows()
 
     #----------------------------------------------------------------------
@@ -558,17 +563,4 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 max_y = y + block.height
 
         return min_x, min_y, max_x - min_x, max_y - min_y
-
-    # ---------------------------------------------------------------------
-    def reload(self):
-        x, y, width, height = self.get_min_max()
-        if x < 0:
-            for block_id in self.blocks:
-                block = self.blocks[block_id]
-                block.move(0 - x, 0)
-        if y < 0:
-            for block_id in self.blocks:
-                block = self.blocks[block_id]
-                block.move(0, 0 - y)
-        self.update_flows()
 #----------------------------------------------------------------------

@@ -34,11 +34,6 @@ class Dialog():
 #------------------------------------------------------------------------------
 
     def confirm_overwrite(self, name, main_window):
-
-        if name and not name.endswith("hrp"):
-            name=(("%s"+".hrp")%name)
-
-        print name
         if os.path.exists(name) == False:
             return True
 

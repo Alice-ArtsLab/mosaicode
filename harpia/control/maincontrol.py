@@ -60,6 +60,8 @@ class MainControl():
         if diagram.get_file_name() is "Untitled" or save_as:
             while True:
                 name = Dialog().save_dialog("Save", self.main_window)
+                if name and not name.endswith("hrp"):
+                    name=(("%s"+".hrp")%name)
                 if Dialog().confirm_overwrite(name, self.main_window):
                     diagram.set_file_name(name)
                     break
@@ -81,9 +83,20 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        name = Dialog().save_png_dialog("Save", self.main_window)
-        if name != None:
-            DiagramControl(diagram).export_png(name)
+
+        while True:
+            name = Dialog().save_png_dialog("Export Diagram...", self.main_window)
+            if name == None:
+                return
+            if name.find(".png") == -1:
+                name = name + ".png"
+            if Dialog().confirm_overwrite(name, self.main_window):
+                break
+
+        result, message = DiagramControl(diagram).export_png(name)
+
+        if not result:
+            Dialog().message_dialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
     def exit(self, widget = None, data = None):
@@ -228,6 +241,6 @@ class MainControl():
     def reload(self):
         if self.main_window.work_area.get_current_diagram() == None:
             return
-        self.main_window.work_area.get_current_diagram().reload()
+        self.main_window.work_area.get_current_diagram().update_scrolling()
 
 # ----------------------------------------------------------------------

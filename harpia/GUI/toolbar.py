@@ -43,8 +43,8 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_ZOOM_100,
                         "Normal Size",
                         self.main_window.main_control.zoom_normal)
-        self.__create_button(Gtk.STOCK_REFRESH,
-                        "Reload",
+        self.__create_button(Gtk.STOCK_ZOOM_FIT,
+                        "Fit on screen",
                         self.main_window.main_control.reload)
         self.show_all()
 
