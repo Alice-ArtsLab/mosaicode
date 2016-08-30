@@ -77,7 +77,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             return True
         if self.tree_store.iter_children(iter) != None :
             return True
-        return self.current_filter in model[iter][1]
+        return self.current_filter in model[iter][1].upper()
 
     # ----------------------------------------------------------------------
     def __on_tree_selection_changed(self, treeview):
