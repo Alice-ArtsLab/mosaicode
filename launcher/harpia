@@ -10,7 +10,8 @@ from gi.repository import Gtk
 from harpia.GUI.mainwindow import MainWindow
 from harpia.control.maincontrol import MainControl
 
-import sys, argparse
+import sys
+import argparse
 import os
 
 #---------------------------------------------------
@@ -23,19 +24,14 @@ def main(argv):
             It initializes the interface.
     """
 
-    #export data folder's path
-
-    #if os.getcwd() == '/home/nofx/pkgHarpia/harpia':
-        #os.environ['HARPIA_DATA_DIR'] = "app_data/"
-    #else:
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
 
 
-	## Initialize the Frontend
+    ## Initialize the Frontend
     win = MainWindow()
     win.show_all()
 
-	## Parameter passing
+    ## Parameter passing
     parser = argparse.ArgumentParser()
     parser.add_argument('file', default=[], nargs='*', help="List of files to open")
     args = parser.parse_args()

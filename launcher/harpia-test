@@ -14,7 +14,8 @@ from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
 
 
-import sys, argparse
+import sys
+import argparse
 import os
 
 #---------------------------------------------------
@@ -31,6 +32,11 @@ def main(argv):
     s2idirectory.load()
     s2idirectory.Log = Log()
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-x", "--examples", help="Generate examples", action='store_false')
+    parser.add_argument("-c", "--compile", help="Compile examples", action='store_false')
+    args = parser.parse_args()
+
     for key in s2idirectory.block:
         obj = s2idirectory.block[key]()
         diagram = DiagramModel()
@@ -45,14 +51,19 @@ def main(argv):
                 diagram.connect_blocks(lenna, 0, obj, cont)
             cont = cont + 1
 
-        # Save Examples
-        diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
-        control = DiagramControl(diagram)
-        control.save()
+        if args.examples:
+            # Save Examples
+            diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
+            print "Generating", diagram.get_file_name(), "file"
+            control = DiagramControl(diagram)
+            control.save()
 
-        # Compile Examples
-        generator = CodeGenerator(diagram)
-        generator.compile()
+        if args.compile:
+            # Compile Examples
+            print "Generating code..."
+            generator = CodeGenerator(diagram)
+            generator.compile()
+            print obj.get_description()["Label"], " - compiled\n"
 
     #----------------------------------------------------------------------
 
