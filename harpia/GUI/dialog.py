@@ -34,13 +34,13 @@ class Dialog():
 #------------------------------------------------------------------------------
 
     def confirm_overwrite(self, name, main_window):
-    	print name
-        if not name.endswith("hrp"):
-        	name=(("%s"+".hrp")%name)
+
+        if name and not name.endswith("hrp"):
+            name=(("%s"+".hrp")%name)
 
         print name
         if os.path.exists(name) == False:
-        	return True
+            return True
 
         msg = "Already exists a file with the same name in this folder. Do you want to continue?"
         print msg
