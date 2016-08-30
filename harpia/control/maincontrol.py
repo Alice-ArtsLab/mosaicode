@@ -23,6 +23,8 @@ class MainControl():
     # ----------------------------------------------------------------------
     def __init__(self, main_window):
         self.main_window = main_window
+        # It must be possible to exchange data between diagrams
+        self.clipboard = [] 
 
     # ----------------------------------------------------------------------
     def new(self):
@@ -120,6 +122,14 @@ class MainControl():
         if self.main_window.work_area.get_current_diagram() == None:
             return
         self.main_window.work_area.get_current_diagram().paste()
+
+    # ----------------------------------------------------------------------
+    def get_clipboard(self):
+        return self.clipboard
+
+    # ----------------------------------------------------------------------
+    def reset_clipboard(self):
+        self.clipboard = []
 
     # ----------------------------------------------------------------------
     def preferences(self):

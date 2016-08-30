@@ -56,7 +56,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         self.curr_connector = None
         self.current_widgets = []
-        self.clipboard = []
 
         self.grab_focus()
         self.connect("motion-notify-event", self.__on_motion_notify)
@@ -431,45 +430,48 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         replace = {}
         self.current_widgets = []
         # interact into blocks, add blocks and change their id
-        for widget in self.clipboard:
-            if isinstance(widget, Block):
-                plugin = copy.deepcopy(widget.get_plugin())
-                plugin.x += 20
-                plugin.y += 20
-                new_id = self.insert_block(plugin)
-                replace[widget.get_id()] = new_id
-                self.current_widgets.append(self.blocks[new_id])
+        clipboard = self.__main_window.main_control.get_clipboard()
+        for widget in clipboard:
+            if not isinstance(widget, Block):
+                continue
+            plugin = copy.deepcopy(widget.get_plugin())
+            plugin.x += 20
+            plugin.y += 20
+            new_id = self.insert_block(plugin)
+            replace[widget.get_id()] = new_id
+            self.current_widgets.append(self.blocks[new_id])
         # interact into connections changing block ids
-        for widget in self.clipboard:
-            if isinstance(widget, Connector):
-                # if a connector is copied without blocks
-                if widget.from_block not in replace:
-                    continue
-                if widget.to_block not in replace:
-                    continue
-                from_block = replace[widget.from_block]
-                from_block_out = widget.from_block_out
-                to_block = replace[widget.to_block]
-                to_block_in = widget.to_block_in
-                new_connection = self.insert_ready_connector(
-                            from_block,
-                            from_block_out,
-                            to_block,
-                            to_block_in)
-                self.current_widgets.append(new_connection)
+        for widget in clipboard:
+            if not isinstance(widget, Connector):
+                continue
+            # if a connector is copied without blocks
+            if widget.from_block not in replace:
+                continue
+            if widget.to_block not in replace:
+                continue
+            from_block = replace[widget.from_block]
+            from_block_out = widget.from_block_out
+            to_block = replace[widget.to_block]
+            to_block_in = widget.to_block_in
+            new_connection = self.insert_ready_connector(
+                        from_block,
+                        from_block_out,
+                        to_block,
+                        to_block_in)
+            self.current_widgets.append(new_connection)
         self.update_flows()
 
     # ---------------------------------------------------------------------
     def copy(self):
-        self.clipboard = []
+        self.__main_window.main_control.reset_clipboard()
         for widget in self.current_widgets:
-            self.clipboard.append(widget)
+            self.__main_window.main_control.get_clipboard().append(widget)
 
     # ---------------------------------------------------------------------
     def cut(self):
-        self.clipboard = []
+        self.__main_window.main_control.reset_clipboard()
         for widget in self.current_widgets:
-            self.clipboard.append(widget)
+            self.__main_window.main_control.get_clipboard().append(widget)
             widget.delete()
 
     #----------------------------------------------------------------------
