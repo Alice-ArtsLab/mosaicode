@@ -143,13 +143,23 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         y1 = self.to_point[1]
 
         path += "M " + str(x0) + " " + str(y0)
-        path += " C " +  str((x1 + x0) / 2) + " " + str(y0)
-        path += " " + str((x1 + x0) / 2) + " " + str(y1)
-        path += " " + str(x1) + " " + str(y1)
 
-        path += "L " + str(x1 - 3) + " " + str(y1 - 3)
-        path += "L " + str(x1 - 3) + " " + str(y1 + 3)
-        path += "L " + str(x1) + " " + str(y1)
+        path += " L " +  str(x0 + 25) + " " + str(y0) 
+        path += " L " + str(x0 + 25) + " " + str((y0 + y1) / 2)
+        if x1 < x0 + 50:
+            path += " L " + str((x1 + x0) / 2) + " " + str((y0 + y1) / 2)
+            path += " L " + str(x1 - 25) + " " + str((y0 + y1) / 2)
+        else:
+            path += " L " + str(x0 + 25) + " " + str(y1)
+        path += " L " + str(x1 - 25) + " " + str(y1)
+        path += " L " + str(x1) + " " + str(y1)
+
+        x1 += 50
+
+#        path += " L " + str(x1 - 3) + " " + str(y1 - 3)
+#        path += " L " + str(x1 - 3) + " " + str(y1 + 3)
+#        path += " L " + str(x1) + " " + str(y1)
+
 
         if not self.widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(

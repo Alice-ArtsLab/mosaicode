@@ -240,8 +240,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     #----------------------------------------------------------------------
     def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):
         if from_block not in self.blocks:
+            harpia.s2idirectory.Log.log("Connection from non existent block")
             return
         if to_block not in self.blocks:
+            harpia.s2idirectory.Log.log("Connection to non existent block")
             return
         new_connection = Connector(self, from_block, from_block_out)
         new_connection.set_end(to_block, to_block_in)
@@ -275,7 +277,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         outType = self.blocks[a_oConnector.from_block].get_description()["OutTypes"][a_oConnector.from_block_out]
         inType = self.blocks[a_oConnector.to_block].get_description()["InTypes"][a_oConnector.to_block_in]
         if not outType == inType:
-            s2idirectory.Log.log("Connection Types mismatch")
+            harpia.s2idirectory.Log.log("Connection Types mismatch")
         return outType == inType
 
     #----------------------------------------------------------------------
@@ -568,4 +570,5 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             for block_id in self.blocks:
                 block = self.blocks[block_id]
                 block.move(0, 0 - y)
+        self.update_flows()
 #----------------------------------------------------------------------
