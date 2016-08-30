@@ -57,17 +57,12 @@ class MainControl():
         if diagram == None:
             return
 
-        
-
         if diagram.get_file_name() is "Untitled" or save_as:
-           
             while True:
                 name = Dialog().save_dialog("Save", self.main_window)
                 if Dialog().confirm_overwrite(name, self.main_window):
                     diagram.set_file_name(name)
                     break
-        
-
         result, message = False,""
 
         if diagram.get_file_name() is not None:
@@ -193,18 +188,21 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_IN)
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_IN)
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_OUT)
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_OUT)
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_ORIGINAL)
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -216,12 +214,20 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def undo(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().undo()
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().undo()
 
     # ----------------------------------------------------------------------
     def redo(self):
-        if self.main_window.work_area.get_current_diagram() != None:
-            self.main_window.work_area.get_current_diagram().redo()
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().redo()
+
+    # ----------------------------------------------------------------------
+    def reload(self):
+        if self.main_window.work_area.get_current_diagram() == None:
+            return
+        self.main_window.work_area.get_current_diagram().reload()
 
 # ----------------------------------------------------------------------

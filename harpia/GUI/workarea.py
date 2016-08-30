@@ -36,6 +36,7 @@ class WorkArea(Gtk.Notebook):
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.add(diagram)
         name = diagram.get_patch_name()
+        diagram.set_scrolled_window(frame)
         index = self.append_page(frame, self.__create_tab_label(name, frame))
         self.show_all()
         self.diagrams.append(diagram)

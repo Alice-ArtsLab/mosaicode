@@ -72,11 +72,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.white_board = None
         self.select_rect = None
         self.__update_white_board()
+        self.scrolled_window = None
         self.show()
 
     #----------------------------------------------------------------------
     def __del__(self):
         pass
+
+    def set_scrolled_window(self, frame):
+        self.scrolled_window = frame
 
     #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, event=None):
@@ -204,7 +208,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                             line_dash = GooCanvas.CanvasLineDash.newv((4.0, 2.0))
                             )
 
-
     # ----------------------------------------------------------------------
     def __drag_data_received(self, widget, context, x, y, selection, targetType, time):
         block = self.__main_window.main_control.get_selected_block()
@@ -216,14 +219,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def update_scrolling(self):
-
-#        for block_id in self.blocks:
-#            x,y = self.blocks[block_id].get_position()
-#            if x > limit_x - self.blocks[block_id].width:
-#                self.blocks[block_id].move(limit_x - x - self.blocks[block_id].width,0)
-#            if y > limit_y - self.blocks[block_id].height:
-#                self.blocks[block_id].move(0, limit_y - y - self.blocks[block_id].height)
-
         self.update_flows()
 
     #----------------------------------------------------------------------
@@ -243,9 +238,13 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_modified(True)
 
     #----------------------------------------------------------------------
-    def insert_ready_connector(self, a_nFromId, a_nFromIdOut, a_nToId, a_nToIdIn):
-        new_connection = Connector(self, a_nFromId, a_nFromIdOut)
-        new_connection.set_end(a_nToId, a_nToIdIn)
+    def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):
+        if from_block not in self.blocks:
+            return
+        if to_block not in self.blocks:
+            return
+        new_connection = Connector(self, from_block, from_block_out)
+        new_connection.set_end(to_block, to_block_in)
         if self.__valid_connector(new_connection):
             if self.__connector_types_match(new_connection):
                 self.connectors.append(new_connection)  # TODO: checar se ja existe este conector
@@ -557,4 +556,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 max_y = y + block.height
 
         return min_x, min_y, max_x - min_x, max_y - min_y
+
+    # ---------------------------------------------------------------------
+    def reload(self):
+        x, y, width, height = self.get_min_max()
+        if x < 0:
+            for block_id in self.blocks:
+                block = self.blocks[block_id]
+                block.move(0 - x, 0)
+        if y < 0:
+            for block_id in self.blocks:
+                block = self.blocks[block_id]
+                block.move(0, 0 - y)
 #----------------------------------------------------------------------
