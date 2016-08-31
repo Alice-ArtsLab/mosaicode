@@ -2,21 +2,25 @@
 <version value='0.0.1' />
 <zoom value='1.0' />
 <blocks>
-  	<block type='harpia.plugins.Pow' id='1'>
+  	<block type='harpia.plugins.multiplication' id='1'>
 		<position x="200" y="0"/>
-		<property name='exponent' value='1' />
 	</block>
 	<block type='harpia.plugins.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.show' id='3'>
+	<block type='harpia.plugins.imageFile' id='3'>
+		<position x="0" y="100"/>
+		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
+	</block>
+	<block type='harpia.plugins.show' id='4'>
 		<position x="400" y="0"/>
 		<property name='title' value='My Image' />
 	</block>
 </blocks>
 <connections>
   	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="1" from_out="1" to="3" to_in="1"/>
+	<connection from="3" from_out="1" to="1" to_in="2"/>
+	<connection from="1" from_out="1" to="4" to_in="1"/>
 </connections>
 </harpia>

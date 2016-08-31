@@ -1,0 +1,15 @@
+<harpia>
+<version value='0.0.1' />
+<zoom value='1.0' />
+<blocks>
+  	<block type='harpia.plugins.intValue' id='1'>
+		<position x="200" y="0"/>
+		<property name='maxVal' value='31' />
+		<property name='window_name' value='My Image' />
+		<property name='intVal' value='1' />
+		<property name='label' value='Value' />
+	</block>
+</blocks>
+<connections>
+  </connections>
+</harpia>

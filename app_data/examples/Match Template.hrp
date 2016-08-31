@@ -2,8 +2,10 @@
 <version value='0.0.1' />
 <zoom value='1.0' />
 <blocks>
-  	<block type='harpia.plugins.And' id='1'>
+  	<block type='harpia.plugins.matchTem' id='1'>
 		<position x="200" y="0"/>
+		<property name='scaleFactor' value='6' />
+		<property name='method' value='CV_TM_SQDIFF' />
 	</block>
 	<block type='harpia.plugins.imageFile' id='2'>
 		<position x="0" y="0"/>

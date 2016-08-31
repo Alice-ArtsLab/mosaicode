@@ -2,16 +2,22 @@
 <version value='0.0.1' />
 <zoom value='1.0' />
 <blocks>
-  	<block type='harpia.plugins.And' id='1'>
+  	<block type='harpia.plugins.rotate' id='1'>
 		<position x="200" y="0"/>
+		<property name='isScalling' value='True' />
+		<property name='angle' value='0' />
+		<property name='xC' value='20' />
+		<property name='yC' value='20' />
+		<property name='isCenter' value='True' />
+		<property name='isFilling' value='True' />
 	</block>
 	<block type='harpia.plugins.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.imageFile' id='3'>
+	<block type='harpia.plugins.newDouble' id='3'>
 		<position x="0" y="100"/>
-		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
+		<property name='doubleVal' value='1' />
 	</block>
 	<block type='harpia.plugins.show' id='4'>
 		<position x="400" y="0"/>

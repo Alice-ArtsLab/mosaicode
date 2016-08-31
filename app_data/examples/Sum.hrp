@@ -1,100 +1,26 @@
 <harpia>
-<GcState>
-	<block type="02" id="10">
-		<position x="567.288391113" y="316.293060303"/>
+<version value='0.0.1' />
+<zoom value='1.0' />
+<blocks>
+  	<block type='harpia.plugins.Sum' id='1'>
+		<position x="200" y="0"/>
 	</block>
-	<block type="17" id="10">
-		<position x="46.350982666" y="187.875976562"/>
+	<block type='harpia.plugins.imageFile' id='2'>
+		<position x="0" y="0"/>
+		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type="102" id="5">
-		<position x="220.40661621" y="272.028015137"/>
+	<block type='harpia.plugins.imageFile' id='3'>
+		<position x="0" y="100"/>
+		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type="20" id="6">
-		<position x="386.207519531" y="186.834228516"/>
+	<block type='harpia.plugins.show' id='4'>
+		<position x="400" y="0"/>
+		<property name='title' value='My Image' />
 	</block>
-	<block type="02" id="9">
-		<position x="588.133361816" y="45.614654541"/>
-	</block>
-	<block type="02" id="8">
-		<position x="570.463867187" y="172.617034912"/>
-	</block>
-</GcState>
-<properties>
-  <block id="10" type="02">
- <property name="title" value="Opening"/>
-</block>
-
-  <block id="10" type="17">
- <property name="camera" value="/dev/video0"/>
-</block>
-
-  <block id="5" type="102">
- <property name="masksize" value="3x3"/>
-</block>
-
-  <block id="6" type="20">
-</block>
-
-  <block id="9" type="02">
- <property name="title" value="Original"/>
-</block>
-
-  <block id="8" type="02">
- <property name="title" value="Sum"/>
-</block>
-
-  </properties>
-<network>
-<block type="02" id="10">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
-<block type="17" id="10">
-<inputs>
-</inputs>
-<outputs>
-<output id="1" inBlock="6" input="1"/>
-<output id="1" inBlock="5" input="1"/>
-<output id="1" inBlock="9" input="1"/>
-</outputs>
-</block>
-<block type="102" id="5">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="6" input="2"/>
-<output id="1" inBlock="10" input="1"/>
-</outputs>
-</block>
-<block type="20" id="6">
-<inputs>
-<input id="1"/>
-<input id="2"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="8" input="1"/>
-</outputs>
-</block>
-<block type="02" id="9">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
-<block type="02" id="8">
-<inputs>
-<input id="1"/>
-</inputs>
-<outputs>
-<output id="1" inBlock="--" input="--"/>
-</outputs>
-</block>
-</network>
+</blocks>
+<connections>
+  	<connection from="2" from_out="1" to="1" to_in="1"/>
+	<connection from="3" from_out="1" to="1" to_in="2"/>
+	<connection from="1" from_out="1" to="4" to_in="1"/>
+</connections>
 </harpia>
