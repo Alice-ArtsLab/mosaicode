@@ -27,7 +27,7 @@ class LiveDelay(Plugin):
         self.frameNumber = int(round(float(self.frameNumber)))
         blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
                                  'IplImage * block$$_img_o1 = NULL;\n' + \
-                                 'int block$$_t_idx = 0;\n' + \
+                                 'int i_$$ = 0;\n' + \
                                  'IplImage * block$$_buffer[' + str(self.frameNumber) + '] = {'
         for idx in range(self.frameNumber):
             blockTemplate.imagesIO += 'NULL'
@@ -42,18 +42,22 @@ class LiveDelay(Plugin):
 
         blockTemplate.imagesIO += 'block$$_img_o1 = block$$_buffer[' + str(self.frameNumber - 1) + '];\n'
 
-        blockTemplate.functionCall = '\nif(block$$_img_i1)\n{\n' + \
-                                     '	cvReleaseImage(&(block$$_buffer[block$$_t_idx]));\n' + \
-                                     '	block$$_buffer[block$$_t_idx] = cvCloneImage(block$$_img_i1);\n' + \
-                                     '	block$$_t_idx++;\n' + \
-                                     '	block$$_t_idx %= ' + str(self.frameNumber) + ';\n' + \
-                                     '	block$$_img_o1 = block$$_buffer[block$$_t_idx];\n' + \
-                                     '}\n'
+        blockTemplate.functionCall = '''
+if(block$$_img_i1){
+    cvReleaseImage(&(block$$_buffer[i_$$]));
+    block$$_buffer[i_$$] = cvCloneImage(block$$_img_i1);
+    i_$$++;
+    i_$$ %= $frameNumber$;
+    block$$_img_o1 = block$$_buffer[i_$$];
+}
+'''
+
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_i1);\n'
-        blockTemplate.outDealloc = 'for(block$$_t_idx=0;block$$_t_idx<' + str(
-            self.frameNumber) + ';block$$_t_idx++)\n' + \
-                                   '	if(block$$_buffer[block$$_t_idx] != NULL)\n' + \
-                                   '		cvReleaseImage(&(block$$_buffer[block$$_t_idx]));\n'
+        blockTemplate.outDealloc = '''
+for(i_$$=0; i_$$<$frameNumber$; i_$$++)
+    if(block$$_buffer[i_$$] != NULL)
+        cvReleaseImage(&(block$$_buffer[i_$$]));
+'''
 
     # ----------------------------------------------------------------------
     def __del__(self):

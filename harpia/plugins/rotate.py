@@ -35,9 +35,8 @@ class Rotate(Plugin):
         blockTemplate.header += "   return (PI/180 * degs);\n"
         blockTemplate.header += "}\n\n"
 
-
         blockTemplate.imagesIO = 'IplImage * block$$_img_i1 = NULL;\n' + \
-                                 'double block$$_double_i2 = ' + str(self.angle) + ';\n' + \
+                                 'double block$$_double_i2 = $angle$;\n' + \
                                  'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += '\n\n'
 
@@ -51,8 +50,7 @@ class Rotate(Plugin):
         if self.isCenter == "true":
             blockTemplate.functionCall += '		CvPoint2D32f center = cvPoint2D32f(W/2, H/2);\n'
         else:
-            blockTemplate.functionCall += '		CvPoint2D32f center = cvPoint2D32f(' + str(int(float(self.xC))) + ',' + str(
-                int(float(self.yC))) + ');\n'
+            blockTemplate.functionCall += '		CvPoint2D32f center = cvPoint2D32f($xC$,$yC$);\n'
 
         if self.isScalling == "true":
             blockTemplate.functionCall += '		scale = H/(fabs(H*sin(rads(90-abs(block$$_double_i2)))) + fabs(W*sin(rads(abs(block$$_double_i2)))));\n' + \
@@ -61,7 +59,7 @@ class Rotate(Plugin):
             blockTemplate.functionCall += '		cv2DRotationMatrix(center,block$$_double_i2,1.0,mat);\n'
 
         if self.isFilling == "true":
-            blockTemplate.functionCall += '		cvWarpAffine(block$$_img_i1,block$$_img_o1,mat,CV_WARP_FILL_OUTLIERS,cvScalarAll(0));\n'
+            blockTemplate.functionCall += '		cvWarpAffine(block$$_img_i1,block$$_img_o1, mat, CV_WARP_FILL_OUTLIERS, cvScalarAll(0));\n'
         else:
             blockTemplate.functionCall += '		cvWarpAffine(block$$_img_i1,block$$_img_o1,mat,0,cvScalarAll(0));\n'
 

@@ -30,30 +30,40 @@ class Canny(Plugin):
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\nIplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.imagesIO += \
-            'int block$$_int_i2 = ' + str(self.threshold2) + ';\n' + \
-            'int block$$_int_i4 = ' + str(self.apertureSize) + ';\n' + \
-            'int block$$_int_i3 = ' + str(self.threshold1) + ';\n'
-        blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                     ' if (block$$_int_i2 < 1) block$$_int_i2 = 1;' + \
-                     ' if (block$$_int_i3 < 1) block$$_int_i3 = 1;' + \
-                     ' if (block$$_int_i4 < 1) block$$_int_i4 = 1;' + \
-                     ' if (block$$_int_i2 > 10) block$$_int_i2 = 10;' + \
-                     ' if (block$$_int_i3 > 100) block$$_int_i3 = 100;' + \
-                     ' if (block$$_int_i4 > 100) block$$_int_i4 = 100;' + \
-                     'block$$_img_o1 = cvCreateImage(cvSize(block$$' + \
-                     '_img_i1->width,block$$_img_i1->height),block$$' + \
-                     '_img_i1->depth,block$$_img_i1->nChannels);\n IplImage * tmpImg$$' + \
-                     ' = cvCreateImage(cvGetSize(block$$_img_i1),8,1);\n if(block$$'+ \
-                     '_img_i1->nChannels == 3)\n {cvCvtColor(block$$_img_i1,tmpImg$$' + \
-                     ',CV_RGB2GRAY);}\n else\n{tmpImg$$ = block$$' + \
-                     '_img_i1 = NULL;}\n cvCanny(tmpImg$$, tmpImg$$' + \
-                     ', block$$_int_i3, block$$' + \
-                     '_int_i2, block$$_int_i4);\n' + \
-                     'if(block$$_img_i1->nChannels == 3)\n{cvCvtColor(tmpImg$$' + \
-                     ', block$$_img_o1,CV_GRAY2RGB);}\nelse\n{cvCopyImage(tmpImg$$' + \
-                     ', block$$_img_o1);}\ncvReleaseImage(&tmpImg$$);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
-                                'cvReleaseImage(&block$$_img_i1);\n'
+            'int block$$_int_i2 = $threshold2$;\n' + \
+            'int block$$_int_i4 = $apertureSize$;\n' + \
+            'int block$$_int_i3 = $threshold1$;\n'
+        blockTemplate.functionCall = '''
+if(block$$_img_i1){ //Canny Code
+    if (block$$_int_i2 < 1) block$$_int_i2 = 1;
+    if (block$$_int_i3 < 1) block$$_int_i3 = 1;
+    if (block$$_int_i4 < 1) block$$_int_i4 = 1;
+    if (block$$_int_i2 > 10) block$$_int_i2 = 10;
+    if (block$$_int_i3 > 100) block$$_int_i3 = 100;
+    if (block$$_int_i4 > 100) block$$_int_i4 = 100;
+    block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,
+                block$$_img_i1->height),
+                block$$_img_i1->depth,
+                block$$_img_i1->nChannels);
+    IplImage * tmpImg$$ = cvCreateImage(cvGetSize(block$$_img_i1),8,1);
+    if(block$$_img_i1->nChannels == 3){
+        cvCvtColor(block$$_img_i1,tmpImg$$ ,CV_RGB2GRAY);
+    }else{
+        tmpImg$$ = block$$_img_i1 = NULL;
+    }
+    cvCanny(tmpImg$$, tmpImg$$, block$$_int_i3, block$$_int_i2, block$$_int_i4);
+    if(block$$_img_i1->nChannels == 3){
+        cvCvtColor(tmpImg$$, block$$_img_o1,CV_GRAY2RGB);
+    }else{
+        cvCopyImage(tmpImg$$, block$$_img_o1);
+    }
+    cvReleaseImage(&tmpImg$$);
+} // End Canny Code
+'''
+        blockTemplate.dealloc = '''
+cvReleaseImage(&block$$_img_o1);
+cvReleaseImage(&block$$_img_i1);
+'''
 
     # ----------------------------------------------------------------------
     def __del__(self):

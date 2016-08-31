@@ -28,13 +28,25 @@ class Dilate(Plugin):
     def generate(self, blockTemplate):
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
-            'IplImage * block$$_img_o1 = NULL;\n'
-        blockTemplate.imagesIO += 'int block$$_arg_iterations = ' + str(self.iterations) + \
-                                          ';\nIplConvKernel * block$$_arg_mask = cvCreateStructuringElementEx(' + str(self.masksize[0]) + ' , ' + \
-                                          str(self.masksize[2]) + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
-        blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-                                     'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width, block$$_img_i1->height), block$$_img_i1->depth ,block$$_img_i1->nChannels);\n' + \
-                                     '\ncvDilate(block$$_img_i1,block$$_img_o1,block$$_arg_mask,block$$_arg_iterations);}\n'
+            'IplImage * block$$_img_o1 = NULL;\n' + \
+            'int block$$_arg_iterations = $iterations$;\n' + \
+            'IplConvKernel * block$$_arg_mask = cvCreateStructuringElementEx(' + \
+                    str(self.masksize[0]) + ' , ' + \
+                    str(self.masksize[2]) + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
+
+        blockTemplate.functionCall = '''
+if(block$$_img_i1){
+    block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,
+            block$$_img_i1->height),
+            block$$_img_i1->depth,
+            block$$_img_i1->nChannels);
+    cvDilate(block$$_img_i1,
+            block$$_img_o1,
+            block$$_arg_mask,
+            block$$_arg_iterations);
+}
+'''
+
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                                 'cvReleaseImage(&block$$_img_i1);\n'
 

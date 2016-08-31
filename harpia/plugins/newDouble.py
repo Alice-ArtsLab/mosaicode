@@ -25,9 +25,9 @@ class NewDouble(Plugin):
 
     # ----------------------------------------------------------------------
     def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'double  block$$_double_o1; // New Double Out\n'
+        blockTemplate.imagesIO = 'double  block$$_double_o1 = $doubleVal$; // New Double Out\n'
 
-        blockTemplate.functionCall = 'block$$_double_o1 = ' + str(float(self.doubleVal)) + ';\n'
+        blockTemplate.functionCall = ''
 
         blockTemplate.dealloc = ''
 

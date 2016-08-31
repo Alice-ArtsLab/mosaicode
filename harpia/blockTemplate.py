@@ -24,6 +24,14 @@ class BlockTemplate:
         self.outDealloc = self.outDealloc.replace("$$", str(self.plugin.id))
         self.functionCall = self.functionCall.replace("$$", str(self.plugin.id))
 
+        for key in self.plugin.__dict__:
+            value = str(self.plugin.__dict__[key])
+            my_key = "$" + key + "$"
+            self.imagesIO = self.imagesIO.replace(my_key, value)
+            self.dealloc = self.dealloc.replace(my_key, value)
+            self.outDealloc = self.outDealloc.replace(my_key, value)
+            self.functionCall = self.functionCall.replace(my_key, value)
+
         for x in self.myConnections:
             if x.destinationNumber == '--':
                 continue

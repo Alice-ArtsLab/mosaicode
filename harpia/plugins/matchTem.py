@@ -32,11 +32,11 @@ class MatchTem(Plugin):
             'IplImage * block$$_img_t1 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1 && block$$_img_i2)\n' + \
-                                     '{\n' + \
-                                     '	block$$_img_t1 = cvCreateImage(cvSize(block$$_img_i1->width - block$$_img_i2->width +1,block$$_img_i1->height - block$$_img_i2->height +1),32,1);\n' + \
-                                     '	block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width - block$$_img_i2->width +1,block$$_img_i1->height - block$$_img_i2->height +1),8,1);\n' + \
-                                     '	cvMatchTemplate(block$$_img_i1 , block$$_img_i2, block$$_img_t1, ' + self.method + ');\n' + \
-                                     '	cvConvertScale(block$$_img_t1,block$$_img_o1, ' + str(
+            '{\n' + \
+            '	block$$_img_t1 = cvCreateImage(cvSize(block$$_img_i1->width - block$$_img_i2->width +1,block$$_img_i1->height - block$$_img_i2->height +1),32,1);\n' + \
+            '	block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width - block$$_img_i2->width +1,block$$_img_i1->height - block$$_img_i2->height +1),8,1);\n' + \
+            '	cvMatchTemplate(block$$_img_i1 , block$$_img_i2, block$$_img_t1, $method$);\n' + \
+            '	cvConvertScale(block$$_img_t1,block$$_img_o1, ' + str(
             10 ** -(int(float(self.scaleFactor)))) + ',0);\n' + \
                                      '}\n'
         blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
