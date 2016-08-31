@@ -39,16 +39,37 @@ def main(argv):
 
     for key in s2idirectory.block:
         obj = s2idirectory.block[key]()
+        obj.x = 200
         diagram = DiagramModel()
-        lenna = s2idirectory.block["15"]()
-        diagram.add_block(lenna)
         diagram.add_block(obj)
  
         cont = 0
         intypes = obj.get_description()["InTypes"]
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
-                diagram.connect_blocks(lenna, 0, obj, cont)
+                block = s2idirectory.block["harpia.plugins.imageFile"]()
+            elif intypes[inkey] == "HRP_INT":
+                block = s2idirectory.block["harpia.plugins.intValue"]()
+            elif intypes[inkey] == "HRP_DOUBLE":
+                block = s2idirectory.block["harpia.plugins.newDouble"]()
+            elif intypes[inkey] == "HRP_RECT":
+                block = s2idirectory.block["harpia.plugins.newRect"]()
+            elif intypes[inkey] == "HRP_POINT":
+                block = s2idirectory.block["harpia.plugins.newPoint"]()
+            diagram.add_block(block)
+            block.y = 100 * cont
+            diagram.connect_blocks(block, 0, obj, cont)
+
+            cont = cont + 1
+
+        cont = 0
+        outtypes = obj.get_description()["OutTypes"]
+        for outkey in outtypes:
+            if outtypes[outkey] == "HRP_IMAGE":
+                show = s2idirectory.block["harpia.plugins.show"]()
+                show.x = 400
+                diagram.add_block(show)
+                diagram.connect_blocks(obj, cont, show, 0)
             cont = cont + 1
 
         if args.examples:
