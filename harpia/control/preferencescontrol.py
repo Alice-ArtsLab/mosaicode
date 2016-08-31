@@ -26,7 +26,10 @@ class PreferencesControl():
 
         for prop in properties:
             if prop.getAttr("name") == "recent_files":
-                self.hp.set_recent_files(ast.literal_eval(prop.getAttr("value")))
+                try:
+                    self.hp.set_recent_files(ast.literal_eval(prop.getAttr("value")))
+                except:
+                    pass
             if prop.getAttr("name") == "default_directory":
                 self.hp.set_default_directory(prop.getAttr("value"))
             if prop.getAttr("name") == "error_log_file":

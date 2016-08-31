@@ -155,7 +155,7 @@ class MainControl():
         if self.main_window.work_area.get_current_diagram() == None:
             return
         diagram = self.main_window.work_area.get_current_diagram()
-        CodeGenerator(diagram).execute_code()
+        CodeGenerator(diagram).execute()
 
     # ----------------------------------------------------------------------
     def save_source(self):

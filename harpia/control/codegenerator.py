@@ -247,7 +247,7 @@ class CodeGenerator():
 
             ## appending compile errors too.. helps finding bugs! =]
             CompilingErrors = o.readlines()
-            print "Errors" , CompilingErrors
+            harpia.s2idirectory.Log.log("Errors "  +  str(CompilingErrors))
 
             o.close()
             i.close()
@@ -255,7 +255,7 @@ class CodeGenerator():
         self.__return_to_old_directory()
 
     #----------------------------------------------------------------------
-    def execute_code(self):
+    def execute(self):
         harpia.s2idirectory.Log.log("Executing Code")
         self.compile()
         self.__change_directory()
@@ -276,14 +276,18 @@ class CodeGenerator():
                 while Gtk.events_pending():
                     Gtk.main_iteration()
 
-        o = open("RunErrorLog", "r")
-        Error = ''
-        errorList = o.readlines()
-        for element in errorList:
-            Error += element
+        try:
+            o = open("RunErrorLog", "r")
+            Error = ''
+            errorList = o.readlines()
+            for element in errorList:
+                Error += element
 
-        print _("Leaving.."), Error
-        o.close()
+            harpia.s2idirectory.Log.log("Leaving..")
+            harpia.s2idirectory.Log.log(Error)
+            o.close()
+        except:
+            pass
         self.__return_to_old_directory()
 
     #----------------------------------------------------------------------
