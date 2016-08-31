@@ -18,9 +18,7 @@ class FloatField(Field, Gtk.HBox):
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
-	#coloca os valores em variáveis e passa as que existem pro Adjustment
-	#Se os caras não existirem, ERRORFIELD NELES!!!
-        adjustment = Gtk.Adjustment(value=data["value"],
+        adjustment = Gtk.Adjustment(value=float(data["value"]),
                                 lower=data["lower"],
                                 upper=data["upper"],
                                 step_incr=data["step"],
@@ -31,7 +29,7 @@ class FloatField(Field, Gtk.HBox):
             self.field.configure(adjustment, 0.0, data["digits"])
         else:
             self.field.configure(adjustment, 0.0, 2)
-        self.field.set_value(data["value"])
+        self.field.set_value(float(data["value"]))
         if event != None:
             self.field.connect("changed", event)
             self.field.connect("value-changed", event)
