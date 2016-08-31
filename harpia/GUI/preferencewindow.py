@@ -15,8 +15,8 @@ class PreferenceWindow(Gtk.Dialog):
 
     def __init__(self, main_window, properties):
         Gtk.Dialog.__init__(self, "Code Window", main_window,
-                0,(Gtk.STOCK_OK, Gtk.ResponseType.OK,
-                Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+                0,(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.properties = properties
         box = self.get_content_area()

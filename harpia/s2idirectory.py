@@ -28,8 +28,8 @@
 
 import harpia.plugins
 from harpia.constants import *
-from harpia.control.harpiapropertiescontrol import *
-from harpia.model.harpiaproperties import *
+from harpia.control.preferencescontrol import *
+from harpia.model.preferences import *
 
 import pkgutil # For dynamic package load
 import inspect # For module inspect
@@ -45,7 +45,7 @@ gettext.textdomain(APP)
 
 Log = None
 
-properties = HarpiaProperties()
+properties = Preferences()
 
 block = {}
 list_of_examples = []
@@ -64,7 +64,7 @@ def load():
         list_of_examples.append(example)
     list_of_examples.sort()
     
-    HarpiaPropertiesControl(properties).load()
+    PreferencesControl(properties).load()
     for recent in properties.get_recent_files():
         recent_files.append(recent)
 

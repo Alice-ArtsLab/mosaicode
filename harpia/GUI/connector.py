@@ -154,11 +154,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1 - 25) + " " + str(y1)
         path += " L " + str(x1) + " " + str(y1)
 
-        x1 += 50
-
-#        path += " L " + str(x1 - 3) + " " + str(y1 - 3)
-#        path += " L " + str(x1 - 3) + " " + str(y1 + 3)
-#        path += " L " + str(x1) + " " + str(y1)
+        path += " L " + str(x1 - 4) + " " + str(y1 - 4)
+        path += " L " + str(x1 - 4) + " " + str(y1 + 4)
+        path += " L " + str(x1) + " " + str(y1)
 
 
         if not self.widgets.has_key("Line"):

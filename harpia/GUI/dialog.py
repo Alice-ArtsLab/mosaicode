@@ -38,7 +38,6 @@ class Dialog():
             return True
 
         msg = "Already exists a file with the same name in this folder. Do you want to continue?"
-        print msg
         dialog = Dialog().confirm_dialog(msg,main_window)
         result = dialog.run() 
         dialog.destroy()
