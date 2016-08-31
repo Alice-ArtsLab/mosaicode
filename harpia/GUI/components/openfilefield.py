@@ -3,6 +3,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+import os
+
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
@@ -30,15 +32,20 @@ class OpenFileField(Field, Gtk.HBox):
 
     def on_choose_file(self, widget):
         dialog = Gtk.FileChooserDialog("Open...",
-                                       None,
-                                       Gtk.FileChooserAction.OPEN,
-                                       (Gtk.STOCK_CANCEL,
-                                       Gtk.ResponseType.CANCEL,
-                                       Gtk.STOCK_OPEN,
-                                       Gtk.ResponseType.OK)
-                                        )
-        dialog.set_current_folder(self.field.get_text())
-
+                      None,
+                      Gtk.FileChooserAction.OPEN,
+                      (Gtk.STOCK_CANCEL,
+                      Gtk.ResponseType.CANCEL,
+                      Gtk.STOCK_OPEN,
+                      Gtk.ResponseType.OK)
+                      )
+        current_dir = ""
+        if os.path.isdir(self.field.get_text()):
+            current_dir = self.field.get_text()
+        else:
+            current_dir = os.path.dirname(self.field.get_text())
+        print current_dir
+        dialog.set_current_folder(current_dir)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
