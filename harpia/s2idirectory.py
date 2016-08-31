@@ -82,7 +82,6 @@ typeIconsIn = {
         "HRP_RECT":"images/s2irctin.png",
         "HRP_IMAGE":"images/s2iinput.png",
         "HRP_POINT":"images/s2ipointin.png",
-        "HRP_32_IMG":"images/s2i64in.png"
         }
 
 typeIconsOut = {
@@ -91,6 +90,5 @@ typeIconsOut = {
         "HRP_RECT":"images/s2irctout.png",
         "HRP_IMAGE":"images/s2ioutput.png",
         "HRP_POINT":"images/s2ipointout.png",
-        "HRP_32_IMG":"images/s2i64out.png"
         }
 

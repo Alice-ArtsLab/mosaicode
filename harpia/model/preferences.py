@@ -27,7 +27,6 @@ class Preferences(object):
         self.__recent_files = recent_files
         self.control.save()
 
-
     # ----------------------------------------------------------------------
     def add_recent_file(self, file_name):
         if file_name in self.__recent_files:

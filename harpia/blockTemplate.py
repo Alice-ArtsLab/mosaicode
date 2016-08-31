@@ -1,7 +1,5 @@
 import s2idirectory
 
-############################################################
-##################### block templates ######################
 class BlockTemplate:
     header = ''
     imagesIO = ''
@@ -11,12 +9,12 @@ class BlockTemplate:
     myConnections = []
     weight = 1
 
-    ###########################################################################
+    #-------------------------------------------------------------------------
     def __init__(self, plugin):
         self.plugin = plugin
         self.myConnections = []
 
-    ######################################################3
+    #-------------------------------------------------------------------------
     def generate_block_code(self):
 
         self.plugin.generate(self)
