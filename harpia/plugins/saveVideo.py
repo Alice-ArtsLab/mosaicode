@@ -16,7 +16,7 @@ class SaveVideo(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "11"
+        self.type = self.__class__.__module__
         self.filename = "~/Output.mpeg"
         self.framerate = 25.0
         self.codecSelection = "MPEG1"

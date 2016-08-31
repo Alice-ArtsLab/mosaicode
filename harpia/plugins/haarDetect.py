@@ -16,7 +16,7 @@ class HaarDetect(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "610"
+        self.type = self.__class__.__module__
         self.cascade_name ="/usr/share/harpia/images/haarcascade_frontalface_alt2.xml"
         self.min_neighbors = 2
 

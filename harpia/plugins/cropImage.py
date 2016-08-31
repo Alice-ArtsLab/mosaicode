@@ -16,7 +16,11 @@ class CropImage(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "802"
+        self.type = self.__class__.__module__
+        self.x0 = 0
+        self.y0 = 0
+        self.width = 640
+        self.height = 480
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -27,7 +31,10 @@ class CropImage(Plugin):
         blockTemplate.imagesIO = \
             'IplImage * block$$_img_i1 = NULL;\n' + \
             'IplImage * block$$_img_o1 = NULL;\n' + \
-            'CvRect  block$$_rect_i2;\n'
+            'CvRect  block$$_rect_i2 = cvRect('+ str(self.x0) + ',' + \
+                    str(self.y0) + ',' + \
+                    str(self.width) + ',' + \
+                    str(self.height) + ');\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                                      '	block$$_rect_i2.x = MAX(0,block$$_rect_i2.x);//Check whether point is negative\n' + \
                                      '	block$$_rect_i2.y = MAX(0,block$$_rect_i2.y);\n' + \
@@ -61,7 +68,35 @@ class CropImage(Plugin):
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {}
+        return {"x0":{"name": "X",
+                            "type": HARPIA_INT,
+                            "value": self.x0,
+                            "lower":1,
+                            "upper":65535,
+                            "step":1
+                            },
+                "y0":{"name": "Y",
+                            "type": HARPIA_INT,
+                            "value": self.y0,
+                            "lower":1,
+                            "upper":65535,
+                            "step":1
+                            },
+                "width":{"name": "Width",
+                            "type": HARPIA_INT,
+                            "value": self.width,
+                            "lower":1,
+                            "upper":65535,
+                            "step":1
+                            },
+                "height":{"name": "Height",
+                            "type": HARPIA_INT,
+                            "value": self.height,
+                            "lower":1,
+                            "upper":65535,
+                            "step":1
+                            }
+                }
 
 # ------------------------------------------------------------------------------
 

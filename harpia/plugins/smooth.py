@@ -16,7 +16,7 @@ class Smooth(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "82"
+        self.type = self.__class__.__module__
         self.smooth_type = "CV_GAUSSIAN"
         self.param1 = 7
         self.param2 = 9

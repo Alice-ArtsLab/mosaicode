@@ -16,7 +16,7 @@ class StereoCorr(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "611"
+        self.type = self.__class__.__module__
         self.maxDist = 60
 
     # ----------------------------------------------------------------------

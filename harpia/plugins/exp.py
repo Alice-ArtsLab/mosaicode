@@ -16,7 +16,7 @@ class Exp(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "61"
+        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -28,13 +28,13 @@ class Exp(Plugin):
        blockTemplate.imagesIO = \
                    'IplImage * block$$_img_i1 = NULL;\n' + \
                    'IplImage * block$$_img_o1 = NULL;\n' + \
-			      		'IplImage * block$$_img_t = NULL;\n'
+                   'IplImage * block$$_img_t = NULL;\n'
        blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
                    'block$$_img_t = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height), IPL_DEPTH_32F,block$$_img_i1->nChannels);\n'+\
                    'block$$_img_o1 = cvCreateImage(cvSize(block$$_img_i1->width,block$$_img_i1->height),block$$_img_i1->depth,block$$_img_i1->nChannels);\n' + \
-					    'cvConvertScale(block$$_img_i1,block$$_img_t,(1/255.0),0);\n' + \
-       				'cvExp(block$$_img_t, block$$_img_t);\n' + \
-        				'cvConvertScale(block$$_img_t,block$$_img_o1,(double)93.8092,0);\n}\n'
+                        'cvConvertScale(block$$_img_i1,block$$_img_t,(1/255.0),0);\n' + \
+                       'cvExp(block$$_img_t, block$$_img_t);\n' + \
+                        'cvConvertScale(block$$_img_t,block$$_img_o1,(double)93.8092,0);\n}\n'
        blockTemplate.dealloc = 'cvReleaseImage(&block$$_img_o1);\n' + \
                    'cvReleaseImage(&block$$_img_i1);\n' + \
                    'cvReleaseImage(&block$$_img_t);\n'
@@ -49,10 +49,10 @@ class Exp(Plugin):
          "Label":_("Exp"),
          "Icon":"images/exp.png",
          "Color":"230:230:60:150",
-				 "InTypes":{0:"HRP_IMAGE"},
-				 "OutTypes":{0:"HRP_IMAGE"},
-				 "Description":_("Return the image made from the neperian constant (e) powered to each one of the image pixels."),
-				 "TreeGroup":_("Math Functions")
+         "InTypes":{0:"HRP_IMAGE"},
+         "OutTypes":{0:"HRP_IMAGE"},
+         "Description":_("Return the image made from the neperian constant (e) powered to each one of the image pixels."),
+         "TreeGroup":_("Math Functions")
          }
 
     # ----------------------------------------------------------------------

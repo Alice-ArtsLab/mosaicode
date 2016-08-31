@@ -16,9 +16,9 @@ class intValue(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "1702"
+        self.type = self.__class__.__module__
         self.intVal = 1
-        self.maxVal = 65535
+        self.maxVal = 31
         self.label = "Value"
         self.window_name = "My Image"
 

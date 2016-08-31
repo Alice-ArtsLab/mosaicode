@@ -16,7 +16,7 @@ class MatchTem(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "605"
+        self.type = self.__class__.__module__
         self.method = 'CV_TM_SQDIFF'
         self.scaleFactor = 6
 

@@ -16,8 +16,8 @@ class Closing(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "103"
-        self.masksize = "3x3"
+        self.type = self.__class__.__module__
+        self.masksize = "7x7"
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -32,8 +32,8 @@ class Closing(Plugin):
             'IplImage * block$$_img_o1 = NULL;\n' + \
 	    'IplConvKernel * block$$_arg_mask = NULL;\n'
         blockTemplate.functionCall = '\nif(block$$_img_i1){\n' + \
-					'if (block$$_int_i2 %2 ==0) block$$_int_i2++;' + \
-					'if (block$$_int_i3 %2 ==0) block$$_int_i3++;' + \
+					'if (block$$_int_i2 % 2 == 0) block$$_int_i2++;' + \
+					'if (block$$_int_i3 % 2 == 0) block$$_int_i3++;' + \
         				'block$$_arg_mask = ' + \
 					'cvCreateStructuringElementEx(block$$_int_i2 ,' + \
 					'block$$_int_i3, 1, 1,CV_SHAPE_RECT,NULL);\n' + \
@@ -60,7 +60,7 @@ class Closing(Plugin):
             "Label": _("Closing"),
             "Icon": "images/closing.png",
             "Color": "180:230:220:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2: "HRP_INT"},
+            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2:"HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
             "Description": _("Morphological operation that connects objects on an image."),
             "TreeGroup": _("Morphological Operations")

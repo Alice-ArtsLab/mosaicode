@@ -10,7 +10,7 @@ class Or(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "42"
+        self.type = self.__class__.__module__
 
         # --------------------------Help Text--------------------------------------------
     def get_help(self):#Função que chama a help

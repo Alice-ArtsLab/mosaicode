@@ -16,7 +16,7 @@ class Erode(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "100"
+        self.type = self.__class__.__module__
         self.masksize = "3x3"
         self.iterations = 1
 

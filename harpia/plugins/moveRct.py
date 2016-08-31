@@ -16,7 +16,7 @@ class MoveRct(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "803"
+        self.type = self.__class__.__module__
         self.offset_x = 0
         self.offset_y = 0
 

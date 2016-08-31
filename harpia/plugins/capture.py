@@ -17,7 +17,7 @@ class Capture(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "18"
+        self.type = self.__class__.__module__
         self.camera = "/dev/video0"
 
     # ----------------------------------------------------------------------

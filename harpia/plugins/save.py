@@ -10,7 +10,7 @@ class Save(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "01"
+        self.type = self.__class__.__module__
         self.filename = ""
 
 # ------------------------------------------------------------------------------

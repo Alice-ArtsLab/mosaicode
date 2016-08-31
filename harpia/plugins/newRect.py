@@ -16,7 +16,7 @@ class NewRect(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "801"
+        self.type = self.__class__.__module__
         self.x0 = 0
         self.y0 = 0
         self.width = 640

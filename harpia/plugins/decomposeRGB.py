@@ -16,7 +16,7 @@ class DecomposeRGB(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "08"
+        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help

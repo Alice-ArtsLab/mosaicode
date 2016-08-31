@@ -16,7 +16,7 @@ class Rotate(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "607"
+        self.type = self.__class__.__module__
         self.isCenter = True
         self.isScalling = True
         self.isFilling = True

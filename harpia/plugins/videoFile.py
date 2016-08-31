@@ -16,7 +16,7 @@ class VideoFile(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "16"
+        self.type = self.__class__.__module__
         self.filename = "/usr/share/harpia/images/vLeft.mpg"
 
     # ----------------------------------------------------------------------

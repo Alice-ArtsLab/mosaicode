@@ -16,7 +16,7 @@ class MinMax(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.type = "606"
+        self.type = self.__class__.__module__
         self.minX = 0
         self.maxX = 500
         self.minY = 0
