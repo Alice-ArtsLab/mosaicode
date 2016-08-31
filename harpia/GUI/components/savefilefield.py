@@ -19,7 +19,8 @@ class SaveFileField(Field, Gtk.HBox):
 
         self.field = Gtk.Entry()
         self.field.set_text(self.file)
-        self.field.connect("changed", event)
+        if event != None:
+            self.field.connect("changed", event)
         self.add(self.field)
 
         button = Gtk.Button.new_from_icon_name("gtk-file",Gtk.IconSize.BUTTON)

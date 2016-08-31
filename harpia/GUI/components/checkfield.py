@@ -24,7 +24,8 @@ class CheckField(Field, Gtk.HBox):
         elif isinstance(data["value"], bool):
             self.field.set_active(data["value"])
 
-        self.field.connect("notify::active", event)
+        if event != None:
+            self.field.connect("notify::active", event)
         self.add(self.field)
         self.show_all()
 

@@ -10,7 +10,7 @@ from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
-from harpia.GUI.harpiapropertywindow import HarpiaPropertyWindow
+from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
 
@@ -141,7 +141,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def preferences(self):
-        HarpiaPropertyWindow(self.main_window, harpia.s2idirectory.properties)
+        PreferenceWindow(self.main_window, harpia.s2idirectory.properties)
 
 
     # ----------------------------------------------------------------------

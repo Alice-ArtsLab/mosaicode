@@ -23,7 +23,8 @@ class ComboField(Field, Gtk.HBox):
         if self.value in data["values"]:
             index = data["values"].index(self.value)
             self.field.set_active(index)
-        self.field.connect("changed", event)
+        if event != None:
+            self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()
 

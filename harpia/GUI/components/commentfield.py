@@ -29,7 +29,8 @@ class CommentField(Field, Gtk.VBox):
         self.field.set_left_margin(10)
         self.field.set_right_margin(10)
         self.field.set_wrap_mode(Gtk.WrapMode.WORD)
-        self.field.connect("focus-out-event", event)
+        if event != None:
+            self.field.connect("focus-out-event", event)
 
         self.text_buffer = self.field.get_buffer()
         self.text_buffer.set_text(data["value"])

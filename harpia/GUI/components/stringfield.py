@@ -17,7 +17,8 @@ class StringField(Field, Gtk.HBox):
 
         self.field = Gtk.Entry()
         self.field.set_text(data["value"])
-        self.field.connect("changed", event)
+        if event != None:
+            self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()
 
