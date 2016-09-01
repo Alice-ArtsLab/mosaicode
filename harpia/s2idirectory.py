@@ -38,6 +38,8 @@ from glob import glob # To load examples
 import os
 import copy
 
+import sys
+
 import gettext
 _ = gettext.gettext
 gettext.bindtextdomain(APP, DIR)
@@ -51,14 +53,21 @@ block = {}
 list_of_examples = []
 recent_files = []
 
-def load():
-    for importer, modname, ispkg in pkgutil.iter_modules(harpia.plugins.__path__):
-        module = __import__("harpia.plugins." + modname, fromlist="dummy")
+def load_blocks():
+    for importer, modname, ispkg in pkgutil.walk_packages(
+                    harpia.plugins.__path__,
+                    harpia.plugins.__name__ + ".",
+                    None):
+        if ispkg:
+            continue
+        module = __import__(modname, fromlist="dummy")
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj) and "Type" in obj().get_description():
                 block[obj().get_description()["Type"]] = obj
 
-    # Load Examples
+def load():
+    load_blocks()
+
     examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
     for example in examples:
         list_of_examples.append(example)
