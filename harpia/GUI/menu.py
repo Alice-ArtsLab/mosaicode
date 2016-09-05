@@ -32,6 +32,7 @@ class Menu(Gtk.MenuBar):
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu("Save", "<Control>S", file_menu, mc.save)
         self.__create_menu("Save As...", None, file_menu, mc.save_as)
+        self.__create_menu("Rename", None, file_menu, mc.rename_tab)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu("Export Diagram As PNG", "<Control>E", file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
@@ -130,4 +131,3 @@ class Menu(Gtk.MenuBar):
         self.recent_files_menu.append(menu_item)
         menu_item.connect("activate", self.__load_recent, None)
         self.recent_files_menu.show_all()
- 
