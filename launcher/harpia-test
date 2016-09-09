@@ -33,9 +33,14 @@ def main(argv):
     s2idirectory.Log = Log()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-x", "--examples", help="Generate examples", action='store_false')
-    parser.add_argument("-c", "--compile", help="Compile examples", action='store_false')
+    parser.add_argument("-x", "--examples", help="Generate examples", action='store_true')
+    parser.add_argument("-c", "--compile", help="Compile examples", action='store_true')
+    parser.add_argument("-t", "--test", help="Test examples", action='store_true')
     args = parser.parse_args()
+
+    if args.test:
+        print"\nHelp\tGenerate  Description\t Properties\tLabel"
+        print"====\t========  ===========\t ==========\t=====\n"
 
     for key in s2idirectory.block:
         obj = s2idirectory.block[key]()
@@ -72,6 +77,9 @@ def main(argv):
                 diagram.connect_blocks(obj, cont, show, 0)
             cont = cont + 1
 
+
+        # Excluir isso antes de enviar pro github
+
         if args.examples:
             # Save Examples
             diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
@@ -85,6 +93,45 @@ def main(argv):
             generator = CodeGenerator(diagram)
             generator.compile()
             print obj.get_description()["Label"], " - compiled\n"
+
+        if args.test:
+            #Test examples
+            #print "\n\nTesting code: ",
+            #print "\n", obj.get_description()["Label"], " ",
+            #print "Help",
+            #print "\tGenerate",
+            #print"\tDescription\tProperties "
+            #-----------------------
+            if obj.get_help():
+                print "  V\t",
+            else:
+                print "  -\t",
+            #-----------------------
+
+            #-----------------------
+            #if obj.generate:
+            #    print "  V\t",
+            #else:
+            print "  -\t",
+            #-----------------------
+
+            #-----------------------
+            if obj.get_description():
+                print "     V\t\t",
+            else:
+                print "     -\t\t",
+            #-----------------------
+
+            #-----------------------
+            if obj.get_properties():
+                print "    V\t",
+            else:
+                print "    -\t",
+            #----------------------
+            print "\t", obj.get_description()["Label"], " "
+
+        #print obj.get_help()
+    print
 
     #----------------------------------------------------------------------
 
