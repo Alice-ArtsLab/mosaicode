@@ -5,3 +5,4 @@ rm -rf files.txt
 rm -rf /usr/share/harpia
 rm -rf build
 rm -rf dist
+rm -rf ~/.harpiaConf.xml

@@ -73,12 +73,15 @@ def main(argv):
             if outtypes[outkey] == "HRP_IMAGE":
                 show = s2idirectory.block["harpia.plugins.show"]()
                 show.x = 400
+                show.title = "My Image - " + obj.get_description()["Label"]
                 diagram.add_block(show)
                 diagram.connect_blocks(obj, cont, show, 0)
             cont = cont + 1
 
-
-        # Excluir isso antes de enviar pro github
+        try:
+            obj.get_help()
+        except:
+            print "Error in get_help() of object", obj.get_description()["Label"] , obj.__class__
 
         if args.examples:
             # Save Examples
@@ -92,6 +95,7 @@ def main(argv):
             print "Generating code..."
             generator = CodeGenerator(diagram)
             generator.compile()
+#            generator.execute()
             print obj.get_description()["Label"], " - compiled\n"
 
         if args.test:
