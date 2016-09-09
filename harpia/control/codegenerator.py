@@ -233,6 +233,7 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def compile(self):
+        harpia.s2idirectory.Log.log("Compilando")
         harpia.s2idirectory.Log.log("Executing Code")
         self.save_code()
         self.__change_directory()
