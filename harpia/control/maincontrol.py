@@ -13,6 +13,7 @@ from harpia.GUI.codewindow import CodeWindow
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
+from harpia.GUI.workarea import WorkArea
 
 from harpia.s2idirectory import *
 
@@ -24,7 +25,7 @@ class MainControl():
     def __init__(self, main_window):
         self.main_window = main_window
         # It must be possible to exchange data between diagrams
-        self.clipboard = [] 
+        self.clipboard = []
 
     # ----------------------------------------------------------------------
     def new(self):
@@ -77,6 +78,11 @@ class MainControl():
     # ----------------------------------------------------------------------
     def save_as(self):
         self.save(save_as = True)
+
+    # ----------------------------------------------------------------------
+    def rename_tab(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        Dialog().rename_dialog(self.main_window, diagram)
 
     # ----------------------------------------------------------------------
     def export_diagram(self):

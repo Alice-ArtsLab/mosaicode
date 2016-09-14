@@ -6,7 +6,7 @@ import os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GObject
-
+from harpia.GUI.components.stringfield import StringField
 
 from filefilters import *
 
@@ -39,7 +39,7 @@ class Dialog():
 
         msg = "Already exists a file with the same name in this folder. Do you want to continue?"
         dialog = Dialog().confirm_dialog(msg,main_window)
-        result = dialog.run() 
+        result = dialog.run()
         dialog.destroy()
         if result ==  Gtk.ResponseType.OK:
             return True
@@ -101,5 +101,33 @@ class Dialog():
                  Gtk.STOCK_OK, Gtk.ResponseType.OK),  "")
         dialog.format_secondary_text(message)
         return dialog
+
+# ----------------------------------------------------------------------
+    def rename_dialog(self, main_window, diagram):
+        dialog = Gtk.Dialog("Rename", main_window,
+                0,(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                Gtk.STOCK_OK, Gtk.ResponseType.OK))
+
+        box = dialog.get_content_area()
+        vbox = Gtk.VBox()
+        box.add(vbox)
+
+        # File name
+        data = {"name":"File name",
+                "value":diagram.get_file_name()}
+        self.file_name =  StringField(data, None)
+        vbox.add(self.file_name)
+
+        dialog.show_all()
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            diagram.set_file_name(self.file_name.get_value())
+
+        dialog.close()
+        dialog.destroy()
+
+        return
+
 
 # ----------------------------------------------------------------------
