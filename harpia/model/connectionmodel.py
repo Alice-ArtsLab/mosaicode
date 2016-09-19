@@ -9,4 +9,5 @@ class ConnectionModel(object):
         self.to_block = -1
         self.from_block_out = -1
         self.to_block_in = -1
+        self.type = ''
 

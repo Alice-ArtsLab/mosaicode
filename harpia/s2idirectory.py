@@ -85,19 +85,36 @@ icons = {
     "IconOutput":"images/s2ioutput.png"
     }
 
-typeIconsIn = {
-        "HRP_INT":"images/s2iintin.png",
-        "HRP_DOUBLE":"images/s2idoubin.png",
-        "HRP_RECT":"images/s2irctin.png",
-        "HRP_IMAGE":"images/s2iinput.png",
-        "HRP_POINT":"images/s2ipointin.png",
-        }
-
-typeIconsOut = {
-        "HRP_INT":"images/s2iintout.png",
-        "HRP_DOUBLE":"images/s2idoubout.png",
-        "HRP_RECT":"images/s2irctout.png",
-        "HRP_IMAGE":"images/s2ioutput.png",
-        "HRP_POINT":"images/s2ipointout.png",
+connections = {
+        "HRP_INT":{
+            "icon_in":"images/s2iintin.png",
+            "icon_out":"images/s2iintout.png",
+            "code": 'block$to_block$_int_i$to_block_in$ = block$from_block$_int_o$from_block_out$;// INT conection\n'
+            },
+        "HRP_DOUBLE":{
+            "icon_in":"images/s2idoubin.png",
+            "icon_out":"images/s2idoubout.png",
+            "code": 'block$to_block$_double_i$to_block_in$ = block$from_block$_double_o$from_block_out$;// DOUBLE conection\n'
+            },
+        "HRP_RECT":{
+            "icon_in":"images/s2irctin.png",
+            "icon_out":"images/s2irctout.png",
+            "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
+            },
+        "HRP_IMAGE":{
+            "icon_in":"images/s2iinput.png",
+            "icon_out":"images/s2ioutput.png",
+            "code": 'block$to_block$_img_i$to_block_in$ = cvCloneImage(block$from_block$_img_o$from_block_out$);// IMG conection\n'
+            },
+        "HRP_POINT":{
+            "icon_in":"images/s2ipointin.png",
+            "icon_out":"images/s2ipointout.png",
+            "code": 'block$to_block$_point_i$to_block_in$ = block$from_block$_point_o$from_block_out$;// POINT conection\n'
+            },
+        "HRP_WEBAUDIO_SOUND":{
+            "icon_in":"images/s2irctin.png",
+            "icon_out":"images/s2irctout.png",
+            "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
+            }
         }
 

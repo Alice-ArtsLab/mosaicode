@@ -32,8 +32,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-
-from harpia.connection import Connection
 from harpia.blockTemplate import BlockTemplate
 from harpia.RunPrg import RunPrg
 from harpia.constants import *
@@ -94,12 +92,8 @@ class CodeGenerator():
             for connection in self.diagram.connectors:
                 if connection.from_block != block.get_plugin().id:
                     continue
-                tmpConnection = Connection()
-                tmpConnection.sourceOutput = int (connection.from_block_out) + 1
-                tmpConnection.destinationInput = int(connection.to_block_in ) + 1
-                tmpConnection.destinationNumber = connection.to_block
-                tmpConnection.connType = block.get_description()["OutTypes"][connection.from_block_out]
-                block_template.myConnections.append(tmpConnection)
+                connection.type = block.get_description()["OutTypes"][connection.from_block_out]
+                block_template.myConnections.append(connection)
 
             block_template.generate_block_code()
             blockList.append(block_template)
@@ -124,7 +118,6 @@ class CodeGenerator():
 
         # Gero o código do menor peso para o maior
         for activeWeight in range(biggestWeight):
-
             activeWeight += 1
             for block in blockList:
                 if block.weight == activeWeight:
@@ -309,7 +302,7 @@ class CodeGenerator():
             for connection in block_template.myConnections:
                 ##and apply the weight on this connection
                 for tmp_block_template in blockList:
-                    if tmp_block_template.plugin.id == connection.destinationNumber:
+                    if tmp_block_template.plugin.id == connection.to_block:
                         tmp_block_template.weight += block_template.weight
                         if tmp_block_template not in returnList:
                             returnList.append(tmp_block_template)

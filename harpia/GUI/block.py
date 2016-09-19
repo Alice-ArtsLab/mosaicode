@@ -213,8 +213,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.typeIconsIn[
-                            self.get_description()["InTypes"][x]])
+                            harpia.s2idirectory.connections[
+                            self.get_description()["InTypes"][x]
+                            ]["icon_in"])
             except:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.icons["IconInput"])
@@ -246,8 +247,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.typeIconsOut[
-                            self.get_description()["OutTypes"][x]])
+                            harpia.s2idirectory.connections[
+                            self.get_description()["OutTypes"][x]
+                            ]["icon_out"])
             except:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                             harpia.s2idirectory.icons["IconOutput"])
