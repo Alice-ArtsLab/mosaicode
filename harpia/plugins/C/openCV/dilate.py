@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Dilate(Plugin):
+class Dilate(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.masksize = "3x3"
@@ -25,8 +25,8 @@ class Dilate(Plugin):
         return "operação morfológica que provoca dilatação nos objetos de uma imagem, aumentando suas dimensões."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_o1 = NULL;\n' + \
             'int block$id$_arg_iterations = $iterations$;\n' + \
@@ -34,21 +34,17 @@ class Dilate(Plugin):
                     str(self.masksize[0]) + ' , ' + \
                     str(self.masksize[2]) + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
 
-        blockTemplate.functionCall = '''
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return '''
 if(block$id$_img_i1){
-    block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width,
-            block$id$_img_i1->height),
-            block$id$_img_i1->depth,
-            block$id$_img_i1->nChannels);
+    block$id$_img_o1 = cvCloneImage(block$id$_img_i1);
     cvDilate(block$id$_img_i1,
             block$id$_img_o1,
             block$id$_arg_mask,
             block$id$_arg_iterations);
 }
 '''
-
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

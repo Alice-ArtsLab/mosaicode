@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class FillRect(Plugin):
+class FillRect(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.color = "#0000ffff0000"
@@ -24,7 +24,14 @@ class FillRect(Plugin):
         return  "Preenche o retângulo de uma cor."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
+        return \
+            'IplImage * block$id$_img_i1 = NULL;\n' + \
+            'CvRect block$id$_rect_i2;\n' + \
+            'IplImage * block$id$_img_o1 = NULL;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
         red = self.color[1:5]
         green = self.color[5:9]
         blue = self.color[9:13]
@@ -32,12 +39,7 @@ class FillRect(Plugin):
         red = int(red, 16) / 257
         green = int(green, 16) / 257
         blue = int(blue, 16) / 257
-
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'CvRect block$id$_rect_i2;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = \
+        return \
             '\nif(block$id$_img_i1)\n{\n' + \
             '\tblock$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
             '\tcvSetImageROI(block$id$_img_o1 , block$id$_rect_i2);\n' + \
@@ -45,8 +47,6 @@ class FillRect(Plugin):
             '\tcvSet(block$id$_img_o1,color,NULL);\n' + \
             '\tcvResetImageROI(block$id$_img_o1);\n' + \
             '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                      'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

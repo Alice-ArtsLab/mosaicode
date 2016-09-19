@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class ImageFile(Plugin):
+class ImageFile(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.filename = "/usr/share/harpia/images/lenna.png"
@@ -25,14 +25,9 @@ class ImageFile(Plugin):
         seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-
-        blockTemplate.imagesIO = 'IplImage * block$id$_img_o1 = NULL; //Capture\n'
-        blockTemplate.imagesIO += 'char block$id$_arg_Filename[] = "$filename$";\n'
-
-        blockTemplate.functionCall = 'block$id$_img_o1 = cvLoadImage(block$id$_arg_Filename,-1);\n'
-
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n'
+    def generate_function_call(self):
+        return \
+            'block$id$_img_o1 = cvLoadImage("$filename$",-1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

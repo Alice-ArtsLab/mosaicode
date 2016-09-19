@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Canny(Plugin):
+class Canny(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.apertureSize = 3
@@ -26,17 +26,20 @@ class Canny(Plugin):
         return "Operacão de filtragem que implementa o algoritmo Canny para detecção de contornos e bordas.\nPropriedades\nLimiar 1 e Limiar 2: os dois valores de limiar são utilizados em conjunto. O menor valor é utilizado para a realizar a conexão de cantos e bordas. O maior valor é utilizado para encontrar segmentos iniciais das bordas mais significativas."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        self.apertureSize = int(self.apertureSize)
-        self.threshold1 = int(self.threshold1)
-        self.threshold2 = int(self.threshold2)
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n'+ \
             'IplImage * block$id$_img_o1 = NULL;\n' + \
             'int block$id$_int_i2 = $threshold2$;\n' + \
             'int block$id$_int_i4 = $apertureSize$;\n' + \
             'int block$id$_int_i3 = $threshold1$;\n'
-        blockTemplate.functionCall = '''
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        self.apertureSize = int(self.apertureSize)
+        self.threshold1 = int(self.threshold1)
+        self.threshold2 = int(self.threshold2)
+        return  '''
 if(block$id$_img_i1){ //Canny Code
     if (block$id$_int_i2 < 1) block$id$_int_i2 = 1;
     if (block$id$_int_i3 < 1) block$id$_int_i3 = 1;
@@ -44,10 +47,7 @@ if(block$id$_img_i1){ //Canny Code
     if (block$id$_int_i2 > 10) block$id$_int_i2 = 10;
     if (block$id$_int_i3 > 100) block$id$_int_i3 = 100;
     if (block$id$_int_i4 > 100) block$id$_int_i4 = 100;
-    block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width,
-                block$id$_img_i1->height),
-                block$id$_img_i1->depth,
-                block$id$_img_i1->nChannels);
+    block$id$_img_o1 = cvCloneImage(block$id$_img_i1);
     IplImage * tmpImg$id$ = cvCreateImage(cvGetSize(block$id$_img_i1),8,1);
     if(block$id$_img_i1->nChannels == 3){
         cvCvtColor(block$id$_img_i1,tmpImg$id$ ,CV_RGB2GRAY);
@@ -62,10 +62,6 @@ if(block$id$_img_i1){ //Canny Code
     }
     cvReleaseImage(&tmpImg$id$);
 } // End Canny Code
-'''
-        blockTemplate.dealloc = '''
-cvReleaseImage(&block$id$_img_o1);
-cvReleaseImage(&block$id$_img_i1);
 '''
 
     # ----------------------------------------------------------------------

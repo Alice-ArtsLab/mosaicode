@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class PlotHistogram(Plugin):
+class PlotHistogram(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.channel = "All"
@@ -22,8 +22,26 @@ class PlotHistogram(Plugin):
     # ----------------------------------------------------------------------
     def get_help(self):
         return "Create a representation of the light intensity levels as an histogram."
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
+        return \
+            'IplImage * block$id$_img_i1 = NULL;\n' + \
+            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'CvHistogram * block$id$_histogram;\n' + \
+            'IplImage * block$id$_SourceCx[] = { NULL, NULL, NULL};\n' + \
+            'IplImage * block$id$_HistCx[] = { NULL, NULL, NULL};\n' + \
+            'int block$id$_histogram_size[] = { 255, 255, 255 };\n' + \
+            'float * block$id$_hist_ranges[] = { NULL, NULL, NULL};\n' + \
+            'float block$id$_hist_rang[2];\n' + \
+            'float block$id$_histBin;\n' + \
+            'float block$id$_histMaxVal;\n' + \
+            'int block$id$_histV;\n' + \
+            'int block$id$_plotHistChanIter;\n' + \
+            'int block$id$_plotHistArrIter;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
         ChannelValue = '3'
         HistValue = '0'
         if self.channel == 'All':
@@ -38,22 +56,8 @@ class PlotHistogram(Plugin):
         elif self.channel == 'Blue':
             ChannelValue = '1'
             HistValue = '0'
-
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'CvHistogram * block$id$_histogram;\n' + \
-            'IplImage * block$id$_SourceCx[] = { NULL, NULL, NULL};\n' + \
-            'IplImage * block$id$_HistCx[] = { NULL, NULL, NULL};\n' + \
-            'int block$id$_histogram_size[] = { 255, 255, 255 };\n' + \
-            'float * block$id$_hist_ranges[] = { NULL, NULL, NULL};\n' + \
-            'float block$id$_hist_rang[2];\n' + \
-            'float block$id$_histBin;\n' + \
-            'float block$id$_histMaxVal;\n' + \
-            'int block$id$_histV;\n' + \
-            'int block$id$_plotHistChanIter;\n' + \
-            'int block$id$_plotHistArrIter;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1 && block$id$_img_i1->nChannels == 3){\n' + \
+        return \
+            '\nif(block$id$_img_i1 && block$id$_img_i1->nChannels == 3){\n' + \
              '	block$id$_img_o1 = cvCreateImage(cvSize(255,300), IPL_DEPTH_8U,3);\n' + \
              '	block$id$_SourceCx[0] = cvCreateImage(cvSize(block$id$'+ \
              '_img_i1->width,block$id$_img_i1->height), IPL_DEPTH_8U, 1);\n' + \
@@ -118,7 +122,10 @@ class PlotHistogram(Plugin):
              ' - 1),cvScalarAll(255),1, 0,0 );\n' + \
              '	}\n' + \
              '}\n'
-        blockTemplate.dealloc = 'if(block$id$_SourceCx[0]) cvReleaseImage(&block$id$_SourceCx[0]);\n' + \
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'if(block$id$_SourceCx[0]) cvReleaseImage(&block$id$_SourceCx[0]);\n' + \
             'if(block$id$_SourceCx[1]) cvReleaseImage(&block$id$_SourceCx[1]);\n' + \
             'if(block$id$_SourceCx[2]) cvReleaseImage(&block$id$_SourceCx[2]);\n' + \
             'if(block$id$_HistCx[0]) cvReleaseImage(&block$id$_HistCx[0]);\n' + \

@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Sobel(Plugin):
+class Sobel(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.masksize = 3
@@ -24,20 +24,28 @@ class Sobel(Plugin):
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Operação de filtragem que utiliza uma máscara Sobel para realçar cantos e bordas da imagem."
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_o1 = NULL;\n' + \
             'IplImage * block$id$_img_t = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-            '_img_i1->width,block$id$_img_i1->height), IPL_DEPTH_32F,block$id$' + \
-            '_img_i1->nChannels);\n' + \
-            'cvSobel(block$id$_img_i1, block$id$_img_o1 ,$xorder$,$yorder$,$masksize$);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n' + \
-                                'cvReleaseImage(&block$id$_img_t);\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'CvSize size$id$ = cvGetSize(block$id$_img_i1);\n'+ \
+            'block$id$_img_o1 = cvCreateImage(size$id$, IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n' + \
+            'cvSobel(block$id$_img_i1, block$id$_img_o1 ,$xorder$, $yorder$, $masksize$);\n'+ \
+            '}\n'
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
+               'cvReleaseImage(&block$id$_img_i1);\n' + \
+               'cvReleaseImage(&block$id$_img_t);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

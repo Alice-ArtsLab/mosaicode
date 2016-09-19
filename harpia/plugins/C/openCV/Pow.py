@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Pow(Plugin):
+class Pow(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.exponent = 1
@@ -22,17 +22,14 @@ class Pow(Plugin):
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Eleva cada ponto de uma imagem a um valor fixo de potência."
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-                'block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width, ' + \
-                'block$id$_img_i1->height),block$id$_img_i1->depth,block$id$_img_i1->nChannels);' + \
-                '\ncvPow(block$id$_img_i1, block$id$_img_o1,$exponent$);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvPow(block$id$_img_i1, block$id$_img_o1, $exponent$);\n' + \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

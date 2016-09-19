@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Fill(Plugin):
+class Fill(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.color = "#0000ffff0000"
@@ -24,7 +24,7 @@ class Fill(Plugin):
         return "Preenche toda a imagem de uma cor."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_function_call(self):
         red = self.color[1:5]
         green = self.color[5:9]
         blue = self.color[9:13]
@@ -32,17 +32,12 @@ class Fill(Plugin):
         red = int(red, 16) / 257
         green = int(green, 16) / 257
         blue = int(blue, 16) / 257
-
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = \
-            '\nif(block$id$_img_i1){\n' + \
+        return \
+            'if(block$id$_img_i1){\n' + \
             'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            '\nCvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red) + ',0);\n' + \
-            '\ncvSet(block$id$_img_o1,color,NULL);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-          'cvReleaseImage(&block$id$_img_i1);\n'
+            'CvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red) + ',0);\n' + \
+            'cvSet(block$id$_img_o1,color,NULL);\n' + \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

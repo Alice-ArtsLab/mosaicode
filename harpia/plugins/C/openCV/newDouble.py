@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class NewDouble(Plugin):
+class NewDouble(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.doubleVal = 1
@@ -24,12 +24,8 @@ class NewDouble(Plugin):
         return "Creates new literal value (Double)"
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'double  block$id$_double_o1 = $doubleVal$; // New Double Out\n'
-
-        blockTemplate.functionCall = ''
-
-        blockTemplate.dealloc = ''
+    def generate_vars(self):
+        return 'double block$id$_double_o1 = $doubleVal$; // New Double Out\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

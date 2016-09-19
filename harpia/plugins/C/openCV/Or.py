@@ -2,13 +2,13 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Or(Plugin):
+class Or(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
@@ -18,27 +18,19 @@ class Or(Plugin):
         Primeira: Executa a operação entre duas imagens ponto a ponto. \
         Segunda: Executa a operação entre um valor constante e cada ponto da imagem."
 
-    # ------------------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        import opencvcommon
-        blockTemplate.header += opencvcommon.adjust_images_size()
+    # ----------------------------------------------------------------------
+    def generate_header(self):
+        return self.get_adjust_images_size()
 
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_i2 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-             'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-             '_img_i1->width,block$id$_img_i1->height),block$id$' + \
-             '_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-             'adjust_images_size(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1);\n' + \
-             'cvOr(block$id$' + \
-             '_img_i1, block$id$_img_i2, block$id$' + \
-             '_img_o1,0);\ncvResetImageROI(block$id$_img_o1);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i2);\n'
-
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1 && block$id$_img_i2){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'adjust_images_size(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1);\n' + \
+            'cvOr(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1,0);\n' + \
+            'cvResetImageROI(block$id$_img_o1);\n'+ \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

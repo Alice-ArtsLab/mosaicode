@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class ColorConversion(Plugin):
+class ColorConversion(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.conversion_type = 'RGB -> GRAY'
@@ -22,8 +22,16 @@ class ColorConversion(Plugin):
     # ----------------------------------------------------------------------
     def get_help(self):
         return "Realiza a conversão de cores entre diferentes padrões de imagens coloridas e tons de cinza."
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
+        return \
+            'IplImage * block$id$_img_i1 = NULL;\n' + \
+            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_t = NULL;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
         channels = '3'
         if self.conversion_type == 'RGB -> GRAY':
             code = 'CV_RGB2GRAY'
@@ -53,22 +61,20 @@ class ColorConversion(Plugin):
         elif self.conversion_type == 'CIE.LUV -> RGB':
             code = 'CV_Luv2RGB'
 
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'IplImage * block$id$_img_t = NULL;\n'
-
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-                   'block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-                   'block$id$_img_t = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth,' + channels + ');\n' + \
-                   'cvCvtColor(block$id$_img_i1, block$id$_img_t ,' + code + ' );}\n' + \
-                   'if ( ' + code + ' == ' + "CV_RGB2GRAY" + ')\n' + \
-                   '{    cvMerge(block$id$_img_t ,block$id$_img_t ,block$id$_img_t ,NULL ,block$id$_img_o1);\n }\n' + \
-                   'else\n' + '{ block$id$_img_o1 = cvCloneImage(block$id$_img_t);\n}'
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'block$id$_img_t = cvCreateImage(cvGetSize(block$id$_img_i1), block$id$_img_i1->depth,' + channels + ');\n' + \
+            'cvCvtColor(block$id$_img_i1, block$id$_img_t ,' + code + ' );}\n' + \
+            'if ( ' + code + ' == ' + "CV_RGB2GRAY" + ')\n' + \
+            '{    cvMerge(block$id$_img_t ,block$id$_img_t ,block$id$_img_t ,NULL ,block$id$_img_o1);\n }\n' + \
+            'else\n' + '{ block$id$_img_o1 = cvCloneImage(block$id$_img_t);\n}'
  
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_t);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n' + \
-                                'cvReleaseImage(&block$id$_img_o1);\n'
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_t);\n' + \
+               'cvReleaseImage(&block$id$_img_i1);\n' + \
+               'cvReleaseImage(&block$id$_img_o1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

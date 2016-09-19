@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class NewImage(Plugin):
+class NewImage(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.width = "640"
@@ -25,15 +25,11 @@ class NewImage(Plugin):
         return "Cria uma nova imagem."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO += 'IplImage * block$id$_img_o1 = NULL; //Capture\n'
-
-        blockTemplate.functionCall = \
+    def generate_function_call(self):
+        return \
             'CvSize size = cvSize($width$,$height$);\n' + \
             'block$id$_img_o1 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
             'cvSetZero(block$id$_img_o1);\n'
-
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -45,11 +41,11 @@ class NewImage(Plugin):
          "Label":_("New Image"),
          "Icon":"images/acquisition.png",
          "Color":"50:100:200:150",
-                 "InTypes":"",
-                 "OutTypes":{0:"HRP_IMAGE"},
-                 "Description":_("Create a new image."),
-                 "TreeGroup":_("Image Source"),
-                 "IsSource":True
+         "InTypes":"",
+         "OutTypes":{0:"HRP_IMAGE"},
+         "Description":_("Create a new image."),
+         "TreeGroup":_("Image Source"),
+         "IsSource":True
          }
 
     # ----------------------------------------------------------------------

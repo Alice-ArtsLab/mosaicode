@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class SaveVideo(Plugin):
+class SaveVideo(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.filename = "~/Output.mpeg"
@@ -26,7 +26,14 @@ class SaveVideo(Plugin):
         return "Save Video needs its description"
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
+        return \
+            'IplImage * block$id$_img_i1 = NULL;\n' + \
+            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'CvVideoWriter* block$id$_vidWriter = NULL;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
         codecMacro = 'CV_FOURCC(\'P\',\'I\',\'M\',\'2\')'
         if self.codecSelection == "MPEG1":
             codecMacro = 'CV_FOURCC(\'P\',\'I\',\'M\',\'2\')'
@@ -44,23 +51,23 @@ class SaveVideo(Plugin):
             codecMacro = 'CV_FOURCC(\'I\',\'2\',\'6\',\'3\')'
         if self.codecSelection == "FLV1":
             codecMacro = 'CV_FOURCC(\'F\',\'L\',\'V\',\'1\')'
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            '	if(block$id$_vidWriter == NULL)//video writer not started up yet!\n' + \
+            '		block$id$_vidWriter = cvCreateVideoWriter( "$filename$", ' + \
+            codecMacro + ',$framerate$' + \
+            ', cvGetSize(block$id$_img_i1), 1 );\n' + \
+            '	cvWriteFrame( block$id$_vidWriter, block$id$_img_i1);\n' + \
+            '	block$id$_img_o1 = block$id$_img_i1;\n' + \
+            '}\n'
 
-        blockTemplate.imagesIO = 'IplImage * block$id$_img_i1 = NULL;\n' + \
-                                 'IplImage * block$id$_img_o1 = NULL;\n' + \
-                                 'CvVideoWriter* block$id$_vidWriter = NULL;\n'
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_i1); // SaveVideo Dealloc\n'
 
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-                '	if(block$id$_vidWriter == NULL)//video writer not started up yet!\n' + \
-                '		block$id$_vidWriter = cvCreateVideoWriter( "' + \
-                self.filename + '", ' + codecMacro + ',$framerate$' + \
-                ', cvGetSize(block$id$_img_i1), 1 );\n' + \
-                '	cvWriteFrame( block$id$_vidWriter, block$id$_img_i1);\n' + \
-                '	block$id$_img_o1 = block$id$_img_i1;\n' + \
-                '}\n'
-
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_i1); // SaveVideo Dealloc\n'
-
-        blockTemplate.outDealloc = 'cvReleaseVideoWriter(&block$id$_vidWriter); // SaveVideo\n'
+    # ----------------------------------------------------------------------
+    def generate_out_dealloc(self):
+        return 'cvReleaseVideoWriter(&block$id$_vidWriter); // SaveVideo\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

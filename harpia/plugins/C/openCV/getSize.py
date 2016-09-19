@@ -8,28 +8,26 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class GetSize(Plugin):
+class GetSize(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Extracts the input image size"
-    # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'IplImage * block$id$_img_i1 = NULL;\n' + \
-                                 'CvRect block$id$_rect_o1 = cvRect( 0, 0, 1, 1);\n'
 
-        blockTemplate.functionCall = '\nif(block$id$_img_i1)\n{\n' + \
-               '	block$id$_rect_o1 = cvRect( 0, 0, block$id$_img_i1->width, block$id$_img_i1->height);\n' + \
-               '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_i1);\n'
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1)\n{\n' + \
+             '	block$id$_rect_o1 = cvRect( 0, 0, block$id$_img_i1->width, block$id$_img_i1->height);\n' + \
+             '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

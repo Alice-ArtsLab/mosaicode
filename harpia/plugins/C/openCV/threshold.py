@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Threshold(Plugin):
+class Threshold(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.threshold = 122
@@ -26,23 +26,12 @@ class Threshold(Plugin):
         return "Operador de binarização da imagem, de acordo com um valor fixo de intensidade luminosa (valor de limiar)."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.imagesIO += \
-            'int block$id$_arg_threshold = $threshold$;\n' + \
-            'int block$id$_arg_maxValue = $maxValue$;\n' + \
-            'int block$id$_arg_thresholdType = $thresholdType$;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-            '_img_i1->width,block$id$_img_i1->height),block$id$' + \
-            '_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-            '\ncvThreshold(block$id$_img_i1,block$id$' + \
-            '_img_o1,block$id$_arg_threshold,block$id$' + \
-            '_arg_maxValue,block$id$_arg_thresholdType);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvThreshold(block$id$_img_i1, block$id$_img_o1, $threshold$, $maxValue$, $thresholdType$);\n'+ \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

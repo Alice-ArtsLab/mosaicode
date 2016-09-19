@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class CropImage(Plugin):
+class CropImage(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.x0 = 0
@@ -27,25 +27,27 @@ class CropImage(Plugin):
         return "Corta a Imagem de acordo com o Retangulo\n de entrada."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_o1 = NULL;\n' + \
             'CvRect  block$id$_rect_i2 = cvRect($x0$, $y0$, $width$, $height$);\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-                 '	block$id$_rect_i2.x = MAX(0,block$id$_rect_i2.x);//Check whether point is negative\n' + \
-                 '	block$id$_rect_i2.y = MAX(0,block$id$_rect_i2.y);\n' + \
-                 '	block$id$_rect_i2.x = MIN(block$id$_img_i1->width-1,block$id$_rect_i2.x);//Check whether point is out of the image\n' + \
-                 '	block$id$_rect_i2.y = MIN(block$id$_img_i1->height-1,block$id$_rect_i2.y);\n' + \
-                 '	block$id$_rect_i2.width = MIN(block$id$_img_i1->width-block$id$_rect_i2.x,block$id$_rect_i2.width);//Check whether rect reaches out of the image\n' + \
-                 '	block$id$_rect_i2.height = MIN(block$id$_img_i1->height-block$id$_rect_i2.y,block$id$_rect_i2.height);\n' + \
-                 '	block$id$_img_o1 = cvCreateImage(cvSize(block$id$_rect_i2.width,block$id$_rect_i2.height),' + \
-                 ' block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-                 '	cvSetImageROI(block$id$_img_i1,block$id$_rect_i2);\n' + \
-                 '	cvCopyImage(block$id$_img_i1,block$id$_img_o1);\n' + \
-                 '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            '	block$id$_rect_i2.x = MAX(0,block$id$_rect_i2.x);//Check whether point is negative\n' + \
+            '	block$id$_rect_i2.y = MAX(0,block$id$_rect_i2.y);\n' + \
+            '	block$id$_rect_i2.x = MIN(block$id$_img_i1->width-1,block$id$_rect_i2.x);//Check whether point is out of the image\n' + \
+            '	block$id$_rect_i2.y = MIN(block$id$_img_i1->height-1,block$id$_rect_i2.y);\n' + \
+            '	block$id$_rect_i2.width = MIN(block$id$_img_i1->width-block$id$_rect_i2.x,block$id$_rect_i2.width);//Check whether rect reaches out of the image\n' + \
+            '	block$id$_rect_i2.height = MIN(block$id$_img_i1->height-block$id$_rect_i2.y,block$id$_rect_i2.height);\n' + \
+            '	block$id$_img_o1 = cvCreateImage(cvSize(block$id$_rect_i2.width,block$id$_rect_i2.height),' + \
+            ' block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
+            '	cvSetImageROI(block$id$_img_i1,block$id$_rect_i2);\n' + \
+            '	cvCopyImage(block$id$_img_i1,block$id$_img_o1);\n' + \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

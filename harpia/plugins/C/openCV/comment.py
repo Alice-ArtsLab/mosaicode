@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Comment(Plugin):
+class Comment(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.comment = ""
@@ -24,8 +24,8 @@ class Comment(Plugin):
         return "Insert a comment"
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.functionCall = '/*'+self.comment+'*/ \n'
+    def generate_vars(self):
+        return '/* $comment$ */ \n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

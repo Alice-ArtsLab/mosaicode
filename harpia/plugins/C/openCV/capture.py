@@ -8,14 +8,14 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 import os
 from glob import glob
-class Capture(Plugin):
+class Capture(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.camera = "/dev/video0"
@@ -26,25 +26,25 @@ class Capture(Plugin):
         seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        camera = self.camera[10:]
-
-
-        blockTemplate.imagesIO = 'IplImage * block$id$_img_o1 = NULL; //Capture\n' + \
+    def generate_vars(self):
+        return \
+           'IplImage * block$id$_img_o1 = NULL; //Capture\n' + \
            'CvCapture* block$id$_capture = NULL; \n' + \
            'IplImage* block$id$_frame = NULL; \n' + \
-           'int counter = 0;\n'
-           
-        blockTemplate.functionCall = \
-           'if (counter == 0){\n' + \
+           'int counter$id$ = 0;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        camera = self.camera[10:]
+        return \
+           'if (counter$id$ == 0){\n' + \
            'block$id$_capture = cvCaptureFromCAM(' + camera + '); \n' + \
            'if( !cvGrabFrame( block$id$_capture )){ printf("Cannot Grab Image from camera '+ camera +'"); }\n' + \
            'block$id$_frame = cvRetrieveFrame( block$id$_capture ); \n' + \
            'block$id$_img_o1 = cvCloneImage( block$id$_frame );\n' + \
-           'counter++;\n' + \
+           'counter$id$++;\n' + \
            '}\n'
 
-        blockTemplate.outDeallocations = 'cvReleaseImage(&block$id$_img_o1);\n'
 
 
     # ----------------------------------------------------------------------

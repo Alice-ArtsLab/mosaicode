@@ -8,31 +8,29 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class IsOnRect(Plugin):
+class IsOnRect(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Checks Wheather the given point is inside the given rectangle"
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'CvRect block$id$_rect_i2;\n' + \
-                                 'CvPoint block$id$_point_i1;\n' + \
-                                 'double block$id$_double_o1;\n'
-        blockTemplate.functionCall = '\n block$id$_double_o1 = 0.0;\n' + \
-              'if(block$id$_point_i1.x >= block$id$_rect_i2.x)\n' + \
-              '	if(block$id$_point_i1.y >= block$id$_rect_i2.y)\n' + \
-              '		if(block$id$_point_i1.x < block$id$_rect_i2.x + block$id$_rect_i2.width)\n' + \
-              '			if(block$id$_point_i1.y < block$id$_rect_i2.y + block$id$_rect_i2.height)\n' + \
-              '				block$id$_double_o1 = 1.0;\n'
-        blockTemplate.dealloc = ''
+    def generate_function_call(self):
+        return \
+            '\n block$id$_double_o1 = 0.0;\n' + \
+            'if(block$id$_point_i1.x >= block$id$_rect_i2.x)\n' + \
+            '	if(block$id$_point_i1.y >= block$id$_rect_i2.y)\n' + \
+            '		if(block$id$_point_i1.x < block$id$_rect_i2.x + block$id$_rect_i2.width)\n' + \
+            '			if(block$id$_point_i1.y < block$id$_rect_i2.y + block$id$_rect_i2.height)\n' + \
+            '				block$id$_double_o1 = 1.0;\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

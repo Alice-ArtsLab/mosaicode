@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class intValue(Plugin):
+class intValue(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.intVal = 1
@@ -27,12 +27,16 @@ class intValue(Plugin):
         return "Creates Slider to int value"
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
         self.intVal = int(self.intVal)
-        blockTemplate.imagesIO = 'int  block$id$_int_o1 = $intVal$; // New Int Out\n'
-        blockTemplate.functionCall = 'cvNamedWindow("$window_name$",CV_WINDOW_AUTOSIZE );\n' + \
+        return \
+            'int  block$id$_int_o1 = $intVal$; // New Int Out\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            'cvNamedWindow("$window_name$",CV_WINDOW_AUTOSIZE );\n' + \
             'cvCreateTrackbar("$label$", "$window_name$", &block$id$_int_o1, $maxVal$, NULL);\n'
-        blockTemplate.dealloc = ''
 
     # ----------------------------------------------------------------------
     def __del__(self):

@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Resize(Plugin):
+class Resize(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.method = "CV_INTER_LINEAR"
@@ -24,17 +24,13 @@ class Resize(Plugin):
         return "Resizes the input image to the dimensions of the input rectangle"
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'CvRect block$id$_rect_i2;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-            '	block$id$_img_o1 = cvCreateImage(cvSize(block$id$_rect_i2.width,block$id$_rect_i2.height),block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-            '	cvResize(block$id$_img_i1, block$id$_img_o1, $method$);\n' + \
+    def generate_function_call(self):
+        return \
+            'if(block$id$_img_i1){\n' + \
+            'CvSize size$id$ = cvSize(block$id$_rect_i2.width,block$id$_rect_i2.height);\n' + \
+            'block$id$_img_o1 = cvCreateImage(size$id$,block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
+            'cvResize(block$id$_img_i1, block$id$_img_o1, $method$);\n' + \
             '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

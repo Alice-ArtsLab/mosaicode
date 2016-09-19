@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class NewPoint(Plugin):
+class NewPoint(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.x0 = 0
@@ -23,11 +23,15 @@ class NewPoint(Plugin):
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Creates a new Point"
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'CvPoint block$id$_point_o1;\n'
-        blockTemplate.functionCall = 'block$id$_point_o1 = cvPoint($x0$,$y0$);\n'
-        blockTemplate.dealloc = ''
+    def generate_vars(self):
+        return 'CvPoint block$id$_point_o1 = cvPoint($x0$,$y0$);\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            'block$id$_point_o1 = cvPoint($x0$,$y0$);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

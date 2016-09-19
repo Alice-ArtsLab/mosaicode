@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Xor(Plugin):
+class Xor(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
@@ -23,25 +23,18 @@ class Xor(Plugin):
         return "Realiza a operação lógica XOR entre duas imagens."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        import opencvcommon
-        blockTemplate.header += opencvcommon.adjust_images_size()
+    def generate_header(self):
+        return self.get_adjust_images_size()
 
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_i2 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-             'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-             '_img_i1->width,block$id$_img_i1->height),block$id$' + \
-             '_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            'if(block$id$_img_i1 && block$id$_img_i2){\n' + \
+             'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
              'adjust_images_size(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1);\n' + \
-             'cvXor(block$id$_img_i1, block$id$_img_i2, block$id$' + \
-             '_img_o1,0);\ncvResetImageROI(block$id$_img_o1);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i2);\n'
-
+             'cvXor(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1,0);\n' + \
+             'cvResetImageROI(block$id$_img_o1);\n' + \
+             '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

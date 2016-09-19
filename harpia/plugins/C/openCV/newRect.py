@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class NewRect(Plugin):
+class NewRect(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.x0 = 0
@@ -27,10 +27,10 @@ class NewRect(Plugin):
        return "Creates new rectangle"
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'CvRect block$id$_rect_o1;\n'
-        blockTemplate.functionCall = 'block$id$_rect_o1 = cvRect($x0$,$y0$,$width$,$height$);'
-        blockTemplate.dealloc = ''
+    def generate_function_call(self):
+        return \
+            'block$id$_rect_o1 = cvRect($x0$, $y0$, $width$, $height$);\n'
+
     # ----------------------------------------------------------------------
     def __del__(self):
         pass

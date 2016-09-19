@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Not(Plugin):
+class Not(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
@@ -23,24 +23,12 @@ class Not(Plugin):
         return "Realiza a negação lógica de uma imagem. Corresponde à negativa da imagem."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = "\n //NOT input and output \n"
-        blockTemplate.imagesIO += \
-            'IplImage * block$id$_img_i1 = NULL; // NOT input\n' + \
-            'IplImage * block$id$_img_o1 = NULL; // NOT output\n'
-        blockTemplate.imagesIO += "\n\n"
-
-        blockTemplate.functionCall = "\n\n // NOT Execution Block\n"
-        blockTemplate.functionCall += 'if(block$id$_img_i1){\n' + \
-                                      'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-                                      '_img_i1->width,block$id$_img_i1->height),block$id$' + \
-                                      '_img_i1->depth,block$id$_img_i1->nChannels);\n'
-        blockTemplate.functionCall += 'cvNot(block$id$_img_i1, block$id$_img_o1);\n}\n'
-
-        blockTemplate.dealloc = '// NOT dealloc block '
-        blockTemplate.dealloc += 'cvReleaseImage(&block$id$_img_o1);\n'
-        blockTemplate.dealloc += 'cvReleaseImage(&block$id$_img_i1);\n'
-        blockTemplate.dealloc = '\n'
+    def generate_function_call(self):
+        return \
+            'if(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvNot(block$id$_img_i1, block$id$_img_o1);\n' + \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

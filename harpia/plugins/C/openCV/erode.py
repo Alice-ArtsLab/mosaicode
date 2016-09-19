@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Erode(Plugin):
+class Erode(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.masksize = "3x3"
@@ -25,26 +25,22 @@ class Erode(Plugin):
         return "operação morfológica que provoca erosão nos objetos de uma imagem, reduzindo suas dimensões."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
         self.iterations = int(float(self.iterations))
-        blockTemplate.imagesIO += \
+        return \
             'IplImage * block$id$_img_i1 = NULL; // ERODE input\n' + \
             'int block$id$_int_i2 = $iterations$; // ERODE iterarions\n' + \
             'IplImage * block$id$_img_o1 = NULL; // ERODE output\n' + \
-            '\n\n' + \
             'IplConvKernel * block$id$_arg_mask = cvCreateStructuringElementEx(' + self.masksize[0] + \
                     ' , ' + self.masksize[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
 
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-             'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-             '_img_i1->width, block$id$_img_i1->height), block$id$' + \
-             '_img_i1->depth ,block$id$_img_i1->nChannels);\n' + \
-             '\ncvErode(block$id$_img_i1,block$id$' + \
-             '_img_o1,block$id$_arg_mask,block$id$_int_i2);\n}\n'
-
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1); // ERODE input\n' + \
-                                'cvReleaseImage(&block$id$_img_i1); // ERODE output\n'
-
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvErode(block$id$_img_i1,block$id$_img_o1,block$id$_arg_mask,block$id$_int_i2);\n'+ \
+            '}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

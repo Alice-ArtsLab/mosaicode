@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Rotate(Plugin):
+class Rotate(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.isCenter = True
@@ -29,43 +29,47 @@ class Rotate(Plugin):
         return "Rotates input image the input angle degrees."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.header += "#define PI 3.1415926535898\n"
-        blockTemplate.header += "double rads(double degs){\n"
-        blockTemplate.header += "   return (PI/180 * degs);\n"
-        blockTemplate.header += "}\n\n"
+    def generate_header(self):
+        return \
+            "#define PI 3.1415926535898\n" + \
+            "double rads(double degs){\n" + \
+            "   return (PI/180 * degs);\n" + \
+            "}\n\n"
 
-        blockTemplate.imagesIO = 'IplImage * block$id$_img_i1 = NULL;\n' + \
-                                 'double block$id$_double_i2 = $angle$;\n' + \
-                                 'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.imagesIO += '\n\n'
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return \
+            'IplImage * block$id$_img_i1 = NULL;\n' + \
+            'double block$id$_double_i2 = $angle$;\n' + \
+            'IplImage * block$id$_img_o1 = NULL;\n'
 
-
-        blockTemplate.functionCall = '\n	if(block$id$_img_i1)\n	{\n' + \
-                                     '		double scale;\n	int H;\n	int W;\n' + \
-                                     '		W = block$id$_img_i1->width;\n' + \
-                                     '		H = block$id$_img_i1->height;\n' + \
-                                     '		block$id$_img_o1 = cvCreateImage(cvSize(W,H),block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-                                     '		CvMat* mat = cvCreateMat(2,3,CV_32FC1);\n'
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        value = \
+            '\n	if(block$id$_img_i1)\n	{\n' + \
+            '		double scale;\n	int H;\n	int W;\n' + \
+            '		W = block$id$_img_i1->width;\n' + \
+            '		H = block$id$_img_i1->height;\n' + \
+            '		block$id$_img_o1 = cvCreateImage(cvSize(W,H),block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
+            '		CvMat* mat = cvCreateMat(2,3,CV_32FC1);\n'
         if self.isCenter == "true":
-            blockTemplate.functionCall += '		CvPoint2D32f center = cvPoint2D32f(W/2, H/2);\n'
+            value += '		CvPoint2D32f center = cvPoint2D32f(W/2, H/2);\n'
         else:
-            blockTemplate.functionCall += '		CvPoint2D32f center = cvPoint2D32f($xC$,$yC$);\n'
+            value += '		CvPoint2D32f center = cvPoint2D32f($xC$,$yC$);\n'
 
         if self.isScalling == "true":
-            blockTemplate.functionCall += '		scale = H/(fabs(H*sin(rads(90-abs(block$id$_double_i2)))) + fabs(W*sin(rads(abs(block$id$_double_i2)))));\n' + \
+            value += '		scale = H/(fabs(H*sin(rads(90-abs(block$id$_double_i2)))) + fabs(W*sin(rads(abs(block$id$_double_i2)))));\n' + \
                     '		cv2DRotationMatrix(center,block$id$_double_i2,scale,mat);\n'
         else:
-            blockTemplate.functionCall += '		cv2DRotationMatrix(center,block$id$_double_i2,1.0,mat);\n'
+            value += '		cv2DRotationMatrix(center,block$id$_double_i2,1.0,mat);\n'
 
         if self.isFilling == "true":
-            blockTemplate.functionCall += '		cvWarpAffine(block$id$_img_i1,block$id$_img_o1, mat, CV_WARP_FILL_OUTLIERS, cvScalarAll(0));\n'
+            value += '		cvWarpAffine(block$id$_img_i1,block$id$_img_o1, mat, CV_WARP_FILL_OUTLIERS, cvScalarAll(0));\n'
         else:
-            blockTemplate.functionCall += '		cvWarpAffine(block$id$_img_i1,block$id$_img_o1,mat,0,cvScalarAll(0));\n'
+            value += '		cvWarpAffine(block$id$_img_i1,block$id$_img_o1,mat,0,cvScalarAll(0));\n'
 
-        blockTemplate.functionCall += '	}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
+        value += '	}\n'
+        return value
 
     # ----------------------------------------------------------------------
     def __del__(self):

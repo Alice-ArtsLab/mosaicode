@@ -8,14 +8,14 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 import os
 from glob import glob
-class LiveMode(Plugin):
+class LiveMode(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.camera = "/dev/video0"
@@ -25,24 +25,28 @@ class LiveMode(Plugin):
         return "Realiza a aquisição de uma imagem a partir de câmera."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
         camera = self.camera[10:]
 
-        blockTemplate.imagesIO = '// Live Mode Cam \n' + \
-                'CvCapture * block$id$_capture = NULL;\n' + \
-                'block$id$_capture = cvCaptureFromCAM(' + camera + ');\n' + \
-                'IplImage * block$id$_frame = NULL;\n' + \
-                'IplImage * block$id$_img_o1 = NULL;\n'
+        return \
+             '// Live Mode Cam \n' + \
+             'CvCapture * block$id$_capture = NULL;\n' + \
+             'block$id$_capture = cvCaptureFromCAM(' + camera + ');\n' + \
+             'IplImage * block$id$_frame = NULL;\n' + \
+             'IplImage * block$id$_img_o1 = NULL;\n'
 
-        blockTemplate.functionCall = '// Live Mode \n' + \
-                'int value = cvGrabFrame(block$id$_capture);\n' + \
-                'block$id$_frame = cvRetrieveFrame(block$id$_capture);\n' + \
-                'if(!block$id$_frame){\ncontinue;\n}\n'+\
-                'block$id$_img_o1 = cvCloneImage(block$id$_frame);\n'
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '// Live Mode \n' + \
+            'int value = cvGrabFrame(block$id$_capture);\n' + \
+            'block$id$_frame = cvRetrieveFrame(block$id$_capture);\n' + \
+            'if(!block$id$_frame){\ncontinue;\n}\n'+\
+            'block$id$_img_o1 = cvCloneImage(block$id$_frame);\n'
 
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n'
-
-        blockTemplate.outDealloc = 'cvReleaseCapture(&block$id$_capture);\n'
+    # ----------------------------------------------------------------------
+    def generate_out_dealloc(self):
+        return 'cvReleaseCapture(&block$id$_capture);\n'
 
 
     # ----------------------------------------------------------------------

@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class MoveRct(Plugin):
+class MoveRct(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.offset_x = 0
@@ -23,16 +23,20 @@ class MoveRct(Plugin):
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Move Rectangle`s (0,0) point to input point"
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = 'CvRect block$$_rect_i1;\n' + \
-                                 'CvPoint block$$_point_i2;\n' + \
-                                 'CvRect block$$_rect_o1;\n'
-        blockTemplate.functionCall = \
-                'block$$_rect_o1 = block$$_rect_i1;\n' + \
-                'block$$_rect_o1.x = block$$_point_i2.x + $offset_x$;\n' + \
-                'block$$_rect_o1.y = block$$_point_i2.y + $offset_y$;\n'
-        blockTemplate.dealloc = ''
+    def generate_vars(self):
+        return \
+            'CvRect block$id$_rect_i1;\n' + \
+            'CvPoint block$id$_point_i2;\n' + \
+            'CvRect block$id$_rect_o1;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+                'block$id$_rect_o1 = block$id$_rect_i1;\n' + \
+                'block$id$_rect_o1.x = block$id$_point_i2.x + $offset_x$;\n' + \
+                'block$id$_rect_o1.y = block$id$_point_i2.y + $offset_y$;\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

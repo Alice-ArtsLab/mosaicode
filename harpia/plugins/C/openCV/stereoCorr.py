@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class StereoCorr(Plugin):
+class StereoCorr(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.maxDist = 60
@@ -24,14 +24,18 @@ class StereoCorr(Plugin):
         return 'Input1 is the left image and Input2 is the right image. Output is the depth image'
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_i2 = NULL;\n' + \
             'IplImage * block$id$_img_o1 = NULL;\n' + \
             'IplImage * block$id$_img_ts1 = NULL;\n' + \
             'IplImage * block$id$_img_ts2 = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1 && block$id$_img_i2)\n{\n' + \
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1 && block$id$_img_i2)\n{\n' + \
             '	if(!block$id$_img_o1)\n' + \
             '		block$id$_img_o1 = cvCreateImage(cvGetSize(block$id$_img_i1), IPL_DEPTH_8U, 1);\n' + \
             '	if(!block$id$_img_ts1)\n' + \
@@ -43,11 +47,13 @@ class StereoCorr(Plugin):
             '	cvFindStereoCorrespondence( block$id$_img_ts1, block$id$_img_ts2, CV_DISPARITY_BIRCHFIELD,' +\
             'block$id$_img_o1, $maxDist$, 15, 3, 6, 8, 15 );\n}\n'
 
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-            'cvReleaseImage(&block$id$_img_i1);\n' + \
-            'cvReleaseImage(&block$id$_img_i2);\n' + \
-            'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n' + \
-            'if(block$id$_img_ts2)\n\tcvReleaseImage(&block$id$_img_ts2);\n'
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return  'cvReleaseImage(&block$id$_img_o1);\n' + \
+                'cvReleaseImage(&block$id$_img_i1);\n' + \
+                'cvReleaseImage(&block$id$_img_i2);\n' + \
+                'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n' + \
+                'if(block$id$_img_ts2)\n\tcvReleaseImage(&block$id$_img_ts2);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

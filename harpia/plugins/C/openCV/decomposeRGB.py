@@ -8,22 +8,23 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class DecomposeRGB(Plugin):
+class DecomposeRGB(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "BLOCO Decomposição RGB"
+
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
                      'IplImage * block$id$_img_i1 = NULL;\n' + \
                      'IplImage * block$id$_img_t1 = NULL;\n' + \
                      'IplImage * block$id$_img_t2 = NULL;\n' + \
@@ -31,25 +32,31 @@ class DecomposeRGB(Plugin):
                      'IplImage * block$id$_img_o1 = NULL;\n' + \
                      'IplImage * block$id$_img_o2 = NULL;\n' + \
                      'IplImage * block$id$_img_o3 = NULL;\n'
-        blockTemplate.functionCall = \
-                '\nif(block$id$_img_i1){\n' + \
-                'block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth, block$id$_img_i1->nChannels);\n'+\
-                'block$id$_img_o2 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth, block$id$_img_i1->nChannels);\n'+\
-                'block$id$_img_o3 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth, block$id$_img_i1->nChannels);\n' + \
-                'block$id$_img_t1 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth, 1);\n' + \
-                'block$id$_img_t2 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth, 1);\n' +\
-                'block$id$_img_t3 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth, 1);\n' + \
-                'cvSplit(block$id$_img_i1 ,block$id$_img_t3 ,block$id$_img_t2 ,block$id$_img_t1 , NULL);\n' + \
-                'cvMerge(block$id$_img_t1 ,block$id$_img_t1 , block$id$_img_t1 , NULL, block$id$_img_o1);\n' + \
-                'cvMerge(block$id$_img_t2 ,block$id$_img_t2, block$id$_img_t2, NULL, block$id$_img_o2);\n' + \
-                'cvMerge(block$id$_img_t3 ,block$id$_img_t3, block$id$_img_t3, NULL, block$id$_img_o3);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_t1);\n' + \
-                      'cvReleaseImage(&block$id$_img_t2);\n' + \
-                      'cvReleaseImage(&block$id$_img_t3);\n' + \
-                      'cvReleaseImage(&block$id$_img_o1);\n' + \
-                      'cvReleaseImage(&block$id$_img_o2);\n' + \
-                      'cvReleaseImage(&block$id$_img_o3);\n' + \
-                      'cvReleaseImage(&block$id$_img_i1);\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'block$id$_img_o2 = cvCloneImage(block$id$_img_i1);\n' + \
+            'block$id$_img_o3 = cvCloneImage(block$id$_img_i1);\n' + \
+            'block$id$_img_t1 = cvCreateImage(cvGetSize(block$id$_img_i1), block$id$_img_i1->depth, 1);\n' + \
+            'block$id$_img_t2 = cvCreateImage(cvGetSize(block$id$_img_i1), block$id$_img_i1->depth, 1);\n' +\
+            'block$id$_img_t3 = cvCreateImage(cvGetSize(block$id$_img_i1), block$id$_img_i1->depth, 1);\n' + \
+            'cvSplit(block$id$_img_i1 ,block$id$_img_t3 ,block$id$_img_t2 ,block$id$_img_t1 , NULL);\n' + \
+            'cvMerge(block$id$_img_t1 ,block$id$_img_t1 , block$id$_img_t1 , NULL, block$id$_img_o1);\n' + \
+            'cvMerge(block$id$_img_t2 ,block$id$_img_t2, block$id$_img_t2, NULL, block$id$_img_o2);\n' + \
+            'cvMerge(block$id$_img_t3 ,block$id$_img_t3, block$id$_img_t3, NULL, block$id$_img_o3);\n}\n'
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_t1);\n' + \
+               'cvReleaseImage(&block$id$_img_t2);\n' + \
+               'cvReleaseImage(&block$id$_img_t3);\n' + \
+               'cvReleaseImage(&block$id$_img_o1);\n' + \
+               'cvReleaseImage(&block$id$_img_o2);\n' + \
+               'cvReleaseImage(&block$id$_img_o3);\n' + \
+               'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

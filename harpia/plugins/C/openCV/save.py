@@ -2,16 +2,23 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Save(Plugin):
+class Save(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.filename = ""
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            '\nif(block$id$_img_i1)\n' + \
+            'cvSaveImage("$filename$" ,block$id$_img_i1);\n'
 
 # ------------------------------------------------------------------------------
     def get_description(self):
@@ -24,18 +31,6 @@ class Save(Plugin):
                 "Description": "Save image on a file indicated by the user.",
                 "TreeGroup": "General"
                 }
-
-# ------------------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            '\nif(block$id$_img_i1)\n' + \
-            'cvSaveImage("$filename$" ,block$id$_img_i1);\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
 
 # ------------------------------------------------------------------------------
     def get_properties(self):

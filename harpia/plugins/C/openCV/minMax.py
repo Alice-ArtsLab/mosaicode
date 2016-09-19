@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class MinMax(Plugin):
+class MinMax(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.minX = 0
@@ -31,35 +31,28 @@ class MinMax(Plugin):
         return "Finds min or max from input image and judges it according to a custom criteria."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'double block$id$_double_o1;\n' + \
-            'CvPoint block$id$_point_o2 = cvPoint(0,0);\n'
-
-        blockTemplate.functionCall = '\nif(block$id$_img_i1)\n{\n' + \
+    def generate_function_call(self):
+        value = '\nif(block$id$_img_i1)\n{\n' + \
                             '	double minVal,maxVal;\n' + \
                             '	CvPoint minP,maxP;\n' + \
                             '	block$id$_double_o1 = 0;\n' + \
                             '	cvMinMaxLoc(block$id$_img_i1, &minVal, &maxVal, &minP, &maxP, NULL);\n'
         if self.minORmax == 'max':
-            blockTemplate.functionCall += '	minP = maxP;\n' + \
+            value += '	minP = maxP;\n' + \
                     '	minVal = maxVal;\n'
 
-        blockTemplate.functionCall += '	block$id$_point_o2 = minP;\n'
+        value += '	block$id$_point_o2 = minP;\n'
 
         if self.criteria == "pos":
-            blockTemplate.functionCall += '	if(minP.x >= ' + str(self.minX) + \
-                        ' && minP.x <= ' + str(self.maxX) + ')\n' + \
-                        '        if(minP.y >= ' + str(self.minY) + \
-                        ' && minP.y <= ' + str(self.maxY) + ')\n' + \
+            value += '	if(minP.x >= $minX$ && minP.x <= $maxX$)\n' + \
+                        '        if(minP.y >= $minY$ && minP.y <= $maxY$)\n' + \
                         '        	block$id$_double_o1 = 1.0;\n'
         elif self.criteria == "val":
-            blockTemplate.functionCall += '	if(minVal >= ' + str(self.minVal) + \
-                        ' && minVal <= ' + str(self.maxVal) + ')\n' + \
+            value += '	if(minVal >= $minVal$ && minVal <= $maxVal$)\n' + \
                         '        block$id$_double_o1 = 1.0;\n'
-        blockTemplate.functionCall += '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_i1);\n'
+        value += '}\n'
+        
+        return value
 
     # ----------------------------------------------------------------------
     def __del__(self):

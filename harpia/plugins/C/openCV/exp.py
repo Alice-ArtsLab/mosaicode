@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Exp(Plugin):
+class Exp(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
 
@@ -24,20 +24,27 @@ class Exp(Plugin):
       eleva a constante neperiana ao valor de intensidade luminosa de cada ponto da imagem."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-       blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
                    'IplImage * block$id$_img_i1 = NULL;\n' + \
                    'IplImage * block$id$_img_o1 = NULL;\n' + \
                    'IplImage * block$id$_img_t = NULL;\n'
-       blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-                   'block$id$_img_t = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n'+\
-                   'block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height),block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-                   'cvConvertScale(block$id$_img_i1,block$id$_img_t,(1/255.0),0);\n' + \
-                   'cvExp(block$id$_img_t, block$id$_img_t);\n' + \
-                   'cvConvertScale(block$id$_img_t,block$id$_img_o1,(double)93.8092,0);\n}\n'
-       blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                   'cvReleaseImage(&block$id$_img_i1);\n' + \
-                   'cvReleaseImage(&block$id$_img_t);\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_t = cvCreateImage(cvGetSize(block$id$_img_i1), IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n'+\
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvConvertScale(block$id$_img_i1,block$id$_img_t,(1/255.0),0);\n' + \
+            'cvExp(block$id$_img_t, block$id$_img_t);\n' + \
+            'cvConvertScale(block$id$_img_t,block$id$_img_o1,(double)93.8092,0);\n}\n'
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
+               'cvReleaseImage(&block$id$_img_i1);\n' + \
+               'cvReleaseImage(&block$id$_img_t);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

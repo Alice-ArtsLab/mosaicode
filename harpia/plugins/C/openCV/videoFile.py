@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class VideoFile(Plugin):
+class VideoFile(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.filename = "/usr/share/harpia/images/vLeft.mpg"
@@ -25,15 +25,17 @@ class VideoFile(Plugin):
         seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    def generate_vars(self):
+        return \
+            'CvCapture * block$id$_capture = NULL;\n'+ \
+            'IplImage * block$id$_frame = NULL;\n' + \
+            'block$id$_capture = cvCreateFileCapture("$filename$");\n' + \
+            'IplImage * block$id$_img_o1 = NULL; //Capture\n'
 
-        blockTemplate.imagesIO = 'CvCapture * block$id$_capture = NULL;\n'+ \
-                'IplImage * block$id$_frame = NULL;\n' + \
-                'block$id$_capture = cvCreateFileCapture("' + self.filename + '");\n'
-
-        blockTemplate.imagesIO += 'IplImage * block$id$_img_o1 = NULL; //Capture\n'
-
-        blockTemplate.functionCall = '// Video Mode \n' + \
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+                '// Video Mode \n' + \
                 'cvGrabFrame(block$id$_capture);\n' + \
                 'block$id$_frame = cvRetrieveFrame (block$id$_capture);\n' + \
                 'if(!block$id$_frame){\n'+\
@@ -42,9 +44,9 @@ class VideoFile(Plugin):
                 '}\n' + \
                 'block$id$_img_o1 = cvCloneImage(block$id$_frame);\n'
 
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n'
-
-        blockTemplate.outDealloc = 'cvReleaseCapture(&block$id$_capture);\n'
+    # ----------------------------------------------------------------------
+    def generate_out_dealloc(self):
+        return 'cvReleaseCapture(&block$id$_capture);\n'
 
 
     # ----------------------------------------------------------------------

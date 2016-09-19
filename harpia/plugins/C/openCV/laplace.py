@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Laplace(Plugin):
+class Laplace(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.masksize = "3"
@@ -24,25 +24,23 @@ class Laplace(Plugin):
         return "operação de filtragem que calcula o Laplaciano de uma imagem,\
         realçando cantos e bordas de objetos."
 
-    def generate(self, blockTemplate):
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
         self.masksize = int(self.masksize)
-        blockTemplate.imagesIO = \
+        return \
             'IplImage * block$id$_img_i1 = NULL; //Laplace In \n' + \
             'IplImage * block$id$_img_o1 = NULL; //Laplace Out \n' + \
-            'IplImage * block$id$_img_t = NULL;  //Laplace Temp \n' + \
             'int block$id$_int_i2 = $masksize$; // Laplace Mask Size\n'
 
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
             'block$id$_int_i2 = (block$id$_int_i2 > 31)? 31 : block$id$_int_i2; // Laplace Mask Constraint\n' + \
             'block$id$_int_i2 = (block$id$_int_i2 % 2 == 0)? block$id$_int_i2 + 1 : block$id$_int_i2; // Only Odd\n' + \
-            'block$id$_img_o1 = cvCreateImage(cvSize(block$id$' + \
-            '_img_i1->width,block$id$_img_i1->height), IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n' + \
+            'CvSize size$id$ = cvGetSize(block$id$_img_i1);\n'+ \
+            'block$id$_img_o1 = cvCreateImage(size$id$, IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n' + \
             'cvLaplace(block$id$_img_i1, block$id$_img_o1 , block$id$_int_i2 );}\n'
-
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n' + \
-                                'cvReleaseImage(&block$id$_img_t);\n'
-
 
     # ----------------------------------------------------------------------
     def __del__(self):

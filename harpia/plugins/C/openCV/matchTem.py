@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class MatchTem(Plugin):
+class MatchTem(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.method = 'CV_TM_SQDIFF'
@@ -25,24 +25,33 @@ class MatchTem(Plugin):
         return "operação de filtragem destinada a suavizar uma imagem."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_i2 = NULL;\n' + \
             'IplImage * block$id$_img_t1 = NULL;\n' + \
             'IplImage * block$id$_img_o1 = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1 && block$id$_img_i2)\n' + \
-            '{\n' + \
-            '	block$id$_img_t1 = cvCreateImage(cvSize(block$id$_img_i1->width - block$id$_img_i2->width +1,block$id$_img_i1->height - block$id$_img_i2->height +1),32,1);\n' + \
-            '	block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width - block$id$_img_i2->width +1,block$id$_img_i1->height - block$id$_img_i2->height +1),8,1);\n' + \
-            '	cvMatchTemplate(block$id$_img_i1 , block$id$_img_i2, block$id$_img_t1, $method$);\n' + \
-            '	cvConvertScale(block$id$_img_t1,block$id$_img_o1, ' + str(
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            'if(block$id$_img_i1 && block$id$_img_i2){\n' + \
+            '\tdouble width$id$ = block$id$_img_i1->width - block$id$_img_i2->width +1;\n' + \
+            '\tdouble height$id$ = block$id$_img_i1->height - block$id$_img_i2->height +1;\n'+ \
+            '\tCvSize size$id$ = cvSize(width$id$,height$id$);\n' + \
+            '\tblock$id$_img_t1 = cvCreateImage(size$id$,32,1);\n' + \
+            '\tblock$id$_img_o1 = cvCreateImage(size$id$,8,1);\n' + \
+            '\tcvMatchTemplate(block$id$_img_i1 , block$id$_img_i2, block$id$_img_t1, $method$);\n' + \
+            '\tcvConvertScale(block$id$_img_t1,block$id$_img_o1, ' + str(
             10 ** -(int(float(self.scaleFactor)))) + ',0);\n' + \
-                                     '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_t1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i2);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
+            '}\n'
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
+               'cvReleaseImage(&block$id$_img_t1);\n' + \
+               'cvReleaseImage(&block$id$_img_i2);\n' + \
+               'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

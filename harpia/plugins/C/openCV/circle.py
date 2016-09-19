@@ -2,13 +2,13 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Circle(Plugin):
+class Circle(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.x0 = 100
@@ -19,10 +19,19 @@ class Circle(Plugin):
     def get_help(self):#Função que chama a help
         return "Desenha Circulos"
 
-    # ------------------------------------------------------------------------------
-    def generate(self, blockTemplate):
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
         self.x0 = int(self.x0)
         self.y0 = int(self.y0)
+
+        return \
+            'IplImage * block$id$_img_i1 = NULL;\n' + \
+            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'int block$id$_int_i2 = $x0$;\n' + \
+            'int block$id$_int_i3 = $y0$;\n' 
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
         red = self.color[1:5]
         green = self.color[5:9]
         blue = self.color[9:13]
@@ -30,21 +39,13 @@ class Circle(Plugin):
         red = int(red, 16) / 257
         green = int(green, 16) / 257
         blue = int(blue, 16) / 257
-
-        blockTemplate.imagesIO = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'int block$id$_int_i2 = $x0$;\n' + \
-            'int block$id$_int_i3 = $y0$;\n' 
-
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
+        return \
+            '\nif(block$id$_img_i1){\n' + \
             'CvPoint center = cvPoint(block$id$_int_i2, block$id$_int_i3);\n' + \
             'CvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red) + ',0);\n' + \
             'cvCircle(block$id$_img_i1, center, 10, color, 1, 8, 0);\n' +\
             'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
             '}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

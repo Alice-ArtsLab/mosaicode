@@ -8,13 +8,13 @@ gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class Smooth(Plugin):
+class Smooth(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        OpenCVPlugin.__init__(self)
         self.id = -1
         self.type = self.__class__.__module__
         self.smooth_type = "CV_GAUSSIAN"
@@ -26,18 +26,23 @@ class Smooth(Plugin):
         return "Aplicação de um filtro de suavização. Suaviza os contornos de objetos na imagem, borrando-os levemente."
 
     # ----------------------------------------------------------------------
-    def generate(self, blockTemplate):
-        blockTemplate.imagesIO = \
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'IplImage * block$id$_img_t = NULL;\n'
-        blockTemplate.functionCall = '\nif(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCreateImage(cvSize(block$id$_img_i1->width,block$id$_img_i1->height), block$id$_img_i1->depth,block$id$' + \
-            '_img_i1->nChannels);\n' + \
-            'cvSmooth(block$id$_img_i1, block$id$_img_o1 ,$smooth_type$,$param1$,$param2$,0,0);}\n'
-        blockTemplate.dealloc = 'cvReleaseImage(&block$id$_img_o1);\n' + \
-                                'cvReleaseImage(&block$id$_img_i1);\n' + \
-                                'cvReleaseImage(&block$id$_img_t);\n'
+            'IplImage * block$id$_img_o1 = NULL;\n'
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
+            '\nif(block$id$_img_i1){\n' + \
+            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvSmooth(block$id$_img_i1, block$id$_img_o1 ,$smooth_type$,$param1$,$param2$,0,0);\n' + \
+            '}\n'
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
+               'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
