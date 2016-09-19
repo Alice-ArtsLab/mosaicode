@@ -82,7 +82,7 @@ class CodeGenerator():
         outDeallocations = []
         functionCalls = []
         headers = []
-        images = []
+        declaration = []
         deallocations = []
 
         # Configura as propriedades dos blocos no blocktemplate
@@ -122,7 +122,7 @@ class CodeGenerator():
             for block in blockList:
                 if block.weight == activeWeight:
                     headers.append(block.header)
-                    images.append(block.imagesIO)
+                    declaration.append(block.declaration)
                     functionCalls.append("//Weight: " + str(block.weight) + "\n")
                     functionCalls.append(block.functionCall)
                     deallocations.append(block.dealloc)
@@ -167,12 +167,12 @@ class CodeGenerator():
 
         header += "\nint main(int argc, char ** argv)\n{"
 
-        declaration = "\n//declaration block\n"
+        declaration_block = "\n//declaration block\n"
 
-        for image in images:
-            declaration += image
+        for var in declaration:
+            declaration_block += var
 
-        declaration += 'while(((char)cvWaitKey(' + \
+        declaration_block += 'while(((char)cvWaitKey(' + \
                 str(int((1.0 / FRAMERATE) * 1000.0)) + \
                 ')) != 27) \n {\t \n'
 
@@ -194,7 +194,7 @@ class CodeGenerator():
         closing += "return 0;\n } //closing main()\n"
 
         # Final code assembly
-        return header + declaration + execution + deallocating + closing
+        return header + declaration_block + execution + deallocating + closing
 
     #----------------------------------------------------------------------
     def save_code(self):

@@ -7,7 +7,7 @@ class BlockTemplate:
         self.plugin = plugin
         self.myConnections = []
         self.header = ''
-        self.imagesIO = ''
+        self.declaration = ''
         self.functionCall = ''
         self.dealloc = ''
         self.outDealloc = ''
@@ -16,13 +16,17 @@ class BlockTemplate:
     #-------------------------------------------------------------------------
     def generate_block_code(self):
 
-        self.plugin.generate(self)
+        self.header = self.plugin.generate_header()
+        self.declaration = self.plugin.generate_vars()
+        self.functionCall = self.plugin.generate_function_call()
+        self.dealloc = self.plugin.generate_dealloc()
+        self.outDealloc = self.plugin.generate_out_dealloc()
 
         for key in self.plugin.__dict__:
             # Replace all object properties by their values
             value = str(self.plugin.__dict__[key])
             my_key = "$" + key + "$"
-            self.imagesIO = self.imagesIO.replace(my_key, value)
+            self.declaration = self.declaration.replace(my_key, value)
             self.dealloc = self.dealloc.replace(my_key, value)
             self.outDealloc = self.outDealloc.replace(my_key, value)
             self.functionCall = self.functionCall.replace(my_key, value)

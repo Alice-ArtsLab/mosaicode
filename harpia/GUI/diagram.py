@@ -54,6 +54,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.undo_stack = []
         self.redo_stack = []
 
+        self.block_id = 0
         self.curr_connector = None
         self.current_widgets = []
 
