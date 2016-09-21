@@ -44,6 +44,11 @@ class DiagramControl():
         xml_loader = XMLParser(self.diagram.get_file_name())
         zoom = xml_loader.getTag("harpia").getTag("zoom").getAttr("value")
         self.diagram.set_zoom(float(zoom))
+        try:
+            language = xml_loader.getTag("harpia").getTag("language").getAttr("value")
+            self.diagram.language = language
+        except:
+            pass
 
         # new version load
         blocks = xml_loader.getTag("harpia").getTag("blocks").getChildTags("block")
@@ -82,11 +87,11 @@ class DiagramControl():
 # ----------------------------------------------------------------------
     def save(self, file_name=None):  # saving project
 
-        print "Diagram language", self.diagram.language
         output = "<harpia>\n"
 
         output += "<version value='" + str(VERSION) + "' />\n"
         output += "<zoom value='" + str(self.diagram.get_zoom()) + "' />\n"
+        output += "<language value='" + str(self.diagram.language) + "' />\n"
         output += "<blocks>\n  "
         for block_id in self.diagram.blocks:
             block_type = str(self.diagram.blocks[block_id].get_type())
