@@ -83,6 +83,8 @@ class MainControl():
     # ----------------------------------------------------------------------
     def rename_tab(self):
         diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
         Dialog().rename_dialog(self.main_window, diagram)
 
     # ----------------------------------------------------------------------
@@ -122,21 +124,24 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def cut(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().cut()
+        diagram.cut()
 
     # ----------------------------------------------------------------------
     def copy(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().copy()
+        diagram.copy()
 
     # ----------------------------------------------------------------------
     def paste(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().paste()
+        diagram.paste()
 
     # ----------------------------------------------------------------------
     def get_clipboard(self):
@@ -152,29 +157,30 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def delete(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().delete()
+        diagram.delete()
 
     # ----------------------------------------------------------------------
     def run(self):
-        if self.main_window.work_area.get_current_diagram() == None:
-            return
         diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
         CodeGenerator(diagram).execute()
 
     # ----------------------------------------------------------------------
     def save_source(self):
-        if self.main_window.work_area.get_current_diagram() == None:
-            return
         diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
         JavascriptGenerator(diagram).save_code()
 
     # ----------------------------------------------------------------------
     def view_source(self):
-        if self.main_window.work_area.get_current_diagram() == None:
-            return
         diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return
         code = JavascriptGenerator(diagram).generate_code()
         CodeWindow(self.main_window, code)
 
@@ -218,21 +224,24 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_IN)
+        diagram.change_zoom(ZOOM_IN)
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_OUT)
+        diagram.change_zoom(ZOOM_OUT)
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().change_zoom(ZOOM_ORIGINAL)
+        diagram.change_zoom(ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -244,9 +253,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def undo(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().undo()
+        diagram.undo()
 
     # ----------------------------------------------------------------------
     def redo(self):
@@ -256,8 +266,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def reload(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
             return
-        self.main_window.work_area.get_current_diagram().update_scrolling()
+        diagram.update_scrolling()
 
 # ----------------------------------------------------------------------
