@@ -13,7 +13,7 @@ from harpia import s2idirectory
 
 class BlocksTreeView(Gtk.ScrolledWindow):
 
-    def __init__(self, main_window):
+    def __init__(self, main_window, language):
         Gtk.ScrolledWindow.__init__(self)
         self.main_window = main_window
         self.current_filter = None
@@ -49,6 +49,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
         # Load blocks
         for x in s2idirectory.block:
+            if s2idirectory.block[x].language != language:
+                continue
             self.blocks[x] = s2idirectory.block[x]
             self.__add_item(s2idirectory.block[x]())
 

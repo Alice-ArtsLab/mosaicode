@@ -184,7 +184,8 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def search(self, query):
-        self.main_window.blocks_tree_view.search(query)
+        for blocks_tree_view in self.main_window.block_notebook.get_tabs():
+            blocks_tree_view.search(query)
 
     # ----------------------------------------------------------------------
     def set_block(self, block):
@@ -210,7 +211,10 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
-        return self.main_window.blocks_tree_view.get_selected_block()
+        blocks_tree_view = self.main_window.block_notebook.get_current_tab()
+        if blocks_tree_view == None:
+            return False
+        return blocks_tree_view.get_selected_block()
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
