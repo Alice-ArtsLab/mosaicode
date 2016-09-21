@@ -216,7 +216,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         if block != None:
             block.x = x
             block.y = y
-            self.insert_block(block)
+            self.__main_window.main_control.add_block(block)
         return
 
     #----------------------------------------------------------------------
@@ -230,12 +230,17 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     #----------------------------------------------------------------------
     def insert_block(self, plugin):
         plugin.set_id(self.__block_id)
-        self.load_block(plugin)
+        if not self.load_block(plugin):
+            return False
         self.update_scrolling()
-        return plugin.get_id()
+        return True
 
     #----------------------------------------------------------------------
     def load_block(self, plugin):
+        if self.language != None and self.language != plugin.language:
+            return False
+        if self.language == None:
+            self.language = plugin.language
         self.do("Insert block")
         new_block = Block(self, plugin)
         self.blocks[plugin.get_id()] = new_block
@@ -243,6 +248,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_modified(True)
         self.__block_id = max(int(self.__block_id), int(plugin.get_id()))
         self.__block_id = int(self.__block_id) + 1
+        return True
 
     #----------------------------------------------------------------------
     def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):
@@ -425,7 +431,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             plugin = copy.deepcopy(widget.get_plugin())
             plugin.x += 20
             plugin.y += 20
-            new_id = self.insert_block(plugin)
+            if not self.__main_window.main_control.add_block(plugin):
+                return
             replace[widget.get_id()] = new_id
             self.current_widgets.append(self.blocks[new_id])
         # interact into connections changing block ids

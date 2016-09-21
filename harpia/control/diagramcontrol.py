@@ -82,6 +82,7 @@ class DiagramControl():
 # ----------------------------------------------------------------------
     def save(self, file_name=None):  # saving project
 
+        print "Diagram language", self.diagram.language
         output = "<harpia>\n"
 
         output += "<version value='" + str(VERSION) + "' />\n"

@@ -13,6 +13,7 @@ from harpia.GUI.codewindow import CodeWindow
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
+from harpia.control.javascriptgenerator import JavascriptGenerator
 from harpia.GUI.workarea import WorkArea
 
 from harpia.s2idirectory import *
@@ -149,7 +150,6 @@ class MainControl():
     def preferences(self):
         PreferenceWindow(self.main_window, harpia.s2idirectory.properties)
 
-
     # ----------------------------------------------------------------------
     def delete(self):
         if self.main_window.work_area.get_current_diagram() == None:
@@ -168,14 +168,14 @@ class MainControl():
         if self.main_window.work_area.get_current_diagram() == None:
             return
         diagram = self.main_window.work_area.get_current_diagram()
-        CodeGenerator(diagram).save_code()
+        JavascriptGenerator(diagram).save_code()
 
     # ----------------------------------------------------------------------
     def view_source(self):
         if self.main_window.work_area.get_current_diagram() == None:
             return
         diagram = self.main_window.work_area.get_current_diagram()
-        code = CodeGenerator(diagram).generate_code()
+        code = JavascriptGenerator(diagram).generate_code()
         CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------
@@ -197,9 +197,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
-        if self.main_window.work_area.get_current_diagram() == None:
-            return
-        self.main_window.work_area.get_current_diagram().insert_block(block)
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram == None:
+            return False
+        if not diagram.insert_block(block):
+            message = "Block language is different from diagram language.\n" + \
+                "Diagram is expecting to generate " + diagram.language + \
+                " code while block is writen in " + block.language
+            Dialog().message_dialog("Error", message, self.main_window)
+            return False
+        return True
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
