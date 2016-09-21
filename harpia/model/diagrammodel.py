@@ -14,6 +14,7 @@ class DiagramModel(object):
         self.__zoom = 1.0 # pixels per unit
         self.__file_name = "Untitled"
         self.__modified = False
+        self.language = None
 
     #----------------------------------------------------------------------
     def add_block(self, block):

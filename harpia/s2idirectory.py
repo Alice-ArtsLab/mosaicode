@@ -63,7 +63,12 @@ def load_blocks():
         module = __import__(modname, fromlist="dummy")
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj) and "Type" in obj().get_description():
-                block[obj().get_description()["Type"]] = obj
+                obj_type = obj().get_description()["Type"]
+                language = obj_type.split(".")[2]
+                framework = obj_type.split(".")[3]
+                obj.language = language # Adding a property do class dinamically
+                obj.framework = framework
+                block[obj_type] = obj
 
 def load():
     load_blocks()
@@ -114,7 +119,7 @@ connections = {
         "HRP_WEBAUDIO_SOUND":{
             "icon_in":"images/s2irctin.png",
             "icon_out":"images/s2irctout.png",
-            "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
+            "code": 'block_$from_block$.connect(block_$to_block$);\n'
             }
         }
 
