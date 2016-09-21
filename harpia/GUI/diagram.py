@@ -54,7 +54,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.undo_stack = []
         self.redo_stack = []
 
-        self.block_id = 0
+        self.__block_id = 0
         self.curr_connector = None
         self.current_widgets = []
 
@@ -229,9 +229,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def insert_block(self, plugin):
-        plugin.set_id(self.block_id)
+        plugin.set_id(self.__block_id)
         self.load_block(plugin)
-        self.block_id += 1
         self.update_scrolling()
         return plugin.get_id()
 
@@ -242,6 +241,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.blocks[plugin.get_id()] = new_block
         self.get_root_item().add_child(new_block, -1)
         self.set_modified(True)
+        self.__block_id = max(int(self.__block_id), int(plugin.get_id()))
+        self.__block_id = int(self.__block_id) + 1
 
     #----------------------------------------------------------------------
     def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):

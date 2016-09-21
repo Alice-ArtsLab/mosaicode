@@ -42,12 +42,6 @@ class DiagramControl():
 
         # load the diagram
         xml_loader = XMLParser(self.diagram.get_file_name())
-
-        # test for old version
-        blocks = xml_loader.getTag("harpia").getTag("GcState").getChildTags("block")
-        if len(blocks) > 0:
-            return self.__load_old(xml_loader)
-
         zoom = xml_loader.getTag("harpia").getTag("zoom").getAttr("value")
         self.diagram.set_zoom(float(zoom))
 
@@ -71,8 +65,6 @@ class DiagramControl():
             new_block.x = float(x)
             new_block.y = float(y)
             self.diagram.load_block(new_block)
-            self.diagram.block_id = max(self.diagram.block_id, block_id)
-        self.diagram.block_id = int(self.diagram.block_id) + 1
 
         connections = xml_loader.getTag("harpia").getTag("connections").getChildTags("connection")
         for conn in connections:
@@ -86,70 +78,6 @@ class DiagramControl():
                                     to_block,
                                     (int(to_block_in) - 1))
         self.diagram.update_scrolling()
-
-# ----------------------------------------------------------------------
-    def __load_old(self, xml_loader):
-        blocks = xml_loader.getTag("harpia").getTag("GcState").getChildTags("block")
-
-        for block in blocks:
-            if block.getAttr("type") not in harpia.s2idirectory.block:
-                continue
-            block_id =  block.getAttr("id")
-            block_type =  block.getAttr("type")
-            position = block.getTag("position")
-            x = position.getAttr("x")
-            y = position.getAttr("y")
-            new_block = harpia.s2idirectory.block[block_type]()
-            new_block.set_id(block_id)
-            new_block.x = float(x)
-            new_block.y = float(y)
-            self.diagram.load_block(new_block)
-            self.diagram.block_id = max(self.diagram.block_id, block_id)
-
-        self.diagram.block_id = int(self.diagram.block_id) + 1
-
-        # loading connectors on canvas
-        blocks = xml_loader.getTag("harpia").getTag("network").getChildTags("block")
-        try:
-            for block in blocks:
-                if block.getAttr("type") not in harpia.s2idirectory.block:
-                    harpia.s2idirectory.Log.log("Block not found: " + block.getAttr("type"))
-                    continue
-                block_id =  block.getAttr("id")
-                outputs = block.getTag("outputs")
-
-                #for connector in block.outputs.output:
-                for connector in outputs.getChildTags("output"):
-                    conn_input = connector.getAttr("input")
-                    conn_inblock = connector.getAttr("inBlock")
-                    conn_id = connector.getAttr("id")
-
-                    if conn_inblock != "--" and conn_input != "--":
-                        self.diagram.insert_ready_connector(
-                                                block_id,
-                                                (int(conn_id) - 1),
-                                                conn_inblock,
-                                                (int(conn_input) - 1))
-        except AttributeError:
-            pass
-
-        # loading properties
-        blocks = xml_loader.getTag("harpia").getTag("properties").getChildTags("block")
-        for block in blocks:
-            block_xml = str(block)
-            block_id =  block.getAttr("id")
-            props = {}
-            properties = block.getChildTags("property")
-            for prop in properties:
-                props[prop.name] = prop.value
-
-            if block_id in self.diagram.blocks:
-                self.diagram.blocks[block_id].set_properties(props)
-            else:
-                harpia.s2idirectory.Log.log("Block " + str(block_id) + "not found!")
-
-        self.diagram.update_scrolling()
-        return True
 
 # ----------------------------------------------------------------------
     def save(self, file_name=None):  # saving project
