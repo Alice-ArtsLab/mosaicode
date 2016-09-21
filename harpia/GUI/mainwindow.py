@@ -10,7 +10,7 @@ from menu import Menu
 from toolbar import Toolbar
 from searchbar import SearchBar
 from harpia.control.maincontrol import MainControl
-from blockstreeview import BlocksTreeView
+from blocknotebook import BlockNotebook
 from blockproperties import BlockProperties
 from status import Status
 from workarea import WorkArea
@@ -34,7 +34,7 @@ class MainWindow(Gtk.Window):
         self.menu = Menu(self)
         self.toolbar = Toolbar(self)
         self.search = SearchBar(self)
-        self.blocks_tree_view = BlocksTreeView(self)
+        self.block_notebook = BlockNotebook(self)
         self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
@@ -102,7 +102,7 @@ class MainWindow(Gtk.Window):
         # | block_properties
         # -----------------------------------------------------
 
-        self.vpaned_left.add1(self.__create_frame(self.blocks_tree_view))
+        self.vpaned_left.add1(self.__create_frame(self.block_notebook))
         self.vpaned_left.add2(self.__create_frame(self.block_properties))
         self.vpaned_left.set_position(s2idirectory.properties.get_vpaned_left())
 
