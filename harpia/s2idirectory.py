@@ -116,10 +116,21 @@ connections = {
             "icon_out":"images/s2ipointout.png",
             "code": 'block$to_block$_point_i$to_block_in$ = block$from_block$_point_o$from_block_out$;// POINT conection\n'
             },
+
         "HRP_WEBAUDIO_SOUND":{
             "icon_in":"images/s2irctin.png",
             "icon_out":"images/s2irctout.png",
-            "code": 'block_$from_block$.connect(block_$to_block$);\n'
+            "code": 'block_$from_block$.connect(block_$to_block$_i[$to_block_in$]);\n'
+            },
+        "HRP_WEBAUDIO_FLOAT":{
+            "icon_in":"images/s2idoubin.png",
+            "icon_out":"images/s2idoubout.png",
+            "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
+            },
+        "HRP_WEBAUDIO_CHAR":{
+            "icon_in":"images/s2iintin.png",
+            "icon_out":"images/s2iintout.png",
+            "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
             }
-        }
 
+}
