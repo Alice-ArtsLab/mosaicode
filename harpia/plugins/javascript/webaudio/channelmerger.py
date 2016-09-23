@@ -10,52 +10,50 @@ gettext.textdomain(APP)
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
-class Oscillator(Plugin):
+class ChannelMerger(Plugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
         self.id = -1
-        self.freq = 440
         self.type = self.__class__.__module__
-        self.oscillator_type = 'sine'
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
-        return "Sound output"
+        return "Channel Merger"
 
     # ----------------------------------------------------------------------
     def generate_header(self):
-        return ""
+        return """
+Merger = function(context) {
+  var that = this;
+  this.x = 0; // Initial sample number
+  this.context = context;
+  this.node = context.createScriptProcessor(1024, 1, 1);
+  this.node.onaudioprocess = function(e) { that.process(e) };
+}
 
+Merger.prototype.process = function(e) {
+  var in1 = e.inputBuffer.getChannelData(0);
+  var out = e.outputBuffer.getChannelData(0);
+  for (var i = 0; i < in1.length; ++i) {
+      out[i] = in1[i];
+  }
+}
+"""
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
-var block_$id$ =  context.createOscillator();
+var block_$id$_obj = new Merger(context);
+var block_$id$ = block_$id$_obj.node;
 var block_$id$_i = [];
-block_$id$_i[1] = block_$id$.frequency;
-block_$id$_i[2] = function(value){
-    block_$id$.frequency.value = value;
-};
-block_$id$_i[3] = function(value){
-    oscillator = ''
-    if (value < 1) oscillator = 'square';
-    if (value == 1) oscillator = 'sine';
-    if (value == 2) oscillblock_$id$_i[1] = block_$id$_obj.node;
-ator = 'sawtooth';
-    if (value > 2) oscillator = 'triangle';
-    block_$id$.type = oscillator;
-};
+block_$id$_i[1] = block_$id$_obj.node;
+block_$id$_i[2] = block_$id$_obj.node;
 """
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        return """
-block_$id$.type = '$oscillator_type$';
-block_$id$.frequency.value = $freq$; // value in hertz
-block_$id$.detune.value = 100; // value in cents
-block_$id$.start(0);
-"""
+        return ""
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
@@ -72,30 +70,17 @@ block_$id$.start(0);
     # ----------------------------------------------------------------------
     def get_description(self):
         return {"Type": str(self.type),
-            "Label": _("Oscillator"),
+            "Label": _("Channel Merger"),
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
-            "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT", 2: "HRP_WEBAUDIO_FLOAT"},
+            "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_SOUND"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "Description": _("Sound Oscillator"),
+            "Description": _("Channel Merger"),
             "TreeGroup": _("Sound"),
-            "IsSource": True
             }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {"freq":{"name": "Frequency",
-                    "type": HARPIA_FLOAT,
-                    "value": self.freq,
-                    "lower":20,
-                    "upper":20000,
-                    "step":1
-                    },
-                "oscillator_type":{"name": "Type",
-                    "type": HARPIA_COMBO,
-                    "value": self.oscillator_type,
-                    "values": ["square", "sine", "sawtooth", "triangle"]
-                    }
-            }
+        return {}
 
 # ------------------------------------------------------------------------------
