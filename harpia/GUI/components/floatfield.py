@@ -18,10 +18,23 @@ class FloatField(Field, Gtk.HBox):
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
+        step = 0.01
+        if step in data:
+            step = data["step"]
+
+        lower_value = 0
+        if "lower" in data:
+            lower_value = data["lower"]
+
+        upper_value = 32000
+        if "upper" in data:
+            upper_value = data["upper"]
+
+
         adjustment = Gtk.Adjustment(value=float(data["value"]),
-                                lower=data["lower"],
-                                upper=data["upper"],
-                                step_incr=data["step"],
+                                lower=lower_value,
+                                upper=upper_value,
+                                step_incr=step,
                                 page_incr=0,
                                 page_size=0)
         self.field = Gtk.SpinButton()

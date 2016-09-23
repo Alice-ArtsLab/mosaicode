@@ -37,8 +37,6 @@ from harpia.RunPrg import RunPrg
 from harpia.constants import *
 from harpia.s2idirectory import *
 
-from harpia.control.diagramcontrol import DiagramControl 
-
 # i18n
 import gettext
 _ = gettext.gettext
@@ -123,8 +121,8 @@ class CodeGenerator():
                 if block.weight == activeWeight:
                     headers.append(block.header)
                     declaration.append(block.declaration)
-                    functionCalls.append("//Weight: " + str(block.weight) + "\n")
                     functionCalls.append(block.functionCall)
+                    functionCalls.append(block.connections)
                     deallocations.append(block.dealloc)
                     outDeallocations.append(block.outDealloc)
 

@@ -9,6 +9,7 @@ class BlockTemplate:
         self.header = ''
         self.declaration = ''
         self.functionCall = ''
+        self.connections = ''
         self.dealloc = ''
         self.outDealloc = ''
         self.weight = 1
@@ -35,9 +36,9 @@ class BlockTemplate:
             if x.to_block == '--':
                 continue
             if x.type in harpia.s2idirectory.connections:
-                self.functionCall +=  harpia.s2idirectory.connections[x.type]["code"]
-            self.functionCall = self.functionCall.replace("$to_block$", str(x.to_block))
-            self.functionCall = self.functionCall.replace("$to_block_in$", str(int(x.to_block_in ) + 1))
-            self.functionCall = self.functionCall.replace("$from_block$", str(x.from_block))
-            self.functionCall = self.functionCall.replace("$from_block_out$", str(int (x.from_block_out) + 1))
+                self.connections +=  harpia.s2idirectory.connections[x.type]["code"]
+            self.connections = self.connections.replace("$to_block$", str(x.to_block))
+            self.connections = self.connections.replace("$to_block_in$", str(int(x.to_block_in ) + 1))
+            self.connections = self.connections.replace("$from_block$", str(x.from_block))
+            self.connections = self.connections.replace("$from_block_out$", str(int (x.from_block_out) + 1))
 
