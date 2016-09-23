@@ -12,8 +12,6 @@ from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
-from harpia.control.codegenerator import CodeGenerator
-from harpia.control.javascriptgenerator import JavascriptGenerator
 from harpia.GUI.workarea import WorkArea
 
 from harpia.s2idirectory import *
@@ -167,21 +165,21 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        CodeGenerator(diagram).execute()
+        DiagramControl(diagram).get_generator().execute()
 
     # ----------------------------------------------------------------------
     def save_source(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        JavascriptGenerator(diagram).save_code()
+        DiagramControl(diagram).get_generator().save_code()
 
     # ----------------------------------------------------------------------
     def view_source(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        code = JavascriptGenerator(diagram).generate_code()
+        code = DiagramControl(diagram).get_generator().generate_code()
         CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------
