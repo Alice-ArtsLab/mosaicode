@@ -13,7 +13,6 @@ from harpia.model.connectionmodel import ConnectionModel
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.control.codegenerator import CodeGenerator
 
-
 import sys
 import argparse
 import os
@@ -24,7 +23,7 @@ import os
 
 class Log(object):
     def log(self, msg):
-        print msg
+        print msg.encode('ascii','ignore')
 
 def main(argv):
 
@@ -52,15 +51,15 @@ def main(argv):
         intypes = obj.get_description()["InTypes"]
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
-                block = s2idirectory.block["harpia.plugins.imageFile"]()
+                block = s2idirectory.block["harpia.plugins.C.openCV.imageFile"]()
             elif intypes[inkey] == "HRP_INT":
-                block = s2idirectory.block["harpia.plugins.intValue"]()
+                block = s2idirectory.block["harpia.plugins.C.openCV.intValue"]()
             elif intypes[inkey] == "HRP_DOUBLE":
-                block = s2idirectory.block["harpia.plugins.newDouble"]()
+                block = s2idirectory.block["harpia.plugins.C.openCV.newDouble"]()
             elif intypes[inkey] == "HRP_RECT":
-                block = s2idirectory.block["harpia.plugins.newRect"]()
+                block = s2idirectory.block["harpia.plugins.C.openCV.newRect"]()
             elif intypes[inkey] == "HRP_POINT":
-                block = s2idirectory.block["harpia.plugins.newPoint"]()
+                block = s2idirectory.block["harpia.plugins.C.openCV.newPoint"]()
             diagram.add_block(block)
             block.y = 100 * cont
             diagram.connect_blocks(block, 0, obj, cont)
@@ -71,7 +70,7 @@ def main(argv):
         outtypes = obj.get_description()["OutTypes"]
         for outkey in outtypes:
             if outtypes[outkey] == "HRP_IMAGE":
-                show = s2idirectory.block["harpia.plugins.show"]()
+                show = s2idirectory.block["harpia.plugins.C.openCV.show"]()
                 show.x = 400
                 show.title = "My Image - " + obj.get_description()["Label"]
                 diagram.add_block(show)
