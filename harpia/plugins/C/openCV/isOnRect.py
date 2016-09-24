@@ -36,13 +36,11 @@ class IsOnRect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Check Point'),
+        return {'Label': _('Check Point'),
             'Icon': 'images/isOnRect.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_POINT', 1: 'HRP_RECT'},
             'OutTypes': {0: 'HRP_DOUBLE'},
-            'Description': _('Checks Wheather the given point is inside the given rectangle'),
             'TreeGroup': _('Experimental')
             }
 

@@ -57,13 +57,11 @@ class MatchTem(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Match Template"),
+        return {"Label": _("Match Template"),
             "Icon": "images/matchTem.png",
             "Color": "180:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Output shows the matching relation between image (input1) and template (input2)"),
             "TreeGroup": _("Feature Detection")
             }
     # ----------------------------------------------------------------------

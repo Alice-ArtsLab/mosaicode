@@ -42,13 +42,11 @@ class MoveRct(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Move Rectangle'),
+        return {'Label': _('Move Rectangle'),
             'Icon': 'images/moveRct.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},
             'OutTypes': {0: 'HRP_RECT'},
-            'Description': _('Move Rectangle`s (0,0) point to input point'),
             'TreeGroup': _('Experimental')
             }
 

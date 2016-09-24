@@ -46,13 +46,11 @@ class Laplace(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Laplace"),
+        return {"Label": _("Laplace"),
             "Icon": "images/laplace.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Filtering operation that uses the Laplacian mask to enhance edges on the image."),
             "TreeGroup": _("Gradients, Edges and Corners")
             }
 

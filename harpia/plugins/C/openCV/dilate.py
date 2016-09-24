@@ -50,13 +50,11 @@ if(block$id$_img_i0){
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Dilate"),
+        return {"Label": _("Dilate"),
             "Icon": "images/dilate.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Morphological operation that dilates the objects of the image, enlarging their size."),
             "TreeGroup": _("Morphological Operations")
             }
 

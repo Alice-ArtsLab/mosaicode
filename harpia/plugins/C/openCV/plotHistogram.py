@@ -139,13 +139,11 @@ class PlotHistogram(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Histogram"),
+        return {"Label": _("Histogram"),
             "Icon": "images/plotHistogram.png",
             "Color": "0:0:0:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Create a representation of the light intensity levels as an histogram."),
             "TreeGroup": _("Histograms")
             }
     # ----------------------------------------------------------------------

@@ -43,13 +43,11 @@ class Fill(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-        "Label":_("Fill image"),
+        return {"Label":_("Fill image"),
         "Icon":"images/fill.png",
         "Color":"50:100:200:150",
         "InTypes":{0:"HRP_IMAGE"},
         "OutTypes":{0:"HRP_IMAGE"},
-        "Description":_("Fill an image with the desired color."),
         "TreeGroup":_("General")
       }
 

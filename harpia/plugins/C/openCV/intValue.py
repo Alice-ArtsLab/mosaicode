@@ -42,13 +42,11 @@ class intValue(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Int Value'),
+        return {'Label': _('Int Value'),
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_INT'},
-            'Description': _('Creates slider to Int Value'),
             'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }

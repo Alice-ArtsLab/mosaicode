@@ -32,13 +32,11 @@ class NewInt(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('New Int'),
+        return {'Label': _('New Int'),
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_INT'},
-            'Description': _('Creates new literal value (int)'),
             'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }

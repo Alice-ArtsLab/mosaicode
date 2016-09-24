@@ -51,13 +51,11 @@ block_$id$_i[0] = context.destination;
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Speaker"),
+        return {"Label": _("Speaker"),
             "Icon": "images/show.png",
             "Color": "150:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND"},
             "OutTypes": {},
-            "Description": _("Sound Output"),
             "TreeGroup": _("Sound")
             }
 

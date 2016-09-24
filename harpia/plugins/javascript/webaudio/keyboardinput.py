@@ -64,14 +64,13 @@ document.onkeypress = function(evt){
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Keyboard Input"),
+        return {"Label": _("Keyboard Input"),
             "Icon": "images/show.png",
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_CHAR"},
-            "Description": _("Keyboard Input"),
-            "TreeGroup": _("Interface")
+            "TreeGroup": _("Interface"),
+            "IsSource": True
             }
 
     # ----------------------------------------------------------------------

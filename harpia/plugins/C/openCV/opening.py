@@ -52,13 +52,11 @@ class Opening(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Opening"),
+        return {"Label": _("Opening"),
             "Icon": "images/opening.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Morphological operation that disconnects objects and reduces noise."),
             "TreeGroup": _("Morphological Operations")
             }
 

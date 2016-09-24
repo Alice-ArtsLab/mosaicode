@@ -46,13 +46,11 @@ class Erode(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Erosion"),
+        return {"Label": _("Erosion"),
             "Icon": "images/erode.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Morphological operation that erodes the objects of the image, reducing their size."),
             "TreeGroup": _("Morphological Operations")
             }
 

@@ -63,13 +63,11 @@ $label$ <span id="block_$id$">$value$</span><br>
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Print"),
+        return {"Label": _("Print"),
             "Icon": "images/show.png",
             "Color": "50:10:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_CHAR"},
             "OutTypes": {},
-            "Description": _("Print Values"),
             "TreeGroup": _("Interface")
             }
 

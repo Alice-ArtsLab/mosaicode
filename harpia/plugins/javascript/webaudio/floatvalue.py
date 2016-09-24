@@ -64,14 +64,13 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$m
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("FloatValue"),
+        return {"Label": _("FloatValue"),
             "Icon": "images/show.png",
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "Description": _("Float Value"),
-            "TreeGroup": _("Interface")
+            "TreeGroup": _("Interface"),
+            "IsSource": True
             }
 
     # ----------------------------------------------------------------------

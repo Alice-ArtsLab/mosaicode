@@ -71,13 +71,11 @@ block_$id$_i[1] = function(value){
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Subtract Float"),
+        return {"Label": _("Subtract Float"),
             "Icon": "images/show.png",
             "Color": "200:200:25:150",
             "InTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "Description": _("Subtract Float"),
             "TreeGroup": _("Arithmetics")
             }
 

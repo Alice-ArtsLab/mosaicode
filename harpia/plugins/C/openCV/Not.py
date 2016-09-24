@@ -34,13 +34,11 @@ class Not(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Not"),
+        return {"Label": _("Not"),
             "Icon": "images/not.png",
             "Color": "10:180:10:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Negate the image. It is equivalent to the negative image."),
             "TreeGroup": _("Arithmetic and logical operations")
             }
 

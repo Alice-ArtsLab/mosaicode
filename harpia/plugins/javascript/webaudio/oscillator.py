@@ -69,13 +69,11 @@ block_$id$.start(0);
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Oscillator"),
+        return {"Label": _("Oscillator"),
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT", 2: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "Description": _("Sound Oscillator"),
             "TreeGroup": _("Sound"),
             "IsSource": True
             }

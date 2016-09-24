@@ -37,13 +37,11 @@ class Threshold(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Threshold"),
+        return {"Label": _("Threshold"),
             "Icon": "images/threshold.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Image binarization operator, according to a fixed threshold value."),
             "TreeGroup": _("Filters and Color Conversion")
             }
     # ----------------------------------------------------------------------

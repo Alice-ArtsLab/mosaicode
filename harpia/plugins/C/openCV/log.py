@@ -51,13 +51,11 @@ class Log(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Log"),
+        return {"Label": _("Log"),
             "Icon": "images/log.png",
             "Color": "230:230:60:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Return the image made from the neperian logarithm of each one of the image pixels."),
             "TreeGroup": _("Math Functions")
             }
 

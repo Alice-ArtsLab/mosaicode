@@ -36,13 +36,11 @@ class And(OpenCVPlugin):
 
     # ------------------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-                "Label": "And",
+        return {"Label": "And",
                 "Icon": "images/and.png",
                 "Color": "10:180:10:150",
                 "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
                 "OutTypes": {0: "HRP_IMAGE"},
-                "Description": "Logical AND operation between two images.",
                 "TreeGroup": "Arithmetic and logical operations"
                 }
 

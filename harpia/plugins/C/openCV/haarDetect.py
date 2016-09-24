@@ -20,7 +20,9 @@ class HaarDetect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_help(self):
-        return "Detecta formas circulares na imagem de entrada. Saida 1 é a resposta da avaliacao(*) e a saida dois mostra os circulos encontrados."
+        return  _('Haar (face) Detector finds regions on the input image according to the given haar-classifier. \n First Output is the center of the first \
+detected feature, second is a rectangle around the first detected feature and the third is the input image with the detected features tagged by a red circle.\n \
+The last output is the number of detected faces.')
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
@@ -95,15 +97,11 @@ class HaarDetect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-                'Label': _('Haar (face) Detector'),
+        return {'Label': _('Haar (face) Detector'),
                 'Icon': 'images/haarDetect.png',
                 'Color': '50:220:40:150',
                 'InTypes': {0: 'HRP_IMAGE'},
                 'OutTypes': {0: 'HRP_POINT', 1: 'HRP_RECT', 2: 'HRP_IMAGE', 3: 'HRP_DOUBLE'},
-                'Description': _('Haar (face) Detector finds regions on the input image according to the given haar-classifier. \n First Output is the center of the first \
-detected feature, second is a rectangle around the first detected feature and the third is the input image with the detected features tagged by a red circle.\n \
-The last output is the number of detected faces.'),
                 'TreeGroup': _("Feature Detection")
             }
 

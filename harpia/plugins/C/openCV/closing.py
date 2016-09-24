@@ -57,13 +57,11 @@ class Closing(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Closing"),
+        return {"Label": _("Closing"),
             "Icon": "images/closing.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2:"HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Morphological operation that connects objects on an image."),
             "TreeGroup": _("Morphological Operations")
             }
 

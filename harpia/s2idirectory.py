@@ -62,8 +62,8 @@ def load_blocks():
             continue
         module = __import__(modname, fromlist="dummy")
         for name, obj in inspect.getmembers(module):
-            if inspect.isclass(obj) and "Type" in obj().get_description():
-                obj_type = obj().get_description()["Type"]
+            if inspect.isclass(obj) and "Label" in obj().get_description():
+                obj_type = obj().type
                 language = obj_type.split(".")[2]
                 framework = obj_type.split(".")[3]
                 obj.language = language # Adding a property do class dinamically
@@ -133,5 +133,4 @@ connections = {
             "multiple": True,
             "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
             }
-
 }

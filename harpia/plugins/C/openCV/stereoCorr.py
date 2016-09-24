@@ -59,13 +59,11 @@ class StereoCorr(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Stereo Correspondence'),
+        return {'Label': _('Stereo Correspondence'),
             'Icon': 'images/stereoCorr.png',
             'Color': '10:10:20:150',
             'InTypes': {0: 'HRP_IMAGE', 1: "HRP_IMAGE"},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'Description': _('Input1 is the left image and Input2 is the right image. Output is the depth image'),
             'TreeGroup': _('Feature Detection')
             }
 

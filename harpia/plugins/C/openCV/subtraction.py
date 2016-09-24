@@ -40,13 +40,11 @@ class Subtraction(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Subtraction"),
+        return {"Label": _("Subtraction"),
             "Icon": "images/subtraction.png",
             "Color": "180:10:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Subtract two images."),
             "TreeGroup": _("Arithmetic and logical operations")
             }
 

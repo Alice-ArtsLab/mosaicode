@@ -69,13 +69,11 @@ for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Live Delay'),
+        return {'Label': _('Live Delay'),
             'Icon': 'images/liveDelay.png',
             'Color': '250:20:30:150',
             'InTypes': {0: 'HRP_IMAGE'},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'Description': _('Inserts a delay inside a live stream'),
             'TreeGroup': _('General'),
             'TimeShifts': True
             }

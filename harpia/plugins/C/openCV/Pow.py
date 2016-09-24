@@ -35,13 +35,11 @@ class Pow(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Pow"),
+        return {"Label": _("Pow"),
             "Icon": "images/pow.png",
             "Color": "230:230:60:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Power each pixel value to a fixed value."),
             "TreeGroup": _("Math Functions")
             }
 

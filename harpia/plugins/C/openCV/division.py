@@ -33,13 +33,11 @@ class Division(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": "Division",
+        return {"Label": "Division",
             "Icon": "images/division.png",
             "Color": "180:10:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": "Divide two images.",
             "TreeGroup": "Arithmetic and logical operations"
             }
 

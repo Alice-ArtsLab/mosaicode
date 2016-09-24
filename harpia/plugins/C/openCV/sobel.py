@@ -51,13 +51,11 @@ class Sobel(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Sobel"),
+        return {"Label": _("Sobel"),
             "Icon": "images/sobel.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Filtering operation that uses the Sobel mask to enhance edges on the image."),
             "TreeGroup": _("Gradients, Edges and Corners")
             }
 

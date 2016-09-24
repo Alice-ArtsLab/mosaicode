@@ -35,13 +35,11 @@ class NewImage(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-         "Label":_("New Image"),
+        return {"Label":_("New Image"),
          "Icon":"images/acquisition.png",
          "Color":"50:100:200:150",
          "InTypes":"",
          "OutTypes":{0:"HRP_IMAGE"},
-         "Description":_("Create a new image."),
          "TreeGroup":_("Image Source"),
          "IsSource":True
          }

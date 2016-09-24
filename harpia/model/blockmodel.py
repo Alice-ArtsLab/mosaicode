@@ -15,7 +15,7 @@ class BlockModel(object):
 
     #----------------------------------------------------------------------
     def get_type(self):
-        return self.__plugin.get_description()["Type"]
+        return self.__plugin.type
 
     #----------------------------------------------------------------------
     def get_xml(self):

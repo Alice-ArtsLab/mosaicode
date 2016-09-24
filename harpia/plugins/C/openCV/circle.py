@@ -51,13 +51,11 @@ class Circle(OpenCVPlugin):
 
     # ------------------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-                "Label": "Circle",
+        return {"Label": "Circle",
                 "Icon": "images/opening.png",
                 "Color": "255:0:0:150",
                 "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT"},
                 "OutTypes": {0: "HRP_IMAGE"},
-                "Description": "Draw Circles.",
                 "TreeGroup": "Basic Shapes"
                 }
 

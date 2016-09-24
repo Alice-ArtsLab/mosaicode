@@ -40,13 +40,11 @@ class Xor(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Xor"),
+        return {"Label": _("Xor"),
             "Icon": "images/xor.png",
             "Color": "10:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Logical XOR (exclusive-or) operation between two images."),
             "TreeGroup": _("Arithmetic and logical operations")
             }
 

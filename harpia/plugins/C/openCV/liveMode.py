@@ -53,15 +53,13 @@ class LiveMode(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-         "Label":_("Live Mode"),
-         "Icon":"images/acquisition.png",
-         "Color":"50:100:200:150",
-                 "InTypes":"",
-                 "OutTypes":{0:"HRP_IMAGE"},
-                 "Description":_("Load image from a camera."),
-                 "TreeGroup":_("Image Source"),
-                 "IsSource":True
+        return {"Label":_("Live Mode"),
+                "Icon":"images/acquisition.png",
+                "Color":"50:100:200:150",
+                "InTypes":"",
+                "OutTypes":{0:"HRP_IMAGE"},
+                "TreeGroup":_("Image Source"),
+                "IsSource":True
          }
 
     # ----------------------------------------------------------------------

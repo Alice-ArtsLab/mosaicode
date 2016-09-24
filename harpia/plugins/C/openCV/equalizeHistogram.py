@@ -61,13 +61,11 @@ class EqualizeHistogram(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Equalize Histogram"),
+        return {"Label": _("Equalize Histogram"),
             "Icon": "images/equalizeHistogram.png",
             "Color": "0:0:0:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("The histogram equalization of an image intends to reinforce contrast of the image elements."),
             "TreeGroup": _("Histograms")
             }
     # ----------------------------------------------------------------------

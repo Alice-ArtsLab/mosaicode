@@ -52,13 +52,11 @@ class FillRect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-                "Label":_("Fill Rectangle"),
+        return {"Label":_("Fill Rectangle"),
                 "Icon":"images/fill.png",
                 "Color":"50:100:200:150",
                 "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
                 "OutTypes":{0:"HRP_IMAGE"},
-                "Description":_("Fill the input rectangle on the input image with the desired color."),
                 "TreeGroup":_("Basic Shapes")
          }
 

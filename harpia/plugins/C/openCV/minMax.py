@@ -58,13 +58,11 @@ class MinMax(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Find Min or Max"),
+        return {"Label": _("Find Min or Max"),
             "Icon": "images/minMax.png",
             "Color": "50:50:200:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_DOUBLE", 1: "HRP_POINT"},
-            "Description": _("Finds min or max from input image and judges it according to a custom criteria."),
             "TreeGroup": _("Feature Detection")
             }
 

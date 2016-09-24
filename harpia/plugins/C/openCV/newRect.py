@@ -35,13 +35,11 @@ class NewRect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('New Rectangle'),
+        return {'Label': _('New Rectangle'),
             'Icon': 'images/newRect.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_RECT'},
-            'Description': _('Creates new rectangle'),
             'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }

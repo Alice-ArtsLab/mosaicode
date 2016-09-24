@@ -80,13 +80,11 @@ class ColorConversion(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Color Conversion"),
+        return {"Label": _("Color Conversion"),
             "Icon": "images/colorConversion.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Convert colors between different standards of graylevel/color images."),
             "TreeGroup": _("Filters and Color Conversion")
             }
     # ----------------------------------------------------------------------

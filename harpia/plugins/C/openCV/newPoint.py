@@ -37,13 +37,11 @@ class NewPoint(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('New Point'),
+        return {'Label': _('New Point'),
             'Icon': 'images/newPoint.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_POINT'},
-            'Description': _('Creates a new Point'),
             'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }

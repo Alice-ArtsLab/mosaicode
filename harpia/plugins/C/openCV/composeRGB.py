@@ -61,13 +61,11 @@ class ComposeRGB(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-         "Label":_("Compose RGB"),
+        return {"Label":_("Compose RGB"),
          "Icon":"images/composeRGB.png",
          "Color":"50:125:50:150",
          "InTypes":{0:"HRP_IMAGE",1:"HRP_IMAGE",2:"HRP_IMAGE"},
          "OutTypes":{0:"HRP_IMAGE"},
-         "Description":_("Compose three color channels  (R, G and B)  into one color image."),
          "TreeGroup":_("Filters and Color Conversion")
          }
 

@@ -68,13 +68,11 @@ block_$id$_i[1] = block_$id$_obj.node;
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Channel Merger"),
+        return {"Label": _("Channel Merger"),
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_SOUND"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "Description": _("Channel Merger"),
             "TreeGroup": _("Sound"),
             }
 

@@ -36,13 +36,11 @@ class Resize(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Resize Image"),
+        return {"Label": _("Resize Image"),
             "Icon": "images/resize.png",
             "Color": "20:80:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_RECT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Resizes the input image to the dimensions of the input rectangle"),
             "TreeGroup": _("Experimental")
             }
 

@@ -53,13 +53,11 @@ class VideoFile(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-         "Label":_("Video File"),
-         "Icon":"images/acquisition.png",
-         "Color":"50:100:200:150",
+        return {"Label":_("Video File"),
+                "Icon":"images/acquisition.png",
+                "Color":"50:100:200:150",
                  "InTypes":"",
                  "OutTypes":{0:"HRP_IMAGE"},
-                 "Description":_("Create a new image or load image from a source, such as file, camera, frame grabber."),
                  "TreeGroup":_("Image Source"),
                  "IsSource":True
          }

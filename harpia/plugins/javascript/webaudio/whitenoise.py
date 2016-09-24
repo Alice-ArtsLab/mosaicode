@@ -67,13 +67,11 @@ var block_$id$ =  new WhiteNoise(context).node;
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("White Noise"),
+        return {"Label": _("White Noise"),
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "Description": _("White Noise"),
             "TreeGroup": _("Sound"),
             "IsSource": True
             }

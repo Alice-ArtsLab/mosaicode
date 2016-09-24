@@ -20,13 +20,11 @@ class Save(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-                "Label": "Save Image",
+        return {"Label": "Save Image",
                 "Icon": "images/save.png",
                 "Color": "50:100:200:150",
                 "InTypes": {0: "HRP_IMAGE"},
                 "OutTypes": {0: "HRP_IMAGE"},
-                "Description": "Save image on a file indicated by the user.",
                 "TreeGroup": "General"
                 }
 

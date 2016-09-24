@@ -68,13 +68,11 @@ if(block$id$_img_i0){ //Canny Code
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Canny"),
+        return {"Label": _("Canny"),
             "Icon": "images/canny.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT", 3:"HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Filtering operation that employs the Canny algorithm to detect edges."),
             "TreeGroup": _("Gradients, Edges and Corners")
             }
 

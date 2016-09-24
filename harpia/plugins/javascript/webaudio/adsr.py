@@ -87,15 +87,12 @@ block_$id$_i[1] = function(value){
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("ADSR"),
+        return {"Label": _("ADSR"),
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "Description": _("ADSR"),
-            "TreeGroup": _("Sound"),
-            "IsSource": True
+            "TreeGroup": _("Sound")
             }
 
     # ----------------------------------------------------------------------

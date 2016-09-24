@@ -43,13 +43,11 @@ class Smooth(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Smooth"),
+        return {"Label": _("Smooth"),
             "Icon": "images/smooth.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Operação de filtragem destinada suavizar uma imagem"),
             "TreeGroup": _("Filters and Color Conversion")
             }
     # ----------------------------------------------------------------------

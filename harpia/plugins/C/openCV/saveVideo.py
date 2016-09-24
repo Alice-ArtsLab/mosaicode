@@ -73,13 +73,11 @@ class SaveVideo(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Save Video'),
+        return {'Label': _('Save Video'),
             'Icon': 'images/saveVideo.png',
             'Color': '120:20:20:150',
             'InTypes': {0: 'HRP_IMAGE'},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'Description': _('Save Video needs its description'),
             'TreeGroup': _('General')
             }
     # ----------------------------------------------------------------------

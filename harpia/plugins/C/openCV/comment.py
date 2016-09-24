@@ -31,13 +31,11 @@ class Comment(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label":_("Comment"),
+        return {"Label":_("Comment"),
             "Icon":"images/comment.png",
             "Color":"50:100:200:150",
             "InTypes":"",
             "OutTypes":"",
-            "Description":_("Insert a comment."),
             "TreeGroup":_("General")
          }
 

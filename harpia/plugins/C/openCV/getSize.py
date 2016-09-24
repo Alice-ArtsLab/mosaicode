@@ -33,13 +33,11 @@ class GetSize(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Get Size'),
+        return {'Label': _('Get Size'),
             'Icon': 'images/getSize.xpm',
             'Color': '250:20:30:150',
             'InTypes': {0: 'HRP_IMAGE'},
             'OutTypes': {0: 'HRP_RECT'},
-            'Description': _('Extracts the input image size'),
             'TreeGroup': _('Experimental'),
             'TimeShifts': False
             }

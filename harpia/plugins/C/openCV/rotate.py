@@ -75,13 +75,11 @@ class Rotate(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            "Label": _("Rotate Image"),
+        return {"Label": _("Rotate Image"),
             "Icon": "images/rotate.png",
             "Color": "90:5:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_DOUBLE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "Description": _("Rotates input image the input angle degrees. (More options inside)"),
             "TreeGroup": _("Experimental")
             }
 

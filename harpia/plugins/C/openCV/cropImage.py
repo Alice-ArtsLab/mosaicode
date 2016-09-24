@@ -53,13 +53,11 @@ class CropImage(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('Crop Image'),
+        return {'Label': _('Crop Image'),
             'Icon': 'images/cropImage.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_IMAGE', 1: 'HRP_RECT'},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'Description': _('Crops the input image according to input Rectangle'),
             'TreeGroup': _('Experimental')
             }
 

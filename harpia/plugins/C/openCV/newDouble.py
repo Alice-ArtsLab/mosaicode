@@ -31,13 +31,11 @@ class NewDouble(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Type": str(self.type),
-            'Label': _('New Double'),
+        return {'Label': _('New Double'),
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_DOUBLE'},
-            'Description': _('Creates new literal value (Double)'),
             'TreeGroup': _('Basic Data Type'),
             "IsSource": True
             }
