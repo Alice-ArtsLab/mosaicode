@@ -96,8 +96,7 @@ function getMouseXY(e) {
             "Color": "50:50:50:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": _("Interface"),
-            "IsSource": True
+            "TreeGroup": _("Interface")
             }
 
     # ----------------------------------------------------------------------

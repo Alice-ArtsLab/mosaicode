@@ -69,8 +69,7 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$m
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": _("Interface"),
-            "IsSource": True
+            "TreeGroup": _("Interface")
             }
 
     # ----------------------------------------------------------------------

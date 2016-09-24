@@ -36,8 +36,7 @@ class NewDouble(OpenCVPlugin):
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_DOUBLE'},
-            'TreeGroup': _('Basic Data Type'),
-            "IsSource": True
+            'TreeGroup': _('Basic Data Type')
             }
 
     # ----------------------------------------------------------------------

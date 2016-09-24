@@ -55,12 +55,10 @@ class JavascriptGenerator(CodeGenerator):
     #----------------------------------------------------------------------
     def generate_code(self):
         harpia.s2idirectory.Log.log("Parsing Code")
-
         self.sort_blocks()
         self.generate_parts()
 
-        header = r"""
-<html>
+        header = r"""<html>
 <head>
 <meta http-equiv="Cache-Control" content="no-store" />
 </head>
@@ -114,8 +112,7 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
     def save_code(self):
         harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name)
         self.change_directory()
-        codeFilename = self.dir_name + '.html'
-        codeFile = open(codeFilename, 'w')
+        codeFile = open(self.dir_name + '.html', 'w')
         code = self.generate_code()
         codeFile.write(code)
         codeFile.close()

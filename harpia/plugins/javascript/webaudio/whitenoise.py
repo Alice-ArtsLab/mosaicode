@@ -72,8 +72,7 @@ var block_$id$ =  new WhiteNoise(context).node;
             "Color": "50:150:250:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": _("Sound"),
-            "IsSource": True
+            "TreeGroup": _("Sound")
             }
 
     # ----------------------------------------------------------------------

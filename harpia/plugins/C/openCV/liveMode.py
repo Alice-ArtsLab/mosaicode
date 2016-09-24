@@ -58,8 +58,7 @@ class LiveMode(OpenCVPlugin):
                 "Color":"50:100:200:150",
                 "InTypes":"",
                 "OutTypes":{0:"HRP_IMAGE"},
-                "TreeGroup":_("Image Source"),
-                "IsSource":True
+                "TreeGroup":_("Image Source")
          }
 
     # ----------------------------------------------------------------------

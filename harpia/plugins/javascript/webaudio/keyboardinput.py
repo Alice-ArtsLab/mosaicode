@@ -69,8 +69,7 @@ document.onkeypress = function(evt){
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_CHAR"},
-            "TreeGroup": _("Interface"),
-            "IsSource": True
+            "TreeGroup": _("Interface")
             }
 
     # ----------------------------------------------------------------------

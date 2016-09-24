@@ -71,10 +71,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.widgets = {}
         self.focus = False
         self.has_flow = False
-        self.is_source = False
-
-        if self.get_description().has_key("IsSource"): #all data sources
-            self.is_source = self.get_description()["IsSource"]
 
         self.width = WIDTH_DEFAULT
 
@@ -301,14 +297,18 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def update_flow(self):
-        if self.is_source :#
-            self.has_flow = True
-        else:
-            sourceConnectors = self.diagram.get_connectors_to(self)
-            if len(sourceConnectors) != len(self.get_description()["InTypes"]):
+        sourceConnectors = self.diagram.get_connectors_to(self)
+        distinct_con = []
+        self.has_flow = True
+        for con in sourceConnectors:
+            if con.to_block_in not in distinct_con:
+                print "Distinct", con.to_block_in
+                distinct_con.append(con.to_block_in)
+        for con in self.get_description()["InTypes"]:
+            print con
+            if con not in distinct_con:
                 self.has_flow = False
-            else:
-                self.has_flow = True
+                break
         self.__update_state()
         return self.has_flow
 

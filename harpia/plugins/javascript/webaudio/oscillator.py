@@ -74,8 +74,7 @@ block_$id$.start(0);
             "Color": "50:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT", 2: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": _("Sound"),
-            "IsSource": True
+            "TreeGroup": _("Sound")
             }
 
     # ----------------------------------------------------------------------
