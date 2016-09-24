@@ -11,7 +11,7 @@ from harpia import s2idirectory
 from harpia.model.diagrammodel import DiagramModel
 from harpia.model.connectionmodel import ConnectionModel
 from harpia.control.diagramcontrol import DiagramControl
-from harpia.control.codegenerator import CodeGenerator
+from harpia.control.cgenerator import CGenerator
 
 import sys
 import argparse
@@ -101,7 +101,7 @@ def main(argv):
         if args.compile:
             # Compile Examples
             print "Generating code..."
-            generator = CodeGenerator(diagram)
+            generator = CGenerator(diagram)
             generator.compile()
 #            generator.execute()
             print obj.get_description()["Label"], " - compiled\n"

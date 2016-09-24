@@ -16,7 +16,7 @@ from harpia.utils.XMLUtils import XMLParser
 
 from harpia.s2idirectory import *
 from harpia.constants import *
-from harpia.control.codegenerator import CodeGenerator
+from harpia.control.cgenerator import CGenerator
 from harpia.control.javascriptgenerator import JavascriptGenerator
 
 
@@ -33,7 +33,7 @@ class DiagramControl():
 # ----------------------------------------------------------------------
     def get_generator(self):
         if self.diagram.language == "C":
-            return CodeGenerator(self.diagram)
+            return CGenerator(self.diagram)
         else: #self.diagram.language == "javascript":
             return JavascriptGenerator(self.diagram)
 
