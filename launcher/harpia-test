@@ -43,6 +43,14 @@ def main(argv):
 
     for key in s2idirectory.block:
         obj = s2idirectory.block[key]()
+        print "Working with", obj.type
+        if obj.language != "C":
+            print "-- Ignoring block", obj.type
+            continue
+        if obj.framework != "openCV":
+            print "-- Ignoring block", obj.type
+            continue
+
         obj.x = 200
         diagram = DiagramModel()
         diagram.add_block(obj)
@@ -54,6 +62,8 @@ def main(argv):
                 block = s2idirectory.block["harpia.plugins.C.openCV.imageFile"]()
             elif intypes[inkey] == "HRP_INT":
                 block = s2idirectory.block["harpia.plugins.C.openCV.intValue"]()
+                block.window_name = "My Image - " + obj.get_description()["Label"]
+                block.label = block.label + " - " + str(cont)
             elif intypes[inkey] == "HRP_DOUBLE":
                 block = s2idirectory.block["harpia.plugins.C.openCV.newDouble"]()
             elif intypes[inkey] == "HRP_RECT":
@@ -63,7 +73,6 @@ def main(argv):
             diagram.add_block(block)
             block.y = 100 * cont
             diagram.connect_blocks(block, 0, obj, cont)
-
             cont = cont + 1
 
         cont = 0
