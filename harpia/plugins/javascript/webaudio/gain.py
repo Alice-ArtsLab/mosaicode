@@ -15,8 +15,6 @@ class Gain(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.gain = 1
 
     # ----------------------------------------------------------------------
@@ -30,11 +28,12 @@ class Gain(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Gain
 var block_$id$ = context.createGain();
 var block_$id$_i = [];
-block_$id$_i[1] = block_$id$;
-block_$id$_i[2] = block_$id$.gain;
-block_$id$_i[3] = function(value){
+block_$id$_i[0] = block_$id$;
+block_$id$_i[1] = block_$id$.gain;
+block_$id$_i[2] = function(value){
     block_$id$.gain.value = value;
     };
 """

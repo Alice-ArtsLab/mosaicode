@@ -15,8 +15,6 @@ class FloatValue(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.value = 1
         self.label = "Label"
         self.min = 0
@@ -33,8 +31,9 @@ class FloatValue(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Float Value
 var block_$id$_value = $value$;
-var block_$id$_o1 = [];
+var block_$id$_o0 = [];
 """
 
     # ----------------------------------------------------------------------
@@ -42,8 +41,8 @@ var block_$id$_o1 = [];
         return """
 function change_$id$_value(){
     value = document.getElementById("block_$id$").value;
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](value);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](value);
     }
 };
 """

@@ -15,8 +15,6 @@ class Char2Float(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.float = 60
         self.char = 'a'
 
@@ -31,13 +29,14 @@ class Char2Float(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
-var block_$id$_o1 = [];
+// block_$id$ = Char 2 Float
+var block_$id$_o0 = [];
 var block_$id$_i = [];
-block_$id$_i[1] = function(value){
+block_$id$_i[0] = function(value){
     if (value != '$char$')
         return true;
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i]($float$);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i]($float$);
     }
     return true;
     };

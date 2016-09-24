@@ -5,7 +5,7 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def __init__(self):
-        self.type = -1
+        self.type = self.__class__.__module__
         self.id = -1
         self.x = 0
         self.y = 0

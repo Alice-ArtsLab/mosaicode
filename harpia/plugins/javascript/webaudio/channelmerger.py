@@ -15,8 +15,6 @@ class ChannelMerger(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -44,11 +42,12 @@ Merger.prototype.process = function(e) {
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Channel Merger
 var block_$id$_obj = new Merger(context);
 var block_$id$ = block_$id$_obj.node;
 var block_$id$_i = [];
+block_$id$_i[0] = block_$id$_obj.node;
 block_$id$_i[1] = block_$id$_obj.node;
-block_$id$_i[2] = block_$id$_obj.node;
 """
 
     # ----------------------------------------------------------------------

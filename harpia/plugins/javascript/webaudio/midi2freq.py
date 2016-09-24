@@ -15,8 +15,6 @@ class Midi2Freq(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -29,16 +27,17 @@ class Midi2Freq(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
-var block_$id$_o1 = [];
+// block_$id$ = Midi 2 Freq
+var block_$id$_o0 = [];
 var block_$id$_i = [];
 
-block_$id$_i[1] = function(value){
+block_$id$_i[0] = function(value){
     value = (value < 0) ? 0 : value;
     value = (value >127) ? 127 : value;
     var arg = ((parseFloat(value) - 69.0) / 12.0);
     result =  Math.pow(2.0, arg) * 440.0;
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](result);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](result);
     }
     return true;
     };

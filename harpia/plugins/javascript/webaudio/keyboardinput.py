@@ -15,8 +15,6 @@ class KeyboardInput(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -29,8 +27,9 @@ class KeyboardInput(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = KeyBoard Input
+var block_$id$_o0 = [];
 var block_$id$_o1 = [];
-var block_$id$_o2 = [];
 """
 
     # ----------------------------------------------------------------------
@@ -39,12 +38,12 @@ var block_$id$_o2 = [];
 document.onkeypress = function(evt){
     evt = evt || window.event;
     var value = evt.keyCode || evt.which;
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](value);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](value);
     }
     value = String.fromCharCode(value);
-    for (var i = 0; i < block_$id$_o2.length ; i++){
-        block_$id$_o2[i](value);
+    for (var i = 0; i < block_$id$_o1.length ; i++){
+        block_$id$_o1[i](value);
     }
 };
 """

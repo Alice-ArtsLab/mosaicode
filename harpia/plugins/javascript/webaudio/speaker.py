@@ -15,8 +15,6 @@ class Speaker(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -29,8 +27,9 @@ class Speaker(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Speaker
 var block_$id$_i = []
-block_$id$_i[1] = context.destination;
+block_$id$_i[0] = context.destination;
 """
 
     # ----------------------------------------------------------------------

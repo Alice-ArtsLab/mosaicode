@@ -15,9 +15,7 @@ class Oscillator(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
         self.freq = 440
-        self.type = self.__class__.__module__
         self.oscillator_type = 'sine'
 
     # ----------------------------------------------------------------------
@@ -31,18 +29,18 @@ class Oscillator(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Oscillator
 var block_$id$ =  context.createOscillator();
 var block_$id$_i = [];
-block_$id$_i[1] = block_$id$.frequency;
-block_$id$_i[2] = function(value){
+block_$id$_i[0] = block_$id$.frequency;
+block_$id$_i[1] = function(value){
     block_$id$.frequency.value = value;
 };
-block_$id$_i[3] = function(value){
+block_$id$_i[2] = function(value){
     oscillator = ''
     if (value < 1) oscillator = 'square';
     if (value == 1) oscillator = 'sine';
-    if (value == 2) oscillblock_$id$_i[1] = block_$id$_obj.node;
-ator = 'sawtooth';
+    if (value == 2) oscillator = 'sawtooth';
     if (value > 2) oscillator = 'triangle';
     block_$id$.type = oscillator;
 };

@@ -15,8 +15,6 @@ class Mouse(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -29,8 +27,9 @@ class Mouse(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Mouse
+var block_$id$_o0 = [];
 var block_$id$_o1 = [];
-var block_$id$_o2 = [];
 """
 
     # ----------------------------------------------------------------------
@@ -66,12 +65,12 @@ function getMouseXY(e) {
   if (tempY < 0){tempY = 0}  
 
     // X value
-    for (var i = 0; i < block_$id$_o1.length ; i++)
-        block_$id$_o1[i](tempX);
+    for (var i = 0; i < block_$id$_o0.length ; i++)
+        block_$id$_o0[i](tempX);
 
     // Y value
     for (var i = 0; i < block_$id$_o1.length ; i++)
-        block_$id$_o2[i](tempY);
+        block_$id$_o1[i](tempY);
   return true
 }
 // ----------------- Mouse position ----------------------------

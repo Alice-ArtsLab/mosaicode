@@ -15,8 +15,6 @@ class AddFloat(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -29,24 +27,25 @@ class AddFloat(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Add Float
 var block_$id$_arg1 = 0;
 var block_$id$_arg2 = 0;
-var block_$id$_o1 = [];
+var block_$id$_o0 = [];
 var block_$id$_i = [];
 
-block_$id$_i[1] = function(value){
+block_$id$_i[0] = function(value){
     block_$id$_arg1 = parseFloat(value);
     result = parseFloat(block_$id$_arg1) + parseFloat(block_$id$_arg2);
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](result);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](result);
     }
     return true;
     };
-block_$id$_i[2] = function(value){
+block_$id$_i[1] = function(value){
     block_$id$_arg2 = parseFloat(value);
     result = parseFloat(block_$id$_arg1) + parseFloat(block_$id$_arg2);
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](result);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](result);
     }
     return true;
     };

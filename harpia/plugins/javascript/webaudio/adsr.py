@@ -15,8 +15,6 @@ class ADSR(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.a = 5
         self.d = 2
         self.s = 100
@@ -62,11 +60,12 @@ Envelope.prototype.play = function(e) {
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = ADSR
 var block_$id$_obj = new Envelope(context, $a$, $d$, $s$, $r$, $g$);
 var block_$id$ =  block_$id$_obj.node;
 var block_$id$_i = [];
-block_$id$_i[1] = block_$id$_obj.node;
-block_$id$_i[2] = function(value){
+block_$id$_i[0] = block_$id$_obj.node;
+block_$id$_i[1] = function(value){
     block_$id$_obj.play();
 };
 """

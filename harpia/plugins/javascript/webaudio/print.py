@@ -15,8 +15,6 @@ class Print(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.label = "Label"
         self.value = 1
 
@@ -31,12 +29,13 @@ class Print(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Print
 var block_$id$_i = [];
-block_$id$_i[1] = function(value){
+block_$id$_i[0] = function(value){
     document.getElementById("block_$id$").innerHTML = value;
     return true;
     };
-block_$id$_i[2] = function(value){
+block_$id$_i[1] = function(value){
     document.getElementById("block_$id$").innerHTML = value;
     return true;
     };

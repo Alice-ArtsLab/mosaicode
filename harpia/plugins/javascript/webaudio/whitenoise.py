@@ -15,8 +15,6 @@ class WhiteNoise(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -46,6 +44,7 @@ WhiteNoise.prototype.process = function(e) {
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = White Noise
 var block_$id$ =  new WhiteNoise(context).node;
 """
 

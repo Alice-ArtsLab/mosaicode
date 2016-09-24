@@ -15,8 +15,6 @@ class Button(Plugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         Plugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.value = 1
         self.label = "Label"
 
@@ -31,8 +29,9 @@ class Button(Plugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return """
+// block_$id$ = Button
 var block_$id$_value = $value$;
-var block_$id$_o1 = [];
+var block_$id$_o0 = [];
 """
 
     # ----------------------------------------------------------------------
@@ -40,8 +39,8 @@ var block_$id$_o1 = [];
         return """
 function click_$id$(){
     value = document.getElementById("block_$id$").value;
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](value);
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](value);
     }
 };
 """
