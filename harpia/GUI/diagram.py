@@ -115,20 +115,22 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 if block.get_position()[0] > xi \
                     and block.get_position()[0] + block.width < xf \
                     and block.get_position()[1] > yi \
-                    and block.get_position()[1] + block.height < yf:
+                    and block.get_position()[1] + block.height < yf \
+                    and block not in self.current_widgets:
                         self.current_widgets.append(block)
-                elif block in self.current_widgets:
-                    self.current_widgets.remove(block)
+#                elif block in self.current_widgets:
+#                    self.current_widgets.remove(block)
                 block.update_flow()
 
             for conn in self.connectors:
                 if conn.from_point[0] > xi \
                     and conn.to_point[0] < xf \
                     and conn.from_point[1] > yi \
-                    and conn.to_point[1] < yf:
+                    and conn.to_point[1] < yf \
+                    and conn not in self.current_widgets:
                         self.current_widgets.append(conn)
-                elif conn in self.current_widgets:
-                    self.current_widgets.remove(conn)
+#                elif conn in self.current_widgets:
+#                    self.current_widgets.remove(conn)
                 conn.update_flow()
 
             return True #Abort other events
@@ -258,7 +260,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         if to_block not in self.blocks:
             harpia.s2idirectory.Log.log("Connection to non existent block")
             return
-        new_connection = Connector(self, from_block, from_block_out)
+        conn_type = self.blocks[from_block].get_description()["OutTypes"][from_block_out]
+        new_connection = Connector(self, from_block, from_block_out, conn_type)
         new_connection.set_end(to_block, to_block_in)
         if self.__valid_connector(new_connection):
             if self.__connector_types_match(new_connection):
@@ -269,10 +272,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         return new_connection
 
     #----------------------------------------------------------------------
-    def clicked_input(self, block, a_nInput):
+    def clicked_input(self, block, block_input):
         if self.curr_connector == None:
             return
-        self.curr_connector.set_end(block.get_id(), a_nInput)
+        self.curr_connector.set_end(block.get_id(), block_input)
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return
@@ -286,9 +289,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.update_flows()
 
     #----------------------------------------------------------------------
-    def __connector_types_match(self, a_oConnector):
-        outType = self.blocks[a_oConnector.from_block].get_description()["OutTypes"][a_oConnector.from_block_out]
-        inType = self.blocks[a_oConnector.to_block].get_description()["InTypes"][a_oConnector.to_block_in]
+    def __connector_types_match(self, conn):
+        outType = self.blocks[conn.from_block].get_description()["OutTypes"][conn.from_block_out]
+        inType = self.blocks[conn.to_block].get_description()["InTypes"][conn.to_block_in]
         if not outType == inType:
             harpia.s2idirectory.Log.log("Connection Types mismatch")
         return outType == inType
@@ -297,18 +300,20 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __valid_connector(self, newCon):
         for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
-                    and oldCon.to_block_in == newCon.to_block_in:
-                harpia.s2idirectory.Log.log("Cloned Connector")
+                    and oldCon.to_block_in == newCon.to_block_in\
+                    and not harpia.s2idirectory.connections[newCon.type]["multiple"]:
+                harpia.s2idirectory.Log.log("Connector Already exists")
                 return False
         if newCon.to_block == newCon.from_block:
-            harpia.s2idirectory.Log.log("Recursive \"from future\" connector")
+            harpia.s2idirectory.Log.log("Recursive connection is not allowed")
             return False
         return True
 
     #----------------------------------------------------------------------
     def clicked_output(self, block, output):
         self.__abort_connection()  # abort any possibly running connections
-        self.curr_connector = Connector(self, block.get_id(), output)
+        conn_type = block.get_description()["OutTypes"][output]
+        self.curr_connector = Connector(self, block.get_id(), output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
@@ -433,6 +438,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             plugin.y += 20
             if not self.__main_window.main_control.add_block(plugin):
                 return
+            new_id = plugin.get_id()
             replace[widget.get_id()] = new_id
             self.current_widgets.append(self.blocks[new_id])
         # interact into connections changing block ids

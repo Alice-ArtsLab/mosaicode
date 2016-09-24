@@ -90,7 +90,6 @@ class CodeGenerator():
             for connection in self.diagram.connectors:
                 if connection.from_block != block.get_plugin().id:
                     continue
-                connection.type = block.get_description()["OutTypes"][connection.from_block_out]
                 block_template.myConnections.append(connection)
 
             block_template.generate_block_code()

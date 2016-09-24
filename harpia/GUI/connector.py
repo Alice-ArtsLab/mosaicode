@@ -36,12 +36,13 @@ import math
 import sys
 
 from harpia.model.connectionmodel import ConnectionModel
+from harpia.s2idirectory import *
 from connectormenu import ConnectorMenu
 
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     #----------------------------------------------------------------------
-    def __init__( self, diagram, from_block=-1, from_block_out=-1):
+    def __init__( self, diagram, from_block, from_block_out, conn_type):
         GooCanvas.CanvasGroup.__init__(self)
         ConnectionModel.__init__(self)
 
@@ -51,7 +52,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         self.from_block_out = from_block_out
         self.to_block_in = -1
-
+        self.type = conn_type
         self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out) 
         self.to_point = (0,0)
 
@@ -193,5 +194,5 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         if  self.to_block_in == -1:
             self.widgets["Line"].set_property("stroke-color","red")
         else:
-            self.widgets["Line"].set_property("stroke-color","black")
+            self.widgets["Line"].set_property("stroke-color", "black")
 #----------------------------------------------------------------------

@@ -124,9 +124,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 self.diagram.current_widgets.append(self)
 
         else:
-            if self in self.diagram.current_widgets:
-                self.diagram.current_widgets = []
-            else:
+            if self not in self.diagram.current_widgets:
                 self.diagram.current_widgets = []
                 self.diagram.current_widgets.append(self)
 
@@ -217,8 +215,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                             self.get_description()["InTypes"][x]
                             ]["icon_in"])
             except:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.icons["IconInput"])
+                pass
 
             image = GooCanvas.CanvasImage(parent=self,
                         pixbuf=pixbuf,
@@ -251,8 +248,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                             self.get_description()["OutTypes"][x]
                             ]["icon_out"])
             except:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.icons["IconOutput"])
+                pass
 
             image = GooCanvas.CanvasImage(parent=self,
                         pixbuf=pixbuf,

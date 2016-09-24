@@ -83,53 +83,54 @@ def load():
         recent_files.append(recent)
 
 
-
-#HERE: ADD TYPED ICONS for inputs and outputs
-icons = {
-    "IconInput":"images/s2iinput.png",
-    "IconOutput":"images/s2ioutput.png"
-    }
-
 connections = {
         "HRP_INT":{
-            "icon_in":"images/s2iintin.png",
-            "icon_out":"images/s2iintout.png",
+            "icon_in":"images/conn_int_in.png",
+            "icon_out":"images/conn_int_out.png",
+            "multiple": False,
             "code": 'block$to_block$_int_i$to_block_in$ = block$from_block$_int_o$from_block_out$;// INT conection\n'
             },
         "HRP_DOUBLE":{
-            "icon_in":"images/s2idoubin.png",
-            "icon_out":"images/s2idoubout.png",
+            "icon_in":"images/conn_double_in.png",
+            "icon_out":"images/conn_double_out.png",
+            "multiple": False,
             "code": 'block$to_block$_double_i$to_block_in$ = block$from_block$_double_o$from_block_out$;// DOUBLE conection\n'
             },
         "HRP_RECT":{
-            "icon_in":"images/s2irctin.png",
-            "icon_out":"images/s2irctout.png",
+            "icon_in":"images/conn_rect_in.png",
+            "icon_out":"images/conn_rect_out.png",
+            "multiple": False,
             "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
             },
         "HRP_IMAGE":{
-            "icon_in":"images/s2iinput.png",
-            "icon_out":"images/s2ioutput.png",
+            "icon_in":"images/conn_image_in.png",
+            "icon_out":"images/conn_image_out.png",
+            "multiple": False,
             "code": 'block$to_block$_img_i$to_block_in$ = cvCloneImage(block$from_block$_img_o$from_block_out$);// IMG conection\n'
             },
         "HRP_POINT":{
-            "icon_in":"images/s2ipointin.png",
-            "icon_out":"images/s2ipointout.png",
+            "icon_in":"images/conn_point_in.png",
+            "icon_out":"images/conn_point_out.png",
+            "multiple": False,
             "code": 'block$to_block$_point_i$to_block_in$ = block$from_block$_point_o$from_block_out$;// POINT conection\n'
             },
 
         "HRP_WEBAUDIO_SOUND":{
-            "icon_in":"images/s2irctin.png",
-            "icon_out":"images/s2irctout.png",
+            "icon_in":"images/conn_sound_in.png",
+            "icon_out":"images/conn_sound_out.png",
+            "multiple": True,
             "code": 'block_$from_block$.connect(block_$to_block$_i[$to_block_in$]);\n'
             },
         "HRP_WEBAUDIO_FLOAT":{
-            "icon_in":"images/s2idoubin.png",
-            "icon_out":"images/s2idoubout.png",
+            "icon_in":"images/conn_float_in.png",
+            "icon_out":"images/conn_float_out.png",
+            "multiple": True,
             "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
             },
         "HRP_WEBAUDIO_CHAR":{
-            "icon_in":"images/s2iintin.png",
-            "icon_out":"images/s2iintout.png",
+            "icon_in":"images/conn_char_in.png",
+            "icon_out":"images/conn_char_out.png",
+            "multiple": True,
             "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
             }
 
