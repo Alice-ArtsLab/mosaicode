@@ -15,8 +15,6 @@ class StereoCorr(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.maxDist = 60
 
     # ----------------------------------------------------------------------
@@ -26,34 +24,34 @@ class StereoCorr(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_i2 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'IplImage * block$id$_img_ts1 = NULL;\n' + \
-            'IplImage * block$id$_img_ts2 = NULL;\n'
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
+            'IplImage * block$id$_img_ts0 = NULL;\n' + \
+            'IplImage * block$id$_img_ts1 = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1 && block$id$_img_i2)\n{\n' + \
-            '	if(!block$id$_img_o1)\n' + \
-            '		block$id$_img_o1 = cvCreateImage(cvGetSize(block$id$_img_i1), IPL_DEPTH_8U, 1);\n' + \
+            '\nif(block$id$_img_i0 && block$id$_img_i1)\n{\n' + \
+            '	if(!block$id$_img_o0)\n' + \
+            '		block$id$_img_o0 = cvCreateImage(cvGetSize(block$id$_img_i0), IPL_DEPTH_8U, 1);\n' + \
+            '	if(!block$id$_img_ts0)\n' + \
+            '		block$id$_img_ts0 = cvCreateImage(cvGetSize(block$id$_img_i0), IPL_DEPTH_8U, 1);\n' + \
             '	if(!block$id$_img_ts1)\n' + \
-            '		block$id$_img_ts1 = cvCreateImage(cvGetSize(block$id$_img_i1), IPL_DEPTH_8U, 1);\n' + \
-            '	if(!block$id$_img_ts2)\n' + \
-            '		block$id$_img_ts2 = cvCreateImage(cvGetSize(block$id$_img_i1), IPL_DEPTH_8U, 1);\n' + \
+            '		block$id$_img_ts1 = cvCreateImage(cvGetSize(block$id$_img_i0), IPL_DEPTH_8U, 1);\n' + \
+            '	cvCvtColor(block$id$_img_i0, block$id$_img_ts0, CV_BGR2GRAY);\n' + \
             '	cvCvtColor(block$id$_img_i1, block$id$_img_ts1, CV_BGR2GRAY);\n' + \
-            '	cvCvtColor(block$id$_img_i2, block$id$_img_ts2, CV_BGR2GRAY);\n' + \
-            '	cvFindStereoCorrespondence( block$id$_img_ts1, block$id$_img_ts2, CV_DISPARITY_BIRCHFIELD,' +\
-            'block$id$_img_o1, $maxDist$, 15, 3, 6, 8, 15 );\n}\n'
+            '	cvFindStereoCorrespondence( block$id$_img_ts0, block$id$_img_ts1, CV_DISPARITY_BIRCHFIELD,' +\
+            'block$id$_img_o0, $maxDist$, 15, 3, 6, 8, 15 );\n}\n'
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return  'cvReleaseImage(&block$id$_img_o1);\n' + \
+        return  'cvReleaseImage(&block$id$_img_o0);\n' + \
+                'cvReleaseImage(&block$id$_img_i0);\n' + \
                 'cvReleaseImage(&block$id$_img_i1);\n' + \
-                'cvReleaseImage(&block$id$_img_i2);\n' + \
-                'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n' + \
-                'if(block$id$_img_ts2)\n\tcvReleaseImage(&block$id$_img_ts2);\n'
+                'if(block$id$_img_ts0)\n\tcvReleaseImage(&block$id$_img_ts0);\n' + \
+                'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

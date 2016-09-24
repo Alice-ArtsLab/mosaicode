@@ -15,8 +15,6 @@ class Comment(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.comment = ""
 
     # ----------------------------------------------------------------------

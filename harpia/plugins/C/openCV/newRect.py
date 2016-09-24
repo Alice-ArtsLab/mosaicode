@@ -15,8 +15,6 @@ class NewRect(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.x0 = 0
         self.y0 = 0
         self.width = 640
@@ -29,7 +27,7 @@ class NewRect(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'block$id$_rect_o1 = cvRect($x0$, $y0$, $width$, $height$);\n'
+            'block$id$_rect_o0 = cvRect($x0$, $y0$, $width$, $height$);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

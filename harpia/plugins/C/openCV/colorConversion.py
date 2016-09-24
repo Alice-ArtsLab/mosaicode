@@ -15,8 +15,6 @@ class ColorConversion(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.conversion_type = 'RGB -> GRAY'
 
     # ----------------------------------------------------------------------
@@ -26,8 +24,8 @@ class ColorConversion(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_img_t = NULL;\n'
 
     # ----------------------------------------------------------------------
@@ -62,19 +60,19 @@ class ColorConversion(OpenCVPlugin):
             code = 'CV_Luv2RGB'
 
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'block$id$_img_t = cvCreateImage(cvGetSize(block$id$_img_i1), block$id$_img_i1->depth,' + channels + ');\n' + \
-            'cvCvtColor(block$id$_img_i1, block$id$_img_t ,' + code + ' );}\n' + \
+            '\nif(block$id$_img_i0){\n' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'block$id$_img_t = cvCreateImage(cvGetSize(block$id$_img_i0), block$id$_img_i0->depth,' + channels + ');\n' + \
+            'cvCvtColor(block$id$_img_i0, block$id$_img_t ,' + code + ' );}\n' + \
             'if ( ' + code + ' == ' + "CV_RGB2GRAY" + ')\n' + \
-            '{    cvMerge(block$id$_img_t ,block$id$_img_t ,block$id$_img_t ,NULL ,block$id$_img_o1);\n }\n' + \
-            'else\n' + '{ block$id$_img_o1 = cvCloneImage(block$id$_img_t);\n}'
+            '{    cvMerge(block$id$_img_t ,block$id$_img_t ,block$id$_img_t ,NULL ,block$id$_img_o0);\n }\n' + \
+            'else\n' + '{ block$id$_img_o0 = cvCloneImage(block$id$_img_t);\n}'
  
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
         return 'cvReleaseImage(&block$id$_img_t);\n' + \
-               'cvReleaseImage(&block$id$_img_i1);\n' + \
-               'cvReleaseImage(&block$id$_img_o1);\n'
+               'cvReleaseImage(&block$id$_img_i0);\n' + \
+               'cvReleaseImage(&block$id$_img_o0);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

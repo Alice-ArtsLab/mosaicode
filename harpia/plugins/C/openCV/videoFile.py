@@ -15,8 +15,6 @@ class VideoFile(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.filename = "/usr/share/harpia/images/vLeft.mpg"
 
     # ----------------------------------------------------------------------
@@ -30,7 +28,7 @@ class VideoFile(OpenCVPlugin):
             'CvCapture * block$id$_capture = NULL;\n'+ \
             'IplImage * block$id$_frame = NULL;\n' + \
             'block$id$_capture = cvCreateFileCapture("$filename$");\n' + \
-            'IplImage * block$id$_img_o1 = NULL; //Capture\n'
+            'IplImage * block$id$_img_o0 = NULL; //Capture\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -42,7 +40,7 @@ class VideoFile(OpenCVPlugin):
                 'cvSetCaptureProperty(block$id$_capture, CV_CAP_PROP_POS_AVI_RATIO , 0);\n' + \
                 'continue;\n' + \
                 '}\n' + \
-                'block$id$_img_o1 = cvCloneImage(block$id$_frame);\n'
+                'block$id$_img_o0 = cvCloneImage(block$id$_frame);\n'
 
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):

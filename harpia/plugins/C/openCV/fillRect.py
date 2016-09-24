@@ -15,8 +15,6 @@ class FillRect(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.color = "#0000ffff0000"
 
     # ----------------------------------------------------------------------
@@ -26,9 +24,9 @@ class FillRect(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'CvRect block$id$_rect_i2;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'CvRect block$id$_rect_i1;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -40,12 +38,12 @@ class FillRect(OpenCVPlugin):
         green = int(green, 16) / 257
         blue = int(blue, 16) / 257
         return \
-            '\nif(block$id$_img_i1)\n{\n' + \
-            '\tblock$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            '\tcvSetImageROI(block$id$_img_o1 , block$id$_rect_i2);\n' + \
+            '\nif(block$id$_img_i0)\n{\n' + \
+            '\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            '\tcvSetImageROI(block$id$_img_o0 , block$id$_rect_i1);\n' + \
             '\tCvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red)+',0);\n' + \
-            '\tcvSet(block$id$_img_o1,color,NULL);\n' + \
-            '\tcvResetImageROI(block$id$_img_o1);\n' + \
+            '\tcvSet(block$id$_img_o0,color,NULL);\n' + \
+            '\tcvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------

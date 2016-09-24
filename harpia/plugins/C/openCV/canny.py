@@ -15,8 +15,6 @@ class Canny(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.apertureSize = 3
         self.threshold1 = 16
         self.threshold2 = 33
@@ -28,11 +26,11 @@ class Canny(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n'+ \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'int block$id$_int_i2 = $threshold2$;\n' + \
-            'int block$id$_int_i4 = $apertureSize$;\n' + \
-            'int block$id$_int_i3 = $threshold1$;\n'
+            'IplImage * block$id$_img_i0 = NULL;\n'+ \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
+            'int block$id$_int_i1 = $threshold2$;\n' + \
+            'int block$id$_int_i3 = $apertureSize$;\n' + \
+            'int block$id$_int_i2 = $threshold1$;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -40,25 +38,25 @@ class Canny(OpenCVPlugin):
         self.threshold1 = int(self.threshold1)
         self.threshold2 = int(self.threshold2)
         return  '''
-if(block$id$_img_i1){ //Canny Code
+if(block$id$_img_i0){ //Canny Code
+    if (block$id$_int_i1 < 1) block$id$_int_i1 = 1;
     if (block$id$_int_i2 < 1) block$id$_int_i2 = 1;
     if (block$id$_int_i3 < 1) block$id$_int_i3 = 1;
-    if (block$id$_int_i4 < 1) block$id$_int_i4 = 1;
-    if (block$id$_int_i2 > 10) block$id$_int_i2 = 10;
+    if (block$id$_int_i1 > 10) block$id$_int_i1 = 10;
+    if (block$id$_int_i2 > 100) block$id$_int_i2 = 100;
     if (block$id$_int_i3 > 100) block$id$_int_i3 = 100;
-    if (block$id$_int_i4 > 100) block$id$_int_i4 = 100;
-    block$id$_img_o1 = cvCloneImage(block$id$_img_i1);
-    IplImage * tmpImg$id$ = cvCreateImage(cvGetSize(block$id$_img_i1),8,1);
-    if(block$id$_img_i1->nChannels == 3){
-        cvCvtColor(block$id$_img_i1,tmpImg$id$ ,CV_RGB2GRAY);
+    block$id$_img_o0 = cvCloneImage(block$id$_img_i0);
+    IplImage * tmpImg$id$ = cvCreateImage(cvGetSize(block$id$_img_i0),8,1);
+    if(block$id$_img_i0->nChannels == 3){
+        cvCvtColor(block$id$_img_i0, tmpImg$id$ ,CV_RGB2GRAY);
     }else{
-        tmpImg$id$ = block$id$_img_i1 = NULL;
+        tmpImg$id$ = block$id$_img_i0 = NULL;
     }
-    cvCanny(tmpImg$id$, tmpImg$id$, block$id$_int_i3, block$id$_int_i2, block$id$_int_i4);
-    if(block$id$_img_i1->nChannels == 3){
-        cvCvtColor(tmpImg$id$, block$id$_img_o1,CV_GRAY2RGB);
+    cvCanny(tmpImg$id$, tmpImg$id$, block$id$_int_i2, block$id$_int_i1, block$id$_int_i3);
+    if(block$id$_img_i0->nChannels == 3){
+        cvCvtColor(tmpImg$id$, block$id$_img_o0,CV_GRAY2RGB);
     }else{
-        cvCopyImage(tmpImg$id$, block$id$_img_o1);
+        cvCopyImage(tmpImg$id$, block$id$_img_o0);
     }
     cvReleaseImage(&tmpImg$id$);
 } // End Canny Code

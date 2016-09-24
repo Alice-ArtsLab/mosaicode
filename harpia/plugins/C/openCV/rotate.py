@@ -15,8 +15,6 @@ class Rotate(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.isCenter = True
         self.isScalling = True
         self.isFilling = True
@@ -39,18 +37,18 @@ class Rotate(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'double block$id$_double_i2 = $angle$;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'double block$id$_double_i1 = $angle$;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         value = \
-            '\n	if(block$id$_img_i1)\n	{\n' + \
+            '\n	if(block$id$_img_i0)\n	{\n' + \
             '		double scale;\n	int H;\n	int W;\n' + \
-            '		W = block$id$_img_i1->width;\n' + \
-            '		H = block$id$_img_i1->height;\n' + \
-            '		block$id$_img_o1 = cvCreateImage(cvSize(W,H),block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
+            '		W = block$id$_img_i0->width;\n' + \
+            '		H = block$id$_img_i0->height;\n' + \
+            '		block$id$_img_o0 = cvCreateImage(cvSize(W,H),block$id$_img_i0->depth,block$id$_img_i0->nChannels);\n' + \
             '		CvMat* mat = cvCreateMat(2,3,CV_32FC1);\n'
         if self.isCenter == "true":
             value += '		CvPoint2D32f center = cvPoint2D32f(W/2, H/2);\n'
@@ -58,15 +56,15 @@ class Rotate(OpenCVPlugin):
             value += '		CvPoint2D32f center = cvPoint2D32f($xC$,$yC$);\n'
 
         if self.isScalling == "true":
-            value += '		scale = H/(fabs(H*sin(rads(90-abs(block$id$_double_i2)))) + fabs(W*sin(rads(abs(block$id$_double_i2)))));\n' + \
-                    '		cv2DRotationMatrix(center,block$id$_double_i2,scale,mat);\n'
+            value += '		scale = H/(fabs(H*sin(rads(90-abs(block$id$_double_i1)))) + fabs(W*sin(rads(abs(block$id$_double_i1)))));\n' + \
+                    '		cv2DRotationMatrix(center,block$id$_double_i1,scale,mat);\n'
         else:
-            value += '		cv2DRotationMatrix(center,block$id$_double_i2,1.0,mat);\n'
+            value += '		cv2DRotationMatrix(center,block$id$_double_i1,1.0,mat);\n'
 
         if self.isFilling == "true":
-            value += '		cvWarpAffine(block$id$_img_i1,block$id$_img_o1, mat, CV_WARP_FILL_OUTLIERS, cvScalarAll(0));\n'
+            value += '		cvWarpAffine(block$id$_img_i0,block$id$_img_o0, mat, CV_WARP_FILL_OUTLIERS, cvScalarAll(0));\n'
         else:
-            value += '		cvWarpAffine(block$id$_img_i1,block$id$_img_o1,mat,0,cvScalarAll(0));\n'
+            value += '		cvWarpAffine(block$id$_img_i0,block$id$_img_o0,mat,0,cvScalarAll(0));\n'
 
         value += '	}\n'
         return value

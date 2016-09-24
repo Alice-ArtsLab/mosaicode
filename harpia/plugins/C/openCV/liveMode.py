@@ -16,8 +16,6 @@ class LiveMode(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.camera = "/dev/video0"
 
     # ----------------------------------------------------------------------
@@ -33,7 +31,7 @@ class LiveMode(OpenCVPlugin):
              'CvCapture * block$id$_capture = NULL;\n' + \
              'block$id$_capture = cvCaptureFromCAM(' + camera + ');\n' + \
              'IplImage * block$id$_frame = NULL;\n' + \
-             'IplImage * block$id$_img_o1 = NULL;\n'
+             'IplImage * block$id$_img_o0 = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -42,7 +40,7 @@ class LiveMode(OpenCVPlugin):
             'int value = cvGrabFrame(block$id$_capture);\n' + \
             'block$id$_frame = cvRetrieveFrame(block$id$_capture);\n' + \
             'if(!block$id$_frame){\ncontinue;\n}\n'+\
-            'block$id$_img_o1 = cvCloneImage(block$id$_frame);\n'
+            'block$id$_img_o0 = cvCloneImage(block$id$_frame);\n'
 
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):

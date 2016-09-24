@@ -15,8 +15,6 @@ class EqualizeHistogram(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):
@@ -25,30 +23,30 @@ class EqualizeHistogram(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_SourceCx[3];\n' + \
             'IplImage * block$id$_EqCx[3];\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'CvSize size$id$ = cvGetSize(block$id$_img_i1);\n'+ \
-            'block$id$_img_o1 = cvCreateImage(size$id$, IPL_DEPTH_8U, 3);\n' + \
+            '\nif(block$id$_img_i0){\n' + \
+            'CvSize size$id$ = cvGetSize(block$id$_img_i0);\n'+ \
+            'block$id$_img_o0 = cvCreateImage(size$id$, IPL_DEPTH_8U, 3);\n' + \
             'block$id$_SourceCx[0] = cvCreateImage(size$id$, IPL_DEPTH_8U, 1);\n' + \
             'block$id$_SourceCx[1] = cvCreateImage(size$id$, IPL_DEPTH_8U, 1);\n' + \
             'block$id$_SourceCx[2] = cvCreateImage(size$id$, IPL_DEPTH_8U, 1);\n' + \
             'block$id$_EqCx[0] = cvCreateImage(size$id$, IPL_DEPTH_8U, 1);\n' + \
             'block$id$_EqCx[1] = cvCreateImage(size$id$, IPL_DEPTH_8U, 1);\n' + \
             'block$id$_EqCx[2] = cvCreateImage(size$id$, IPL_DEPTH_8U, 1);\n' + \
-            'cvSplit(block$id$_img_i1,block$id$_SourceCx[0],' + \
+            'cvSplit(block$id$_img_i0, block$id$_SourceCx[0],' + \
             'block$id$_SourceCx[1],block$id$_SourceCx[2], NULL);\n' + \
             'cvEqualizeHist(block$id$_SourceCx[0], block$id$_EqCx[0]);\n' + \
             'cvEqualizeHist(block$id$_SourceCx[1], block$id$_EqCx[1]);\n' + \
             'cvEqualizeHist(block$id$_SourceCx[2], block$id$_EqCx[2]);\n' + \
             'cvMerge( block$id$_EqCx[0],block$id$_EqCx[1],' + \
-            'block$id$_EqCx[2], NULL,block$id$_img_o1);\n' + \
+            'block$id$_EqCx[2], NULL,block$id$_img_o0);\n' + \
             'cvReleaseImage(&block$id$_SourceCx[0]);\n' + \
             'cvReleaseImage(&block$id$_SourceCx[1]);\n' + \
             'cvReleaseImage(&block$id$_SourceCx[2]);\n' + \

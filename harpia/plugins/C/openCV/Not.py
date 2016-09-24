@@ -15,8 +15,6 @@ class Not(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -25,9 +23,9 @@ class Not(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'if(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'cvNot(block$id$_img_i1, block$id$_img_o1);\n' + \
+            'if(block$id$_img_i0){\n' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'cvNot(block$id$_img_i0, block$id$_img_o0);\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------

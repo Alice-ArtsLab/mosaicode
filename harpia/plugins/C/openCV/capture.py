@@ -16,8 +16,6 @@ class Capture(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.camera = "/dev/video0"
 
     # ----------------------------------------------------------------------
@@ -28,7 +26,7 @@ class Capture(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-           'IplImage * block$id$_img_o1 = NULL; //Capture\n' + \
+           'IplImage * block$id$_img_o0 = NULL; //Capture\n' + \
            'CvCapture* block$id$_capture = NULL; \n' + \
            'IplImage* block$id$_frame = NULL; \n' + \
            'int counter$id$ = 0;\n'
@@ -41,7 +39,7 @@ class Capture(OpenCVPlugin):
            'block$id$_capture = cvCaptureFromCAM(' + camera + '); \n' + \
            'if( !cvGrabFrame( block$id$_capture )){ printf("Cannot Grab Image from camera '+ camera +'"); }\n' + \
            'block$id$_frame = cvRetrieveFrame( block$id$_capture ); \n' + \
-           'block$id$_img_o1 = cvCloneImage( block$id$_frame );\n' + \
+           'block$id$_img_o0 = cvCloneImage( block$id$_frame );\n' + \
            'counter$id$++;\n' + \
            '}\n'
 

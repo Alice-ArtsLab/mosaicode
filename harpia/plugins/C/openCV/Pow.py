@@ -15,8 +15,6 @@ class Pow(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.exponent = 1
 
     # ----------------------------------------------------------------------
@@ -26,9 +24,9 @@ class Pow(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'cvPow(block$id$_img_i1, block$id$_img_o1, $exponent$);\n' + \
+            '\nif(block$id$_img_i0){\n' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'cvPow(block$id$_img_i0, block$id$_img_o0, $exponent$);\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------

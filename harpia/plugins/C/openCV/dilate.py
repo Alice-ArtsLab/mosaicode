@@ -15,8 +15,6 @@ class Dilate(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.masksize = "3x3"
         self.iterations = 1
 
@@ -27,8 +25,8 @@ class Dilate(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'int block$id$_arg_iterations = $iterations$;\n' + \
             'IplConvKernel * block$id$_arg_mask = cvCreateStructuringElementEx(' + \
                     str(self.masksize[0]) + ' , ' + \
@@ -37,10 +35,10 @@ class Dilate(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return '''
-if(block$id$_img_i1){
-    block$id$_img_o1 = cvCloneImage(block$id$_img_i1);
-    cvDilate(block$id$_img_i1,
-            block$id$_img_o1,
+if(block$id$_img_i0){
+    block$id$_img_o0 = cvCloneImage(block$id$_img_i0);
+    cvDilate(block$id$_img_i0,
+            block$id$_img_o0,
             block$id$_arg_mask,
             block$id$_arg_iterations);
 }

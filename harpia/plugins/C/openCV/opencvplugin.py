@@ -13,27 +13,27 @@ class OpenCVPlugin(Plugin):
         value = ""
         for x in self.get_description()["InTypes"]:
             if self.get_description()["InTypes"][x] == "HRP_IMAGE":
-                value += 'IplImage * block$id$_img_i' + str(x + 1) + ' = NULL;\n'
+                value += 'IplImage * block$id$_img_i' + str(x) + ' = NULL;\n'
             if self.get_description()["InTypes"][x] == "HRP_INT":
-                value += 'int block$id$_int_i' + str(x + 1) + ' = 0;\n'
+                value += 'int block$id$_int_i' + str(x) + ' = 0;\n'
             if self.get_description()["InTypes"][x] == "HRP_RECT":
-                value += 'CvRect block$id$_rect_i' + str(x + 1) + ' = cvRect( 0, 0, 1, 1);\n'
+                value += 'CvRect block$id$_rect_i' + str(x) + ' = cvRect( 0, 0, 1, 1);\n'
             if self.get_description()["InTypes"][x] == "HRP_POINT":
-                value += 'CvPoint block$id$_point_i' + str(x + 1) + ';\n'
+                value += 'CvPoint block$id$_point_i' + str(x) + ';\n'
             if self.get_description()["InTypes"][x] == "HRP_DOUBLE":
-                value += 'double block$id$_double_i' + str(x + 1) + ';\n'
+                value += 'double block$id$_double_i' + str(x) + ';\n'
 
         for x in self.get_description()["OutTypes"]:
             if self.get_description()["OutTypes"][x] == "HRP_IMAGE":
-                value += 'IplImage * block$id$_img_o' + str(x + 1) + ' = NULL;\n'
+                value += 'IplImage * block$id$_img_o' + str(x) + ' = NULL;\n'
             if self.get_description()["OutTypes"][x] == "HRP_INT":
-                value += 'int block$id$_int_o' + str(x + 1) + ' = 0;\n'
+                value += 'int block$id$_int_o' + str(x) + ' = 0;\n'
             if self.get_description()["OutTypes"][x] == "HRP_RECT":
-                value += 'CvRect block$id$_rect_o' + str(x + 1) + ' = cvRect( 0, 0, 1, 1);\n'
+                value += 'CvRect block$id$_rect_o' + str(x) + ' = cvRect( 0, 0, 1, 1);\n'
             if self.get_description()["OutTypes"][x] == "HRP_POINT":
-                value += 'CvPoint block$id$_point_o' + str(x + 1) + ' = cvPoint(0,0);\n'
+                value += 'CvPoint block$id$_point_o' + str(x) + ' = cvPoint(0,0);\n'
             if self.get_description()["OutTypes"][x] == "HRP_DOUBLE":
-                value += 'double block$id$_double_o' + str(x + 1) + ';\n'
+                value += 'double block$id$_double_o' + str(x) + ';\n'
 
         return value
 
@@ -42,10 +42,10 @@ class OpenCVPlugin(Plugin):
         value = ""
         for x in self.get_description()["InTypes"]:
             if self.get_description()["InTypes"][x] == "HRP_IMAGE":
-                value += 'cvReleaseImage(&block$id$_img_i' + str(x + 1) + ');\n'
+                value += 'cvReleaseImage(&block$id$_img_i' + str(x) + ');\n'
         for x in self.get_description()["OutTypes"]:
             if self.get_description()["OutTypes"][x] == "HRP_IMAGE":
-                value += 'cvReleaseImage(&block$id$_img_o' + str(x + 1) + ');\n'
+                value += 'cvReleaseImage(&block$id$_img_o' + str(x) + ');\n'
         return value
 
     # ----------------------------------------------------------------------

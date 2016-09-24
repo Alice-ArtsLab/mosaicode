@@ -15,8 +15,6 @@ class MinMax(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.minX = 0
         self.maxX = 500
         self.minY = 0
@@ -32,24 +30,24 @@ class MinMax(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        value = '\nif(block$id$_img_i1)\n{\n' + \
-                            '	double minVal,maxVal;\n' + \
-                            '	CvPoint minP,maxP;\n' + \
-                            '	block$id$_double_o1 = 0;\n' + \
-                            '	cvMinMaxLoc(block$id$_img_i1, &minVal, &maxVal, &minP, &maxP, NULL);\n'
+        value = '\nif(block$id$_img_i0)\n{\n' + \
+                '	double minVal,maxVal;\n' + \
+                '	CvPoint minP,maxP;\n' + \
+                '	block$id$_double_o0 = 0;\n' + \
+                '	cvMinMaxLoc(block$id$_img_i0, &minVal, &maxVal, &minP, &maxP, NULL);\n'
         if self.minORmax == 'max':
             value += '	minP = maxP;\n' + \
                     '	minVal = maxVal;\n'
 
-        value += '	block$id$_point_o2 = minP;\n'
+        value += '	block$id$_point_o1 = minP;\n'
 
         if self.criteria == "pos":
             value += '	if(minP.x >= $minX$ && minP.x <= $maxX$)\n' + \
                         '        if(minP.y >= $minY$ && minP.y <= $maxY$)\n' + \
-                        '        	block$id$_double_o1 = 1.0;\n'
+                        '        	block$id$_double_o0 = 1.0;\n'
         elif self.criteria == "val":
             value += '	if(minVal >= $minVal$ && minVal <= $maxVal$)\n' + \
-                        '        block$id$_double_o1 = 1.0;\n'
+                        '        block$id$_double_o0 = 1.0;\n'
         value += '}\n'
         
         return value

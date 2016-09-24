@@ -15,8 +15,6 @@ class GetSize(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -25,8 +23,8 @@ class GetSize(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1)\n{\n' + \
-             '	block$id$_rect_o1 = cvRect( 0, 0, block$id$_img_i1->width, block$id$_img_i1->height);\n' + \
+            '\nif(block$id$_img_i0)\n{\n' + \
+             '	block$id$_rect_o0 = cvRect( 0, 0, block$id$_img_i0->width, block$id$_img_i0->height);\n' + \
              '}\n'
 
     # ----------------------------------------------------------------------

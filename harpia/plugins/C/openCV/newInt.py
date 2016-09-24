@@ -15,8 +15,6 @@ class NewInt(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.intVal = 1
 
     # ----------------------------------------------------------------------
@@ -26,7 +24,7 @@ class NewInt(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         self.intVal = int(self.intVal)
-        return 'int  block$id$_int_o1 = $intVal$; // New Int Out\n'
+        return 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

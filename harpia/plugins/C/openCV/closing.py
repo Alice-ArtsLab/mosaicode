@@ -15,8 +15,6 @@ class Closing(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.masksize = "7x7"
 
     # ----------------------------------------------------------------------
@@ -26,32 +24,32 @@ class Closing(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'int block$id$_int_i2 = ' + self.masksize[0] + ';\n' + \
-            'int block$id$_int_i3 = ' + self.masksize[2] + ';\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'int block$id$_int_i1 = ' + self.masksize[0] + ';\n' + \
+            'int block$id$_int_i2 = ' + self.masksize[2] + ';\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplConvKernel * block$id$_arg_mask = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
+            '\nif(block$id$_img_i0){\n' + \
+            'if (block$id$_int_i1 % 2 == 0) block$id$_int_i1++;\n' + \
             'if (block$id$_int_i2 % 2 == 0) block$id$_int_i2++;\n' + \
-            'if (block$id$_int_i3 % 2 == 0) block$id$_int_i3++;\n' + \
             'block$id$_arg_mask = ' + \
-            'cvCreateStructuringElementEx(block$id$_int_i2 ,' + \
-            'block$id$_int_i3, 1, 1,CV_SHAPE_RECT,NULL);\n' + \
+            'cvCreateStructuringElementEx(block$id$_int_i1 ,' + \
+            'block$id$_int_i2, 1, 1,CV_SHAPE_RECT,NULL);\n' + \
             'IplImage * block$id$_auxImg;\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'block$id$_auxImg = cvCloneImage(block$id$_img_i1);\n' + \
-            'cvMorphologyEx(block$id$_img_i1,block$id$_img_o1,NULL,' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'block$id$_auxImg = cvCloneImage(block$id$_img_i0);\n' + \
+            'cvMorphologyEx(block$id$_img_i0, block$id$_img_o0, NULL,' + \
             'block$id$_arg_mask, CV_MOP_CLOSE, 1);\n}\n'
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
+        return 'cvReleaseImage(&block$id$_img_o0);\n' + \
                'cvReleaseStructuringElement(&block$id$_arg_mask);\n' + \
-               'cvReleaseImage(&block$id$_img_i1);\n'
+               'cvReleaseImage(&block$id$_img_i0);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

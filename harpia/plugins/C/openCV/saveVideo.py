@@ -15,8 +15,6 @@ class SaveVideo(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.filename = "~/Output.mpeg"
         self.framerate = 25.0
         self.codecSelection = "MPEG1"
@@ -28,8 +26,8 @@ class SaveVideo(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'CvVideoWriter* block$id$_vidWriter = NULL;\n'
 
     # ----------------------------------------------------------------------
@@ -52,18 +50,18 @@ class SaveVideo(OpenCVPlugin):
         if self.codecSelection == "FLV1":
             codecMacro = 'CV_FOURCC(\'F\',\'L\',\'V\',\'1\')'
         return \
-            '\nif(block$id$_img_i1){\n' + \
+            '\nif(block$id$_img_i0){\n' + \
             '	if(block$id$_vidWriter == NULL)//video writer not started up yet!\n' + \
             '		block$id$_vidWriter = cvCreateVideoWriter( "$filename$", ' + \
             codecMacro + ',$framerate$' + \
-            ', cvGetSize(block$id$_img_i1), 1 );\n' + \
-            '	cvWriteFrame( block$id$_vidWriter, block$id$_img_i1);\n' + \
-            '	block$id$_img_o1 = block$id$_img_i1;\n' + \
+            ', cvGetSize(block$id$_img_i0), 1 );\n' + \
+            '	cvWriteFrame( block$id$_vidWriter, block$id$_img_i0);\n' + \
+            '	block$id$_img_o0 = block$id$_img_i0;\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_i1); // SaveVideo Dealloc\n'
+        return 'cvReleaseImage(&block$id$_img_i0); // SaveVideo Dealloc\n'
 
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):

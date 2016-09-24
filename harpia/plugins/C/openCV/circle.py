@@ -9,8 +9,6 @@ class Circle(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.x0 = 100
         self.y0 = 100
         self.color = "#0000ffff0000"
@@ -25,10 +23,10 @@ class Circle(OpenCVPlugin):
         self.y0 = int(self.y0)
 
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
-            'int block$id$_int_i2 = $x0$;\n' + \
-            'int block$id$_int_i3 = $y0$;\n' 
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
+            'int block$id$_int_i1 = $x0$;\n' + \
+            'int block$id$_int_i2 = $y0$;\n' 
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -40,11 +38,11 @@ class Circle(OpenCVPlugin):
         green = int(green, 16) / 257
         blue = int(blue, 16) / 257
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'CvPoint center = cvPoint(block$id$_int_i2, block$id$_int_i3);\n' + \
+            '\nif(block$id$_img_i0){\n' + \
+            'CvPoint center = cvPoint(block$id$_int_i1, block$id$_int_i2);\n' + \
             'CvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red) + ',0);\n' + \
-            'cvCircle(block$id$_img_i1, center, 10, color, 1, 8, 0);\n' +\
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'cvCircle(block$id$_img_i0, center, 10, color, 1, 8, 0);\n' +\
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------

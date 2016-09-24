@@ -15,8 +15,6 @@ class LiveDelay(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.frameNumber = 5
 
     # ----------------------------------------------------------------------
@@ -27,8 +25,8 @@ class LiveDelay(OpenCVPlugin):
     def generate_vars(self):
         self.frameNumber = int(round(float(self.frameNumber)))
         value = \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'int i_$id$ = 0;\n' + \
             'IplImage * block$id$_buffer[$frameNumber$] = {'
         for idx in range(self.frameNumber):
@@ -41,19 +39,19 @@ class LiveDelay(OpenCVPlugin):
             value += 'block$id$_buffer[' + str(
                 idx) + '] = cvCreateImage( cvSize(640,480), 8, 3);\n'
             value += 'cvSetZero(block$id$_buffer[' + str(idx) + ']);\n'
-        value += 'block$id$_img_o1 = block$id$_buffer[' + str(self.frameNumber - 1) + '];\n'
+        value += 'block$id$_img_o0 = block$id$_buffer[' + str(self.frameNumber - 1) + '];\n'
 
         return value
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return '''
-if(block$id$_img_i1){
+if(block$id$_img_i0){
     cvReleaseImage(&(block$id$_buffer[i_$id$]));
-    block$id$_buffer[i_$id$] = cvCloneImage(block$id$_img_i1);
+    block$id$_buffer[i_$id$] = cvCloneImage(block$id$_img_i0);
     i_$id$++;
     i_$id$ %= $frameNumber$;
-    block$id$_img_o1 = block$id$_buffer[i_$id$];
+    block$id$_img_o0 = block$id$_buffer[i_$id$];
 }
 '''
 

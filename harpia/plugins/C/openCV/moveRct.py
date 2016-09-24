@@ -15,8 +15,6 @@ class MoveRct(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.offset_x = 0
         self.offset_y = 0
 
@@ -27,16 +25,16 @@ class MoveRct(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'CvRect block$id$_rect_i1;\n' + \
-            'CvPoint block$id$_point_i2;\n' + \
-            'CvRect block$id$_rect_o1;\n'
+            'CvRect block$id$_rect_i0;\n' + \
+            'CvPoint block$id$_point_i1;\n' + \
+            'CvRect block$id$_rect_o0;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-                'block$id$_rect_o1 = block$id$_rect_i1;\n' + \
-                'block$id$_rect_o1.x = block$id$_point_i2.x + $offset_x$;\n' + \
-                'block$id$_rect_o1.y = block$id$_point_i2.y + $offset_y$;\n'
+                'block$id$_rect_o0 = block$id$_rect_i0;\n' + \
+                'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
+                'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

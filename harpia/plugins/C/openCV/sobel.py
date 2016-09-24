@@ -15,8 +15,6 @@ class Sobel(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.masksize = 3
         self.xorder = 1
         self.yorder = 1
@@ -28,23 +26,23 @@ class Sobel(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_img_t = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'CvSize size$id$ = cvGetSize(block$id$_img_i1);\n'+ \
-            'block$id$_img_o1 = cvCreateImage(size$id$, IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n' + \
-            'cvSobel(block$id$_img_i1, block$id$_img_o1 ,$xorder$, $yorder$, $masksize$);\n'+ \
+            '\nif(block$id$_img_i0){\n' + \
+            'CvSize size$id$ = cvGetSize(block$id$_img_i0);\n'+ \
+            'block$id$_img_o0 = cvCreateImage(size$id$, IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n' + \
+            'cvSobel(block$id$_img_i0, block$id$_img_o0 ,$xorder$, $yorder$, $masksize$);\n'+ \
             '}\n'
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
-               'cvReleaseImage(&block$id$_img_i1);\n' + \
+        return 'cvReleaseImage(&block$id$_img_o0);\n' + \
+               'cvReleaseImage(&block$id$_img_i0);\n' + \
                'cvReleaseImage(&block$id$_img_t);\n'
 
     # ----------------------------------------------------------------------

@@ -15,8 +15,6 @@ class IsOnRect(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -25,12 +23,12 @@ class IsOnRect(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\n block$id$_double_o1 = 0.0;\n' + \
-            'if(block$id$_point_i1.x >= block$id$_rect_i2.x)\n' + \
-            '	if(block$id$_point_i1.y >= block$id$_rect_i2.y)\n' + \
-            '		if(block$id$_point_i1.x < block$id$_rect_i2.x + block$id$_rect_i2.width)\n' + \
-            '			if(block$id$_point_i1.y < block$id$_rect_i2.y + block$id$_rect_i2.height)\n' + \
-            '				block$id$_double_o1 = 1.0;\n'
+            '\n block$id$_double_o0 = 0.0;\n' + \
+            'if(block$id$_point_i0.x >= block$id$_rect_i1.x)\n' + \
+            '	if(block$id$_point_i0.y >= block$id$_rect_i1.y)\n' + \
+            '		if(block$id$_point_i0.x < block$id$_rect_i1.x + block$id$_rect_i1.width)\n' + \
+            '			if(block$id$_point_i0.y < block$id$_rect_i1.y + block$id$_rect_i1.height)\n' + \
+            '				block$id$_double_o0 = 1.0;\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

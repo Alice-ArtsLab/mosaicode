@@ -9,8 +9,6 @@ class Or(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
 
         # --------------------------Help Text--------------------------------------------
     def get_help(self):#Função que chama a help
@@ -25,11 +23,11 @@ class Or(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1 && block$id$_img_i2){\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'adjust_images_size(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1);\n' + \
-            'cvOr(block$id$_img_i1, block$id$_img_i2, block$id$_img_o1,0);\n' + \
-            'cvResetImageROI(block$id$_img_o1);\n'+ \
+            'if(block$id$_img_i0 && block$id$_img_i1){\n' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'adjust_images_size(block$id$_img_i0, block$id$_img_i1, block$id$_img_o0);\n' + \
+            'cvOr(block$id$_img_i0, block$id$_img_i1, block$id$_img_o0,0);\n' + \
+            'cvResetImageROI(block$id$_img_o0);\n'+ \
             '}\n'
 
     # ----------------------------------------------------------------------

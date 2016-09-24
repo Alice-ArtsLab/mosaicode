@@ -15,8 +15,6 @@ class Laplace(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.masksize = "3"
 
     # ----------------------------------------------------------------------
@@ -28,19 +26,19 @@ class Laplace(OpenCVPlugin):
     def generate_vars(self):
         self.masksize = int(self.masksize)
         return \
-            'IplImage * block$id$_img_i1 = NULL; //Laplace In \n' + \
-            'IplImage * block$id$_img_o1 = NULL; //Laplace Out \n' + \
-            'int block$id$_int_i2 = $masksize$; // Laplace Mask Size\n'
+            'IplImage * block$id$_img_i0 = NULL; //Laplace In \n' + \
+            'IplImage * block$id$_img_o0 = NULL; //Laplace Out \n' + \
+            'int block$id$_int_i1 = $masksize$; // Laplace Mask Size\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'block$id$_int_i2 = (block$id$_int_i2 > 31)? 31 : block$id$_int_i2; // Laplace Mask Constraint\n' + \
-            'block$id$_int_i2 = (block$id$_int_i2 % 2 == 0)? block$id$_int_i2 + 1 : block$id$_int_i2; // Only Odd\n' + \
-            'CvSize size$id$ = cvGetSize(block$id$_img_i1);\n'+ \
-            'block$id$_img_o1 = cvCreateImage(size$id$, IPL_DEPTH_32F,block$id$_img_i1->nChannels);\n' + \
-            'cvLaplace(block$id$_img_i1, block$id$_img_o1 , block$id$_int_i2 );}\n'
+            '\nif(block$id$_img_i0){\n' + \
+            'block$id$_int_i1 = (block$id$_int_i1 > 31)? 31 : block$id$_int_i1; // Laplace Mask Constraint\n' + \
+            'block$id$_int_i1 = (block$id$_int_i1 % 2 == 0)? block$id$_int_i1 + 1 : block$id$_int_i1; // Only Odd\n' + \
+            'CvSize size$id$ = cvGetSize(block$id$_img_i0);\n'+ \
+            'block$id$_img_o0 = cvCreateImage(size$id$, IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n' + \
+            'cvLaplace(block$id$_img_i0, block$id$_img_o0 , block$id$_int_i1);}\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

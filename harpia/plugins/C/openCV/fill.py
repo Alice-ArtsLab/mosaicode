@@ -15,8 +15,6 @@ class Fill(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.color = "#0000ffff0000"
 
     # ----------------------------------------------------------------------
@@ -33,10 +31,10 @@ class Fill(OpenCVPlugin):
         green = int(green, 16) / 257
         blue = int(blue, 16) / 257
         return \
-            'if(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
+            'if(block$id$_img_i0){\n' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'CvScalar color = cvScalar('+ str(blue) +','+ str(green) +','+ str(red) + ',0);\n' + \
-            'cvSet(block$id$_img_o1,color,NULL);\n' + \
+            'cvSet(block$id$_img_o0, color, NULL);\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------

@@ -15,8 +15,6 @@ class Resize(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.method = "CV_INTER_LINEAR"
 
     # ----------------------------------------------------------------------
@@ -26,10 +24,10 @@ class Resize(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'if(block$id$_img_i1){\n' + \
-            'CvSize size$id$ = cvSize(block$id$_rect_i2.width,block$id$_rect_i2.height);\n' + \
-            'block$id$_img_o1 = cvCreateImage(size$id$,block$id$_img_i1->depth,block$id$_img_i1->nChannels);\n' + \
-            'cvResize(block$id$_img_i1, block$id$_img_o1, $method$);\n' + \
+            'if(block$id$_img_i0){\n' + \
+            'CvSize size$id$ = cvSize(block$id$_rect_i1.width,block$id$_rect_i1.height);\n' + \
+            'block$id$_img_o0 = cvCreateImage(size$id$,block$id$_img_i0->depth,block$id$_img_i0->nChannels);\n' + \
+            'cvResize(block$id$_img_i0, block$id$_img_o0, $method$);\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------

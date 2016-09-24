@@ -15,8 +15,6 @@ class NewDouble(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.doubleVal = 1
 
     # ----------------------------------------------------------------------
@@ -25,7 +23,7 @@ class NewDouble(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
-        return 'double block$id$_double_o1 = $doubleVal$; // New Double Out\n'
+        return 'double block$id$_double_o0 = $doubleVal$; // New Double Out\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

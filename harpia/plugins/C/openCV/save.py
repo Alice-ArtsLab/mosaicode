@@ -9,16 +9,14 @@ class Save(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.filename = ""
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            '\nif(block$id$_img_i1)\n' + \
-            'cvSaveImage("$filename$" ,block$id$_img_i1);\n'
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'if(block$id$_img_i0)\n' + \
+            'cvSaveImage("$filename$" ,block$id$_img_i0);\n'
 
 # ------------------------------------------------------------------------------
     def get_description(self):

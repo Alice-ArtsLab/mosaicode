@@ -15,8 +15,6 @@ class NewImage(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.width = "640"
         self.height = "480"
 
@@ -28,8 +26,8 @@ class NewImage(OpenCVPlugin):
     def generate_function_call(self):
         return \
             'CvSize size = cvSize($width$,$height$);\n' + \
-            'block$id$_img_o1 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
-            'cvSetZero(block$id$_img_o1);\n'
+            'block$id$_img_o0 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
+            'cvSetZero(block$id$_img_o0);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

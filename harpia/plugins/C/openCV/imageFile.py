@@ -15,8 +15,6 @@ class ImageFile(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.filename = "/usr/share/harpia/images/lenna.png"
 
     # ----------------------------------------------------------------------
@@ -27,7 +25,7 @@ class ImageFile(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'block$id$_img_o1 = cvLoadImage("$filename$",-1);\n'
+            'block$id$_img_o0 = cvLoadImage("$filename$",-1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

@@ -15,8 +15,6 @@ class Smooth(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.smooth_type = "CV_GAUSSIAN"
         self.param1 = 7
         self.param2 = 9
@@ -28,21 +26,16 @@ class Smooth(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n'
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'cvSmooth(block$id$_img_i1, block$id$_img_o1 ,$smooth_type$,$param1$,$param2$,0,0);\n' + \
+            '\nif(block$id$_img_i0){\n' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'cvSmooth(block$id$_img_i0, block$id$_img_o0 ,$smooth_type$,$param1$,$param2$,0,0);\n' + \
             '}\n'
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
-               'cvReleaseImage(&block$id$_img_i1);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

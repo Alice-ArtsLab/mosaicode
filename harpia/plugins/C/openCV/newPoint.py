@@ -15,8 +15,6 @@ class NewPoint(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.x0 = 0
         self.y0 = 0
 
@@ -26,12 +24,12 @@ class NewPoint(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
-        return 'CvPoint block$id$_point_o1 = cvPoint($x0$,$y0$);\n'
+        return 'CvPoint block$id$_point_o0 = cvPoint($x0$,$y0$);\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'block$id$_point_o1 = cvPoint($x0$,$y0$);\n'
+            'block$id$_point_o0 = cvPoint($x0$,$y0$);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):

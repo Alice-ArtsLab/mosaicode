@@ -15,8 +15,6 @@ class intValue(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.intVal = 1
         self.maxVal = 31
         self.label = "Value"
@@ -30,13 +28,13 @@ class intValue(OpenCVPlugin):
     def generate_vars(self):
         self.intVal = int(self.intVal)
         return \
-            'int  block$id$_int_o1 = $intVal$; // New Int Out\n'
+            'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
             'cvNamedWindow("$window_name$",CV_WINDOW_AUTOSIZE );\n' + \
-            'cvCreateTrackbar("$label$", "$window_name$", &block$id$_int_o1, $maxVal$, NULL);\n'
+            'cvCreateTrackbar("$label$", "$window_name$", &block$id$_int_o0, $maxVal$, NULL);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -65,7 +63,7 @@ class intValue(OpenCVPlugin):
                         "upper":65535,
                         "step":1
                             },
-            "maxVal":{"name": "Value",
+            "maxVal":{"name": "Max Value",
                         "type": HARPIA_INT,
                         "value": self.maxVal,
                         "lower":0,

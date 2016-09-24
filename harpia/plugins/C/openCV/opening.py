@@ -15,8 +15,6 @@ class Opening(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.id = -1
-        self.type = self.__class__.__module__
         self.masksize = "3x3"
 
     # ----------------------------------------------------------------------
@@ -26,8 +24,8 @@ class Opening(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_vars(self):
         return \
-            'IplImage * block$id$_img_i1 = NULL;\n' + \
-            'IplImage * block$id$_img_o1 = NULL;\n' + \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplConvKernel * block$id$' + \
             '_arg_mask = cvCreateStructuringElementEx(' + self.masksize[0] + ' , ' + \
             self.masksize[2] + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
@@ -35,18 +33,18 @@ class Opening(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            '\nif(block$id$_img_i1){\n' + \
+            '\nif(block$id$_img_i0){\n' + \
             'IplImage * block$id$_auxImg;' + \
-            'block$id$_img_o1 = cvCloneImage(block$id$_img_i1);\n' + \
-            'block$id$_auxImg = cvCloneImage(block$id$_img_i1);\n' + \
-            'cvMorphologyEx(block$id$_img_i1,block$id$_img_o1,NULL,' + \
+            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
+            'block$id$_auxImg = cvCloneImage(block$id$_img_i0);\n' + \
+            'cvMorphologyEx(block$id$_img_i0, block$id$_img_o0, NULL,' + \
             'block$id$_arg_mask, CV_MOP_OPEN, 1);\n}\n'
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_o1);\n' + \
+        return 'cvReleaseImage(&block$id$_img_o0);\n' + \
                'cvReleaseStructuringElement(&block$id$_arg_mask);\n' + \
-               'cvReleaseImage(&block$id$_img_i1);\n'
+               'cvReleaseImage(&block$id$_img_i0);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
