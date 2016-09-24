@@ -1,8 +1,9 @@
 <harpia>
 <version value='0.0.1' />
 <zoom value='1.0' />
+<language value='C' />
 <blocks>
-  	<block type='harpia.plugins.newInt' id='1'>
+  	<block type='harpia.plugins.C.openCV.newInt' id='1'>
 		<position x="200" y="0"/>
 		<property name='intVal' value='1' />
 	</block>

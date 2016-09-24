@@ -1,17 +1,18 @@
 <harpia>
 <version value='0.0.1' />
 <zoom value='1.0' />
+<language value='C' />
 <blocks>
-  	<block type='harpia.plugins.equalizeHistogram' id='1'>
+  	<block type='harpia.plugins.C.openCV.equalizeHistogram' id='1'>
 		<position x="200" y="0"/>
 	</block>
-	<block type='harpia.plugins.imageFile' id='2'>
+	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.show' id='3'>
+	<block type='harpia.plugins.C.openCV.show' id='3'>
 		<position x="400" y="0"/>
-		<property name='title' value='My Image' />
+		<property name='title' value='My Image - Equalize Histogram' />
 	</block>
 </blocks>
 <connections>

@@ -1,25 +1,26 @@
 <harpia>
 <version value='0.0.1' />
 <zoom value='1.0' />
+<language value='C' />
 <blocks>
-  	<block type='harpia.plugins.composeRGB' id='1'>
+  	<block type='harpia.plugins.C.openCV.composeRGB' id='1'>
 		<position x="200" y="0"/>
 	</block>
-	<block type='harpia.plugins.imageFile' id='2'>
+	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.imageFile' id='3'>
+	<block type='harpia.plugins.C.openCV.imageFile' id='3'>
 		<position x="0" y="100"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.imageFile' id='4'>
+	<block type='harpia.plugins.C.openCV.imageFile' id='4'>
 		<position x="0" y="200"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.show' id='5'>
+	<block type='harpia.plugins.C.openCV.show' id='5'>
 		<position x="400" y="0"/>
-		<property name='title' value='My Image' />
+		<property name='title' value='My Image - Compose RGB' />
 	</block>
 </blocks>
 <connections>

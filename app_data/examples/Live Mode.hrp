@@ -1,14 +1,15 @@
 <harpia>
 <version value='0.0.1' />
 <zoom value='1.0' />
+<language value='C' />
 <blocks>
-  	<block type='harpia.plugins.liveMode' id='1'>
+  	<block type='harpia.plugins.C.openCV.liveMode' id='1'>
 		<position x="200" y="0"/>
 		<property name='camera' value='/dev/video0' />
 	</block>
-	<block type='harpia.plugins.show' id='2'>
+	<block type='harpia.plugins.C.openCV.show' id='2'>
 		<position x="400" y="0"/>
-		<property name='title' value='My Image' />
+		<property name='title' value='My Image - Live Mode' />
 	</block>
 </blocks>
 <connections>

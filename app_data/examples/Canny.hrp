@@ -1,41 +1,42 @@
 <harpia>
 <version value='0.0.1' />
 <zoom value='1.0' />
+<language value='C' />
 <blocks>
-  	<block type='harpia.plugins.canny' id='1'>
+  	<block type='harpia.plugins.C.openCV.canny' id='1'>
 		<position x="200" y="0"/>
 		<property name='threshold1' value='16' />
 		<property name='threshold2' value='33' />
 		<property name='apertureSize' value='3' />
 	</block>
-	<block type='harpia.plugins.imageFile' id='2'>
+	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.intValue' id='3'>
+	<block type='harpia.plugins.C.openCV.intValue' id='3'>
 		<position x="0" y="100"/>
 		<property name='maxVal' value='31' />
-		<property name='window_name' value='My Image' />
+		<property name='window_name' value='My Image - Canny' />
 		<property name='intVal' value='1' />
-		<property name='label' value='Value' />
+		<property name='label' value='Value - 1' />
 	</block>
-	<block type='harpia.plugins.intValue' id='4'>
+	<block type='harpia.plugins.C.openCV.intValue' id='4'>
 		<position x="0" y="200"/>
 		<property name='maxVal' value='31' />
-		<property name='window_name' value='My Image' />
+		<property name='window_name' value='My Image - Canny' />
 		<property name='intVal' value='1' />
-		<property name='label' value='Value' />
+		<property name='label' value='Value - 2' />
 	</block>
-	<block type='harpia.plugins.intValue' id='5'>
+	<block type='harpia.plugins.C.openCV.intValue' id='5'>
 		<position x="0" y="300"/>
 		<property name='maxVal' value='31' />
-		<property name='window_name' value='My Image' />
+		<property name='window_name' value='My Image - Canny' />
 		<property name='intVal' value='1' />
-		<property name='label' value='Value' />
+		<property name='label' value='Value - 3' />
 	</block>
-	<block type='harpia.plugins.show' id='6'>
+	<block type='harpia.plugins.C.openCV.show' id='6'>
 		<position x="400" y="0"/>
-		<property name='title' value='My Image' />
+		<property name='title' value='My Image - Canny' />
 	</block>
 </blocks>
 <connections>
