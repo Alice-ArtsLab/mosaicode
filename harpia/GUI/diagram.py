@@ -241,7 +241,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def load_block(self, plugin):
         if self.language != None and self.language != plugin.language:
             return False
-        if self.language == None:
+        if self.language == None or self.language == 'None':
             self.language = plugin.language
         self.do("Insert block")
         new_block = Block(self, plugin)

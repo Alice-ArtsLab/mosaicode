@@ -18,6 +18,10 @@ class DiagramModel(object):
 
     #----------------------------------------------------------------------
     def add_block(self, block):
+        if self.language != None and self.language != block.language:
+            return False
+        if self.language == None or self.language == 'None':
+            self.language = block.language
         block.set_id(self.block_id)
         self.blocks[self.block_id] = block
         self.block_id = self.block_id + 1
