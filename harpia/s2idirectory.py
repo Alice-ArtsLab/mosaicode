@@ -51,7 +51,6 @@ properties = Preferences()
 
 block = {}
 list_of_examples = []
-recent_files = []
 
 def load_blocks():
     for importer, modname, ispkg in pkgutil.walk_packages(
@@ -79,9 +78,6 @@ def load():
     list_of_examples.sort()
     
     PreferencesControl(properties).load()
-    for recent in properties.get_recent_files():
-        recent_files.append(recent)
-
 
 connections = {
         "HRP_INT":{

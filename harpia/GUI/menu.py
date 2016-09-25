@@ -122,7 +122,7 @@ class Menu(Gtk.MenuBar):
     def update_recent_file(self):
         for widget in self.recent_files_menu.get_children():
             self.recent_files_menu.remove(widget)
-        for recent_file in harpia.s2idirectory.properties.get_recent_files():
+        for recent_file in harpia.s2idirectory.properties.get_recent_files_as_array():
             self.__add_recent_file(recent_file)
 
     # ----------------------------------------------------------------------

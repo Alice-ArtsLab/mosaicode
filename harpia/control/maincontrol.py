@@ -107,6 +107,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def exit(self, widget = None, data = None):
+        PreferencesControl(properties).save()
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:

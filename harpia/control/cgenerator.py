@@ -33,7 +33,6 @@ from threading import Thread
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.RunPrg import RunPrg
 from harpia.constants import *
 from harpia.s2idirectory import *
 
@@ -194,7 +193,7 @@ class CGenerator(CodeGenerator):
             i.close()
         else:
             command = "LD_LIBRARY_PATH=/lib/ ./" + self.filename + " 2> Error" + self.error_log_file
-            program = Thread(target=os.system(command))
+            program = Thread(target=os.system, args=(command,))
             program.start()
             while program.isAlive():
                 program.join(0.4)

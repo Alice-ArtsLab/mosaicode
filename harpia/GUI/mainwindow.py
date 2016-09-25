@@ -138,6 +138,7 @@ class MainWindow(Gtk.Window):
         s2idirectory.properties.set_vpaned_left(self.vpaned_left.get_position())
         self.work_area.resize(data)
 
+    #----------------------------------------------------------------------
     def set_title(self, title):
         Gtk.Window.set_title(self, "Harpia (" + title + ")")
 #----------------------------------------------------------------------
