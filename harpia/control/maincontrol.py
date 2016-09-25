@@ -205,7 +205,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return False
-        if not diagram.insert_block(block):
+        if not diagram.add_block(block):
             message = "Block language is different from diagram language.\n" + \
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language

@@ -227,7 +227,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, args):
-        self.diagram.clicked_input(self, args)
+        self.diagram.end_connection(self, args)
         return True
 
     #----------------------------------------------------------------------
@@ -260,7 +260,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
-        self.diagram.clicked_output(self, args)
+        self.diagram.start_connection(self, args)
         return True
 
     #----------------------------------------------------------------------
@@ -297,15 +297,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def update_flow(self):
-        sourceConnectors = self.diagram.get_connectors_to(self)
-        distinct_con = []
         self.has_flow = True
+        sourceConnectors = self.diagram.get_connectors_to_block(self)
+        distinct_con = []
         for con in sourceConnectors:
             if con.to_block_in not in distinct_con:
-                print "Distinct", con.to_block_in
                 distinct_con.append(con.to_block_in)
         for con in self.get_description()["InTypes"]:
-            print con
             if con not in distinct_con:
                 self.has_flow = False
                 break
@@ -328,9 +326,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def move(self, x, y):
-        self.diagram.do("Move block")
         self.translate(x, y)
-        self.diagram.set_modified(True)
 
     #----------------------------------------------------------------------
     def delete(self):
@@ -345,8 +341,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     #----------------------------------------------------------------------
     def set_properties(self, data):
         self.diagram.do("Set block property")
-        self.get_plugin().set_properties(data)
-        self.diagram.set_modified(True)
+        BlockModel.set_properties(self, data)
 
     #----------------------------------------------------------------------
     def get_properties(self):

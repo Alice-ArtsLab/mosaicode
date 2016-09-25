@@ -78,7 +78,7 @@ class DiagramControl():
             new_block.set_id(block_id)
             new_block.x = float(x)
             new_block.y = float(y)
-            self.diagram.load_block(new_block)
+            self.diagram.add_block(new_block)
 
         connections = xml_loader.getTag("harpia").getTag("connections").getChildTags("connection")
         for conn in connections:
@@ -92,6 +92,7 @@ class DiagramControl():
                                     to_block,
                                     (int(to_block_in) - 1))
         self.diagram.update_scrolling()
+        self.diagram.reset_undo()
 
 # ----------------------------------------------------------------------
     def save(self, file_name=None):  # saving project
