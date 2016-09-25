@@ -32,6 +32,8 @@ class PreferencesControl():
                     pass
             if prop.getAttr("name") == "default_directory":
                 self.hp.set_default_directory(prop.getAttr("value"))
+            if prop.getAttr("name") == "default_filename":
+                self.hp.set_default_filename(prop.getAttr("value"))
             if prop.getAttr("name") == "error_log_file":
                 self.hp.set_error_log_file(prop.getAttr("value"))
             if prop.getAttr("name") == "width":
@@ -51,6 +53,7 @@ class PreferencesControl():
         conf = "<HarpiaProperties>\n"
         conf += "<property name='recent_files' value=\"" + str(map(str, self.hp.get_recent_files())) + "\"/>\n"
         conf += "<property name='default_directory' value='" + self.hp.get_default_directory() + "'/>\n"
+        conf += "<property name='default_filename' value='" + self.hp.get_default_filename() + "'/>\n"
         conf += "<property name='error_log_file' value='" + self.hp.get_error_log_file() + "'/>\n"
         conf += "<property name='width' value='" + str(self.hp.get_width()) + "'/>\n"
         conf += "<property name='height' value='" + str(self.hp.get_height()) + "'/>\n"

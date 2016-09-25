@@ -6,11 +6,14 @@ from harpia.control.preferencescontrol import *
 class Preferences(object):
 
     def __init__(self):
-        self.__recent_files = []
-        self.__default_directory = "/tmp/"
-        self.__error_log_file = "ErrorLog"
         self.conf_file_path = "~/.harpiaConf.xml"
         self.control = PreferencesControl(self)
+        self.__recent_files = []
+        self.__default_directory = "/tmp/"
+        self.__default_filename = "harpia%d"
+        self.__error_log_file = "ErrorLog"
+
+        # GUI stuff
         self.__width = 900
         self.__height = 500
         self.__hpaned_work_area = 150
@@ -43,6 +46,15 @@ class Preferences(object):
     # ----------------------------------------------------------------------
     def set_default_directory(self, default_directory):
         self.__default_directory = default_directory
+        self.control.save()
+
+    # ----------------------------------------------------------------------
+    def get_default_filename(self):
+        return self.__default_filename
+
+    # ----------------------------------------------------------------------
+    def set_default_filename(self, default_filename):
+        self.__default_filename = default_filename
         self.control.save()
 
     # ----------------------------------------------------------------------

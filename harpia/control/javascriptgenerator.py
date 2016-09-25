@@ -110,9 +110,9 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     #----------------------------------------------------------------------
     def save_code(self):
-        harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name)
+        harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name + self.filename)
         self.change_directory()
-        codeFile = open(self.dir_name + '.html', 'w')
+        codeFile = open(self.filename + '.html', 'w')
         code = self.generate_code()
         codeFile.write(code)
         codeFile.close()
@@ -127,7 +127,7 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
         harpia.s2idirectory.Log.log("Executing Code")
         self.compile()
         self.change_directory()
-        result = webbrowser.open_new(self.dir_name + '.html')
+        result = webbrowser.open_new(self.filename + '.html')
         self.return_to_old_directory()
 
 #-------------------------------------------------------------------------------

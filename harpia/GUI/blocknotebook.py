@@ -20,9 +20,11 @@ class BlockNotebook(Gtk.Notebook):
         languages = []
         self.tabs = []
         for x in s2idirectory.block:
-            if s2idirectory.block[x].language in languages:
+            name = s2idirectory.block[x].language
+            name += "/" + s2idirectory.block[x].framework
+            if name in languages:
                 continue
-            languages.append(s2idirectory.block[x].language)
+            languages.append(name)
         for language in languages:
             treeview = BlocksTreeView(self.main_window, language)
             self.append_page(treeview, Gtk.Label(language))

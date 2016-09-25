@@ -24,7 +24,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.blocks_tree_view = Gtk.TreeView.new_with_model(self.filter)
         self.add(self.blocks_tree_view)
 
-        col = Gtk.TreeViewColumn("Available BLocks")
+        col = Gtk.TreeViewColumn("Available Blocks")
         self.blocks_tree_view.append_column(col)
 
         cellrenderimage = Gtk.CellRendererPixbuf()
@@ -40,16 +40,19 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.blocks_tree_view.connect("row-activated", self.__on_row_activated)
         self.blocks_tree_view.connect("cursor-changed", self.__on_tree_selection_changed)
 
-        self.blocks_tree_view.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK,
-                                                                [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
-                                                                Gdk.DragAction.DEFAULT |
-                                                                Gdk.DragAction.COPY)
+        self.blocks_tree_view.enable_model_drag_source(
+                Gdk.ModifierType.BUTTON1_MASK,
+                [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
+                Gdk.DragAction.DEFAULT |
+                Gdk.DragAction.COPY)
         self.blocks_tree_view.connect("drag-data-get", self.__drag_data)
         self.blocks = {}
 
         # Load blocks
         for x in s2idirectory.block:
-            if s2idirectory.block[x].language != language:
+            name = s2idirectory.block[x].language
+            name += "/" + s2idirectory.block[x].framework
+            if name != language:
                 continue
             self.blocks[x] = s2idirectory.block[x]
             self.__add_item(s2idirectory.block[x]())

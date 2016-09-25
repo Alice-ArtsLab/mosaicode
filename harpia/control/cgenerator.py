@@ -29,6 +29,7 @@
 import os
 import time
 import gi
+from threading import Thread
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
@@ -128,27 +129,27 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def save_code(self):
-        harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name)
+        harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name + self.filename)
         self.change_directory()
-        codeFilename = self.dir_name + '.c'
+        codeFilename = self.filename + '.c'
         codeFile = open(codeFilename, 'w')
         code = self.generate_code()
         codeFile.write(code)
         codeFile.close()
 
         if os.name == "nt":
-            makeFilename = 'Makefile' + self.dir_name + '.bat'
+            makeFilename = self.filename +'.Makefile.bat'
             makeFileEntry = '"/\\bin\\gcc.exe" ' + codeFilename + \
                     " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
             makeFile = open(makeFilename, 'w')
             makeFile.write(makeFileEntry)
             makeFile.close()
         else:
-            makeFilename = 'Makefile.' + self.dir_name
+            makeFilename = self.filename +'.Makefile'
             makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib/;\n"
             makeFileEntry += "export PKG_CONFIG_PATH=/lib/pkgconfig/;\n"
             makeFileEntry += "g++ " + codeFilename + " -o " + \
-                    codeFilename[:-2] + " `pkg-config --cflags --libs opencv`\n"
+                    self.filename + " `pkg-config --cflags --libs opencv`\n"
             makeFile = open(makeFilename, 'w')
             makeFile.write(makeFileEntry)
             makeFile.close()
@@ -161,15 +162,14 @@ class CGenerator(CodeGenerator):
         self.save_code()
         self.change_directory()
         if os.name == "nt":
-            i, o = os.popen4('Makefile' + self.dir_name + '.bat')
+            i, o = os.popen4(self.filename +'.Makefile.bat')
 
             o.readlines()
             o.close()
             i.close()
         else:
-            i, o = os.popen4("sh " + 'Makefile.' + self.dir_name)
+            i, o = os.popen4("sh " + self.filename +'.Makefile')
 
-            ## appending compile errors too.. helps finding bugs! =]
             CompilingErrors = o.readlines()
             harpia.s2idirectory.Log.log("Errors "  +  str(CompilingErrors))
 
@@ -193,7 +193,8 @@ class CGenerator(CodeGenerator):
             o.close()
             i.close()
         else:
-            program = RunPrg("LD_LIBRARY_PATH=/lib/ ./" + self.dir_name)
+            command = "LD_LIBRARY_PATH=/lib/ ./" + self.filename + " 2> Error" + self.error_log_file
+            program = Thread(target=os.system(command))
             program.start()
             while program.isAlive():
                 program.join(0.4)
@@ -201,7 +202,7 @@ class CGenerator(CodeGenerator):
                     Gtk.main_iteration()
 
         try:
-            o = open("RunErrorLog", "r")
+            o = open("Run" + self.error_log_file, "r")
             Error = ''
             errorList = o.readlines()
             for element in errorList:
