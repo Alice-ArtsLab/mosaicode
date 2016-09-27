@@ -19,8 +19,8 @@ class NewImage(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'CvSize size = cvSize($width$,$height$);\n' + \
-            'block$id$_img_o0 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
+            'CvSize size$id$ = cvSize($width$,$height$);\n' + \
+            'block$id$_img_o0 = cvCreateImage(size$id$,IPL_DEPTH_8U,3);\n' + \
             'cvSetZero(block$id$_img_o0);\n'
 
     # ----------------------------------------------------------------------

@@ -21,6 +21,8 @@ class Show(OpenCVPlugin):
         code = OpenCVPlugin.generate_vars(self)
         if self.window_type == "Window Size":
             code += 'cvNamedWindow("$title$",CV_WINDOW_NORMAL);\n'
+        elif self.window_type == "Resizable Window":
+            code += 'cvNamedWindow("$title$",CV_WINDOW_NORMAL);\n'
         else:
             code += 'cvNamedWindow("$title$",CV_WINDOW_AUTOSIZE);\n'
         return  code
@@ -55,7 +57,7 @@ class Show(OpenCVPlugin):
         "window_type":{"name":"Window Type",
                 "type":HARPIA_COMBO,
                 "value": self.window_type,
-                "values": ["Window Size", "Image Size"]
+                "values": ["Window Size", "Image Size", "Resizable Window"]
                     }
         }
 

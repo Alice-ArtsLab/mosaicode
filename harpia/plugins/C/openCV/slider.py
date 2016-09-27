@@ -4,7 +4,7 @@
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
-class intValue(OpenCVPlugin):
+class Slider(OpenCVPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
@@ -32,7 +32,7 @@ class intValue(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': 'Int Value',
+        return {'Label': 'Slider',
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
