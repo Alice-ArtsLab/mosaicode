@@ -10,19 +10,30 @@ class Show(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.title = "My Image"
+        self.window_type = "Image Size"
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
         return "Mostra uma imagem da cadeia de processamento de imagens."
 
     # ----------------------------------------------------------------------
+    def generate_vars(self):
+        code = OpenCVPlugin.generate_vars(self)
+        if self.window_type == "Window Size":
+            code += 'cvNamedWindow("$title$",CV_WINDOW_NORMAL);\n'
+        else:
+            code += 'cvNamedWindow("$title$",CV_WINDOW_AUTOSIZE);\n'
+        return  code
+
+    # ----------------------------------------------------------------------
     def generate_function_call(self):
-        return \
-            '\nif(block$id$_img_i0){\n' + \
+        code = '\nif(block$id$_img_i0){\n' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
-            'cvNamedWindow("$title$",CV_WINDOW_AUTOSIZE );\n' + \
-            'cvShowImage("$title$",block$id$_img_i0);\n' + \
-            '\n}\n'
+            'cvShowImage("$title$",block$id$_img_i0);\n'
+        if self.window_type == "Window Size":
+            code += 'cvSetWindowProperty("$title$", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);\n'
+        code += '\n}\n'
+        return code
 
     # ----------------------------------------------------------------------
     def get_description(self):
@@ -40,6 +51,11 @@ class Show(OpenCVPlugin):
         "title":{"name": "Window Title",
                     "type": HARPIA_STRING,
                     "value": self.title
+                    },
+        "window_type":{"name":"Window Type",
+                "type":HARPIA_COMBO,
+                "value": self.window_type,
+                "values": ["Window Size", "Image Size"]
                     }
         }
 
