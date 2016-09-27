@@ -87,14 +87,14 @@ class CGenerator(CodeGenerator):
         for header_code in temp_header:
             header += header_code
 
-        header += "\nint main(int argc, char ** argv)\n{"
-
+        header += "\nint main(int argc, char ** argv){\n"
+        header += "char key = ' ';\n"
         declaration_block = "\n//declaration block\n"
 
         for var in self.declarations:
             declaration_block += var
 
-        declaration_block += 'while(((char)cvWaitKey(' + \
+        declaration_block += 'while((key = (char)cvWaitKey(' + \
                 str(int((1.0 / FRAMERATE) * 1000.0)) + \
                 ')) != 27) \n {\t \n'
 
