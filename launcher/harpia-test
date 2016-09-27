@@ -7,7 +7,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
-from harpia import s2idirectory
+from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
 from harpia.model.connectionmodel import ConnectionModel
 from harpia.control.diagramcontrol import DiagramControl
@@ -28,8 +28,8 @@ class Log(object):
 def main(argv):
 
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
-    s2idirectory.load()
-    s2idirectory.Log = Log()
+    System()
+    System.set_log(Log())
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-x", "--examples", help="Generate examples", action='store_true')
@@ -41,8 +41,8 @@ def main(argv):
         print"\nHelp\tGenerate  Description\t Properties\tLabel"
         print"====\t========  ===========\t ==========\t=====\n"
 
-    for key in s2idirectory.block:
-        obj = s2idirectory.block[key]()
+    for key in System.blocks:
+        obj = System.blocks[key]()
         print "Working with", obj.type
         if obj.language != "C":
             print "-- Ignoring block", obj.type
@@ -53,23 +53,24 @@ def main(argv):
 
         obj.x = 200
         diagram = DiagramModel()
+        diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
         diagram.add_block(obj)
  
         cont = 0
         intypes = obj.get_description()["InTypes"]
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
-                block = s2idirectory.block["harpia.plugins.C.openCV.imageFile"]()
+                block = System.blocks["harpia.plugins.C.openCV.imageFile"]()
             elif intypes[inkey] == "HRP_INT":
-                block = s2idirectory.block["harpia.plugins.C.openCV.intValue"]()
+                block = System.blocks["harpia.plugins.C.openCV.intValue"]()
                 block.window_name = "My Image - " + obj.get_description()["Label"]
                 block.label = block.label + " - " + str(cont)
             elif intypes[inkey] == "HRP_DOUBLE":
-                block = s2idirectory.block["harpia.plugins.C.openCV.newDouble"]()
+                block = System.blocks["harpia.plugins.C.openCV.newDouble"]()
             elif intypes[inkey] == "HRP_RECT":
-                block = s2idirectory.block["harpia.plugins.C.openCV.newRect"]()
+                block = System.blocks["harpia.plugins.C.openCV.newRect"]()
             elif intypes[inkey] == "HRP_POINT":
-                block = s2idirectory.block["harpia.plugins.C.openCV.newPoint"]()
+                block = System.blocks["harpia.plugins.C.openCV.newPoint"]()
             diagram.add_block(block)
             block.y = 100 * cont
             diagram.connect_blocks(block, 0, obj, cont)
@@ -79,7 +80,7 @@ def main(argv):
         outtypes = obj.get_description()["OutTypes"]
         for outkey in outtypes:
             if outtypes[outkey] == "HRP_IMAGE":
-                show = s2idirectory.block["harpia.plugins.C.openCV.show"]()
+                show = System.blocks["harpia.plugins.C.openCV.show"]()
                 show.x = 400
                 show.title = "My Image - " + obj.get_description()["Label"]
                 diagram.add_block(show)

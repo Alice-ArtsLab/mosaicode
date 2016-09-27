@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -58,12 +52,12 @@ class MinMax(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Find Min or Max"),
+        return {"Label": "Find Min or Max",
             "Icon": "images/minMax.png",
             "Color": "50:50:200:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_DOUBLE", 1: "HRP_POINT"},
-            "TreeGroup": _("Feature Detection")
+            "TreeGroup": "Feature Detection"
             }
 
     # ----------------------------------------------------------------------

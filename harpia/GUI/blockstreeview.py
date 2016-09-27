@@ -9,7 +9,7 @@ from gi.repository import GdkPixbuf
 
 import os
 
-from harpia import s2idirectory
+from harpia.system import System as System
 
 class BlocksTreeView(Gtk.ScrolledWindow):
 
@@ -49,13 +49,13 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.blocks = {}
 
         # Load blocks
-        for x in s2idirectory.block:
-            name = s2idirectory.block[x].language
-            name += "/" + s2idirectory.block[x].framework
+        for x in System.blocks:
+            name = System.blocks[x].language
+            name += "/" + System.blocks[x].framework
             if name != language:
                 continue
-            self.blocks[x] = s2idirectory.block[x]
-            self.__add_item(s2idirectory.block[x]())
+            self.blocks[x] = System.blocks[x]
+            self.__add_item(System.blocks[x]())
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):

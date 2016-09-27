@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -52,12 +46,12 @@ class FillRect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label":_("Fill Rectangle"),
+        return {"Label":"Fill Rectangle",
                 "Icon":"images/fill.png",
                 "Color":"50:100:200:150",
                 "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
                 "OutTypes":{0:"HRP_IMAGE"},
-                "TreeGroup":_("Basic Shapes")
+                "TreeGroup":"Basic Shapes"
          }
 
     # ----------------------------------------------------------------------

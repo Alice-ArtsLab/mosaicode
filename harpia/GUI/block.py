@@ -35,15 +35,12 @@ from gi.repository import GdkPixbuf
 
 import math
 import os
+import copy
 
 from blockmenu import BlockMenu
-import harpia.s2idirectory
-from harpia.s2idirectory import *
-
-from harpia import s2idirectory
+from harpia.system import System as System
 from harpia.model.blockmodel import BlockModel
 
-import copy
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
@@ -207,7 +204,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.connections[
+                            System.connections[
                             self.get_description()["InTypes"][x]
                             ]["icon_in"])
             except:
@@ -240,7 +237,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.connections[
+                            System.connections[
                             self.get_description()["OutTypes"][x]
                             ]["icon_out"])
             except:

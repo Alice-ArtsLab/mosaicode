@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -54,17 +48,13 @@ class StereoCorr(OpenCVPlugin):
                 'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': _('Stereo Correspondence'),
+        return {'Label': 'Stereo Correspondence',
             'Icon': 'images/stereoCorr.png',
             'Color': '10:10:20:150',
             'InTypes': {0: 'HRP_IMAGE', 1: "HRP_IMAGE"},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': _('Feature Detection')
+            'TreeGroup': 'Feature Detection'
             }
 
     # ----------------------------------------------------------------------

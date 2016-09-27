@@ -5,7 +5,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.constants import *
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
@@ -14,7 +13,8 @@ from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.GUI.workarea import WorkArea
 
-from harpia.s2idirectory import *
+from harpia.system import System as System
+from harpia.control.preferencescontrol import PreferencesControl
 
 import os
 
@@ -43,7 +43,7 @@ class MainControl():
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
-        harpia.s2idirectory.properties.add_recent_file(file_name)
+        System.properties.add_recent_file(file_name)
         self.main_window.menu.update_recent_file()
 
     # ----------------------------------------------------------------------
@@ -107,7 +107,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def exit(self, widget = None, data = None):
-        PreferencesControl(properties).save()
+        PreferencesControl(System.properties).save()
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:
@@ -152,7 +152,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def preferences(self):
-        PreferenceWindow(self.main_window, harpia.s2idirectory.properties)
+        PreferenceWindow(self.main_window)
 
     # ----------------------------------------------------------------------
     def delete(self):
@@ -226,21 +226,21 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        diagram.change_zoom(ZOOM_IN)
+        diagram.change_zoom(System.ZOOM_IN)
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        diagram.change_zoom(ZOOM_OUT)
+        diagram.change_zoom(System.ZOOM_OUT)
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
-        diagram.change_zoom(ZOOM_ORIGINAL)
+        diagram.change_zoom(System.ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):

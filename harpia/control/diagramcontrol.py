@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 
+import os
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
@@ -14,9 +15,9 @@ from exceptions import AttributeError
 
 from harpia.utils.XMLUtils import XMLParser
 
-from harpia.s2idirectory import *
-from harpia.constants import *
+from harpia.system import System as System
 from harpia.control.cgenerator import CGenerator
+from harpia.control.codegenerator import CodeGenerator
 from harpia.control.javascriptgenerator import JavascriptGenerator
 
 
@@ -34,8 +35,10 @@ class DiagramControl():
     def get_generator(self):
         if self.diagram.language == "C":
             return CGenerator(self.diagram)
-        else: #self.diagram.language == "javascript":
+        elif self.diagram.language == "javascript":
             return JavascriptGenerator(self.diagram)
+        else:
+            return CodeGenerator(self.diagram)
 
 # ----------------------------------------------------------------------
     def load(self, file_name=None):
@@ -43,10 +46,10 @@ class DiagramControl():
             self.diagram.set_file_name(file_name)
         else:
             if self.diagram.get_file_name() == None:
-                harpia.s2idirectory.Log.log("Cannot Load without filename")
+                System.log("Cannot Load without filename")
                 return False
         if not os.path.exists(self.diagram.get_file_name()):
-            harpia.s2idirectory.Log.log("File '" + self.diagram.get_file_name() + "' does not exist!")
+            System.log("File '" + self.diagram.get_file_name() + "' does not exist!")
             return False
 
         # load the diagram
@@ -63,7 +66,7 @@ class DiagramControl():
         blocks = xml_loader.getTag("harpia").getTag("blocks").getChildTags("block")
         for block in blocks:
             block_type =  block.getAttr("type")
-            if block_type not in harpia.s2idirectory.block:
+            if block_type not in System.blocks:
                 continue
             block_id =  block.getAttr("id")
             position = block.getTag("position")
@@ -73,7 +76,7 @@ class DiagramControl():
             props = {}
             for prop in properties:
                 props[prop.name] = prop.value
-            new_block = harpia.s2idirectory.block[block_type]()
+            new_block = System.blocks[block_type]()
             new_block.set_properties(props)
             new_block.set_id(block_id)
             new_block.x = float(x)
@@ -99,7 +102,7 @@ class DiagramControl():
 
         output = "<harpia>\n"
 
-        output += "<version value='" + str(VERSION) + "' />\n"
+        output += "<version value='" + str(System.VERSION) + "' />\n"
         output += "<zoom value='" + str(self.diagram.get_zoom()) + "' />\n"
         output += "<language value='" + str(self.diagram.language) + "' />\n"
         output += "<blocks>\n  "
@@ -136,7 +139,7 @@ class DiagramControl():
             save_file.write(output)
             save_file.close()
         except IOError as e:
-            harpia.s2idirectory.Log.log(e.strerror)
+            System.log(e.strerror)
             return False, e.strerror
 
         self.diagram.set_modified(False)
@@ -166,9 +169,8 @@ class DiagramControl():
             save_file.write(tmp_buffer)
             save_file.close()
         except IOError as e:
-            harpia.s2idirectory.Log.log(e.strerror)
+            System.log(e.strerror)
             return False, e.strerror
 
         return True, ""
-# ----------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------

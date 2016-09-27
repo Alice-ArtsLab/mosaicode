@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -52,17 +46,13 @@ class MatchTem(OpenCVPlugin):
                'cvReleaseImage(&block$id$_img_i0);\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Match Template"),
+        return {"Label": "Match Template",
             "Icon": "images/matchTem.png",
             "Color": "180:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Feature Detection")
+            "TreeGroup": "Feature Detection"
             }
     # ----------------------------------------------------------------------
     def get_properties(self):

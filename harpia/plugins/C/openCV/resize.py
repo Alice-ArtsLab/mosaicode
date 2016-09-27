@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -31,17 +25,13 @@ class Resize(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Resize Image"),
+        return {"Label": "Resize Image",
             "Icon": "images/resize.png",
             "Color": "20:80:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_RECT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Experimental")
+            "TreeGroup": "Experimental"
             }
 
     # ----------------------------------------------------------------------

@@ -45,10 +45,6 @@ class Circle(OpenCVPlugin):
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             '}\n'
 
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
     # ------------------------------------------------------------------------------
     def get_description(self):
         return {"Label": "Circle",

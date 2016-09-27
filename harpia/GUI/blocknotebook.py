@@ -6,7 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from harpia import s2idirectory
+from harpia.system import System as System
 from blockstreeview import BlocksTreeView
 
 
@@ -19,9 +19,9 @@ class BlockNotebook(Gtk.Notebook):
         # Load blocks
         languages = []
         self.tabs = []
-        for x in s2idirectory.block:
-            name = s2idirectory.block[x].language
-            name += "/" + s2idirectory.block[x].framework
+        for x in System.blocks:
+            name = System.blocks[x].language
+            name += "/" + System.blocks[x].framework
             if name in languages:
                 continue
             languages.append(name)

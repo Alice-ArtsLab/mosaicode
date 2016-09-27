@@ -20,3 +20,4 @@ class SearchBar(Gtk.Box, Gtk.SearchBar):
     def search_changed(self, data):
         self.main_window.main_control.search(self.search_entry.get_text().upper())
         return self.search_entry.get_text()
+# ------------------------------------------------------------------------------

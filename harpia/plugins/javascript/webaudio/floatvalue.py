@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
@@ -53,23 +47,18 @@ function change_$id$_value(){
 $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$max$" onChange="change_$id$_value();"><br>
 """
 
-
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
         return ""
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("FloatValue"),
+        return {"Label": "FloatValue",
             "Icon": "images/show.png",
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": _("Interface")
+            "TreeGroup": "Interface"
             }
 
     # ----------------------------------------------------------------------

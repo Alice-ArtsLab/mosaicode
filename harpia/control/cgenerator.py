@@ -33,15 +33,8 @@ from threading import Thread
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.constants import *
-from harpia.s2idirectory import *
-
+from harpia.system import System as System
 from codegenerator import CodeGenerator
-# i18n
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
 
 FRAMERATE = 25
 
@@ -53,7 +46,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        harpia.s2idirectory.Log.log("Parsing Code")
+        System.log("Parsing Code")
 
         self.sort_blocks()
         self.generate_parts()
@@ -128,7 +121,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def save_code(self):
-        harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name + self.filename)
+        System.log("Saving Code to " + self.dir_name + self.filename)
         self.change_directory()
         codeFilename = self.filename + '.c'
         codeFile = open(codeFilename, 'w')
@@ -156,8 +149,8 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def compile(self):
-        harpia.s2idirectory.Log.log("Compilando")
-        harpia.s2idirectory.Log.log("Executing Code")
+        System.log("Compilando")
+        System.log("Executing Code")
         self.save_code()
         self.change_directory()
         if os.name == "nt":
@@ -170,7 +163,7 @@ class CGenerator(CodeGenerator):
             i, o = os.popen4("sh " + self.filename +'.Makefile')
 
             CompilingErrors = o.readlines()
-            harpia.s2idirectory.Log.log("Errors "  +  str(CompilingErrors))
+            System.log("Errors "  +  str(CompilingErrors))
 
             o.close()
             i.close()
@@ -179,7 +172,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def execute(self):
-        harpia.s2idirectory.Log.log("Executing Code")
+        System.log("Executing Code")
         self.compile()
         self.change_directory()
         if os.name == "nt":
@@ -207,8 +200,8 @@ class CGenerator(CodeGenerator):
             for element in errorList:
                 Error += element
 
-            harpia.s2idirectory.Log.log("Leaving..")
-            harpia.s2idirectory.Log.log(Error)
+            System.log("Leaving..")
+            System.log(Error)
             o.close()
         except:
             pass

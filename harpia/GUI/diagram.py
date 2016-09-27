@@ -36,9 +36,8 @@ import copy
 
 from block import Block
 from connector import Connector
-from harpia.s2idirectory import *
+from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
-from harpia.constants import *
 
 class Diagram(GooCanvas.Canvas, DiagramModel):
 
@@ -236,7 +235,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         outType = self.blocks[conn.from_block].get_description()["OutTypes"][conn.from_block_out]
         inType = self.blocks[conn.to_block].get_description()["InTypes"][conn.to_block_in]
         if not outType == inType:
-            harpia.s2idirectory.Log.log("Connection Types mismatch")
+            System.log("Connection Types mismatch")
         return outType == inType
 
     #----------------------------------------------------------------------
@@ -244,11 +243,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
                     and oldCon.to_block_in == newCon.to_block_in\
-                    and not harpia.s2idirectory.connections[newCon.type]["multiple"]:
-                harpia.s2idirectory.Log.log("Connector Already exists")
+                    and not System.connections[newCon.type]["multiple"]:
+                System.log("Connector Already exists")
                 return False
         if newCon.to_block == newCon.from_block:
-            harpia.s2idirectory.Log.log("Recursive connection is not allowed")
+            System.log("Recursive connection is not allowed")
             return False
         return True
 
@@ -288,10 +287,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     #----------------------------------------------------------------------
     def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):
         if from_block not in self.blocks:
-            harpia.s2idirectory.Log.log("Connection from non existent block")
+            System.log("Connection from non existent block")
             return None
         if to_block not in self.blocks:
-            harpia.s2idirectory.Log.log("Connection to non existent block")
+            System.log("Connection to non existent block")
             return None
         self.start_connection(self.blocks[from_block], from_block_out)
         if self.end_connection(self.blocks[to_block], to_block_in):
@@ -345,11 +344,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     #----------------------------------------------------------------------
     def change_zoom(self, value):
         zoom = self.get_zoom()
-        if value == ZOOM_ORIGINAL:
-            zoom = ZOOM_ORIGINAL
-        elif value == ZOOM_IN:
+        if value == System.ZOOM_ORIGINAL:
+            zoom = System.ZOOM_ORIGINAL
+        elif value == System.ZOOM_IN:
             zoom = zoom + 0.1
-        elif value == ZOOM_OUT:
+        elif value == System.ZOOM_OUT:
             zoom = zoom - 0.1
         DiagramModel.set_zoom(self, zoom)
         self.__apply_zoom()
@@ -479,7 +478,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def do(self, new_msg):
         self.set_modified(True)
-        harpia.s2idirectory.Log.log("Do: " + new_msg)
+        System.log("Do: " + new_msg)
         self.undo_stack.append(
                 (copy.copy(self.blocks), 
                 copy.copy(self.connectors),
@@ -492,7 +491,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return
         self.set_modified(True)
         blocks, connectors, msg = self.undo_stack.pop()
-        harpia.s2idirectory.Log.log("Undo: " + msg)
+        System.log("Undo: " + msg)
         self.redo_stack.append(
                 (copy.copy(self.blocks), 
                 copy.copy(self.connectors),
@@ -507,7 +506,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return
         self.set_modified(True)
         blocks, connectors, msg = self.redo_stack.pop()
-        harpia.s2idirectory.Log.log("Redo: " + msg)
+        System.log("Redo: " + msg)
         self.undo_stack.append(
                 (copy.copy(self.blocks), 
                 copy.copy(self.connectors),

@@ -6,19 +6,18 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from harpia.constants import *
-from harpia import s2idirectory
 from harpia.GUI.components.stringfield import StringField
 from harpia.GUI.components.openfilefield import OpenFileField
+from harpia.system import System as System
 
 class PreferenceWindow(Gtk.Dialog):
 
-    def __init__(self, main_window, properties):
+    def __init__(self, main_window):
         Gtk.Dialog.__init__(self, "Code Window", main_window,
                 0,(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
-        self.properties = properties
+        self.properties = System.properties
         box = self.get_content_area()
         vbox = Gtk.VBox()
         box.add(vbox)

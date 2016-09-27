@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
@@ -52,7 +46,6 @@ var block_$id$ =  new WhiteNoise(context).node;
     def generate_function_call(self):
         return """
 """
-
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
         return ""
@@ -62,17 +55,13 @@ var block_$id$ =  new WhiteNoise(context).node;
         return ""
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("White Noise"),
+        return {"Label": "White Noise",
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": _("Sound")
+            "TreeGroup": "Sound"
             }
 
     # ----------------------------------------------------------------------

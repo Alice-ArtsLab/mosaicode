@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -35,17 +29,13 @@ class Xor(OpenCVPlugin):
              '}\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Xor"),
+        return {"Label": "Xor",
             "Icon": "images/xor.png",
             "Color": "10:180:10:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Arithmetic and logical operations")
+            "TreeGroup": "Arithmetic and logical operations"
             }
 
     # ----------------------------------------------------------------------

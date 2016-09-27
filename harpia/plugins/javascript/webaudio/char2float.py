@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
@@ -57,17 +51,13 @@ block_$id$_i[0] = function(value){
         return ""
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Char 2 Float"),
+        return {"Label": "Char 2 Float",
             "Icon": "images/show.png",
             "Color": "200:200:25:150",
             "InTypes": {0: "HRP_WEBAUDIO_CHAR"},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": _("Conversion")
+            "TreeGroup": "Conversion"
             }
 
     # ----------------------------------------------------------------------

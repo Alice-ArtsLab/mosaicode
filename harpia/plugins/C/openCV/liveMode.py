@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 import os
@@ -53,12 +47,12 @@ class LiveMode(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label":_("Live Mode"),
+        return {"Label":"Live Mode",
                 "Icon":"images/acquisition.png",
                 "Color":"50:100:200:150",
                 "InTypes":"",
                 "OutTypes":{0:"HRP_IMAGE"},
-                "TreeGroup":_("Image Source")
+                "TreeGroup":"Image Source"
          }
 
     # ----------------------------------------------------------------------

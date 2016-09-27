@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -68,17 +62,13 @@ class SaveVideo(OpenCVPlugin):
         return 'cvReleaseVideoWriter(&block$id$_vidWriter); // SaveVideo\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': _('Save Video'),
+        return {'Label': 'Save Video',
             'Icon': 'images/saveVideo.png',
             'Color': '120:20:20:150',
             'InTypes': {0: 'HRP_IMAGE'},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': _('General')
+            'TreeGroup': 'General'
             }
     # ----------------------------------------------------------------------
     def get_properties(self):

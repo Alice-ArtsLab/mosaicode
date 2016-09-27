@@ -33,14 +33,13 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.constants import *
-from harpia.s2idirectory import *
+from harpia.system import System as System
 
 # i18n
 import gettext
 _ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
+gettext.bindtextdomain(System.APP, System.DIR)
+gettext.textdomain(System.APP)
 
 class CodeGenerator():
 
@@ -48,9 +47,12 @@ class CodeGenerator():
     def __init__(self, diagram):
         self.diagram = diagram
 
+        if self.diagram.language == None:
+            System.log("No language, no block, no code")
+            return
         self.dir_name = self.get_dir_name()
         self.filename = self.get_filename()
-        self.error_log_file = harpia.s2idirectory.properties.get_error_log_file()
+        self.error_log_file = System.properties.get_error_log_file()
         self.error_log_file = self.replace_wildcards(self.error_log_file)
         self.old_path = os.path.realpath(os.curdir)
 
@@ -63,7 +65,7 @@ class CodeGenerator():
         self.deallocations = []
 
         if not len(self.diagram.blocks) > 0:
-            harpia.s2idirectory.Log.log("Diagram is empty. Nothing to generate.")
+            System.log("Diagram is empty. Nothing to generate.")
             return
 
     #----------------------------------------------------------------------
@@ -78,7 +80,7 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def get_dir_name(self):
-        name = harpia.s2idirectory.properties.get_default_directory()
+        name = System.properties.get_default_directory()
         name = self.replace_wildcards(name)
         if not name.endswith("/"):
             name = name + "/"
@@ -86,7 +88,7 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def get_filename(self):
-        name = harpia.s2idirectory.properties.get_default_filename()
+        name = System.properties.get_default_filename()
         name = self.replace_wildcards(name)
         return name
 
@@ -191,8 +193,8 @@ class CodeGenerator():
         for x in block.connections:
             if x.to_block == '--':
                 continue
-            if x.type in harpia.s2idirectory.connections:
-                connections +=  harpia.s2idirectory.connections[x.type]["code"]
+            if x.type in System.connections:
+                connections +=  System.connections[x.type]["code"]
             connections = connections.replace("$to_block$", str(x.to_block))
             connections = connections.replace("$to_block_in$", str(int(x.to_block_in )))
             connections = connections.replace("$from_block$", str(x.from_block))
@@ -202,7 +204,7 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        return ""
+        return "Houston, we have a problem!"
 
     #----------------------------------------------------------------------
     def save_code(self):
@@ -222,7 +224,7 @@ class CodeGenerator():
             Error = file(self.error_log_file, 'wb')
         else:
             Error = file(self.error_log_file, 'w')
-        harpia.s2idirectory.Log.log(error)
+        System.Log.log(error)
         Error.write(error)
         Error.close()
 

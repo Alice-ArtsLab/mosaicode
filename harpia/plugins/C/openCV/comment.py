@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -26,17 +20,13 @@ class Comment(OpenCVPlugin):
         return '/* $comment$ */ \n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label":_("Comment"),
+        return {"Label":"Comment",
             "Icon":"images/comment.png",
             "Color":"50:100:200:150",
             "InTypes":"",
             "OutTypes":"",
-            "TreeGroup":_("General")
+            "TreeGroup":"General"
          }
 
     # ----------------------------------------------------------------------

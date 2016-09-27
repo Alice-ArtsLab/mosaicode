@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -20,9 +14,9 @@ class HaarDetect(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_help(self):
-        return  _('Haar (face) Detector finds regions on the input image according to the given haar-classifier. \n First Output is the center of the first \
+        return  'Haar (face) Detector finds regions on the input image according to the given haar-classifier. \n First Output is the center of the first \
 detected feature, second is a rectangle around the first detected feature and the third is the input image with the detected features tagged by a red circle.\n \
-The last output is the number of detected faces.')
+The last output is the number of detected faces.'
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
@@ -97,22 +91,19 @@ The last output is the number of detected faces.')
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': _('Haar (face) Detector'),
+        return {'Label': 'Haar Detector',
                 'Icon': 'images/haarDetect.png',
                 'Color': '50:220:40:150',
                 'InTypes': {0: 'HRP_IMAGE'},
                 'OutTypes': {0: 'HRP_POINT', 1: 'HRP_RECT', 2: 'HRP_IMAGE', 3: 'HRP_DOUBLE'},
-                'TreeGroup': _("Feature Detection")
+                'TreeGroup': "Feature Detection"
             }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {
-
-                    "cascade_name":{"name": "File Name",
+        return {"cascade_name":{"name": "File Name",
                             "type": HARPIA_SAVE_FILE,
                             "value": self.cascade_name},
-
                 "min_neighbors":{"name": "Min neighbors",
                     "type": HARPIA_INT,
                     "value": self.min_neighbors,

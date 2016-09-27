@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -29,17 +23,13 @@ class Not(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Not"),
+        return {"Label": "Not",
             "Icon": "images/not.png",
             "Color": "10:180:10:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Arithmetic and logical operations")
+            "TreeGroup": "Arithmetic and logical operations"
             }
 
     # ----------------------------------------------------------------------
