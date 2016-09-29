@@ -302,10 +302,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = True
         for con in sourceConnectors:
             if con.to_block_in not in distinct_con:
-                print "Distinct", con.to_block_in
                 distinct_con.append(con.to_block_in)
         for con in self.get_description()["InTypes"]:
-            print con
             if con not in distinct_con:
                 self.has_flow = False
                 break
