@@ -160,11 +160,9 @@ class CodeGenerator():
     def generate_block_code(self, block):
         plugin = block.get_plugin()
         header = plugin.generate_header()
-        declaration = "//" + plugin.get_type() + " Weight:"
-        declaration += str(block.weight) + "\n"
+        declaration = "//" + plugin.get_type() + "\n"
         declaration += plugin.generate_vars()
         functionCall = "//" + plugin.get_type() + "\n"
-        functionCall += "//" + str(block.weight) + "\n"
         functionCall += plugin.generate_function_call()
         dealloc = plugin.generate_dealloc()
         outDealloc = plugin.generate_out_dealloc()
