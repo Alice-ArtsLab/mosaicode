@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -27,17 +21,13 @@ class NewInt(OpenCVPlugin):
         return 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': _('New Int'),
+        return {'Label': 'New Int',
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_INT'},
-            'TreeGroup': _('Basic Data Type')
+            'TreeGroup': 'Basic Data Type'
             }
 
     # ----------------------------------------------------------------------

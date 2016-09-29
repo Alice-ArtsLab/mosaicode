@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -63,17 +57,13 @@ if(block$id$_img_i0){ //Canny Code
 '''
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Canny"),
+        return {"Label": "Canny",
             "Icon": "images/canny.png",
             "Color": "250:180:80:150",
             "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT", 3:"HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Gradients, Edges and Corners")
+            "TreeGroup": "Gradients, Edges and Corners"
             }
 
     # ----------------------------------------------------------------------

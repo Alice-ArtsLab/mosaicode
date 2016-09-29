@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
@@ -51,23 +45,18 @@ function click_$id$(){
 <button type="button" value="$value$" onClick="click_$id$();" id="block_$id$">$label$</button><br>
 """
 
-
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
         return ""
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Button"),
+        return {"Label": "Button",
             "Icon": "images/show.png",
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": _("Interface")
+            "TreeGroup": "Interface"
             }
 
     # ----------------------------------------------------------------------

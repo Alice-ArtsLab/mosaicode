@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -64,18 +58,13 @@ for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
 '''
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': _('Live Delay'),
+        return {'Label': 'Live Delay',
             'Icon': 'images/liveDelay.png',
             'Color': '250:20:30:150',
             'InTypes': {0: 'HRP_IMAGE'},
             'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': _('General'),
-            'TimeShifts': True
+            'TreeGroup': 'General',
             }
 
     # ----------------------------------------------------------------------

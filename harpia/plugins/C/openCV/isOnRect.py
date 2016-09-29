@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -31,17 +25,13 @@ class IsOnRect(OpenCVPlugin):
             '				block$id$_double_o0 = 1.0;\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': _('Check Point'),
+        return {'Label': 'Check Point',
             'Icon': 'images/isOnRect.png',
             'Color': '50:50:200:150',
             'InTypes': {0: 'HRP_POINT', 1: 'HRP_RECT'},
             'OutTypes': {0: 'HRP_DOUBLE'},
-            'TreeGroup': _('Experimental')
+            'TreeGroup': 'Experimental'
             }
 
     # ----------------------------------------------------------------------

@@ -15,18 +15,16 @@ from blockproperties import BlockProperties
 from status import Status
 from workarea import WorkArea
 
-from harpia.constants import *
-from harpia import s2idirectory
-
+from harpia.system import System as System
 class MainWindow(Gtk.Window):
 
     def __init__(self):
-        s2idirectory.load()
+        System()
         Gtk.Window.__init__(self, title="Harpia")
         #self.set_default_size(800,600)
         self.resize(
-                s2idirectory.properties.get_width(),
-                s2idirectory.properties.get_height())
+                System.properties.get_width(),
+                System.properties.get_height())
         self.main_control = MainControl(self)
         self.connect("check-resize", self.__resize)
 
@@ -38,7 +36,7 @@ class MainWindow(Gtk.Window):
         self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
-        s2idirectory.Log = self.status
+        System.set_log(self.status)
 
         # vbox main 
         # -----------------------------------------------------
@@ -68,11 +66,11 @@ class MainWindow(Gtk.Window):
 
         self.hpaned_work_area = Gtk.HPaned()
         self.hpaned_work_area.connect("accept-position", self.__resize)
-        self.hpaned_work_area.set_position(s2idirectory.properties.get_hpaned_work_area())
+        self.hpaned_work_area.set_position(System.properties.get_hpaned_work_area())
 
         self.vpaned_bottom.add1(self.hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
-        self.vpaned_bottom.set_position(s2idirectory.properties.get_vpaned_bottom())
+        self.vpaned_bottom.set_position(System.properties.get_vpaned_bottom())
         self.vpaned_bottom.set_size_request(50,50)
 
         # hpaned_work_area
@@ -104,12 +102,12 @@ class MainWindow(Gtk.Window):
 
         self.vpaned_left.add1(self.__create_frame(self.block_notebook))
         self.vpaned_left.add2(self.__create_frame(self.block_properties))
-        self.vpaned_left.set_position(s2idirectory.properties.get_vpaned_left())
+        self.vpaned_left.set_position(System.properties.get_vpaned_left())
 
         self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
 
-        for example in s2idirectory.list_of_examples:
+        for example in System.list_of_examples:
             self.menu.add_example(example)
         self.menu.update_recent_file()
 
@@ -131,13 +129,14 @@ class MainWindow(Gtk.Window):
     #----------------------------------------------------------------------
     def __resize(self, data):
         width, height = self.get_size()
-        s2idirectory.properties.set_width(width)
-        s2idirectory.properties.set_height(height)
-        s2idirectory.properties.set_hpaned_work_area(self.hpaned_work_area.get_position())
-        s2idirectory.properties.set_vpaned_bottom(self.vpaned_bottom.get_position())
-        s2idirectory.properties.set_vpaned_left(self.vpaned_left.get_position())
+        System.properties.set_width(width)
+        System.properties.set_height(height)
+        System.properties.set_hpaned_work_area(self.hpaned_work_area.get_position())
+        System.properties.set_vpaned_bottom(self.vpaned_bottom.get_position())
+        System.properties.set_vpaned_left(self.vpaned_left.get_position())
         self.work_area.resize(data)
 
+    #----------------------------------------------------------------------
     def set_title(self, title):
         Gtk.Window.set_title(self, "Harpia (" + title + ")")
 #----------------------------------------------------------------------

@@ -36,7 +36,6 @@ import math
 import sys
 
 from harpia.model.connectionmodel import ConnectionModel
-from harpia.s2idirectory import *
 from connectormenu import ConnectorMenu
 
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):

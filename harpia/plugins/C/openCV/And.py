@@ -30,10 +30,6 @@ class And(OpenCVPlugin):
             'cvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
     # ------------------------------------------------------------------------------
     def get_description(self):
         return {"Label": "And",

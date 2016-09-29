@@ -27,24 +27,10 @@
 #
 # ----------------------------------------------------------------------
 import os
-import time
-import gi
-gi.require_version('Gtk', '3.0')
-
 import webbrowser #to open HTML file
 
-from gi.repository import Gtk
-
-from harpia.constants import *
-from harpia.s2idirectory import *
-
+from harpia.system import System as System
 from codegenerator import CodeGenerator
-
-# i18n
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
 
 class JavascriptGenerator(CodeGenerator):
 
@@ -54,7 +40,7 @@ class JavascriptGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        harpia.s2idirectory.Log.log("Parsing Code")
+        System.log("Parsing Code")
         self.sort_blocks()
         self.generate_parts()
 
@@ -110,9 +96,9 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     #----------------------------------------------------------------------
     def save_code(self):
-        harpia.s2idirectory.Log.log("Saving Code to " + self.dir_name)
+        System.log("Saving Code to " + self.dir_name + self.filename)
         self.change_directory()
-        codeFile = open(self.dir_name + '.html', 'w')
+        codeFile = open(self.filename + '.html', 'w')
         code = self.generate_code()
         codeFile.write(code)
         codeFile.close()
@@ -124,10 +110,10 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     #----------------------------------------------------------------------
     def execute(self):
-        harpia.s2idirectory.Log.log("Executing Code")
+        System.log("Executing Code")
         self.compile()
         self.change_directory()
-        result = webbrowser.open_new(self.dir_name + '.html')
+        result = webbrowser.open_new(self.filename + '.html')
         self.return_to_old_directory()
 
 #-------------------------------------------------------------------------------

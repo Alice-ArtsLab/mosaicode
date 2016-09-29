@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
@@ -80,23 +74,18 @@ function getMouseXY(e) {
     def generate_dealloc(self):
         return """"""
 
-
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
         return ""
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Mouse Position"),
+        return {"Label": "Mouse Position",
             "Icon": "images/show.png",
             "Color": "50:50:50:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": _("Interface")
+            "TreeGroup": "Interface"
             }
 
     # ----------------------------------------------------------------------

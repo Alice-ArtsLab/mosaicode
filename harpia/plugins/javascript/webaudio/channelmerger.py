@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
 
@@ -63,17 +57,13 @@ block_$id$_i[1] = block_$id$_obj.node;
         return ""
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Channel Merger"),
+        return {"Label": "Channel Merger",
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_SOUND"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": _("Sound"),
+            "TreeGroup": "Sound",
             }
 
     # ----------------------------------------------------------------------

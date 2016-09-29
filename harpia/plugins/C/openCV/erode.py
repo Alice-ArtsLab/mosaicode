@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -41,17 +35,13 @@ class Erode(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Erosion"),
+        return {"Label": "Erosion",
             "Icon": "images/erode.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Morphological Operations")
+            "TreeGroup": "Morphological Operations"
             }
 
     # ----------------------------------------------------------------------

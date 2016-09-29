@@ -8,7 +8,6 @@ class DiagramModel(object):
     #----------------------------------------------------------------------
     def __init__(self):
         self.block_id = 1  # o primeiro bloco eh o n1 (incrementa a cada novo bloco
-        self.connector_id = 1  # o primeiro conector eh o n1 (incrementa a cada novo conector
         self.blocks = {} # GUI blocks
         self.connectors = []
         self.__zoom = 1.0 # pixels per unit
@@ -16,16 +15,41 @@ class DiagramModel(object):
         self.__modified = False
         self.language = None
 
+
     #----------------------------------------------------------------------
     def add_block(self, block):
-        if self.language != None and self.language != block.language:
+        if self.language != None and self.language != block.get_language():
             return False
         if self.language == None or self.language == 'None':
-            self.language = block.language
-        block.set_id(self.block_id)
-        self.blocks[self.block_id] = block
+            self.language = block.get_language()
+        if block.get_id() < 0:
+            block.set_id(self.block_id)
+        self.blocks[block.get_id()] = block
+        self.block_id = max(int(self.block_id), int(block.get_id()))
         self.block_id = self.block_id + 1
-        
+        return True
+
+    #----------------------------------------------------------------------
+    def delete_block(self, block):
+        block_id = block.get_id()
+        if block_id not in self.blocks:
+            return False
+        for idx in reversed(range(len(self.connectors))):
+            if self.connectors[idx].from_block == block_id \
+                or self.connectors[idx].to_block == block_id:
+                    self.delete_connection(self.connectors[idx])
+        return True
+
+    #----------------------------------------------------------------------
+    def add_connection(self, connection):
+        self.connectors.append(connection)
+
+    #----------------------------------------------------------------------
+    def delete_connection(self, connection):
+        if connection not in self.connectors:
+            return
+        self.connectors.remove(connection)
+
     #----------------------------------------------------------------------
     def connect_blocks(self, block_out, block_out_port, block_in, block_in_port):
         connection = ConnectionModel()
@@ -34,6 +58,14 @@ class DiagramModel(object):
         connection.from_block_out = block_out_port
         connection.to_block_in = block_in_port
         self.connectors.append(connection)
+
+    #----------------------------------------------------------------------
+    def get_connectors_to_block(self, block):
+        result = []
+        for conn in self.connectors:
+            if conn.to_block == block.get_id():
+                result.append(conn)
+        return result
 
     #----------------------------------------------------------------------
     def set_file_name(self, file_name):

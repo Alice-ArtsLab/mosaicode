@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -32,17 +26,13 @@ class Threshold(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Threshold"),
+        return {"Label": "Threshold",
             "Icon": "images/threshold.png",
             "Color": "50:125:50:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Filters and Color Conversion")
+            "TreeGroup": "Filters and Color Conversion"
             }
     # ----------------------------------------------------------------------
     def get_properties(self):

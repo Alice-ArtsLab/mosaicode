@@ -14,6 +14,10 @@ class BlockModel(object):
         return self.__plugin.id
 
     #----------------------------------------------------------------------
+    def set_id(self, block_id):
+        self.__plugin.id = block_id
+
+    #----------------------------------------------------------------------
     def get_type(self):
         return self.__plugin.type
 
@@ -28,6 +32,14 @@ class BlockModel(object):
     #----------------------------------------------------------------------
     def get_properties(self):
         return self.__plugin.get_properties()
+
+    #----------------------------------------------------------------------
+    def set_properties(self, data):
+        self.get_plugin().set_properties(data)
+
+    #----------------------------------------------------------------------
+    def get_language(self):
+        return self.__plugin.language
 
     #----------------------------------------------------------------------
     def get_plugin(self):

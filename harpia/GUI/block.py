@@ -35,15 +35,12 @@ from gi.repository import GdkPixbuf
 
 import math
 import os
+import copy
 
 from blockmenu import BlockMenu
-import harpia.s2idirectory
-from harpia.s2idirectory import *
-
-from harpia import s2idirectory
+from harpia.system import System as System
 from harpia.model.blockmodel import BlockModel
 
-import copy
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
@@ -207,7 +204,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.connections[
+                            System.connections[
                             self.get_description()["InTypes"][x]
                             ]["icon_in"])
             except:
@@ -227,7 +224,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, args):
-        self.diagram.clicked_input(self, args)
+        self.diagram.end_connection(self, args)
         return True
 
     #----------------------------------------------------------------------
@@ -240,7 +237,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            harpia.s2idirectory.connections[
+                            System.connections[
                             self.get_description()["OutTypes"][x]
                             ]["icon_out"])
             except:
@@ -260,7 +257,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
-        self.diagram.clicked_output(self, args)
+        self.diagram.start_connection(self, args)
         return True
 
     #----------------------------------------------------------------------
@@ -297,9 +294,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def update_flow(self):
-        sourceConnectors = self.diagram.get_connectors_to(self)
-        distinct_con = []
         self.has_flow = True
+        sourceConnectors = self.diagram.get_connectors_to_block(self)
+        distinct_con = []
         for con in sourceConnectors:
             if con.to_block_in not in distinct_con:
                 distinct_con.append(con.to_block_in)
@@ -326,9 +323,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def move(self, x, y):
-        self.diagram.do("Move block")
         self.translate(x, y)
-        self.diagram.set_modified(True)
 
     #----------------------------------------------------------------------
     def delete(self):
@@ -343,8 +338,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     #----------------------------------------------------------------------
     def set_properties(self, data):
         self.diagram.do("Set block property")
-        self.get_plugin().set_properties(data)
-        self.diagram.set_modified(True)
+        BlockModel.set_properties(self, data)
 
     #----------------------------------------------------------------------
     def get_properties(self):

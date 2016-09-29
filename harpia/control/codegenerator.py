@@ -28,18 +28,18 @@
 # ----------------------------------------------------------------------
 import os
 import time
+import datetime
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.constants import *
-from harpia.s2idirectory import *
+from harpia.system import System as System
 
 # i18n
 import gettext
 _ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
+gettext.bindtextdomain(System.APP, System.DIR)
+gettext.textdomain(System.APP)
 
 class CodeGenerator():
 
@@ -47,7 +47,13 @@ class CodeGenerator():
     def __init__(self, diagram):
         self.diagram = diagram
 
-        self.dir_name = DIRNAME + str(time.time())
+        if self.diagram.language == None:
+            System.log("No language, no block, no code")
+            return
+        self.dir_name = self.get_dir_name()
+        self.filename = self.get_filename()
+        self.error_log_file = System.properties.get_error_log_file()
+        self.error_log_file = self.replace_wildcards(self.error_log_file)
         self.old_path = os.path.realpath(os.curdir)
 
         self.blockList = []
@@ -59,21 +65,40 @@ class CodeGenerator():
         self.deallocations = []
 
         if not len(self.diagram.blocks) > 0:
-            harpia.s2idirectory.Log.log("Diagram is empty. Nothing to generate.")
+            System.log("Diagram is empty. Nothing to generate.")
             return
+
+    #----------------------------------------------------------------------
+    def replace_wildcards(self, text):
+        result = text.replace("%t", str(time.time()))
+        date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
+        result = result.replace("%d", date)
+        result = result.replace("%l", self.diagram.language)
+        result = result.replace("%n", self.diagram.get_patch_name()[:-4])
+        result = result.replace(" ", "_")
+        return result
+
+    #----------------------------------------------------------------------
+    def get_dir_name(self):
+        name = System.properties.get_default_directory()
+        name = self.replace_wildcards(name)
+        if not name.endswith("/"):
+            name = name + "/"
+        return name
+
+    #----------------------------------------------------------------------
+    def get_filename(self):
+        name = System.properties.get_default_filename()
+        name = self.replace_wildcards(name)
+        return name
 
     #----------------------------------------------------------------------
     def change_directory(self):
         try:
-            os.makedirs(harpia.s2idirectory.properties.get_default_directory())
-        except:
-            pass
-        os.chdir(harpia.s2idirectory.properties.get_default_directory())
-        try:
             os.makedirs(self.dir_name)
         except:
             pass
-        os.chdir(harpia.s2idirectory.properties.get_default_directory() + '/' + self.dir_name)
+        os.chdir(self.dir_name)
 
     #----------------------------------------------------------------------
     def return_to_old_directory(self):
@@ -111,6 +136,20 @@ class CodeGenerator():
             organizedChain = self.apply_weights_on_connections(tmpList, self.blockList)
             while organizedChain != []:
                 organizedChain = self.apply_weights_on_connections(organizedChain, self.blockList)
+
+    #----------------------------------------------------------------------
+    def apply_weights_on_connections(self, listOfBlocks, blockList):
+        returnList = []
+        for block in listOfBlocks:
+            ##Put the connections on returnList
+            for connection in block.connections:
+                ##and apply the weight on this connection
+                for tmp_block in blockList:
+                    if tmp_block.get_id() == connection.to_block:
+                        tmp_block.weight += block.weight
+                        if tmp_block not in returnList:
+                            returnList.append(tmp_block)
+        return returnList
 
     #----------------------------------------------------------------------
     def generate_parts(self):
@@ -154,8 +193,8 @@ class CodeGenerator():
         for x in block.connections:
             if x.to_block == '--':
                 continue
-            if x.type in harpia.s2idirectory.connections:
-                connections +=  harpia.s2idirectory.connections[x.type]["code"]
+            if x.type in System.connections:
+                connections +=  System.connections[x.type]["code"]
             connections = connections.replace("$to_block$", str(x.to_block))
             connections = connections.replace("$to_block_in$", str(int(x.to_block_in )))
             connections = connections.replace("$from_block$", str(x.from_block))
@@ -165,7 +204,7 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        return ""
+        return "Houston, we have a problem!"
 
     #----------------------------------------------------------------------
     def save_code(self):
@@ -182,25 +221,11 @@ class CodeGenerator():
     #----------------------------------------------------------------------
     def __set_error_log(self, error):
         if os.name == 'nt':
-            Error = file(harpia.s2idirectory.properties.get_error_log_file(), 'wb')
+            Error = file(self.error_log_file, 'wb')
         else:
-            Error = file(harpia.s2idirectory.properties.get_error_log_file(), 'w')
-        harpia.s2idirectory.Log.log(error)
+            Error = file(self.error_log_file, 'w')
+        System.Log.log(error)
         Error.write(error)
         Error.close()
-
-    #----------------------------------------------------------------------
-    def apply_weights_on_connections(self, listOfBlocks, blockList):
-        returnList = []
-        for block in listOfBlocks:
-            ##Put the connections on returnList
-            for connection in block.connections:
-                ##and apply the weight on this connection
-                for tmp_block in blockList:
-                    if tmp_block.get_id() == connection.to_block:
-                        tmp_block.weight += block.weight
-                        if tmp_block not in returnList:
-                            returnList.append(tmp_block)
-        return returnList
 
 #-------------------------------------------------------------------------------

@@ -27,6 +27,13 @@ class Plugin(object):
         return self.id
 
     # ----------------------------------------------------------------------
+    def get_language(self):
+        try:
+            return self.language
+        except:
+            return None
+
+    # ----------------------------------------------------------------------
     def get_help(self):
         return ""
 

@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -25,22 +19,18 @@ class NewImage(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         return \
-            'CvSize size = cvSize($width$,$height$);\n' + \
-            'block$id$_img_o0 = cvCreateImage(size,IPL_DEPTH_8U,3);\n' + \
+            'CvSize size$id$ = cvSize($width$,$height$);\n' + \
+            'block$id$_img_o0 = cvCreateImage(size$id$,IPL_DEPTH_8U,3);\n' + \
             'cvSetZero(block$id$_img_o0);\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label":_("New Image"),
+        return {"Label":"New Image",
          "Icon":"images/acquisition.png",
          "Color":"50:100:200:150",
          "InTypes":"",
          "OutTypes":{0:"HRP_IMAGE"},
-         "TreeGroup":_("Image Source")
+         "TreeGroup":"Image Source"
          }
 
     # ----------------------------------------------------------------------

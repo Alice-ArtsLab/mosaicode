@@ -7,8 +7,6 @@ from gi.repository import Gtk
 gi.require_version('GtkSource', '3.0')
 from gi.repository import GtkSource
 
-from harpia.constants import *
-
 class CodeWindow(Gtk.Dialog):
 
     # ----------------------------------------------------------------------

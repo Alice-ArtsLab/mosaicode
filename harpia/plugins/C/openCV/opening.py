@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -47,17 +41,13 @@ class Opening(OpenCVPlugin):
                'cvReleaseImage(&block$id$_img_i0);\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Opening"),
+        return {"Label": "Opening",
             "Icon": "images/opening.png",
             "Color": "180:230:220:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Morphological Operations")
+            "TreeGroup": "Morphological Operations"
             }
 
     # ----------------------------------------------------------------------

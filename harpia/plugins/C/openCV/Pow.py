@@ -1,12 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
 
-from harpia.constants import *
-import gettext
-_ = gettext.gettext
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
@@ -30,17 +24,13 @@ class Pow(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": _("Pow"),
+        return {"Label": "Pow",
             "Icon": "images/pow.png",
             "Color": "230:230:60:150",
             "InTypes": {0: "HRP_IMAGE"},
             "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": _("Math Functions")
+            "TreeGroup": "Math Functions"
             }
 
     # ----------------------------------------------------------------------
