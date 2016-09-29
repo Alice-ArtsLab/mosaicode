@@ -126,38 +126,30 @@ class CodeGenerator():
             self.blockList.append(block)
 
         # ajusta o peso de cada bloco
-        for block in self.blockList:
-            if len(block.get_description()["InTypes"]) != 0:
-                continue
-            if len(block.get_description()["OutTypes"]) == 0:
-                continue
-            tmpList = []
-            tmpList.append(block)
-            organizedChain = self.apply_weights_on_connections(tmpList, self.blockList)
-            while organizedChain != []:
-                organizedChain = self.apply_weights_on_connections(organizedChain, self.blockList)
+        modification = True
+        while modification:
+            modification = False
+            for block in self.blockList:
+                for connection in block.connections:
+                    for block_target in self.blockList:
+                        if block_target.get_id() != connection.to_block:
+                            continue
+                        weight = block.weight
+                        if block_target.weight < weight + 1:
+                            block_target.weight = weight + 1
+                            modification = True
 
     #----------------------------------------------------------------------
-    def apply_weights_on_connections(self, listOfBlocks, blockList):
-        returnList = []
-        for block in listOfBlocks:
-            ##Put the connections on returnList
-            for connection in block.connections:
-                ##and apply the weight on this connection
-                for tmp_block in blockList:
-                    if tmp_block.get_id() == connection.to_block:
-                        tmp_block.weight += block.weight
-                        if tmp_block not in returnList:
-                            returnList.append(tmp_block)
-        return returnList
+    def get_max_weight(self):
+        biggestWeight = -1
+        for block in self.blockList:
+            if block.weight > biggestWeight:
+                biggestWeight = block.weight
+        return biggestWeight
 
     #----------------------------------------------------------------------
     def generate_parts(self):
-        biggestWeight = -1
-        for block in self.blockList:
-            if block.weight >= biggestWeight:
-                biggestWeight = block.weight
-
+        biggestWeight = self.get_max_weight()
         for activeWeight in range(biggestWeight):
             activeWeight += 1
             for block in self.blockList:
@@ -168,8 +160,12 @@ class CodeGenerator():
     def generate_block_code(self, block):
         plugin = block.get_plugin()
         header = plugin.generate_header()
-        declaration = plugin.generate_vars()
-        functionCall = plugin.generate_function_call()
+        declaration = "//" + plugin.get_type() + " Weight:"
+        declaration += str(block.weight) + "\n"
+        declaration += plugin.generate_vars()
+        functionCall = "//" + plugin.get_type() + "\n"
+        functionCall += "//" + str(block.weight) + "\n"
+        functionCall += plugin.generate_function_call()
         dealloc = plugin.generate_dealloc()
         outDealloc = plugin.generate_out_dealloc()
 
