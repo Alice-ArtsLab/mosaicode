@@ -17,9 +17,20 @@ class ImageFile(OpenCVPlugin):
         seja este uma mídia ou um dispositivo de aquisição de imagens (câmera, scanner)."
 
     # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return OpenCVPlugin.generate_vars(self) + 'block$id$_img_o0 = cvLoadImage("$filename$",-1);\n'
+
+    # ----------------------------------------------------------------------
     def generate_function_call(self):
-        return \
-            'block$id$_img_o0 = cvLoadImage("$filename$",-1);\n'
+        return ""
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return ""
+        
+    # ----------------------------------------------------------------------
+    def generate_out_dealloc(self):
+        return "cvReleaseImage(&block$id$_img_o0);\n"
 
     # ----------------------------------------------------------------------
     def get_description(self):

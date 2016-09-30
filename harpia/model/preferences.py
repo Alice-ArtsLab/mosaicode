@@ -32,7 +32,10 @@ class Preferences(object):
 
     # ----------------------------------------------------------------------
     def add_recent_file(self, file_name):
-        self.recent_files = ast.literal_eval(self.recent_files)
+        try:
+            self.recent_files = ast.literal_eval(self.recent_files)
+        except:
+            return
         if file_name in self.recent_files:
             self.recent_files.remove(file_name)
         self.recent_files.insert(0,file_name)
