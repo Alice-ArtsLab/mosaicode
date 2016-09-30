@@ -20,7 +20,7 @@ class Slider(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
-        self.intVal = int(self.intVal)
+        self.intVal = int(float(self.intVal))
         return \
             'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
