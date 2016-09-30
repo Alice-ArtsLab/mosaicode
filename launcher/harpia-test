@@ -62,7 +62,7 @@ def main(argv):
             if intypes[inkey] == "HRP_IMAGE":
                 block = System.blocks["harpia.plugins.C.openCV.imageFile"]()
             elif intypes[inkey] == "HRP_INT":
-                block = System.blocks["harpia.plugins.C.openCV.intValue"]()
+                block = System.blocks["harpia.plugins.C.openCV.slider"]()
                 block.window_name = "My Image - " + obj.get_description()["Label"]
                 block.label = block.label + " - " + str(cont)
             elif intypes[inkey] == "HRP_DOUBLE":
