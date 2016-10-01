@@ -77,9 +77,6 @@ class DiagramModel(object):
 
     #----------------------------------------------------------------------
     def get_patch_name(self):
-        if self.__modified:
-            return "* " + self.__file_name.split("/").pop()
-        else:
             return self.__file_name.split("/").pop()
 
     # ---------------------------------------------------------------------
