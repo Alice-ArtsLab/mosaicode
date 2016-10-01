@@ -130,7 +130,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         else:
             b += 1
 
-        self.to_point = self.from_point[0] + a - 2, self.from_point[1] + b
+        self.to_point = self.from_point[0] + a - 5, self.from_point[1] + b
         self.__update_draw()
 
     #----------------------------------------------------------------------

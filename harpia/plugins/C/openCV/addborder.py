@@ -58,8 +58,11 @@ class AddBorder(OpenCVPlugin):
                     },
                 "border_type":{"name": "Type",
                     "type": HARPIA_COMBO,
-                    "values": ["IPL_BORDER_CONSTANT", "IPL_BORDER_REPLICATE", "IPL_BORDER_REFLECT", "IPL_BORDER_WRAP"]
-                    }                    
+                    "values": ["IPL_BORDER_CONSTANT",
+                            "IPL_BORDER_REPLICATE",
+                            "IPL_BORDER_REFLECT",
+                            "IPL_BORDER_WRAP"]
+                    }
                 }
 
 # ------------------------------------------------------------------------------

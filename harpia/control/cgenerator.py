@@ -37,7 +37,6 @@ from harpia.system import System as System
 from codegenerator import CodeGenerator
 
 FRAMERATE = 25
-
 class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
@@ -76,6 +75,9 @@ class CGenerator(CodeGenerator):
 #include <opencv/cvwimage.h>
 #include <opencv/highgui.h>
 #include <math.h>
+
+#define FRAMERATE """+ str(int((1.0 / FRAMERATE) * 1000.0)) +"""
+
 """
 
         # Adds only if it does not contains
@@ -94,11 +96,9 @@ class CGenerator(CodeGenerator):
         for var in self.declarations:
             declaration_block += var
 
-        declaration_block += 'while((key = (char)cvWaitKey(' + \
-                str(int((1.0 / FRAMERATE) * 1000.0)) + \
-                ')) != 27) \n {\t \n'
+        declaration_block += '\n\nwhile((key = (char)cvWaitKey(FRAMERATE)) != 27){\n'
 
-        execution = "\n\t//execution block\n"
+        execution = "\n//execution block\n"
         for x,y in zip(self.functionCalls, self.connections):
             execution += x
             execution += y
@@ -107,7 +107,7 @@ class CGenerator(CodeGenerator):
         for x in self.deallocations:
             deallocating += x
 
-        deallocating += "}"
+        deallocating += "} // End of while"
 
         closing = ""
         closing += "\n"

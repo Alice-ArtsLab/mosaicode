@@ -55,7 +55,6 @@ block_$id$_i[0].delayTime.value = $time$;
     def get_properties(self):
         return {"time":{"name": "Time",
                     "type": HARPIA_FLOAT,
-                    "value": self.time,
                     "lower":0,
                     "upper":10000,
                     "step":1

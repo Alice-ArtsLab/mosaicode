@@ -52,7 +52,6 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save(self, save_as = False):
-
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram == None:
             return
