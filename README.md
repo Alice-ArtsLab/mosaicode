@@ -25,6 +25,7 @@ sudo apt-get install python-pip
 sudo apt-get install libgoocanvas-2.0-common
 sudo apt-get install gir1.2-goocanvas-2.0
 sudo apt-get install python-lxml
+sudo apt-get install python-gobject
 sudo pip install BeautifulSoup4
 ```
 
