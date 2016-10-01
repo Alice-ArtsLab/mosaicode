@@ -37,7 +37,6 @@ class Pow(OpenCVPlugin):
     def get_properties(self):
         return {"exponent":{"name": "Exponent",
                             "type": HARPIA_INT,
-                            "value": self.exponent,
                             "lower":1,
                             "upper":10,
                             "step":1

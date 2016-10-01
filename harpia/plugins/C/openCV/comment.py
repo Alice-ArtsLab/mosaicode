@@ -33,8 +33,7 @@ class Comment(OpenCVPlugin):
     def get_properties(self):
         return {
         "comment":{"name": "Comment",
-                    "type": HARPIA_COMMENT,
-                    "value": self.comment
+                    "type": HARPIA_COMMENT
                     }
         }
 # ------------------------------------------------------------------------------

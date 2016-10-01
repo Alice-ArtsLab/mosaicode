@@ -60,7 +60,6 @@ class MatchTem(OpenCVPlugin):
 
             "scaleFactor":{"name": "Scale Factor",
                     "type": HARPIA_INT,
-                    "value": self.scaleFactor,
                     "lower":0,
                     "upper":99,
                     "step":1
@@ -68,7 +67,6 @@ class MatchTem(OpenCVPlugin):
 
         "method":{"name": "Method",
                     "type": HARPIA_COMBO,
-                    "value": self.method,
                     "values": ["CV_TM_CCOEFF_NORMED", "CV_TM_CCOEFF",
                                 "CV_TM_CCORR_NORMED", "CV_TM_CCORR",
                                 "CV_TM_SQDIFF_NORMED", "CV_TM_SQDIFF"

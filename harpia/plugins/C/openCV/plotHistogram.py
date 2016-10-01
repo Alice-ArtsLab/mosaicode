@@ -142,7 +142,6 @@ class PlotHistogram(OpenCVPlugin):
 
         "channel":{"name": "Channels",
                     "type": HARPIA_COMBO,
-                    "value": self.channel,
                     "values": ["All", "Red", "Green", "Blue"]
                     }
 

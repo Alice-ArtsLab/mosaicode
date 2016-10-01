@@ -65,28 +65,24 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$m
     def get_properties(self):
         return {"value":{"name": "Value",
                     "type": HARPIA_FLOAT,
-                    "value": self.value,
                     "lower":0,
                     "upper":20000,
                     "step":1
                     },
                 "min":{"name": "Min",
                     "type": HARPIA_FLOAT,
-                    "value": self.min,
                     "lower":0,
                     "upper":20000,
                     "step":1
                     },
                 "max":{"name": "Max",
                     "type": HARPIA_FLOAT,
-                    "value": self.max,
                     "lower":00,
                     "upper":20000,
                     "step":1
                     },
                 "label":{"name": "Label",
-                    "type": HARPIA_STRING,
-                    "value": self.label
+                    "type": HARPIA_STRING
                     }
             }
 

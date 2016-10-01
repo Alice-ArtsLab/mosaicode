@@ -51,12 +51,10 @@ class Show(OpenCVPlugin):
     def get_properties(self):
         return {
         "title":{"name": "Window Title",
-                    "type": HARPIA_STRING,
-                    "value": self.title
+                    "type": HARPIA_STRING
                     },
         "window_type":{"name":"Window Type",
                 "type":HARPIA_COMBO,
-                "value": self.window_type,
                 "values": ["Window Size", "Image Size", "Resizable Window"]
                     }
         }

@@ -74,12 +74,10 @@ class SaveVideo(OpenCVPlugin):
     def get_properties(self):
         return {
                 "filename":{"name": "File Name",
-                            "type": HARPIA_SAVE_FILE,
-                            "value": self.filename},
-
+                            "type": HARPIA_SAVE_FILE
+                            },
             "framerate":{"name": "Frame Rate",
                     "type": HARPIA_INT,
-                    "value": self.framerate,
                     "lower":1,
                     "upper":99,
                     "step":1
@@ -87,7 +85,6 @@ class SaveVideo(OpenCVPlugin):
 
         "codecSelection":{"name": "Encoding Codec",
                     "type": HARPIA_COMBO,
-                    "value": self.codecSelection,
                     "values": ["MPEG1", "mjpeg", "MPEG4.2", "MPEG4.3", "MPEG4", "H263", "H263I", "FLV1"]
                     }
 

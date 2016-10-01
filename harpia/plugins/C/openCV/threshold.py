@@ -40,7 +40,6 @@ class Threshold(OpenCVPlugin):
 
             "threshold":{"name": "Threshold",
                     "type": HARPIA_INT,
-                    "value": self.threshold,
                     "lower":0,
                     "upper":255,
                     "step":1
@@ -48,7 +47,6 @@ class Threshold(OpenCVPlugin):
 
             "maxValue":{"name": "Max Gray Value",
                     "type": HARPIA_INT,
-                    "value": self.maxValue,
                     "lower":0,
                     "upper":255,
                     "step":1
@@ -56,7 +54,6 @@ class Threshold(OpenCVPlugin):
 
         "thresholdType":{"name": "Threshold Type",
                     "type": HARPIA_COMBO,
-                    "value": self.thresholdType,
                     "values": ["CV_THRESH_BINARY", "CV_THRESH_BINARY_INV",
                             "CV_THRESH_TRUNC", "CV_THRESH_TOZERO",
                             "CV_THRESH_TOZERO_INV"]

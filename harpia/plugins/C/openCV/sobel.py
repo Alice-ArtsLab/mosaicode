@@ -53,21 +53,18 @@ class Sobel(OpenCVPlugin):
     def get_properties(self):
         return {"xorder":{"name": "X Axis Derivate Order",
                             "type": HARPIA_INT,
-                            "value": self.xorder,
                             "lower":0,
                             "upper":6,
                             "step":1
                             },
                 "yorder":{"name": "Y Axis Derivate Order",
                             "type": HARPIA_INT,
-                            "value": self.yorder,
                             "lower":0,
                             "upper":6,
                             "step":1
                             },
                 "masksize":{"name": "Mask Size",
                             "type": HARPIA_INT,
-                            "value": self.masksize,
                             "lower":1,
                             "upper":7,
                             "step":2

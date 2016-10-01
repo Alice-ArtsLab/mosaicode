@@ -87,7 +87,6 @@ class ColorConversion(OpenCVPlugin):
 
         "conversion_type":{"name": "Conversion Type",
                     "type": HARPIA_COMBO,
-                    "value": self.conversion_type,
                     "values": ["RGB -> GRAY",
                                 "RGB -> YCrCb",
                                 "YCrCb -> RGB",

@@ -46,7 +46,7 @@ class ImageFile(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {"filename":{"name": "File Name",
-                            "type": HARPIA_OPEN_FILE,
-                            "value": self.filename}
+                            "type": HARPIA_OPEN_FILE
+                            }
                 }
 # ------------------------------------------------------------------------------

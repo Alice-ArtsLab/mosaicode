@@ -39,14 +39,12 @@ class NewImage(OpenCVPlugin):
 
         "width":{"name": "Width",
                     "type": HARPIA_INT,
-                    "value": self.width,
                     "lower":0,
                     "upper":65535,
                     "step":1
                     },
         "height":{"name": "Height",
                     "type": HARPIA_INT,
-                    "value": self.height,
                     "lower":0,
                     "upper":65535,
                     "step":1

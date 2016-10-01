@@ -71,14 +71,12 @@ block_$id$.start(0);
     def get_properties(self):
         return {"freq":{"name": "Frequency",
                     "type": HARPIA_FLOAT,
-                    "value": self.freq,
                     "lower":20,
                     "upper":20000,
                     "step":1
                     },
                 "oscillator_type":{"name": "Type",
                     "type": HARPIA_COMBO,
-                    "value": self.oscillator_type,
                     "values": ["square", "sine", "sawtooth", "triangle"]
                     }
             }

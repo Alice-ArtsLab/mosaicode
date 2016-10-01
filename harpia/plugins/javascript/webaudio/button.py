@@ -63,14 +63,12 @@ function click_$id$(){
     def get_properties(self):
         return {"value":{"name": "Value",
                     "type": HARPIA_FLOAT,
-                    "value": self.value,
                     "lower":0,
                     "upper":20000,
                     "step":1
                     },
                 "label":{"name": "Label",
-                    "type": HARPIA_STRING,
-                    "value": self.label
+                    "type": HARPIA_STRING
                     }
             }
 

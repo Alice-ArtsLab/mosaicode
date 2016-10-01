@@ -72,7 +72,6 @@ for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
         return {
             "frameNumber":{"name": "Time (in frames)",
                         "type": HARPIA_INT,
-                        "value": self.frameNumber,
                         "lower":1,
                         "upper":200,
                         "step":1

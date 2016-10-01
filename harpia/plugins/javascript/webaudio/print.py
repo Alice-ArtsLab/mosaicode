@@ -63,8 +63,7 @@ $label$ <span id="block_$id$">$value$</span><br>
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {"label":{"name": "Label",
-                    "type": HARPIA_STRING,
-                    "value": self.label
+                    "type": HARPIA_STRING
                     }
             }
 

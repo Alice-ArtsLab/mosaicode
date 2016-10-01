@@ -28,9 +28,9 @@ class Canny(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        self.apertureSize = int(self.apertureSize)
-        self.threshold1 = int(self.threshold1)
-        self.threshold2 = int(self.threshold2)
+        self.apertureSize = int(float(self.apertureSize))
+        self.threshold1 = int(float(self.threshold1))
+        self.threshold2 = int(float(self.threshold2))
         return  '''
 if(block$id$_img_i0){ //Canny Code
     if (block$id$_int_i1 < 1) block$id$_int_i1 = 1;
@@ -70,21 +70,18 @@ if(block$id$_img_i0){ //Canny Code
     def get_properties(self):
         return {"apertureSize":{"name": "Aperture Size",
                             "type": HARPIA_INT,
-                            "value": self.apertureSize,
                             "lower":1,
                             "upper":10,
                             "step":1
                             },
             "threshold1":{"name": "Threshold 1",
                             "type": HARPIA_INT,
-                            "value": self.threshold1,
                             "lower":1,
                             "upper":100,
                             "step":1
                             },
             "threshold2":{"name": "Threshold 2",
                             "type": HARPIA_INT,
-                            "value": self.threshold2,
                             "lower":1,
                             "upper":100,
                             "step":1

@@ -64,14 +64,12 @@ block_$id$_i[0] = function(value){
     def get_properties(self):
         return {"float":{"name": "Output float",
                     "type": HARPIA_FLOAT,
-                    "value": self.float,
                     "lower":0,
                     "upper":20000,
                     "step":1
                     },
                 "char":{"name": "Input Char",
-                    "type": HARPIA_STRING,
-                    "value": self.char
+                    "type": HARPIA_STRING
                     }
         }
 

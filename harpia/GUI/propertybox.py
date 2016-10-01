@@ -23,7 +23,8 @@ class PropertyBox(Gtk.VBox):
         Gtk.VBox.__init__(self)
         self.set_homogeneous(False)
         self.set_property("border-width", 0)
-        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(1, 1, 1, 1))
+        white = Gdk.RGBA(1, 1, 1, 1)
+        self.override_background_color(Gtk.StateType.NORMAL, white)
         self.show_all()
 
 # ----------------------------------------------------------------------
@@ -34,8 +35,10 @@ class PropertyBox(Gtk.VBox):
             self.remove(widget)
 
         #Search block properties to create GUI
-        for component in self.block.get_properties() :
-            field = self._generate_field(component, self.block.get_properties()[component])
+        for component in self.block.get_properties():
+            prop = self.block.get_properties()[component]
+            prop["value"] = self.block.get_plugin().__dict__[component]
+            field = self._generate_field(component, prop)
             self.pack_start(field, False, False, 0)
 
 # ----------------------------------------------------------------------

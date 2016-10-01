@@ -57,11 +57,10 @@ class VideoFile(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {"filename":{"name": "File Name",
-                            "type": HARPIA_OPEN_FILE,
-                            "value": self.filename},
+                            "type": HARPIA_OPEN_FILE
+                            },
                 "key" :{"name": "Reset Key",
-                    "type": HARPIA_STRING,
-                    "value": self.key
+                    "type": HARPIA_STRING
                     }
                 }
 

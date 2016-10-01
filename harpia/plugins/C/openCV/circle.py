@@ -59,21 +59,18 @@ class Circle(OpenCVPlugin):
     def get_properties(self):
         return {"x0":{"name": "x0",
                             "type": HARPIA_INT,
-                            "value": self.x0,
                             "lower":0,
                             "upper":800,
                             "step":1
                             },
             "y0":{"name": "y0",
                             "type": HARPIA_INT,
-                            "value": self.y0,
                             "lower":0,
                             "upper":1000,
                             "step":1
                             },
             "color":{"name": "Color",
-                     "type": HARPIA_COLOR,
-                     "value": self.color
+                     "type": HARPIA_COLOR
                     }
                 }
 

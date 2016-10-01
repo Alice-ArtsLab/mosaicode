@@ -54,12 +54,10 @@ class AddBorder(OpenCVPlugin):
     def get_properties(self):
         return {
                    "color":{"name": "Color",
-                     "type": HARPIA_COLOR,
-                     "value": self.color
+                     "type": HARPIA_COLOR
                     },
                 "border_type":{"name": "Type",
                     "type": HARPIA_COMBO,
-                    "value": self.border_type,
                     "values": ["IPL_BORDER_CONSTANT", "IPL_BORDER_REPLICATE", "IPL_BORDER_REFLECT", "IPL_BORDER_WRAP"]
                     }                    
                 }

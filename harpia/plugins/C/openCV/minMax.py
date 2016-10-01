@@ -66,7 +66,6 @@ class MinMax(OpenCVPlugin):
         
         "minX":{"name": "Min X",
                     "type": HARPIA_INT,
-                    "value": self.minX,
                     "lower":0,
                     "upper":65535,
                     "step":1
@@ -74,7 +73,6 @@ class MinMax(OpenCVPlugin):
 
         "maxX":{"name": "Max X",
                     "type": HARPIA_INT,
-                    "value": self.maxX,
                     "lower":0,
                     "upper":65535,
                     "step":1
@@ -82,7 +80,6 @@ class MinMax(OpenCVPlugin):
 
         "minY":{"name": "Min Y",
                     "type": HARPIA_INT,
-                    "value": self.minY,
                     "lower":0,
                     "upper":65535,
                     "step":1
@@ -90,7 +87,6 @@ class MinMax(OpenCVPlugin):
 
         "maxY":{"name": "Max Y",
                     "type": HARPIA_INT,
-                    "value": self.maxY,
                     "lower":0,
                     "upper":65535,
                     "step":1
@@ -98,7 +94,6 @@ class MinMax(OpenCVPlugin):
 
         "minVal":{"name": "Min Val",
                     "type": HARPIA_INT,
-                    "value": self.minVal,
                     "lower":0,
                     "upper":65535,
                     "step":1
@@ -106,7 +101,6 @@ class MinMax(OpenCVPlugin):
 
         "maxVal":{"name": "Max Val",
                     "type": HARPIA_INT,
-                    "value": self.maxVal,
                     "lower":0,
                     "upper":65535,
                     "step":1
@@ -114,13 +108,11 @@ class MinMax(OpenCVPlugin):
 
         "minORmax":{"name": "Min Or Max",
                     "type": HARPIA_COMBO,
-                    "value": self.minORmax,
                     "values": ["min", "max"]
                     },
 
         "criteria":{"name": "Criteria",
                     "type": HARPIA_COMBO,
-                    "value": self.criteria,
                     "values": ["pos", "val"]
                     }
         }

@@ -54,6 +54,8 @@ class DiagramControl():
 
         # load the diagram
         xml_loader = XMLParser(self.diagram.get_file_name())
+        
+
         zoom = xml_loader.getTag("harpia").getTag("zoom").getAttr("value")
         self.diagram.set_zoom(float(zoom))
         try:
@@ -135,7 +137,7 @@ class DiagramControl():
 
         try:
             save_file = open(str(self.diagram.get_file_name()), "w")
-            output = output.encode('utf-8')
+            output = output.decode().encode('utf-8')
             save_file.write(output)
             save_file.close()
         except IOError as e:

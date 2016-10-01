@@ -40,14 +40,12 @@ class NewPoint(OpenCVPlugin):
         return {
             "x0":{"name": "X",
                         "type": HARPIA_INT,
-                        "value": self.x0,
                         "lower":0,
                         "upper":65535,
                         "step":1
                             },
             "y0":{"name": "Y",
                         "type": HARPIA_INT,
-                        "value": self.y0,
                         "lower":0,
                         "upper":65535,
                         "step":1

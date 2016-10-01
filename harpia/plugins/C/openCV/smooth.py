@@ -49,19 +49,16 @@ class Smooth(OpenCVPlugin):
         return {
         "smooth_type":{"name": "Type",
                     "type": HARPIA_COMBO,
-                    "value": self.smooth_type,
                     "values": ["CV_GAUSSIAN", "CV_BLUR", "CV_MEDIAN"]
                     },
         "param1":{"name": "Parameter 1",
                     "type": HARPIA_INT,
-                    "value": self.param1,
                     "lower":0,
                     "upper":99,
                     "step":1
                     },
         "param2":{"name": "Parameter 2",
                     "type": HARPIA_INT,
-                    "value": self.param2,
                     "lower":0,
                     "upper":99,
                     "step":1

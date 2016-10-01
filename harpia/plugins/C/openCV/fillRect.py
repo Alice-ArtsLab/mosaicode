@@ -58,8 +58,7 @@ class FillRect(OpenCVPlugin):
     def get_properties(self):
         return {
             "color":{"name": "Color",
-                     "type": HARPIA_COLOR,
-                     "value": self.color
+                     "type": HARPIA_COLOR
                     }
         }
 # ------------------------------------------------------------------------------
