@@ -44,8 +44,9 @@ class Select(OpenCVPlugin):
     def get_properties(self):
         return {
         "key":{"name": "Key",
-                    "type": HARPIA_STRING
-                    }
+               "type": HARPIA_STRING,
+               "maxlength":1
+               }
         }
 
 # ------------------------------------------------------------------------------

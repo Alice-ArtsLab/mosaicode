@@ -9,6 +9,7 @@ class AddBorder(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
+        self.border = 50
         self.color = "#0000ffff0000"
         self.border_type = "IPL_BORDER_CONSTANT"
  
@@ -19,7 +20,9 @@ class AddBorder(OpenCVPlugin):
 
     # --------------------------Help Text--------------------------------------------
     def generate_vars(self):
-        return OpenCVPlugin.generate_vars(self) + "// Qualquer coisa\n"
+        return "IplImage * block$id$_img_i0 = NULL;\n" + \
+                "int block$id$_int_i1 = $border$;\n"+ \
+                "IplImage * block$id$_img_o0 = NULL;\n"
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -32,7 +35,7 @@ class AddBorder(OpenCVPlugin):
         blue = int(blue, 16) / 257
         return \
             'if(block$id$_img_i0){\n' + \
-            'int border=50;\n' + \
+            'int border=$border$;\n' + \
             'CvSize size$id$ = cvSize(block$id$_img_i0->width + border * 2, block$id$_img_i0->height + border * 2);\n' + \
             'block$id$_img_o0 = cvCreateImage(size$id$, block$id$_img_i0->depth,block$id$_img_i0->nChannels);\n' + \
             'CvPoint point$id$ = cvPoint(border, border);\n' + \
@@ -45,7 +48,7 @@ class AddBorder(OpenCVPlugin):
         return {"Label": "Add Border",
                 "Icon": "images/and.png",
                 "Color": "0:180:210:150",
-                "InTypes": {0: "HRP_IMAGE"},
+                "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT"},
                 "OutTypes": {0: "HRP_IMAGE"},
                 "TreeGroup": "Experimental"
                 }
@@ -62,7 +65,11 @@ class AddBorder(OpenCVPlugin):
                             "IPL_BORDER_REPLICATE",
                             "IPL_BORDER_REFLECT",
                             "IPL_BORDER_WRAP"]
-                    }
+                    },
+                 "border":{
+                 "name": "Border Size",
+                 "type": HARPIA_INT
+                 }
                 }
 
 # ------------------------------------------------------------------------------
