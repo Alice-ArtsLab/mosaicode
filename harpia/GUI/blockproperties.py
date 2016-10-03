@@ -19,7 +19,7 @@ class BlockProperties(Gtk.Notebook):
         properties_scrolled_window = Gtk.ScrolledWindow()
         properties_scrolled_window.set_border_width(10)
         properties_scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        self.property_box = PropertyBox()
+        self.property_box = PropertyBox(self.main_window)
         properties_scrolled_window.add(self.property_box)
         self.append_page(properties_scrolled_window, Gtk.Label("Properties"))
 
