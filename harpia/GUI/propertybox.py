@@ -9,15 +9,17 @@ import pkgutil # For dynamic package load
 import inspect # For module inspect
 
 import harpia.GUI.components
+from harpia.GUI.fieldtypes import *
 
 component_list = {} #Dynamic list to store components
 
 class PropertyBox(Gtk.VBox):
 
 # ----------------------------------------------------------------------
-    def __init__(self):
+    def __init__(self, main_window):
         if not component_list: #load only if it is empty
             self.__load_components()
+        self.main_window = main_window
         self.block = None
         self.properties = {}
         Gtk.VBox.__init__(self)
@@ -39,6 +41,8 @@ class PropertyBox(Gtk.VBox):
             prop = self.block.get_properties()[component]
             prop["value"] = self.block.get_plugin().__dict__[component]
             field = self._generate_field(component, prop)
+            if prop["type"] == HARPIA_OPEN_FILE or prop["type"] == HARPIA_SAVE_FILE:
+                field.set_parent_window(self.main_window)
             self.pack_start(field, False, False, 0)
 
 # ----------------------------------------------------------------------
