@@ -7,9 +7,15 @@ from harpia.GUI.fieldtypes import *
 
 class ComboField(Field, Gtk.HBox):
 
+    # ------------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data,dict):
             return
+
+        self.check_value(data, "name", "")
+        self.check_value(data, "value", "")
+        self.check_value(data, "values", [])
+
         self.value = data["value"]
         Gtk.HBox.__init__(self, True)
         self.label = Gtk.Label(data["name"])
@@ -18,6 +24,7 @@ class ComboField(Field, Gtk.HBox):
 
         self.field = Gtk.ComboBoxText()
         self.field.set_entry_text_column(0)
+
         for value in data["values"]:
             self.field.append_text(value)
         if self.value in data["values"]:
@@ -28,11 +35,15 @@ class ComboField(Field, Gtk.HBox):
         self.add(self.field)
         self.show_all()
 
+    # ------------------------------------------------------------------------------
     def get_type(self):
         return HARPIA_COMBO
 
+    # ------------------------------------------------------------------------------
     def get_value(self):
         value = self.field.get_active_text()
         if value != None:
             self.value = value
         return self.value
+
+# ------------------------------------------------------------------------------

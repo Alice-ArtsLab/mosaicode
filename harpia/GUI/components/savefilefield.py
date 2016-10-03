@@ -8,10 +8,16 @@ from harpia.GUI.fieldtypes import *
 
 class SaveFileField(Field, Gtk.HBox):
 
+    # --------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data,dict):
             return
+
+        self.check_value(data, "name", "")
+        self.check_value(data, "value", "")
+
         self.file = data["value"]
+        self.parent_window = None
         Gtk.HBox.__init__(self, False)
         self.label = Gtk.Label(data["name"])
         self.label.set_property("halign", Gtk.Align.START)
@@ -28,9 +34,14 @@ class SaveFileField(Field, Gtk.HBox):
         self.add(button)
         self.show_all()
 
+    # --------------------------------------------------------------------------
+    def set_parent_window(self, widget):
+        self.parent_window = widget
+
+    # --------------------------------------------------------------------------
     def on_choose_file(self, widget):
         dialog = Gtk.FileChooserDialog("Salvar...",
-                                       None,
+                                       self.parent_window,
                                        Gtk.FileChooserAction.SAVE,
                                        (Gtk.STOCK_CANCEL,
                                        Gtk.ResponseType.CANCEL,
@@ -39,11 +50,6 @@ class SaveFileField(Field, Gtk.HBox):
                                         )
         dialog.set_current_folder(self.field.get_text())
 
-        filter = Gtk.FileFilter()
-        filter.set_name("images")
-        filter.add_mime_type("*.jpg")
-        dialog.add_filter(filter)
-
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             self.field.set_text(dialog.get_filename())
@@ -51,8 +57,12 @@ class SaveFileField(Field, Gtk.HBox):
             pass
         dialog.destroy()
 
+    # --------------------------------------------------------------------------
     def get_type(self):
         return HARPIA_SAVE_FILE
 
+    # --------------------------------------------------------------------------
     def get_value(self):
         return self.field.get_text()
+
+# --------------------------------------------------------------------------

@@ -8,17 +8,20 @@ from harpia.GUI.fieldtypes import *
 
 class ColorField(Field, Gtk.HBox):
 
+    # --------------------------------------------------------------------------
     def __init__(self, data, event):
-        Gtk.HBox.__init__(self, True)
-        self.event = event
         if not isinstance(data,dict):
             return
-        if "value" in data:
-            self.color = Gdk.color_parse(data["value"])
-        if "name" in data:
-            self.label = Gtk.Label(data["name"])
-            self.add(self.label)
-            self.label.set_property("halign", Gtk.Align.START)
+        Gtk.HBox.__init__(self, True)
+
+        self.check_value(data, "name", "")
+        self.check_value(data, "value", "#ffff00000000")
+
+        self.event = event
+        self.color = Gdk.color_parse(data["value"])
+        self.label = Gtk.Label(data["name"])
+        self.add(self.label)
+        self.label.set_property("halign", Gtk.Align.START)
 
         self.color_block = Gtk.DrawingArea()
         self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
@@ -29,6 +32,7 @@ class ColorField(Field, Gtk.HBox):
         self.add(button)
         self.show_all()
 
+    # --------------------------------------------------------------------------
     def on_choose_color(self, widget):
         color_selection_dialog = Gtk.ColorSelectionDialog("Select color")
         if self.event != None:
@@ -42,8 +46,12 @@ class ColorField(Field, Gtk.HBox):
             self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         color_selection_dialog.destroy()
 
+    # --------------------------------------------------------------------------
     def get_type(self):
         return HARPIA_COLOR
 
+    # --------------------------------------------------------------------------
     def get_value(self):
         return self.color.to_string()
+
+# ------------------------------------------------------------------------------

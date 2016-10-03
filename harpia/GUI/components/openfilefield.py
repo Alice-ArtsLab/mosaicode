@@ -10,10 +10,16 @@ from harpia.GUI.fieldtypes import *
 
 class OpenFileField(Field, Gtk.HBox):
 
+    # --------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data,dict):
             return
+
+        self.check_value(data, "name", "")
+        self.check_value(data, "value", "")
+
         self.file = data["value"]
+        self.parent_window = None
         Gtk.HBox.__init__(self, False)
         self.label = Gtk.Label(data["name"])
         self.label.set_property("halign", Gtk.Align.START)
@@ -30,9 +36,14 @@ class OpenFileField(Field, Gtk.HBox):
         self.add(button)
         self.show_all()
 
+    # --------------------------------------------------------------------------
+    def set_parent_window(self, widget):
+        self.parent_window = widget
+
+    # --------------------------------------------------------------------------
     def on_choose_file(self, widget):
         dialog = Gtk.FileChooserDialog("Open...",
-                      None,
+                      self.parent_window,
                       Gtk.FileChooserAction.OPEN,
                       (Gtk.STOCK_CANCEL,
                       Gtk.ResponseType.CANCEL,
@@ -54,8 +65,12 @@ class OpenFileField(Field, Gtk.HBox):
             pass
         dialog.destroy()
 
+    # --------------------------------------------------------------------------
     def get_type(self):
         return HARPIA_OPEN_FILE
 
+    # --------------------------------------------------------------------------
     def get_value(self):
         return self.field.get_text()
+
+# --------------------------------------------------------------------------

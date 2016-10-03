@@ -1,25 +1,32 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
 class CommentField(Field, Gtk.VBox):
 
+    # --------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data,dict):
             return
         Gtk.VBox.__init__(self)
+
+        self.check_value(data, "name", "")
+        self.check_value(data, "value", 0)
+        self.check_value(data, "height", 80)
+        self.check_value(data, "width", 50)
+
         self.set_homogeneous(False)
         self.set_spacing(10)
         scrolled_window = Gtk.ScrolledWindow()
 
-        if "height" in data:
-            scrolled_window.set_min_content_height(data["height"])
+        scrolled_window.set_min_content_height(data["height"])
+        scrolled_window.set_min_content_width(data["width"])
 
-        if "width" in data:
-            scrolled_window.set_min_content_width(data["width"])
+        scrolled_window.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
 
         self.label = Gtk.Label(data["name"])
         self.label.set_property("halign", Gtk.Align.START)
@@ -39,11 +46,14 @@ class CommentField(Field, Gtk.VBox):
         self.add(scrolled_window)
         self.show_all()
 
+    # --------------------------------------------------------------------------
     def get_type(self):
         return HARPIA_COMMENT
-        
+
+    # --------------------------------------------------------------------------
     def get_value(self):
         return self.text_buffer.get_text(
                         self.text_buffer.get_start_iter(),
                         self.text_buffer.get_end_iter(),
                         True)
+# ------------------------------------------------------------------------------
