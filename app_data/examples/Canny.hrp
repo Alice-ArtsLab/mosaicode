@@ -4,46 +4,23 @@
 <language value='C' />
 <blocks>
   	<block type='harpia.plugins.C.openCV.canny' id='1'>
-		<position x="200" y="0"/>
-		<property name='threshold1' value='16' />
-		<property name='threshold2' value='33' />
-		<property name='apertureSize' value='3' />
+		<position x="208.117858887" y="24.0798034668"/>
+		<property name='threshold1' value='20' />
+		<property name='threshold2' value='34' />
+		<property name='apertureSize' value='5' />
 	</block>
 	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
-		<position x="0" y="0"/>
-		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
-	</block>
-	<block type='harpia.plugins.C.openCV.intValue' id='3'>
-		<position x="0" y="100"/>
-		<property name='maxVal' value='31' />
-		<property name='window_name' value='My Image - Canny' />
-		<property name='intVal' value='1' />
-		<property name='label' value='Value - 1' />
-	</block>
-	<block type='harpia.plugins.C.openCV.intValue' id='4'>
-		<position x="0" y="200"/>
-		<property name='maxVal' value='31' />
-		<property name='window_name' value='My Image - Canny' />
-		<property name='intVal' value='1' />
-		<property name='label' value='Value - 2' />
-	</block>
-	<block type='harpia.plugins.C.openCV.intValue' id='5'>
-		<position x="0" y="300"/>
-		<property name='maxVal' value='31' />
-		<property name='window_name' value='My Image - Canny' />
-		<property name='intVal' value='1' />
-		<property name='label' value='Value - 3' />
+		<position x="28.2658081055" y="46.4766387939"/>
+		<property name='filename' value='/usr/share/harpia/images/acquisition.png' />
 	</block>
 	<block type='harpia.plugins.C.openCV.show' id='6'>
-		<position x="400" y="0"/>
+		<position x="400.0" y="0.0"/>
+		<property name='window_type' value='Image Size' />
 		<property name='title' value='My Image - Canny' />
 	</block>
 </blocks>
 <connections>
   	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="3" from_out="1" to="1" to_in="2"/>
-	<connection from="4" from_out="1" to="1" to_in="3"/>
-	<connection from="5" from_out="1" to="1" to_in="4"/>
 	<connection from="1" from_out="1" to="6" to_in="1"/>
 </connections>
 </harpia>

@@ -1,0 +1,25 @@
+<harpia>
+<version value='0.0.1' />
+<zoom value='1.0' />
+<language value='C' />
+<blocks>
+  	<block type='harpia.plugins.C.openCV.show' id='1'>
+		<position x="450.734863281" y="93.9713134766"/>
+		<property name='window_type' value='Image Size' />
+		<property name='title' value='My Image' />
+	</block>
+	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
+		<position x="0.0" y="0.0"/>
+		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
+	</block>
+	<block type='harpia.plugins.C.openCV.addborder' id='3'>
+		<position x="181.472900391" y="62.8236083984"/>
+		<property name='color' value='#0000ffff0000' />
+		<property name='border_type' value='IPL_BORDER_CONSTANT' />
+	</block>
+</blocks>
+<connections>
+  	<connection from="2" from_out="1" to="3" to_in="1"/>
+	<connection from="3" from_out="1" to="1" to_in="1"/>
+</connections>
+</harpia>

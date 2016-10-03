@@ -3,21 +3,37 @@
 <zoom value='1.0' />
 <language value='C' />
 <blocks>
-  	<block type='harpia.plugins.C.openCV.liveDelay' id='1'>
-		<position x="200" y="0"/>
+  	<block type='harpia.plugins.C.openCV.liveMode' id='4'>
+		<position x="0.0" y="0.0"/>
+		<property name='camera' value='/dev/video0' />
+	</block>
+	<block type='harpia.plugins.C.openCV.decomposeRGB' id='5'>
+		<position x="119.04675293" y="165.299880981"/>
+	</block>
+	<block type='harpia.plugins.C.openCV.composeRGB' id='6'>
+		<position x="555.912353516" y="203.255020142"/>
+	</block>
+	<block type='harpia.plugins.C.openCV.liveDelay' id='7'>
+		<position x="327.101379395" y="203.402770996"/>
+		<property name='frameNumber' value='3.0' />
+	</block>
+	<block type='harpia.plugins.C.openCV.liveDelay' id='1'>
+		<position x="384.889770508" y="90.1461181641"/>
 		<property name='frameNumber' value='5' />
 	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
-		<position x="0" y="0"/>
-		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
-	</block>
 	<block type='harpia.plugins.C.openCV.show' id='3'>
-		<position x="400" y="0"/>
+		<position x="628.612915039" y="61.5144348145"/>
+		<property name='window_type' value='Image Size' />
 		<property name='title' value='My Image - Live Delay' />
 	</block>
 </blocks>
 <connections>
-  	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="1" from_out="1" to="3" to_in="1"/>
+  	<connection from="4" from_out="1" to="5" to_in="1"/>
+	<connection from="5" from_out="1" to="1" to_in="1"/>
+	<connection from="1" from_out="1" to="6" to_in="1"/>
+	<connection from="6" from_out="1" to="3" to_in="1"/>
+	<connection from="5" from_out="3" to="6" to_in="3"/>
+	<connection from="5" from_out="2" to="7" to_in="1"/>
+	<connection from="7" from_out="1" to="6" to_in="2"/>
 </connections>
 </harpia>

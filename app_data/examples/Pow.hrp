@@ -4,20 +4,52 @@
 <language value='C' />
 <blocks>
   	<block type='harpia.plugins.C.openCV.Pow' id='1'>
-		<position x="200" y="0"/>
+		<position x="200.0" y="0.0"/>
 		<property name='exponent' value='1' />
 	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
-		<position x="0" y="0"/>
-		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
+	<block type='harpia.plugins.C.openCV.newImage' id='12'>
+		<position x="151.881835938" y="280.142059326"/>
+		<property name='width' value='640' />
+		<property name='height' value='480' />
+	</block>
+	<block type='harpia.plugins.C.openCV.select' id='14'>
+		<position x="503.227355957" y="250.49685669"/>
+		<property name='key' value='s' />
+	</block>
+	<block type='harpia.plugins.C.openCV.select' id='15'>
+		<position x="664.50793457" y="247.10610962"/>
+		<property name='key' value='d' />
+	</block>
+	<block type='harpia.plugins.C.openCV.videoFile' id='16'>
+		<position x="482.739471436" y="388.17225647"/>
+		<property name='filename' value='/usr/share/harpia/images/vLeft.mpg' />
 	</block>
 	<block type='harpia.plugins.C.openCV.show' id='3'>
-		<position x="400" y="0"/>
-		<property name='title' value='My Image - Pow' />
+		<position x="550.731384277" y="126.539611816"/>
+		<property name='window_type' value='Window Size' />
+		<property name='title' value='My Image' />
+	</block>
+	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
+		<position x="0.0" y="0.0"/>
+		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
+	</block>
+	<block type='harpia.plugins.C.openCV.select' id='6'>
+		<position x="337.45111084" y="123.713134766"/>
+		<property name='key' value='a' />
+	</block>
+	<block type='harpia.plugins.C.openCV.imageFile' id='8'>
+		<position x="2.41784667969" y="146.399017334"/>
+		<property name='filename' value='/usr/share/harpia/images/aviao.png' />
 	</block>
 </blocks>
 <connections>
   	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="1" from_out="1" to="3" to_in="1"/>
+	<connection from="1" from_out="1" to="6" to_in="1"/>
+	<connection from="8" from_out="1" to="6" to_in="2"/>
+	<connection from="12" from_out="1" to="14" to_in="1"/>
+	<connection from="6" from_out="1" to="14" to_in="2"/>
+	<connection from="15" from_out="1" to="3" to_in="1"/>
+	<connection from="16" from_out="1" to="15" to_in="1"/>
+	<connection from="14" from_out="1" to="15" to_in="2"/>
 </connections>
 </harpia>
