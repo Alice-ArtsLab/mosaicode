@@ -17,7 +17,6 @@ class AddBorder(OpenCVPlugin):
     def get_help(self):#Função que chama a help
         return "Adiciona bordas na imagem"
 
-
     # --------------------------Help Text--------------------------------------------
     def generate_vars(self):
         return "IplImage * block$id$_img_i0 = NULL;\n" + \
@@ -56,20 +55,20 @@ class AddBorder(OpenCVPlugin):
     # ------------------------------------------------------------------------------
     def get_properties(self):
         return {
-                   "color":{"name": "Color",
-                     "type": HARPIA_COLOR
+            "color":{"name": "Color",
+                "type": HARPIA_COLOR
+                },
+            "border_type":{"name": "Type",
+                "type": HARPIA_COMBO,
+                "values": ["IPL_BORDER_CONSTANT",
+                    "IPL_BORDER_REPLICATE",
+                    "IPL_BORDER_REFLECT",
+                    "IPL_BORDER_WRAP"]
                     },
-                "border_type":{"name": "Type",
-                    "type": HARPIA_COMBO,
-                    "values": ["IPL_BORDER_CONSTANT",
-                            "IPL_BORDER_REPLICATE",
-                            "IPL_BORDER_REFLECT",
-                            "IPL_BORDER_WRAP"]
-                    },
-                 "border":{
-                 "name": "Border Size",
-                 "type": HARPIA_INT
-                 }
+            "border":{
+                "name": "Border Size",
+                "type": HARPIA_INT
                 }
+            }
 
 # ------------------------------------------------------------------------------

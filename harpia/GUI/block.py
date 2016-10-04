@@ -217,6 +217,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                       + (x*5) # spacing betwen ports
                       + x*INPUT_HEIGHT) #previous ports
                        )
+            image.set_property("tooltip", self.get_description()["InTypes"][x])
             image.connect("button-press-event", self.__on_input_press, x)
             image.connect("button-release-event", self.__on_input_release, x)
             ins.append(image)
@@ -250,6 +251,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                       + (x*5) # spacing betwen ports
                       + x*OUTPUT_HEIGHT) #previous ports
                         )
+            image.set_property("tooltip", self.get_description()["OutTypes"][x])
             image.connect("button-press-event", self.__on_output_press, x)
             image.connect("button-release-event", self.__on_output_release, x)
             outs.append(image)

@@ -72,6 +72,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.select_rect = None
         self.__update_white_board()
         self.scrolled_window = None
+        self.set_property("has-tooltip", True) #Allow tooltip on elements
         self.show()
 
     #----------------------------------------------------------------------
