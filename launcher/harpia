@@ -45,6 +45,9 @@ def main(argv):
     else:
         win.main_control.new()
 
+    # to kill with Terminal Ctrl+C
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
     #----------------------------------------------------------------------
 
