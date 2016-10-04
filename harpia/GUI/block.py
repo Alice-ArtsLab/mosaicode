@@ -283,6 +283,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.widgets["Label"] = label
 
     #----------------------------------------------------------------------
+    def rebuild(self):
+        self.widgets = {}
+        # remove all elements
+        while self.get_root_item().get_n_children() != 0:
+            self.get_root_item().remove_child(0)
+        self.build()
+
+    #----------------------------------------------------------------------
     def build(self):
         self.__draw_label()
         self.__draw_rect()

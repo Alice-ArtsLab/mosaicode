@@ -12,6 +12,13 @@ class Canny(OpenCVPlugin):
         self.apertureSize = 3
         self.threshold1 = 16
         self.threshold2 = 33
+        self.description = {"Label": "Canny",
+            "Icon": "images/canny.png",
+            "Color": "250:180:80:150",
+            "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT", 3:"HRP_INT"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "TreeGroup": "Gradients, Edges and Corners"
+            }
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -56,15 +63,6 @@ if(block$id$_img_i0){ //Canny Code
 } // End Canny Code
 '''
 
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Canny",
-            "Icon": "images/canny.png",
-            "Color": "250:180:80:150",
-            "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT", 3:"HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Gradients, Edges and Corners"
-            }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
