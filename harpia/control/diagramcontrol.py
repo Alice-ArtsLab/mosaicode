@@ -88,13 +88,10 @@ class DiagramControl():
         for conn in connections:
             from_block = conn.getAttr("from")
             to_block = conn.getAttr("to")
-            from_block_out = conn.getAttr("from_out")
-            to_block_in = conn.getAttr("to_in")
-            self.diagram.insert_ready_connector(
-                                    from_block,
-                                    (int(from_block_out) - 1),
-                                    to_block,
-                                    (int(to_block_in) - 1))
+            from_block_out = int(conn.getAttr("from_out"))
+            to_block_in = int(conn.getAttr("to_in"))
+            self.diagram.start_connection(self.diagram.blocks[from_block], from_block_out - 1)
+            self.diagram.end_connection(self.diagram.blocks[to_block], to_block_in - 1)
         self.diagram.update_scrolling()
         self.diagram.reset_undo()
 

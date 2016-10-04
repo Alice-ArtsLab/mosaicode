@@ -105,7 +105,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
-        self.translate(self.x, self.y)
+        self.move(self.x, self.y)
 
     #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -145,10 +145,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         # Get the new position and move by the difference
         new_x = event.x - self.remember_x
         new_y = event.y - self.remember_y
-        for widget in self.diagram.current_widgets:
-            if widget.__class__ == Block:
-                widget.move(new_x, new_y)
-        self.diagram.update_scrolling()
+        self.diagram.move_selected_blocks(new_x, new_y)
         return False
 
     #----------------------------------------------------------------------

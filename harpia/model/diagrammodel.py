@@ -94,4 +94,3 @@ class DiagramModel(object):
     # ---------------------------------------------------------------------
     def get_zoom(self):
         return self.__zoom
-

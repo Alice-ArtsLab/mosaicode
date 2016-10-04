@@ -228,6 +228,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def add_block(self, plugin):
         new_block = Block(self, plugin)
         if DiagramModel.add_block(self, new_block):
+            self.do("Add")
             self.get_root_item().add_child(new_block, -1)
             return True
         else:
@@ -288,20 +289,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         return True
 
     #----------------------------------------------------------------------
-    def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):
-        if from_block not in self.blocks:
-            System.log("Connection from non existent block")
-            return None
-        if to_block not in self.blocks:
-            System.log("Connection to non existent block")
-            return None
-        self.start_connection(self.blocks[from_block], from_block_out)
-        if self.end_connection(self.blocks[to_block], to_block_in):
-            return self.connectors[len(self.connectors) - 1]
-        else:
-            return None
-
-    #----------------------------------------------------------------------
     def __white_board_event(self, widget, event=None):
         if event.type == Gdk.EventType.BUTTON_PRESS:
             if event.button == 1:
@@ -316,13 +303,14 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                         x=0,
                         y=0,
                         width=self.__main_window.get_size()[0],
-                        height=1000,
+                        height=self.__main_window.get_size()[1],
                         stroke_color="white",
                         fill_color="white")
         self.white_board.connect("focus-in-event", self.__white_board_event)
 
     #----------------------------------------------------------------------
     def update_flows(self):
+        self.white_board.set_property("stroke_color","white")
         for block_id in self.blocks:
             self.blocks[block_id].update_flow()
         for conn in self.connectors:
@@ -384,6 +372,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ---------------------------------------------------------------------
     def delete(self):
+        if len(self.current_widgets) < 1:
+            return
         self.do("Delete")
         for widget in self.current_widgets:
             widget.delete()
@@ -419,12 +409,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             from_block_out = widget.from_block_out
             to_block = replace[widget.to_block]
             to_block_in = widget.to_block_in
-            new_connection = self.insert_ready_connector(
-                        from_block,
-                        from_block_out,
-                        to_block,
-                        to_block_in)
-            self.current_widgets.append(new_connection)
+            self.start_connection(self.blocks[from_block], from_block_out)
+            self.current_widgets.append(self.curr_connector)
+            self.end_connection(self.blocks[to_block], to_block_in)
         self.update_flows()
 
     # ---------------------------------------------------------------------
@@ -435,6 +422,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ---------------------------------------------------------------------
     def cut(self):
+        if len(self.current_widgets) < 1:
+            return
         self.do("Cut")
         self.__main_window.main_control.reset_clipboard()
         for widget in self.current_widgets:
@@ -481,47 +470,42 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def do(self, new_msg):
         self.set_modified(True)
+        action = (copy.copy(self.blocks), copy.copy(self.connectors), new_msg)
+        self.undo_stack.append(action)
         System.log("Do: " + new_msg)
-        self.undo_stack.append(
-                (copy.copy(self.blocks), 
-                copy.copy(self.connectors),
-                new_msg))
-        self.redo_stack = []
 
     # ---------------------------------------------------------------------
     def undo(self):
         if len(self.undo_stack) < 1:
             return
         self.set_modified(True)
-        blocks, connectors, msg = self.undo_stack.pop()
-        System.log("Undo: " + msg)
-        self.redo_stack.append(
-                (copy.copy(self.blocks), 
-                copy.copy(self.connectors),
-                msg))
-        self.blocks = blocks
-        self.connectors = connectors
+        action = self.undo_stack.pop()
+        self.blocks = action[0]
+        self.connectors = action[1]
+        msg = action[2]
         self.redraw()
+        self.redo_stack.append(action)
+        if len(self.undo_stack) == 0:
+            self.set_modified(False)
+        System.log("Undo: " + msg)
 
     # ---------------------------------------------------------------------
     def redo(self):
         if len(self.redo_stack) < 1:
             return
         self.set_modified(True)
-        blocks, connectors, msg = self.redo_stack.pop()
-        System.log("Redo: " + msg)
-        self.undo_stack.append(
-                (copy.copy(self.blocks), 
-                copy.copy(self.connectors),
-                msg))
-        self.blocks = blocks
-        self.connectors = connectors
+        action = self.redo_stack.pop()
+        self.blocks = action[0]
+        self.connectors = action[1]
+        msg = action[2]
         self.redraw()
+        self.undo_stack.append(action)
+        System.log("Redo: " + msg)
 
     # ---------------------------------------------------------------------
     def get_min_max(self):
-        min_x = 32000
-        min_y = 32000
+        min_x = self.__main_window.get_size()[0]
+        min_y = self.__main_window.get_size()[1]
 
         max_x = 0
         max_y = 0
@@ -537,6 +521,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 max_x = x + block.width
             if y + block.height > max_y:
                 max_y = y + block.height
-
         return min_x, min_y, max_x - min_x, max_y - min_y
+
 #----------------------------------------------------------------------
