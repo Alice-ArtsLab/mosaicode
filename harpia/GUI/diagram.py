@@ -85,9 +85,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, event):
+        scale = self.get_scale()
         # Select elements
         if self.select_rect != None:
-            self.__update_select(event.x, event.y)
+            self.__update_select(event.x / scale, event.y / scale)
             items = self.get_items_in_area(self.select_rect.bounds, True, False, True)
             self.current_widgets = []
             for item in items:
@@ -104,7 +105,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         if self.curr_connector == None:
             return False
-        point = (event.x,event.y)
+        point = (event.x / scale, event.y / scale)
         self.curr_connector.update_tracking(point)
         return False
 
@@ -181,22 +182,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __update_select(self, x, y):
+        scale = self.get_scale()
         xi = 0
         xf = 0
         yi = 0
         yf = 0
-        if x > self.last_clicked_point[0]:
-            xi = self.last_clicked_point[0]
+        if x > self.last_clicked_point[0] / scale:
+            xi = self.last_clicked_point[0] / scale
             xf = x
         else:
             xi = x
-            xf = self.last_clicked_point[0]
-        if y > self.last_clicked_point[1]:
-            yi = self.last_clicked_point[1]
+            xf = self.last_clicked_point[0] / scale
+        if y > self.last_clicked_point[1] / scale:
+            yi = self.last_clicked_point[1] / scale
             yf = y
         else:
             yi = y
-            yf = self.last_clicked_point[1]
+            yf = self.last_clicked_point[1] / scale
         self.select_rect.set_property("x", xi)
         self.select_rect.set_property("width", xf - xi)
         self.select_rect.set_property("y", yi)

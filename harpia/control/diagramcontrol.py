@@ -100,7 +100,7 @@ class DiagramControl():
         self.diagram.reset_undo()
 
 # ----------------------------------------------------------------------
-    def save(self, file_name=None):  # saving project
+    def save(self, file_name=None):
 
         output = "<harpia>\n"
 
