@@ -24,6 +24,9 @@ def main(argv):
             It initializes the interface.
     """
 
+    reload(sys)  
+    sys.setdefaultencoding('utf8')
+
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
 
 
