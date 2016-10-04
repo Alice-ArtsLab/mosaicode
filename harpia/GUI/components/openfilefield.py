@@ -55,7 +55,6 @@ class OpenFileField(Field, Gtk.HBox):
             current_dir = self.field.get_text()
         else:
             current_dir = os.path.dirname(self.field.get_text())
-        print current_dir
         dialog.set_current_folder(current_dir)
 
         response = dialog.run()
