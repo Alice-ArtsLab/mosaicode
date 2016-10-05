@@ -60,14 +60,6 @@ class DiagramModel(object):
         self.connectors.append(connection)
 
     #----------------------------------------------------------------------
-    def get_connectors_to_block(self, block):
-        result = []
-        for conn in self.connectors:
-            if conn.to_block == block.get_id():
-                result.append(conn)
-        return result
-
-    #----------------------------------------------------------------------
     def set_file_name(self, file_name):
         self.__file_name = file_name
 

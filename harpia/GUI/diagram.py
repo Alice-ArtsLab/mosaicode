@@ -513,14 +513,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for block_id in self.blocks:
             block = self.blocks[block_id]
             x,y = block.get_position()
-            if x < min_x:
-                min_x = x
-            if y < min_y:
-                min_y = y
-            if x + block.width > max_x:
-                max_x = x + block.width
-            if y + block.height > max_y:
-                max_y = y + block.height
+            if x < min_x: min_x = x
+            if y < min_y: min_y = y
+            if x + block.width > max_x: max_x = x + block.width
+            if y + block.height > max_y: max_y = y + block.height
         return min_x, min_y, max_x - min_x, max_y - min_y
 
 #----------------------------------------------------------------------

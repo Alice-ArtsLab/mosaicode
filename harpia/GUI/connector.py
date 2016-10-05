@@ -92,13 +92,13 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
         self.focus = True
-        self.diagram.update_flows()
+        self.__update_state()
         return False
 
     #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         self.focus = False
-        self.diagram.update_flows()
+        self.__update_state()
         return False
 
     #----------------------------------------------------------------------
@@ -107,12 +107,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.to_block_in = to_block_in
         self.to_point = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
         self.update_tracking(self.to_point)
-
-    #----------------------------------------------------------------------
-    def __update_connectors(self):
-        self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out)
-        self.to_point = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
-        self.__update_draw()
 
     #----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
@@ -131,6 +125,14 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             b += 1
 
         self.to_point = self.from_point[0] + a - 5, self.from_point[1] + b
+        self.__update_draw()
+
+    #----------------------------------------------------------------------
+    def update_flow(self):
+        block = self.diagram.blocks[self.from_block]
+        self.from_point = block.get_output_pos(self.from_block_out)
+        block = self.diagram.blocks[self.to_block]
+        self.to_point = block.get_input_pos(self.to_block_in)
         self.__update_draw()
 
     #----------------------------------------------------------------------
@@ -170,10 +172,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.widgets["Line"].set_property("data",path)
 
         self.__update_state()
-
-    #----------------------------------------------------------------------
-    def update_flow(self):
-        self.__update_connectors()
 
     #----------------------------------------------------------------------
     def __update_state(self):

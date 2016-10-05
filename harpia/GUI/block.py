@@ -70,36 +70,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = False
 
         self.width = WIDTH_DEFAULT
-
-        maxIO = max(len(self.get_description()["InTypes"]), len(self.get_description()["OutTypes"]))
-
-        ## Generates the block size, based on the number of inputs,outputs
-        # Comment block is too small...
-        if not maxIO:
-            maxIO = 1
-
-        self.height = max( ((maxIO-1)* 5 ) #espacamento entre ports = 5
-                          +(RADIUS*2 ) #tirando a margem superior e inferior
-                          +(maxIO * INPUT_HEIGHT),#adicionando a altura de cada port
-                          HEIGHT_DEFAULT)
-
         self.build()
-
-        self.input_port_centers = []
-        for inputPort in range(len(self.get_description()["InTypes"])):
-            self.input_port_centers.append((INPUT_WIDTH/2,
-                     (RADIUS # upper border
-                     + (inputPort*5) # spacing betwen ports
-                     + inputPort*INPUT_HEIGHT #previous ports
-                     + INPUT_HEIGHT/2)))#going to the port's center
-
-        self.output_port_centers = []
-        for outputPort in range(len(self.get_description()["OutTypes"])):
-            self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
-                     (RADIUS # upper border
-                     + (outputPort*5) # spacing betwen ports
-                     + outputPort*INPUT_HEIGHT #previous ports
-                     + INPUT_HEIGHT/2)))#going to the port's center
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
@@ -151,13 +122,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
         self.focus = True
-        self.diagram.update_flows()
+        self.__update_state()
         return False
 
     #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         self.focus = False
-        self.diagram.update_flows()
+        self.__update_state()
         return False
 
     #----------------------------------------------------------------------
@@ -211,8 +182,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                         pixbuf=pixbuf,
                         x=0,
                         y=(RADIUS # upper border
-                      + (x*5) # spacing betwen ports
-                      + x*INPUT_HEIGHT) #previous ports
+                      + (x * 5) # spacing betwen ports
+                      + x * INPUT_HEIGHT) #previous ports
                        )
             image.set_property("tooltip", self.get_description()["InTypes"][x])
             image.connect("button-press-event", self.__on_input_press, x)
@@ -292,6 +263,19 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def build(self):
+        maxIO = max(len(self.get_description()["InTypes"]),
+                    len(self.get_description()["OutTypes"]))
+
+        ## Generates the block size, based on the number of inputs,outputs
+        # Comment block is too small...
+        if not maxIO:
+            maxIO = 1
+
+        self.height = max( ((maxIO-1) * 5 ) #espacamento entre ports = 5
+                          +(RADIUS * 2 ) #tirando a margem superior e inferior
+                          +(maxIO * INPUT_HEIGHT),#adicionando a altura de cada port
+                          HEIGHT_DEFAULT)
+
         self.__draw_label()
         self.__draw_rect()
         self.__draw_inputs()
@@ -300,32 +284,23 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.update_flow()
 
     #----------------------------------------------------------------------
-    def update_flow(self):
-        self.has_flow = True
-        sourceConnectors = self.diagram.get_connectors_to_block(self)
-        distinct_con = []
-        for con in sourceConnectors:
-            if con.to_block_in not in distinct_con:
-                distinct_con.append(con.to_block_in)
-        for con in self.get_description()["InTypes"]:
-            if con not in distinct_con:
-                self.has_flow = False
-                break
-        self.__update_state()
-        return self.has_flow
-
-    #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = self.input_port_centers[input_id][0] + x - PORT_SENSITIVITY
-        y = self.input_port_centers[input_id][1] + y - PORT_SENSITIVITY + 3
+        x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
+        y = (RADIUS # upper border
+                     + (input_id * 5) # spacing betwen ports
+                     + input_id * INPUT_HEIGHT #previous ports
+                     + INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
     #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = self.output_port_centers[output_id][0] + x + PORT_SENSITIVITY
-        y = self.output_port_centers[output_id][1] + y - PORT_SENSITIVITY + 3
+        x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
+        y = (RADIUS # upper border
+                     + (output_id * 5) # spacing betwen ports
+                     + output_id * INPUT_HEIGHT #previous ports
+                     + INPUT_HEIGHT/2) + y - PORT_SENSITIVITY + 3
         return (x,y)
 
     #----------------------------------------------------------------------
@@ -350,6 +325,20 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     #----------------------------------------------------------------------
     def get_properties(self):
         return BlockModel.get_properties(self)
+
+    #----------------------------------------------------------------------
+    def update_flow(self):
+        self.has_flow = True
+        distinct_con = []
+        for con in self.diagram.connectors:
+            if con.to_block != self.get_id():
+                continue
+            if con.to_block_in not in distinct_con:
+                distinct_con.append(con.to_block_in)
+        if len(distinct_con) < len(self.get_description()["InTypes"]):
+            self.has_flow = False
+        self.__update_state()
+        return self.has_flow
 
     #----------------------------------------------------------------------
     def __update_state(self):
