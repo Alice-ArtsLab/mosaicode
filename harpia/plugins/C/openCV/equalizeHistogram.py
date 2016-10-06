@@ -10,27 +10,21 @@ class EqualizeHistogram(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
-        self.help = "a equalização do histograma de uma imagem visa alcançar maior contraste entre os diversos elementos de uma imagem."
-        
-        self.description = {
-            "Label": "Equalize Histogram",
-            "Icon": "images/equalizeHistogram.png",
-            "Color": "0:0:0:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Histograms"
-        }
+    # ----------------------------------------------------------------------
+    def get_help(self):
+        return "a equalização do histograma de uma imagem visa alcançar maior contraste entre os diversos elementos de uma imagem."
 
-        self.properties = {}
-
-        #-------------------C/OpenCv code---------------------------------------
-        self.vars =  \
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_SourceCx[3];\n' + \
             'IplImage * block$id$_EqCx[3];\n'
 
-        self.function_call = \
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
             '\nif(block$id$_img_i0){\n' + \
             'CvSize size$id$ = cvGetSize(block$id$_img_i0);\n'+ \
             'block$id$_img_o0 = cvCreateImage(size$id$, IPL_DEPTH_8U, 3);\n' + \
@@ -56,29 +50,21 @@ class EqualizeHistogram(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
     def __del__(self):
         pass
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return self.description
-
+        return {"Label": "Equalize Histogram",
+            "Icon": "images/equalizeHistogram.png",
+            "Color": "0:0:0:150",
+            "InTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "TreeGroup": "Histograms"
+            }
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
+        return {}
 
 # ------------------------------------------------------------------------------
 
