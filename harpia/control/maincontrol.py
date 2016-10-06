@@ -21,6 +21,7 @@ gi.require_version('Gtk', '3.0')
 class MainControl():
 
     # ----------------------------------------------------------------------
+
     def __init__(self, main_window):
         self.main_window = main_window
         # It must be possible to exchange data between diagrams
@@ -207,8 +208,9 @@ class MainControl():
         if diagram is None:
             return False
         if not diagram.add_block(block):
-            message = "Block language is different from diagram language.\n" + \
-                "Diagram is expecting to generate " + diagram.language + \
+            message = "Block language is different from diagram language.\n" +
+            \
+            "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
             return False
