@@ -11,16 +11,72 @@ class ColorConversion(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.conversion_type = 'RGB -> GRAY'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return "Realiza a conversão de cores entre diferentes padrões de imagens coloridas e tons de cinza."
+        self.help = "Realiza a conversão de cores entre diferentes padrões de imagens coloridas e tons de cinza."
 
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return \
+        self.description = {
+            "Label": "Color Conversion",
+            "Icon": "images/colorConversion.png",
+            "Color": "50:125:50:150",
+            "InTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "TreeGroup": "Filters and Color Conversion"
+        }
+
+        self.properties =  {
+            "conversion_type":{"name": "Conversion Type",
+                "type": HARPIA_COMBO,
+                "values": ["RGB -> GRAY",
+                            "RGB -> YCrCb",
+                            "YCrCb -> RGB",
+                            "RGB -> HSV",
+                            "HSV -> RGB",
+                            "RGB -> HLS",
+                            "HLS -> RGB",
+                            "RGB -> CIE.XYZ",
+                            "CIE.XYZ -> RGB",
+                            "RGB -> CIE.LAB",
+                            "CIE.LAB -> RGB",
+                            "RGB -> CIE.LUV",
+                            "CIE.LUV -> RGB"]
+            }
+        }
+
+        self.vars =  \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_img_t = NULL;\n'
+
+        self.function_call = ""
+        
+        self.dealloc = \
+            'cvReleaseImage(&block$id$_img_t);\n' + \
+            'cvReleaseImage(&block$id$_img_i0);\n' + \
+            'cvReleaseImage(&block$id$_img_o0);\n'
+
+
+    # ----------------------------------------------------------------------
+    def get_help(self):
+        return self.help
+
+    # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return self.dealloc
+
+    # ----------------------------------------------------------------------
+    def __del__(self):
+        pass
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return self.description
+
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return self.properties
+
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return self.vars
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -62,45 +118,5 @@ class ColorConversion(OpenCVPlugin):
             '{    cvMerge(block$id$_img_t ,block$id$_img_t ,block$id$_img_t ,NULL ,block$id$_img_o0);\n }\n' + \
             'else\n' + '{ block$id$_img_o0 = cvCloneImage(block$id$_img_t);\n}'
  
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_t);\n' + \
-               'cvReleaseImage(&block$id$_img_i0);\n' + \
-               'cvReleaseImage(&block$id$_img_o0);\n'
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Color Conversion",
-            "Icon": "images/colorConversion.png",
-            "Color": "50:125:50:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Filters and Color Conversion"
-            }
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {
-
-        "conversion_type":{"name": "Conversion Type",
-                    "type": HARPIA_COMBO,
-                    "values": ["RGB -> GRAY",
-                                "RGB -> YCrCb",
-                                "YCrCb -> RGB",
-                                "RGB -> HSV",
-                                "HSV -> RGB",
-                                "RGB -> HLS",
-                                "HLS -> RGB",
-                                "RGB -> CIE.XYZ",
-                                "CIE.XYZ -> RGB",
-                                "RGB -> CIE.LAB",
-                                "CIE.LAB -> RGB",
-                                "RGB -> CIE.LUV",
-                                "CIE.LUV -> RGB"]
-                    }
-        }
 
 # ------------------------------------------------------------------------------

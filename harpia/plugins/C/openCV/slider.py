@@ -14,53 +14,69 @@ class Slider(OpenCVPlugin):
         self.label = "Value"
         self.window_name = "My Image"
 
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Creates Slider to int value"
+        self.help = "Creates Slider to int value."
 
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        self.intVal = int(float(self.intVal))
-        return \
-            'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return \
-            'cvNamedWindow("$window_name$",CV_WINDOW_AUTOSIZE );\n' + \
-            'cvCreateTrackbar("$label$", "$window_name$", &block$id$_int_o0, $maxVal$, NULL);\n'
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {'Label': 'Slider',
+        self.description = {
+            'Label': 'Slider',
             'Icon': 'images/newDouble.png',
             'Color': '50:50:200:150',
             'InTypes': "",
             'OutTypes': {0: 'HRP_INT'},
             'TreeGroup': 'Basic Data Type'
+        }
+
+        self.properties = {
+            "intVal":{
+                "name": "Value",
+                "type": HARPIA_INT,
+                "lower":0,
+                "upper":65535,
+                "step":1
+            },
+            "maxVal":{
+                "name": "Max Value",
+                "type": HARPIA_INT,
+                "lower":0,
+                "upper":65535,
+                "step":1
+            },
+            "label":{
+                "name": "Label",
+                "type": HARPIA_STRING
+            },                            
+            "window_name": {
+                "name": "Window Title",
+                "type": HARPIA_STRING
             }
+        }
+
+        #-------------------C/OpenCv code------------------------------------
+        self.vars = \
+            'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
+
+        self.function_call = \
+            'cvNamedWindow("$window_name$",CV_WINDOW_AUTOSIZE );\n' + \
+            'cvCreateTrackbar("$label$", "$window_name$", &block$id$_int_o0, $maxVal$, NULL);\n'
+
+    # ----------------------------------------------------------------------
+    def get_help(self):
+        return self.help
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return self.description
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {
-            "intVal":{"name": "Value",
-                        "type": HARPIA_INT,
-                        "lower":0,
-                        "upper":65535,
-                        "step":1
-                            },
-            "maxVal":{"name": "Max Value",
-                        "type": HARPIA_INT,
-                        "lower":0,
-                        "upper":65535,
-                        "step":1
-                            },
-            "label":{"name": "Label",
-                    "type": HARPIA_STRING
-            },                            
-            "window_name": {"name": "Window Title",
-                        "type": HARPIA_STRING
-            }
-        }
+        return self.properties
+
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        self.intVal = int(float(self.intVal))
+        return self.vars
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return self.function_call
 
 # ------------------------------------------------------------------------------
