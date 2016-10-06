@@ -11,9 +11,57 @@ class LiveDelay(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.frameNumber = 5
 
+        self.help = "Inserts a delay inside a live stream."
+
+        self.description = {
+            'Label': 'Live Delay',
+            'Icon': 'images/liveDelay.png',
+            'Color': '250:20:30:150',
+            'InTypes': {0: 'HRP_IMAGE'},
+            'OutTypes': {0: 'HRP_IMAGE'},
+            'TreeGroup': 'General',
+        }
+
+        self.properties = {
+            "frameNumber":{
+                "name": "Time (in frames)",
+                "type": HARPIA_INT,
+                "lower":1,
+                "upper":200,
+                "step":1
+            }
+        }
+        #------------------------------C/OpenCv code---------------------------
+        self.vars = ""
+
+        self.function_call = '''
+            if(block$id$_img_i0){
+                cvReleaseImage(&(block$id$_buffer[i_$id$]));
+                block$id$_buffer[i_$id$] = cvCloneImage(block$id$_img_i0);
+                i_$id$++;
+                i_$id$ %= $frameNumber$;
+                block$id$_img_o0 = block$id$_buffer[i_$id$];
+            }
+            '''
+        self.dealloc = 'cvReleaseImage(&block$id$_img_i0);\n'
+
+        self.out_dealloc = '''
+            for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
+                if(block$id$_buffer[i_$id$] != NULL)
+                    cvReleaseImage(&(block$id$_buffer[i_$id$]));
+            '''
+
     # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Inserts a delay inside a live stream"
+    def get_help(self):
+        return self.help
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return self.description
+
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return self.properties
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
@@ -39,48 +87,15 @@ class LiveDelay(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        return '''
-if(block$id$_img_i0){
-    cvReleaseImage(&(block$id$_buffer[i_$id$]));
-    block$id$_buffer[i_$id$] = cvCloneImage(block$id$_img_i0);
-    i_$id$++;
-    i_$id$ %= $frameNumber$;
-    block$id$_img_o0 = block$id$_buffer[i_$id$];
-}
-'''
+        return self.function_call
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return 'cvReleaseImage(&block$id$_img_i0);\n'
+        return self.dealloc
 
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
-        return '''
-for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
-    if(block$id$_buffer[i_$id$] != NULL)
-        cvReleaseImage(&(block$id$_buffer[i_$id$]));
-'''
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {'Label': 'Live Delay',
-            'Icon': 'images/liveDelay.png',
-            'Color': '250:20:30:150',
-            'InTypes': {0: 'HRP_IMAGE'},
-            'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': 'General',
-            }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {
-            "frameNumber":{"name": "Time (in frames)",
-                        "type": HARPIA_INT,
-                        "lower":1,
-                        "upper":200,
-                        "step":1
-                        }
-        }
+        return self.out_dealloc
 
 # ------------------------------------------------------------------------------
 

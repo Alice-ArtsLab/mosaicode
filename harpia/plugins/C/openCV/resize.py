@@ -11,13 +11,29 @@ class Resize(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.method = "CV_INTER_LINEAR"
 
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Resizes the input image to the dimensions of the input rectangle"
+        self.help = "Resizes the input image to the dimensions of the input rectangle."
 
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return \
+        self.description = {
+            "Label": "Resize Image",
+            "Icon": "images/resize.png",
+            "Color": "20:80:10:150",
+            "InTypes": {0: "HRP_IMAGE", 1: "HRP_RECT"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "TreeGroup": "Experimental"
+        }
+
+        self.properties = {
+            "method":{
+                "name": "Method",
+                "type": HARPIA_COMBO,
+                "values": ["CV_INTER_NN", "CV_INTER_LINEAR" , "CV_INTER_AREA", "CV_INTER_CUBIC"]
+            }
+        }
+
+        #-------------------C/OpenCv code------------------------------------
+        self.vars = ""
+
+        self.function_call = \
             'if(block$id$_img_i0){\n' + \
             'CvSize size$id$ = cvSize(block$id$_rect_i1.width,block$id$_rect_i1.height);\n' + \
             'block$id$_img_o0 = cvCreateImage(size$id$,block$id$_img_i0->depth,block$id$_img_i0->nChannels);\n' + \
@@ -25,22 +41,19 @@ class Resize(OpenCVPlugin):
             '}\n'
 
     # ----------------------------------------------------------------------
+    def get_help(self):
+        return self.help
+
+    # ----------------------------------------------------------------------
     def get_description(self):
-        return {"Label": "Resize Image",
-            "Icon": "images/resize.png",
-            "Color": "20:80:10:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_RECT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Experimental"
-            }
+        return self.description
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {
-        "method":{"name": "Method",
-                    "type": HARPIA_COMBO,
-                    "values": ["CV_INTER_NN", "CV_INTER_LINEAR" , "CV_INTER_AREA", "CV_INTER_CUBIC"]
-                    }
-        }
+        return self.properties
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return self.function_call
 
 # ------------------------------------------------------------------------------

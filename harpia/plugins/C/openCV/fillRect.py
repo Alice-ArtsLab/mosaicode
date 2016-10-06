@@ -11,16 +11,51 @@ class FillRect(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.color = "#0000ffff0000"
 
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return  "Preenche o retângulo de uma cor."
+        self.help = "Preenche o retângulo de uma cor."
+        
+        self.description = {
+            "Label":"Fill Rectangle",
+            "Icon":"images/fill.png",
+            "Color":"50:100:200:150",
+            "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
+            "OutTypes":{0:"HRP_IMAGE"},
+            "TreeGroup":"Basic Shapes"
+        }
+        
+        self.properties = {
+            "color":{
+                "name": "Color",
+                "type": HARPIA_COLOR
+            }
+        }
 
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return \
+        #------------------------------C/OpenCv code---------------------------
+        self.vars = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'CvRect block$id$_rect_i1;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n'
+
+        self.function_call = ""
+
+    # ----------------------------------------------------------------------
+    def get_help(self):
+        return  self.help
+
+    # ----------------------------------------------------------------------
+    def __del__(self):
+        pass
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return self.description
+
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return self.properties
+
+    #----------------------------------------------------------------------
+    def generate_vars(self):
+        return self.vars
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -40,25 +75,4 @@ class FillRect(OpenCVPlugin):
             '\tcvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label":"Fill Rectangle",
-                "Icon":"images/fill.png",
-                "Color":"50:100:200:150",
-                "InTypes":{0:"HRP_IMAGE",1:"HRP_RECT"},
-                "OutTypes":{0:"HRP_IMAGE"},
-                "TreeGroup":"Basic Shapes"
-         }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {
-            "color":{"name": "Color",
-                     "type": HARPIA_COLOR
-                    }
-        }
 # ------------------------------------------------------------------------------
