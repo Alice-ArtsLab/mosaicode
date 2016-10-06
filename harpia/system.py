@@ -7,7 +7,7 @@
 # UFSC - Federal University of Santa Catarina
 # Copyright: 2006 - 2007 Luis Carlos Dill Junges (lcdjunges@yahoo.com.br),
 #                        Clovis Peruchi Scotti (scotti@ieee.org),
-#                        Guilherme Augusto Rutzen (rutzen@das.ufsc.br), 
+#                        Guilherme Augusto Rutzen (rutzen@das.ufsc.br),
 #                        Mathias Erdtmann (erdtmann@gmail.com)
 #                        and S2i (www.s2i.das.ufsc.br)
 #            2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
@@ -26,27 +26,27 @@
 #    You should have received a copy of the GNU General Public License along
 #    with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#    For further information, check the COPYING file distributed with this software.
-#
-#----------------------------------------------------------------------
+#    For further information, check the COPYING file distributed with this
+#    software.
 
 import harpia.plugins
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.model.preferences import Preferences
 
-import pkgutil # For dynamic package load
-import inspect # For module inspect
+import pkgutil  # For dynamic package load
+import inspect  # For module inspect
 
-from glob import glob # To load examples
+from glob import glob  # To load examples
 import os
 import copy
 
 import sys
 
+
 class System(object):
 
-    APP='harpia'
-    DIR='/usr/share/harpia/po'
+    APP = 'harpia'
+    DIR = '/usr/share/harpia/po'
 
     ZOOM_ORIGINAL = 1
     ZOOM_IN = 2
@@ -59,6 +59,7 @@ class System(object):
     # ----------------------------------------------------------------------
     class __Singleton:
         # ----------------------------------------------------------------------
+
         def __init__(self):
             self.Log = None
             self.properties = Preferences()
@@ -77,15 +78,14 @@ class System(object):
             self.list_of_examples.sort()
             PreferencesControl(self.properties).load()
 
-
         # ----------------------------------------------------------------------
         def __load_blocks(self):
             from harpia.control.codegenerator import CodeGenerator
             from harpia.model.plugin import Plugin
             for importer, modname, ispkg in pkgutil.walk_packages(
-                            harpia.plugins.__path__,
-                            harpia.plugins.__name__ + ".",
-                            None):
+                    harpia.plugins.__path__,
+                    harpia.plugins.__name__ + ".",
+                    None):
                 if ispkg:
                     continue
                 module = __import__(modname, fromlist="dummy")
@@ -93,12 +93,13 @@ class System(object):
                     if not inspect.isclass(obj):
                         continue
                     instance = obj()
-                    if isinstance(instance, Plugin) and "Label" in instance.get_description():
+                    if isinstance(instance, Plugin)
+                    and "Label" in instance.get_description():
                         obj_type = instance.type
                         language = obj_type.split(".")[2]
                         framework = obj_type.split(".")[3]
                         # Adding a property do class dinamically
-                        obj.language = language 
+                        obj.language = language
                         obj.framework = framework
                         self.blocks[obj_type] = obj
                     if isinstance(instance, CodeGenerator):
@@ -114,10 +115,10 @@ class System(object):
         if not System.instance:
             System.instance = System.__Singleton()
 
-    def __new__(cls): # __new__ always a classmethod
-        if System.instance == None:
+    def __new__(cls):  # __new__ always a classmethod
+        if System.instance is None:
             System.instance = System.__Singleton()
-            #Add properties dynamically
+            # Add properties dynamically
             cls.properties = System.instance.properties
             cls.blocks = System.instance.blocks
             cls.list_of_examples = System.instance.list_of_examples

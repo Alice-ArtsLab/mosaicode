@@ -5,6 +5,7 @@ from harpia.utils.XMLUtils import XMLParser
 import os
 import ast
 
+
 class PreferencesControl():
 
     # ----------------------------------------------------------------------
@@ -19,10 +20,11 @@ class PreferencesControl():
     def load(self):
         # load the diagram
         file_name = os.path.expanduser(self.hp.conf_file_path)
-        if os.path.exists(file_name) == False:
+        if os.path.exists(file_name) is False:
             return
         xml_loader = XMLParser(file_name)
-        properties = xml_loader.getTag("HarpiaProperties").getChildTags("property")
+        properties = xml_loader.getTag(
+            "HarpiaProperties").getChildTags("property")
 
         for prop in properties:
             if prop.getAttr("name") in self.hp.__dict__:
@@ -33,7 +35,8 @@ class PreferencesControl():
     def save(self):
         conf = "<HarpiaProperties>\n"
         for key in self.hp.__dict__:
-            conf += "<property name='" + key + "' value=\"" + str(self.hp.__dict__[key]) + "\"/>\n"
+            conf += "<property name='" + key + "' value=\"" + \
+                str(self.hp.__dict__[key]) + "\"/>\n"
         conf += "</HarpiaProperties>\n"
 
         try:
@@ -44,4 +47,3 @@ class PreferencesControl():
             return False
         return True
 # ----------------------------------------------------------------------
-
