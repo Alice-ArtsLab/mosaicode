@@ -12,43 +12,9 @@ class Show(OpenCVPlugin):
         self.title = "My Image"
         self.window_type = "Image Size"
 
-        self.help = "Mostra uma imagem da cadeia de processamento de imagens."
-
-        self.description = {
-            "Label": "Show Image",
-            "Icon": "images/show.png",
-            "Color": "50:100:200:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {},
-            "TreeGroup": "General"
-        }
-
-        self.properties = {
-            "title":{
-                "name": "Window Title",
-                "type": HARPIA_STRING
-            },
-            "window_type":{
-                "name":"Window Type",
-                "type":HARPIA_COMBO,
-                "values": ["Window Size", "Image Size", "Resizable Window"]
-            }
-        } 
-
-        #-------------------C/OpenCv code------------------------------------
-        self.vars = ""
-
     # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
+    def get_help(self):#Função que chama a help
+        return "Mostra uma imagem da cadeia de processamento de imagens."
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
@@ -69,5 +35,27 @@ class Show(OpenCVPlugin):
             code += 'cvSetWindowProperty("$title$", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);\n'
         code += '}\n'
         return code
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return {"Label": "Show Image",
+            "Icon": "images/show.png",
+            "Color": "50:100:200:150",
+            "InTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {},
+            "TreeGroup": "General"
+            }
+
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return {
+        "title":{"name": "Window Title",
+                    "type": HARPIA_STRING
+                    },
+        "window_type":{"name":"Window Type",
+                "type":HARPIA_COMBO,
+                "values": ["Window Size", "Image Size", "Resizable Window"]
+                    }
+        }
 
 # ------------------------------------------------------------------------------

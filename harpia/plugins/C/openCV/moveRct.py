@@ -12,47 +12,23 @@ class MoveRct(OpenCVPlugin):
         self.offset_x = 0
         self.offset_y = 0
 
-        self.help = "Move Rectangle`s (0,0) point to input point"
+    # ----------------------------------------------------------------------
+    def get_help(self):#Função que chama a help
+        return "Move Rectangle`s (0,0) point to input point"
 
-        self.description = {
-            'Label': 'Move Rectangle',
-            'Icon': 'images/moveRct.png',
-            'Color': '50:50:200:150',
-            'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},
-            'OutTypes': {0: 'HRP_RECT'},
-            'TreeGroup': 'Experimental'
-        }
-
-        self.properties = {
-            "offset_x":{
-                "name": "Offset x",
-                "type": HARPIA_INT,
-                "lower":0,
-                "upper":65535,
-                "step":1
-            },
-            "offset_y":{
-                "name": "Offset Y",
-                "type": HARPIA_INT,
-                "lower":0,
-                "upper":65535,
-                "step":1
-            }
-        }
-        #--------------------C/OpenCv code--------------------------------
-        self.vars = \
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return \
             'CvRect block$id$_rect_i0;\n' + \
             'CvPoint block$id$_point_i1;\n' + \
             'CvRect block$id$_rect_o0;\n'
 
-        self.function_call = \
-            'block$id$_rect_o0 = block$id$_rect_i0;\n' + \
-            'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
-            'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
-
     # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
+    def generate_function_call(self):
+        return \
+                'block$id$_rect_o0 = block$id$_rect_i0;\n' + \
+                'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
+                'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -60,18 +36,30 @@ class MoveRct(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return self.description
+        return {'Label': 'Move Rectangle',
+            'Icon': 'images/moveRct.png',
+            'Color': '50:50:200:150',
+            'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},
+            'OutTypes': {0: 'HRP_RECT'},
+            'TreeGroup': 'Experimental'
+            }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return self.properties
+        return {
+            "offset_x":{"name": "Offset x",
+                        "type": HARPIA_INT,
+                        "lower":0,
+                        "upper":65535,
+                        "step":1
+                            },
 
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
+            "offset_y":{"name": "Offset Y",
+                        "type": HARPIA_INT,
+                        "lower":0,
+                        "upper":65535,
+                        "step":1
+                            }
+        }
 
 # ------------------------------------------------------------------------------

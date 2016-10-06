@@ -13,61 +13,16 @@ class SaveVideo(OpenCVPlugin):
         self.framerate = 25.0
         self.codecSelection = "MPEG1"
 
-        self.help = "Save Video needs its description."
-
-        self.description = {
-            'Label': 'Save Video',
-            'Icon': 'images/saveVideo.png',
-            'Color': '120:20:20:150',
-            'InTypes': {0: 'HRP_IMAGE'},
-            'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': 'General'
-        }
-
-        self.properties = {
-            "filename":{
-                "name": "File Name",
-                "type": HARPIA_SAVE_FILE
-            },
-            "framerate":{
-                "name": "Frame Rate",
-                "type": HARPIA_INT,
-                "lower":1,
-                "upper":99,
-                "step":1
-            },
-            "codecSelection":{
-                "name": "Encoding Codec",
-                "type": HARPIA_COMBO,
-                "values": ["MPEG1", "mjpeg", "MPEG4.2", "MPEG4.3", "MPEG4", "H263", "H263I", "FLV1"]
-            }
-        }
-
-        #-------------------C/OpenCv code------------------------------------
-        self.vars = \
-            'IplImage * block$id$_img_i0 = NULL;\n' + \
-            'IplImage * block$id$_img_o0 = NULL;\n' + \
-            'CvVideoWriter* block$id$_vidWriter = NULL;\n'
-
-        self.dealloc = 'cvReleaseImage(&block$id$_img_i0); // SaveVideo Dealloc\n'
-
-        self.out_dealloc = 'cvReleaseVideoWriter(&block$id$_vidWriter); // SaveVideo\n'
-
     # ----------------------------------------------------------------------
     def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
+        return "Save Video needs its description"
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
-        return self.vars
+        return \
+            'IplImage * block$id$_img_i0 = NULL;\n' + \
+            'IplImage * block$id$_img_o0 = NULL;\n' + \
+            'CvVideoWriter* block$id$_vidWriter = NULL;\n'
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -90,20 +45,49 @@ class SaveVideo(OpenCVPlugin):
             codecMacro = 'CV_FOURCC(\'F\',\'L\',\'V\',\'1\')'
         return \
             '\nif(block$id$_img_i0){\n' + \
-            '   if(block$id$_vidWriter == NULL)//video writer not started up yet!\n' + \
-            '       block$id$_vidWriter = cvCreateVideoWriter( "$filename$", ' + \
+            '	if(block$id$_vidWriter == NULL)//video writer not started up yet!\n' + \
+            '		block$id$_vidWriter = cvCreateVideoWriter( "$filename$", ' + \
             codecMacro + ',$framerate$' + \
             ', cvGetSize(block$id$_img_i0), 1 );\n' + \
-            '   cvWriteFrame( block$id$_vidWriter, block$id$_img_i0);\n' + \
-            '   block$id$_img_o0 = block$id$_img_i0;\n' + \
+            '	cvWriteFrame( block$id$_vidWriter, block$id$_img_i0);\n' + \
+            '	block$id$_img_o0 = block$id$_img_i0;\n' + \
             '}\n'
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return self.dealloc
+        return 'cvReleaseImage(&block$id$_img_i0); // SaveVideo Dealloc\n'
 
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
-        return self.out_dealloc
+        return 'cvReleaseVideoWriter(&block$id$_vidWriter); // SaveVideo\n'
+
+    # ----------------------------------------------------------------------
+    def get_description(self):
+        return {'Label': 'Save Video',
+            'Icon': 'images/saveVideo.png',
+            'Color': '120:20:20:150',
+            'InTypes': {0: 'HRP_IMAGE'},
+            'OutTypes': {0: 'HRP_IMAGE'},
+            'TreeGroup': 'General'
+            }
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return {
+                "filename":{"name": "File Name",
+                            "type": HARPIA_SAVE_FILE
+                            },
+            "framerate":{"name": "Frame Rate",
+                    "type": HARPIA_INT,
+                    "lower":1,
+                    "upper":99,
+                    "step":1
+                    },
+
+        "codecSelection":{"name": "Encoding Codec",
+                    "type": HARPIA_COMBO,
+                    "values": ["MPEG1", "mjpeg", "MPEG4.2", "MPEG4.3", "MPEG4", "H263", "H263I", "FLV1"]
+                    }
+
+        }
 
 # ------------------------------------------------------------------------------

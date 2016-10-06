@@ -10,27 +10,21 @@ class Exp(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
-        self.help = "Aplica a função exponencial a uma imagem, ou seja, " + \
-        "eleva a constante neperiana ao valor de intensidade luminosa de cada ponto da imagem."
+    # ----------------------------------------------------------------------
+    def get_help(self):#Função que chama a help
+      return "aplica a função exponencial a uma imagem, ou seja,\
+      eleva a constante neperiana ao valor de intensidade luminosa de cada ponto da imagem."
 
-        self.description = {
-            "Label":"Exp",
-            "Icon":"images/exp.png",
-            "Color":"230:230:60:150",
-            "InTypes":{0:"HRP_IMAGE"},
-            "OutTypes":{0:"HRP_IMAGE"},
-            "TreeGroup":"Math Functions"
-        }
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return \
+                   'IplImage * block$id$_img_i0 = NULL;\n' + \
+                   'IplImage * block$id$_img_o0 = NULL;\n' + \
+                   'IplImage * block$id$_img_t = NULL;\n'
 
-        self.properties = {}
-
-        #--------------------------C/OpenCv code-------------------------------
-        self.vars = \
-           'IplImage * block$id$_img_i0 = NULL;\n' + \
-           'IplImage * block$id$_img_o0 = NULL;\n' + \
-           'IplImage * block$id$_img_t = NULL;\n'
-
-        self.function_call = \
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return \
             '\nif(block$id$_img_i0){\n' + \
             'block$id$_img_t = cvCreateImage(cvGetSize(block$id$_img_i0), IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n'+\
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
@@ -38,15 +32,11 @@ class Exp(OpenCVPlugin):
             'cvExp(block$id$_img_t, block$id$_img_t);\n' + \
             'cvConvertScale(block$id$_img_t, block$id$_img_o0, (double)93.8092,0);\n}\n'
 
-        self.dealloc = \
-            'cvReleaseImage(&block$id$_img_o0);\n' + \
-            'cvReleaseImage(&block$id$_img_i0);\n' + \
-            'cvReleaseImage(&block$id$_img_t);\n'
-
-
     # ----------------------------------------------------------------------
-    def get_help(self):
-      return self.help
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_o0);\n' + \
+               'cvReleaseImage(&block$id$_img_i0);\n' + \
+               'cvReleaseImage(&block$id$_img_t);\n'
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -54,22 +44,16 @@ class Exp(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return self.description
+        return {"Label":"Exp",
+         "Icon":"images/exp.png",
+         "Color":"230:230:60:150",
+         "InTypes":{0:"HRP_IMAGE"},
+         "OutTypes":{0:"HRP_IMAGE"},
+         "TreeGroup":"Math Functions"
+         }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return self.properties
+        return {}
 
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-        
 # ------------------------------------------------------------------------------
