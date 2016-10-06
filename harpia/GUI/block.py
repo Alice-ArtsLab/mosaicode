@@ -172,7 +172,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            System.connections[
+                            System.connectors[
                             self.get_description()["InTypes"][x]
                             ]["icon_in"])
             except:
@@ -206,7 +206,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            System.connections[
+                            System.connectors[
                             self.get_description()["OutTypes"][x]
                             ]["icon_out"])
             except:

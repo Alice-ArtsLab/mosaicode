@@ -62,15 +62,15 @@ class System(object):
         def __init__(self):
             self.Log = None
             self.properties = Preferences()
+            self.generators = {}
             self.blocks = {}
             self.list_of_examples = []
-            self.connections = {}
+            self.connectors = {}
             self.__load()
 
         # ----------------------------------------------------------------------
         def __load(self):
             self.__load_blocks()
-            self.__load_connections()
             examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
             for example in examples:
                 self.list_of_examples.append(example)
@@ -80,6 +80,8 @@ class System(object):
 
         # ----------------------------------------------------------------------
         def __load_blocks(self):
+            from harpia.control.codegenerator import CodeGenerator
+            from harpia.model.plugin import Plugin
             for importer, modname, ispkg in pkgutil.walk_packages(
                             harpia.plugins.__path__,
                             harpia.plugins.__name__ + ".",
@@ -88,67 +90,21 @@ class System(object):
                     continue
                 module = __import__(modname, fromlist="dummy")
                 for name, obj in inspect.getmembers(module):
-                    if inspect.isclass(obj) and "Label" in obj().get_description():
-                        obj_type = obj().type
+                    if not inspect.isclass(obj):
+                        continue
+                    instance = obj()
+                    if isinstance(instance, Plugin) and "Label" in instance.get_description():
+                        obj_type = instance.type
                         language = obj_type.split(".")[2]
                         framework = obj_type.split(".")[3]
                         # Adding a property do class dinamically
                         obj.language = language 
                         obj.framework = framework
                         self.blocks[obj_type] = obj
-
-        # ----------------------------------------------------------------------
-        def __load_connections(self):
-            self.connections = {        "HRP_INT":{
-            "icon_in":"images/conn_int_in.png",
-            "icon_out":"images/conn_int_out.png",
-            "multiple": False,
-            "code": 'block$to_block$_int_i$to_block_in$ = block$from_block$_int_o$from_block_out$;// INT conection\n'
-            },
-        "HRP_DOUBLE":{
-            "icon_in":"images/conn_double_in.png",
-            "icon_out":"images/conn_double_out.png",
-            "multiple": False,
-            "code": 'block$to_block$_double_i$to_block_in$ = block$from_block$_double_o$from_block_out$;// DOUBLE conection\n'
-            },
-        "HRP_RECT":{
-            "icon_in":"images/conn_rect_in.png",
-            "icon_out":"images/conn_rect_out.png",
-            "multiple": False,
-            "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
-            },
-        "HRP_IMAGE":{
-            "icon_in":"images/conn_image_in.png",
-            "icon_out":"images/conn_image_out.png",
-            "multiple": False,
-            "code": 'block$to_block$_img_i$to_block_in$ = cvCloneImage(block$from_block$_img_o$from_block_out$);// IMG conection\n'
-            },
-        "HRP_POINT":{
-            "icon_in":"images/conn_point_in.png",
-            "icon_out":"images/conn_point_out.png",
-            "multiple": False,
-            "code": 'block$to_block$_point_i$to_block_in$ = block$from_block$_point_o$from_block_out$;// POINT conection\n'
-            },
-
-        "HRP_WEBAUDIO_SOUND":{
-            "icon_in":"images/conn_sound_in.png",
-            "icon_out":"images/conn_sound_out.png",
-            "multiple": True,
-            "code": 'block_$from_block$.connect(block_$to_block$_i[$to_block_in$]);\n'
-            },
-        "HRP_WEBAUDIO_FLOAT":{
-            "icon_in":"images/conn_float_in.png",
-            "icon_out":"images/conn_float_out.png",
-            "multiple": True,
-            "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
-            },
-        "HRP_WEBAUDIO_CHAR":{
-            "icon_in":"images/conn_char_in.png",
-            "icon_out":"images/conn_char_out.png",
-            "multiple": True,
-            "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
-            }
-        }
+                    if isinstance(instance, CodeGenerator):
+                        language = instance.__class__.__module__.split(".")[2]
+                        self.generators[language] = obj
+                        self.connectors.update(instance.connectors)
 
     # Instance variable to the singleton
     instance = None
@@ -165,7 +121,8 @@ class System(object):
             cls.properties = System.instance.properties
             cls.blocks = System.instance.blocks
             cls.list_of_examples = System.instance.list_of_examples
-            cls.connections = System.instance.connections
+            cls.connectors = System.instance.connectors
+            cls.generators = System.instance.generators
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -182,4 +139,5 @@ class System(object):
             cls.instance.Log.log(msg)
         except:
             print msg
+
 # ------------------------------------------------------------------------------

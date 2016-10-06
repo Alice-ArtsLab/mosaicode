@@ -247,7 +247,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for oldCon in self.connectors:
             if oldCon.to_block == newCon.to_block \
                     and oldCon.to_block_in == newCon.to_block_in\
-                    and not System.connections[newCon.type]["multiple"]:
+                    and not System.connectors[newCon.type]["multiple"]:
                 System.log("Connector Already exists")
                 return False
         if newCon.to_block == newCon.from_block:

@@ -44,7 +44,12 @@ gettext.textdomain(System.APP)
 class CodeGenerator():
 
     #----------------------------------------------------------------------
-    def __init__(self, diagram):
+    def __init__(self, diagram = None):
+        self.connectors = {}
+        self.diagram = diagram
+        if diagram == None:
+            return
+
         self.diagram = diagram
 
         if self.diagram.language == None:
@@ -187,8 +192,8 @@ class CodeGenerator():
         for x in block.connections:
             if x.to_block == '--':
                 continue
-            if x.type in System.connections:
-                connections +=  System.connections[x.type]["code"]
+            if x.type in System.connectors:
+                connections +=  System.connectors[x.type]["code"]
             connections = connections.replace("$to_block$", str(x.to_block))
             connections = connections.replace("$to_block_in$", str(int(x.to_block_in )))
             connections = connections.replace("$from_block$", str(x.from_block))
@@ -198,10 +203,12 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def generate_code(self):
+        System.log("Parsing Code")
         return "Houston, we have a problem!"
 
     #----------------------------------------------------------------------
     def save_code(self):
+        System.log("Saving Code to " + self.dir_name + self.filename)
         pass
 
     #----------------------------------------------------------------------
@@ -210,6 +217,7 @@ class CodeGenerator():
 
     #----------------------------------------------------------------------
     def execute(self):
+        System.log("Executing Code")
         pass
 
     #----------------------------------------------------------------------

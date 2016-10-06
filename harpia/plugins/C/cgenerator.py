@@ -33,19 +33,50 @@ from threading import Thread
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.system import System as System
-from codegenerator import CodeGenerator
+from harpia.control.codegenerator import CodeGenerator
 
 FRAMERATE = 25
 class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
-    def __init__(self, diagram):
+    def __init__(self, diagram = None):
         CodeGenerator.__init__(self, diagram)
+        self.connectors = {
+        "HRP_INT":{
+            "icon_in":"images/conn_int_in.png",
+            "icon_out":"images/conn_int_out.png",
+            "multiple": False,
+            "code": 'block$to_block$_int_i$to_block_in$ = block$from_block$_int_o$from_block_out$;// INT conection\n'
+            },
+        "HRP_DOUBLE":{
+            "icon_in":"images/conn_double_in.png",
+            "icon_out":"images/conn_double_out.png",
+            "multiple": False,
+            "code": 'block$to_block$_double_i$to_block_in$ = block$from_block$_double_o$from_block_out$;// DOUBLE conection\n'
+            },
+        "HRP_RECT":{
+            "icon_in":"images/conn_rect_in.png",
+            "icon_out":"images/conn_rect_out.png",
+            "multiple": False,
+            "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
+            },
+        "HRP_IMAGE":{
+            "icon_in":"images/conn_image_in.png",
+            "icon_out":"images/conn_image_out.png",
+            "multiple": False,
+            "code": 'block$to_block$_img_i$to_block_in$ = cvCloneImage(block$from_block$_img_o$from_block_out$);// IMG conection\n'
+            },
+        "HRP_POINT":{
+            "icon_in":"images/conn_point_in.png",
+            "icon_out":"images/conn_point_out.png",
+            "multiple": False,
+            "code": 'block$to_block$_point_i$to_block_in$ = block$from_block$_point_o$from_block_out$;// POINT conection\n'
+            }
+        }
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        System.log("Parsing Code")
+        CodeGenerator.generate_code(self)
 
         self.sort_blocks()
         self.generate_parts()
@@ -121,7 +152,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def save_code(self):
-        System.log("Saving Code to " + self.dir_name + self.filename)
+        CodeGenerator.save_code(self)
         self.change_directory()
         codeFilename = self.filename + '.c'
         codeFile = open(codeFilename, 'w')
@@ -149,8 +180,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def compile(self):
-        System.log("Compilando")
-        System.log("Executing Code")
+        CodeGenerator.compile(self)
         self.save_code()
         self.change_directory()
         if os.name == "nt":
@@ -163,7 +193,6 @@ class CGenerator(CodeGenerator):
             i, o = os.popen4("sh " + self.filename +'.Makefile')
 
             CompilingErrors = o.readlines()
-            System.log("Errors "  +  str(CompilingErrors))
 
             o.close()
             i.close()
@@ -172,7 +201,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def execute(self):
-        System.log("Executing Code")
+        CodeGenerator.execute(self)
         self.compile()
         self.change_directory()
         if os.name == "nt":
@@ -199,9 +228,6 @@ class CGenerator(CodeGenerator):
             errorList = o.readlines()
             for element in errorList:
                 Error += element
-
-            System.log("Leaving..")
-            System.log(Error)
             o.close()
         except:
             pass

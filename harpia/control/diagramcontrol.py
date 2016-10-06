@@ -16,9 +16,7 @@ from exceptions import AttributeError
 from harpia.utils.XMLUtils import XMLParser
 
 from harpia.system import System as System
-from harpia.control.cgenerator import CGenerator
 from harpia.control.codegenerator import CodeGenerator
-from harpia.control.javascriptgenerator import JavascriptGenerator
 
 
 class DiagramControl():
@@ -33,12 +31,12 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def get_generator(self):
-        if self.diagram.language == "C":
-            return CGenerator(self.diagram)
-        elif self.diagram.language == "javascript":
-            return JavascriptGenerator(self.diagram)
-        else:
-            return CodeGenerator(self.diagram)
+        try:
+            generator = System.generators[self.diagram.language](self.diagram)
+        except:
+            generator = CodeGenerator(self.diagram)
+            System.log("Language generator not available")
+        return generator
 
 # ----------------------------------------------------------------------
     def load(self, file_name=None):
