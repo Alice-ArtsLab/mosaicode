@@ -198,17 +198,13 @@ class CodeGenerator():
 
         connections = ""
         for x in block.connections:
-            if x.to_block == '--':
-                continue
-            if x.type in System.connectors:
-                connections += System.connectors[x.type]["code"]
-            connections = connections.replace("$to_block$", str(x.to_block))
-            connections = connections.replace(
-                "$to_block_in$", str(int(x.to_block_in)))
-            connections = connections.replace(
-                "$from_block$", str(x.from_block))
-            connections = connections.replace(
-                "$from_block_out$", str(int(x.from_block_out)))
+            code = System.connectors[x.type]["code"]
+            # Replace all connection properties by their values
+            for key in x.__dict__:
+                value = str(x.__dict__[key])
+                my_key = "$" + key + "$"
+                code = code.replace(my_key, value)
+            connections += code
 
         self.connections.append(connections)
 
