@@ -93,8 +93,7 @@ class System(object):
                     if not inspect.isclass(obj):
                         continue
                     instance = obj()
-                    if isinstance(instance, Plugin)
-                    and "Label" in instance.get_description():
+                    if isinstance(instance, Plugin) and "Label" in instance.get_description():
                         obj_type = instance.type
                         language = obj_type.split(".")[2]
                         framework = obj_type.split(".")[3]

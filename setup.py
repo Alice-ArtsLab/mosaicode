@@ -24,7 +24,7 @@ config['classifiers'] = [
             ]
 
 setup(name='harpia',
-            install_requires=['beautifulsoup4'],
+            install_requires=['beautifulsoup4','pip'],
             version='1.0',
             packages=['harpia',
                       'harpia.utils',
@@ -37,7 +37,7 @@ setup(name='harpia',
                       'harpia.plugins.javascript.webaudio',
                       'harpia.control',
                       'harpia.model'],
-            scripts=['launcher/harpia'],
+            scripts=['launcher/harpia','scripts/req.sh'],
             description='Image Processing and Computer Vision Automatic Programming Tool',
             author='Clovis Peruchi Scotti',
             author_email='scotti@ieee.org',
