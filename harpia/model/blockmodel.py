@@ -49,3 +49,6 @@ class BlockModel(object):
     def get_description(self):
         return self.__plugin.get_description()
 
+    #----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.get_id())

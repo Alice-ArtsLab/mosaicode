@@ -92,4 +92,8 @@ class Plugin(object):
             xml += "\t\t<property name='" + key + "' value='" + str(self.__dict__[key]) + "' />\n"
         return xml
 
+    #----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.get_id())
+
 # ------------------------------------------------------------------------------

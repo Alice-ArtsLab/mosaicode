@@ -46,31 +46,31 @@ class CGenerator(CodeGenerator):
             "icon_in":"images/conn_int_in.png",
             "icon_out":"images/conn_int_out.png",
             "multiple": False,
-            "code": 'block$to_block$_int_i$to_block_in$ = block$from_block$_int_o$from_block_out$;// INT conection\n'
+            "code": 'block$sink$_int_i$sink_port$ = block$source$_int_o$source_port$;// INT conection\n'
             },
         "HRP_DOUBLE":{
             "icon_in":"images/conn_double_in.png",
             "icon_out":"images/conn_double_out.png",
             "multiple": False,
-            "code": 'block$to_block$_double_i$to_block_in$ = block$from_block$_double_o$from_block_out$;// DOUBLE conection\n'
+            "code": 'block$sink$_double_i$sink_port$ = block$source$_double_o$source_port$;// DOUBLE conection\n'
             },
         "HRP_RECT":{
             "icon_in":"images/conn_rect_in.png",
             "icon_out":"images/conn_rect_out.png",
             "multiple": False,
-            "code": 'block$to_block$_rect_i$to_block_in$ = block$from_block$_rect_o$from_block_out$;// RECT conection\n'
+            "code": 'block$sink$_rect_i$sink_port$ = block$source$_rect_o$source_port$;// RECT conection\n'
             },
         "HRP_IMAGE":{
             "icon_in":"images/conn_image_in.png",
             "icon_out":"images/conn_image_out.png",
             "multiple": False,
-            "code": 'block$to_block$_img_i$to_block_in$ = cvCloneImage(block$from_block$_img_o$from_block_out$);// IMG conection\n'
+            "code": 'block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n'
             },
         "HRP_POINT":{
             "icon_in":"images/conn_point_in.png",
             "icon_out":"images/conn_point_out.png",
             "multiple": False,
-            "code": 'block$to_block$_point_i$to_block_in$ = block$from_block$_point_o$from_block_out$;// POINT conection\n'
+            "code": 'block$sink$_point_i$sink_port$ = block$source$_point_o$source_port$;// POINT conection\n'
             }
         }
 
@@ -120,14 +120,16 @@ class CGenerator(CodeGenerator):
         for header_code in temp_header:
             header += header_code
 
-        header += "\nint main(int argc, char ** argv){\n"
+        header += "\n\n"
+        header += "int main(int argc, char ** argv){\n"
         header += "char key = ' ';\n"
         declaration_block = "\n//declaration block\n"
 
         for var in self.declarations:
             declaration_block += var
 
-        declaration_block += '\n\nwhile((key = (char)cvWaitKey(FRAMERATE)) != 27){\n'
+        declaration_block += '\n\n'
+        declaration_block += 'while((key = (char)cvWaitKey(FRAMERATE)) != 27){\n'
 
         execution = "\n//execution block\n"
         for x,y in zip(self.functionCalls, self.connections):

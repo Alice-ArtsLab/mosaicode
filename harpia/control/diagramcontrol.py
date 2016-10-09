@@ -113,11 +113,11 @@ class DiagramControl():
 
         output += "<connections>\n  "
         for connector in self.diagram.connectors:
-            output += '\t<connection from="' + str(connector.from_block) + \
-                '" from_out="' + str(connector.from_block_out + 1) + \
-                '" to="' + str(connector.to_block) + \
+            output += '\t<connection from="' + str(connector.source.get_id()) + \
+                '" from_out="' + str(connector.source_port + 1) + \
+                '" to="' + str(connector.sink.get_id()) + \
                 '" to_in="' + \
-                str(connector.to_block_in + 1) + '"/>\n'
+                str(connector.sink_port + 1) + '"/>\n'
         output += "</connections>\n"
 
         output += "</harpia>\n"

@@ -133,7 +133,7 @@ class CodeGenerator():
                 block.__class__.connections = []
 
             for connection in self.diagram.connectors:
-                if connection.from_block != block.get_id():
+                if connection.source != block:
                     continue
                 block.connections.append(connection)
             self.blockList.append(block)
@@ -145,7 +145,7 @@ class CodeGenerator():
             for block in self.blockList:
                 for connection in block.connections:
                     for block_target in self.blockList:
-                        if block_target.get_id() != connection.to_block:
+                        if block_target != connection.sink:
                             continue
                         weight = block.weight
                         if block_target.weight < weight + 1:
@@ -173,10 +173,8 @@ class CodeGenerator():
     def generate_block_code(self, block):
         plugin = block.get_plugin()
         header = plugin.generate_header()
-        declaration = "//" + plugin.get_type() + "\n"
-        declaration += plugin.generate_vars()
-        functionCall = "//" + plugin.get_type() + "\n"
-        functionCall += plugin.generate_function_call()
+        declaration = plugin.generate_vars()
+        functionCall = plugin.generate_function_call()
         dealloc = plugin.generate_dealloc()
         outDealloc = plugin.generate_out_dealloc()
 
@@ -205,7 +203,6 @@ class CodeGenerator():
                 my_key = "$" + key + "$"
                 code = code.replace(my_key, value)
             connections += code
-
         self.connections.append(connections)
 
     # ----------------------------------------------------------------------

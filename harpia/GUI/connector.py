@@ -41,18 +41,12 @@ from connectormenu import ConnectorMenu
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     #----------------------------------------------------------------------
-    def __init__( self, diagram, from_block, from_block_out, conn_type):
+    def __init__( self, diagram, source, source_port, conn_type):
         GooCanvas.CanvasGroup.__init__(self)
-        ConnectionModel.__init__(self, diagram)
+        ConnectionModel.__init__(self, diagram, source, source_port, conn_type)
 
-        self.from_block = from_block
-        self.to_block = -1
-
-        self.from_block_out = from_block_out
-        self.to_block_in = -1
-        self.type = conn_type
-        self.from_point = self.get_diagram().blocks[self.from_block].get_output_pos(self.from_block_out) 
-        self.to_point = (0,0)
+        self.__from_point = self.source.get_output_pos(self.source_port) 
+        self.__to_point = (0,0)
 
         self.__focus = False
         self.width = 0
@@ -101,18 +95,17 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return False
 
     #----------------------------------------------------------------------
-    def set_end(self, to_block=-1, to_block_in=-1):
-        self.to_block = to_block
-        self.to_block_in = to_block_in
-        self.to_point = self.get_diagram().blocks[self.to_block].get_input_pos(self.to_block_in)
-        self.update_tracking(self.to_point)
+    def set_end(self, sink, sink_port):
+        ConnectionModel.set_end(self, sink, sink_port)
+        self.__to_point = sink.get_input_pos(self.sink_port)
+        self.update_tracking(self.__to_point)
 
     #----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
         if newEnd == None:
-            newEnd = self.from_point
-        a = newEnd[0] - self.from_point[0]
-        b = newEnd[1] - self.from_point[1]
+            newEnd = self.__from_point
+        a = newEnd[0] - self.__from_point[0]
+        b = newEnd[1] - self.__from_point[1]
         if a > 0:
             a -= 1
         else:
@@ -123,25 +116,23 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         else:
             b += 1
 
-        self.to_point = self.from_point[0] + a - 5, self.from_point[1] + b
+        self.__to_point = self.__from_point[0] + a - 5, self.__from_point[1] + b
         self.__update_draw()
 
     #----------------------------------------------------------------------
     def update_flow(self):
-        block = self.get_diagram().blocks[self.from_block]
-        self.from_point = block.get_output_pos(self.from_block_out)
-        block = self.get_diagram().blocks[self.to_block]
-        self.to_point = block.get_input_pos(self.to_block_in)
+        self.__from_point = self.source.get_output_pos(self.source_port)
+        self.__to_point = self.sink.get_input_pos(self.sink_port)
         self.__update_draw()
 
     #----------------------------------------------------------------------
     def __update_draw(self):
         # svg M L bezier curve
         path = ""
-        x0 = self.from_point[0]
-        y0 = self.from_point[1]
-        x1 = self.to_point[0]
-        y1 = self.to_point[1]
+        x0 = self.__from_point[0]
+        y0 = self.__from_point[1]
+        x1 = self.__to_point[0]
+        y1 = self.__to_point[1]
 
         path += "M " + str(x0) + " " + str(y0)
 
@@ -187,7 +178,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.__widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
         # not connected: Color = red
-        if  self.to_block_in == -1:
+        if  self.sink_port == -1:
             self.__widgets["Line"].set_property("stroke-color","red")
         else:
             self.__widgets["Line"].set_property("stroke-color", "black")
