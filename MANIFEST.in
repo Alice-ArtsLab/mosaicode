@@ -1,0 +1,4 @@
+include COPYING
+include app_data/*
+include app_data/examples/*
+include app_data/images/*
