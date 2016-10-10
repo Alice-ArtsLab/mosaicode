@@ -237,24 +237,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return False
 
     #----------------------------------------------------------------------
-    def __connector_types_match(self, conn):
-        outType = self.blocks[conn.from_block].get_description()[
-            "OutTypes"][conn.from_block_out]
-        inType = self.blocks[conn.to_block].get_description()[
-            "InTypes"][conn.to_block_in]
-        if not outType == inType:
-            System.log("Connection Types mismatch")
-        return outType == inType
 
-    #----------------------------------------------------------------------
     def __valid_connector(self, newCon):
         for oldCon in self.connectors:
-            if oldCon.to_block == newCon.to_block \
-                    and oldCon.to_block_in == newCon.to_block_in\
+            if oldCon.sink == newCon.sink \
+                    and oldCon.sink_port == newCon.sink_port\
                     and not System.connectors[newCon.type]["multiple"]:
                 System.log("Connector Already exists")
                 return False
-        if newCon.to_block == newCon.from_block:
+        if newCon.sink == newCon.source:
             System.log("Recursive connection is not allowed")
             return False
         return True
@@ -272,8 +263,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def start_connection(self, block, output):
         self.__abort_connection()  # abort any possibly running connections
         conn_type = block.get_description()["OutTypes"][output]
-        self.curr_connector = Connector(
-            self, block.get_id(), output, conn_type)
+        self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
@@ -281,11 +271,12 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def end_connection(self, block, block_input):
         if self.curr_connector == None:
             return False
-        self.curr_connector.set_end(block.get_id(), block_input)
+        self.curr_connector.set_end(block, block_input)
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return False
-        if not self.__connector_types_match(self.curr_connector):
+        if not self.curr_connector.type_match():
+            System.log("Connection Types mismatch")
             self.__abort_connection()
             return False
         self.add_connection(self.curr_connector)
@@ -401,23 +392,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             plugin.set_id(-1)
             if not self.__main_window.main_control.add_block(plugin):
                 return
-            new_id = plugin.get_id()
-            replace[widget.get_id()] = new_id
-            self.current_widgets.append(self.blocks[new_id])
+            replace[widget.get_id()] = plugin
+            self.current_widgets.append(plugin)
         # interact into connections changing block ids
         for widget in clipboard:
             if not isinstance(widget, Connector):
                 continue
             # if a connector is copied without blocks
-            if widget.from_block not in replace or widget.to_block not in replace:
+            if widget.source.get_id() not in replace or widget.sink.get_id() not in replace:
                 continue
-            from_block = replace[widget.from_block]
-            from_block_out = widget.from_block_out
-            to_block = replace[widget.to_block]
-            to_block_in = widget.to_block_in
-            self.start_connection(self.blocks[from_block], from_block_out)
+            print "continuing..."
+            source = replace[widget.source.get_id()]
+            source_port = widget.source_port
+            sink = replace[widget.sink.get_id()]
+            sink_port = widget.sink_port
+            self.start_connection(source, source_port)
             self.current_widgets.append(self.curr_connector)
-            self.end_connection(self.blocks[to_block], to_block_in)
+            self.end_connection(sink, sink_port)
         self.update_flows()
 
     # ---------------------------------------------------------------------

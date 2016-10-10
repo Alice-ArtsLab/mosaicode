@@ -31,12 +31,11 @@ class DiagramModel(object):
 
     #----------------------------------------------------------------------
     def delete_block(self, block):
-        block_id = block.get_id()
-        if block_id not in self.blocks:
+        if block.get_id() not in self.blocks:
             return False
         for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].from_block == block_id \
-                or self.connectors[idx].to_block == block_id:
+            if self.connectors[idx].source == block \
+                or self.connectors[idx].sink == block:
                     self.delete_connection(self.connectors[idx])
         return True
 
@@ -51,12 +50,11 @@ class DiagramModel(object):
         self.connectors.remove(connection)
 
     #----------------------------------------------------------------------
-    def connect_blocks(self, block_out, block_out_port, block_in, block_in_port):
-        connection = ConnectionModel()
-        connection.from_block = block_out.id
-        connection.to_block = block_in.id
-        connection.from_block_out = block_out_port
-        connection.to_block_in = block_in_port
+    def connect_blocks(self, source, source_port, sink, sink_port):
+        out_type = source.get_description()["OutTypes"][source_port]
+        connection = ConnectionModel(self, source, source_port, out_type)
+        connection.sink = sink
+        connection.sink_port = sink_port
         self.connectors.append(connection)
 
     #----------------------------------------------------------------------
@@ -69,7 +67,7 @@ class DiagramModel(object):
 
     #----------------------------------------------------------------------
     def get_patch_name(self):
-            return self.__file_name.split("/").pop()
+        return self.__file_name.split("/").pop()
 
     # ---------------------------------------------------------------------
     def set_modified(self, state):

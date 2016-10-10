@@ -61,6 +61,7 @@ class System(object):
         # ----------------------------------------------------------------------
 
         def __init__(self):
+            os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
             self.Log = None
             self.properties = Preferences()
             self.generators = {}
@@ -93,8 +94,8 @@ class System(object):
                     if not inspect.isclass(obj):
                         continue
                     instance = obj()
-                    if isinstance(instance, Plugin)
-                    and "Label" in instance.get_description():
+                    if isinstance(instance, Plugin) and \
+                    "Label" in instance.get_description():
                         obj_type = instance.type
                         language = obj_type.split(".")[2]
                         framework = obj_type.split(".")[3]
@@ -115,6 +116,7 @@ class System(object):
         if not System.instance:
             System.instance = System.__Singleton()
 
+    # ----------------------------------------------------------------------
     def __new__(cls):  # __new__ always a classmethod
         if System.instance is None:
             System.instance = System.__Singleton()

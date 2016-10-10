@@ -15,6 +15,14 @@ class Plugin(object):
         self.vars = ""
 
     # ----------------------------------------------------------------------
+    def get_output_port_name(self, number):
+        return "block_" + str(self.id) + "o" + str(number)
+
+    # ----------------------------------------------------------------------
+    def get_input_port_name(self, number):
+        return "block_" + str(self.id) + "i" + str(number)
+
+    # ----------------------------------------------------------------------
     def get_position(self):
         return (self.x, self.y)
 
@@ -91,5 +99,9 @@ class Plugin(object):
         for key in self.get_properties():
             xml += "\t\t<property name='" + key + "' value='" + str(self.__dict__[key]) + "' />\n"
         return xml
+
+    #----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.get_id())
 
 # ------------------------------------------------------------------------------

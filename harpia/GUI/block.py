@@ -339,11 +339,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def update_flow(self):
         self.has_flow = True
         distinct_con = []
-        for con in self.diagram.connectors:
-            if con.to_block != self.get_id():
+        for conn in self.diagram.connectors:
+            if conn.sink != self:
                 continue
-            if con.to_block_in not in distinct_con:
-                distinct_con.append(con.to_block_in)
+            if conn.sink_port not in distinct_con:
+                distinct_con.append(conn.sink_port)
         if len(distinct_con) < len(self.get_description()["InTypes"]):
             self.has_flow = False
         self.__update_state()

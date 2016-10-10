@@ -37,10 +37,8 @@ import time
 import datetime
 import gi
 import gettext
-from gi.repository import Gtk
 from harpia.system import System as System
 
-gi.require_version('Gtk', '3.0')
 
 
 # i18n
@@ -133,7 +131,7 @@ class CodeGenerator():
                 block.__class__.connections = []
 
             for connection in self.diagram.connectors:
-                if connection.from_block != block.get_id():
+                if connection.source != block:
                     continue
                 block.connections.append(connection)
             self.blockList.append(block)
@@ -145,7 +143,7 @@ class CodeGenerator():
             for block in self.blockList:
                 for connection in block.connections:
                     for block_target in self.blockList:
-                        if block_target.get_id() != connection.to_block:
+                        if block_target != connection.sink:
                             continue
                         weight = block.weight
                         if block_target.weight < weight + 1:
@@ -173,10 +171,8 @@ class CodeGenerator():
     def generate_block_code(self, block):
         plugin = block.get_plugin()
         header = plugin.generate_header()
-        declaration = "//" + plugin.get_type() + "\n"
-        declaration += plugin.generate_vars()
-        functionCall = "//" + plugin.get_type() + "\n"
-        functionCall += plugin.generate_function_call()
+        declaration = plugin.generate_vars()
+        functionCall = plugin.generate_function_call()
         dealloc = plugin.generate_dealloc()
         outDealloc = plugin.generate_out_dealloc()
 
@@ -198,18 +194,29 @@ class CodeGenerator():
 
         connections = ""
         for x in block.connections:
-            if x.to_block == '--':
-                continue
-            if x.type in System.connectors:
-                connections += System.connectors[x.type]["code"]
-            connections = connections.replace("$to_block$", str(x.to_block))
-            connections = connections.replace(
-                "$to_block_in$", str(int(x.to_block_in)))
-            connections = connections.replace(
-                "$from_block$", str(x.from_block))
-            connections = connections.replace(
-                "$from_block_out$", str(int(x.from_block_out)))
-
+            code = System.connectors[x.type]["code"]
+            # Replace all connection properties by their values
+            for key in x.__dict__:
+                value = str(x.__dict__[key])
+                my_key = "$" + key + "$"
+                code = code.replace(my_key, value)
+            # Replace all connection methods by their values
+            for func in dir(x):
+                result = ""
+                try:
+                    callable(getattr(x, func))
+                except:
+                    continue
+                # if code does not have the method, we do not execute it
+                key = "$" + str(func) + "$"
+                if key not in code:
+                    continue
+                try:
+                    result = getattr(x, func)()
+                except:
+                    continue
+                code = code.replace(key, str(result))
+            connections += code
         self.connections.append(connections)
 
     # ----------------------------------------------------------------------

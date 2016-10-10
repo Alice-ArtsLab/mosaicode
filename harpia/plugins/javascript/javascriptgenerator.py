@@ -41,19 +41,19 @@ class JavascriptGenerator(CodeGenerator):
             "icon_in":"images/conn_sound_in.png",
             "icon_out":"images/conn_sound_out.png",
             "multiple": True,
-            "code": 'block_$from_block$.connect(block_$to_block$_i[$to_block_in$]);\n'
+            "code": 'block_$source$.connect(block_$sink$_i[$sink_port$]);\n'
             },
         "HRP_WEBAUDIO_FLOAT":{
             "icon_in":"images/conn_float_in.png",
             "icon_out":"images/conn_float_out.png",
             "multiple": True,
-            "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
+            "code": 'block_$source$_o$source_port$.push(block_$sink$_i[$sink_port$]);\n'
             },
         "HRP_WEBAUDIO_CHAR":{
             "icon_in":"images/conn_char_in.png",
             "icon_out":"images/conn_char_out.png",
             "multiple": True,
-            "code": 'block_$from_block$_o$from_block_out$.push(block_$to_block$_i[$to_block_in$]);\n'
+            "code": 'block_$source$_o$source_port$.push(block_$sink$_i[$sink_port$]);\n'
             }
         }
 
