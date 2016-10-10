@@ -1,21 +1,22 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-
+from harpia.system import System as System
 from harpia.GUI.components.stringfield import StringField
 from harpia.GUI.components.openfilefield import OpenFileField
-from harpia.system import System as System
+
+gi.require_version('Gtk', '3.0')
 
 
 class PreferenceWindow(Gtk.Dialog):
 
     def __init__(self, main_window):
         Gtk.Dialog.__init__(self, "Code Window", main_window,
-                            0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                            0, (Gtk.STOCK_CANCEL,
+                                Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.properties = System.properties
@@ -42,7 +43,8 @@ class PreferenceWindow(Gtk.Dialog):
         vbox.add(self.error_log_file)
 
         vbox.add(Gtk.Label("\nname wildcards:\n" +
-                           "\t%d = Date | %n = diagram name | %t = time value | %l = language\n"))
+                           "\t%d = Date | %n = diagram name |"
+                           " %t = time value | %l = language\n"))
 
         self.show_all()
         response = self.run()

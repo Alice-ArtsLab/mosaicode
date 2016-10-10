@@ -1,14 +1,14 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
+from diagram import Diagram
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from diagram import Diagram
 from harpia.GUI.dialog import Dialog
 from harpia.control.diagramcontrol import DiagramControl
+
+gi.require_version('Gtk', '3.0')
 
 
 class WorkArea(Gtk.Notebook):
@@ -21,12 +21,12 @@ class WorkArea(Gtk.Notebook):
         self.connect("switch-page", self.__on_switch_page)
         self.connect("page-removed", self.__on_page_removed)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_page_removed(self, notebook, child, page_num):
         if self.get_n_pages() == 0:
             self.main_window.set_title("")
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_switch_page(self, notebook, child, page_num):
         self.main_window.set_title(child.get_children()[0].get_file_name())
 
@@ -44,7 +44,7 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def close_tab(self, position=None):
-        if position == None:
+        if position is None:
             position = self.get_current_page()
         tab = self.get_nth_page(position)
         diagram = tab.get_children()[0]
@@ -52,7 +52,9 @@ class WorkArea(Gtk.Notebook):
         if diagram.get_modified():
             dialog = Dialog().confirm_dialog("Diagram " +
                                              diagram.get_file_name() +
-                                             " is not saved. \nIf you close it, changes will be lost.\nConfirm?", self.main_window)
+                                             " is not saved. \nIf you close it"
+                                             ", changes will be lost.\n"
+                                             "Confirm?", self.main_window)
             result = dialog.run()
             dialog.destroy()
             if result == Gtk.ResponseType.CANCEL:
@@ -101,7 +103,7 @@ class WorkArea(Gtk.Notebook):
             if tab == diagram:
                 break
         tab = self.get_nth_page(index)
-        if tab == None:
+        if tab is None:
             return
         hbox = self.get_tab_label(tab)
         label = hbox.get_children()[0]

@@ -3,22 +3,23 @@
 
 import gi
 import os
-gi.require_version('Gtk', '3.0')
+from filefilters import *
 from gi.repository import Gtk
 from gi.repository import GObject
 from harpia.GUI.components.stringfield import StringField
 
-from filefilters import *
+gi.require_version('Gtk', '3.0')
 
 
 class Dialog():
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def open_dialog(self, title, main_window):
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.OPEN,
-                                       (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                       (Gtk.STOCK_CANCEL,
+                                        Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
         dialog.add_filter(AllFileFilter())
@@ -33,13 +34,14 @@ class Dialog():
         dialog.destroy()
         return file_name
 
-#------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def confirm_overwrite(self, name, main_window):
-        if os.path.exists(name) == False:
+        if os.path.exists(name) is False:
             return True
 
-        msg = "Already exists a file with the same name in this folder. Do you want to continue?"
+        msg = "Already exists a file with the same name in this folder."
+        msg = msg + " Do you want to continue?"
         dialog = Dialog().confirm_dialog(msg, main_window)
         result = dialog.run()
         dialog.destroy()
@@ -48,13 +50,13 @@ class Dialog():
         if result == Gtk.ResponseType.CANCEL:
             return False
 
-
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def save_dialog(self, title, main_window):
         diagram = main_window.work_area.get_current_diagram()
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.SAVE,
-                                       (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                       (Gtk.STOCK_CANCEL,
+                                        Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
 
         dialog.add_filter(AllFileFilter())
@@ -70,11 +72,12 @@ class Dialog():
         dialog.destroy()
         return file_name
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def save_png_dialog(self, title, main_window):
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.SAVE,
-                                       (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                       (Gtk.STOCK_CANCEL,
+                                        Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
 
         dialog.add_filter(PNGFileFilter())

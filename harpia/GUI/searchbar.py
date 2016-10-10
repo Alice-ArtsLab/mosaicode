@@ -1,9 +1,10 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
+gi.require_version('Gtk', '3.0')
 
 
 class SearchBar(Gtk.Box, Gtk.SearchBar):
@@ -23,4 +24,4 @@ class SearchBar(Gtk.Box, Gtk.SearchBar):
         self.main_window.main_control.search(
             self.search_entry.get_text().upper())
         return self.search_entry.get_text()
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------

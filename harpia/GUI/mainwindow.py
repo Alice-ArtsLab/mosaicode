@@ -1,21 +1,20 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
+from menu import Menu
+from status import Status
+from toolbar import Toolbar
+from workarea import WorkArea
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from menu import Menu
-from toolbar import Toolbar
 from searchbar import SearchBar
-from harpia.control.maincontrol import MainControl
 from blocknotebook import BlockNotebook
-from blockproperties import BlockProperties
-from status import Status
-from workarea import WorkArea
-
 from harpia.system import System as System
+from blockproperties import BlockProperties
+from harpia.control.maincontrol import MainControl
+
+gi.require_version('Gtk', '3.0')
 
 
 class MainWindow(Gtk.Window):
@@ -26,7 +25,7 @@ class MainWindow(Gtk.Window):
         # self.set_default_size(800,600)
         self.resize(
             System.properties.get_width(),
-                System.properties.get_height())
+            System.properties.get_height())
         self.main_control = MainControl(self)
         self.connect("check-resize", self.__resize)
 
@@ -111,14 +110,16 @@ class MainWindow(Gtk.Window):
             self.menu.add_example(example)
         self.menu.update_recent_file()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        if event.state ==
+        Gdk.ModifierType.CONTROL_MASK |
+        Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_a:
                 self.main_control.select_all()
                 return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __create_frame(self, widget):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
@@ -126,7 +127,7 @@ class MainWindow(Gtk.Window):
         frame.set_property("border-width", 4)
         return frame
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __resize(self, data):
         width, height = self.get_size()
         System.properties.set_width(width)
@@ -137,7 +138,7 @@ class MainWindow(Gtk.Window):
         System.properties.set_vpaned_left(self.vpaned_left.get_position())
         self.work_area.resize(data)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def set_title(self, title):
         Gtk.Window.set_title(self, "Harpia (" + title + ")")
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------

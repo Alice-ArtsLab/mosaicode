@@ -1,12 +1,12 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
+import datetime
 from gi.repository import Gtk
 from gi.repository import Pango
 
-import datetime
+gi.require_version('Gtk', '3.0')
 
 
 class Status(Gtk.ScrolledWindow):

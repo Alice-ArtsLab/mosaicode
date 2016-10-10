@@ -1,11 +1,12 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-gi.require_version('GtkSource', '3.0')
 from gi.repository import GtkSource
+
+gi.require_version('Gtk', '3.0')
+gi.require_version('GtkSource', '3.0')
 
 
 class CodeWindow(Gtk.Dialog):

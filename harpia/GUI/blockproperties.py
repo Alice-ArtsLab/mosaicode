@@ -1,16 +1,15 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
 from propertybox import PropertyBox
+gi.require_version('Gtk', '3.0')
 
 
 class BlockProperties(Gtk.Notebook):
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
         Gtk.Notebook.__init__(self)

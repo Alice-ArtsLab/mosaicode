@@ -1,15 +1,14 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
+import os
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-
-import os
-
 from harpia.system import System as System
+
+gi.require_version('Gtk', '3.0')
 
 
 class BlocksTreeView(Gtk.ScrolledWindow):
@@ -43,9 +42,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
         self.blocks_tree_view.enable_model_drag_source(
             Gdk.ModifierType.BUTTON1_MASK,
-                [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
-                Gdk.DragAction.DEFAULT |
-                Gdk.DragAction.COPY)
+            [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
+            Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
         self.blocks_tree_view.connect("drag-data-get", self.__drag_data)
         self.blocks = {}
 
@@ -70,7 +68,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
         iter = self.tree_store.get_iter_first()
-        while iter != None:
+        while iter is not None:
             if category_name in self.tree_store[iter][:]:
                 return iter
             iter = self.tree_store.iter_next(iter)
@@ -84,7 +82,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             return True
         if self.current_filter == "":
             return True
-        if self.tree_store.iter_children(iter) != None:
+        if self.tree_store.iter_children(iter) is not None:
             return True
         return self.current_filter in model[iter][1].upper()
 
@@ -98,7 +96,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             return
 
         block = self.get_selected_block()
-        if block != None:
+        if block is not None:
             self.main_window.main_control.set_block(self.get_selected_block())
 
     # ----------------------------------------------------------------------
@@ -113,13 +111,13 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         block_name = tree_view_model.get_value(
             tree_view_model.get_iter(path), 0)
         block = self.get_selected_block()
-        if block != None:
+        if block is not None:
             self.main_window.main_control.add_block(block)
 
     # ----------------------------------------------------------------------
     def __drag_data(self, treeview, context, selection, target_id, etime):
         block = self.get_selected_block()
-        if block != None:
+        if block is not None:
             selection.set_text(block.get_description()["Label"], -1)
 
     # ----------------------------------------------------------------------

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
 from harpia.system import System as System
+
+gi.require_version('Gtk', '3.0')
 
 
 class Menu(Gtk.MenuBar):
@@ -37,7 +37,8 @@ class Menu(Gtk.MenuBar):
         self.__create_menu("Rename", None, file_menu, mc.rename_tab)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(
-            "Export Diagram As PNG", "<Control>E", file_menu, mc.export_diagram)
+            "Export Diagram As PNG", "<Control>E",
+            file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu("Exit", "<Control>Q", file_menu, mc.exit)
         self.__add_menu_category("File", file_menu)
@@ -68,14 +69,14 @@ class Menu(Gtk.MenuBar):
             "Normal Size", "<Control>0", view_menu, mc.zoom_normal)
         self.__add_menu_category("View", view_menu)
 
-        # -------------------------- Process ----------------------------------
+        # -------------------------- Process --------------------------------
         process_menu = Gtk.Menu()
         self.__create_menu("Run", "<Control>R", process_menu, mc.run)
         self.__create_menu("Save Source", None, process_menu, mc.save_source)
         self.__create_menu("View Source", None, process_menu, mc.view_source)
         self.__add_menu_category("Process", process_menu)
 
-        # -------------------------- Help --------------------------------------
+        # -------------------------- Help -----------------------------------
         # Cria sub menu
         help_menu = Gtk.Menu()
         self.example_menu = Gtk.Menu()
@@ -88,12 +89,12 @@ class Menu(Gtk.MenuBar):
     # ----------------------------------------------------------------------
     def __create_menu(self, name, accel, menu, action):
         item = Gtk.MenuItem(name)
-        if accel != None:
+        if accel is not None:
             key, mod = Gtk.accelerator_parse(accel)
             item.add_accelerator(
                 "activate", self.accel_group, key, mod, Gtk.AccelFlags.VISIBLE)
         menu.append(item)
-        if action != None:
+        if action is not None:
             item.connect("activate", self.__menu_clicked, None)
             self.actions[item] = action
         return item

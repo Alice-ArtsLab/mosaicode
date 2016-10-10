@@ -1,13 +1,12 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from harpia.system import System as System
 from blockstreeview import BlocksTreeView
+from harpia.system import System as System
+gi.require_version('Gtk', '3.0')
 
 
 class BlockNotebook(Gtk.Notebook):

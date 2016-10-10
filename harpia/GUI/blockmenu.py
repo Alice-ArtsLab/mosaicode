@@ -5,7 +5,8 @@
 # S2i - Intelligent Industrial Systems
 # DAS - Automation and Systems Department
 # UFSC - Federal University of Santa Catarina
-# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org), S2i (www.s2i.das.ufsc.br)
+# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
+# S2i (www.s2i.das.ufsc.br)
 #
 #
 #    This program is free software: you can redistribute it and/or modify it
@@ -20,14 +21,15 @@
 #    You should have received a copy of the GNU General Public License along
 #    with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#    For further information, check the COPYING file distributed with this software.
+#    For further information, check the COPYING file distributed with
+#    this software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
+gi.require_version('Gtk', '3.0')
 
 
 class BlockMenu(Gtk.Menu):
@@ -44,5 +46,5 @@ class BlockMenu(Gtk.Menu):
         self.show_all()
         self.popup(None, None, None, None, event.button.button, event.time)
 
-    def __delete_clicked(self, *args):  # this strongly depends on the garbage collector
+    def __delete_clicked(self, *args):  # strongly depends on garbage collector
         self.block.delete()
