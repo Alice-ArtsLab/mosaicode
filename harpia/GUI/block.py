@@ -56,6 +56,7 @@ OUTPUT_WIDTH = 24
 class Block(GooCanvas.CanvasGroup, BlockModel):
 
 #----------------------------------------------------------------------
+
     def __init__(self, diagram, plugin):
         GooCanvas.CanvasGroup.__init__(self)
         BlockModel.__init__(self, plugin)
@@ -139,31 +140,33 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __draw_rect(self):
         color = self.get_description()["Color"].split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
-        color = int(color[0])*0x1000000 + \
-                int(color[1])*0x10000 + \
-                int(color[2])*0x100 + \
-                int(color[3])*0x01
+        color = int(color[0]) * 0x1000000 + \
+            int(color[1]) * 0x10000 + \
+            int(color[2]) * 0x100 + \
+            int(color[3]) * 0x01
         rect = GooCanvas.CanvasRect(parent=self,
-                    x=0,
-                    y=0,
-                    width=self.width,
-                    height=self.height,
-                    radius_x = 10,
-                    radius_y = 10,
-                    stroke_color="black",
-                    fill_color_rgba=color
-                    )
+                                    x=0,
+                                    y=0,
+                                    width=self.width,
+                                    height=self.height,
+                                    radius_x=10,
+                                    radius_y=10,
+                                    stroke_color="black",
+                                    fill_color_rgba=color
+                                    )
         self.widgets["Rect"] = rect
 
     #----------------------------------------------------------------------
     def __draw_icon(self):
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                self.get_description()["Icon"])
+                                                self.get_description()["Icon"])
         image = GooCanvas.CanvasImage(parent=self,
-                pixbuf=pixbuf,
-                x=(self.width/2) - (pixbuf.props.width / 2),
-                y=(self.height/2)  - (pixbuf.props.height / 2)
-                )
+                                      pixbuf=pixbuf,
+                                      x=(self.width / 2) - (
+                                          pixbuf.props.width / 2),
+                                      y=(self.height / 2) - (
+                                      pixbuf.props.height / 2)
+                                      )
         self.widgets["Icon"] = image
 
     #----------------------------------------------------------------------
@@ -172,19 +175,20 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            System.connectors[
-                            self.get_description()["InTypes"][x]
-                            ]["icon_in"])
+                                                        System.connectors[
+                                                        self.get_description()[
+                                                        "InTypes"][x]
+                                                        ]["icon_in"])
             except:
                 pass
 
             image = GooCanvas.CanvasImage(parent=self,
-                        pixbuf=pixbuf,
-                        x=0,
-                        y=(RADIUS # upper border
-                      + (x * 5) # spacing betwen ports
-                      + x * INPUT_HEIGHT) #previous ports
-                       )
+                                          pixbuf=pixbuf,
+                                          x=0,
+                                          y=(RADIUS  # upper border
+                                             + (x * 5)  # spacing betwen ports
+                                              + x * INPUT_HEIGHT)  # previous ports
+                                          )
             image.set_property("tooltip", self.get_description()["InTypes"][x])
             image.connect("button-press-event", self.__on_input_press, x)
             image.connect("button-release-event", self.__on_input_release, x)
@@ -206,20 +210,22 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            System.connectors[
-                            self.get_description()["OutTypes"][x]
-                            ]["icon_out"])
+                                                        System.connectors[
+                                                        self.get_description()[
+                                                        "OutTypes"][x]
+                                                        ]["icon_out"])
             except:
                 pass
 
             image = GooCanvas.CanvasImage(parent=self,
-                        pixbuf=pixbuf,
-                        x=(self.width-OUTPUT_WIDTH),
-                        y=(RADIUS # upper border
-                      + (x*5) # spacing betwen ports
-                      + x*OUTPUT_HEIGHT) #previous ports
-                        )
-            image.set_property("tooltip", self.get_description()["OutTypes"][x])
+                                          pixbuf=pixbuf,
+                                          x=(self.width - OUTPUT_WIDTH),
+                                          y=(RADIUS  # upper border
+                                             + (x * 5)  # spacing betwen ports
+                                              + x * OUTPUT_HEIGHT)  # previous ports
+                                          )
+            image.set_property(
+                "tooltip", self.get_description()["OutTypes"][x])
             image.connect("button-press-event", self.__on_output_press, x)
             image.connect("button-release-event", self.__on_output_release, x)
             outs.append(image)
@@ -236,19 +242,20 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     #----------------------------------------------------------------------
     def __draw_label(self):
-        text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + self.get_description()["Label"] + "</span>"
+        text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + \
+            self.get_description()["Label"] + "</span>"
 
         label = GooCanvas.CanvasText(parent=self,
-                            text=text_label,
-                            fill_color='black',
-                            anchor=GooCanvas.CanvasAnchorType.CENTER,
-                            x=(self.width/2),
-                            y=(self.height-10),
-                            use_markup=True
-                            )
+                                     text=text_label,
+                                     fill_color='black',
+                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
+                                     x=(self.width / 2),
+                                     y=(self.height - 10),
+                                     use_markup=True
+                                     )
 
         text_width = label.get_property('width')
-        oldX, oldY = ((self.width/2),(self.height-10))
+        oldX, oldY = ((self.width / 2), (self.height - 10))
         self.width = max(text_width + WIDTH_2_TEXT_OFFSET, self.width)
         label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
         self.widgets["Label"] = label
@@ -266,14 +273,16 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         maxIO = max(len(self.get_description()["InTypes"]),
                     len(self.get_description()["OutTypes"]))
 
-        ## Generates the block size, based on the number of inputs,outputs
+        # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
         if not maxIO:
             maxIO = 1
 
-        self.height = max( ((maxIO-1) * 5 ) #espacamento entre ports = 5
-                          +(RADIUS * 2 ) #tirando a margem superior e inferior
-                          +(maxIO * INPUT_HEIGHT),#adicionando a altura de cada port
+        self.height = max(((maxIO - 1) * 5)  # espacamento entre ports = 5
+                          + (RADIUS * 2)
+                          # tirando a margem superior e inferior
+                          + (maxIO * INPUT_HEIGHT),
+                          # adicionando a altura de cada port
                           HEIGHT_DEFAULT)
 
         self.__draw_label()
@@ -287,9 +296,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def get_input_pos(self, input_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
-        y = (RADIUS # upper border
-                     + (input_id * 5) # spacing betwen ports
-                     + input_id * INPUT_HEIGHT #previous ports
+        y = (RADIUS  # upper border
+                     + (input_id * 5)  # spacing betwen ports
+                     + input_id * INPUT_HEIGHT  # previous ports
                      + INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
@@ -297,11 +306,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def get_output_pos(self, output_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
-        y = (RADIUS # upper border
-                     + (output_id * 5) # spacing betwen ports
-                     + output_id * INPUT_HEIGHT #previous ports
-                     + INPUT_HEIGHT/2) + y - PORT_SENSITIVITY + 3
-        return (x,y)
+        y = (RADIUS  # upper border
+                     + (output_id * 5)  # spacing betwen ports
+                     + output_id * INPUT_HEIGHT  # previous ports
+                     + INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
+        return (x, y)
 
     #----------------------------------------------------------------------
     def move(self, x, y):
@@ -315,7 +324,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     #----------------------------------------------------------------------
     def get_position(self):
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        return x,y
+        return x, y
 
     #----------------------------------------------------------------------
     def set_properties(self, data):
@@ -344,20 +353,22 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __update_state(self):
         # Not connected: Color = red
         if self.has_flow:
-            self.widgets["Rect"].set_property("stroke_color",'black')
+            self.widgets["Rect"].set_property("stroke_color", 'black')
         else:
-            self.widgets["Rect"].set_property("stroke_color",'red')
+            self.widgets["Rect"].set_property("stroke_color", 'red')
 
         # in focus: Line width = 3
         if self.focus:
-            self.widgets["Rect"].set_property("line-width",3)
+            self.widgets["Rect"].set_property("line-width", 3)
         else:
-            self.widgets["Rect"].set_property("line-width",1)
+            self.widgets["Rect"].set_property("line-width", 1)
 
         # selected: Line = dashed
         if self in self.diagram.current_widgets:
-            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
+            self.widgets["Rect"].set_property(
+                "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:
-            self.widgets["Rect"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
+            self.widgets["Rect"].set_property(
+                "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
 #----------------------------------------------------------------------

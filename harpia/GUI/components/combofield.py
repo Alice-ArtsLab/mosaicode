@@ -5,11 +5,13 @@ from gi.repository import Gtk
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
+
 class ComboField(Field, Gtk.HBox):
 
     # ------------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
 
         self.check_value(data, "name", "")

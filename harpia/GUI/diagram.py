@@ -39,9 +39,11 @@ from connector import Connector
 from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
 
+
 class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
+
     def __init__(self, main_window):
         GooCanvas.Canvas.__init__(self)
         DiagramModel.__init__(self)
@@ -72,7 +74,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.select_rect = None
         self.__update_white_board()
         self.scrolled_window = None
-        self.set_property("has-tooltip", True) #Allow tooltip on elements
+        self.set_property("has-tooltip", True)  # Allow tooltip on elements
         self.show()
 
     #----------------------------------------------------------------------
@@ -89,7 +91,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         # Select elements
         if self.select_rect != None:
             self.__update_select(event.x / scale, event.y / scale)
-            items = self.get_items_in_area(self.select_rect.bounds, True, False, True)
+            items = self.get_items_in_area(
+                self.select_rect.bounds, True, False, True)
             self.current_widgets = []
             for item in items:
                 if not isinstance(item, Connector) and not isinstance(item, Block):
@@ -97,7 +100,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 if item not in self.current_widgets:
                         self.current_widgets.append(item)
             self.update_flows()
-            return True #Abort other events
+            return True  # Abort other events
 
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
             for connector in self.connectors:
@@ -113,16 +116,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __on_key_press(self, widget, event=None):
         if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_Up:
-                self.move_selected_blocks(0,-5)
+                self.move_selected_blocks(0, -5)
                 return True
             if event.keyval == Gdk.KEY_Down:
-                self.move_selected_blocks(0,5)
+                self.move_selected_blocks(0, 5)
                 return True
             if event.keyval == Gdk.KEY_Left:
-                self.move_selected_blocks(-5,0)
+                self.move_selected_blocks(-5, 0)
                 return True
             if event.keyval == Gdk.KEY_Right:
-                self.move_selected_blocks(5,0)
+                self.move_selected_blocks(5, 0)
                 return True
 
         if event.keyval == Gdk.KEY_Delete:
@@ -130,18 +133,17 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return True
 
         if event.keyval == Gdk.KEY_Up:
-            self.move_selected_blocks(0,-1)
+            self.move_selected_blocks(0, -1)
             return True
         if event.keyval == Gdk.KEY_Down:
-            self.move_selected_blocks(0,1)
+            self.move_selected_blocks(0, 1)
             return True
         if event.keyval == Gdk.KEY_Left:
-            self.move_selected_blocks(-1,0)
+            self.move_selected_blocks(-1, 0)
             return True
         if event.keyval == Gdk.KEY_Right:
-            self.move_selected_blocks(1,0)
+            self.move_selected_blocks(1, 0)
             return True
-
 
     #----------------------------------------------------------------------
     def __on_button_release(self, widget, event=None):
@@ -163,15 +165,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __start_select(self):
         if self.select_rect == None:
             self.select_rect = GooCanvas.CanvasRect(
-                    parent=self.get_root_item(),
-                    x = self.last_clicked_point[0],
-                    y = self.last_clicked_point[1],
+                parent=self.get_root_item(),
+                    x=self.last_clicked_point[0],
+                    y=self.last_clicked_point[1],
                     width=0,
                     height=0,
                     stroke_color="black",
                     fill_color=None,
-                    line_dash = GooCanvas.CanvasLineDash.newv((4.0, 2.0))
-                    )
+                    line_dash=GooCanvas.CanvasLineDash.newv((4.0, 2.0))
+            )
 
     #----------------------------------------------------------------------
     def __end_select(self):
@@ -236,8 +238,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __connector_types_match(self, conn):
-        outType = self.blocks[conn.from_block].get_description()["OutTypes"][conn.from_block_out]
-        inType = self.blocks[conn.to_block].get_description()["InTypes"][conn.to_block_in]
+        outType = self.blocks[conn.from_block].get_description()[
+            "OutTypes"][conn.from_block_out]
+        inType = self.blocks[conn.to_block].get_description()[
+            "InTypes"][conn.to_block_in]
         if not outType == inType:
             System.log("Connection Types mismatch")
         return outType == inType
@@ -268,7 +272,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def start_connection(self, block, output):
         self.__abort_connection()  # abort any possibly running connections
         conn_type = block.get_description()["OutTypes"][output]
-        self.curr_connector = Connector(self, block.get_id(), output, conn_type)
+        self.curr_connector = Connector(
+            self, block.get_id(), output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
@@ -299,7 +304,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     #----------------------------------------------------------------------
     def __update_white_board(self):
         self.white_board = GooCanvas.CanvasRect(
-                        parent=self.get_root_item(),
+            parent=self.get_root_item(),
                         x=0,
                         y=0,
                         width=self.__main_window.get_size()[0],
@@ -310,7 +315,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def update_flows(self):
-        self.white_board.set_property("stroke_color","white")
+        self.white_board.set_property("stroke_color", "white")
         for block_id in self.blocks:
             self.blocks[block_id].update_flow()
         for conn in self.connectors:
@@ -351,7 +356,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def resize(self, data):
         self.set_property("x2", self.__main_window.get_size()[0])
-        self.white_board.set_property("width", self.__main_window.get_size()[0])
+        self.white_board.set_property(
+            "width", self.__main_window.get_size()[0])
 
     # ----------------------------------------------------------------------
     def select_all(self):
@@ -367,7 +373,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.do("Move blocks")
         for block_id in self.blocks:
             if self.blocks[block_id] in self.current_widgets:
-                self.blocks[block_id].move(x,y)
+                self.blocks[block_id].move(x, y)
         self.update_scrolling()
 
     # ---------------------------------------------------------------------
@@ -512,11 +518,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         for block_id in self.blocks:
             block = self.blocks[block_id]
-            x,y = block.get_position()
-            if x < min_x: min_x = x
-            if y < min_y: min_y = y
-            if x + block.width > max_x: max_x = x + block.width
-            if y + block.height > max_y: max_y = y + block.height
+            x, y = block.get_position()
+            if x < min_x:
+                min_x = x
+            if y < min_y:
+                min_y = y
+            if x + block.width > max_x:
+                max_x = x + block.width
+            if y + block.height > max_y:
+                max_y = y + block.height
         return min_x, min_y, max_x - min_x, max_y - min_y
 
 #----------------------------------------------------------------------

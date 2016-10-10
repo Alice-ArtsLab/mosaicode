@@ -29,6 +29,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+
 class BlockMenu(Gtk.Menu):
 
     def __init__(self, block, event):
@@ -43,5 +44,5 @@ class BlockMenu(Gtk.Menu):
         self.show_all()
         self.popup(None, None, None, None, event.button.button, event.time)
 
-    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
+    def __delete_clicked(self, *args):  # this strongly depends on the garbage collector
         self.block.delete()

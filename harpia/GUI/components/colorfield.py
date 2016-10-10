@@ -6,11 +6,13 @@ from gi.repository import Gdk
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
+
 class ColorField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.HBox.__init__(self, True)
 
@@ -27,7 +29,8 @@ class ColorField(Field, Gtk.HBox):
         self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         self.add(self.color_block)
 
-        button = Gtk.Button.new_from_icon_name("gtk-select-color",Gtk.IconSize.BUTTON)
+        button = Gtk.Button.new_from_icon_name(
+            "gtk-select-color", Gtk.IconSize.BUTTON)
         button.connect("clicked", self.on_choose_color)
         self.add(button)
         self.show_all()

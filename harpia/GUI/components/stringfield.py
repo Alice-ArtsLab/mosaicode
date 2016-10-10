@@ -5,11 +5,13 @@ from gi.repository import Gtk
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
+
 class StringField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.HBox.__init__(self, True)
 
@@ -20,7 +22,6 @@ class StringField(Field, Gtk.HBox):
         self.label = Gtk.Label(data["name"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
-
 
         self.field = Gtk.Entry()
         self.field.set_text(data["value"])

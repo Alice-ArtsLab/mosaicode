@@ -7,12 +7,14 @@ from gi.repository import Gtk
 gi.require_version('GtkSource', '3.0')
 from gi.repository import GtkSource
 
+
 class CodeWindow(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
+
     def __init__(self, main_window, code):
         Gtk.Dialog.__init__(self, "Code Window", main_window,
-                0,(Gtk.STOCK_OK, Gtk.ResponseType.OK))
+                            0, (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.set_default_size(800, 600)
         sw = Gtk.ScrolledWindow()

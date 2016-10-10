@@ -28,6 +28,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+
 class ConnectorMenu(Gtk.Menu):
 
     def __init__(self, connector, event):
@@ -36,7 +37,7 @@ class ConnectorMenu(Gtk.Menu):
 
         # Excluir (delete) item
         menu_item = Gtk.MenuItem("Delete")
-        menu_item.connect("activate", self.__delete_clicked )
+        menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
         # Shows the menu
@@ -48,6 +49,6 @@ class ConnectorMenu(Gtk.Menu):
         pass
 
 #----------------------------------------------------------------------
-    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
+    def __delete_clicked(self, *args):  # this strongly depends on the garbage collector
         self.connector.delete()
         return True

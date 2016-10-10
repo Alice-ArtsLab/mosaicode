@@ -38,10 +38,12 @@ import sys
 from harpia.model.connectionmodel import ConnectionModel
 from connectormenu import ConnectorMenu
 
+
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     #----------------------------------------------------------------------
-    def __init__( self, diagram, from_block, from_block_out, conn_type):
+
+    def __init__(self, diagram, from_block, from_block_out, conn_type):
         GooCanvas.CanvasGroup.__init__(self)
         ConnectionModel.__init__(self)
 
@@ -52,8 +54,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.from_block_out = from_block_out
         self.to_block_in = -1
         self.type = conn_type
-        self.from_point = self.diagram.blocks[self.from_block].get_output_pos(self.from_block_out) 
-        self.to_point = (0,0)
+        self.from_point = self.diagram.blocks[
+            self.from_block].get_output_pos(self.from_block_out)
+        self.to_point = (0, 0)
 
         self.focus = False
         self.width = 0
@@ -105,7 +108,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def set_end(self, to_block=-1, to_block_in=-1):
         self.to_block = to_block
         self.to_block_in = to_block_in
-        self.to_point = self.diagram.blocks[self.to_block].get_input_pos(self.to_block_in)
+        self.to_point = self.diagram.blocks[
+            self.to_block].get_input_pos(self.to_block_in)
         self.update_tracking(self.to_point)
 
     #----------------------------------------------------------------------
@@ -146,7 +150,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         path += "M " + str(x0) + " " + str(y0)
 
-        path += " L " +  str(x0 + 25) + " " + str(y0) 
+        path += " L " + str(x0 + 25) + " " + str(y0)
         path += " L " + str(x0 + 25) + " " + str((y0 + y1) / 2)
         if x1 < x0 + 50:
             path += " L " + str((x1 + x0) / 2) + " " + str((y0 + y1) / 2)
@@ -160,16 +164,15 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1 - 4) + " " + str(y1 + 4)
         path += " L " + str(x1) + " " + str(y1)
 
-
         if not self.widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(
-                    parent = self,
-                    data = path
+                parent=self,
+                    data=path
             )
             self.widgets["Line"] = widget
 
         else:
-            self.widgets["Line"].set_property("data",path)
+            self.widgets["Line"].set_property("data", path)
 
         self.__update_state()
 
@@ -177,19 +180,21 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def __update_state(self):
         # With focus: line width = 3
         if self.focus:
-            self.widgets["Line"].set_property("line-width",3)
+            self.widgets["Line"].set_property("line-width", 3)
         else:
-            self.widgets["Line"].set_property("line-width",2)
+            self.widgets["Line"].set_property("line-width", 2)
 
         # selected: line style = dashed and line width = 3
         if self in self.diagram.current_widgets:
-            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
+            self.widgets["Line"].set_property(
+                "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:
-            self.widgets["Line"].set_property("line_dash",GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
+            self.widgets["Line"].set_property(
+                "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
         # not connected: Color = red
-        if  self.to_block_in == -1:
-            self.widgets["Line"].set_property("stroke-color","red")
+        if self.to_block_in == -1:
+            self.widgets["Line"].set_property("stroke-color", "red")
         else:
             self.widgets["Line"].set_property("stroke-color", "black")
 #----------------------------------------------------------------------

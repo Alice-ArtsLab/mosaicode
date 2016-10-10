@@ -11,6 +11,7 @@ import os
 
 from harpia.system import System as System
 
+
 class BlocksTreeView(Gtk.ScrolledWindow):
 
     def __init__(self, main_window, language):
@@ -35,13 +36,13 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         col.pack_end(cellrenderertext, True)
         col.add_attribute(cellrenderertext, "text", 1)
 
-
         self.blocks_tree_view.set_enable_search(False)
         self.blocks_tree_view.connect("row-activated", self.__on_row_activated)
-        self.blocks_tree_view.connect("cursor-changed", self.__on_tree_selection_changed)
+        self.blocks_tree_view.connect(
+            "cursor-changed", self.__on_tree_selection_changed)
 
         self.blocks_tree_view.enable_model_drag_source(
-                Gdk.ModifierType.BUTTON1_MASK,
+            Gdk.ModifierType.BUTTON1_MASK,
                 [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
                 Gdk.DragAction.DEFAULT |
                 Gdk.DragAction.COPY)
@@ -59,15 +60,18 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
-        category = self.__contains_category(block.get_description()["TreeGroup"])
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(os.environ['HARPIA_DATA_DIR'] + block.get_description()["Icon"])
-        self.tree_store.append(category, [pixbuf, block.get_description()["Label"]])
+        category = self.__contains_category(
+            block.get_description()["TreeGroup"])
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file(
+            os.environ['HARPIA_DATA_DIR'] + block.get_description()["Icon"])
+        self.tree_store.append(
+            category, [pixbuf, block.get_description()["Label"]])
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
         iter = self.tree_store.get_iter_first()
         while iter != None:
-            if category_name in self.tree_store[iter][:] :
+            if category_name in self.tree_store[iter][:]:
                 return iter
             iter = self.tree_store.iter_next(iter)
         return self.tree_store.append(None, [None, category_name])
@@ -80,7 +84,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             return True
         if self.current_filter == "":
             return True
-        if self.tree_store.iter_children(iter) != None :
+        if self.tree_store.iter_children(iter) != None:
             return True
         return self.current_filter in model[iter][1].upper()
 
@@ -90,7 +94,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         (tree_view_model, iter) = treeViewSelection.get_selected()
 
         # If it is a category, give up
-        if tree_view_model.iter_has_child(iter) :
+        if tree_view_model.iter_has_child(iter):
             return
 
         block = self.get_selected_block()
@@ -106,7 +110,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __on_row_activated(self, tree_view, path, column):
         tree_view_model = tree_view.get_model()
-        block_name = tree_view_model.get_value(tree_view_model.get_iter(path), 0)
+        block_name = tree_view_model.get_value(
+            tree_view_model.get_iter(path), 0)
         block = self.get_selected_block()
         if block != None:
             self.main_window.main_control.add_block(block)
@@ -122,7 +127,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         treeselection = self.blocks_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         path = model.get_path(iterac)
-        block_name = model.get_value(model.get_iter(path), 1) # 1 is the name position
+        block_name = model.get_value(
+            model.get_iter(path), 1)  # 1 is the name position
         for x in self.blocks:                                 # 0 is the icon
             block = self.blocks[x]()
             if block.get_description()["Label"] == block_name:

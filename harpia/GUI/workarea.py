@@ -48,14 +48,14 @@ class WorkArea(Gtk.Notebook):
             position = self.get_current_page()
         tab = self.get_nth_page(position)
         diagram = tab.get_children()[0]
-        
+
         if diagram.get_modified():
-            dialog = Dialog().confirm_dialog("Diagram " + \
-                        diagram.get_file_name() + \
-                        " is not saved. \nIf you close it, changes will be lost.\nConfirm?", self.main_window)
-            result = dialog.run() 
+            dialog = Dialog().confirm_dialog("Diagram " +
+                                             diagram.get_file_name() +
+                                             " is not saved. \nIf you close it, changes will be lost.\nConfirm?", self.main_window)
+            result = dialog.run()
             dialog.destroy()
-            if result ==  Gtk.ResponseType.CANCEL:
+            if result == Gtk.ResponseType.CANCEL:
                 return False
 
         self.remove_page(position)
@@ -123,4 +123,4 @@ class WorkArea(Gtk.Notebook):
             if not self.close_tab(0):
                 return False
         return True
-# ----------------------------------------------------------------------            
+# ----------------------------------------------------------------------

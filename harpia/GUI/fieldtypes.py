@@ -10,4 +10,3 @@ HARPIA_SAVE_FILE = "Save"
 HARPIA_OPEN_FILE = "Open"
 HARPIA_COMBO = "Combo"
 HARPIA_CHECK = "Check"
-

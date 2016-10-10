@@ -6,11 +6,13 @@ from gi.repository import Gdk
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
+
 class CommentField(Field, Gtk.VBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.VBox.__init__(self)
 
@@ -53,7 +55,7 @@ class CommentField(Field, Gtk.VBox):
     # --------------------------------------------------------------------------
     def get_value(self):
         return self.text_buffer.get_text(
-                        self.text_buffer.get_start_iter(),
+            self.text_buffer.get_start_iter(),
                         self.text_buffer.get_end_iter(),
                         True)
 # ------------------------------------------------------------------------------
