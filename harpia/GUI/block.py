@@ -5,7 +5,8 @@
 # S2i - Intelligent Industrial Systems
 # DAS - Automation and Systems Department
 # UFSC - Federal University of Santa Catarina
-# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org), S2i (www.s2i.das.ufsc.br)
+# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
+# S2i (www.s2i.das.ufsc.br)
 #
 #
 #    This program is free software: you can redistribute it and/or modify it
@@ -20,27 +21,26 @@
 #    You should have received a copy of the GNU General Public License along
 #    with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#    For further information, check the COPYING file distributed with this software.
+#    For further information, check the COPYING file distributed with this
+#    software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GooCanvas', '2.0')
+import os
+import copy
+import math
 from gi.repository import Gtk
 from gi.repository import Gdk
+from blockmenu import BlockMenu
 from gi.repository import GObject
 from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
-
-import math
-import os
-import copy
-
-from blockmenu import BlockMenu
 from harpia.system import System as System
 from harpia.model.blockmodel import BlockModel
 
+gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
@@ -55,7 +55,7 @@ OUTPUT_WIDTH = 24
 
 class Block(GooCanvas.CanvasGroup, BlockModel):
 
-#----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
     def __init__(self, diagram, plugin):
         GooCanvas.CanvasGroup.__init__(self)
@@ -79,10 +79,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.connect("leave-notify-event", self.__on_leave_notify)
         self.move(self.x, self.y)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         # with Shift
-        if event.state == Gdk.ModifierType.SHIFT_MASK | Gdk.ModifierType.MOD2_MASK:
+        if event.state == Gdk.ModifierType.SHIFT_MASK \
+                | Gdk.ModifierType.MOD2_MASK:
             if self in self.diagram.current_widgets:
                 self.diagram.current_widgets.remove(self)
             else:
@@ -108,11 +109,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
             return False
-        if self.diagram.curr_connector != None:
+        if self.diagram.curr_connector is not None:
             return False
         # Get the new position and move by the difference
         new_x = event.x - self.remember_x
@@ -120,23 +121,23 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.diagram.move_selected_blocks(new_x, new_y)
         return False
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
         self.focus = True
         self.__update_state()
         return False
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         self.focus = False
         self.__update_state()
         return False
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __del__(self):
         pass
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __draw_rect(self):
         color = self.get_description()["Color"].split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
@@ -156,38 +157,39 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                     )
         self.widgets["Rect"] = rect
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __draw_icon(self):
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                                                 self.get_description()["Icon"])
         image = GooCanvas.CanvasImage(parent=self,
                                       pixbuf=pixbuf,
-                                      x=(self.width / 2) - (
-                                          pixbuf.props.width / 2),
-                                      y=(self.height / 2) - (
-                                      pixbuf.props.height / 2)
+                                      x=(self.width / 2) -
+                                      (pixbuf.props.width / 2),
+                                      y=(self.height / 2) -
+                                      (pixbuf.props.height / 2)
                                       )
         self.widgets["Icon"] = image
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __draw_inputs(self):
         ins = []
         for x in range(len(self.get_description()["InTypes"])):
             try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                                                        System.connectors[
-                                                        self.get_description()[
-                                                        "InTypes"][x]
-                                                        ]["icon_in"])
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(
+                    self.data_dir +
+                    System.connectors[
+                        self.get_description()[
+                            "InTypes"][x]
+                    ]["icon_in"])
             except:
                 pass
 
             image = GooCanvas.CanvasImage(parent=self,
                                           pixbuf=pixbuf,
                                           x=0,
-                                          y=(RADIUS  # upper border
-                                             + (x * 5)  # spacing betwen ports
-                                              + x * INPUT_HEIGHT)  # previous ports
+                                          y=(RADIUS +  # upper border
+                                             (x * 5) +  # spacing betwen ports
+                                              x * INPUT_HEIGHT)  # prev ports
                                           )
             image.set_property("tooltip", self.get_description()["InTypes"][x])
             image.connect("button-press-event", self.__on_input_press, x)
@@ -195,34 +197,34 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             ins.append(image)
         self.widgets["Inputs"] = ins
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, args):
         self.diagram.end_connection(self, args)
         return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_input_release(self, canvas_item, target_item, event, args):
         return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __draw_outputs(self):
         outs = []
         for x in range(len(self.get_description()["OutTypes"])):
             try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                                                        System.connectors[
-                                                        self.get_description()[
-                                                        "OutTypes"][x]
-                                                        ]["icon_out"])
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(
+                    self.data_dir +
+                    System.connectors[
+                                    self.get_description()["OutTypes"][x]
+                                    ]["icon_out"])
             except:
                 pass
 
             image = GooCanvas.CanvasImage(parent=self,
                                           pixbuf=pixbuf,
                                           x=(self.width - OUTPUT_WIDTH),
-                                          y=(RADIUS  # upper border
-                                             + (x * 5)  # spacing betwen ports
-                                              + x * OUTPUT_HEIGHT)  # previous ports
+                                          y=(RADIUS +  # upper border
+                                             (x * 5) +  # spacing betwen ports
+                                              x * OUTPUT_HEIGHT)  # prev ports
                                           )
             image.set_property(
                 "tooltip", self.get_description()["OutTypes"][x])
@@ -231,18 +233,19 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             outs.append(image)
         self.widgets["Outputs"] = outs
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
         self.diagram.start_connection(self, args)
         return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_output_release(self, canvas_item, target_item, event, args):
         return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __draw_label(self):
-        text_label = "<span font_family ='Arial' size = '10000' weight = 'ultralight'> " + \
+        text_label = "<span font_family ='Arial' >"  # Pode gerar erros
+        text_label = text_label + "<size = '10000' weight = 'ultralight'> " + \
             self.get_description()["Label"] + "</span>"
 
         label = GooCanvas.CanvasText(parent=self,
@@ -260,7 +263,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
         self.widgets["Label"] = label
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def rebuild(self):
         self.widgets = {}
         # remove all elements
@@ -268,7 +271,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.get_root_item().remove_child(0)
         self.build()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def build(self):
         maxIO = max(len(self.get_description()["InTypes"]),
                     len(self.get_description()["OutTypes"]))
@@ -278,10 +281,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         if not maxIO:
             maxIO = 1
 
-        self.height = max(((maxIO - 1) * 5)  # espacamento entre ports = 5
-                          + (RADIUS * 2)
+        self.height = max(((maxIO - 1) * 5) +  # espacamento entre ports = 5
+                          (RADIUS * 2) +
                           # tirando a margem superior e inferior
-                          + (maxIO * INPUT_HEIGHT),
+                          (maxIO * INPUT_HEIGHT),
                           # adicionando a altura de cada port
                           HEIGHT_DEFAULT)
 
@@ -292,50 +295,50 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.__draw_icon()
         self.update_flow()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def get_input_pos(self, input_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
-        y = (RADIUS  # upper border
-                     + (input_id * 5)  # spacing betwen ports
-                     + input_id * INPUT_HEIGHT  # previous ports
-                     + INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
+        y = (RADIUS +  # upper border
+             (input_id * 5) +  # spacing betwen ports
+             input_id * INPUT_HEIGHT +  # previous ports
+             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def get_output_pos(self, output_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
-        y = (RADIUS  # upper border
-                     + (output_id * 5)  # spacing betwen ports
-                     + output_id * INPUT_HEIGHT  # previous ports
-                     + INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
+        y = (RADIUS +  # upper border
+             (output_id * 5) +  # spacing betwen ports
+             output_id * INPUT_HEIGHT +  # previous ports
+             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def move(self, x, y):
         self.translate(x, y)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def delete(self):
         self.diagram.delete_block(self)
         self.diagram.update_flows()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def get_position(self):
         isSet, x, y, scale, rotation = self.get_simple_transform()
         return x, y
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def set_properties(self, data):
         self.diagram.do("Set block property")
         BlockModel.set_properties(self, data)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def get_properties(self):
         return BlockModel.get_properties(self)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def update_flow(self):
         self.has_flow = True
         distinct_con = []
@@ -349,7 +352,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.__update_state()
         return self.has_flow
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __update_state(self):
         # Not connected: Color = red
         if self.has_flow:
@@ -371,4 +374,4 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
