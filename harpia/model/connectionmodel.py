@@ -23,6 +23,13 @@ class ConnectionModel(object):
         inType = self.sink.get_description()["InTypes"][self.sink_port]
         return outType == inType
 
+    # -------------------------------------------------------------------------
+    def get_source_port_name(self):
+        return self.source.get_input_port_name(self.source_port)
+
+    # -------------------------------------------------------------------------
+    def get_sink_port_name(self):
+        return self.sink.get_output_port_name(self.sink_port)
 
     #----------------------------------------------------------------------
     def set_end(self, sink, sink_port):

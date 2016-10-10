@@ -15,6 +15,14 @@ class Plugin(object):
         self.vars = ""
 
     # ----------------------------------------------------------------------
+    def get_output_port_name(self, number):
+        return "block_" + str(self.id) + "o" + str(number)
+
+    # ----------------------------------------------------------------------
+    def get_input_port_name(self, number):
+        return "block_" + str(self.id) + "i" + str(number)
+
+    # ----------------------------------------------------------------------
     def get_position(self):
         return (self.x, self.y)
 

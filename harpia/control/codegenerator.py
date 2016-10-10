@@ -202,6 +202,20 @@ class CodeGenerator():
                 value = str(x.__dict__[key])
                 my_key = "$" + key + "$"
                 code = code.replace(my_key, value)
+            # Replace all connection methods by their values
+            for func in dir(x):
+                result = ""
+                try:
+                    callable(getattr(x, func))
+                except:
+                    continue
+                if not callable(getattr(x, func)):
+                    continue
+                try:
+                    result = getattr(x, func)()
+                except:
+                    continue
+                code = code.replace("$" + str(func) + "$", str(result))
             connections += code
         self.connections.append(connections)
 
