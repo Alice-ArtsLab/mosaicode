@@ -77,34 +77,28 @@ class Rotate(OpenCVPlugin):
     def get_properties(self):
         return {
         "isCenter":{"name": "Use Image Center",
-                            "type": HARPIA_CHECK,
-                            "value": self.isCenter
+                            "type": HARPIA_CHECK
                             },
         "isScalling":{"name": "Resize Image To Fit In",
-                            "type": HARPIA_CHECK,
-                            "value": self.isScalling
+                            "type": HARPIA_CHECK
                             },
         "isFilling":{"name": "Fill Leftovers",
-                            "type": HARPIA_CHECK,
-                            "value": self.isFilling
+                            "type": HARPIA_CHECK
                             },
         "xC":{"name": "Point X",
                     "type": HARPIA_INT,
-                    "value": self.xC,
                     "lower":0,
                     "upper":65535,
                     "step":1
                     },
         "yC":{"name": "Point Y",
                     "type": HARPIA_INT,
-                    "value": self.yC,
                     "lower":0,
                     "upper":65535,
                     "step":1
                     },
         "angle":{"name": "Angle",
                     "type": HARPIA_FLOAT,
-                    "value": self.angle,
                     "lower":0,
                     "upper":360,
                     "step":1

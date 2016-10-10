@@ -102,11 +102,10 @@ The last output is the number of detected faces.'
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {"cascade_name":{"name": "File Name",
-                            "type": HARPIA_SAVE_FILE,
-                            "value": self.cascade_name},
+                            "type": HARPIA_SAVE_FILE
+                            },
                 "min_neighbors":{"name": "Min neighbors",
                     "type": HARPIA_INT,
-                    "value": self.min_neighbors,
                     "lower":1,
                     "upper":99,
                     "step":1

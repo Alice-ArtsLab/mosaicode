@@ -9,21 +9,24 @@ import pkgutil # For dynamic package load
 import inspect # For module inspect
 
 import harpia.GUI.components
+from harpia.GUI.fieldtypes import *
 
 component_list = {} #Dynamic list to store components
 
 class PropertyBox(Gtk.VBox):
 
 # ----------------------------------------------------------------------
-    def __init__(self):
+    def __init__(self, main_window):
         if not component_list: #load only if it is empty
             self.__load_components()
+        self.main_window = main_window
         self.block = None
         self.properties = {}
         Gtk.VBox.__init__(self)
         self.set_homogeneous(False)
         self.set_property("border-width", 0)
-        self.override_background_color(Gtk.StateType.NORMAL, Gdk.RGBA(1, 1, 1, 1))
+        white = Gdk.RGBA(1, 1, 1, 1)
+        self.override_background_color(Gtk.StateType.NORMAL, white)
         self.show_all()
 
 # ----------------------------------------------------------------------
@@ -34,8 +37,12 @@ class PropertyBox(Gtk.VBox):
             self.remove(widget)
 
         #Search block properties to create GUI
-        for component in self.block.get_properties() :
-            field = self._generate_field(component, self.block.get_properties()[component])
+        for component in self.block.get_properties():
+            prop = self.block.get_properties()[component]
+            prop["value"] = self.block.get_plugin().__dict__[component]
+            field = self._generate_field(component, prop)
+            if prop["type"] == HARPIA_OPEN_FILE or prop["type"] == HARPIA_SAVE_FILE:
+                field.set_parent_window(self.main_window)
             self.pack_start(field, False, False, 0)
 
 # ----------------------------------------------------------------------

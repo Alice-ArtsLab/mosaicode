@@ -11,7 +11,6 @@ from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
 from harpia.model.connectionmodel import ConnectionModel
 from harpia.control.diagramcontrol import DiagramControl
-from harpia.control.cgenerator import CGenerator
 
 import sys
 import argparse
@@ -21,28 +20,41 @@ import os
 #--------HARPIA FRONTEND MAIN FUNCTION--------------
 #---------------------------------------------------
 
+
 class Log(object):
+
     def log(self, msg):
-        print msg.encode('ascii','ignore')
+        print msg.encode('ascii', 'ignore')
+
+
+def save(diagram, obj):
+    diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
+    print "Generating", diagram.get_file_name(), "file"
+    control = DiagramControl(diagram)
+    control.save()
+
 
 def main(argv):
 
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    RED = '\x1B[31m'
+    # HEADER = '\033[95m'
+    # OKBLUE = '\033[94m'
+    # OKGREEN = '\033[92m'
+    # WARNING = '\033[93m'
+    # FAIL = '\033[91m'
+    # ENDC = '\033[0m'
+    # RED = '\x1B[31m'
 
-    os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
+    os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
     System()
     System.set_log(Log())
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-x", "--examples", help="Generate examples", action='store_true')
-    parser.add_argument("-c", "--compile", help="Compile examples", action='store_true')
-    parser.add_argument("-t", "--test", help="Test examples", action='store_true')
+    parser.add_argument("-x", "--examples",
+                        help="Generate examples", action='store_true')
+    parser.add_argument("-c", "--compile",
+                        help="Compile examples", action='store_true')
+    parser.add_argument(
+        "-t", "--test", help="Test examples", action='store_true')
     args = parser.parse_args()
 
     if args.test:
@@ -61,17 +73,19 @@ def main(argv):
 
         obj.x = 200
         diagram = DiagramModel()
-        diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
+        diagram.set_file_name(
+            "/tmp/" + obj.get_description()["Label"] + ".hrp")
         diagram.add_block(obj)
- 
+
         cont = 0
         intypes = obj.get_description()["InTypes"]
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
                 block = System.blocks["harpia.plugins.C.openCV.imageFile"]()
             elif intypes[inkey] == "HRP_INT":
-                block = System.blocks["harpia.plugins.C.openCV.intValue"]()
-                block.window_name = "My Image - " + obj.get_description()["Label"]
+                block = System.blocks["harpia.plugins.C.openCV.slider"]()
+                block.window_name = "My Image - " + \
+                    obj.get_description()["Label"]
                 block.label = block.label + " - " + str(cont)
             elif intypes[inkey] == "HRP_DOUBLE":
                 block = System.blocks["harpia.plugins.C.openCV.newDouble"]()
@@ -98,30 +112,28 @@ def main(argv):
         try:
             obj.get_help()
         except:
-            print "Error in get_help() of object", obj.get_description()["Label"] , obj.__class__
+            print "Error in get_help() of object", obj.get_description()["Label"], obj.__class__
 
         if args.examples:
             # Save Examples
-            diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
-            print "Generating", diagram.get_file_name(), "file"
-            control = DiagramControl(diagram)
-            control.save()
+            save(diagram, obj)
 
         if args.compile:
             # Compile Examples
             print "Generating code..."
-            generator = CGenerator(diagram)
+            generator = DiagramControl(diagram).get_generator()
             generator.compile()
 #            generator.execute()
+            save(diagram, obj)
             print obj.get_description()["Label"], " - compiled\n"
 
         if args.test:
-            #Test examples
-            #print "\n\nTesting code: ",
-            #print "\n", obj.get_description()["Label"], " ",
-            #print "Help",
-            #print "\tGenerate",
-            #print"\tDescription\tProperties "
+            # Test examples
+            # print "\n\nTesting code: ",
+            # print "\n", obj.get_description()["Label"], " ",
+            # print "Help",
+            # print "\tGenerate",
+            # print"\tDescription\tProperties "
             #-----------------------
             if obj.get_help():
                 print WARNING + "  V\t" + ENDC,
@@ -130,9 +142,9 @@ def main(argv):
             #-----------------------
 
             #-----------------------
-            #if obj.generate:
+            # if obj.generate:
             #    print "  V\t",
-            #else:
+            # else:
             print "  -\t",
             #-----------------------
 
@@ -151,7 +163,7 @@ def main(argv):
             #----------------------
             print "\t", obj.get_description()["Label"], " "
 
-        #print obj.get_help()
+        # print obj.get_help()
     print
 
     #----------------------------------------------------------------------

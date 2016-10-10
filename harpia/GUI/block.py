@@ -70,42 +70,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = False
 
         self.width = WIDTH_DEFAULT
-
-        maxIO = max(len(self.get_description()["InTypes"]), len(self.get_description()["OutTypes"]))
-
-        ## Generates the block size, based on the number of inputs,outputs
-        # Comment block is too small...
-        if not maxIO:
-            maxIO = 1
-
-        self.height = max( ((maxIO-1)* 5 ) #espacamento entre ports = 5
-                          +(RADIUS*2 ) #tirando a margem superior e inferior
-                          +(maxIO * INPUT_HEIGHT),#adicionando a altura de cada port
-                          HEIGHT_DEFAULT)
-
         self.build()
-
-        self.input_port_centers = []
-        for inputPort in range(len(self.get_description()["InTypes"])):
-            self.input_port_centers.append((INPUT_WIDTH/2,
-                     (RADIUS # upper border
-                     + (inputPort*5) # spacing betwen ports
-                     + inputPort*INPUT_HEIGHT #previous ports
-                     + INPUT_HEIGHT/2)))#going to the port's center
-
-        self.output_port_centers = []
-        for outputPort in range(len(self.get_description()["OutTypes"])):
-            self.output_port_centers.append((self.width-(INPUT_WIDTH/2),
-                     (RADIUS # upper border
-                     + (outputPort*5) # spacing betwen ports
-                     + outputPort*INPUT_HEIGHT #previous ports
-                     + INPUT_HEIGHT/2)))#going to the port's center
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
-        self.translate(self.x, self.y)
+        self.move(self.x, self.y)
 
     #----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -145,22 +116,19 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         # Get the new position and move by the difference
         new_x = event.x - self.remember_x
         new_y = event.y - self.remember_y
-        for widget in self.diagram.current_widgets:
-            if widget.__class__ == Block:
-                widget.move(new_x, new_y)
-        self.diagram.update_scrolling()
+        self.diagram.move_selected_blocks(new_x, new_y)
         return False
 
     #----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
         self.focus = True
-        self.diagram.update_flows()
+        self.__update_state()
         return False
 
     #----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         self.focus = False
-        self.diagram.update_flows()
+        self.__update_state()
         return False
 
     #----------------------------------------------------------------------
@@ -204,7 +172,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["InTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            System.connections[
+                            System.connectors[
                             self.get_description()["InTypes"][x]
                             ]["icon_in"])
             except:
@@ -214,9 +182,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                         pixbuf=pixbuf,
                         x=0,
                         y=(RADIUS # upper border
-                      + (x*5) # spacing betwen ports
-                      + x*INPUT_HEIGHT) #previous ports
+                      + (x * 5) # spacing betwen ports
+                      + x * INPUT_HEIGHT) #previous ports
                        )
+            image.set_property("tooltip", self.get_description()["InTypes"][x])
             image.connect("button-press-event", self.__on_input_press, x)
             image.connect("button-release-event", self.__on_input_release, x)
             ins.append(image)
@@ -237,7 +206,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for x in range(len(self.get_description()["OutTypes"])):
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                            System.connections[
+                            System.connectors[
                             self.get_description()["OutTypes"][x]
                             ]["icon_out"])
             except:
@@ -250,6 +219,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                       + (x*5) # spacing betwen ports
                       + x*OUTPUT_HEIGHT) #previous ports
                         )
+            image.set_property("tooltip", self.get_description()["OutTypes"][x])
             image.connect("button-press-event", self.__on_output_press, x)
             image.connect("button-release-event", self.__on_output_release, x)
             outs.append(image)
@@ -284,7 +254,28 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.widgets["Label"] = label
 
     #----------------------------------------------------------------------
+    def rebuild(self):
+        self.widgets = {}
+        # remove all elements
+        while self.get_root_item().get_n_children() != 0:
+            self.get_root_item().remove_child(0)
+        self.build()
+
+    #----------------------------------------------------------------------
     def build(self):
+        maxIO = max(len(self.get_description()["InTypes"]),
+                    len(self.get_description()["OutTypes"]))
+
+        ## Generates the block size, based on the number of inputs,outputs
+        # Comment block is too small...
+        if not maxIO:
+            maxIO = 1
+
+        self.height = max( ((maxIO-1) * 5 ) #espacamento entre ports = 5
+                          +(RADIUS * 2 ) #tirando a margem superior e inferior
+                          +(maxIO * INPUT_HEIGHT),#adicionando a altura de cada port
+                          HEIGHT_DEFAULT)
+
         self.__draw_label()
         self.__draw_rect()
         self.__draw_inputs()
@@ -293,32 +284,23 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.update_flow()
 
     #----------------------------------------------------------------------
-    def update_flow(self):
-        self.has_flow = True
-        sourceConnectors = self.diagram.get_connectors_to_block(self)
-        distinct_con = []
-        for con in sourceConnectors:
-            if con.to_block_in not in distinct_con:
-                distinct_con.append(con.to_block_in)
-        for con in self.get_description()["InTypes"]:
-            if con not in distinct_con:
-                self.has_flow = False
-                break
-        self.__update_state()
-        return self.has_flow
-
-    #----------------------------------------------------------------------
     def get_input_pos(self, input_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = self.input_port_centers[input_id][0] + x - PORT_SENSITIVITY
-        y = self.input_port_centers[input_id][1] + y - PORT_SENSITIVITY + 3
+        x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
+        y = (RADIUS # upper border
+                     + (input_id * 5) # spacing betwen ports
+                     + input_id * INPUT_HEIGHT #previous ports
+                     + INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
     #----------------------------------------------------------------------
     def get_output_pos(self, output_id):
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = self.output_port_centers[output_id][0] + x + PORT_SENSITIVITY
-        y = self.output_port_centers[output_id][1] + y - PORT_SENSITIVITY + 3
+        x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
+        y = (RADIUS # upper border
+                     + (output_id * 5) # spacing betwen ports
+                     + output_id * INPUT_HEIGHT #previous ports
+                     + INPUT_HEIGHT/2) + y - PORT_SENSITIVITY + 3
         return (x,y)
 
     #----------------------------------------------------------------------
@@ -343,6 +325,20 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     #----------------------------------------------------------------------
     def get_properties(self):
         return BlockModel.get_properties(self)
+
+    #----------------------------------------------------------------------
+    def update_flow(self):
+        self.has_flow = True
+        distinct_con = []
+        for conn in self.diagram.connectors:
+            if conn.sink != self:
+                continue
+            if conn.sink_port not in distinct_con:
+                distinct_con.append(conn.sink_port)
+        if len(distinct_con) < len(self.get_description()["InTypes"]):
+            self.has_flow = False
+        self.__update_state()
+        return self.has_flow
 
     #----------------------------------------------------------------------
     def __update_state(self):

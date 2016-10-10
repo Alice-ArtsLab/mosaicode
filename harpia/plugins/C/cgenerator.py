@@ -33,20 +33,50 @@ from threading import Thread
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from harpia.system import System as System
-from codegenerator import CodeGenerator
+from harpia.control.codegenerator import CodeGenerator
 
 FRAMERATE = 25
-
 class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
-    def __init__(self, diagram):
+    def __init__(self, diagram = None):
         CodeGenerator.__init__(self, diagram)
+        self.connectors = {
+        "HRP_INT":{
+            "icon_in":"images/conn_int_in.png",
+            "icon_out":"images/conn_int_out.png",
+            "multiple": False,
+            "code": 'block$sink$_int_i$sink_port$ = block$source$_int_o$source_port$;// INT conection\n'
+            },
+        "HRP_DOUBLE":{
+            "icon_in":"images/conn_double_in.png",
+            "icon_out":"images/conn_double_out.png",
+            "multiple": False,
+            "code": 'block$sink$_double_i$sink_port$ = block$source$_double_o$source_port$;// DOUBLE conection\n'
+            },
+        "HRP_RECT":{
+            "icon_in":"images/conn_rect_in.png",
+            "icon_out":"images/conn_rect_out.png",
+            "multiple": False,
+            "code": 'block$sink$_rect_i$sink_port$ = block$source$_rect_o$source_port$;// RECT conection\n'
+            },
+        "HRP_IMAGE":{
+            "icon_in":"images/conn_image_in.png",
+            "icon_out":"images/conn_image_out.png",
+            "multiple": False,
+            "code": 'block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n'
+            },
+        "HRP_POINT":{
+            "icon_in":"images/conn_point_in.png",
+            "icon_out":"images/conn_point_out.png",
+            "multiple": False,
+            "code": 'block$sink$_point_i$sink_port$ = block$source$_point_o$source_port$;// POINT conection\n'
+            }
+        }
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        System.log("Parsing Code")
+        CodeGenerator.generate_code(self)
 
         self.sort_blocks()
         self.generate_parts()
@@ -76,6 +106,9 @@ class CGenerator(CodeGenerator):
 #include <opencv/cvwimage.h>
 #include <opencv/highgui.h>
 #include <math.h>
+
+#define FRAMERATE """+ str(int((1.0 / FRAMERATE) * 1000.0)) +"""
+
 """
 
         # Adds only if it does not contains
@@ -87,18 +120,18 @@ class CGenerator(CodeGenerator):
         for header_code in temp_header:
             header += header_code
 
-        header += "\nint main(int argc, char ** argv){\n"
+        header += "\n\n"
+        header += "int main(int argc, char ** argv){\n"
         header += "char key = ' ';\n"
         declaration_block = "\n//declaration block\n"
 
         for var in self.declarations:
             declaration_block += var
 
-        declaration_block += 'while((key = (char)cvWaitKey(' + \
-                str(int((1.0 / FRAMERATE) * 1000.0)) + \
-                ')) != 27) \n {\t \n'
+        declaration_block += '\n\n'
+        declaration_block += 'while((key = (char)cvWaitKey(FRAMERATE)) != 27){\n'
 
-        execution = "\n\t//execution block\n"
+        execution = "\n//execution block\n"
         for x,y in zip(self.functionCalls, self.connections):
             execution += x
             execution += y
@@ -107,7 +140,7 @@ class CGenerator(CodeGenerator):
         for x in self.deallocations:
             deallocating += x
 
-        deallocating += "}"
+        deallocating += "} // End of while"
 
         closing = ""
         closing += "\n"
@@ -121,7 +154,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def save_code(self):
-        System.log("Saving Code to " + self.dir_name + self.filename)
+        CodeGenerator.save_code(self)
         self.change_directory()
         codeFilename = self.filename + '.c'
         codeFile = open(codeFilename, 'w')
@@ -149,8 +182,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def compile(self):
-        System.log("Compilando")
-        System.log("Executing Code")
+        CodeGenerator.compile(self)
         self.save_code()
         self.change_directory()
         if os.name == "nt":
@@ -163,7 +195,6 @@ class CGenerator(CodeGenerator):
             i, o = os.popen4("sh " + self.filename +'.Makefile')
 
             CompilingErrors = o.readlines()
-            System.log("Errors "  +  str(CompilingErrors))
 
             o.close()
             i.close()
@@ -172,7 +203,7 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def execute(self):
-        System.log("Executing Code")
+        CodeGenerator.execute(self)
         self.compile()
         self.change_directory()
         if os.name == "nt":
@@ -199,9 +230,6 @@ class CGenerator(CodeGenerator):
             errorList = o.readlines()
             for element in errorList:
                 Error += element
-
-            System.log("Leaving..")
-            System.log(Error)
             o.close()
         except:
             pass

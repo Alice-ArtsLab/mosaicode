@@ -67,7 +67,6 @@ class LiveMode(OpenCVPlugin):
         return {
         "camera":{"name": "Camera",
                     "type": HARPIA_COMBO,
-                    "value": self.camera,
                     "values": device_list
                     }
                }

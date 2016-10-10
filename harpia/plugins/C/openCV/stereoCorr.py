@@ -62,7 +62,6 @@ class StereoCorr(OpenCVPlugin):
         return {
         "maxDist":{"name": "Max Distance",
                     "type": HARPIA_INT,
-                    "value": self.maxDist,
                     "lower":0,
                     "upper":655,
                     "step":1

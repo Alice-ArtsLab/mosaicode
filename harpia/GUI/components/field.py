@@ -10,3 +10,9 @@ class Field(object):
 
     def get_value(self):
         return 0
+    
+    def check_value(self, data, key, value):
+        if key in data:
+            return
+        else:
+            data[key] = value

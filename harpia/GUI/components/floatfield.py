@@ -10,38 +10,36 @@ from harpia.GUI.fieldtypes import *
 
 class FloatField(Field, Gtk.HBox):
 
+    # --------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data,dict):
             return
         Gtk.HBox.__init__(self, True)
+
+        self.check_value(data, "name", "")
+        self.check_value(data, "value", 0)
+        self.check_value(data, "lower", 0)
+        self.check_value(data, "upper", 9223372036854775807)
+        self.check_value(data, "step", 1)
+        self.check_value(data, "page_inc", 10)
+        self.check_value(data, "page_size", 10)
+        self.check_value(data, "digits", 2)
+
         self.label = Gtk.Label(data["name"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
-        step = 0.01
-        if step in data:
-            step = data["step"]
 
-        lower_value = 0
-        if "lower" in data:
-            lower_value = data["lower"]
+        adjustment = Gtk.Adjustment(value = float(data["value"]),
+                                lower = int(data["lower"]),
+                                upper = int(data["upper"]),
+                                step_incr = int(data["step"]),
+                                page_incr=int(data["page_inc"]),
+                                page_size=int(data["page_size"]))
 
-        upper_value = 32000
-        if "upper" in data:
-            upper_value = data["upper"]
-
-
-        adjustment = Gtk.Adjustment(value=float(data["value"]),
-                                lower=lower_value,
-                                upper=upper_value,
-                                step_incr=step,
-                                page_incr=0,
-                                page_size=0)
         self.field = Gtk.SpinButton()
-        if "digits" in data:
-            self.field.configure(adjustment, 0.0, data["digits"])
-        else:
-            self.field.configure(adjustment, 0.0, 2)
+        self.field.set_adjustment(adjustment)
+        self.field.configure(adjustment, 0.0, data["digits"])
         self.field.set_value(float(data["value"]))
         if event != None:
             self.field.connect("changed", event)
@@ -50,8 +48,12 @@ class FloatField(Field, Gtk.HBox):
         self.add(self.field)
         self.show_all()
 
+    # --------------------------------------------------------------------------
     def get_type(self):
         return HARPIA_FLOAT
 
+    # --------------------------------------------------------------------------
     def get_value(self):
-        return self.field.get_value()
+        return float(self.field.get_value())
+
+# --------------------------------------------------------------------------

@@ -24,9 +24,12 @@ import os
 #--------HARPIA FRONTEND MAIN FUNCTION--------------
 #---------------------------------------------------
 
+<<<<<<< HEAD
 class Log(object):
     def log(self, msg):
         print msg.encode('ascii','ignore')
+=======
+>>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
 
 def main(argv):
     """
@@ -34,21 +37,31 @@ def main(argv):
             It initializes the interface.
     """
 
+<<<<<<< HEAD
     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
     System()
     System.set_log(Log())
 
+=======
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+>>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
 
-    ## Initialize the Frontend
+    # Initialize the Frontend
     win = MainWindow()
     win.show_all()
 
-    ## Parameter passing
+    # Parameter passing
     parser = argparse.ArgumentParser()
+<<<<<<< HEAD
     parser.add_argument('file', default=[], nargs='*', help="List of files to open")
     parser.add_argument("-x", "--examples", help="Generate examples", action='store_true')
     parser.add_argument("-c", "--compile", help="Compile examples", action='store_true')
     parser.add_argument("-t", "--test", help="Test examples", action='store_true')
+=======
+    parser.add_argument('file', default=[], nargs='*',
+                        help="List of files to open")
+>>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
     args = parser.parse_args()
 
     ##-----------------------------------
@@ -170,6 +183,9 @@ def main(argv):
     else:
         win.main_control.new()
 
+    # to kill with Terminal Ctrl+C
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
     #----------------------------------------------------------------------
 

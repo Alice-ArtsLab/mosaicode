@@ -50,6 +50,10 @@ if(block$id$_img_i0){
 '''
 
     # ----------------------------------------------------------------------
+    def generate_dealloc(self):
+        return 'cvReleaseImage(&block$id$_img_i0);\n'
+
+    # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
         return '''
 for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
@@ -72,7 +76,6 @@ for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
         return {
             "frameNumber":{"name": "Time (in frames)",
                         "type": HARPIA_INT,
-                        "value": self.frameNumber,
                         "lower":1,
                         "upper":200,
                         "step":1

@@ -9,6 +9,18 @@ class Plugin(object):
         self.id = -1
         self.x = 0
         self.y = 0
+        self.help = ""
+        self.description = {}
+        # Code generation
+        self.vars = ""
+
+    # ----------------------------------------------------------------------
+    def get_output_port_name(self, number):
+        return "block_" + str(self.id) + "o" + str(number)
+
+    # ----------------------------------------------------------------------
+    def get_input_port_name(self, number):
+        return "block_" + str(self.id) + "i" + str(number)
 
     # ----------------------------------------------------------------------
     def get_position(self):
@@ -35,7 +47,7 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_help(self):
-        return ""
+        return self.help
 
     # ----------------------------------------------------------------------
     def generate_header(self):
@@ -43,7 +55,7 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
-        return ""
+        return self.vars
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -63,7 +75,7 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {}
+        return self.description
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
@@ -87,5 +99,9 @@ class Plugin(object):
         for key in self.get_properties():
             xml += "\t\t<property name='" + key + "' value='" + str(self.__dict__[key]) + "' />\n"
         return xml
+
+    #----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.get_id())
 
 # ------------------------------------------------------------------------------

@@ -20,7 +20,7 @@ class Slider(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
-        self.intVal = int(self.intVal)
+        self.intVal = int(float(self.intVal))
         return \
             'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
@@ -45,25 +45,21 @@ class Slider(OpenCVPlugin):
         return {
             "intVal":{"name": "Value",
                         "type": HARPIA_INT,
-                        "value": self.intVal,
                         "lower":0,
                         "upper":65535,
                         "step":1
                             },
             "maxVal":{"name": "Max Value",
                         "type": HARPIA_INT,
-                        "value": self.maxVal,
                         "lower":0,
                         "upper":65535,
                         "step":1
                             },
             "label":{"name": "Label",
-                    "type": HARPIA_STRING,
-                    "value": self.label
+                    "type": HARPIA_STRING
             },                            
             "window_name": {"name": "Window Title",
-                        "type": HARPIA_STRING,
-                        "value": self.window_name
+                        "type": HARPIA_STRING
             }
         }
 

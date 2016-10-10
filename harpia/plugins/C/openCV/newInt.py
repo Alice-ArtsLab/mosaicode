@@ -35,7 +35,6 @@ class NewInt(OpenCVPlugin):
         return {
             "intVal":{"name": "Value",
                         "type": HARPIA_INT,
-                        "value": self.intVal,
                         "lower":0,
                         "upper":65535,
                         "step":1

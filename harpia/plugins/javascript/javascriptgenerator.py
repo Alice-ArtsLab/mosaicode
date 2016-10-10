@@ -29,18 +29,37 @@
 import os
 import webbrowser #to open HTML file
 
-from harpia.system import System as System
-from codegenerator import CodeGenerator
+from harpia.control.codegenerator import CodeGenerator
 
 class JavascriptGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
-    def __init__(self, diagram):
+    def __init__(self, diagram = None):
         CodeGenerator.__init__(self, diagram)
+        self.connectors = {
+        "HRP_WEBAUDIO_SOUND":{
+            "icon_in":"images/conn_sound_in.png",
+            "icon_out":"images/conn_sound_out.png",
+            "multiple": True,
+            "code": 'block_$source$.connect(block_$sink$_i[$sink_port$]);\n'
+            },
+        "HRP_WEBAUDIO_FLOAT":{
+            "icon_in":"images/conn_float_in.png",
+            "icon_out":"images/conn_float_out.png",
+            "multiple": True,
+            "code": 'block_$source$_o$source_port$.push(block_$sink$_i[$sink_port$]);\n'
+            },
+        "HRP_WEBAUDIO_CHAR":{
+            "icon_in":"images/conn_char_in.png",
+            "icon_out":"images/conn_char_out.png",
+            "multiple": True,
+            "code": 'block_$source$_o$source_port$.push(block_$sink$_i[$sink_port$]);\n'
+            }
+        }
 
     #----------------------------------------------------------------------
     def generate_code(self):
-        System.log("Parsing Code")
+        CodeGenerator.generate_code(self)
         self.sort_blocks()
         self.generate_parts()
 
@@ -96,7 +115,7 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     #----------------------------------------------------------------------
     def save_code(self):
-        System.log("Saving Code to " + self.dir_name + self.filename)
+        CodeGenerator.save_code(self)
         self.change_directory()
         codeFile = open(self.filename + '.html', 'w')
         code = self.generate_code()
@@ -110,7 +129,7 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     #----------------------------------------------------------------------
     def execute(self):
-        System.log("Executing Code")
+        CodeGenerator.execute(self)
         self.compile()
         self.change_directory()
         result = webbrowser.open_new(self.filename + '.html')

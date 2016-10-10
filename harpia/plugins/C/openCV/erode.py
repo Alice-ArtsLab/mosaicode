@@ -49,12 +49,10 @@ class Erode(OpenCVPlugin):
         return {
         "masksize":{"name": "Mask Size",
                     "type": HARPIA_COMBO,
-                    "value": self.masksize,
                     "values": ["1x1", "3x3", "5x5", "7x7"]
                     },
         "iterations":{"name": "Iterations",
                     "type": HARPIA_INT,
-                    "value": self.iterations,
                     "lower":0,
                     "upper":65535,
                     "step":1

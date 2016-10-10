@@ -7,17 +7,15 @@ class XMLParser(object):
     def __init__(self, source=None, fromString=False, fromTag=False):
 
         if (source is None):
-            #self.parsedXML = BeautifulSoup(features='xml')
             self.__dict__['parsedXML'] = BeautifulSoup(features='xml')
         elif fromString:
-            #self.parsedXML = BeautifulSoup(source, "xml")
             self.__dict__['parsedXML'] = BeautifulSoup(source, "xml")
         elif fromTag:
             self.__dict__['parsedXML'] = source;
-            #self.parsedXML = source
         else:
-            #self.parsedXML = BeautifulSoup(open(source), "xml")
-            self.__dict__['parsedXML'] = BeautifulSoup(open(source), "xml")
+            self.__dict__['parsedXML'] = BeautifulSoup(open(source),
+                                                "xml",
+                                                from_encoding="UTF-8")
 
     def getTagAttr(self, tag, attr):
         return getattr(self.parsedXML, tag)[attr]
@@ -38,7 +36,6 @@ class XMLParser(object):
         tags = []
         for tag in self.parsedXML.find_all(child):
             tags.append(XMLParser(tag, fromTag=True))
-
         return tags
 
     def addTag(self, tagName, attrs):
@@ -69,7 +66,6 @@ class XMLParser(object):
         return str(self.parsedXML)
 
     def __getattr__(self, attr):
-        #print type(self.parsedXML)
         return self.parsedXML[attr]
 
     def __setattr__(self, attr, value):

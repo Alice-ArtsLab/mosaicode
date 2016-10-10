@@ -49,7 +49,6 @@ class MoveRct(OpenCVPlugin):
         return {
             "offset_x":{"name": "Offset x",
                         "type": HARPIA_INT,
-                        "value": self.offset_x,
                         "lower":0,
                         "upper":65535,
                         "step":1
@@ -57,7 +56,6 @@ class MoveRct(OpenCVPlugin):
 
             "offset_y":{"name": "Offset Y",
                         "type": HARPIA_INT,
-                        "value": self.offset_y,
                         "lower":0,
                         "upper":65535,
                         "step":1

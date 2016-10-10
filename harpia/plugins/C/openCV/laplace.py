@@ -49,7 +49,6 @@ class Laplace(OpenCVPlugin):
         return {
         "masksize":{"name": "Mask Size",
                     "type": HARPIA_COMBO,
-                    "value": self.masksize,
                     "values": ["1", "3", "5", "7", "9", "11", "13"]
                     }
         }

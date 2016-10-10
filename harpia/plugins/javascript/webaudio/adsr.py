@@ -89,35 +89,30 @@ block_$id$_i[1] = function(value){
     def get_properties(self):
         return {"a":{"name": "Attack",
                     "type": HARPIA_FLOAT,
-                    "value": self.a,
                     "lower":0,
                     "upper":10000,
                     "step":1
                     },
                 "d":{"name": "Delay",
                             "type": HARPIA_FLOAT,
-                            "value": self.d,
                             "lower":0,
                             "upper":10000,
                             "step":1
                             },
                 "s":{"name": "Sustain",
                             "type": HARPIA_FLOAT,
-                            "value": self.s,
                             "lower":0,
                             "upper":10000,
                             "step":1
                             },
                 "r":{"name": "Release",
                             "type": HARPIA_FLOAT,
-                            "value": self.r,
                             "lower":0,
                             "upper":10000,
                             "step":1
                             },
                 "g":{"name": "Gain",
                             "type": HARPIA_FLOAT,
-                            "value": self.g,
                             "lower":0,
                             "upper":10000,
                             "step":1

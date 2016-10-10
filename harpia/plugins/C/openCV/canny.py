@@ -12,6 +12,13 @@ class Canny(OpenCVPlugin):
         self.apertureSize = 3
         self.threshold1 = 16
         self.threshold2 = 33
+        self.description = {"Label": "Canny",
+            "Icon": "images/canny.png",
+            "Color": "250:180:80:150",
+            "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT", 3:"HRP_INT"},
+            "OutTypes": {0: "HRP_IMAGE"},
+            "TreeGroup": "Gradients, Edges and Corners"
+            }
 
     # ----------------------------------------------------------------------
     def get_help(self):#Função que chama a help
@@ -28,9 +35,9 @@ class Canny(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        self.apertureSize = int(self.apertureSize)
-        self.threshold1 = int(self.threshold1)
-        self.threshold2 = int(self.threshold2)
+        self.apertureSize = int(float(self.apertureSize))
+        self.threshold1 = int(float(self.threshold1))
+        self.threshold2 = int(float(self.threshold2))
         return  '''
 if(block$id$_img_i0){ //Canny Code
     if (block$id$_int_i1 < 1) block$id$_int_i1 = 1;
@@ -56,35 +63,23 @@ if(block$id$_img_i0){ //Canny Code
 } // End Canny Code
 '''
 
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Canny",
-            "Icon": "images/canny.png",
-            "Color": "250:180:80:150",
-            "InTypes": {0: "HRP_IMAGE", 1:"HRP_INT", 2:"HRP_INT", 3:"HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Gradients, Edges and Corners"
-            }
 
     # ----------------------------------------------------------------------
     def get_properties(self):
         return {"apertureSize":{"name": "Aperture Size",
                             "type": HARPIA_INT,
-                            "value": self.apertureSize,
                             "lower":1,
                             "upper":10,
                             "step":1
                             },
             "threshold1":{"name": "Threshold 1",
                             "type": HARPIA_INT,
-                            "value": self.threshold1,
                             "lower":1,
                             "upper":100,
                             "step":1
                             },
             "threshold2":{"name": "Threshold 2",
                             "type": HARPIA_INT,
-                            "value": self.threshold2,
                             "lower":1,
                             "upper":100,
                             "step":1

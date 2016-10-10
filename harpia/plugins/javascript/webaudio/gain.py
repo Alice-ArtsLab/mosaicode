@@ -58,7 +58,6 @@ block_$id$_i[2] = function(value){
     def get_properties(self):
         return {"gain":{"name": "Gain",
                     "type": HARPIA_FLOAT,
-                    "value": self.gain,
                     "lower":0,
                     "upper":32000
                     }

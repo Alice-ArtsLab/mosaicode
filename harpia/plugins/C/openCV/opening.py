@@ -55,7 +55,6 @@ class Opening(OpenCVPlugin):
         return {
         "masksize":{"name": "Mask Size",
                     "type": HARPIA_COMBO,
-                    "value": self.masksize,
                     "values": ["1x1", "3x3", "5x5", "7x7"]
                     }
         }

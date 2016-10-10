@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -10,13 +11,12 @@ from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
 from harpia.GUI.preferencewindow import PreferenceWindow
-from harpia.control.diagramcontrol import DiagramControl
 from harpia.GUI.workarea import WorkArea
-
+from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
 
-import os
+
 
 class MainControl():
 
@@ -33,7 +33,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def select_open(self):
         file_name = Dialog().open_dialog("Open Diagram", self.main_window)
-        if file_name == None or file_name == "":
+        if file_name is None or file_name == "":
             return
         self.open(file_name)
 
@@ -51,21 +51,20 @@ class MainControl():
         self.main_window.work_area.close_tab()
 
     # ----------------------------------------------------------------------
-    def save(self, save_as = False):
-
+    def save(self, save_as=False):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
 
         if diagram.get_file_name() is "Untitled" or save_as:
             while True:
                 name = Dialog().save_dialog("Save", self.main_window)
                 if name and not name.endswith("hrp"):
-                    name=(("%s"+".hrp")%name)
+                    name = (("%s" + ".hrp") % name)
                 if Dialog().confirm_overwrite(name, self.main_window):
                     diagram.set_file_name(name)
                     break
-        result, message = False,""
+        result, message = False, ""
 
         if diagram.get_file_name() is not None:
             if len(diagram.get_file_name()) > 0:
@@ -76,24 +75,25 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save_as(self):
-        self.save(save_as = True)
+        self.save(save_as=True)
 
     # ----------------------------------------------------------------------
     def rename_tab(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         Dialog().rename_dialog(self.main_window, diagram)
 
     # ----------------------------------------------------------------------
     def export_diagram(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
 
         while True:
-            name = Dialog().save_png_dialog("Export Diagram...", self.main_window)
-            if name == None:
+            name = Dialog().save_png_dialog("Export Diagram...",
+                                            self.main_window)
+            if name is None:
                 return
             if name.find(".png") == -1:
                 name = name + ".png"
@@ -106,7 +106,7 @@ class MainControl():
             Dialog().message_dialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
-    def exit(self, widget = None, data = None):
+    def exit(self, widget=None, data=None):
         PreferencesControl(System.properties).save()
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
@@ -116,7 +116,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def select_all(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.select_all()
         diagram.grab_focus()
@@ -124,21 +124,21 @@ class MainControl():
     # ----------------------------------------------------------------------
     def cut(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.cut()
 
     # ----------------------------------------------------------------------
     def copy(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.copy()
 
     # ----------------------------------------------------------------------
     def paste(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.paste()
 
@@ -157,28 +157,28 @@ class MainControl():
     # ----------------------------------------------------------------------
     def delete(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.delete()
 
     # ----------------------------------------------------------------------
     def run(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         DiagramControl(diagram).get_generator().execute()
 
     # ----------------------------------------------------------------------
     def save_source(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         DiagramControl(diagram).get_generator().save_code()
 
     # ----------------------------------------------------------------------
     def view_source(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         code = DiagramControl(diagram).get_generator().generate_code()
         CodeWindow(self.main_window, code)
@@ -204,7 +204,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def add_block(self, block):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return False
         if not diagram.add_block(block):
             message = "Block language is different from diagram language.\n" + \
@@ -217,28 +217,28 @@ class MainControl():
     # ----------------------------------------------------------------------
     def get_selected_block(self):
         blocks_tree_view = self.main_window.block_notebook.get_current_tab()
-        if blocks_tree_view == None:
+        if blocks_tree_view is None:
             return False
         return blocks_tree_view.get_selected_block()
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.change_zoom(System.ZOOM_IN)
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.change_zoom(System.ZOOM_OUT)
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.change_zoom(System.ZOOM_ORIGINAL)
 
@@ -253,20 +253,20 @@ class MainControl():
     # ----------------------------------------------------------------------
     def undo(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.undo()
 
     # ----------------------------------------------------------------------
     def redo(self):
-        if self.main_window.work_area.get_current_diagram() == None:
+        if self.main_window.work_area.get_current_diagram() is None:
             return
         self.main_window.work_area.get_current_diagram().redo()
 
     # ----------------------------------------------------------------------
     def reload(self):
         diagram = self.main_window.work_area.get_current_diagram()
-        if diagram == None:
+        if diagram is None:
             return
         diagram.update_scrolling()
 

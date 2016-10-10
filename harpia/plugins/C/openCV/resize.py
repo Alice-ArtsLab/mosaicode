@@ -39,7 +39,6 @@ class Resize(OpenCVPlugin):
         return {
         "method":{"name": "Method",
                     "type": HARPIA_COMBO,
-                    "value": self.method,
                     "values": ["CV_INTER_NN", "CV_INTER_LINEAR" , "CV_INTER_AREA", "CV_INTER_CUBIC"]
                     }
         }

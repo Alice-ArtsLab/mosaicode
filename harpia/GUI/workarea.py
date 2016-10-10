@@ -105,7 +105,10 @@ class WorkArea(Gtk.Notebook):
             return
         hbox = self.get_tab_label(tab)
         label = hbox.get_children()[0]
-        label.set_text(diagram.get_patch_name())
+        name = diagram.get_patch_name()
+        if diagram.get_modified():
+            name = "* " + name
+        label.set_text(name)
         self.main_window.set_title(diagram.get_file_name())
 
     # ----------------------------------------------------------------------

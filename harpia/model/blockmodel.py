@@ -9,6 +9,14 @@ class BlockModel(object):
         self.x = plugin.x
         self.y = plugin.y
 
+    # ----------------------------------------------------------------------
+    def get_output_port_name(self, number):
+        return self.__plugin.get_output_port_name(number)
+
+    # ----------------------------------------------------------------------
+    def get_input_port_name(self, number):
+        return self.__plugin.get_input_port_name(number)
+
     #----------------------------------------------------------------------
     def get_id(self):
         return self.__plugin.id
@@ -49,3 +57,6 @@ class BlockModel(object):
     def get_description(self):
         return self.__plugin.get_description()
 
+    #----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.get_id())

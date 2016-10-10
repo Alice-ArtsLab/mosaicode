@@ -59,28 +59,24 @@ class CropImage(OpenCVPlugin):
     def get_properties(self):
         return {"x0":{"name": "X",
                             "type": HARPIA_INT,
-                            "value": self.x0,
                             "lower":1,
                             "upper":65535,
                             "step":1
                             },
                 "y0":{"name": "Y",
                             "type": HARPIA_INT,
-                            "value": self.y0,
                             "lower":1,
                             "upper":65535,
                             "step":1
                             },
                 "width":{"name": "Width",
                             "type": HARPIA_INT,
-                            "value": self.width,
                             "lower":1,
                             "upper":65535,
                             "step":1
                             },
                 "height":{"name": "Height",
                             "type": HARPIA_INT,
-                            "value": self.height,
                             "lower":1,
                             "upper":65535,
                             "step":1

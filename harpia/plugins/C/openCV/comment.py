@@ -6,7 +6,7 @@ from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 class Comment(OpenCVPlugin):
 
-# ------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.comment = ""
@@ -33,8 +33,7 @@ class Comment(OpenCVPlugin):
     def get_properties(self):
         return {
         "comment":{"name": "Comment",
-                    "type": HARPIA_COMMENT,
-                    "value": self.comment
+                    "type": HARPIA_COMMENT
                     }
         }
 # ------------------------------------------------------------------------------

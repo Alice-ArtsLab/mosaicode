@@ -31,8 +31,8 @@ class Save(OpenCVPlugin):
 # ------------------------------------------------------------------------------
     def get_properties(self):
         return {"filename":{"name": "File Name",
-                            "type": HARPIA_SAVE_FILE,
-                            "value": self.filename}
+                            "type": HARPIA_SAVE_FILE
+                            }
                 }
 
 # ------------------------------------------------------------------------------

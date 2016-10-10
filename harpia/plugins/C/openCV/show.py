@@ -30,11 +30,10 @@ class Show(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         code = '\nif(block$id$_img_i0){\n' + \
-            'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'cvShowImage("$title$",block$id$_img_i0);\n'
         if self.window_type == "Window Size":
             code += 'cvSetWindowProperty("$title$", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);\n'
-        code += '\n}\n'
+        code += '}\n'
         return code
 
     # ----------------------------------------------------------------------
@@ -43,7 +42,7 @@ class Show(OpenCVPlugin):
             "Icon": "images/show.png",
             "Color": "50:100:200:150",
             "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
+            "OutTypes": {},
             "TreeGroup": "General"
             }
 
@@ -51,12 +50,10 @@ class Show(OpenCVPlugin):
     def get_properties(self):
         return {
         "title":{"name": "Window Title",
-                    "type": HARPIA_STRING,
-                    "value": self.title
+                    "type": HARPIA_STRING
                     },
         "window_type":{"name":"Window Type",
                 "type":HARPIA_COMBO,
-                "value": self.window_type,
                 "values": ["Window Size", "Image Size", "Resizable Window"]
                     }
         }

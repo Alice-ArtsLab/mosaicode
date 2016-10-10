@@ -34,7 +34,6 @@ class NewDouble(OpenCVPlugin):
         return {
             "doubleVal":{"name": "Value",
                         "type": HARPIA_FLOAT,
-                        "value": self.doubleVal,
                         "lower":0,
                         "upper":65535,
                         "step":1

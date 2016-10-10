@@ -72,6 +72,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.select_rect = None
         self.__update_white_board()
         self.scrolled_window = None
+        self.set_property("has-tooltip", True) #Allow tooltip on elements
         self.show()
 
     #----------------------------------------------------------------------
@@ -84,9 +85,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, event):
+        scale = self.get_scale()
         # Select elements
         if self.select_rect != None:
-            self.__update_select(event.x, event.y)
+            self.__update_select(event.x / scale, event.y / scale)
             items = self.get_items_in_area(self.select_rect.bounds, True, False, True)
             self.current_widgets = []
             for item in items:
@@ -103,7 +105,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         if self.curr_connector == None:
             return False
-        point = (event.x,event.y)
+        point = (event.x / scale, event.y / scale)
         self.curr_connector.update_tracking(point)
         return False
 
@@ -180,22 +182,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     #----------------------------------------------------------------------
     def __update_select(self, x, y):
+        scale = self.get_scale()
         xi = 0
         xf = 0
         yi = 0
         yf = 0
-        if x > self.last_clicked_point[0]:
-            xi = self.last_clicked_point[0]
+        if x > self.last_clicked_point[0] / scale:
+            xi = self.last_clicked_point[0] / scale
             xf = x
         else:
             xi = x
-            xf = self.last_clicked_point[0]
-        if y > self.last_clicked_point[1]:
-            yi = self.last_clicked_point[1]
+            xf = self.last_clicked_point[0] / scale
+        if y > self.last_clicked_point[1] / scale:
+            yi = self.last_clicked_point[1] / scale
             yf = y
         else:
             yi = y
-            yf = self.last_clicked_point[1]
+            yf = self.last_clicked_point[1] / scale
         self.select_rect.set_property("x", xi)
         self.select_rect.set_property("width", xf - xi)
         self.select_rect.set_property("y", yi)
@@ -225,28 +228,21 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def add_block(self, plugin):
         new_block = Block(self, plugin)
         if DiagramModel.add_block(self, new_block):
+            self.do("Add")
             self.get_root_item().add_child(new_block, -1)
             return True
         else:
             return False
 
     #----------------------------------------------------------------------
-    def __connector_types_match(self, conn):
-        outType = self.blocks[conn.from_block].get_description()["OutTypes"][conn.from_block_out]
-        inType = self.blocks[conn.to_block].get_description()["InTypes"][conn.to_block_in]
-        if not outType == inType:
-            System.log("Connection Types mismatch")
-        return outType == inType
-
-    #----------------------------------------------------------------------
     def __valid_connector(self, newCon):
         for oldCon in self.connectors:
-            if oldCon.to_block == newCon.to_block \
-                    and oldCon.to_block_in == newCon.to_block_in\
-                    and not System.connections[newCon.type]["multiple"]:
+            if oldCon.sink == newCon.sink \
+                    and oldCon.sink_port == newCon.sink_port\
+                    and not System.connectors[newCon.type]["multiple"]:
                 System.log("Connector Already exists")
                 return False
-        if newCon.to_block == newCon.from_block:
+        if newCon.sink == newCon.source:
             System.log("Recursive connection is not allowed")
             return False
         return True
@@ -264,7 +260,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def start_connection(self, block, output):
         self.__abort_connection()  # abort any possibly running connections
         conn_type = block.get_description()["OutTypes"][output]
-        self.curr_connector = Connector(self, block.get_id(), output, conn_type)
+        self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
@@ -272,31 +268,18 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def end_connection(self, block, block_input):
         if self.curr_connector == None:
             return False
-        self.curr_connector.set_end(block.get_id(), block_input)
+        self.curr_connector.set_end(block, block_input)
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return False
-        if not self.__connector_types_match(self.curr_connector):
+        if not self.curr_connector.type_match():
+            System.log("Connection Types mismatch")
             self.__abort_connection()
             return False
         self.add_connection(self.curr_connector)
         self.curr_connector = None
         self.update_flows()
         return True
-
-    #----------------------------------------------------------------------
-    def insert_ready_connector(self, from_block, from_block_out, to_block, to_block_in):
-        if from_block not in self.blocks:
-            System.log("Connection from non existent block")
-            return None
-        if to_block not in self.blocks:
-            System.log("Connection to non existent block")
-            return None
-        self.start_connection(self.blocks[from_block], from_block_out)
-        if self.end_connection(self.blocks[to_block], to_block_in):
-            return self.connectors[len(self.connectors) - 1]
-        else:
-            return None
 
     #----------------------------------------------------------------------
     def __white_board_event(self, widget, event=None):
@@ -313,13 +296,14 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                         x=0,
                         y=0,
                         width=self.__main_window.get_size()[0],
-                        height=1000,
+                        height=self.__main_window.get_size()[1],
                         stroke_color="white",
                         fill_color="white")
         self.white_board.connect("focus-in-event", self.__white_board_event)
 
     #----------------------------------------------------------------------
     def update_flows(self):
+        self.white_board.set_property("stroke_color","white")
         for block_id in self.blocks:
             self.blocks[block_id].update_flow()
         for conn in self.connectors:
@@ -381,6 +365,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ---------------------------------------------------------------------
     def delete(self):
+        if len(self.current_widgets) < 1:
+            return
         self.do("Delete")
         for widget in self.current_widgets:
             widget.delete()
@@ -402,26 +388,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             plugin.set_id(-1)
             if not self.__main_window.main_control.add_block(plugin):
                 return
-            new_id = plugin.get_id()
-            replace[widget.get_id()] = new_id
-            self.current_widgets.append(self.blocks[new_id])
+            replace[widget.get_id()] = plugin
+            self.current_widgets.append(plugin)
         # interact into connections changing block ids
         for widget in clipboard:
             if not isinstance(widget, Connector):
                 continue
             # if a connector is copied without blocks
-            if widget.from_block not in replace or widget.to_block not in replace:
+            if widget.source.get_id() not in replace or widget.sink.get_id() not in replace:
                 continue
-            from_block = replace[widget.from_block]
-            from_block_out = widget.from_block_out
-            to_block = replace[widget.to_block]
-            to_block_in = widget.to_block_in
-            new_connection = self.insert_ready_connector(
-                        from_block,
-                        from_block_out,
-                        to_block,
-                        to_block_in)
-            self.current_widgets.append(new_connection)
+            print "continuing..."
+            source = replace[widget.source.get_id()]
+            source_port = widget.source_port
+            sink = replace[widget.sink.get_id()]
+            sink_port = widget.sink_port
+            self.start_connection(source, source_port)
+            self.current_widgets.append(self.curr_connector)
+            self.end_connection(sink, sink_port)
         self.update_flows()
 
     # ---------------------------------------------------------------------
@@ -432,6 +415,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ---------------------------------------------------------------------
     def cut(self):
+        if len(self.current_widgets) < 1:
+            return
         self.do("Cut")
         self.__main_window.main_control.reset_clipboard()
         for widget in self.current_widgets:
@@ -478,47 +463,42 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def do(self, new_msg):
         self.set_modified(True)
+        action = (copy.copy(self.blocks), copy.copy(self.connectors), new_msg)
+        self.undo_stack.append(action)
         System.log("Do: " + new_msg)
-        self.undo_stack.append(
-                (copy.copy(self.blocks), 
-                copy.copy(self.connectors),
-                new_msg))
-        self.redo_stack = []
 
     # ---------------------------------------------------------------------
     def undo(self):
         if len(self.undo_stack) < 1:
             return
         self.set_modified(True)
-        blocks, connectors, msg = self.undo_stack.pop()
-        System.log("Undo: " + msg)
-        self.redo_stack.append(
-                (copy.copy(self.blocks), 
-                copy.copy(self.connectors),
-                msg))
-        self.blocks = blocks
-        self.connectors = connectors
+        action = self.undo_stack.pop()
+        self.blocks = action[0]
+        self.connectors = action[1]
+        msg = action[2]
         self.redraw()
+        self.redo_stack.append(action)
+        if len(self.undo_stack) == 0:
+            self.set_modified(False)
+        System.log("Undo: " + msg)
 
     # ---------------------------------------------------------------------
     def redo(self):
         if len(self.redo_stack) < 1:
             return
         self.set_modified(True)
-        blocks, connectors, msg = self.redo_stack.pop()
-        System.log("Redo: " + msg)
-        self.undo_stack.append(
-                (copy.copy(self.blocks), 
-                copy.copy(self.connectors),
-                msg))
-        self.blocks = blocks
-        self.connectors = connectors
+        action = self.redo_stack.pop()
+        self.blocks = action[0]
+        self.connectors = action[1]
+        msg = action[2]
         self.redraw()
+        self.undo_stack.append(action)
+        System.log("Redo: " + msg)
 
     # ---------------------------------------------------------------------
     def get_min_max(self):
-        min_x = 32000
-        min_y = 32000
+        min_x = self.__main_window.get_size()[0]
+        min_y = self.__main_window.get_size()[1]
 
         max_x = 0
         max_y = 0
@@ -526,14 +506,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for block_id in self.blocks:
             block = self.blocks[block_id]
             x,y = block.get_position()
-            if x < min_x:
-                min_x = x
-            if y < min_y:
-                min_y = y
-            if x + block.width > max_x:
-                max_x = x + block.width
-            if y + block.height > max_y:
-                max_y = y + block.height
-
+            if x < min_x: min_x = x
+            if y < min_y: min_y = y
+            if x + block.width > max_x: max_x = x + block.width
+            if y + block.height > max_y: max_y = y + block.height
         return min_x, min_y, max_x - min_x, max_y - min_y
+
 #----------------------------------------------------------------------

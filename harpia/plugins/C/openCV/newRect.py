@@ -38,28 +38,24 @@ class NewRect(OpenCVPlugin):
         return {
             "x0":{"name": "X",
                         "type": HARPIA_INT,
-                        "value": self.x0,
                         "lower":0,
                         "upper":65535,
                         "step":1
                             },
             "y0":{"name": "Y",
                         "type": HARPIA_INT,
-                        "value": self.y0,
                         "lower":0,
                         "upper":65535,
                         "step":1
                             },
             "width":{"name": "Width",
                         "type": HARPIA_INT,
-                        "value": self.width,
                         "lower":0,
                         "upper":65535,
                         "step":1
                             },
             "height":{"name": "Height",
                         "type": HARPIA_INT,
-                        "value": self.height,
                         "lower":0,
                         "upper":65535,
                         "step":1
