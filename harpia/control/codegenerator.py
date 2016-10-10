@@ -209,13 +209,15 @@ class CodeGenerator():
                     callable(getattr(x, func))
                 except:
                     continue
-                if not callable(getattr(x, func)):
+                # if code does not have the method, we do not execute it
+                key = "$" + str(func) + "$"
+                if key not in code:
                     continue
                 try:
                     result = getattr(x, func)()
                 except:
                     continue
-                code = code.replace("$" + str(func) + "$", str(result))
+                code = code.replace(key, str(result))
             connections += code
         self.connections.append(connections)
 
