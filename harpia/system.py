@@ -61,6 +61,7 @@ class System(object):
         # ----------------------------------------------------------------------
 
         def __init__(self):
+            os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
             self.Log = None
             self.properties = Preferences()
             self.generators = {}
@@ -115,6 +116,7 @@ class System(object):
         if not System.instance:
             System.instance = System.__Singleton()
 
+    # ----------------------------------------------------------------------
     def __new__(cls):  # __new__ always a classmethod
         if System.instance is None:
             System.instance = System.__Singleton()

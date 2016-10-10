@@ -28,8 +28,6 @@ def main(argv):
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-    os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
-
     # Initialize the Frontend
     win = MainWindow()
     win.show_all()
