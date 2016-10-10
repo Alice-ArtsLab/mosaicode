@@ -38,34 +38,17 @@ import sys
 from harpia.model.connectionmodel import ConnectionModel
 from connectormenu import ConnectorMenu
 
-
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     #----------------------------------------------------------------------
-<<<<<<< HEAD
-
-    def __init__(self, diagram, from_block, from_block_out, conn_type):
-=======
     def __init__( self, diagram, source, source_port, conn_type):
->>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
         GooCanvas.CanvasGroup.__init__(self)
         ConnectionModel.__init__(self, diagram, source, source_port, conn_type)
 
         self.__from_point = self.source.get_output_pos(self.source_port) 
         self.__to_point = (0,0)
 
-<<<<<<< HEAD
-        self.from_block_out = from_block_out
-        self.to_block_in = -1
-        self.type = conn_type
-        self.from_point = self.diagram.blocks[
-            self.from_block].get_output_pos(self.from_block_out)
-        self.to_point = (0, 0)
-
-        self.focus = False
-=======
         self.__focus = False
->>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
         self.width = 0
         self.height = 0
 
@@ -112,19 +95,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return False
 
     #----------------------------------------------------------------------
-<<<<<<< HEAD
-    def set_end(self, to_block=-1, to_block_in=-1):
-        self.to_block = to_block
-        self.to_block_in = to_block_in
-        self.to_point = self.diagram.blocks[
-            self.to_block].get_input_pos(self.to_block_in)
-        self.update_tracking(self.to_point)
-=======
     def set_end(self, sink, sink_port):
         ConnectionModel.set_end(self, sink, sink_port)
         self.__to_point = sink.get_input_pos(self.sink_port)
         self.update_tracking(self.__to_point)
->>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
 
     #----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
@@ -162,7 +136,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         path += "M " + str(x0) + " " + str(y0)
 
-        path += " L " + str(x0 + 25) + " " + str(y0)
+        path += " L " +  str(x0 + 25) + " " + str(y0) 
         path += " L " + str(x0 + 25) + " " + str((y0 + y1) / 2)
         if x1 < x0 + 50:
             path += " L " + str((x1 + x0) / 2) + " " + str((y0 + y1) / 2)
@@ -176,48 +150,22 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1 - 4) + " " + str(y1 + 4)
         path += " L " + str(x1) + " " + str(y1)
 
-<<<<<<< HEAD
-        if not self.widgets.has_key("Line"):
-=======
 
         if not self.__widgets.has_key("Line"):
->>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
             widget = GooCanvas.CanvasPath(
-                parent=self,
-                    data=path
+                    parent = self,
+                    data = path
             )
             self.__widgets["Line"] = widget
 
         else:
-<<<<<<< HEAD
-            self.widgets["Line"].set_property("data", path)
-=======
             self.__widgets["Line"].set_property("data",path)
->>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
 
         self.__update_state()
 
     #----------------------------------------------------------------------
     def __update_state(self):
         # With focus: line width = 3
-<<<<<<< HEAD
-        if self.focus:
-            self.widgets["Line"].set_property("line-width", 3)
-        else:
-            self.widgets["Line"].set_property("line-width", 2)
-
-        # selected: line style = dashed and line width = 3
-        if self in self.diagram.current_widgets:
-            self.widgets["Line"].set_property(
-                "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
-        else:
-            self.widgets["Line"].set_property(
-                "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
-
-        # not connected: Color = red
-        if self.to_block_in == -1:
-            self.widgets["Line"].set_property("stroke-color", "red")
-=======
         if self.__focus:
             self.__widgets["Line"].set_property("line-width",3)
         else:
@@ -232,7 +180,5 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         # not connected: Color = red
         if  self.sink_port == -1:
             self.__widgets["Line"].set_property("stroke-color","red")
->>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
         else:
-            self.__widgets["Line"].set_property("stroke-color", "black")
-#----------------------------------------------------------------------
+self.__widgets["Line"].set_property("stroke-color", "black")
