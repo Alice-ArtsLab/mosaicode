@@ -40,7 +40,6 @@ import gettext
 from harpia.system import System as System
 
 
-
 # i18n
 _ = gettext.gettext
 gettext.bindtextdomain(System.APP, System.DIR)
@@ -50,6 +49,7 @@ gettext.textdomain(System.APP)
 class CodeGenerator():
 
     # ----------------------------------------------------------------------
+
     def __init__(self, diagram=None):
         self.connectors = {}
         self.diagram = diagram

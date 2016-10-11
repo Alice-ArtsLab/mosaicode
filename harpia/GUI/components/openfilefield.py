@@ -8,11 +8,13 @@ import os
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
+
 class OpenFileField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
 
         self.check_value(data, "name", "")
@@ -31,7 +33,7 @@ class OpenFileField(Field, Gtk.HBox):
             self.field.connect("changed", event)
         self.add(self.field)
 
-        button = Gtk.Button.new_from_icon_name("gtk-file",Gtk.IconSize.BUTTON)
+        button = Gtk.Button.new_from_icon_name("gtk-file", Gtk.IconSize.BUTTON)
         button.connect("clicked", self.on_choose_file)
         self.add(button)
         self.show_all()
@@ -43,13 +45,13 @@ class OpenFileField(Field, Gtk.HBox):
     # --------------------------------------------------------------------------
     def on_choose_file(self, widget):
         dialog = Gtk.FileChooserDialog("Open...",
-                      self.parent_window,
-                      Gtk.FileChooserAction.OPEN,
-                      (Gtk.STOCK_CANCEL,
-                      Gtk.ResponseType.CANCEL,
-                      Gtk.STOCK_OPEN,
-                      Gtk.ResponseType.OK)
-                      )
+                                       self.parent_window,
+                                       Gtk.FileChooserAction.OPEN,
+                                       (Gtk.STOCK_CANCEL,
+                                        Gtk.ResponseType.CANCEL,
+                                        Gtk.STOCK_OPEN,
+                                        Gtk.ResponseType.OK)
+                                       )
         current_dir = ""
         if os.path.isdir(self.field.get_text()):
             current_dir = self.field.get_text()

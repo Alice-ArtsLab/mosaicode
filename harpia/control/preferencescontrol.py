@@ -9,6 +9,7 @@ import ast
 class PreferencesControl():
 
     # ----------------------------------------------------------------------
+
     def __init__(self, harpia_properties):
         self.hp = harpia_properties
 

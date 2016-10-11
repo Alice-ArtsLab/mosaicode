@@ -1,16 +1,18 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
+import datetime
 from gi.repository import Gtk
 from gi.repository import Pango
 
-import datetime
+gi.require_version('Gtk', '3.0')
+
 
 class Status(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
+
     def __init__(self, main_window):
         Gtk.ScrolledWindow.__init__(self)
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -27,7 +29,6 @@ class Status(Gtk.ScrolledWindow):
         self.tag = textbuffer.create_tag("red", weight=Pango.Weight.NORMAL)
         self.tag_red = textbuffer.create_tag("normal", background="red")
 
-
     # ----------------------------------------------------------------------
     def clear(self):
         self.status.get_buffer().set_text("")
@@ -42,7 +43,8 @@ class Status(Gtk.ScrolledWindow):
         end_iter = textbuffer.get_end_iter()
         msg = " - " + text + "\n"
         textbuffer.insert_with_tags(end_iter, msg, self.tag)
-        self.status.scroll_to_mark(textbuffer.get_insert(), 0.0, True, 0.5, 0.5)
+        self.status.scroll_to_mark(
+            textbuffer.get_insert(), 0.0, True, 0.5, 0.5)
 
     # ----------------------------------------------------------------------
     def log(self, text):

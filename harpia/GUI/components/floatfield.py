@@ -1,6 +1,6 @@
 #!/usr/bin/env python
  # -*- coding: utf-8 -*-
- 
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -8,11 +8,13 @@ from gi.repository import Gtk
 from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
 
+
 class FloatField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.HBox.__init__(self, True)
 
@@ -29,13 +31,12 @@ class FloatField(Field, Gtk.HBox):
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
-
-        adjustment = Gtk.Adjustment(value = float(data["value"]),
-                                lower = int(data["lower"]),
-                                upper = int(data["upper"]),
-                                step_incr = int(data["step"]),
-                                page_incr=int(data["page_inc"]),
-                                page_size=int(data["page_size"]))
+        adjustment = Gtk.Adjustment(value=float(data["value"]),
+                                    lower=int(data["lower"]),
+                                    upper=int(data["upper"]),
+                                    step_incr=int(data["step"]),
+                                    page_incr=int(data["page_inc"]),
+                                    page_size=int(data["page_size"]))
 
         self.field = Gtk.SpinButton()
         self.field.set_adjustment(adjustment)

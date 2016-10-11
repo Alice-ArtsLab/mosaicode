@@ -1,34 +1,35 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
+from menu import Menu
+from status import Status
+from toolbar import Toolbar
+from workarea import WorkArea
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from menu import Menu
-from toolbar import Toolbar
 from searchbar import SearchBar
-from harpia.control.maincontrol import MainControl
 from blocknotebook import BlockNotebook
-from blockproperties import BlockProperties
-from status import Status
-from workarea import WorkArea
-
 from harpia.system import System as System
+from blockproperties import BlockProperties
+from harpia.control.maincontrol import MainControl
+
+gi.require_version('Gtk', '3.0')
+
+
 class MainWindow(Gtk.Window):
 
     def __init__(self):
         System()
         Gtk.Window.__init__(self, title="Harpia")
-        #self.set_default_size(800,600)
+        # self.set_default_size(800,600)
         self.resize(
-                System.properties.get_width(),
-                System.properties.get_height())
+            System.properties.get_width(),
+            System.properties.get_height())
         self.main_control = MainControl(self)
         self.connect("check-resize", self.__resize)
 
-        #GUI components
+        # GUI components
         self.menu = Menu(self)
         self.toolbar = Toolbar(self)
         self.search = SearchBar(self)
@@ -38,7 +39,7 @@ class MainWindow(Gtk.Window):
         self.status = Status(self)
         System.set_log(self.status)
 
-        # vbox main 
+        # vbox main
         # -----------------------------------------------------
         # | Menu
         # -----------------------------------------------------
@@ -46,7 +47,6 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
         # | V Paned bottom
         # -----------------------------------------------------
-
 
         # First Vertical Box
         vbox_main = Gtk.VBox()
@@ -56,8 +56,7 @@ class MainWindow(Gtk.Window):
         self.vpaned_bottom = Gtk.Paned.new(Gtk.Orientation.VERTICAL)
         vbox_main.add(self.vpaned_bottom)
 
-
-        # vpaned_bottom 
+        # vpaned_bottom
         # -----------------------------------------------------
         # | hpaned_work_area
         # =====================================================
@@ -66,12 +65,13 @@ class MainWindow(Gtk.Window):
 
         self.hpaned_work_area = Gtk.HPaned()
         self.hpaned_work_area.connect("accept-position", self.__resize)
-        self.hpaned_work_area.set_position(System.properties.get_hpaned_work_area())
+        self.hpaned_work_area.set_position(
+            System.properties.get_hpaned_work_area())
 
         self.vpaned_bottom.add1(self.hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
         self.vpaned_bottom.set_position(System.properties.get_vpaned_bottom())
-        self.vpaned_bottom.set_size_request(50,50)
+        self.vpaned_bottom.set_size_request(50, 50)
 
         # hpaned_work_area
         # -----------------------------------------------------
@@ -80,7 +80,6 @@ class MainWindow(Gtk.Window):
         vbox_left = Gtk.VBox(False, 0)
         self.hpaned_work_area.add1(vbox_left)
         self.hpaned_work_area.add2(self.work_area)
-
 
         # vbox_left
         # -----------------------------------------------------
@@ -111,14 +110,16 @@ class MainWindow(Gtk.Window):
             self.menu.add_example(example)
         self.menu.update_recent_file()
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        if event.state ==
+        Gdk.ModifierType.CONTROL_MASK |
+        Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_a:
                 self.main_control.select_all()
                 return True
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __create_frame(self, widget):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
@@ -126,17 +127,18 @@ class MainWindow(Gtk.Window):
         frame.set_property("border-width", 4)
         return frame
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __resize(self, data):
         width, height = self.get_size()
         System.properties.set_width(width)
         System.properties.set_height(height)
-        System.properties.set_hpaned_work_area(self.hpaned_work_area.get_position())
+        System.properties.set_hpaned_work_area(
+            self.hpaned_work_area.get_position())
         System.properties.set_vpaned_bottom(self.vpaned_bottom.get_position())
         System.properties.set_vpaned_left(self.vpaned_left.get_position())
         self.work_area.resize(data)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def set_title(self, title):
         Gtk.Window.set_title(self, "Harpia (" + title + ")")
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
