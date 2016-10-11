@@ -1,46 +1,22 @@
 # -*- coding: utf-8 -*-
-# [HARPIA PROJECT]
-#
-#
-# S2i - Intelligent Industrial Systems
-# DAS - Automation and Systems Department
-# UFSC - Federal University of Santa Catarina
-# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
-# S2i (www.s2i.das.ufsc.br)
-#
-#
-#    This program is free software: you can redistribute it and/or modify it
-#    under the terms of the GNU General Public License version 3, as published
-#    by the Free Software Foundation.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranties of
-#    MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-#    PURPOSE.  See the GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#    For further information, check the COPYING file distributed with this
-#    software.
-#
-# ----------------------------------------------------------------------
+# noqa: E402
 
 import gi
 import os
 import copy
 import math
+gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-from blockmenu import BlockMenu
 from gi.repository import GObject
 from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
+
 from harpia.system import System as System
 from harpia.model.blockmodel import BlockModel
+from harpia.GUI.blockmenu import BlockMenu
 
-gi.require_version('Gtk', '3.0')
-gi.require_version('GooCanvas', '2.0')
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
@@ -244,8 +220,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_label(self):
-        text_label = "<span font_family ='Arial' >"  # Pode gerar erros
-        text_label = text_label + "<size = '10000' weight = 'ultralight'> " + \
+        text_label = "<span font_family ='Arial' " + \
+            "size = '10000' weight = 'ultralight'> " + \
             self.get_description()["Label"] + "</span>"
 
         label = GooCanvas.CanvasText(parent=self,

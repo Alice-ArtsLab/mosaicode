@@ -206,9 +206,8 @@ class MainControl():
         if diagram is None:
             return False
         if not diagram.add_block(block):
-            message = "Block language is different from diagram language.\n" +
-            \
-            "Diagram is expecting to generate " + diagram.language + \
+            message = "Block language is different from diagram language.\n" +\
+                "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
             return False

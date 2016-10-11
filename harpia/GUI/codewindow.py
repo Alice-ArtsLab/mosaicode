@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# noqa: E402
 
 import gi
-from gi.repository import Gtk
-from gi.repository import GtkSource
-
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
+from gi.repository import Gtk
+from gi.repository import GtkSource
 
 
 class CodeWindow(Gtk.Dialog):

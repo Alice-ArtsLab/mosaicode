@@ -73,8 +73,7 @@ class PropertyBox(Gtk.VBox):
 
 # ----------------------------------------------------------------------
     def __load_components(self):
-        for importer, modname, ispkg in
-        pkgutil.iter_modules(harpia.GUI.components.__path__):
+        for importer, modname, ispkg in pkgutil.iter_modules(harpia.GUI.components.__path__):
             module = __import__(
                 "harpia.GUI.components." + modname, fromlist="dummy")
             for name, obj in inspect.getmembers(module):
