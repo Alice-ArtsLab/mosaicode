@@ -2,33 +2,20 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class Mouse(Plugin):
+class Mouse(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Mouse Position"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        WebaudioPlugin.__init__(self)
+        self.help = "Mouse Position"
+        self.vars = """
 // block_$id$ = Mouse
 var block_$id$_o0 = [];
 var block_$id$_o1 = [];
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
+        self.function_call = """
 // ----------------- Mouse position ----------------------------
 // Detect if the browser is IE or not.
 // If it is not IE, we assume that the browser is NS.
@@ -53,10 +40,10 @@ function getMouseXY(e) {
   } else {  // grab the x-y pos.s if browser is NS
     tempX = e.pageX
     tempY = e.pageY
-  }  
+  }
   // catch possible negative values in NS4
   if (tempX < 0){tempX = 0}
-  if (tempY < 0){tempY = 0}  
+  if (tempY < 0){tempY = 0}
 
     // X value
     for (var i = 0; i < block_$id$_o0.length ; i++)
@@ -69,27 +56,10 @@ function getMouseXY(e) {
 }
 // ----------------- Mouse position ----------------------------
 """
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return """"""
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Mouse Position",
+        self.description = {"Label": "Mouse Position",
             "Icon": "images/show.png",
             "Color": "50:50:50:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_FLOAT"},
             "TreeGroup": "Interface"
             }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-# ------------------------------------------------------------------------------

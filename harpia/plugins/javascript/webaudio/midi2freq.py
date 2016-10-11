@@ -2,25 +2,15 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class Midi2Freq(Plugin):
+class Midi2Freq(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "midi to freq"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        WebaudioPlugin.__init__(self)
+        self.help = "midi to freq"
+        self.vars = """
 // block_$id$ = Midi 2 Freq
 var block_$id$_o0 = [];
 var block_$id$_i = [];
@@ -36,33 +26,10 @@ block_$id$_i[0] = function(value){
     return true;
     };
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
-"""
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return """"""
-
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Midi 2 Freq",
+        self.description = {"Label": "Midi 2 Freq",
             "Icon": "images/show.png",
             "Color": "200:200:25:150",
             "InTypes": {0: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
             "TreeGroup": "Conversion"
             }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-# ------------------------------------------------------------------------------

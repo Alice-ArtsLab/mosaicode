@@ -2,33 +2,20 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class KeyboardInput(Plugin):
+class KeyboardInput(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Keyboard Input"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        WebaudioPlugin.__init__(self)
+        self.help = "Keyboard Input"
+        self.vars = """
 // block_$id$ = KeyBoard Input
 var block_$id$_o0 = [];
 var block_$id$_o1 = [];
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
+        self.function_call = """
 document.onkeypress = function(evt){
     evt = evt || window.event;
     var value = evt.keyCode || evt.which;
@@ -41,29 +28,10 @@ document.onkeypress = function(evt){
     }
 };
 """
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return """
-"""
-
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Keyboard Input",
+        self.description = {"Label": "Keyboard Input",
             "Icon": "images/show.png",
             "Color": "50:150:20:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_CHAR"},
             "TreeGroup": "Interface"
             }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-# ------------------------------------------------------------------------------
