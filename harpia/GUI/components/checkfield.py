@@ -1,9 +1,9 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
 
 
 class CheckField(Field, Gtk.HBox):
@@ -24,7 +24,8 @@ class CheckField(Field, Gtk.HBox):
 
         self.field = Gtk.Switch()
 
-        if isinstance(data["value"], str) or isinstance(data["value"], unicode):
+        if isinstance(data["value"], str) or isinstance(data["value"],
+                                                        unicode):
             if data["value"] == "True":
                 self.field.set_active(True)
             else:
@@ -32,7 +33,7 @@ class CheckField(Field, Gtk.HBox):
         elif isinstance(data["value"], bool):
             self.field.set_active(data["value"])
 
-        if event != None:
+        if event is not None:
             self.field.connect("notify::active", event)
         self.add(self.field)
         self.show_all()

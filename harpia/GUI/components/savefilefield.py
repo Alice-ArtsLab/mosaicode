@@ -1,10 +1,10 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
 
 
 class SaveFileField(Field, Gtk.HBox):
@@ -27,7 +27,7 @@ class SaveFileField(Field, Gtk.HBox):
 
         self.field = Gtk.Entry()
         self.field.set_text(self.file)
-        if event != None:
+        if event is not None:
             self.field.connect("changed", event)
         self.add(self.field)
 

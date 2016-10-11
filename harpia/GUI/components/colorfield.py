@@ -1,10 +1,10 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
 
 
 class ColorField(Field, Gtk.HBox):
@@ -38,7 +38,7 @@ class ColorField(Field, Gtk.HBox):
     # --------------------------------------------------------------------------
     def on_choose_color(self, widget):
         color_selection_dialog = Gtk.ColorSelectionDialog("Select color")
-        if self.event != None:
+        if self.event is not None:
             color_selection_dialog.connect("destroy", self.event)
         color_selection = color_selection_dialog.get_color_selection()
         color_selection.set_current_color(self.color)

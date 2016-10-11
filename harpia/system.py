@@ -29,18 +29,15 @@
 #    For further information, check the COPYING file distributed with this
 #    software.
 
+import os
+import sys
+import copy
+import inspect  # For module inspect
+import pkgutil  # For dynamic package load
 import harpia.plugins
+from glob import glob  # To load examples
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.model.preferences import Preferences
-
-import pkgutil  # For dynamic package load
-import inspect  # For module inspect
-
-from glob import glob  # To load examples
-import os
-import copy
-
-import sys
 
 
 class System(object):
@@ -95,7 +92,7 @@ class System(object):
                         continue
                     instance = obj()
                     if isinstance(instance, Plugin) and \
-                    "Label" in instance.get_description():
+                            "Label" in instance.get_description():
                         obj_type = instance.type
                         language = obj_type.split(".")[2]
                         framework = obj_type.split(".")[3]
