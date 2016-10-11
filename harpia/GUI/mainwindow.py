@@ -2,19 +2,20 @@
 # -*- coding: utf-8 -*-
 
 import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from gi.repository import Gdk
+
 from menu import Menu
 from status import Status
 from toolbar import Toolbar
 from workarea import WorkArea
-from gi.repository import Gtk
-from gi.repository import Gdk
 from searchbar import SearchBar
 from blocknotebook import BlockNotebook
 from harpia.system import System as System
 from blockproperties import BlockProperties
 from harpia.control.maincontrol import MainControl
 
-gi.require_version('Gtk', '3.0')
 
 
 class MainWindow(Gtk.Window):
@@ -112,9 +113,7 @@ class MainWindow(Gtk.Window):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state ==
-        Gdk.ModifierType.CONTROL_MASK |
-        Gdk.ModifierType.MOD2_MASK:
+        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_a:
                 self.main_control.select_all()
                 return True

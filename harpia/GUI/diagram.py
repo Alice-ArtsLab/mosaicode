@@ -116,10 +116,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.curr_connector.update_tracking(point)
         return False
 
-    # -------------------------------------------------------[0---------------
+    # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state ==
-        Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_Up:
                 self.move_selected_blocks(0, -5)
                 return True

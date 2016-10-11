@@ -2,27 +2,17 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class Oscillator(Plugin):
+class Oscillator(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        WebaudioPlugin.__init__(self)
         self.freq = 440
         self.oscillator_type = 'sine'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Sound output"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        self.help = "Sound output"
+        self.vars = """
 // block_$id$ = Oscillator
 var block_$id$ =  context.createOscillator();
 var block_$id$_i = [];
@@ -39,27 +29,13 @@ block_$id$_i[2] = function(value){
     block_$id$.type = oscillator;
 };
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
+        self.function_call = """
 block_$id$.type = '$oscillator_type$';
 block_$id$.frequency.value = $freq$; // value in hertz
 block_$id$.detune.value = 100; // value in cents
 block_$id$.start(0);
 """
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Oscillator",
+        self.description = {"Label": "Oscillator",
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT", 2: "HRP_WEBAUDIO_FLOAT"},
@@ -67,9 +43,7 @@ block_$id$.start(0);
             "TreeGroup": "Sound"
             }
 
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {"freq":{"name": "Frequency",
+        self.properties = {"freq":{"name": "Frequency",
                     "type": HARPIA_FLOAT,
                     "lower":20,
                     "upper":20000,
@@ -80,5 +54,4 @@ block_$id$.start(0);
                     "values": ["square", "sine", "sawtooth", "triangle"]
                     }
             }
-
-# ------------------------------------------------------------------------------
+            
