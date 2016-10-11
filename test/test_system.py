@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.system import System
 
+
 class Log(object):
 
     def log(self, msg):
@@ -18,4 +19,3 @@ class TestSystem(TestCase):
 
     def test_log(self):
         System.log("Hello World")
-
