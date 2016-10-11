@@ -1,7 +1,8 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import ast
+
 
 class Preferences(object):
 
@@ -38,7 +39,7 @@ class Preferences(object):
             return
         if file_name in self.recent_files:
             self.recent_files.remove(file_name)
-        self.recent_files.insert(0,file_name)
+        self.recent_files.insert(0, file_name)
         if len(self.recent_files) > 10:
             self.recent_files.pop()
 

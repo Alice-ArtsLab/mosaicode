@@ -1,5 +1,5 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 
 class ConnectionModel(object):
@@ -31,7 +31,7 @@ class ConnectionModel(object):
     def get_sink_port_name(self):
         return self.sink.get_output_port_name(self.sink_port)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def set_end(self, sink, sink_port):
         self.sink = sink
         self.sink_port = sink_port

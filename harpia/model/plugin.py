@@ -1,5 +1,6 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 
 class Plugin(object):
 
@@ -83,7 +84,7 @@ class Plugin(object):
             if key in self.__dict__ and key in data:
                 self.__dict__[key] = data[key]
             else:
-                print "Plugin.set_property ERROR: key ", key , "not present" 
+                print "Plugin.set_property ERROR: key ", key, "not present"
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -97,10 +98,11 @@ class Plugin(object):
     def get_xml(self):
         xml = ""
         for key in self.get_properties():
-            xml += "\t\t<property name='" + key + "' value='" + str(self.__dict__[key]) + "' />\n"
+            xml += "\t\t<property name='" + key + \
+                "' value='" + str(self.__dict__[key]) + "' />\n"
         return xml
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def __str__(self):
         return str(self.get_id())
 
