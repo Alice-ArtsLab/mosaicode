@@ -2,37 +2,24 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class FloatValue(Plugin):
+class FloatValue(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
+        WebaudioPlugin.__init__(self)
         self.value = 1
         self.label = "Label"
         self.min = 0
         self.max = 10
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Double value"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        self.help = "Double value"
+        self.vars = """
 // block_$id$ = Float Value
 var block_$id$_value = $value$;
 var block_$id$_o0 = [];
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
+        self.function_call = """
 function change_$id$_value(){
     value = document.getElementById("block_$id$").value;
     for (var i = 0; i < block_$id$_o0.length ; i++){
@@ -40,20 +27,11 @@ function change_$id$_value(){
     }
 };
 """
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return """
+        self.dealloc = """
 $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$max$" onChange="change_$id$_value();"><br>
 """
 
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "FloatValue",
+        self.description = {"Label": "FloatValue",
             "Icon": "images/show.png",
             "Color": "50:150:20:150",
             "InTypes": {},
@@ -61,9 +39,7 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$m
             "TreeGroup": "Interface"
             }
 
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {"value":{"name": "Value",
+        self.properties = {"value":{"name": "Value",
                     "type": HARPIA_FLOAT,
                     "lower":0,
                     "upper":20000,
@@ -85,5 +61,3 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$" max="$m
                     "type": HARPIA_STRING
                     }
             }
-
-# ------------------------------------------------------------------------------

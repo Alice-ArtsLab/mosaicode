@@ -2,25 +2,15 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class DivideFloat(Plugin):
+class DivideFloat(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Mouse Position"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        WebaudioPlugin.__init__(self)
+        self.help =  "Mouse Position"
+        self.vars = """
 // block_$id$ = Divide Float
 var block_$id$_arg1 = 0;
 var block_$id$_arg2 = 0;
@@ -46,33 +36,10 @@ block_$id$_i[1] = function(value){
     return true;
     };
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
-"""
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return """"""
-
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "Divide Float",
+        self.description =  {"Label": "Divide Float",
             "Icon": "images/show.png",
             "Color": "200:200:25:150",
             "InTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
             "TreeGroup": "Arithmetics"
             }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-# ------------------------------------------------------------------------------

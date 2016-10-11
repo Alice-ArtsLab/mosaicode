@@ -12,8 +12,14 @@ class Plugin(object):
         self.y = 0
         self.help = ""
         self.description = {}
+
         # Code generation
+        self.header = ""
+        self.properties = {}
         self.vars = ""
+        self.function_call = ""
+        self.dealloc = ""
+        self.out_dealloc = ""
 
     # ----------------------------------------------------------------------
     def get_output_port_name(self, number):
@@ -52,7 +58,7 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def generate_header(self):
-        return ""
+        return self.header
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
@@ -60,15 +66,15 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        return ""
+        return self.function_call
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
-        return ""
+        return self.dealloc
 
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
-        return ""
+        return self.out_dealloc
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -88,7 +94,7 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {}
+        return self.properties
 
     # ----------------------------------------------------------------------
     def get_plugin(self):

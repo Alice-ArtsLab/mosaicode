@@ -2,21 +2,15 @@
  # -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
-class WhiteNoise(Plugin):
+class WhiteNoise(WebaudioPlugin):
 
 # ------------------------------------------------------------------------------
     def __init__(self):
-        Plugin.__init__(self)
-
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "White Noise"
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return """
+        WebaudioPlugin.__init__(self)
+        self.help = "White Noise"
+        self.header = """
 WhiteNoise = function(context) {
   var that = this;
   this.x = 0; // Initial sample number
@@ -35,37 +29,14 @@ WhiteNoise.prototype.process = function(e) {
   }
 }
 """
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return """
+        self.vars = """
 // block_$id$ = White Noise
 var block_$id$ =  new WhiteNoise(context).node;
 """
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return """
-"""
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return ""
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return {"Label": "White Noise",
+        self.description = {"Label": "White Noise",
             "Icon": "images/show.png",
             "Color": "50:150:250:150",
             "InTypes": {},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
             "TreeGroup": "Sound"
             }
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-# ------------------------------------------------------------------------------
