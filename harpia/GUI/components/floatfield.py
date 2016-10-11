@@ -1,12 +1,12 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
 
 
 class FloatField(Field, Gtk.HBox):
@@ -42,7 +42,7 @@ class FloatField(Field, Gtk.HBox):
         self.field.set_adjustment(adjustment)
         self.field.configure(adjustment, 0.0, data["digits"])
         self.field.set_value(float(data["value"]))
-        if event != None:
+        if event is not None:
             self.field.connect("changed", event)
             self.field.connect("value-changed", event)
             self.field.connect("change-value", event)
