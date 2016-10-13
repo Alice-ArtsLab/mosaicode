@@ -1,15 +1,17 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
+
 
 class StringField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.HBox.__init__(self, True)
 
@@ -21,11 +23,10 @@ class StringField(Field, Gtk.HBox):
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
-
         self.field = Gtk.Entry()
         self.field.set_text(data["value"])
         self.field.set_property("max-length", data["maxlength"])
-        if event != None:
+        if event is not None:
             self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()

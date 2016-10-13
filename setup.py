@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-DISTUTILS_DEBUG = "True"
 
 from glob import glob
+
+DISTUTILS_DEBUG = "True"
+
 
 try:
     from setuptools import setup, find_packages
@@ -42,15 +44,17 @@ setup(name='harpia',
           'harpia.control',
           'harpia.model'],
       scripts=['launcher/harpia', 'scripts/harpia.sh'],
-      description='Image Processing and Computer Vision Automatic Programming Tool',
+      description='Image Processing and Computer Vision \
+      Automatic Programming Tool',
       author='Ouroboros',
       author_email='cmagnobarbosa+harpia@gmail.com',
-      maintainer="Ourobos",
+      maintainer="Ouroboros",
       maintainer_email="cmagnobarbosa+harpia@gmail.com",
       license="GNU GPL",
       url='http://ges.dcomp.ufsj.edu.br/index.php/ouroboros/',
 
-      data_files=[('/usr/share/harpia/images', glob("app_data/images/*")),  # this is fucked up! must put it in package_data!!
+      # this is fucked up! must put it in package_data!!
+      data_files=[('/usr/share/harpia/images', glob("app_data/images/*")),
                   ('/usr/share/harpia/po/pt/LC_MESSAGES/',
                    glob("app_data/po/pt/LC_MESSAGES/*")),
                   ('/usr/share/harpia/examples',
@@ -61,6 +65,7 @@ setup(name='harpia',
                    ['app_data/images/harpia.svg']),
                   ('/usr/share/pixmaps',
                    ['app_data/images/harpia.svg']),
-                  ('/usr/share/icons/hicolor/24x24/apps', ['app_data/images/harpia.png']), ],
+                  ('/usr/share/icons/hicolor/24x24/apps',
+                  ['app_data/images/harpia.png']), ],
       **config
       )

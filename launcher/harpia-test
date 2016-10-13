@@ -3,22 +3,20 @@
 
 # Libraries
 import gi
-gi.require_version('Gtk', '3.0')
+import os
+import sys
+import argparse
 from gi.repository import Gtk
-
-
 from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
 from harpia.model.connectionmodel import ConnectionModel
 from harpia.control.diagramcontrol import DiagramControl
 
-import sys
-import argparse
-import os
+gi.require_version('Gtk', '3.0')
 
-#---------------------------------------------------
-#--------HARPIA FRONTEND MAIN FUNCTION--------------
-#---------------------------------------------------
+# ---------------------------------------------------
+# --------HARPIA FRONTEND MAIN FUNCTION--------------
+# ---------------------------------------------------
 
 
 class Log(object):
@@ -112,7 +110,8 @@ def main(argv):
         try:
             obj.get_help()
         except:
-            print "Error in get_help() of object", obj.get_description()["Label"], obj.__class__
+            print "Error in get_help() of object",
+            obj.get_description()["Label"], obj.__class__
 
         if args.examples:
             # Save Examples
@@ -123,7 +122,7 @@ def main(argv):
             print "Generating code..."
             generator = DiagramControl(diagram).get_generator()
             generator.compile()
-#            generator.execute()
+            # generator.execute()
             save(diagram, obj)
             print obj.get_description()["Label"], " - compiled\n"
 
@@ -134,43 +133,43 @@ def main(argv):
             # print "Help",
             # print "\tGenerate",
             # print"\tDescription\tProperties "
-            A = os.getcwd()
-            print "ENDERECO:: " + A
+
             #-----------------------
+
             if obj.get_help():
                 print WARNING + "  V\t" + ENDC,
             else:
                 print "  -\t",
-            #-----------------------
+            # -----------------------
 
-            #-----------------------
+            # -----------------------
             # if obj.generate:
             #    print "  V\t",
             # else:
             print "  -\t",
-            #-----------------------
+            # -----------------------
 
-            #-----------------------
+            # -----------------------
             if obj.get_description():
                 print WARNING + "     V\t\t" + ENDC,
             else:
                 print "     -\t\t",
-            #-----------------------
+            # -----------------------
 
-            #-----------------------
+            # -----------------------
             if obj.get_properties():
                 print WARNING + "    V\t" + ENDC,
             else:
                 print "    -\t",
-            #----------------------
+            # ----------------------
             print "\t", obj.get_description()["Label"], " "
 
         # print obj.get_help()
     print
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
 if __name__ == '__main__':
     main(sys.argv)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------

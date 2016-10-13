@@ -1,15 +1,17 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
+
 
 class ComboField(Field, Gtk.HBox):
 
     # ------------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
 
         self.check_value(data, "name", "")
@@ -30,7 +32,7 @@ class ComboField(Field, Gtk.HBox):
         if self.value in data["values"]:
             index = data["values"].index(self.value)
             self.field.set_active(index)
-        if event != None:
+        if event is not None:
             self.field.connect("changed", event)
         self.add(self.field)
         self.show_all()
@@ -42,7 +44,7 @@ class ComboField(Field, Gtk.HBox):
     # ------------------------------------------------------------------------------
     def get_value(self):
         value = self.field.get_active_text()
-        if value != None:
+        if value is not None:
             self.value = value
         return self.value
 

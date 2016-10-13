@@ -3,9 +3,7 @@
 
 import os
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
@@ -15,12 +13,13 @@ from harpia.GUI.workarea import WorkArea
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
-
+gi.require_version('Gtk', '3.0')
 
 
 class MainControl():
 
     # ----------------------------------------------------------------------
+
     def __init__(self, main_window):
         self.main_window = main_window
         # It must be possible to exchange data between diagrams
@@ -207,7 +206,7 @@ class MainControl():
         if diagram is None:
             return False
         if not diagram.add_block(block):
-            message = "Block language is different from diagram language.\n" + \
+            message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)

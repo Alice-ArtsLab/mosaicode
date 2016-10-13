@@ -5,7 +5,8 @@
 # S2i - Intelligent Industrial Systems
 # DAS - Automation and Systems Department
 # UFSC - Federal University of Santa Catarina
-# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org), S2i (www.s2i.das.ufsc.br)
+# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
+# S2i (www.s2i.das.ufsc.br)
 #
 #
 #    This program is free software: you can redistribute it and/or modify it
@@ -20,13 +21,16 @@
 #    You should have received a copy of the GNU General Public License along
 #    with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#    For further information, check the COPYING file distributed with this software.
+#    For further information, check the COPYING file distributed with this
+#    software.
 #
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
+gi.require_version('Gtk', '3.0')
+
 
 class ConnectorMenu(Gtk.Menu):
 
@@ -36,18 +40,18 @@ class ConnectorMenu(Gtk.Menu):
 
         # Excluir (delete) item
         menu_item = Gtk.MenuItem("Delete")
-        menu_item.connect("activate", self.__delete_clicked )
+        menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
         # Shows the menu
         self.show_all()
         self.popup(None, None, None, None, event.button.button, event.time)
 
-#----------------------------------------------------------------------
+# ----------------------------------------------------------------------
     def __del__(self):
         pass
 
-#----------------------------------------------------------------------
-    def __delete_clicked(self, *args ): #this strongly depends on the garbage collector
+# ----------------------------------------------------------------------
+    def __delete_clicked(self, *args):  # strongly depends on garbage collector
         self.connector.delete()
         return True

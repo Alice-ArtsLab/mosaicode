@@ -1,16 +1,18 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
+
 
 class CommentField(Field, Gtk.VBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.VBox.__init__(self)
 
@@ -36,7 +38,7 @@ class CommentField(Field, Gtk.VBox):
         self.field.set_left_margin(10)
         self.field.set_right_margin(10)
         self.field.set_wrap_mode(Gtk.WrapMode.WORD)
-        if event != None:
+        if event is not None:
             self.field.connect("focus-out-event", event)
 
         self.text_buffer = self.field.get_buffer()
@@ -53,7 +55,7 @@ class CommentField(Field, Gtk.VBox):
     # --------------------------------------------------------------------------
     def get_value(self):
         return self.text_buffer.get_text(
-                        self.text_buffer.get_start_iter(),
-                        self.text_buffer.get_end_iter(),
-                        True)
+            self.text_buffer.get_start_iter(),
+            self.text_buffer.get_end_iter(),
+            True)
 # ------------------------------------------------------------------------------

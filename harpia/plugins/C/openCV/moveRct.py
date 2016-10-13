@@ -1,34 +1,59 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
+
 class MoveRct(OpenCVPlugin):
 
-# ------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.offset_x = 0
         self.offset_y = 0
 
-    # ----------------------------------------------------------------------
-    def get_help(self):#Função que chama a help
-        return "Move Rectangle`s (0,0) point to input point"
+        self.help = "Move Rectangle`s (0,0) point to input point"
 
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return \
+        self.description = {
+            'Label': 'Move Rectangle',
+            'Icon': 'images/moveRct.png',
+            'Color': '50:50:200:150',
+            'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},
+            'OutTypes': {0: 'HRP_RECT'},
+            'TreeGroup': 'Experimental'
+        }
+
+        self.properties = {
+            "offset_x": {
+                "name": "Offset x",
+                "type": HARPIA_INT,
+                "lower": 0,
+                "upper": 65535,
+                "step": 1
+            },
+            "offset_y": {
+                "name": "Offset Y",
+                "type": HARPIA_INT,
+                "lower": 0,
+                "upper": 65535,
+                "step": 1
+            }
+        }
+        # --------------------C/OpenCv code--------------------------------
+        self.vars = \
             'CvRect block$id$_rect_i0;\n' + \
             'CvPoint block$id$_point_i1;\n' + \
             'CvRect block$id$_rect_o0;\n'
 
+        self.function_call = \
+            'block$id$_rect_o0 = block$id$_rect_i0;\n' + \
+            'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
+            'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
+
     # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return \
-                'block$id$_rect_o0 = block$id$_rect_i0;\n' + \
-                'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
-                'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
+    def get_help(self):
+        return self.help
 
     # ----------------------------------------------------------------------
     def __del__(self):
@@ -36,30 +61,18 @@ class MoveRct(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_description(self):
-        return {'Label': 'Move Rectangle',
-            'Icon': 'images/moveRct.png',
-            'Color': '50:50:200:150',
-            'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},
-            'OutTypes': {0: 'HRP_RECT'},
-            'TreeGroup': 'Experimental'
-            }
+        return self.description
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-        return {
-            "offset_x":{"name": "Offset x",
-                        "type": HARPIA_INT,
-                        "lower":0,
-                        "upper":65535,
-                        "step":1
-                            },
+        return self.properties
 
-            "offset_y":{"name": "Offset Y",
-                        "type": HARPIA_INT,
-                        "lower":0,
-                        "upper":65535,
-                        "step":1
-                            }
-        }
+    # ----------------------------------------------------------------------
+    def generate_vars(self):
+        return self.vars
+
+    # ----------------------------------------------------------------------
+    def generate_function_call(self):
+        return self.function_call
 
 # ------------------------------------------------------------------------------

@@ -1,16 +1,18 @@
 import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-
-from harpia.GUI.components.field import Field
 from harpia.GUI.fieldtypes import *
+from harpia.GUI.components.field import Field
+
+gi.require_version('Gtk', '3.0')
+
 
 class ColorField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
+
     def __init__(self, data, event):
-        if not isinstance(data,dict):
+        if not isinstance(data, dict):
             return
         Gtk.HBox.__init__(self, True)
 
@@ -27,7 +29,8 @@ class ColorField(Field, Gtk.HBox):
         self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         self.add(self.color_block)
 
-        button = Gtk.Button.new_from_icon_name("gtk-select-color",Gtk.IconSize.BUTTON)
+        button = Gtk.Button.new_from_icon_name(
+            "gtk-select-color", Gtk.IconSize.BUTTON)
         button.connect("clicked", self.on_choose_color)
         self.add(button)
         self.show_all()
@@ -35,7 +38,7 @@ class ColorField(Field, Gtk.HBox):
     # --------------------------------------------------------------------------
     def on_choose_color(self, widget):
         color_selection_dialog = Gtk.ColorSelectionDialog("Select color")
-        if self.event != None:
+        if self.event is not None:
             color_selection_dialog.connect("destroy", self.event)
         color_selection = color_selection_dialog.get_color_selection()
         color_selection.set_current_color(self.color)

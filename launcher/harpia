@@ -3,26 +3,18 @@
 
 # Libraries
 import gi
-gi.require_version('Gtk', '3.0')
+import os
+import sys
+import argparse
 from gi.repository import Gtk
-
-
 from harpia.GUI.mainwindow import MainWindow
 from harpia.control.maincontrol import MainControl
 
-from harpia.system import System as System
-from harpia.model.diagrammodel import DiagramModel
-from harpia.model.connectionmodel import ConnectionModel
-from harpia.control.diagramcontrol import DiagramControl
-from harpia.control.cgenerator import CGenerator
+gi.require_version('Gtk', '3.0')
 
-import sys
-import argparse
-import os
-
-#---------------------------------------------------
-#--------HARPIA FRONTEND MAIN FUNCTION--------------
-#---------------------------------------------------
+# ---------------------------------------------------
+# --------HARPIA FRONTEND MAIN FUNCTION--------------
+# ---------------------------------------------------
 
 # <<<<<<< HEAD
 # class Log(object):
@@ -33,8 +25,8 @@ import os
 
 def main(argv):
     """
-            The Harpia-Frontend class is where the main function starts the system.
-            It initializes the interface.
+        The Harpia-Frontend class is where the main function starts the system.
+        It initializes the interface.
     """
 
 # <<<<<<< HEAD
@@ -186,9 +178,9 @@ def main(argv):
     import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
 
 if __name__ == '__main__':
     main(sys.argv)
 
-    #----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
