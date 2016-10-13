@@ -61,7 +61,6 @@ def main(argv):
 # =======
     parser.add_argument('file', default=[], nargs='*',
                         help="List of files to open")
-# >>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
     args = parser.parse_args()
 
     ##-----------------------------------
