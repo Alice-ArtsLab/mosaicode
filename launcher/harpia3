@@ -3,104 +3,76 @@
 
 # Libraries
 import gi
-import os
-import sys
-import argparse
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
+
 from harpia.GUI.mainwindow import MainWindow
 from harpia.control.maincontrol import MainControl
 
-gi.require_version('Gtk', '3.0')
+import sys
+import argparse
+import os
 
-# ---------------------------------------------------
-# --------HARPIA FRONTEND MAIN FUNCTION--------------
-# ---------------------------------------------------
-
-# <<<<<<< HEAD
-# class Log(object):
-#     def log(self, msg):
-#         print msg.encode('ascii','ignore')
-# =======
-# >>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
+#---------------------------------------------------
+#--------HARPIA FRONTEND MAIN FUNCTION--------------
+#---------------------------------------------------
 
 def main(argv):
     """
-        The Harpia-Frontend class is where the main function starts the system.
-        It initializes the interface.
+            The Harpia-Frontend class is where the main function starts the system.
+            It initializes the interface.
     """
 
-# <<<<<<< HEAD
-#     os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
-#     System()
-#     System.set_log(Log())
+    os.environ['HARPIA_DATA_DIR']="/usr/share/harpia/"
 
-# =======
-    reload(sys)
-    sys.setdefaultencoding('utf8')
-# >>>>>>> 42ce749d63a772084bebe7321cf18c3c84b03ca3
 
-    # Initialize the Frontend
+    ## Initialize the Frontend
     win = MainWindow()
     win.show_all()
 
-    # Parameter passing
+    ## Parameter passing
     parser = argparse.ArgumentParser()
-# <<<<<<< HEAD
-#     parser.add_argument('file', default=[], nargs='*', help="List of files to open")
-#     parser.add_argument("-x", "--examples", help="Generate examples", action='store_true')
-#     parser.add_argument("-c", "--compile", help="Compile examples", action='store_true')
-#     parser.add_argument("-t", "--test", help="Test examples", action='store_true')
-# =======
-    parser.add_argument('file', default=[], nargs='*',
-                        help="List of files to open")
+    parser.add_argument('file', default=[], nargs='*', help="List of files to open")
+    parser.add_argument("-x", "--examples", help="Generate examples", action='store_true')
+    parser.add_argument("-c", "--compile", help="Compile examples", action='store_true')
+    parser.add_argument("-t", "--test", help="Test examples", action='store_true')
     args = parser.parse_args()
 
-    ##-----------------------------------
-
     if args.test:
-        print OKBLUE + "\nHelp\tGenerate  Description\t Properties\tLabel" + ENDC
+        print"\nHelp\tGenerate  Description\t Properties\tLabel"
         print"====\t========  ===========\t ==========\t=====\n"
 
-    for key in System.blocks:
-        obj = System.blocks[key]()
-        print "Working with", obj.type
-        if obj.language != "C":
-            print "-- Ignoring block", obj.type
-            continue
-        if obj.framework != "openCV":
-            print "-- Ignoring block", obj.type
-            continue
-
+    for key in s2idirectory.block:
+        obj = s2idirectory.block[key]()
         obj.x = 200
         diagram = DiagramModel()
-        diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
         diagram.add_block(obj)
  
         cont = 0
         intypes = obj.get_description()["InTypes"]
         for inkey in intypes:
             if intypes[inkey] == "HRP_IMAGE":
-                block = System.blocks["harpia.plugins.C.openCV.imageFile"]()
+                block = s2idirectory.block["harpia.plugins.imageFile"]()
             elif intypes[inkey] == "HRP_INT":
-                block = System.blocks["harpia.plugins.C.openCV.intValue"]()
-                block.window_name = "My Image - " + obj.get_description()["Label"]
-                block.label = block.label + " - " + str(cont)
+                block = s2idirectory.block["harpia.plugins.intValue"]()
             elif intypes[inkey] == "HRP_DOUBLE":
-                block = System.blocks["harpia.plugins.C.openCV.newDouble"]()
+                block = s2idirectory.block["harpia.plugins.newDouble"]()
             elif intypes[inkey] == "HRP_RECT":
-                block = System.blocks["harpia.plugins.C.openCV.newRect"]()
+                block = s2idirectory.block["harpia.plugins.newRect"]()
             elif intypes[inkey] == "HRP_POINT":
-                block = System.blocks["harpia.plugins.C.openCV.newPoint"]()
+                block = s2idirectory.block["harpia.plugins.newPoint"]()
             diagram.add_block(block)
             block.y = 100 * cont
             diagram.connect_blocks(block, 0, obj, cont)
+
             cont = cont + 1
 
         cont = 0
         outtypes = obj.get_description()["OutTypes"]
         for outkey in outtypes:
             if outtypes[outkey] == "HRP_IMAGE":
-                show = System.blocks["harpia.plugins.C.openCV.show"]()
+                show = s2idirectory.block["harpia.plugins.show"]()
                 show.x = 400
                 show.title = "My Image - " + obj.get_description()["Label"]
                 diagram.add_block(show)
@@ -122,7 +94,7 @@ def main(argv):
         if args.compile:
             # Compile Examples
             print "Generating code..."
-            generator = CGenerator(diagram)
+            generator = CodeGenerator(diagram)
             generator.compile()
 #            generator.execute()
             print obj.get_description()["Label"], " - compiled\n"
@@ -136,7 +108,7 @@ def main(argv):
             #print"\tDescription\tProperties "
             #-----------------------
             if obj.get_help():
-                print WARNING + "  V\t" + ENDC,
+                print "  V\t",
             else:
                 print "  -\t",
             #-----------------------
@@ -150,14 +122,14 @@ def main(argv):
 
             #-----------------------
             if obj.get_description():
-                print WARNING + "     V\t\t" + ENDC,
+                print "     V\t\t",
             else:
                 print "     -\t\t",
             #-----------------------
 
             #-----------------------
             if obj.get_properties():
-                print WARNING + "    V\t" + ENDC,
+                print "    V\t",
             else:
                 print "    -\t",
             #----------------------
@@ -166,7 +138,6 @@ def main(argv):
         #print obj.get_help()
     print
 
-    ##-----------------------------------
 
     if args.file:
         for arg in args.file:
@@ -174,13 +145,10 @@ def main(argv):
     else:
         win.main_control.new()
 
-    # to kill with Terminal Ctrl+C
-    import signal
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
-    # ----------------------------------------------------------------------
+    #----------------------------------------------------------------------
 
 if __name__ == '__main__':
     main(sys.argv)
 
-    # ----------------------------------------------------------------------
+    #----------------------------------------------------------------------
