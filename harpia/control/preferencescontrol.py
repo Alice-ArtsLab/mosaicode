@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 
-from harpia.utils.XMLUtils import XMLParser
 import os
-import ast
+from harpia.utils.XMLUtils import XMLParser
 
 
 class PreferencesControl():

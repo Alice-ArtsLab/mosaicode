@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.GUI.fieldtypes import *
 from harpia.GUI.components.field import Field
-
-gi.require_version('Gtk', '3.0')
 
 
 class FloatField(Field, Gtk.HBox):

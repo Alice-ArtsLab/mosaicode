@@ -2,12 +2,9 @@
 # noqa: E402
 
 import gi
-import sys
-import math
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
-from gi.repository import GObject
 from gi.repository import GooCanvas
 from connectormenu import ConnectorMenu
 from harpia.model.connectionmodel import ConnectionModel
@@ -129,8 +126,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         if not self.__widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(
-                    parent = self,
-                    data = path
+                    parent=self,
+                    data=path
                     )
             self.__widgets["Line"] = widget
         else:

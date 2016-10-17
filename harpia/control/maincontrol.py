@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
 from harpia.GUI.preferencewindow import PreferenceWindow
-from harpia.GUI.workarea import WorkArea
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
-gi.require_version('Gtk', '3.0')
 
 
 class MainControl():

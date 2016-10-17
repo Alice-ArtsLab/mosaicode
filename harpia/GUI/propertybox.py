@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import gi
+gi.require_version('Gtk', '3.0')
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 import harpia.GUI.components
@@ -8,7 +9,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from harpia.GUI.fieldtypes import *
 
-gi.require_version('Gtk', '3.0')
 
 component_list = {}  # Dynamic list to store components
 
