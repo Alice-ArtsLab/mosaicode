@@ -34,6 +34,14 @@ def save(diagram, obj):
 
 def main(argv):
 
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    RED = '\x1B[31m'
+
     os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
     System()
     System.set_log(Log())
@@ -48,7 +56,7 @@ def main(argv):
     args = parser.parse_args()
 
     if args.test:
-        print"\nHelp\tGenerate  Description\t Properties\tLabel"
+        print OKBLUE + "\nHelp\tGenerate  Description\t Properties\tLabel" + ENDC
         print"====\t========  ===========\t ==========\t=====\n"
 
     for key in System.blocks:
@@ -125,9 +133,11 @@ def main(argv):
             # print "Help",
             # print "\tGenerate",
             # print"\tDescription\tProperties "
-            # -----------------------
+
+            #-----------------------
+
             if obj.get_help():
-                print "  V\t",
+                print WARNING + "  V\t" + ENDC,
             else:
                 print "  -\t",
             # -----------------------
@@ -141,14 +151,14 @@ def main(argv):
 
             # -----------------------
             if obj.get_description():
-                print "     V\t\t",
+                print WARNING + "     V\t\t" + ENDC,
             else:
                 print "     -\t\t",
             # -----------------------
 
             # -----------------------
             if obj.get_properties():
-                print "    V\t",
+                print WARNING + "    V\t" + ENDC,
             else:
                 print "    -\t",
             # ----------------------
