@@ -2,13 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import gi
-from diagram import Diagram
-from gi.repository import Gtk
-from gi.repository import Gdk
-from harpia.GUI.dialog import Dialog
-from harpia.control.diagramcontrol import DiagramControl
-
 gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from harpia.GUI.dialog import Dialog
 
 
 class WorkArea(Gtk.Notebook):

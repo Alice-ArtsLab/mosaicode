@@ -3,20 +3,15 @@
 
 import gi
 import os
-import copy
-import math
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
-
 from harpia.system import System as System
-from harpia.model.blockmodel import BlockModel
 from harpia.GUI.blockmenu import BlockMenu
-
+from harpia.model.blockmodel import BlockModel
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112

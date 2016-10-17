@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
-
 import os
-import gi
 from gi.repository import Gdk
-from exceptions import AttributeError
 from harpia.utils.XMLUtils import XMLParser
 from harpia.system import System as System
 from harpia.control.codegenerator import CodeGenerator

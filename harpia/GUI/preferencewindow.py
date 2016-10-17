@@ -2,13 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from gi.repository import Gdk
 from harpia.system import System as System
 from harpia.GUI.components.stringfield import StringField
 from harpia.GUI.components.openfilefield import OpenFileField
-
-gi.require_version('Gtk', '3.0')
 
 
 class PreferenceWindow(Gtk.Dialog):

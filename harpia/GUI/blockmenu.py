@@ -27,9 +27,8 @@
 # ----------------------------------------------------------------------
 
 import gi
-from gi.repository import Gtk
-from gi.repository import Gdk
 gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 
 class BlockMenu(Gtk.Menu):
