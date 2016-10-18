@@ -10,7 +10,7 @@ class And(OpenCVPlugin):
     # ------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.help = "ooooii  Permite a operação lógica 'E' entre as duas entradas." + \
+        self.help = "Permite a operação lógica 'E' entre as duas entradas." + \
             " Para esse bloco há duas possibilidades." + \
             "Primeira: Executa a operação entre" + \
             " duas imagens ponto a ponto." + \
