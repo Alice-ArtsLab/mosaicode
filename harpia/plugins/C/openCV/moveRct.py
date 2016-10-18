@@ -51,28 +51,4 @@ class MoveRct(OpenCVPlugin):
             'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
             'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # ------------------------------------------------------------------------------

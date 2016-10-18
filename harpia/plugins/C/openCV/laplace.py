@@ -50,26 +50,10 @@ class Laplace(OpenCVPlugin):
             '(size$id$, IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n' + \
             'cvLaplace(block$id$_img_i0, block$id$_img_o0, ' + \
             'block$id$_int_i1);}\n'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
+    
     # ----------------------------------------------------------------------
     def generate_vars(self):
         self.masksize = int(self.masksize)
         return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
 
 # ------------------------------------------------------------------------------

@@ -48,8 +48,6 @@ class PlotHistogram(OpenCVPlugin):
             'int block$id$_plotHistChanIter;\n' + \
             'int block$id$_plotHistArrIter;\n'
 
-        self.function_call = ""
-
         self.dealloc = \
             'if(block$id$_SourceCx[0]) cvReleaseImage' + \
             '(&block$id$_SourceCx[0]);\n' + \
@@ -66,22 +64,6 @@ class PlotHistogram(OpenCVPlugin):
             'if(block$id$_img_i0) cvReleaseImage(&block$id$_img_i0);\n' + \
             'if(block$id$_img_o0) cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseHist(&block$id$_histogram);\n'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
@@ -190,9 +172,5 @@ class PlotHistogram(OpenCVPlugin):
             ' - 1),cvScalarAll(255),1, 0,0 );\n' + \
             '  }\n' + \
             '}\n'
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
 
 # -----------------------------------------------------------------------------

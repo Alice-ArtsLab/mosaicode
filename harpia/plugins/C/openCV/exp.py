@@ -24,8 +24,6 @@ class Exp(OpenCVPlugin):
             "TreeGroup": "Math Functions"
         }
 
-        self.properties = {}
-
         # --------------------------C/OpenCv code------------------------------
         self.vars = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
@@ -49,33 +47,5 @@ class Exp(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseImage(&block$id$_img_t);\n'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
 
 # -----------------------------------------------------------------------------

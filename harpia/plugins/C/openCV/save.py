@@ -37,20 +37,4 @@ class Save(OpenCVPlugin):
             'if(block$id$_img_i0)\n' + \
             'cvSaveImage("$filename$" ,block$id$_img_i0);\n'
 
-    # -------------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # -------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # -------------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # -------------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

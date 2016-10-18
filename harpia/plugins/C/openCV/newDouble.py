@@ -37,20 +37,4 @@ class NewDouble(OpenCVPlugin):
         self.vars = 'double block$id$_double_o0 = ' + \
             '$doubleVal$; // New Double Out\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
 # -----------------------------------------------------------------------------

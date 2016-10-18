@@ -60,25 +60,4 @@ class Slider(OpenCVPlugin):
             'cvCreateTrackbar("$label$", "$window_name$",' + \
             ' &block$id$_int_o0, $maxVal$, NULL);\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        self.intVal = int(float(self.intVal))
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

@@ -23,11 +23,7 @@ class IsOnRect(OpenCVPlugin):
             'TreeGroup': 'Experimental'
         }
 
-        self.properties = {}
-
         # ------------------------------C/OpenCv code--------------------------
-        self.vars = ""
-
         self.function_call = \
             '\n block$id$_double_o0 = 0.0;\n' + \
             'if(block$id$_point_i0.x >= block$id$_rect_i1.x)\n' + \
@@ -37,21 +33,5 @@ class IsOnRect(OpenCVPlugin):
             '           if(block$id$_point_i0.y < block$id$_rect_i1.y + ' + \
             'block$id$_rect_i1.height)\n' + \
             '               block$id$_double_o0 = 1.0;\n'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
 
 # -----------------------------------------------------------------------------

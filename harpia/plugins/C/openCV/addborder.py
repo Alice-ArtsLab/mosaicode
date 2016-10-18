@@ -67,24 +67,4 @@ class AddBorder(OpenCVPlugin):
         self.green = int(self.green, 16) / 257
         self.blue = int(self.blue, 16) / 257
 
-    # -------------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # -------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # -------------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # -------------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # -------------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

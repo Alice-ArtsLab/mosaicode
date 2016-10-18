@@ -57,22 +57,6 @@ class SaveVideo(OpenCVPlugin):
         self.out_dealloc = 'cvReleaseVideoWriter' + \
             '(&block$id$_vidWriter); // SaveVideo\n'
 
-    # -------------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # -------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         codecMacro = 'CV_FOURCC(\'P\',\'I\',\'M\',\'2\')'
@@ -103,13 +87,5 @@ class SaveVideo(OpenCVPlugin):
             '   cvWriteFrame( block$id$_vidWriter, block$id$_img_i0);\n' + \
             '   block$id$_img_o0 = block$id$_img_i0;\n' + \
             '}\n'
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return self.out_dealloc
 
 # ------------------------------------------------------------------------------
