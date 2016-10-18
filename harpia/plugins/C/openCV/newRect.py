@@ -61,20 +61,4 @@ class NewRect(OpenCVPlugin):
         self.function_call = \
             'block$id$_rect_o0 = cvRect($x0$, $y0$, $width$, $height$);\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

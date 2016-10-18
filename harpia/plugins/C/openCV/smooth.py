@@ -66,24 +66,4 @@ class Smooth(OpenCVPlugin):
             '$smooth_type$,block$id$_int_i1,block$id$_int_i2,0,0);\n' + \
             '}\n'
 
-    # -------------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # -------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # -------------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # -------------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # -------------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

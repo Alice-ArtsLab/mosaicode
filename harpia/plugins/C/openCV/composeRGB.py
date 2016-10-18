@@ -61,28 +61,4 @@ class ComposeRGB(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_i1);\n' + \
             'cvReleaseImage(&block$id$_img_i2);\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
 # -----------------------------------------------------------------------------

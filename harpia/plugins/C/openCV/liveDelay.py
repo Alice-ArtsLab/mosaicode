@@ -33,8 +33,6 @@ class LiveDelay(OpenCVPlugin):
             }
         }
         # ------------------------------C/OpenCv code--------------------------
-        self.vars = ""
-
         self.function_call = '''
             if(block$id$_img_i0){
                 cvReleaseImage(&(block$id$_buffer[i_$id$]));
@@ -51,18 +49,6 @@ class LiveDelay(OpenCVPlugin):
                 if(block$id$_buffer[i_$id$] != NULL)
                     cvReleaseImage(&(block$id$_buffer[i_$id$]));
             '''
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
@@ -86,17 +72,5 @@ class LiveDelay(OpenCVPlugin):
             str(self.frameNumber - 1) + '];\n'
 
         return value
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return self.out_dealloc
 
 # -----------------------------------------------------------------------------

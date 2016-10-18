@@ -91,28 +91,11 @@ class Canny(OpenCVPlugin):
             "} // End Canny Code"
 
     # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # -----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
     def generate_function_call(self):
         self.apertureSize = int(float(self.apertureSize))
         self.threshold1 = int(float(self.threshold1))
         self.threshold2 = int(float(self.threshold2))
 
         return self.function_call
-
 
 # ------------------------------------------------------------------------------

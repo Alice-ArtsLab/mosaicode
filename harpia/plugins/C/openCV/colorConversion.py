@@ -56,30 +56,6 @@ class ColorConversion(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_o0);\n'
 
     # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
     def generate_function_call(self):
         channels = '3'
         if self.conversion_type == 'RGB -> GRAY':
@@ -122,6 +98,5 @@ class ColorConversion(OpenCVPlugin):
             '{    cvMerge(block$id$_img_t ,block$id$_img_t ,' + \
             'block$id$_img_t ,NULL ,block$id$_img_o0);\n }\n' + \
             'else\n' + '{ block$id$_img_o0 = cvCloneImage(block$id$_img_t);\n}'
-
 
 # -----------------------------------------------------------------------------

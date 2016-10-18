@@ -27,24 +27,12 @@ class Capture(OpenCVPlugin):
             "TreeGroup": "Image Source"
         }
 
-        self.properties = {}
-
         # ---------------------C/OpenCv code-----------------------------------
         self.vars = \
             'IplImage * block$id$_img_o0 = NULL; //Capture\n' + \
             'CvCapture* block$id$_capture = NULL; \n' + \
             'IplImage* block$id$_frame = NULL; \n' + \
             'int counter$id$ = 0;\n'
-
-        self.function_call = ""
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -61,10 +49,6 @@ class Capture(OpenCVPlugin):
                 "values": device_list
             }
         }
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):

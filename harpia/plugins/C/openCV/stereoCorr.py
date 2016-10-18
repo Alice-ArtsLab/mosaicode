@@ -70,28 +70,4 @@ class StereoCorr(OpenCVPlugin):
             '(&block$id$_img_ts0);\n' + \
             'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
 # -----------------------------------------------------------------------------

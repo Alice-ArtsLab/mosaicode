@@ -37,24 +37,4 @@ class And(OpenCVPlugin):
             '\tcvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # -------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # -------------------------------------------------------------------------
-    def get_properties(self):
-        return {}
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return self.get_adjust_images_size()
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

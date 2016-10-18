@@ -62,28 +62,4 @@ class VideoFile(OpenCVPlugin):
 
         self.out_dealloc = 'cvReleaseCapture(&block$id$_capture);\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return self.out_dealloc
-
 # -----------------------------------------------------------------------------
