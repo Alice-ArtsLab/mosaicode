@@ -3,10 +3,9 @@
 
 import gi
 import datetime
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Pango
-
-gi.require_version('Gtk', '3.0')
 
 
 class Status(Gtk.ScrolledWindow):

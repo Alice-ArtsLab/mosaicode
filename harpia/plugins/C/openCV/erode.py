@@ -56,25 +56,4 @@ class Erode(OpenCVPlugin):
             'block$id$_arg_mask, block$id$_int_i1);\n' + \
             '}\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        self.iterations = int(float(self.iterations))
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------

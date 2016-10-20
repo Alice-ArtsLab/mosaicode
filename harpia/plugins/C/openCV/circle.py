@@ -53,12 +53,6 @@ class Circle(OpenCVPlugin):
             'int block$id$_int_i1 = $x0$;\n' + \
             'int block$id$_int_i2 = $y0$;\n'
 
-        self.function_call = ""
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
     # ----------------------------------------------------------------------
     def generate_vars(self):
         self.x0 = int(self.x0)
@@ -86,13 +80,5 @@ class Circle(OpenCVPlugin):
             'cvCircle(block$id$_img_i0, center, 10, color, 1, 8, 0);\n' +\
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             '}\n'
-
-    # ------------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ------------------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
 
 # ------------------------------------------------------------------------------

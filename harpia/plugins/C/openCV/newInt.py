@@ -36,21 +36,4 @@ class NewInt(OpenCVPlugin):
         # -------------------C/OpenCv code------------------------------------
         self.vars = 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        self.intVal = int(self.intVal)
-        return self.vars
-
 # ------------------------------------------------------------------------------

@@ -35,7 +35,6 @@
 import os
 import time
 import datetime
-import gi
 import gettext
 from harpia.system import System as System
 

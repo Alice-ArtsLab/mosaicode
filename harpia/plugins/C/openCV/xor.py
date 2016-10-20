@@ -22,8 +22,6 @@ class Xor(OpenCVPlugin):
             "TreeGroup": "Arithmetic and logical operations"
         }
 
-        self.properties = {}
-
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \
             'if(block$id$_img_i0 && block$id$_img_i1){\n' + \
@@ -34,25 +32,5 @@ class Xor(OpenCVPlugin):
             'block$id$_img_o0,0);\n' + \
             'cvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return self.get_adjust_images_size()
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
 
 # -----------------------------------------------------------------------------

@@ -29,6 +29,8 @@
 import gi
 import copy
 from block import Block
+gi.require_version('Gtk', '3.0')
+gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from connector import Connector
@@ -36,9 +38,6 @@ from gi.repository import GObject
 from gi.repository import GooCanvas
 from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
-
-gi.require_version('Gtk', '3.0')
-gi.require_version('GooCanvas', '2.0')
 
 
 class Diagram(GooCanvas.Canvas, DiagramModel):
@@ -102,7 +101,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                         isinstance(item, Block):
                     continue
                 if item not in self.current_widgets:
-                        self.current_widgets.append(item)
+                    self.current_widgets.append(item)
             self.update_flows()
             return True  # Abort other events
 
@@ -118,7 +117,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        if event.state == \
+                Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_Up:
                 self.move_selected_blocks(0, -5)
                 return True

@@ -47,20 +47,4 @@ class NewImage(OpenCVPlugin):
             'block$id$_img_o0 = cvCreateImage(size$id$,IPL_DEPTH_8U,3);\n' + \
             'cvSetZero(block$id$_img_o0);\n'
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # ------------------------------------------------------------------------------

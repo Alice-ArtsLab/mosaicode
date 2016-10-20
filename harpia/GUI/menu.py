@@ -2,10 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import gi
+import gettext
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.system import System as System
 
-gi.require_version('Gtk', '3.0')
+
+gettext.bindtextdomain(System.APP, System.DIR)
+gettext.textdomain(System.APP)
 
 
 class Menu(Gtk.MenuBar):

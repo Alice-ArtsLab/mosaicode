@@ -22,7 +22,6 @@ class Not(OpenCVPlugin):
             "OutTypes": {0: "HRP_IMAGE"},
             "TreeGroup": "Arithmetic and logical operations"
         }
-        self.properties = {}
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \
@@ -30,21 +29,5 @@ class Not(OpenCVPlugin):
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'cvNot(block$id$_img_i0, block$id$_img_o0);\n' + \
             '}\n'
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # ----------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
 
 # -----------------------------------------------------------------------------

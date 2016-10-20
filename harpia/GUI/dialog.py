@@ -4,11 +4,9 @@
 import gi
 import os
 from filefilters import *
-from gi.repository import Gtk
-from gi.repository import GObject
-from harpia.GUI.components.stringfield import StringField
-
 gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from harpia.GUI.components.stringfield import StringField
 
 
 class Dialog():

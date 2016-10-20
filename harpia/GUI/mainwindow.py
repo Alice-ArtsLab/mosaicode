@@ -17,7 +17,6 @@ from blockproperties import BlockProperties
 from harpia.control.maincontrol import MainControl
 
 
-
 class MainWindow(Gtk.Window):
 
     def __init__(self):
@@ -113,7 +112,8 @@ class MainWindow(Gtk.Window):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state == Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        if event.state == \
+                Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_a:
                 self.main_control.select_all()
                 return True

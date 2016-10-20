@@ -43,24 +43,4 @@ class Select(OpenCVPlugin):
             '\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i1);\n' + \
             '}\n'
 
-    # -------------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # -------------------------------------------------------------------------
-    def get_description(self):
-        return self.description
-
-    # -------------------------------------------------------------------------
-    def get_properties(self):
-        return self.properties
-
-    # -------------------------------------------------------------------------
-    def generate_vars(self):
-        return OpenCVPlugin.generate_vars(self) + self.vars
-
-    # -------------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
 # -----------------------------------------------------------------------------
