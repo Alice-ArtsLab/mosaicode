@@ -1,12 +1,13 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
+
 class Print(WebaudioPlugin):
 
-# ------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
         self.label = "Label"
@@ -28,14 +29,15 @@ block_$id$_i[1] = function(value){
 $label$ <span id="block_$id$">$value$</span><br>
 """
         self.description = {"Label": "Print",
-            "Icon": "images/show.png",
-            "Color": "50:10:250:150",
-            "InTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_CHAR"},
-            "OutTypes": {},
-            "TreeGroup": "Interface"
-            }
+                            "Icon": "images/show.png",
+                            "Color": "50:10:250:150",
+                            "InTypes": {0: "HRP_WEBAUDIO_FLOAT",
+                                        1: "HRP_WEBAUDIO_CHAR"},
+                            "OutTypes": {},
+                            "TreeGroup": "Interface"
+                            }
 
-        self.properties = {"label":{"name": "Label",
-                    "type": HARPIA_STRING
-                    }
-            }
+        self.properties = {"label": {"name": "Label",
+                                     "type": HARPIA_STRING
+                                     }
+                           }

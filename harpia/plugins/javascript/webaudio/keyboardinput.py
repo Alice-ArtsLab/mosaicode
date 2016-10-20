@@ -1,12 +1,13 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
+
 class KeyboardInput(WebaudioPlugin):
 
-# ------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
         self.help = "Keyboard Input"
@@ -29,9 +30,10 @@ document.onkeypress = function(evt){
 };
 """
         self.description = {"Label": "Keyboard Input",
-            "Icon": "images/show.png",
-            "Color": "50:150:20:150",
-            "InTypes": {},
-            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_CHAR"},
-            "TreeGroup": "Interface"
-            }
+                            "Icon": "images/show.png",
+                            "Color": "50:150:20:150",
+                            "InTypes": {},
+                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT",
+                                         1: "HRP_WEBAUDIO_CHAR"},
+                            "TreeGroup": "Interface"
+                            }

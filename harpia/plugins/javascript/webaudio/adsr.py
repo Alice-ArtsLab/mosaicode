@@ -1,12 +1,13 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
+
 class ADSR(WebaudioPlugin):
 
-# ------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
         self.a = 5
@@ -61,37 +62,37 @@ block_$id$_i[1] = function(value){
             "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT"},
             "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
             "TreeGroup": "Sound"
-            }
+        }
 
         self.properties = {
-                "a":{"name": "Attack",
-                    "type": HARPIA_FLOAT,
-                    "lower":0,
-                    "upper":10000,
-                    "step":1
-                    },
-                "d":{"name": "Delay",
-                            "type": HARPIA_FLOAT,
-                            "lower":0,
-                            "upper":10000,
-                            "step":1
-                            },
-                "s":{"name": "Sustain",
-                            "type": HARPIA_FLOAT,
-                            "lower":0,
-                            "upper":10000,
-                            "step":1
-                            },
-                "r":{"name": "Release",
-                            "type": HARPIA_FLOAT,
-                            "lower":0,
-                            "upper":10000,
-                            "step":1
-                            },
-                "g":{"name": "Gain",
-                            "type": HARPIA_FLOAT,
-                            "lower":0,
-                            "upper":10000,
-                            "step":1
-                            }
-            }
+            "a": {"name": "Attack",
+                  "type": HARPIA_FLOAT,
+                  "lower": 0,
+                  "upper": 10000,
+                  "step": 1
+                  },
+            "d": {"name": "Delay",
+                  "type": HARPIA_FLOAT,
+                  "lower": 0,
+                  "upper": 10000,
+                  "step": 1
+                  },
+            "s": {"name": "Sustain",
+                  "type": HARPIA_FLOAT,
+                  "lower": 0,
+                  "upper": 10000,
+                  "step": 1
+                  },
+            "r": {"name": "Release",
+                  "type": HARPIA_FLOAT,
+                  "lower": 0,
+                  "upper": 10000,
+                  "step": 1
+                  },
+            "g": {"name": "Gain",
+                  "type": HARPIA_FLOAT,
+                  "lower": 0,
+                  "upper": 10000,
+                  "step": 1
+                  }
+        }

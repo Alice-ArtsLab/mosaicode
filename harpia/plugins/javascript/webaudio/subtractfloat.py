@@ -1,12 +1,13 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
+
 class SubtractFloat(WebaudioPlugin):
 
-# ------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
         self.help = "Mouse Position"
@@ -35,9 +36,10 @@ block_$id$_i[1] = function(value){
     };
 """
         self.description = {"Label": "Subtract Float",
-            "Icon": "images/show.png",
-            "Color": "200:200:25:150",
-            "InTypes": {0: "HRP_WEBAUDIO_FLOAT", 1: "HRP_WEBAUDIO_FLOAT"},
-            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-            "TreeGroup": "Arithmetics"
-            }
+                            "Icon": "images/show.png",
+                            "Color": "200:200:25:150",
+                            "InTypes": {0: "HRP_WEBAUDIO_FLOAT",
+                                        1: "HRP_WEBAUDIO_FLOAT"},
+                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
+                            "TreeGroup": "Arithmetics"
+                            }
