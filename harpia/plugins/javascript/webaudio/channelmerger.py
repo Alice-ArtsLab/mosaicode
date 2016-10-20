@@ -20,10 +20,8 @@ Merger = function(context) {
   this.node = context.createScriptProcessor(1024, 1, 1);
   this.node.onaudioprocess = function(e) { that.process(e) };
 }
-port os
-import webbrowser  # to open HTML file
 
-from harpia.control.cod
+Merger.prototype.process = function(e) {
   var in1 = e.inputBuffer.getChannelData(0);
   var out = e.outputBuffer.getChannelData(0);
   for (var i = 0; i < in1.length; ++i) {
