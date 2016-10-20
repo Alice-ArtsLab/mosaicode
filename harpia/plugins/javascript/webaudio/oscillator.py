@@ -1,12 +1,13 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
+
 class Oscillator(WebaudioPlugin):
 
-# ------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
         self.freq = 440
@@ -36,22 +37,25 @@ block_$id$.detune.value = 100; // value in cents
 block_$id$.start(0);
 """
         self.description = {"Label": "Oscillator",
-            "Icon": "images/show.png",
-            "Color": "50:150:250:150",
-            "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT", 2: "HRP_WEBAUDIO_FLOAT"},
-            "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": "Sound"
-            }
+                            "Icon": "images/show.png",
+                            "Color": "50:150:250:150",
+                            "InTypes": {0: "HRP_WEBAUDIO_SOUND",
+                                        1: "HRP_WEBAUDIO_FLOAT",
+                                        2: "HRP_WEBAUDIO_FLOAT"},
+                            "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
+                            "TreeGroup": "Sound"
+                            }
 
-        self.properties = {"freq":{"name": "Frequency",
-                    "type": HARPIA_FLOAT,
-                    "lower":20,
-                    "upper":20000,
-                    "step":1
-                    },
-                "oscillator_type":{"name": "Type",
-                    "type": HARPIA_COMBO,
-                    "values": ["square", "sine", "sawtooth", "triangle"]
-                    }
-            }
-            
+        self.properties = {"freq": {"name": "Frequency",
+                                    "type": HARPIA_FLOAT,
+                                    "lower": 20,
+                                    "upper": 20000,
+                                    "step": 1
+                                    },
+                           "oscillator_type": {"name": "Type",
+                                               "type": HARPIA_COMBO,
+                                               "values": ["square", "sine",
+                                                          "sawtooth",
+                                                          "triangle"]
+                                               }
+                           }

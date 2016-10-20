@@ -1,12 +1,13 @@
 #!/usr/bin/env python
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
+
 class ChannelMerger(WebaudioPlugin):
 
-# ------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
 
@@ -37,9 +38,10 @@ block_$id$_i[0] = block_$id$_obj.node;
 block_$id$_i[1] = block_$id$_obj.node;
 """
         self.description = {"Label": "Channel Merger",
-            "Icon": "images/show.png",
-            "Color": "50:150:250:150",
-            "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_SOUND"},
-            "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": "Sound",
-            }
+                            "Icon": "images/show.png",
+                            "Color": "50:150:250:150",
+                            "InTypes": {0: "HRP_WEBAUDIO_SOUND",
+                                        1: "HRP_WEBAUDIO_SOUND"},
+                            "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
+                            "TreeGroup": "Sound",
+                            }
