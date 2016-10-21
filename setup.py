@@ -21,7 +21,7 @@ config['classifiers'] = [
     'Operating System :: OS Independent',
     'Programming Language :: C',
     'Programming Language :: Python',
-    'Programming Language :: Javascript',
+    'Programming Language :: JavaScript',
     'Topic :: Scientific/Engineering',
     'Topic :: Software Development :: Code Generators',
 ]
