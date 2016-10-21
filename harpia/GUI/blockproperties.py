@@ -6,6 +6,7 @@ from gi.repository import Gtk
 from propertybox import PropertyBox
 gi.require_version('Gtk', '3.0')
 import gettext
+_ = gettext.gettext
 
 class BlockProperties(Gtk.Notebook):
 

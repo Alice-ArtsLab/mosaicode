@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import gi
-import gettext
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.system import System as System
 import gettext
 
-gettext.bindtextdomain(System.APP, System.DIR)
-gettext.textdomain(System.APP)
-
+_ = gettext.gettext
 
 class Menu(Gtk.MenuBar):
 
@@ -40,8 +37,7 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(_("Save As..."), None, file_menu, mc.save_as)
         self.__create_menu(_("Rename"), None, file_menu, mc.rename_tab)
         file_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(_(
-            "Export Diagram As PNG", "<Control>E"),
+        self.__create_menu(_("Export Diagram As PNG"), "<Control>E",
             file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)

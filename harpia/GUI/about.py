@@ -4,6 +4,7 @@ import os
 from gi.repository import Gtk
 gi.require_version('Gtk', '3.0')
 import gettext
+_ = gettext.gettext
 
 class About(Gtk.Window):
 

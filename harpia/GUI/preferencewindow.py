@@ -9,10 +9,11 @@ from harpia.GUI.components.stringfield import StringField
 from harpia.GUI.components.openfilefield import OpenFileField
 import gettext
 
+_ = gettext.gettext
 class PreferenceWindow(Gtk.Dialog):
 
     def __init__(self, main_window):
-        Gtk.Dialog.__init__(self, "Code Window", main_window,
+        Gtk.Dialog.__init__(self, _("Code Window"), main_window,
                             0, (Gtk.STOCK_CANCEL,
                                 Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
@@ -23,7 +24,7 @@ class PreferenceWindow(Gtk.Dialog):
         box.add(vbox)
 
         # Default directory
-        data = {"name": _("Default directory")),
+        data = {"name": _("Default directory"),
                 "value": self.properties.get_default_directory()}
         self.default_directory = OpenFileField(data, None)
         vbox.add(self.default_directory)

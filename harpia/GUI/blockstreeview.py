@@ -3,13 +3,13 @@
 
 import os
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from harpia.system import System as System
 import gettext
-
-gi.require_version('Gtk', '3.0')
+_ = gettext.gettext
 
 
 class BlocksTreeView(Gtk.ScrolledWindow):

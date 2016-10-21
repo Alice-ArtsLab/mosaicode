@@ -6,6 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.GUI.dialog import Dialog
 import gettext
+_ = gettext.gettext
 
 class WorkArea(Gtk.Notebook):
 

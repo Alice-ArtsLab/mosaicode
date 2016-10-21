@@ -39,6 +39,7 @@ from gi.repository import GooCanvas
 from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
 import gettext
+_ = gettext.gettext
 
 class Diagram(GooCanvas.Canvas, DiagramModel):
 
@@ -391,7 +392,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for widget in clipboard:
             if not isinstance(widget, Block):
                 continue
-            plugin = copy.deepcopy(widget.get_plugin())
+            plugin = copy.deepcopy(widget)
             plugin.x += 20
             plugin.y += 20
             plugin.set_id(-1)
