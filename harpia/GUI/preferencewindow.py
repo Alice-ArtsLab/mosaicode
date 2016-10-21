@@ -7,7 +7,7 @@ from gi.repository import Gtk
 from harpia.system import System as System
 from harpia.GUI.components.stringfield import StringField
 from harpia.GUI.components.openfilefield import OpenFileField
-
+import gettext
 
 class PreferenceWindow(Gtk.Dialog):
 
@@ -23,26 +23,26 @@ class PreferenceWindow(Gtk.Dialog):
         box.add(vbox)
 
         # Default directory
-        data = {"name": "Default directory",
+        data = {"name": _("Default directory")),
                 "value": self.properties.get_default_directory()}
         self.default_directory = OpenFileField(data, None)
         vbox.add(self.default_directory)
 
         # Default directory
-        data = {"name": "Default Filename",
+        data = {"name": _("Default Filename"),
                 "value": self.properties.get_default_filename()}
         self.default_filename = StringField(data, None)
         vbox.add(self.default_filename)
 
         # Error Log File
-        data = {"name": "Error Log File",
+        data = {"name": _("Error Log File"),
                 "value": self.properties.get_error_log_file()}
         self.error_log_file = StringField(data, None)
         vbox.add(self.error_log_file)
 
-        vbox.add(Gtk.Label("\nname wildcards:\n" +
+        vbox.add(Gtk.Label(_("\nname wildcards:\n" +
                            "\t%d = Date | %n = diagram name |"
-                           " %t = time value | %l = language\n"))
+                           " %t = time value | %l = language\n")))
 
         self.show_all()
         response = self.run()

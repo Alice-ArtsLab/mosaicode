@@ -7,6 +7,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from harpia.system import System as System
+import gettext
 
 gi.require_version('Gtk', '3.0')
 
@@ -24,7 +25,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.blocks_tree_view = Gtk.TreeView.new_with_model(self.filter)
         self.add(self.blocks_tree_view)
 
-        col = Gtk.TreeViewColumn("Available Blocks")
+        col = Gtk.TreeViewColumn(_("Available Blocks"))
         self.blocks_tree_view.append_column(col)
 
         cellrenderimage = Gtk.CellRendererPixbuf()
