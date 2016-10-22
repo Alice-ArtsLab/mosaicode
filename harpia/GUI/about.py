@@ -3,13 +3,14 @@ import gi
 import os
 from gi.repository import Gtk
 gi.require_version('Gtk', '3.0')
-
+import gettext
+_ = gettext.gettext
 
 class About(Gtk.Window):
 
     def __init__(self, main_window):
         self.data_dir = os.environ['HARPIA_DATA_DIR']
-        Gtk.Window.__init__(self, title="About Harpia")
+        Gtk.Window.__init__(self, title=_("About Harpia"))
         self.set_default_size(650, 480)
 
         grid = Gtk.Grid()
@@ -29,7 +30,7 @@ class About(Gtk.Window):
         grid.add(frameBorder)
 # --------------------------------------------------------------------#
 # -------------------------------About Text---------------------------#
-        labelAbout = Gtk.Label('Harpia Project was one of the aproved'
+        labelAbout = Gtk.Label(_('Harpia Project was one of the aproved'
                                'projects under CT-INFO 2003 Edital.\n' +
                                'This project intends to build a ' +
                                'graphical environment for learning,\n' +
@@ -44,13 +45,13 @@ class About(Gtk.Window):
                                'develop quality control systems, and ' +
                                'vision system based process,\n' +
                                'helping the learning and spreading of ' +
-                               'vision systems.')
+                               'vision systems.'))
         aboutBox = Gtk.Box()
         aboutBox.add(labelAbout)
         aboutBox.set_border_width(35)
 # --------------------------------------------------------------------#
 # ----------------------------License Text----------------------------#
-        labelLicense = Gtk.Label('Harpia\n' +
+        labelLicense = Gtk.Label(_('Harpia\n' +
                                  'Copyright (C) 2007 S2i-das-ufsc\n\n' +
                                  'This program is free software: you can ' +
                                  ' redistribute it and/or modify\n' +
@@ -75,7 +76,7 @@ class About(Gtk.Window):
                                  'Copyright 2006 Uche Ogbuji\n' +
                                  '(http://uche.ogbuji.net), more ' +
                                  'information\nfound in the copyright ' +
-                                 'archive \nprovided with this software.')
+                                 'archive \nprovided with this software.'))
 
         labelLicense.set_justify(Gtk.Justification.CENTER)
 
@@ -99,8 +100,8 @@ class About(Gtk.Window):
         imgbox2.set_spacing(65)
         imgbox2.set_border_width(2)
 
-        labelFinep = Gtk.Label('FINEP\n Financiadora de estudos e' +
-                               'Pesquisas\n http://www.finep.gov.br/')
+        labelFinep = Gtk.Label(_('FINEP\n Financiadora de estudos e' +
+                               'Pesquisas\n http://www.finep.gov.br/'))
 
         labelFinep.set_justify(Gtk.Justification.CENTER)
 
@@ -117,27 +118,27 @@ class About(Gtk.Window):
         sponsorsBox.add(imgbox)
         sponsorsBox.add(textbox)
 
-        labelSponsors = Gtk.Label("Sponsors")
-        labelSponsors.set_markup("<b>Sponsors</b>")
+        labelSponsors = Gtk.Label(_("Sponsors"))
+        labelSponsors.set_markup(_("<b>Sponsors</b>"))
 
         frame2 = Gtk.Frame()
         frame2.set_label_widget(labelSponsors)
         frame2.set_border_width(10)
         frame2.add(sponsorsBox)
 
-        labelDevelopment = Gtk.Label("Development")
-        labelDevelopment.set_markup("<b>Development</b>")
+        labelDevelopment = Gtk.Label(_("Development"))
+        labelDevelopment.set_markup(_("<b>Development</b>"))
 
         imageDevelopment = Gtk.Image()
         imageDevelopment.set_from_file(self.data_dir + "images/s2ilogo.png")
 
-        labelDevelopmentText = Gtk.Label('Sistemas Industriais ' +
+        labelDevelopmentText = Gtk.Label(_('Sistemas Industriais ' +
                                          'Inteligentes\n' +
                                          'Departamento de Automação' +
                                          ' e Sistemas\n' +
                                          'Universidade Federal de ' +
                                          'Santa Catarina\n' +
-                                         'http://s2i.das.ufsc.br/')
+                                         'http://s2i.das.ufsc.br/'))
         labelDevelopmentText.set_justify(Gtk.Justification.CENTER)
 
         textBox2 = Gtk.Box()
@@ -172,7 +173,7 @@ class About(Gtk.Window):
         hbox.pack_start(vbox_center, True, True, 0)
         hbox.pack_start(vbox_right, True, True, 0)
 
-        labelNames = Gtk.Label('Alberto Xavier Pavim\n\n' +
+        labelNames = Gtk.Label(_('Alberto Xavier Pavim\n\n' +
                                'Christian Emanuel Silvano\n\n' +
                                'Clovis Peruchi Scotti\n\n' +
                                'Fábio Pedrotti Terra\n\n' +
@@ -184,21 +185,21 @@ class About(Gtk.Window):
                                'Mário Lúcio Roloff\n\n' +
                                'Mathias José Kreutz Erdtmann\n\n' +
                                'José Luiz Bittencourt\n\n' +
-                               'Ricardo Grützmacher')
+                               'Ricardo Grützmacher'))
 
         vbox_left.pack_start(labelNames, True, True, 0)
 
-        labelJobs = Gtk.Label('Tutor\n\nDeveloper\n\n' +
+        labelJobs = Gtk.Label(_('Tutor\n\nDeveloper\n\n' +
                               'Present Developer\n\n' +
                               'Developer\n\nTutor\n\nTutor\n\n' +
                               'Developer\n\n' +
                               'Developer\n\nCoordinator\n\n' +
                               'Tutor\n\nDeveloper\n\n' +
-                              'Developer\n\nDeveloper')
+                              'Developer\n\nDeveloper'))
 
         vbox_center.pack_start(labelJobs, True, True, 0)
 
-        labelEMAILS = Gtk.Label('axpavim@gmail.com\n\n' +
+        labelEMAILS = Gtk.Label(_('axpavim@gmail.com\n\n' +
                                 'silvano@das.ufsc.br\n\n' +
                                 'scotti@ieee.org\n\n' +
                                 'fpterra@yahoo.com.br\n\n' +
@@ -210,7 +211,7 @@ class About(Gtk.Window):
                                 'marcelo@das.ufsc.br\n\n' +
                                 'roloff@cefetsc.edu.br\n\n' +
                                 'erdtmann@das.ufsc.br\n\n' +
-                                'jlbitt@yahoo.com\n\ngrutz@terra.com.br')
+                                'jlbitt@yahoo.com\n\ngrutz@terra.com.br'))
 
         vbox_right.pack_start(labelEMAILS, True, True, 0)
 
@@ -225,9 +226,9 @@ class About(Gtk.Window):
         gridFrame3.attach_next_to(hbox, x, Gtk.PositionType.BOTTOM, 1, 2)
         gridFrame3.attach_next_to(y, hbox, Gtk.PositionType.BOTTOM, 1, 2)
 
-        labelFinal = Gtk.Label('Any bugs or sugestions\n' +
+        labelFinal = Gtk.Label(_('Any bugs or sugestions\n' +
                                'should be directed to\n' +
-                               'scotti@ieee.org')
+                               'scotti@ieee.org'))
 
         labelFinal.set_justify(Gtk.Justification.CENTER)
 
@@ -249,17 +250,17 @@ class About(Gtk.Window):
         notebook.page1 = Gtk.Frame()
         notebook.page1.set_border_width(10)
         notebook.page1.add(aboutBox)
-        notebook.append_page(notebook.page1, Gtk.Label('About'))
+        notebook.append_page(notebook.page1, Gtk.Label(_('About')))
 
         notebook.page2 = Gtk.ScrolledWindow()
         notebook.page2.set_min_content_width(635)
         notebook.page2.add(gridTeste)
-        notebook.append_page(notebook.page2, Gtk.Label('Developers'))
+        notebook.append_page(notebook.page2, Gtk.Label(_('Developers')))
 
         notebook.page3 = Gtk.ScrolledWindow()
         notebook.page3.set_min_content_width(635)
         notebook.page3.add(frameLicense)
-        notebook.append_page(notebook.page3, Gtk.Label('License'))
+        notebook.append_page(notebook.page3, Gtk.Label(_('License')))
 
         grid.attach_next_to(
             notebook, frameBorder, Gtk.PositionType.BOTTOM, 1, 2)

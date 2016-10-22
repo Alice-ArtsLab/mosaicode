@@ -40,7 +40,10 @@ class PropertyBox(Gtk.VBox):
         # Search block properties to create GUI
         for component in self.block.get_properties():
             prop = self.block.get_properties()[component]
-            prop["value"] = self.block.get_plugin().__dict__[component]
+            if component not in self.block.__dict__:
+                print "Component not present:", component
+                continue
+            prop["value"] = self.block.__dict__[component]
             field = self._generate_field(component, prop)
             if prop["type"] == HARPIA_OPEN_FILE or \
                     prop["type"] == HARPIA_SAVE_FILE:
