@@ -13,16 +13,13 @@ class NewImage(OpenCVPlugin):
         self.width = "640"
         self.height = "480"
 
+        # Appearance
         self.help = "Cria uma nova imagem."
-
-        self.description = {
-            "Label": "New Image",
-            "Icon": "images/acquisition.png",
-            "Color": "50:100:200:150",
-            "InTypes": "",
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Image Source"
-        }
+        self.label = "New Image"
+        self.icon = "images/acquisition.png"
+        self.color = "50:100:200:150"
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Image Source"
 
         self.properties = {
             "width": {

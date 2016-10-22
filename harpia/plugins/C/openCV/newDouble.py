@@ -12,16 +12,13 @@ class NewDouble(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.doubleVal = 1
 
+        # Appearance
         self.help = "Creates new literal value (Double)."
-
-        self.description = {
-            'Label': 'New Double',
-            'Icon': 'images/newDouble.png',
-            'Color': '50:50:200:150',
-            'InTypes': "",
-            'OutTypes': {0: 'HRP_DOUBLE'},
-            'TreeGroup': 'Basic Data Type'
-        }
+        self.label = "New Double"
+        self.icon = "images/newDouble.png"
+        self.color = "50:50:200:150"
+        self.out_types = ["HRP_DOUBLE"]
+        self.group = "Basic Data Type"
 
         self.properties = {
             "doubleVal": {

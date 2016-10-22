@@ -11,18 +11,16 @@ class EqualizeHistogram(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "A equalização do histograma de uma imagem visa " + \
             "alcançar maior contraste entre os " + \
             "diversos elementos de uma imagem."
-
-        self.description = {
-            "Label": "Equalize Histogram",
-            "Icon": "images/equalizeHistogram.png",
-            "Color": "0:0:0:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Histograms"
-        }
+        self.label = "Equalize Histogram"
+        self.icon = "images/equalizeHistogram.png"
+        self.color = "0:0:0:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Histograms"
 
         # -------------------C/OpenCv code-------------------------------------
         self.vars =  \

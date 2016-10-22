@@ -12,17 +12,15 @@ class StereoCorr(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.maxDist = 60
 
+        # Appearance
         self.help = 'Input1 is the left image and Input2 " + \
             "is the right image. Output is the depth image.'
-
-        self.description = {
-            'Label': 'Stereo Correspondence',
-            'Icon': 'images/stereoCorr.png',
-            'Color': '10:10:20:150',
-            'InTypes': {0: 'HRP_IMAGE', 1: "HRP_IMAGE"},
-            'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': 'Feature Detection'
-        }
+        self.label = "images/stereoCorr.png"
+        self.icon = "images/and.png"
+        self.color = "10:10:20:150"
+        self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Feature Detection"
 
         self.properties = {
             "maxDist": {

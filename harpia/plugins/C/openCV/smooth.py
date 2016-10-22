@@ -14,17 +14,15 @@ class Smooth(OpenCVPlugin):
         self.param1 = 7
         self.param2 = 9
 
+        # Appearance
         self.help = "Aplicação de um filtro de suavização. " + \
             "Suaviza os contornos de objetos na imagem, borrando-os levemente."
-
-        self.description = {
-            "Label": "Smooth",
-            "Icon": "images/smooth.png",
-            "Color": "50:125:50:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Filters and Color Conversion"
-        }
+        self.label = "Smooth"
+        self.icon = "images/smooth.png"
+        self.color = "50:125:50:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT"]
+        self.group = "Filters and Color Conversion"
 
         self.properties = {
             "smooth_type": {

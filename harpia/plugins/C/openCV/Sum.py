@@ -11,16 +11,14 @@ class Sum(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Realiza a soma de duas imagens."
-
-        self.description = {
-            "Label": "Sum",
-            "Icon": "images/sum.png",
-            "Color": "180:10:10:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Arithmetic and logical operations"
-        }
+        self.label = "Sum"
+        self.icon = "images/sum.png"
+        self.color = "180:10:10:150"
+        self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Arithmetic and logical operations"
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

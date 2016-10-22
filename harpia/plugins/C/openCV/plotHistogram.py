@@ -12,17 +12,15 @@ class PlotHistogram(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.channel = "All"
 
+        # Appearance
         self.help = "Create a representation of the light " + \
             "intensity levels as an histogram."
-
-        self.description = {
-            "Label": "Histogram",
-            "Icon": "images/plotHistogram.png",
-            "Color": "0:0:0:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Histograms"
-        }
+        self.label = "Histogram"
+        self.icon = "images/plotHistogram.png"
+        self.color = "0:0:0:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Histograms"
 
         self.properties = {
             "channel": {

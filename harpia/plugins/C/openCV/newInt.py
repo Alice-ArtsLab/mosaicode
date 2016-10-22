@@ -12,16 +12,13 @@ class NewInt(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.intVal = 1
 
+        # Appearance
         self.help = "Creates new literal value (Int)."
-
-        self.description = {
-            'Label': 'New Int',
-            'Icon': 'images/newDouble.png',
-            'Color': '50:50:200:150',
-            'InTypes': "",
-            'OutTypes': {0: 'HRP_INT'},
-            'TreeGroup': 'Basic Data Type'
-        }
+        self.label = "New Int"
+        self.icon = "images/newDouble.png"
+        self.color = "50:50:200:150"
+        self.out_types = ["HRP_INT"]
+        self.group = "Basic Data Type"
 
         self.properties = {
             "intVal": {

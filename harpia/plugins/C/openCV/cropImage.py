@@ -15,16 +15,14 @@ class CropImage(OpenCVPlugin):
         self.width = 640
         self.height = 480
 
-        self.help = "Corta a Imagem de acordo com o Retangulo de entrada."
-
-        self.description = {
-            'Label': 'Crop Image',
-            'Icon': 'images/cropImage.png',
-            'Color': '50:50:200:150',
-            'InTypes': {0: 'HRP_IMAGE', 1: 'HRP_RECT'},
-            'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': 'Experimental'
-        }
+        # Appearance
+        self.help = "Corta a Imagem de acordo com o Retangulo de entrada.""
+        self.label = "Crop Image"
+        self.icon = "images/cropImage.png"
+        self.color = "50:50:200:150"
+        self.in_types = ["HRP_IMAGE", "HRP_RECT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Experimental"
 
         self.properties = {
             "x0": {"name": "X",

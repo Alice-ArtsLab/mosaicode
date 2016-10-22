@@ -14,17 +14,15 @@ class Sobel(OpenCVPlugin):
         self.xorder = 1
         self.yorder = 1
 
+        # Appearance
         self.help = "Operação de filtragem que utiliza uma máscara " + \
             "Sobel para realçar cantos e bordas da imagem."
-
-        self.description = {
-            "Label": "Sobel",
-            "Icon": "images/sobel.png",
-            "Color": "250:180:80:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Gradients, Edges and Corners"
-        }
+        self.label = "Sobel"
+        self.icon = "images/sobel.png"
+        self.color = "250:180:80:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Gradients, Edges and Corners"
 
         self.properties = {
             "xorder": {

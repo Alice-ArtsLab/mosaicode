@@ -13,16 +13,15 @@ class AddBorder(OpenCVPlugin):
         self.border = 50
         self.color = "#0000ffff0000"
         self.border_type = "IPL_BORDER_CONSTANT"
-        self.help = "Adiciona bordas na imagem."
 
-        self.description = {
-            "Label": "Add Border",
-            "Icon": "images/and.png",
-            "Color": "0:180:210:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Experimental"
-        }
+        # Appearance
+        self.help = "Adiciona bordas na imagem."
+        self.label = "Add Border"
+        self.icon = "images/and.png"
+        self.color = "0:180:210:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Experimental"
 
         self.properties = {
             "color": {
