@@ -18,7 +18,7 @@ class GetSize(OpenCVPlugin):
         self.color = "250:20:30:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_RECT"]
-        self.group = "Experimental",
+        self.group = "Experimental"
         self.time_shifts = False
 
         # ------------------------------C/OpenCv code--------------------------

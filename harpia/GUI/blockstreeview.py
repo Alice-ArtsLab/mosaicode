@@ -59,8 +59,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
-        category = self.__contains_category(
-            block.get_group())
+        category = self.__contains_category(block.get_group())
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(
             os.environ['HARPIA_DATA_DIR'] + block.get_icon())
         self.tree_store.append(category, [pixbuf, block.get_label()])
@@ -72,7 +71,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             if category_name in self.tree_store[iter][:]:
                 return iter
             iter = self.tree_store.iter_next(iter)
-        return self.tree_store.append(None, [None, category_name])
+        return self.tree_store.append(None, [None, str(category_name)])
 
     # ----------------------------------------------------------------------
     def __filter_func(self, model, iter, data):

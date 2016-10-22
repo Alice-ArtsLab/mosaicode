@@ -144,11 +144,12 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     # ----------------------------------------------------------------------
     def __draw_inputs(self):
         ins = []
-        for x in range(len(self.get_in_types())):
+        x = 0
+        for in_type in self.get_in_types():
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(
                     self.data_dir +
-                    System.connectors[self.get_in_types()[x]]["icon_in"])
+                    System.connectors[in_type]["icon_in"])
             except:
                 pass
 
@@ -159,10 +160,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                              (x * 5) +  # spacing betwen ports
                                               x * INPUT_HEIGHT)  # prev ports
                                           )
-            image.set_property("tooltip", self.get_in_types()[x])
+            image.set_property("tooltip", in_type)
             image.connect("button-press-event", self.__on_input_press, x)
             image.connect("button-release-event", self.__on_input_release, x)
             ins.append(image)
+            x += 1
         self.widgets["Inputs"] = ins
 
     # ----------------------------------------------------------------------
@@ -177,11 +179,12 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     # ----------------------------------------------------------------------
     def __draw_outputs(self):
         outs = []
-        for x in range(len(self.get_out_types())):
+        x = 0
+        for out_type in self.get_out_types():
             try:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(
                     self.data_dir +
-                    System.connectors[self.get_out_types()[x]]["icon_out"])
+                    System.connectors[out_type]["icon_out"])
             except:
                 pass
 
@@ -192,11 +195,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                              (x * 5) +  # spacing betwen ports
                                               x * OUTPUT_HEIGHT)  # prev ports
                                           )
-            image.set_property(
-                "tooltip", self.get_out_types()[x])
+            image.set_property("tooltip", out_type)
             image.connect("button-press-event", self.__on_output_press, x)
             image.connect("button-release-event", self.__on_output_release, x)
             outs.append(image)
+            x += 1
         self.widgets["Outputs"] = outs
 
     # ----------------------------------------------------------------------
