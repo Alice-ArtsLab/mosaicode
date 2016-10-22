@@ -78,18 +78,18 @@ def main(argv):
         cont = 0
         intypes = obj.get_in_types()
         for inkey in intypes:
-            if intypes[inkey] == "HRP_IMAGE":
+            if inkey == "HRP_IMAGE":
                 block = System.blocks["harpia.plugins.C.openCV.imageFile"]()
-            elif intypes[inkey] == "HRP_INT":
+            elif inkey == "HRP_INT":
                 block = System.blocks["harpia.plugins.C.openCV.slider"]()
                 block.window_name = "My Image - " + \
                     obj.get_label()
                 block.label = block.label + " - " + str(cont)
-            elif intypes[inkey] == "HRP_DOUBLE":
+            elif inkey == "HRP_DOUBLE":
                 block = System.blocks["harpia.plugins.C.openCV.newDouble"]()
-            elif intypes[inkey] == "HRP_RECT":
+            elif inkey == "HRP_RECT":
                 block = System.blocks["harpia.plugins.C.openCV.newRect"]()
-            elif intypes[inkey] == "HRP_POINT":
+            elif inkey == "HRP_POINT":
                 block = System.blocks["harpia.plugins.C.openCV.newPoint"]()
             diagram.add_block(block)
             block.y = 100 * cont
@@ -97,9 +97,8 @@ def main(argv):
             cont = cont + 1
 
         cont = 0
-        outtypes = obj.get_out_types()
-        for outkey in outtypes:
-            if outtypes[outkey] == "HRP_IMAGE":
+        for outkey in obj.get_out_types():
+            if outkey == "HRP_IMAGE":
                 show = System.blocks["harpia.plugins.C.openCV.show"]()
                 show.x = 400
                 show.title = "My Image - " + obj.get_label()
