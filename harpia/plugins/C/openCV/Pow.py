@@ -12,17 +12,15 @@ class Pow(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.exponent = 1
 
+        # Appearance
         self.help = "Eleva cada ponto de uma " + \
             "imagem a um valor fixo de potência."
-
-        self.description = {
-            "Label": "Pow",
-            "Icon": "images/pow.png",
-            "Color": "230:230:60:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Math Functions"
-        }
+        self.label = "Pow"
+        self.icon = "images/pow.png"
+        self.color = "230:230:60:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Math Functions"
 
         self.properties = {
             "exponent": {

@@ -12,18 +12,16 @@ class Closing(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.masksize = "7x7"
 
+        # Appearance
         self.help = "Operação de morfologia matemática para realizar o " + \
             "fechamento da imagem de acordo com o elemento estruturante." + \
             "Equivale a aplicação de uma dilatação seguida de uma erosão."
-
-        self.description = {
-            "Label": "Closing",
-            "Icon": "images/closing.png",
-            "Color": "180:230:220:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Morphological Operations"
-        }
+        self.label = "Closing"
+        self.icon = "images/closing.png"
+        self.color = "180:230:220:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Morphological Operations"
 
         self.properties = {
             "masksize": {"name": "Mask Size",

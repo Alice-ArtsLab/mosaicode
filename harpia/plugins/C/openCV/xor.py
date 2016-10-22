@@ -11,16 +11,14 @@ class Xor(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Realiza a operação lógica XOR entre duas imagens."
-
-        self.description = {
-            "Label": "Xor",
-            "Icon": "images/xor.png",
-            "Color": "10:180:10:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Arithmetic and logical operations"
-        }
+        self.label = "Xor"
+        self.icon = "images/xor.png"
+        self.color = "10:180:10:150"
+        self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Arithmetic and logical operations"
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

@@ -14,6 +14,7 @@ class HaarDetect(OpenCVPlugin):
             "haarcascade_frontalface_alt2.xml"
         self.min_neighbors = 2
 
+        # Appearance
         self.help = 'Haar (face) Detector finds regions on the input ' + \
             'image according to the given haar-classifier. \n' + \
             'First Output is the center of the first detected feature, ' + \
@@ -21,16 +22,12 @@ class HaarDetect(OpenCVPlugin):
             'detected feature and the third is the input image with ' + \
             'the detected features tagged by a red circle.\n' + \
             'The last output is the number of detected faces.'
-
-        self.description = {
-            'Label': 'Haar Detector',
-            'Icon': 'images/haarDetect.png',
-            'Color': '50:220:40:150',
-            'InTypes': {0: 'HRP_IMAGE'},
-            'OutTypes': {0: 'HRP_POINT', 1: 'HRP_RECT',
-                         2: 'HRP_IMAGE', 3: 'HRP_DOUBLE'},
-            'TreeGroup': "Feature Detection"
-        }
+        self.label = "Haar Detector"
+        self.icon = "images/haarDetect.png"
+        self.color = "50:220:40:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_POINT", "HRP_RECT", "HRP_IMAGE", "HRP_DOUBLE"]
+        self.group = "Feature Detection"
 
         self.properties = {
             "cascade_name": {

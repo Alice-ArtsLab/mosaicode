@@ -11,18 +11,16 @@ class Exp(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Aplica a função exponencial a uma imagem, ou seja, " + \
             "eleva a constante neperiana ao valor " + \
             "de intensidade luminosa de cada ponto da imagem."
-
-        self.description = {
-            "Label": "Exp",
-            "Icon": "images/exp.png",
-            "Color": "230:230:60:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Math Functions"
-        }
+        self.label = "Exp"
+        self.icon = "images/exp.png"
+        self.color = "230:230:60:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Math Functions"
 
         # --------------------------C/OpenCv code------------------------------
         self.vars = \
