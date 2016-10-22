@@ -10,7 +10,16 @@ class SubtractFloat(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.help = "Mouse Position"
+
+        # Appearance
+        self.help = "Subtract Float"
+        self.label = "Subtract Float"
+        self.icon = "images/show.png"
+        self.color = "200:200:25:150"
+        self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
+        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.group = "Arithmetics"
+
         self.vars = """
 // block_$id$ = Subtraction
 var block_$id$_arg1 = 0;
@@ -35,11 +44,3 @@ block_$id$_i[1] = function(value){
     return true;
     };
 """
-        self.description = {"Label": "Subtract Float",
-                            "Icon": "images/show.png",
-                            "Color": "200:200:25:150",
-                            "InTypes": {0: "HRP_WEBAUDIO_FLOAT",
-                                        1: "HRP_WEBAUDIO_FLOAT"},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "TreeGroup": "Arithmetics"
-                            }
