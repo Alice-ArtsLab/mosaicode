@@ -12,7 +12,7 @@ class ComposeRGB(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
 
         # Appearance
-        self.help = "BLOCO Composição RGB""
+        self.help = "BLOCO Composição RGB"
         self.label = "Compose RGB"
         self.icon = "images/composeRGB.png"
         self.color = "50:125:50:150"
