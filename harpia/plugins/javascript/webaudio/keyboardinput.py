@@ -10,7 +10,15 @@ class KeyboardInput(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
+
+        # Appearance
         self.help = "Keyboard Input"
+        self.label = "Keyboard Input"
+        self.icon = "images/show.png"
+        self.color = "50:150:250:150"
+        self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_CHAR"]
+        self.group = "Interface"
+
         self.vars = """
 // block_$id$ = KeyBoard Input
 var block_$id$_o0 = [];
@@ -29,11 +37,3 @@ document.onkeypress = function(evt){
     }
 };
 """
-        self.description = {"Label": "Keyboard Input",
-                            "Icon": "images/show.png",
-                            "Color": "50:150:20:150",
-                            "InTypes": {},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT",
-                                         1: "HRP_WEBAUDIO_CHAR"},
-                            "TreeGroup": "Interface"
-                            }

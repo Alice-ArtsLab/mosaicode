@@ -12,7 +12,17 @@ class Oscillator(WebaudioPlugin):
         WebaudioPlugin.__init__(self)
         self.freq = 440
         self.oscillator_type = 'sine'
+
+        # Appearance
         self.help = "Sound output"
+        self.label = "Oscillator"
+        self.icon = "images/show.png"
+        self.color = "50:150:250:150"
+        self.in_types = ["HRP_WEBAUDIO_SOUND",
+                         "HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
+        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.group = "Sound"
+
         self.vars = """
 // block_$id$ = Oscillator
 var block_$id$ =  context.createOscillator();
@@ -36,16 +46,6 @@ block_$id$.frequency.value = $freq$; // value in hertz
 block_$id$.detune.value = 100; // value in cents
 block_$id$.start(0);
 """
-        self.description = {"Label": "Oscillator",
-                            "Icon": "images/show.png",
-                            "Color": "50:150:250:150",
-                            "InTypes": {0: "HRP_WEBAUDIO_SOUND",
-                                        1: "HRP_WEBAUDIO_FLOAT",
-                                        2: "HRP_WEBAUDIO_FLOAT"},
-                            "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-                            "TreeGroup": "Sound"
-                            }
-
         self.properties = {"freq": {"name": "Frequency",
                                     "type": HARPIA_FLOAT,
                                     "lower": 20,

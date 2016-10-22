@@ -10,8 +10,6 @@ class Plugin(object):
         self.id = -1
         self.x = 0
         self.y = 0
-        self.help = ""
-        self.description = {}
 
         # Code generation
         self.header = ""
@@ -20,6 +18,16 @@ class Plugin(object):
         self.function_call = ""
         self.dealloc = ""
         self.out_dealloc = ""
+
+        # Appearance
+        self.help = ""
+        self.label = ""
+        self.icon = "images/show.png"
+        self.color = "200:200:25:150"
+        self.in_types = []
+        self.out_types = []
+        self.group = "Undefined"
+
 
     # ----------------------------------------------------------------------
     def get_output_port_name(self, number):

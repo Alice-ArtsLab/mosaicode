@@ -12,7 +12,15 @@ class Button(WebaudioPlugin):
         WebaudioPlugin.__init__(self)
         self.value = 1
         self.label = "Label"
+
+        # Appearance
         self.help = "Button"
+        self.label = "Button"
+        self.icon = "images/show.png"
+        self.color = "50:150:250:150"
+        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.group = "Interface"
+
         self.vars = """
 // block_$id$ = Button
 var block_$id$_value = $value$;
@@ -32,14 +40,6 @@ function click_$id$(){
 <button type="button" value="$value$" onClick="click_$id$();"
 id="block_$id$">$label$</button><br>
 """
-
-        self.description = {"Label": "Button",
-                            "Icon": "images/show.png",
-                            "Color": "50:150:20:150",
-                            "InTypes": {},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "TreeGroup": "Interface"
-                            }
 
         self.properties = {"value": {"name": "Value",
                                      "type": HARPIA_FLOAT,
