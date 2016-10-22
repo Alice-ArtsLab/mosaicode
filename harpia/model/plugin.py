@@ -27,7 +27,7 @@ class Plugin(object):
         self.in_types = []
         self.out_types = []
         self.group = "Undefined"
-
+        self.time_shifts = False
 
     # ----------------------------------------------------------------------
     def get_output_port_name(self, number):

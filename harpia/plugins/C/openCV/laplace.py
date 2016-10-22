@@ -12,18 +12,16 @@ class Laplace(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.masksize = "3"
 
+        # Appearance
         self.help = "Operação de filtragem que calcula o " + \
             "Laplaciano de uma imagem," + \
             "realçando cantos e bordas de objetos."
-
-        self.description = {
-            "Label": "Laplace",
-            "Icon": "images/laplace.png",
-            "Color": "250:180:80:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Gradients, Edges and Corners"
-        }
+        self.label = "Laplace"
+        self.icon = "images/laplace.png"
+        self.color = "250:180:80:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Gradients, Edges and Corners"
 
         self.properties = {
             "masksize": {
@@ -50,7 +48,7 @@ class Laplace(OpenCVPlugin):
             '(size$id$, IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n' + \
             'cvLaplace(block$id$_img_i0, block$id$_img_o0, ' + \
             'block$id$_int_i1);}\n'
-    
+
     # ----------------------------------------------------------------------
     def generate_vars(self):
         self.masksize = int(self.masksize)

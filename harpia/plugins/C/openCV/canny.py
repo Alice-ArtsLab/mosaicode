@@ -13,6 +13,8 @@ class Canny(OpenCVPlugin):
         self.apertureSize = 3
         self.threshold1 = 16
         self.threshold2 = 33
+
+        # Appearance
         self.help = "Operacão de filtragem que implementa o algoritmo " + \
             "Canny para detecção de contornos e bordas." + \
             "\nPropriedades\nLimiar 1 e Limiar 2: os dois valores" + \
@@ -21,16 +23,12 @@ class Canny(OpenCVPlugin):
             "conexão de cantos e bordas." + \
             "O maior valor é utilizado para encontrar" + \
             " segmentos iniciais das bordas mais significativas."
-
-        self.description = {
-            "Label": "Canny",
-            "Icon": "images/canny.png",
-            "Color": "250:180:80:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT",
-                        2: "HRP_INT", 3: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Gradients, Edges and Corners"
-        }
+        self.label = "Canny"
+        self.icon = "images/canny.png"
+        self.color = "50:180:80:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Gradients, Edges and Corners"
 
         self.properties = {
             "apertureSize": {

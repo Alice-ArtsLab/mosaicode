@@ -12,16 +12,14 @@ class LiveDelay(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.frameNumber = 5
 
+        # Appearance
         self.help = "Inserts a delay inside a live stream."
-
-        self.description = {
-            'Label': 'Live Delay',
-            'Icon': 'images/liveDelay.png',
-            'Color': '250:20:30:150',
-            'InTypes': {0: 'HRP_IMAGE'},
-            'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': 'General',
-        }
+        self.label = "Live Delay"
+        self.icon = "images/liveDelay.png"
+        self.color = "250:20:30:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "General"
 
         self.properties = {
             "frameNumber": {

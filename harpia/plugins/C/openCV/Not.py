@@ -11,17 +11,15 @@ class Not(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Realiza a negação lógica de uma imagem. " + \
             "Corresponde à negativa da imagem."
-
-        self.description = {
-            "Label": "Not",
-            "Icon": "images/not.png",
-            "Color": "10:180:10:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Arithmetic and logical operations"
-        }
+        self.label = "Not"
+        self.icon = "images/not.png"
+        self.color = "10:180:10:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Arithmetic and logical operations"
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

@@ -11,17 +11,15 @@ class IsOnRect(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Checks Wheather the given " + \
             "point is inside the given rectangle."
-
-        self.description = {
-            'Label': 'Check Point',
-            'Icon': 'images/isOnRect.png',
-            'Color': '50:50:200:150',
-            'InTypes': {0: 'HRP_POINT', 1: 'HRP_RECT'},
-            'OutTypes': {0: 'HRP_DOUBLE'},
-            'TreeGroup': 'Experimental'
-        }
+        self.label = "Check Point"
+        self.icon = "images/isOnRect.png"
+        self.color = "50:50:200:150"
+        self.in_types = ["HRP_POINT", "HRP_RECT"]
+        self.out_types = ["HRP_DOUBLE"]
+        self.group = "Experimental"
 
         # ------------------------------C/OpenCv code--------------------------
         self.function_call = \

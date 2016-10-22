@@ -12,17 +12,15 @@ class Resize(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.method = "CV_INTER_LINEAR"
 
+        # Appearance
         self.help = "Resizes the input image to the " + \
             "dimensions of the input rectangle."
-
-        self.description = {
-            "Label": "Resize Image",
-            "Icon": "images/resize.png",
-            "Color": "20:80:10:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_RECT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Experimental"
-        }
+        self.label = "Resize Image"
+        self.icon = "images/resize.png"
+        self.color = "20:80:10:150"
+        self.in_types = ["HRP_IMAGE", "HRP_RECT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Experimental"
 
         self.properties = {
             "method": {

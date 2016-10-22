@@ -13,19 +13,17 @@ class Capture(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.camera = "/dev/video0"
+
+        # Appearance
         self.help = "Realiza a aquisição de uma imagem " + \
             "a partir de algum dispositivo," + \
             " seja este uma mídia ou um dispositivo " + \
             "de aquisição de imagens (câmera, scanner)."
-
-        self.description = {
-            "Label": "Capture",
-            "Icon": "images/acquisition.png",
-            "Color": "50:100:200:150",
-            "InTypes": "",
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Image Source"
-        }
+        self.label = "Add Capture"
+        self.icon = "images/acquisition.png"
+        self.color = "50:100:200:150"
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Image Source"
 
         # ---------------------C/OpenCv code-----------------------------------
         self.vars = \

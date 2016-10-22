@@ -14,16 +14,14 @@ class Circle(OpenCVPlugin):
         self.y0 = 100
         self.color = "#0000ffff0000"
 
+        # Appearance
         self.help = "Desenha Circulos."
-
-        self.description = {
-            "Label": "Circle",
-            "Icon": "images/opening.png",
-            "Color": "255:0:0:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT", 2: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Basic Shapes"
-        }
+        self.label = "Circle"
+        self.icon = "images/opening.png"
+        self.color = "255:0:0:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Basic Shapes"
 
         self.properties = {
             "x0": {

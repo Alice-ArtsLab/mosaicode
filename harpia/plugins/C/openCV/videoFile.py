@@ -13,19 +13,16 @@ class VideoFile(OpenCVPlugin):
         self.filename = "/usr/share/harpia/images/vLeft.mpg"
         self.key = 'a'
 
+        # Appearance
         self.help = "Realiza a aquisição de uma imagem a partir " + \
             "de algum dispositivo," + \
             "seja este uma mídia ou um dispositivo " + \
             "de aquisição de imagens (câmera, scanner)."
-
-        self.description = {
-            "Label": "Video File",
-            "Icon": "images/acquisition.png",
-            "Color": "50:100:200:150",
-            "InTypes": "",
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Image Source"
-        }
+        self.label = "Video File"
+        self.icon = "images/acquisition.png"
+        self.color = "50:100:200:150"
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Image Source"
 
         self.properties = {
             "filename": {

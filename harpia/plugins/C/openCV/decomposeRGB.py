@@ -11,16 +11,14 @@ class DecomposeRGB(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "BLOCO Decomposição RGB."
-
-        self.description = {
-            "Label": "Decompose RGB",
-            "Icon": "images/decomposeRGB.png",
-            "Color": "50:125:50:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE", 2: "HRP_IMAGE"},
-            "TreeGroup": "Filters and Color Conversion"
-        }
+        self.label = "Decompose RGB"
+        self.icon = "images/decomposeRGB.png"
+        self.color = "50:125:50:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE"]
+        self.group = "Filters and Color Conversion"
 
         # ------------------C/OpenCv code--------------------------------------
         self.vars = \

@@ -11,16 +11,14 @@ class SideBySide(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Coloca uma imagem do lado da outra."
-
-        self.description = {
-            "Label": "Side By Side",
-            "Icon": "images/and.png",
-            "Color": "10:180:10:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Arithmetic and logical operations"
-        }
+        self.label = "Side By Side"
+        self.icon = "images/and.png"
+        self.color = "10:180:10:150"
+        self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Arithmetic and logical operations"
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call =  \
