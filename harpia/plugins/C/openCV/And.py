@@ -18,7 +18,7 @@ class And(OpenCVPlugin):
             " duas imagens ponto a ponto." + \
             "Segunda: Executa a operação entre um " + \
             "valor constante e cada ponto da imagem."
-        self.label = "And
+        self.label = "And"
         self.icon = "images/and.png"
         self.color = "10:180:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
