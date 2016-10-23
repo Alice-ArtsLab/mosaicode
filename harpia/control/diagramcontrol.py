@@ -77,14 +77,15 @@ class DiagramControl():
         connections = xml_loader.getTag("harpia").getTag(
             "connections").getChildTags("connection")
         for conn in connections:
-            from_block = conn.getAttr("from")
-            to_block = conn.getAttr("to")
+            try:
+                from_block = self.diagram.blocks[int(conn.getAttr("from"))]
+                to_block = self.diagram.blocks[int(conn.getAttr("to"))]
+            except:
+                continue
             from_block_out = int(conn.getAttr("from_out"))
             to_block_in = int(conn.getAttr("to_in"))
-            self.diagram.start_connection(
-                self.diagram.blocks[from_block], from_block_out - 1)
-            self.diagram.end_connection(
-                self.diagram.blocks[to_block], to_block_in - 1)
+            self.diagram.start_connection(from_block, int(from_block_out) - 1)
+            self.diagram.end_connection(to_block, int(to_block_in) - 1)
         self.diagram.update_scrolling()
         self.diagram.reset_undo()
 
@@ -107,16 +108,15 @@ class DiagramControl():
                 str(pos[0]) + '" y="' + str(pos[1]) + '"/>\n'
             output += self.diagram.blocks[block_id].get_xml()
             output += "\t</block>\n"
-            output += "</blocks>\n"
+        output += "</blocks>\n"
 
         output += "<connections>\n  "
         for connector in self.diagram.connectors:
-            output += '\t<connection from="'
-            + str(connector.source.get_id()) + \
-                '" from_out="' + str(connector.source_port + 1) + \
-                '" to="' + str(connector.sink.get_id()) + \
-                '" to_in="' + \
-                str(connector.sink_port + 1) + '"/>\n'
+            output += '\t<connection'
+            output += ' from="' + str(connector.source.get_id()) + '"'
+            output += ' from_out="' + str(int(connector.source_port) + 1) + '"'
+            output += ' to="' + str(connector.sink.get_id()) + '"'
+            output += ' to_in="' + str(int(connector.sink_port) + 1) + '"/>\n'
         output += "</connections>\n"
 
         output += "</harpia>\n"

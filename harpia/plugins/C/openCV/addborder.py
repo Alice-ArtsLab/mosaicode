@@ -14,6 +14,15 @@ class AddBorder(OpenCVPlugin):
         self.color = "#0000ffff0000"
         self.border_type = "IPL_BORDER_CONSTANT"
 
+        self.red = self.color[1:5]
+        self.green = self.color[5:9]
+        self.blue = self.color[9:13]
+
+        self.red = int(self.red, 16) / 257
+        self.green = int(self.green, 16) / 257
+        self.blue = int(self.blue, 16) / 257
+
+
         # Appearance
         self.help = "Adiciona bordas na imagem."
         self.label = "Add Border"

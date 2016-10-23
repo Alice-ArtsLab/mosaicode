@@ -31,11 +31,8 @@ class ImageFile(OpenCVPlugin):
         }
 
         # ----------------------------C/OpenCv code-------------------------
-        self.vars = 'block$id$_img_o0 = cvLoadImage("$filename$",-1);\n'
+        self.vars = 'IplImage * block$id$_img_o0 = NULL;\n'
+        self.vars += 'block$id$_img_o0 = cvLoadImage("$filename$",-1);\n'
         self.out_dealloc = "cvReleaseImage(&block$id$_img_o0);\n"
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return OpenCVPlugin.generate_vars(self) + self.vars
 
 # -----------------------------------------------------------------------------

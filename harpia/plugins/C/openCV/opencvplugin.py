@@ -11,45 +11,57 @@ class OpenCVPlugin(Plugin):
 
     # ----------------------------------------------------------------------
     def generate_vars(self):
+        if self.vars != "":
+            return self.vars
         value = ""
-        for x in self.get_description()["InTypes"]:
-            if self.get_description()["InTypes"][x] == "HRP_IMAGE":
-                value += 'IplImage * block$id$_img_i' + str(x) + ' = NULL;\n'
-            if self.get_description()["InTypes"][x] == "HRP_INT":
-                value += 'int block$id$_int_i' + str(x) + ' = 0;\n'
-            if self.get_description()["InTypes"][x] == "HRP_RECT":
+        count = 0
+        for in_type in self.get_in_types():
+            if in_type == "HRP_IMAGE":
+                value += 'IplImage * block$id$_img_i' + str(count) + ' = NULL;\n'
+            if in_type == "HRP_INT":
+                value += 'int block$id$_int_i' + str(count) + ' = 0;\n'
+            if in_type == "HRP_RECT":
                 value += 'CvRect block$id$_rect_i' + \
-                    str(x) + ' = cvRect( 0, 0, 1, 1);\n'
-            if self.get_description()["InTypes"][x] == "HRP_POINT":
-                value += 'CvPoint block$id$_point_i' + str(x) + ';\n'
-            if self.get_description()["InTypes"][x] == "HRP_DOUBLE":
-                value += 'double block$id$_double_i' + str(x) + ';\n'
+                    str(count) + ' = cvRect( 0, 0, 1, 1);\n'
+            if in_type == "HRP_POINT":
+                value += 'CvPoint block$id$_point_i' + str(count) + ';\n'
+            if in_type == "HRP_DOUBLE":
+                value += 'double block$id$_double_i' + str(count) + ';\n'
+            count += 1
 
-        for x in self.get_description()["OutTypes"]:
-            if self.get_description()["OutTypes"][x] == "HRP_IMAGE":
-                value += 'IplImage * block$id$_img_o' + str(x) + ' = NULL;\n'
-            if self.get_description()["OutTypes"][x] == "HRP_INT":
-                value += 'int block$id$_int_o' + str(x) + ' = 0;\n'
-            if self.get_description()["OutTypes"][x] == "HRP_RECT":
+        count = 0
+        for out_type in self.get_out_types():
+            if out_type == "HRP_IMAGE":
+                value += 'IplImage * block$id$_img_o' + str(count) + ' = NULL;\n'
+            if out_type == "HRP_INT":
+                value += 'int block$id$_int_o' + str(count) + ' = 0;\n'
+            if out_type == "HRP_RECT":
                 value += 'CvRect block$id$_rect_o' + \
-                    str(x) + ' = cvRect( 0, 0, 1, 1);\n'
-            if self.get_description()["OutTypes"][x] == "HRP_POINT":
+                    str(count) + ' = cvRect( 0, 0, 1, 1);\n'
+            if out_type == "HRP_POINT":
                 value += 'CvPoint block$id$_point_o' + \
-                    str(x) + ' = cvPoint(0,0);\n'
-            if self.get_description()["OutTypes"][x] == "HRP_DOUBLE":
-                value += 'double block$id$_double_o' + str(x) + ';\n'
+                    str(count) + ' = cvPoint(0,0);\n'
+            if out_type == "HRP_DOUBLE":
+                value += 'double block$id$_double_o' + str(count) + ';\n'
+            count += 1
 
         return value
 
     # ----------------------------------------------------------------------
     def generate_dealloc(self):
+        if self.dealloc != "":
+            return self.dealloc
         value = ""
-        for x in self.get_description()["InTypes"]:
-            if self.get_description()["InTypes"][x] == "HRP_IMAGE":
-                value += 'cvReleaseImage(&block$id$_img_i' + str(x) + ');\n'
-        for x in self.get_description()["OutTypes"]:
-            if self.get_description()["OutTypes"][x] == "HRP_IMAGE":
-                value += 'cvReleaseImage(&block$id$_img_o' + str(x) + ');\n'
+        count = 0
+        for x in self.get_in_types():
+            if x == "HRP_IMAGE":
+                value += 'cvReleaseImage(&block$id$_img_i' + str(count) + ');\n'
+            count += 1
+        count = 0
+        for x in self.get_out_types():
+            if x == "HRP_IMAGE":
+                value += 'cvReleaseImage(&block$id$_img_o' + str(count) + ');\n'
+            count += 1
         return value
 
     # ----------------------------------------------------------------------

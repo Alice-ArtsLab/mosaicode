@@ -26,6 +26,7 @@ class And(OpenCVPlugin):
         self.group = "Arithmetic and logical operations"
 
         # --------------------c/OpneCV code----------------------------
+        self.header = self.get_adjust_images_size()
         self.function_call = \
             '\nif(block$id$_img_i0 && block$id$_img_i1){\n' + \
             '\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
