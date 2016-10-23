@@ -10,8 +10,6 @@ class Plugin(object):
         self.id = -1
         self.x = 0
         self.y = 0
-        self.help = ""
-        self.description = {}
 
         # Code generation
         self.header = ""
@@ -20,6 +18,43 @@ class Plugin(object):
         self.function_call = ""
         self.dealloc = ""
         self.out_dealloc = ""
+
+        # Appearance
+        self.help = ""
+        self.label = ""
+        self.icon = "images/show.png"
+        self.color = "200:200:25:150"
+        self.in_types = []
+        self.out_types = []
+        self.group = "Undefined"
+
+    # ----------------------------------------------------------------------
+    def get_help(self):
+        return self.help
+
+    # ----------------------------------------------------------------------
+    def get_label(self):
+        return self.label
+
+    # ----------------------------------------------------------------------
+    def get_icon(self):
+        return self.icon
+
+    # ----------------------------------------------------------------------
+    def get_color(self):
+        return self.color
+
+    # ----------------------------------------------------------------------
+    def get_in_types(self):
+        return self.in_types
+
+    # ----------------------------------------------------------------------
+    def get_out_types(self):
+        return self.out_types
+
+    # ----------------------------------------------------------------------
+    def get_group(self):
+        return self.group
 
     # ----------------------------------------------------------------------
     def get_output_port_name(self, number):
@@ -79,10 +114,6 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def __del__(self):
         pass
-
-    # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.description
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):

@@ -13,16 +13,14 @@ class MatchTem(OpenCVPlugin):
         self.method = 'CV_TM_SQDIFF'
         self.scaleFactor = 6
 
+        # Appearance
         self.help = "Operação de filtragem destinada a suavizar uma imagem."
-
-        self.description = {
-            "Label": "Match Template",
-            "Icon": "images/matchTem.png",
-            "Color": "180:180:10:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Feature Detection"
-        }
+        self.label = "Match Template"
+        self.icon = "images/matchTem.png"
+        self.color = "180:180:10:150"
+        self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Feature Detection"
 
         self.properties = {
             "scaleFactor": {

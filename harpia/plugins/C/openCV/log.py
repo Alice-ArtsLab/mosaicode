@@ -11,18 +11,16 @@ class Log(OpenCVPlugin):
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
+        # Appearance
         self.help = "Aplica a função logarítmica a uma imagem, ou seja," + \
             "calcula o logarítmo natural do valor de intensidade" + \
             " luminosa de cada ponto da imagem."
-
-        self.description = {
-            "Label": "Log",
-            "Icon": "images/log.png",
-            "Color": "230:230:60:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Math Functions"
-        }
+        self.label = "Log"
+        self.icon = "images/log.png"
+        self.color = "230:230:60:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Math Functions"
 
         # ------------------------------C/OpenCv code--------------------------
         self.vars = \

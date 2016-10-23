@@ -12,16 +12,14 @@ class FillRect(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.color = "#0000ffff0000"
 
+        # Appearance
         self.help = "Preenche o retângulo de uma cor."
-
-        self.description = {
-            "Label": "Fill Rectangle",
-            "Icon": "images/fill.png",
-            "Color": "50:100:200:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_RECT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Basic Shapes"
-        }
+        self.label = "Fill Rectangle"
+        self.icon = "images/fill.png"
+        self.color = "50:100:200:150"
+        self.in_types = ["HRP_IMAGE", "HRP_RECT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Basic Shapes"
 
         self.properties = {
             "color": {

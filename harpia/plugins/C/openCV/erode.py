@@ -13,17 +13,15 @@ class Erode(OpenCVPlugin):
         self.masksize = "3x3"
         self.iterations = 1
 
+        # Appearance
         self.help = "Operação morfológica que provoca erosão " + \
             "nos objetos de uma imagem, reduzindo suas dimensões."
-
-        self.description = {
-            "Label": "Erosion",
-            "Icon": "images/erode.png",
-            "Color": "180:230:220:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_INT"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Morphological Operations"
-        }
+        self.label = "Erosion"
+        self.icon = "images/erode.png"
+        self.color = "180:230:220:150"
+        self.in_types = ["HRP_IMAGE", "HRP_INT"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Morphological Operations"
 
         self.properties = {
             "masksize": {

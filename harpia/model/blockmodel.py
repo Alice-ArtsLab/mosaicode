@@ -56,9 +56,34 @@ class BlockModel(object):
         return self.__plugin
 
     # ----------------------------------------------------------------------
-    def get_description(self):
-        return self.__plugin.get_description()
-
-    # ----------------------------------------------------------------------
     def __str__(self):
         return str(self.get_id())
+
+    # ----------------------------------------------------------------------
+    def get_help(self):
+        return self.__plugin.get_help()
+
+    # ----------------------------------------------------------------------
+    def get_label(self):
+        return self.__plugin.get_label()
+
+    # ----------------------------------------------------------------------
+    def get_icon(self):
+        return self.__plugin.get_icon()
+
+    # ----------------------------------------------------------------------
+    def get_color(self):
+        return self.__plugin.get_color()
+
+    # ----------------------------------------------------------------------
+    def get_in_types(self):
+        return self.__plugin.get_in_types()
+
+    # ----------------------------------------------------------------------
+    def get_out_types(self):
+        return self.__plugin.get_out_types()
+
+    # ----------------------------------------------------------------------
+    def get_group(self):
+        return self.__plugin.get_group()
+

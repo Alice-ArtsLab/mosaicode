@@ -13,16 +13,14 @@ class MoveRct(OpenCVPlugin):
         self.offset_x = 0
         self.offset_y = 0
 
+        # Appearance
         self.help = "Move Rectangle`s (0,0) point to input point"
-
-        self.description = {
-            'Label': 'Move Rectangle',
-            'Icon': 'images/moveRct.png',
-            'Color': '50:50:200:150',
-            'InTypes': {0: 'HRP_RECT', 1: 'HRP_POINT'},
-            'OutTypes': {0: 'HRP_RECT'},
-            'TreeGroup': 'Experimental'
-        }
+        self.label = "Move Rectangle"
+        self.icon = "images/moveRct.png"
+        self.color = "50:50:200:150"
+        self.in_types = ["HRP_RECT", "HRP_POINT"]
+        self.out_types = ["HRP_RECT"]
+        self.group = "Experimental"
 
         self.properties = {
             "offset_x": {

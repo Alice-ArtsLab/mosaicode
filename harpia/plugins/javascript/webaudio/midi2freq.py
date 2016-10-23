@@ -10,7 +10,16 @@ class Midi2Freq(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
+
+        # Appearance
         self.help = "midi to freq"
+        self.label = "Midi 2 Freq"
+        self.icon = "images/show.png"
+        self.color = "200:200:25:150"
+        self.in_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.group = "Conversion"
+
         self.vars = """
 // block_$id$ = Midi 2 Freq
 var block_$id$_o0 = [];
@@ -27,10 +36,3 @@ block_$id$_i[0] = function(value){
     return true;
     };
 """
-        self.description = {"Label": "Midi 2 Freq",
-                            "Icon": "images/show.png",
-                            "Color": "200:200:25:150",
-                            "InTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "TreeGroup": "Conversion"
-                            }

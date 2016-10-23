@@ -12,7 +12,14 @@ class Select(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.key = "a"
 
+        # Appearance
         self.help = "Select between two images."
+        self.label = "Select"
+        self.icon = "images/select.png"
+        self.color = "50:100:200:150"
+        self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "General"
 
         self.properties = {
             "key": {
@@ -20,15 +27,6 @@ class Select(OpenCVPlugin):
                 "type": HARPIA_STRING,
                 "maxlength": 1
             }
-        }
-
-        self.description = {
-            "Label": "Select",
-            "Icon": "images/select.png",
-            "Color": "50:100:200:150",
-            "InTypes": {0: "HRP_IMAGE", 1: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "General"
         }
 
         # -------------------C/OpenCv code------------------------------------

@@ -60,11 +60,10 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __add_item(self, block):
         category = self.__contains_category(
-            block.get_description()["TreeGroup"])
+            block.get_group())
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(
-            os.environ['HARPIA_DATA_DIR'] + block.get_description()["Icon"])
-        self.tree_store.append(
-            category, [pixbuf, block.get_description()["Label"]])
+            os.environ['HARPIA_DATA_DIR'] + block.get_icon())
+        self.tree_store.append(category, [pixbuf, block.get_label()])
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
@@ -119,7 +118,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def __drag_data(self, treeview, context, selection, target_id, etime):
         block = self.get_selected_block()
         if block is not None:
-            selection.set_text(block.get_description()["Label"], -1)
+            selection.set_text(block.get_label(), -1)
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
@@ -130,7 +129,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             model.get_iter(path), 1)  # 1 is the name position
         for x in self.blocks:                                 # 0 is the icon
             block = self.blocks[x]()
-            if block.get_description()["Label"] == block_name:
+            if block.get_label() == block_name:
                 return block
         return None
 # ----------------------------------------------------------------------

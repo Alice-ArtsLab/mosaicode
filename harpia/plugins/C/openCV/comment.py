@@ -12,16 +12,12 @@ class Comment(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.comment = ""
 
+        # Appearance
         self.help = "Insert a comment"
-
-        self.description = {
-            "Label": "Comment",
-            "Icon": "images/comment.png",
-            "Color": "50:100:200:150",
-            "InTypes": "",
-            "OutTypes": "",
-            "TreeGroup": "General"
-        }
+        self.label = "Comment"
+        self.icon = "images/comment.png"
+        self.color = "50:100:200:150"
+        self.group = "General"
 
         self.properties = {
             "comment": {
