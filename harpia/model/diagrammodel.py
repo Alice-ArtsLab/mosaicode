@@ -24,9 +24,9 @@ class DiagramModel(object):
             self.language = block.get_language()
         if block.get_id() < 0:
             block.set_id(self.block_id)
-        self.blocks[block.get_id()] = block
-        self.block_id = max(int(self.block_id), int(block.get_id()))
+        self.blocks[int(block.get_id())] = block
         self.block_id = self.block_id + 1
+        self.block_id = max(int(self.block_id), int(block.get_id()))
         return True
 
     # ----------------------------------------------------------------------

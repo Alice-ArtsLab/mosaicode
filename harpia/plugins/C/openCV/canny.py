@@ -31,15 +31,13 @@ class Canny(OpenCVPlugin):
         self.group = "Gradients, Edges and Corners"
 
         self.properties = {
-            "apertureSize": {
-                "name": "Aperture Size",
+            "apertureSize": {"name": "Aperture Size",
                 "type": HARPIA_INT,
                 "lower": 1,
                 "upper": 10,
                 "step": 1
             },
-            "threshold1": {
-                "name": "Threshold 1",
+            "threshold1": {"name": "Threshold 1",
                 "type": HARPIA_INT,
                 "lower": 1,
                 "upper": 100,
@@ -62,31 +60,31 @@ class Canny(OpenCVPlugin):
             'int block$id$_int_i2 = $threshold1$;\n'
 
         self.function_call = \
-            "if(block$id$_img_i0){ //Canny Code" + \
-            "\tif (block$id$_int_i1 < 1) block$id$_int_i1 = 1;" + \
-            "\tif (block$id$_int_i2 < 1) block$id$_int_i2 = 1;" + \
-            "\tif (block$id$_int_i3 < 1) block$id$_int_i3 = 1;" + \
-            "\tif (block$id$_int_i1 > 10) block$id$_int_i1 = 10;" + \
-            "\tif (block$id$_int_i2 > 100) block$id$_int_i2 = 100;" + \
-            "\tif (block$id$_int_i3 > 100) block$id$_int_i3 = 100;" + \
-            "\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i0);" + \
+            "if(block$id$_img_i0){ //Canny Code\n" + \
+            "\tif (block$id$_int_i1 < 1) block$id$_int_i1 = 1;\n" + \
+            "\tif (block$id$_int_i2 < 1) block$id$_int_i2 = 1;\n" + \
+            "\tif (block$id$_int_i3 < 1) block$id$_int_i3 = 1;\n" + \
+            "\tif (block$id$_int_i1 > 10) block$id$_int_i1 = 10;\n" + \
+            "\tif (block$id$_int_i2 > 100) block$id$_int_i2 = 100;\n" + \
+            "\tif (block$id$_int_i3 > 100) block$id$_int_i3 = 100;\n" + \
+            "\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n" + \
             "\tIplImage * tmpImg$id$ =" + \
-            " cvCreateImage(cvGetSize(block$id$_img_i0),8,1);" + \
-            "\tif(block$id$_img_i0->nChannels == 3){" + \
+            " cvCreateImage(cvGetSize(block$id$_img_i0),8,1);\n" + \
+            "\tif(block$id$_img_i0->nChannels == 3){\n" + \
             "    \t\tcvCvtColor(block$id$_img_i0," + \
-            " tmpImg$id$ ,CV_RGB2GRAY);" + \
-            "\t}else{" + \
-            "    \t\ttmpImg$id$ = block$id$_img_i0 = NULL;" + \
-            "}" + \
+            " tmpImg$id$ ,CV_RGB2GRAY);\n" + \
+            "\t}else{\n" + \
+            "    \t\ttmpImg$id$ = block$id$_img_i0 = NULL;\n" + \
+            "}\n" + \
             "cvCanny(tmpImg$id$, tmpImg$id$, block$id$_int_i2," + \
-            " block$id$_int_i1, block$id$_int_i3);" + \
-            "\tif(block$id$_img_i0->nChannels == 3){" + \
-            "    \t\tcvCvtColor(tmpImg$id$, block$id$_img_o0,CV_GRAY2RGB);" + \
-            "\t}else{" + \
-            "    \t\tcvCopyImage(tmpImg$id$, block$id$_img_o0);" + \
-            "\t}" + \
-            "\tcvReleaseImage(&tmpImg$id$);" + \
-            "} // End Canny Code"
+            " block$id$_int_i1, block$id$_int_i3);\n" + \
+            "\tif(block$id$_img_i0->nChannels == 3){\n" + \
+            "    \t\tcvCvtColor(tmpImg$id$, block$id$_img_o0,CV_GRAY2RGB);\n" + \
+            "\t}else{\n" + \
+            "    \t\tcvCopyImage(tmpImg$id$, block$id$_img_o0);\n" + \
+            "\t}\n" + \
+            "\tcvReleaseImage(&tmpImg$id$);\n" + \
+            "} // End Canny Code\n"
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):

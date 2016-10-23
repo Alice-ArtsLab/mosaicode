@@ -108,14 +108,15 @@ class DiagramControl():
                 str(pos[0]) + '" y="' + str(pos[1]) + '"/>\n'
             output += self.diagram.blocks[block_id].get_xml()
             output += "\t</block>\n"
-            output += "</blocks>\n"
+        output += "</blocks>\n"
 
         output += "<connections>\n  "
         for connector in self.diagram.connectors:
-            output += '\t<connection from="' + str(connector.source.get_id()) + \
-                '" from_out="' + str(int(connector.source_port) + 1) + \
-                '" to="' + str(connector.sink.get_id()) + \
-                '" to_in="' + str(int(connector.sink_port) + 1) + '"/>\n'
+            output += '\t<connection'
+            output += ' from="' + str(connector.source.get_id()) + '"'
+            output += ' from_out="' + str(int(connector.source_port) + 1) + '"'
+            output += ' to="' + str(connector.sink.get_id()) + '"'
+            output += ' to_in="' + str(int(connector.sink_port) + 1) + '"/>\n'
         output += "</connections>\n"
 
         output += "</harpia>\n"

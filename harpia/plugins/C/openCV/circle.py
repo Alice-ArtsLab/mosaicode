@@ -12,7 +12,15 @@ class Circle(OpenCVPlugin):
         OpenCVPlugin.__init__(self)
         self.x0 = 100
         self.y0 = 100
-        self.color = "#0000ffff0000"
+        self.circle_color = "#0000ffff0000"
+
+        self.red = self.circle_color[1:5]
+        self.green = self.circle_color[5:9]
+        self.blue = self.circle_color[9:13]
+
+        self.red = int(self.red, 16) / 257
+        self.green = int(self.green, 16) / 257
+        self.blue = int(self.blue, 16) / 257
 
         # Appearance
         self.help = "Desenha Circulos."
@@ -38,7 +46,7 @@ class Circle(OpenCVPlugin):
                 "upper": 1000,
                 "step": 1
             },
-            "color": {
+            "circle_color": {
                 "name": "Color",
                 "type": HARPIA_COLOR
             }
@@ -60,21 +68,18 @@ class Circle(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):
-        # -------------define RGB---------------
-        red = self.color[1:5]
-        green = self.color[5:9]
-        blue = self.color[9:13]
+        self.red = self.circle_color[1:5]
+        self.green = self.circle_color[5:9]
+        self.blue = self.circle_color[9:13]
 
-        red = int(red, 16) / 257
-        green = int(green, 16) / 257
-        blue = int(blue, 16) / 257
-
+        self.red = int(self.red, 16) / 257
+        self.green = int(self.green, 16) / 257
+        self.blue = int(self.blue, 16) / 257
         return \
             '\nif(block$id$_img_i0){\n' + \
             'CvPoint center = cvPoint' + \
             '(block$id$_int_i1, block$id$_int_i2);\n' + \
-            'CvScalar color = cvScalar(' + str(blue) + ',' + str(green) + \
-            ',' + str(red) + ',0);\n' + \
+            'CvScalar color = cvScalar($blue$,$green$,$red$,0);\n' + \
             'cvCircle(block$id$_img_i0, center, 10, color, 1, 8, 0);\n' +\
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             '}\n'
