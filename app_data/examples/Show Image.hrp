@@ -1,30 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <harpia>
-<version value='0.0.1' />
-<zoom value='1.0' />
-<language value='C' />
-<blocks>
-  	<block type='harpia.plugins.C.openCV.show' id='1'>
-		<position x="200.0" y="0.0"/>
-		<property name='window_type' value='Image Size' />
-		<property name='title' value='My Image' />
-	</block>
-	<block type='harpia.plugins.C.openCV.show' id='3'>
-		<position x="397.348693848" y="145.967269897"/>
-		<property name='window_type' value='Image Size' />
-		<property name='title' value='My Image - Show Image' />
-	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
-		<position x="0.0" y="0.0"/>
-		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
-	</block>
-	<block type='harpia.plugins.C.openCV.Pow' id='4'>
-		<position x="145.461425781" y="145.174728394"/>
-		<property name='exponent' value='5.0' />
-	</block>
-</blocks>
-<connections>
-  	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="2" from_out="1" to="4" to_in="1"/>
-	<connection from="4" from_out="1" to="3" to_in="1"/>
-</connections>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.show">
+   <position x="200" y="0"/>
+   <property key="window_type" value="Image Size"/>
+   <property key="title" value="My Image"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="0"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="2" from_out="1" to_block="1" to_in="1"/>
+ </connections>
 </harpia>

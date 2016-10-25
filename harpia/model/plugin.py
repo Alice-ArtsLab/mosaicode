@@ -132,14 +132,6 @@ class Plugin(object):
         return self
 
     # ----------------------------------------------------------------------
-    def get_xml(self):
-        xml = ""
-        for key in self.get_properties():
-            xml += "\t\t<property name='" + key + \
-                "' value='" + str(self.__dict__[key]) + "' />\n"
-        return xml
-
-    # ----------------------------------------------------------------------
     def __str__(self):
         return str(self.get_id())
 

@@ -53,9 +53,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.last_clicked_point = (None, None)
         self.__main_window = main_window
 
-        self.undo_stack = []
-        self.redo_stack = []
-
         self.curr_connector = None
         self.current_widgets = []
 
@@ -465,11 +462,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             self.get_root_item().add_child(self.blocks[block_id], -1)
         for connector in self.connectors:
             self.get_root_item().add_child(connector, -1)
-
-    # ---------------------------------------------------------------------
-    def reset_undo(self):
-        self.redo_stack = []
-        self.undo_stack = []
 
     # ---------------------------------------------------------------------
     def do(self, new_msg):

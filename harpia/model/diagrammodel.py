@@ -16,6 +16,9 @@ class DiagramModel(object):
         self.__modified = False
         self.language = None
 
+        self.undo_stack = []
+        self.redo_stack = []
+
     # ----------------------------------------------------------------------
     def add_block(self, block):
         if self.language is not None and self.language != block.get_language():
@@ -84,3 +87,9 @@ class DiagramModel(object):
     # ---------------------------------------------------------------------
     def get_zoom(self):
         return self.__zoom
+        
+    # ---------------------------------------------------------------------
+    def reset_undo(self):
+        self.redo_stack = []
+        self.undo_stack = []
+

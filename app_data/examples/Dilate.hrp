@@ -1,24 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <harpia>
-<version value='0.0.1' />
-<zoom value='1.0' />
-<language value='C' />
-<blocks>
-  	<block type='harpia.plugins.C.openCV.dilate' id='1'>
-		<position x="200" y="0"/>
-		<property name='masksize' value='3x3' />
-		<property name='iterations' value='1' />
-	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
-		<position x="0" y="0"/>
-		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
-	</block>
-	<block type='harpia.plugins.C.openCV.show' id='3'>
-		<position x="400" y="0"/>
-		<property name='title' value='My Image - Dilate' />
-	</block>
-</blocks>
-<connections>
-  	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="1" from_out="1" to="3" to_in="1"/>
-</connections>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.dilate">
+   <position x="200" y="0"/>
+   <property key="masksize" value="3x3"/>
+   <property key="iterations" value="1"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="0"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+  <block id="3" type="harpia.plugins.C.openCV.show">
+   <position x="400" y="0"/>
+   <property key="window_type" value="Image Size"/>
+   <property key="title" value="My Image - Dilate"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="2" from_out="1" to_block="1" to_in="1"/>
+  <connection from_block="1" from_out="1" to_block="3" to_in="1"/>
+ </connections>
 </harpia>

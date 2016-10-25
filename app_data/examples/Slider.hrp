@@ -4,9 +4,12 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.newInt">
+  <block id="1" type="harpia.plugins.C.openCV.slider">
    <position x="200" y="0"/>
+   <property key="maxVal" value="31"/>
+   <property key="window_name" value="My Image"/>
    <property key="intVal" value="1"/>
+   <property key="label" value="Slider"/>
   </block>
  </blocks>
  <connections/>

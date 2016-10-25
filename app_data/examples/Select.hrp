@@ -4,8 +4,9 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.sidebyside">
+  <block id="1" type="harpia.plugins.C.openCV.select">
    <position x="200" y="0"/>
+   <property key="key" value="a"/>
   </block>
   <block id="2" type="harpia.plugins.C.openCV.imageFile">
    <position x="0" y="0"/>
@@ -18,7 +19,7 @@
   <block id="4" type="harpia.plugins.C.openCV.show">
    <position x="400" y="0"/>
    <property key="window_type" value="Image Size"/>
-   <property key="title" value="My Image - Side By Side"/>
+   <property key="title" value="My Image - Select"/>
   </block>
  </blocks>
  <connections>

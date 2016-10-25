@@ -32,10 +32,6 @@ class BlockModel(object):
         return self.__plugin.type
 
     # ----------------------------------------------------------------------
-    def get_xml(self):
-        return self.__plugin.get_xml()
-
-    # ----------------------------------------------------------------------
     def get_help(self):
         return self.__plugin.get_help()
 

@@ -65,12 +65,17 @@ class XMLParser(object):
             tags.append(XMLParser(tag, fromTag=True))
         return tags
 
-    def addTag(self, tagName, attrs):
-        self.parsedXML.append(self.parsedXML.new_tag(tagName, **attrs))
+    def addTag(self, tagName, **attrs):
+        new_tag = self.parsedXML.new_tag(tagName, **attrs)
+        self.parsedXML.append(new_tag)
 
-    def appendToTag(self, tagParent, tagChild, attrs):
-        getattr(self.parsedXML, tagParent).append(
-            self.parsedXML.new_tag(tagChild, **attrs))
+    def appendToTag(self, tagParent, tagChild, **attrs):
+        new_tag = self.parsedXML.new_tag(tagChild, **attrs)
+        getattr(self.parsedXML, tagParent).append(new_tag)
+
+    def appendToLastTag(self, tagParent, tagChild, **attrs):
+        new_tag = self.parsedXML.new_tag(tagChild, **attrs)
+        self.parsedXML.find_all(tagParent)[-1].append(new_tag)
 
     def getXML(self):
         return self.parsedXML.prettify()
@@ -89,6 +94,9 @@ class XMLParser(object):
 
     def getTagChildren(self):
         return self.parsedXML.children
+
+    def prettify(self):
+        return self.parsedXML.prettify()
 
     def __repr__(self):
         return str(self.parsedXML)
