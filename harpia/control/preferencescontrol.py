@@ -27,21 +27,26 @@ class PreferencesControl():
             "HarpiaProperties").getChildTags("property")
 
         for prop in properties:
-            if prop.getAttr("name") in self.hp.__dict__:
-                self.hp.__dict__[prop.getAttr("name")] = prop.getAttr("value")
+            try:
+                prop.getAttr("key")
+            except:
+                continue
+            if prop.getAttr("key") in self.hp.__dict__:
+                self.hp.__dict__[prop.getAttr("key")] = prop.getAttr("value")
         return True
 
     # ----------------------------------------------------------------------
     def save(self):
-        conf = "<HarpiaProperties>\n"
+        parser = XMLParser()
+        parser.addTag('HarpiaProperties')
         for key in self.hp.__dict__:
-            conf += "<property name='" + key + "' value=\"" + \
-                str(self.hp.__dict__[key]) + "\"/>\n"
-        conf += "</HarpiaProperties>\n"
-
+            parser.appendToTag('HarpiaProperties',
+                    'property',
+                    key=key,
+                    value=self.hp.__dict__[key])
         try:
             confFile = file(os.path.expanduser(self.hp.conf_file_path), 'w')
-            confFile.write(conf)
+            confFile.write(parser.prettify())
             confFile.close()
         except IOError as e:
             return False
