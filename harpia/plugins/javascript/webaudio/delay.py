@@ -10,7 +10,6 @@ class Delay(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.time = 0
 
         # Appearance
         self.help = "Delay"
@@ -29,10 +28,12 @@ block_$id$_i[0] = block_$id$
 block_$id$_i[0].delayTime.value = $time$;
 """
 
-        self.properties = {"time": {"name": "Time",
-                                    "type": HARPIA_FLOAT,
-                                    "lower": 0,
-                                    "upper": 10000,
-                                    "step": 1
+        self.properties = [{"name": "time",
+                            "label": "Time",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 10000,
+                            "step": 1,
+                            "value":1
                                     }
-                           }
+                           ]

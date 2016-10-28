@@ -10,7 +10,6 @@ class Print(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.value = 1
 
         # Appearance
         self.help = "Print value"
@@ -33,9 +32,11 @@ block_$id$_i[1] = function(value){
     };
 """
         self.dealloc = """
-$label$ <span id="block_$id$">$value$</span><br>
+$label$ <span id="block_$id$"></span><br>
 """
-        self.properties = {"label": {"name": "Label",
-                                     "type": HARPIA_STRING
+        self.properties = [{"name": "label",
+                            "label" : "Label",
+                            "value" : "Label",
+                            "type": HARPIA_STRING
                                      }
-                           }
+                           ]

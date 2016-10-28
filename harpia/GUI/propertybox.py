@@ -38,10 +38,8 @@ class PropertyBox(Gtk.VBox):
             self.remove(widget)
 
         # Search block properties to create GUI
-        for component in self.block.get_properties():
-            prop = self.block.get_properties()[component]
-            prop["value"] = self.block.get_plugin().__dict__[component]
-            field = self._generate_field(component, prop)
+        for prop in self.block.get_properties():
+            field = self._generate_field(prop.get("name"), prop)
             if prop["type"] == HARPIA_OPEN_FILE or \
                     prop["type"] == HARPIA_SAVE_FILE:
                 field.set_parent_window(self.main_window)
@@ -60,8 +58,8 @@ class PropertyBox(Gtk.VBox):
             # If widget is a container, search inside it
             if isinstance(widget, Gtk.Container):
                 self.__recursive_search(widget)
-            # Onde a component is found, search for it on the component list
-            if widget.get_name() in self.block.get_properties():
+            # Once a component is found, search for it on the component list
+            if widget.get_name() in self.properties:
                 self.properties[widget.get_name()] = widget.get_value()
 
 # ----------------------------------------------------------------------
@@ -69,6 +67,7 @@ class PropertyBox(Gtk.VBox):
         type_ = component_attributes["type"]
         field = component_list[type_](component_attributes, self.notify)
         field.set_name(component_key)  # Define widget name
+        self.properties[component_key] = ""
         return field
 
 # ----------------------------------------------------------------------

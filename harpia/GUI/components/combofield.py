@@ -13,13 +13,13 @@ class ComboField(Field, Gtk.HBox):
         if not isinstance(data, dict):
             return
 
-        self.check_value(data, "name", "")
+        self.check_value(data, "label", "")
         self.check_value(data, "value", "")
         self.check_value(data, "values", [])
 
         self.value = data["value"]
         Gtk.HBox.__init__(self, True)
-        self.label = Gtk.Label(data["name"])
+        self.label = Gtk.Label(data["label"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 

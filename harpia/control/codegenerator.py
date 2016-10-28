@@ -175,7 +175,17 @@ class CodeGenerator():
         dealloc = plugin.generate_dealloc()
         outDealloc = plugin.generate_out_dealloc()
 
-        # Replace all object properties by their values
+        # First we replace properties by their values
+        for prop in plugin.get_properties():
+            my_key = "$" + prop.get("name") + "$"
+            value = str(prop.get("value"))
+            header = header.replace(my_key, value)
+            declaration = declaration.replace(my_key, value)
+            functionCall = functionCall.replace(my_key, value)
+            dealloc = dealloc.replace(my_key, value)
+            outDealloc = outDealloc.replace(my_key, value)
+
+        # Then we replace object attributes by their values
         for key in plugin.__dict__:
             value = str(plugin.__dict__[key])
             my_key = "$" + key + "$"

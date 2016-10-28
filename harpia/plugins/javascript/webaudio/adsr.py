@@ -10,11 +10,6 @@ class ADSR(WebaudioPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.a = 5
-        self.d = 2
-        self.s = 100
-        self.r = 50
-        self.g = 0.2
 
         # Appearance
         self.help = "ADSR"
@@ -64,35 +59,45 @@ block_$id$_i[1] = function(value){
     block_$id$_obj.play();
 };
 """
-        self.properties = {
-            "a": {"name": "Attack",
+        self.properties = [
+            {"name":"a",
+                  "label": "Attack",
                   "type": HARPIA_FLOAT,
                   "lower": 0,
                   "upper": 10000,
-                  "step": 1
+                  "step": 1,
+                  "value": 5
                   },
-            "d": {"name": "Delay",
+            {"name": "d",
+                  "label": "Delay",
                   "type": HARPIA_FLOAT,
                   "lower": 0,
                   "upper": 10000,
-                  "step": 1
+                  "step": 1,
+                  "value": 2
                   },
-            "s": {"name": "Sustain",
+            {"name": "s",
+                "label": "Sustain",
                   "type": HARPIA_FLOAT,
                   "lower": 0,
                   "upper": 10000,
-                  "step": 1
+                  "step": 1,
+                  "value": 100
                   },
-            "r": {"name": "Release",
+            {"name": "r",
+            "label": "Release",
                   "type": HARPIA_FLOAT,
                   "lower": 0,
                   "upper": 10000,
-                  "step": 1
+                  "step": 1,
+                  "value": 50
                   },
-            "g": {"name": "Gain",
+            {"name": "g",
+            "label":"Gain",
                   "type": HARPIA_FLOAT,
                   "lower": 0,
                   "upper": 10000,
-                  "step": 1
+                  "step": 1,
+                  "value": 0.5
                   }
-        }
+        ]

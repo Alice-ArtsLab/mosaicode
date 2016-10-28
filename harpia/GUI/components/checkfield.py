@@ -14,10 +14,10 @@ class CheckField(Field, Gtk.HBox):
             return
         Gtk.HBox.__init__(self, True)
 
-        self.check_value(data, "name", "")
+        self.check_value(data, "label", "")
         self.check_value(data, "value", False)
 
-        self.label = Gtk.Label(data["name"])
+        self.label = Gtk.Label(data["label"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 

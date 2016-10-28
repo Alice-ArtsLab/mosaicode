@@ -10,8 +10,6 @@ class Button(WebaudioPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.value = 1
-        self.label = "Label"
 
         # Appearance
         self.help = "Button"
@@ -41,13 +39,17 @@ function click_$id$(){
 id="block_$id$">$label$</button><br>
 """
 
-        self.properties = {"value": {"name": "Value",
-                                     "type": HARPIA_FLOAT,
-                                     "lower": 0,
-                                     "upper": 20000,
-                                     "step": 1
+        self.properties = [{"name": "value",
+                            "label": "Value",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 1
                                      },
-                           "label": {"name": "Label",
-                                     "type": HARPIA_STRING
+                           {"name": "label",
+                            "label": "Label",
+                            "type": HARPIA_STRING,
+                            "value" : "Label"
                                      }
-                           }
+                           ]

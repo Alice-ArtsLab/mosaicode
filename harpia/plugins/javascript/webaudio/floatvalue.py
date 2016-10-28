@@ -10,10 +10,6 @@ class FloatValue(WebaudioPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.value = 1
-        self.label = "Label"
-        self.min = 0
-        self.max = 10
 
         # Appearance
         self.help = "Double value"
@@ -41,25 +37,33 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$"
         max="$max$" onChange="change_$id$_value();"><br>
 """
 
-        self.properties = {"value": {"name": "Value",
-                                     "type": HARPIA_FLOAT,
-                                     "lower": 0,
-                                     "upper": 20000,
-                                     "step": 1
-                                     },
-                           "min": {"name": "Min",
-                                   "type": HARPIA_FLOAT,
-                                   "lower": 0,
-                                   "upper": 20000,
-                                   "step": 1
-                                   },
-                           "max": {"name": "Max",
-                                   "type": HARPIA_FLOAT,
-                                   "lower": 00,
-                                   "upper": 20000,
-                                   "step": 1
-                                   },
-                           "label": {"name": "Label",
-                                     "type": HARPIA_STRING
-                                     }
-                           }
+        self.properties = [{"name": "value",
+                            "label": "Value",
+                           "type": HARPIA_FLOAT,
+                           "lower": 0,
+                           "upper": 20000,
+                           "step": 1,
+                           "value": 1
+                           },
+                           {"name": "min",
+                            "label": "Min",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 1
+                            },
+                           {"name": "max",
+                            "label": "Max",
+                            "type": HARPIA_FLOAT,
+                            "lower": 00,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 10
+                            },
+                           {"name": "label",
+                            "label": "Label",
+                            "type": HARPIA_STRING,
+                            "value": "Label"
+                            }
+                           ]

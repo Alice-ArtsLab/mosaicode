@@ -14,7 +14,7 @@ class CommentField(Field, Gtk.VBox):
             return
         Gtk.VBox.__init__(self)
 
-        self.check_value(data, "name", "")
+        self.check_value(data, "label", "")
         self.check_value(data, "value", 0)
         self.check_value(data, "height", 80)
         self.check_value(data, "width", 50)
@@ -28,7 +28,7 @@ class CommentField(Field, Gtk.VBox):
 
         scrolled_window.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
 
-        self.label = Gtk.Label(data["name"])
+        self.label = Gtk.Label(data["label"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 

@@ -17,7 +17,7 @@ class FloatField(Field, Gtk.HBox):
             return
         Gtk.HBox.__init__(self, True)
 
-        self.check_value(data, "name", "")
+        self.check_value(data, "label", "")
         self.check_value(data, "value", 0)
         self.check_value(data, "lower", 0)
         self.check_value(data, "upper", 9223372036854775807)
@@ -26,7 +26,7 @@ class FloatField(Field, Gtk.HBox):
         self.check_value(data, "page_size", 10)
         self.check_value(data, "digits", 2)
 
-        self.label = Gtk.Label(data["name"])
+        self.label = Gtk.Label(data["label"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 

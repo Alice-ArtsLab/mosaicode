@@ -10,8 +10,6 @@ class Char2Float(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.float = 60
-        self.char = 'a'
 
         # Appearance
         self.help = "Char to Float"
@@ -35,21 +33,18 @@ block_$id$_i[0] = function(value){
     return true;
     };
 """
-        self.description = {"Label": "Char 2 Float",
-                            "Icon": "images/show.png",
-                            "Color": "200:200:25:150",
-                            "InTypes": {0: "HRP_WEBAUDIO_CHAR"},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "TreeGroup": "Conversion"
-                            }
 
-        self.properties = {"float": {"name": "Output float",
+        self.properties = [{"name": "float",
+                            "label": "Output float",
                                      "type": HARPIA_FLOAT,
                                      "lower": 0,
                                      "upper": 20000,
-                                     "step": 1
+                                     "step": 1,
+                                     "value": 60
                                      },
-                           "char": {"name": "Input Char",
-                                    "type": HARPIA_STRING
+                           {"name": "char",
+                            "label": "Input Char",
+                            "type": HARPIA_STRING,
+                            "value": "a"
                                     }
-                           }
+                           ]

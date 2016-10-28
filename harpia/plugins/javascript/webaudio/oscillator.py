@@ -10,8 +10,6 @@ class Oscillator(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.freq = 440
-        self.oscillator_type = 'sine'
 
         # Appearance
         self.help = "Sound output"
@@ -46,16 +44,21 @@ block_$id$.frequency.value = $freq$; // value in hertz
 block_$id$.detune.value = 100; // value in cents
 block_$id$.start(0);
 """
-        self.properties = {"freq": {"name": "Frequency",
+        self.properties = [{"name": "freq",
+                            "label": "Frequency",
                                     "type": HARPIA_FLOAT,
                                     "lower": 20,
                                     "upper": 20000,
-                                    "step": 1
+                                    "step": 1,
+                                    "value": 440
                                     },
-                           "oscillator_type": {"name": "Type",
-                                               "type": HARPIA_COMBO,
-                                               "values": ["square", "sine",
-                                                          "sawtooth",
-                                                          "triangle"]
-                                               }
-                           }
+                           {"name": "oscillator_type",
+                            "label": "Type",
+                             "type": HARPIA_COMBO,
+                             "values": ["square",
+                             "sine",
+                             "sawtooth",
+                            "triangle"],
+                            "value": "sine"
+                            }
+                           ]

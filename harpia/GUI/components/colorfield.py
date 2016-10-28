@@ -15,12 +15,12 @@ class ColorField(Field, Gtk.HBox):
             return
         Gtk.HBox.__init__(self, True)
 
-        self.check_value(data, "name", "")
+        self.check_value(data, "label", "")
         self.check_value(data, "value", "#ffff00000000")
 
         self.event = event
         self.color = Gdk.color_parse(data["value"])
-        self.label = Gtk.Label(data["name"])
+        self.label = Gtk.Label(data["label"])
         self.add(self.label)
         self.label.set_property("halign", Gtk.Align.START)
 

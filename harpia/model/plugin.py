@@ -13,7 +13,7 @@ class Plugin(object):
 
         # Code generation
         self.header = ""
-        self.properties = {}
+        self.properties = []
         self.vars = ""
         self.function_call = ""
         self.dealloc = ""
@@ -117,9 +117,10 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
-        for key in self.get_properties():
-            if key in self.__dict__ and key in data:
-                self.__dict__[key] = data[key]
+        for prop in self.get_properties():
+            key = prop.get("name")
+            if key in data:
+                prop["value"] = data[key]
             else:
                 print "Plugin.set_property ERROR: key ", key, "not present"
 
