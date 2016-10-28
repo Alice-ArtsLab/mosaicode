@@ -27,10 +27,10 @@ config['classifiers'] = [
 ]
 
 setup(name='harpia',
-      install_requires=['beautifulsoup4', 'pip','python>=2.7','pep8','autopep8'],
+      install_requires=['beautifulsoup4', 'pip','python>=2.7'],
       tests_require=['pytest'],
       test_suite='test',
-      version='1.0a6',
+      version='1.0a7',
       packages=[
           'app_data',
           'harpia',
