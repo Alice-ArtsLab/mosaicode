@@ -15,16 +15,13 @@ class Slider(OpenCVPlugin):
         self.label = "Value"
         self.window_name = "My Image"
 
+        # Appearance
         self.help = "Creates Slider to int value."
-
-        self.description = {
-            'Label': 'Slider',
-            'Icon': 'images/newDouble.png',
-            'Color': '50:50:200:150',
-            'InTypes': "",
-            'OutTypes': {0: 'HRP_INT'},
-            'TreeGroup': 'Basic Data Type'
-        }
+        self.label = "Slider"
+        self.icon = "images/newDouble.png"
+        self.color = "50:50:200:150"
+        self.out_types = ["HRP_INT"]
+        self.group = "Basic Data Type"
 
         self.properties = {
             "intVal": {

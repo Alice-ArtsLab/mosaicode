@@ -14,7 +14,15 @@ class FloatValue(WebaudioPlugin):
         self.label = "Label"
         self.min = 0
         self.max = 10
+
+        # Appearance
         self.help = "Double value"
+        self.label = "FloatValue"
+        self.icon = "images/show.png"
+        self.color = "50:150:250:150"
+        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.group = "Interface"
+
         self.vars = """
 // block_$id$ = Float Value
 var block_$id$_value = $value$;
@@ -32,14 +40,6 @@ function change_$id$_value(){
 $label$ <input type="number" id="block_$id$" value="$value$" min="$min$"
         max="$max$" onChange="change_$id$_value();"><br>
 """
-
-        self.description = {"Label": "FloatValue",
-                            "Icon": "images/show.png",
-                            "Color": "50:150:20:150",
-                            "InTypes": {},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "TreeGroup": "Interface"
-                            }
 
         self.properties = {"value": {"name": "Value",
                                      "type": HARPIA_FLOAT,

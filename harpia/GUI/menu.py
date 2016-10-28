@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import gi
-import gettext
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.system import System as System
+import gettext
 
-
-gettext.bindtextdomain(System.APP, System.DIR)
-gettext.textdomain(System.APP)
-
+_ = gettext.gettext
 
 class Menu(Gtk.MenuBar):
 
@@ -30,65 +27,64 @@ class Menu(Gtk.MenuBar):
         # -------------------------- File -------------------------------------
         file_menu = Gtk.Menu()
         self.recent_files_menu = Gtk.Menu()
-        self.__create_menu("New", "<Control>N", file_menu, mc.new)
-        self.__create_menu("Open", "<Control>O", file_menu, mc.select_open)
-        self.__create_menu("Close", "<Control>W", file_menu, mc.close)
-        recents = self.__create_menu("Recents", None, file_menu, None)
+        self.__create_menu(_("New"), "<Control>N", file_menu, mc.new)
+        self.__create_menu(_("Open"), "<Control>O", file_menu, mc.select_open)
+        self.__create_menu(_("Close"), "<Control>W", file_menu, mc.close)
+        recents = self.__create_menu(_("Recents"), None, file_menu, None)
         recents.set_submenu(self.recent_files_menu)
         file_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu("Save", "<Control>S", file_menu, mc.save)
-        self.__create_menu("Save As...", None, file_menu, mc.save_as)
-        self.__create_menu("Rename", None, file_menu, mc.rename_tab)
+        self.__create_menu(_("Save"), "<Control>S", file_menu, mc.save)
+        self.__create_menu(_("Save As..."), None, file_menu, mc.save_as)
+        self.__create_menu(_("Rename"), None, file_menu, mc.rename_tab)
         file_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(
-            "Export Diagram As PNG", "<Control>E",
+        self.__create_menu(_("Export Diagram As PNG"), "<Control>E",
             file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu("Exit", "<Control>Q", file_menu, mc.exit)
-        self.__add_menu_category("File", file_menu)
+        self.__create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)
+        self.__add_menu_category(_("File"), file_menu)
 
         # -------------------------- Edit -------------------------------------
         edit_menu = Gtk.Menu()
-        self.__create_menu("Undo", "<Control>Z", edit_menu, mc.undo)
-        self.__create_menu("Redo", "<Shift><Control>Z", edit_menu, mc.redo)
+        self.__create_menu(_("Undo"), "<Control>Z", edit_menu, mc.undo)
+        self.__create_menu(_("Redo"), "<Shift><Control>Z", edit_menu, mc.redo)
         edit_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(
-            "Select All", "<Control>A", edit_menu, mc.select_all)
-        self.__create_menu("Cut", "<Control>X", edit_menu, mc.cut)
-        self.__create_menu("Copy", "<Control>C", edit_menu, mc.copy)
-        self.__create_menu("Paste", "<Control>V", edit_menu, mc.paste)
-        self.__create_menu("Delete", "Delete", edit_menu, mc.delete)
+            _("Select All"), "<Control>A", edit_menu, mc.select_all)
+        self.__create_menu(_("Cut"), "<Control>X", edit_menu, mc.cut)
+        self.__create_menu(_("Copy"), "<Control>C", edit_menu, mc.copy)
+        self.__create_menu(_("Paste"), "<Control>V", edit_menu, mc.paste)
+        self.__create_menu(_("Delete"), "Delete", edit_menu, mc.delete)
         edit_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(
-            "Clear Console", "<Control>L", edit_menu, mc.clear_console)
+            _("Clear Console"), "<Control>L", edit_menu, mc.clear_console)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu("Preferences", None, edit_menu, mc.preferences)
-        self.__add_menu_category("Edit", edit_menu)
+        self.__create_menu(_("Preferences"), None, edit_menu, mc.preferences)
+        self.__add_menu_category(_("Edit"), edit_menu)
 
         # -------------------------- View -------------------------------------
         view_menu = Gtk.Menu()
-        self.__create_menu("Zoom In", None, view_menu, mc.zoom_in)
-        self.__create_menu("Zoom Out", None, view_menu, mc.zoom_out)
+        self.__create_menu(_("Zoom In"), None, view_menu, mc.zoom_in)
+        self.__create_menu(_("Zoom Out"), None, view_menu, mc.zoom_out)
         self.__create_menu(
-            "Normal Size", "<Control>0", view_menu, mc.zoom_normal)
-        self.__add_menu_category("View", view_menu)
+            _("Normal Size"), "<Control>0", view_menu, mc.zoom_normal)
+        self.__add_menu_category(_("View"), view_menu)
 
         # -------------------------- Process --------------------------------
         process_menu = Gtk.Menu()
-        self.__create_menu("Run", "<Control>R", process_menu, mc.run)
-        self.__create_menu("Save Source", None, process_menu, mc.save_source)
-        self.__create_menu("View Source", None, process_menu, mc.view_source)
-        self.__add_menu_category("Process", process_menu)
+        self.__create_menu(_("Run"), "<Control>R", process_menu, mc.run)
+        self.__create_menu(_("Save Source"), None, process_menu, mc.save_source)
+        self.__create_menu(_("View Source"), None, process_menu, mc.view_source)
+        self.__add_menu_category(_("Process"), process_menu)
 
         # -------------------------- Help -----------------------------------
         # Cria sub menu
         help_menu = Gtk.Menu()
         self.example_menu = Gtk.Menu()
-        examples = self.__create_menu("Example", None, help_menu, None)
+        examples = self.__create_menu(_("Example"), None, help_menu, None)
         examples.set_submenu(self.example_menu)
         help_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu("About", None, help_menu, mc.about)
-        self.__add_menu_category("Help", help_menu)
+        self.__create_menu(_("About"), None, help_menu, mc.about)
+        self.__add_menu_category(_("Help"), help_menu)
 
     # ----------------------------------------------------------------------
     def __create_menu(self, name, accel, menu, action):

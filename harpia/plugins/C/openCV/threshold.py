@@ -14,17 +14,15 @@ class Threshold(OpenCVPlugin):
         self.maxValue = 255
         self.thresholdType = "CV_THRESH_BINARY"
 
+        # Appearance
         self.help = "Operador de binarização da imagem, de acordo " + \
             "com um valor fixo de intensidade luminosa (valor de limiar)."
-
-        self.description = {
-            "Label": "Threshold",
-            "Icon": "images/threshold.png",
-            "Color": "50:125:50:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "Filters and Color Conversion"
-        }
+        self.label = "Threshold"
+        self.icon = "images/threshold.png"
+        self.color = "50:125:50:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "Filters and Color Conversion"
 
         self.properties = {
             "threshold": {

@@ -19,17 +19,15 @@ class MinMax(OpenCVPlugin):
         self.minORmax = "min"
         self.criteria = "pos"
 
+        # Appearance
         self.help = "Finds min or max from input image and judges " + \
             "it according to a custom criteria."
-
-        self.description = {
-            "Label": "Find Min or Max",
-            "Icon": "images/minMax.png",
-            "Color": "50:50:200:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_DOUBLE", 1: "HRP_POINT"},
-            "TreeGroup": "Feature Detection"
-        }
+        self.label = "Find Min or Max"
+        self.icon = "images/minMax.png"
+        self.color = "50:50:200:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_DOUBLE", "HRP_POINT"]
+        self.group = "Feature Detection"
 
         self.properties = {
             "minX": {

@@ -12,7 +12,16 @@ class Char2Float(WebaudioPlugin):
         WebaudioPlugin.__init__(self)
         self.float = 60
         self.char = 'a'
-        self.help = "char to float"
+
+        # Appearance
+        self.help = "Char to Float"
+        self.label = "Char 2 Float"
+        self.icon = "images/show.png"
+        self.color = "200:200:25:150"
+        self.in_types = ["HRP_WEBAUDIO_CHAR"]
+        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.group = "Conversion"
+
         self.vars = """
 // block_$id$ = Char 2 Float
 var block_$id$_o0 = [];

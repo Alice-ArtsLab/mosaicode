@@ -14,16 +14,14 @@ class SaveVideo(OpenCVPlugin):
         self.framerate = 25.0
         self.codecSelection = "MPEG1"
 
+        # Appearance
         self.help = "Save Video needs its description."
-
-        self.description = {
-            'Label': 'Save Video',
-            'Icon': 'images/saveVideo.png',
-            'Color': '120:20:20:150',
-            'InTypes': {0: 'HRP_IMAGE'},
-            'OutTypes': {0: 'HRP_IMAGE'},
-            'TreeGroup': 'General'
-        }
+        self.label = "Save Video"
+        self.icon = "images/saveVideo.png"
+        self.color = "120:20:20:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "General"
 
         self.properties = {
             "filename": {

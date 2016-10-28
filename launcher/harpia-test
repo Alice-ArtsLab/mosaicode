@@ -26,7 +26,7 @@ class Log(object):
 
 
 def save(diagram, obj):
-    diagram.set_file_name("/tmp/" + obj.get_description()["Label"] + ".hrp")
+    diagram.set_file_name("/tmp/" + obj.get_label() + ".hrp")
     print "Generating", diagram.get_file_name(), "file"
     control = DiagramControl(diagram)
     control.save()
@@ -72,24 +72,24 @@ def main(argv):
         obj.x = 200
         diagram = DiagramModel()
         diagram.set_file_name(
-            "/tmp/" + obj.get_description()["Label"] + ".hrp")
+            "/tmp/" + obj.get_label() + ".hrp")
         diagram.add_block(obj)
 
         cont = 0
-        intypes = obj.get_description()["InTypes"]
+        intypes = obj.get_in_types()
         for inkey in intypes:
-            if intypes[inkey] == "HRP_IMAGE":
+            if inkey == "HRP_IMAGE":
                 block = System.blocks["harpia.plugins.C.openCV.imageFile"]()
-            elif intypes[inkey] == "HRP_INT":
+            elif inkey == "HRP_INT":
                 block = System.blocks["harpia.plugins.C.openCV.slider"]()
                 block.window_name = "My Image - " + \
-                    obj.get_description()["Label"]
+                    obj.get_label()
                 block.label = block.label + " - " + str(cont)
-            elif intypes[inkey] == "HRP_DOUBLE":
+            elif inkey == "HRP_DOUBLE":
                 block = System.blocks["harpia.plugins.C.openCV.newDouble"]()
-            elif intypes[inkey] == "HRP_RECT":
+            elif inkey == "HRP_RECT":
                 block = System.blocks["harpia.plugins.C.openCV.newRect"]()
-            elif intypes[inkey] == "HRP_POINT":
+            elif inkey == "HRP_POINT":
                 block = System.blocks["harpia.plugins.C.openCV.newPoint"]()
             diagram.add_block(block)
             block.y = 100 * cont
@@ -97,12 +97,11 @@ def main(argv):
             cont = cont + 1
 
         cont = 0
-        outtypes = obj.get_description()["OutTypes"]
-        for outkey in outtypes:
-            if outtypes[outkey] == "HRP_IMAGE":
+        for outkey in obj.get_out_types():
+            if outkey == "HRP_IMAGE":
                 show = System.blocks["harpia.plugins.C.openCV.show"]()
                 show.x = 400
-                show.title = "My Image - " + obj.get_description()["Label"]
+                show.title = "My Image - " + obj.get_label()
                 diagram.add_block(show)
                 diagram.connect_blocks(obj, cont, show, 0)
             cont = cont + 1
@@ -111,7 +110,7 @@ def main(argv):
             obj.get_help()
         except:
             print "Error in get_help() of object",
-            obj.get_description()["Label"], obj.__class__
+            obj.get_label(), obj.__class__
 
         if args.examples:
             # Save Examples
@@ -124,15 +123,15 @@ def main(argv):
             generator.compile()
             # generator.execute()
             save(diagram, obj)
-            print obj.get_description()["Label"], " - compiled\n"
+            print obj.get_label(), " - compiled\n"
 
         if args.test:
             # Test examples
             # print "\n\nTesting code: ",
-            # print "\n", obj.get_description()["Label"], " ",
+            # print "\n", obj.get_label(), " ",
             # print "Help",
             # print "\tGenerate",
-            # print"\tDescription\tProperties "
+            # print"\tProperties "
 
             #-----------------------
 
@@ -150,19 +149,12 @@ def main(argv):
             # -----------------------
 
             # -----------------------
-            if obj.get_description():
-                print WARNING + "     V\t\t" + ENDC,
-            else:
-                print "     -\t\t",
-            # -----------------------
-
-            # -----------------------
             if obj.get_properties():
                 print WARNING + "    V\t" + ENDC,
             else:
                 print "    -\t",
             # ----------------------
-            print "\t", obj.get_description()["Label"], " "
+            print "\t", obj.get_label(), " "
 
         # print obj.get_help()
     print

@@ -15,7 +15,16 @@ class ADSR(WebaudioPlugin):
         self.s = 100
         self.r = 50
         self.g = 0.2
+
+        # Appearance
         self.help = "ADSR"
+        self.label = "ADSR"
+        self.icon = "images/show.png"
+        self.color = "50:150:250:150"
+        self.in_types = ["HRP_WEBAUDIO_SOUND", "HRP_WEBAUDIO_FLOAT"]
+        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.group = "Sound"
+
         self.header = """
 Envelope = function(context, a, d, s, r, g) {
 this.node = context.createGain()
@@ -55,15 +64,6 @@ block_$id$_i[1] = function(value){
     block_$id$_obj.play();
 };
 """
-        self.description = {
-            "Label": "ADSR",
-            "Icon": "images/show.png",
-            "Color": "50:150:250:150",
-            "InTypes": {0: "HRP_WEBAUDIO_SOUND", 1: "HRP_WEBAUDIO_FLOAT"},
-            "OutTypes": {0: "HRP_WEBAUDIO_SOUND"},
-            "TreeGroup": "Sound"
-        }
-
         self.properties = {
             "a": {"name": "Attack",
                   "type": HARPIA_FLOAT,

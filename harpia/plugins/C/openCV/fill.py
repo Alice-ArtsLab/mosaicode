@@ -10,21 +10,19 @@ class Fill(OpenCVPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.color = "#0000ffff0000"
+        self.rect_color = "#0000ffff0000"
 
+        # Appearance
         self.help = "Preenche toda a imagem de uma cor."
-
-        self.description = {
-            "Label": "Fill image",
-            "Icon": "images/fill.png",
-            "Color": "50:100:200:150",
-            "InTypes": {0: "HRP_IMAGE"},
-            "OutTypes": {0: "HRP_IMAGE"},
-            "TreeGroup": "General"
-        }
+        self.label = "Fill image"
+        self.icon = "images/fill.png"
+        self.color = "50:100:200:150"
+        self.in_types = ["HRP_IMAGE"]
+        self.out_types = ["HRP_IMAGE"]
+        self.group = "General"
 
         self.properties = {
-            "color": {
+            "rect_color": {
                 "name": "Color",
                 "type": HARPIA_COLOR
             }
@@ -35,9 +33,9 @@ class Fill(OpenCVPlugin):
     # ----------------------------------------------------------------------
     def generate_function_call(self):
         # --------define RGB-------------
-        red = self.color[1:5]
-        green = self.color[5:9]
-        blue = self.color[9:13]
+        red = self.rect_color[1:5]
+        green = self.rect_color[5:9]
+        blue = self.rect_color[9:13]
 
         red = int(red, 16) / 257
         green = int(green, 16) / 257

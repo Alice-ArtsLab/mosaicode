@@ -32,7 +32,6 @@ import gi
 from threading import Thread
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
 from harpia.control.codegenerator import CodeGenerator
 
 FRAMERATE = 25
@@ -187,15 +186,14 @@ class CGenerator(CodeGenerator):
         self.change_directory()
         if os.name == "nt":
             i, o = os.popen4(self.filename +'.Makefile.bat')
-
             o.readlines()
             o.close()
             i.close()
         else:
             i, o = os.popen4("sh " + self.filename +'.Makefile')
-
-            CompilingErrors = o.readlines()
-
+            errors = o.read()
+            from harpia.system import System as System
+            System.log(errors)
             o.close()
             i.close()
 
@@ -208,11 +206,9 @@ class CGenerator(CodeGenerator):
         self.change_directory()
         if os.name == "nt":
             i, o = os.popen4(codeFilename[:-2] + '.exe')
-            ## ERROR LOG
-            Error = ''
-            errorList = o.readlines()
-            for element in errorList:
-                Error = Error + element
+            errors = o.read()
+            from harpia.system import System as System
+            System.log(errors)
             o.close()
             i.close()
         else:
@@ -226,10 +222,9 @@ class CGenerator(CodeGenerator):
 
         try:
             o = open("Run" + self.error_log_file, "r")
-            Error = ''
-            errorList = o.readlines()
-            for element in errorList:
-                Error += element
+            errors = o.read()
+            from harpia.system import System as System
+            System.log(errors)
             o.close()
         except:
             pass

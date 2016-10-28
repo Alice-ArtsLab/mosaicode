@@ -10,15 +10,15 @@ class AddFloat(WebaudioPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
+
+        # Appearance
         self.help = "Add Float"
-        self.description = {"Label": "Add Float",
-                            "Icon": "images/dilate.png",
-                            "Color": "200:200:25:150",
-                            "InTypes": {0: "HRP_WEBAUDIO_FLOAT",
-                                        1: "HRP_WEBAUDIO_FLOAT"},
-                            "OutTypes": {0: "HRP_WEBAUDIO_FLOAT"},
-                            "TreeGroup": "Arithmetics"
-                            }
+        self.label = "Add Float"
+        self.icon = "images/dilate.png"
+        self.color = "200:200:25:150"
+        self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
+        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.group = "Arithmetics"
 
         self.vars = """
 // block_$id$ = Add Float
