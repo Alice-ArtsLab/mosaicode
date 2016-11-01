@@ -24,19 +24,19 @@ class PreferenceWindow(Gtk.Dialog):
         box.add(vbox)
 
         # Default directory
-        data = {"name": _("Default directory"),
+        data = {"label": _("Default directory"),
                 "value": self.properties.get_default_directory()}
         self.default_directory = OpenFileField(data, None)
         vbox.add(self.default_directory)
 
         # Default directory
-        data = {"name": _("Default Filename"),
+        data = {"label": _("Default Filename"),
                 "value": self.properties.get_default_filename()}
         self.default_filename = StringField(data, None)
         vbox.add(self.default_filename)
 
         # Error Log File
-        data = {"name": _("Error Log File"),
+        data = {"label": _("Error Log File"),
                 "value": self.properties.get_error_log_file()}
         self.error_log_file = StringField(data, None)
         vbox.add(self.error_log_file)
