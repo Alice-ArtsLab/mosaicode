@@ -15,7 +15,7 @@ class CommentField(Field, Gtk.VBox):
         Gtk.VBox.__init__(self)
 
         self.check_value(data, "name", "")
-        self.check_value(data, "value", 0)
+        self.check_value(data, "value", "")
         self.check_value(data, "height", 80)
         self.check_value(data, "width", 50)
 
