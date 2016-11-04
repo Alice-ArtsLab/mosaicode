@@ -45,4 +45,8 @@ class CheckField(Field, Gtk.HBox):
     def get_value(self):
         return self.field.get_active()
 
+    # ------------------------------------------------------------------------------
+    def set_value(self, value):
+        return self.field.set_active(value)
+
 # ------------------------------------------------------------------------------

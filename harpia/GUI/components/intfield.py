@@ -53,4 +53,8 @@ class IntField(Field, Gtk.HBox):
     def get_value(self):
         return int(self.field.get_value())
 
+    # --------------------------------------------------------------------------
+    def set_value(self, value):
+        self.field.set_value(float(value))
+
 # ------------------------------------------------------------------------------

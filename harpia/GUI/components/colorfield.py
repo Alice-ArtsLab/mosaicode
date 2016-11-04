@@ -56,4 +56,12 @@ class ColorField(Field, Gtk.HBox):
     def get_value(self):
         return self.color.to_string()
 
+    # --------------------------------------------------------------------------
+    def set_value(self, value):
+        try:
+            self.color = Gdk.color_parse(value)
+            self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
+        except:
+            pass
+
 # ------------------------------------------------------------------------------

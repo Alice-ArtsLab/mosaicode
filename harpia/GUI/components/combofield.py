@@ -17,6 +17,7 @@ class ComboField(Field, Gtk.HBox):
         self.check_value(data, "value", "")
         self.check_value(data, "values", [])
 
+        self.data = data
         self.value = data["value"]
         Gtk.HBox.__init__(self, True)
         self.label = Gtk.Label(data["label"])
@@ -46,5 +47,12 @@ class ComboField(Field, Gtk.HBox):
         if value is not None:
             self.value = value
         return self.value
+
+    # ------------------------------------------------------------------------------
+    def set_value(self, value):
+        self.value = value
+        if self.value in self.data["values"]:
+            index = self.data["values"].index(self.value)
+            self.field.set_active(index)
 
 # ------------------------------------------------------------------------------

@@ -74,4 +74,8 @@ class OpenFileField(Field, Gtk.HBox):
     def get_value(self):
         return self.field.get_text()
 
+    # --------------------------------------------------------------------------
+    def set_value(self, value):
+        self.field.set_text(value)
+
 # --------------------------------------------------------------------------
