@@ -76,6 +76,11 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(_("View Source"), None, process_menu, mc.view_source)
         self.__add_menu_category(_("Process"), process_menu)
 
+        # -------------------------- Plugin --------------------------------
+        plugin_menu = Gtk.Menu()
+        self.__create_menu(_("Plugin Manager"), None, plugin_menu, mc.new_plugin)
+        self.__add_menu_category(_("Plugins"), plugin_menu)
+
         # -------------------------- Help -----------------------------------
         # Cria sub menu
         help_menu = Gtk.Menu()
