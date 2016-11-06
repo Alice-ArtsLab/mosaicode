@@ -15,6 +15,7 @@ from harpia.GUI.components.commentfield import CommentField
 from harpia.GUI.components.codefield import CodeField
 from harpia.GUI.components.openfilefield import OpenFileField
 from harpia.GUI.blocknotebook import BlockNotebook
+from harpia.GUI.fieldtypes import *
 from harpia.system import System as System
 import gettext
 
@@ -22,7 +23,6 @@ _ = gettext.gettext
 class PluginManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
-
     def __init__(self, main_window):
         Gtk.Dialog.__init__(self, _("Plugin Manager"), main_window,
                             0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -72,8 +72,10 @@ class PluginManager(Gtk.Dialog):
         self.group = StringField({"label": _("Group")}, None)
         vbox.pack_start(self.group, False, False, 1)
         self.icon = OpenFileField({"label": _("Icon")}, None)
+        self.icon.set_parent_window(self)
         vbox.pack_start(self.icon, False, False, 1)
         self.color = ColorField({"label": _("Color")}, None)
+        self.color.set_parent_window(self)
         vbox.pack_start(self.color, False, False, 1)
         self.help = CommentField({"label": _("Help")}, None)
         vbox.pack_start(self.help, False, False, 1)
@@ -97,6 +99,14 @@ class PluginManager(Gtk.Dialog):
         tabs.append_page(configuration, Gtk.Label(_("Configuration")))
         vbox = Gtk.VBox()
         configuration.add(vbox)
+        fieldtypes = []
+        for key in component_list:
+            fieldtypes.append(key)
+        data = {"label": _("Field Type"), "values": fieldtypes}
+        self.field_type = ComboField(data, self.__select_field_type)
+        vbox.pack_start(self.field_type, False, False, 1)
+        self.configuration_panel = Gtk.VBox()
+        vbox.pack_start(self.configuration_panel, True, True, 1)
 
         # ----------------------------------------------------------------------
         code = Gtk.ScrolledWindow()
@@ -123,7 +133,6 @@ class PluginManager(Gtk.Dialog):
         if result == Gtk.ResponseType.OK:
             print "Good Save the Queen"
         self.close()
-        self.destroy()
 
     # ----------------------------------------------------------------------
     def set_block(self, plugin):
@@ -147,4 +156,16 @@ class PluginManager(Gtk.Dialog):
         self.function_call.set_value(plugin.generate_function_call())
         self.dealloc.set_value(plugin.generate_dealloc())
         self.out_dealloc.set_value(plugin.generate_out_dealloc())
+
+    # ----------------------------------------------------------------------
+    def __select_field_type(self, widget=None, data=None):
+        # Clean configuration panel
+        for widget in self.configuration_panel.get_children():
+            self.configuration_panel.remove(widget)
+        field_type = self.field_type.get_value()
+        configuration = component_list[field_type].get_configuration()
+        for key in configuration:
+            data = {"label": _(key), "value":str(configuration[key])}
+            field = StringField(data, None)
+            self.configuration_panel.pack_start(field, False, False, 1)
 # ----------------------------------------------------------------------
