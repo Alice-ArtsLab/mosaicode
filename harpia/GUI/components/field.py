@@ -1,15 +1,19 @@
-from harpia.GUI.fieldtypes import *
-
-
 class Field(object):
 
+    configuration = {}
     # ----------------------------------------------------------------------
     def __init__(self, data, event):
-        pass
+        self.data = data
 
     # ----------------------------------------------------------------------
     def get_type(self):
+        from harpia.GUI.fieldtypes import *
         return HARPIA_NONE
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_configuration(cls):
+        return cls.configuration
 
     # ----------------------------------------------------------------------
     def get_value(self):
@@ -20,9 +24,9 @@ class Field(object):
         pass
 
     # ----------------------------------------------------------------------
-    def check_value(self, data, key, value):
-        if key in data:
-            return
-        else:
-            data[key] = value
-
+    def check_values(self):
+        for key in self.get_configuration():
+            if key in self.data:
+                continue
+            else:
+                self.data[key] = self.get_configuration()[key]

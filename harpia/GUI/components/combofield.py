@@ -1,36 +1,37 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from harpia.GUI.fieldtypes import *
 from harpia.GUI.components.field import Field
 
 
 class ComboField(Field, Gtk.HBox):
 
-    # ------------------------------------------------------------------------------
+    configuration = {"label": "", "value": "", "name": "", "values": []}
 
+    # ------------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data, dict):
             return
-
-        self.check_value(data, "label", "")
-        self.check_value(data, "value", "")
-        self.check_value(data, "values", [])
-
-        self.data = data
-        self.value = data["value"]
+        Field.__init__(self, data, event)
         Gtk.HBox.__init__(self, True)
-        self.label = Gtk.Label(data["label"])
+
+        self.check_values()
+
+        self.set_name(self.data["name"])
+
+        self.value = self.data["value"]
+
+        self.label = Gtk.Label(self.data["label"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
         self.field = Gtk.ComboBoxText()
         self.field.set_entry_text_column(0)
 
-        for value in data["values"]:
+        for value in self.data["values"]:
             self.field.append_text(value)
-        if self.value in data["values"]:
-            index = data["values"].index(self.value)
+        if self.value in self.data["values"]:
+            index = self.data["values"].index(self.value)
             self.field.set_active(index)
         if event is not None:
             self.field.connect("changed", event)
@@ -39,6 +40,7 @@ class ComboField(Field, Gtk.HBox):
 
     # ------------------------------------------------------------------------------
     def get_type(self):
+        from harpia.GUI.fieldtypes import *
         return HARPIA_COMBO
 
     # ------------------------------------------------------------------------------
