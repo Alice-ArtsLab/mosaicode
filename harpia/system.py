@@ -90,6 +90,9 @@ class System(object):
                 for name, obj in inspect.getmembers(module):
                     if not inspect.isclass(obj):
                         continue
+                    modname = inspect.getmodule(obj).__name__
+                    if not modname.startswith("harpia.plugins"):
+                        continue
                     instance = obj()
                     if isinstance(instance, Plugin) and \
                             instance.get_label() != "":
