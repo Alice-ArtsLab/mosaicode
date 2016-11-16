@@ -5,7 +5,7 @@
 class Plugin(object):
     """
     This class contains the base attributes of each plug-in,
-    their position on the screen, id and others applicable properties for each one. 
+    their position on the screen, id and others applicable properties for each one.
     """
 
     # ----------------------------------------------------------------------
@@ -37,21 +37,36 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def get_help(self):
         """
-        Return the plugins help text.
+        Return the plugin help text.
+        Args:
+            None
+
+        Returns:
+            string: The return value.
         """
         return self.help
 
     # ----------------------------------------------------------------------
     def get_label(self):
         """
-        Return the plugins label.
+        Return the plugin label.
+        Args:
+            None
+
+        Returns:
+            string: The return value.
         """
         return self.label
 
     # ----------------------------------------------------------------------
     def get_icon(self):
         """
-        Get icon of plugins.
+        Return the plugin icon path.
+        Args:
+            None
+
+        Returns:
+            string: The return value is the icon path.
         """
 
         return self.icon
@@ -59,13 +74,14 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def get_color(self):
         """
-        Get color in RGB format and return in hexadecimal.
+        Get the color in RGB format and return in hexadecimal.
         Args:
             None
 
         Returns:
-            The return hex value.
+            hex: The return is the hex value reference to color
         """
+
         color = self.color.split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
         color = int(color[0]) * 0x1000000 + \
@@ -76,6 +92,14 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_in_types(self):
+        """
+        Return types of plugin entries.
+        Args:
+            None
+
+        Returns:
+            List: The return is a list of types plugin entries.
+        """
         return self.in_types
 
     # ----------------------------------------------------------------------
