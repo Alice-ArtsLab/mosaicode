@@ -21,22 +21,21 @@ class NewImage(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"
 
-        self.properties = {
-            "width": {
-                "name": "Width",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "height": {
-                "name": "Height",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Width",
+                            "label": "width",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Height",
+                            "label": "Height",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

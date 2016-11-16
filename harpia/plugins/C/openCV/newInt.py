@@ -20,15 +20,14 @@ class NewInt(OpenCVPlugin):
         self.out_types = ["HRP_INT"]
         self.group = "Basic Data Type"
 
-        self.properties = {
-            "intVal": {
-                "name": "Value",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Value",
+                            "label": "intVal",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'

@@ -20,8 +20,6 @@ class UpToBottom(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Arithmetic and logical operations"
 
-        self.properties = {}
-
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \
             'if(block$id$_img_i0 && block$id$_img_i1){\n' + \

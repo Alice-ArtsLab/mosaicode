@@ -31,26 +31,25 @@ class Circle(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Basic Shapes"
 
-        self.properties = {
-            "x0": {
-                "name": "x0",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 800,
-                "step": 1
-            },
-            "y0": {
-                "name": "y0",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 1000,
-                "step": 1
-            },
-            "circle_color": {
-                "name": "Color",
-                "type": HARPIA_COLOR
-            }
-        }
+        self.properties = [{"name": "x0",
+                            "label": "x0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 800,
+                            "step": 1
+                            },
+                           {"name": "y0",
+                            "label": "y0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 1000,
+                            "step": 1
+                            },
+                           {"name": "Color",
+                            "label": "circle_color",
+                            "type": HARPIA_COLOR
+                            }
+                           ]
 
         # -----------------C/OpenCv code ---------------------------
         self.vars = \

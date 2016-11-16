@@ -21,22 +21,21 @@ class NewPoint(OpenCVPlugin):
         self.out_types = ["HRP_POINT"]
         self.group = "Basic Data Type"
 
-        self.properties = {
-            "x0": {
-                "name": "X",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "y0": {
-                "name": "Y",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "X",
+                            "label": "x0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Y",
+                            "label": "y0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = 'CvPoint block$id$_point_o0 = cvPoint($x0$,$y0$);\n'

@@ -22,14 +22,15 @@ class Resize(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Experimental"
 
-        self.properties = {
-            "method": {
-                "name": "Method",
-                "type": HARPIA_COMBO,
-                "values": ["CV_INTER_NN", "CV_INTER_LINEAR",
-                           "CV_INTER_AREA", "CV_INTER_CUBIC"]
-            }
-        }
+        self.properties = [{"name": "Method",
+                            "label": "method",
+                            "type": HARPIA_COMBO,
+                            "values": ["CV_INTER_NN",
+                                       "CV_INTER_LINEAR",
+                                       "CV_INTER_AREA",
+                                       "CV_INTER_CUBIC"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

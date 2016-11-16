@@ -82,4 +82,3 @@ class BlockModel(object):
     # ----------------------------------------------------------------------
     def get_group(self):
         return self.__plugin.get_group()
-

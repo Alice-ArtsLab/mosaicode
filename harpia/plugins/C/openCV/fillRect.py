@@ -21,12 +21,11 @@ class FillRect(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Basic Shapes"
 
-        self.properties = {
-            "rect_color": {
-                "name": "Color",
-                "type": HARPIA_COLOR
-            }
-        }
+        self.properties = [{"name": "rect_Color",
+                            "label": "rect_color",
+                            "type": HARPIA_COLOR
+                            }
+                           ]
 
         # ------------------------------C/OpenCv code--------------------------
         self.vars = \

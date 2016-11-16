@@ -22,15 +22,14 @@ class StereoCorr(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Feature Detection"
 
-        self.properties = {
-            "maxDist": {
-                "name": "Max Distance",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 655,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Max Distance",
+                            "label": "maxDist",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 655,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

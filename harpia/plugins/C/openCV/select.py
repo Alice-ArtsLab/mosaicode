@@ -21,13 +21,12 @@ class Select(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "key": {
-                "name": "Key",
-                "type": HARPIA_STRING,
-                "maxlength": 1
-            }
-        }
+        self.properties = [{"name": "Key",
+                            "label": "key",
+                            "type": HARPIA_STRING,
+                            "maxlength": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars += 'IplImage * block$id$_img_i0 = NULL;\n'

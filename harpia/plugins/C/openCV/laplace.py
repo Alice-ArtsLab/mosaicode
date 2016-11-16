@@ -23,13 +23,12 @@ class Laplace(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Gradients, Edges and Corners"
 
-        self.properties = {
-            "masksize": {
-                "name": "Mask Size",
-                "type": HARPIA_COMBO,
-                "values": ["1", "3", "5", "7", "9", "11", "13"]
-            }
-        }
+        self.properties = [{"name": "Mask Size",
+                            "label": "masksize",
+                            "type": HARPIA_COMBO,
+                            "values": ["1", "3", "5", "7", "9", "11", "13"]
+                            }
+                           ]
 
         # ------------------------------C/OpenCv code--------------------------
         self.vars = \

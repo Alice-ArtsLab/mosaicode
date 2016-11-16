@@ -87,9 +87,8 @@ class DiagramModel(object):
     # ---------------------------------------------------------------------
     def get_zoom(self):
         return self.__zoom
-        
+
     # ---------------------------------------------------------------------
     def reset_undo(self):
         self.redo_stack = []
         self.undo_stack = []
-

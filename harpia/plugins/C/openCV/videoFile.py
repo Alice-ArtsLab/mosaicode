@@ -24,16 +24,15 @@ class VideoFile(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"
 
-        self.properties = {
-            "filename": {
-                "name": "File Name",
-                "type": HARPIA_OPEN_FILE
-            },
-            "key": {
-                "name": "Reset Key",
-                "type": HARPIA_STRING
-            }
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "filename",
+                            "type": HARPIA_OPEN_FILE
+                            },
+                           {"name": "Reset Key",
+                            "label": "key",
+                            "type": HARPIA_STRING
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \
