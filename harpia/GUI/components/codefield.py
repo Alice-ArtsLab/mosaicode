@@ -1,16 +1,19 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import GtkSource
+from harpia.GUI.fieldtypes import *
 from harpia.GUI.components.field import Field
 
 
-class CommentField(Field, Gtk.VBox):
+class CodeField(Field, Gtk.VBox):
 
     configuration = {"label": "",
             "value": "",
             "name": "",
             "height": 80,
-            "width": 50
+            "width": 50,
+            "language": "c"
             }
 
     # --------------------------------------------------------------------------
@@ -35,26 +38,29 @@ class CommentField(Field, Gtk.VBox):
 
         self.label = Gtk.Label(self.data["label"])
         self.label.set_property("halign", Gtk.Align.START)
-        self.add(self.label)
+        self.pack_start(self.label, False, False, 0)
 
-        self.field = Gtk.TextView()
-        self.field.set_left_margin(10)
-        self.field.set_right_margin(10)
-        self.field.set_wrap_mode(Gtk.WrapMode.WORD)
+        lang_manager = GtkSource.LanguageManager()
+        self.text_buffer = GtkSource.Buffer.new_with_language(
+                lang_manager.get_language(self.data["language"]))
+        textview = GtkSource.View.new_with_buffer(self.text_buffer)
+        textview.set_show_line_numbers(True)
+        textview.set_left_margin(10)
+        textview.set_right_margin(10)
+        textview.get_buffer().set_text(self.data["value"])
+
+        textview.set_wrap_mode(Gtk.WrapMode.WORD)
         if event is not None:
             self.field.connect("focus-out-event", event)
 
-        self.text_buffer = self.field.get_buffer()
-        self.text_buffer.set_text(self.data["value"])
-        scrolled_window.add(self.field)
+        scrolled_window.add(textview)
 
-        self.add(scrolled_window)
+        self.pack_start(scrolled_window, True, True, 0)
         self.show_all()
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
-        return HARPIA_COMMENT
+        return HARPIA_CODE
 
     # --------------------------------------------------------------------------
     def get_value(self):

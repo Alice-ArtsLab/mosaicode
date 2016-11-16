@@ -5,25 +5,27 @@ import gi
 import os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from harpia.GUI.fieldtypes import *
 from harpia.GUI.components.field import Field
 
 
 class OpenFileField(Field, Gtk.HBox):
 
-    # --------------------------------------------------------------------------
+    configuration = {"label": "", "value": "", "name": ""}
 
+    # --------------------------------------------------------------------------
     def __init__(self, data, event):
         if not isinstance(data, dict):
             return
-
-        self.check_value(data, "label", "")
-        self.check_value(data, "value", "")
-
-        self.file = data["value"]
-        self.parent_window = None
+        Field.__init__(self, data, event)
         Gtk.HBox.__init__(self, False)
-        self.label = Gtk.Label(data["label"])
+
+        self.check_values()
+
+        self.set_name(self.data["name"])
+
+        self.file = self.data["value"]
+        self.parent_window = None
+        self.label = Gtk.Label(self.data["label"])
         self.label.set_property("halign", Gtk.Align.START)
         self.add(self.label)
 
@@ -68,10 +70,15 @@ class OpenFileField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
+        from harpia.GUI.fieldtypes import *
         return HARPIA_OPEN_FILE
 
     # --------------------------------------------------------------------------
     def get_value(self):
         return self.field.get_text()
+
+    # --------------------------------------------------------------------------
+    def set_value(self, value):
+        self.field.set_text(value)
 
 # --------------------------------------------------------------------------

@@ -33,6 +33,7 @@ from gi.repository import Gtk
 
 class BlockMenu(Gtk.Menu):
 
+    # ----------------------------------------------------------------------
     def __init__(self, block, event):
         Gtk.Notebook.__init__(self)
         self.block = block
@@ -45,5 +46,6 @@ class BlockMenu(Gtk.Menu):
         self.show_all()
         self.popup(None, None, None, None, event.button.button, event.time)
 
+    # ----------------------------------------------------------------------
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
         self.block.delete()

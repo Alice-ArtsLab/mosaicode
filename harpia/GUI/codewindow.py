@@ -15,7 +15,9 @@ class CodeWindow(Gtk.Dialog):
 
     def __init__(self, main_window, code):
         Gtk.Dialog.__init__(self, "Code Window", main_window,
-                            0, (Gtk.STOCK_OK, Gtk.ResponseType.OK))
+                            Gtk.DialogFlags.DESTROY_WITH_PARENT |
+                            Gtk.DialogFlags.MODAL,
+                            (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.set_default_size(800, 600)
         sw = Gtk.ScrolledWindow()
@@ -23,7 +25,9 @@ class CodeWindow(Gtk.Dialog):
         box.pack_start(sw, True, True, 0)
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        textview = GtkSource.View()
+        lang_manager = GtkSource.LanguageManager()
+        textbuffer = GtkSource.Buffer.new_with_language(lang_manager.get_language('c'))
+        textview = GtkSource.View.new_with_buffer(textbuffer)
         textview.set_show_line_numbers(True)
         textview.set_left_margin(10)
         textview.set_right_margin(10)
@@ -33,7 +37,7 @@ class CodeWindow(Gtk.Dialog):
         textview.show()
         self.show_all()
 
-        if self.run() == Gtk.ResponseType.OK:
-            self.close()
-            self.destroy()
+        self.run()
+        self.close()
+        self.destroy()
 # ----------------------------------------------------------------------

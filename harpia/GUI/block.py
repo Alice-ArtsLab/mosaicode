@@ -110,12 +110,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_rect(self):
-        color = self.get_color().split(":")
-        color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
-        color = int(color[0]) * 0x1000000 + \
-            int(color[1]) * 0x10000 + \
-            int(color[2]) * 0x100 + \
-            int(color[3]) * 0x01
         rect = GooCanvas.CanvasRect(parent=self,
                                     x=0,
                                     y=0,
@@ -124,7 +118,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                     radius_x=10,
                                     radius_y=10,
                                     stroke_color="black",
-                                    fill_color_rgba=color
+                                    fill_color_rgba=self.get_color()
                                     )
         self.widgets["Rect"] = rect
 

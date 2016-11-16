@@ -8,6 +8,7 @@ from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
+from harpia.GUI.pluginmanager import PluginManager
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
@@ -266,5 +267,9 @@ class MainControl():
         if diagram is None:
             return
         diagram.update_scrolling()
+
+    # ----------------------------------------------------------------------
+    def new_plugin(self):
+        PluginManager(self.main_window)
 
 # ----------------------------------------------------------------------

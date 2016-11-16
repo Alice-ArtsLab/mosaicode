@@ -48,10 +48,10 @@ class WorkArea(Gtk.Notebook):
 
         if diagram.get_modified():
             dialog = Dialog().confirm_dialog(_("Diagram ") +
-                                             diagram.get_file_name() +
-                                             _(" is not saved. \nIf you close it"
-                                             ", changes will be lost.\n"
-                                             "Confirm?"), self.main_window)
+                           diagram.get_file_name() +
+                           _(" is not saved. \nIf you close it"
+                           ", changes will be lost.\n"
+                           "Confirm?"), self.main_window)
             result = dialog.run()
             dialog.destroy()
             if result == Gtk.ResponseType.CANCEL:
