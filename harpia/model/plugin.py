@@ -3,6 +3,10 @@
 
 
 class Plugin(object):
+    """
+    This class contains the base attributes of each plug-in,
+    their position on the screen, id and others applicable properties for each one. 
+    """
 
     # ----------------------------------------------------------------------
     def __init__(self):
@@ -32,18 +36,31 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_help(self):
+        """
+        Get the plugins help text.
+        """
         return self.help
 
     # ----------------------------------------------------------------------
     def get_label(self):
+        """
+        Get labels of plugins.
+        """
         return self.label
 
     # ----------------------------------------------------------------------
     def get_icon(self):
+        """
+        Get icon of plugins.
+        """
+
         return self.icon
 
     # ----------------------------------------------------------------------
     def get_color(self):
+        """
+        Get color in format RGB and return. 
+        """
         color = self.color.split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
         color = int(color[0]) * 0x1000000 + \
