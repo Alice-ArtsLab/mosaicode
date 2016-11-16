@@ -37,14 +37,14 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def get_help(self):
         """
-        Get the plugins help text.
+        Return the plugins help text.
         """
         return self.help
 
     # ----------------------------------------------------------------------
     def get_label(self):
         """
-        Get labels of plugins.
+        Return the plugins label.
         """
         return self.label
 
@@ -59,7 +59,12 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def get_color(self):
         """
-        Get color in format RGB and return. 
+        Get color in RGB format and return in hexadecimal.
+        Args:
+            None
+
+        Returns:
+            The return hex value.
         """
         color = self.color.split(":")
         color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
