@@ -24,29 +24,28 @@ class Sobel(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Gradients, Edges and Corners"
 
-        self.properties = {
-            "xorder": {
-                "name": "X Axis Derivate Order",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 6,
-                "step": 1
-            },
-            "yorder": {
-                "name": "Y Axis Derivate Order",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 6,
-                "step": 1
-            },
-            "masksize": {
-                "name": "Mask Size",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 7,
-                "step": 2
-            }
-        }
+        self.properties = [{"name": "X Axis Derivate Order",
+                            "label": "xorder",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 6,
+                            "step": 1
+                            },
+                           {"name": "Y Axis Derivate Order",
+                            "label": "yorder",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 6,
+                            "step": 1
+                            },
+                           {"name": "Mask Size",
+                            "label": "masksize",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 7,
+                            "step": 2
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

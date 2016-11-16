@@ -20,15 +20,14 @@ class NewDouble(OpenCVPlugin):
         self.out_types = ["HRP_DOUBLE"]
         self.group = "Basic Data Type"
 
-        self.properties = {
-            "doubleVal": {
-                "name": "Value",
-                "type": HARPIA_FLOAT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Value",
+                            "label": "doubleVal",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = 'double block$id$_double_o0 = ' + \

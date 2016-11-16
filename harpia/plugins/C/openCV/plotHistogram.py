@@ -22,13 +22,15 @@ class PlotHistogram(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Histograms"
 
-        self.properties = {
-            "channel": {
-                "name": "Channels",
-                "type": HARPIA_COMBO,
-                "values": ["All", "Red", "Green", "Blue"]
-            }
-        }
+        self.properties = [{"name": "Channels",
+                            "label": "channel",
+                            "type": HARPIA_COMBO,
+                            "values": ["All",
+                                       "Red",
+                                       "Green",
+                                       "Blue"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

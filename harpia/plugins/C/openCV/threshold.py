@@ -24,29 +24,30 @@ class Threshold(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Filters and Color Conversion"
 
-        self.properties = {
-            "threshold": {
-                "name": "Threshold",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 255,
-                "step": 1
-            },
-            "maxValue": {
-                "name": "Max Gray Value",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 255,
-                "step": 1
-            },
-            "thresholdType": {
-                "name": "Threshold Type",
-                "type": HARPIA_COMBO,
-                "values": ["CV_THRESH_BINARY", "CV_THRESH_BINARY_INV",
-                           "CV_THRESH_TRUNC", "CV_THRESH_TOZERO",
-                           "CV_THRESH_TOZERO_INV"]
-            }
-        }
+        self.properties = [{"name": "Threshold",
+                            "label": "threshold",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 255,
+                            "step": 1
+                            },
+                           {"name": "Max Gray Value",
+                            "label": "maxValue",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 255,
+                            "step": 1
+                            },
+                           {"name": "Threshold Type",
+                            "label": "thresholdType",
+                            "type": HARPIA_COMBO,
+                            "values": ["CV_THRESH_BINARY",
+                                       "CV_THRESH_BINARY_INV",
+                                       "CV_THRESH_TRUNC",
+                                       "CV_THRESH_TOZERO",
+                                       "CV_THRESH_TOZERO_INV"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

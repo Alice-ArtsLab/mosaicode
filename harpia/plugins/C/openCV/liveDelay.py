@@ -21,15 +21,15 @@ class LiveDelay(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "frameNumber": {
-                "name": "Time (in frames)",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 200,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Time (in frames)",
+                            "label": "frameNumber",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 200,
+                            "step": 1
+                            }
+                           ]
+
         # ------------------------------C/OpenCv code--------------------------
         self.function_call = '''
             if(block$id$_img_i0){

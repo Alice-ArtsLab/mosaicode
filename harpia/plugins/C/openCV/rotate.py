@@ -26,41 +26,40 @@ class Rotate(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Experimental"
 
-        self.properties = {
-            "isCenter": {
-                "name": "Use Image Center",
-                "type": HARPIA_CHECK
-            },
-            "isScalling": {
-                "name": "Resize Image To Fit In",
-                "type": HARPIA_CHECK
-            },
-            "isFilling": {
-                "name": "Fill Leftovers",
-                "type": HARPIA_CHECK
-            },
-            "xC": {
-                "name": "Point X",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "yC": {
-                "name": "Point Y",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "angle": {
-                "name": "Angle",
-                "type": HARPIA_FLOAT,
-                "lower": 0,
-                "upper": 360,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Use Image Center",
+                            "label": "isCenter",
+                            "type": HARPIA_CHECK
+                            },
+                           {"name": "Resize Image To Fit In",
+                            "label": "isScalling",
+                            "type": HARPIA_CHECK
+                            },
+                           {"name": "Fill Leftovers",
+                            "label": "isFilling",
+                            "type": HARPIA_CHECK
+                            },
+                           {"name": "Point X",
+                            "label": "xC",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Point Y",
+                            "label": "yC",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Angle",
+                            "label": "angle",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 360,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

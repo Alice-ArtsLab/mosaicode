@@ -23,12 +23,11 @@ class ImageFile(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"
 
-        self.properties = {
-            "filename": {
-                "name": "File Name",
-                "type": HARPIA_OPEN_FILE
-            }
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "filename",
+                            "type": HARPIA_OPEN_FILE
+                            }
+                           ]
 
         # ----------------------------C/OpenCv code-------------------------
         self.vars = 'IplImage * block$id$_img_o0 = NULL;\n'

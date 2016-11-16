@@ -23,20 +23,19 @@ class Dilate(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Morphological Operations"
 
-        self.properties = {
-            "masksize": {
-                "name": "Mask Size",
-                "type": HARPIA_COMBO,
-                "values": ["1x1", "3x3", "5x5", "7x7"]
-            },
-            "iterations": {
-                "name": "Iterations",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Mask Size",
+                            "label": "masksize",
+                            "type": HARPIA_COMBO,
+                            "values": ["1x1", "3x3", "5x5", "7x7"]
+                            },
+                           {"name": "Iterations",
+                            "label": "iterations",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # ----------------------------C/OpenCv code---------------------------
         self.vars = \

@@ -21,17 +21,18 @@ class Show(OpenCVPlugin):
         self.in_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "title": {
-                "name": "Window Title",
-                "type": HARPIA_STRING
-            },
-            "window_type": {
-                "name": "Window Type",
-                "type": HARPIA_COMBO,
-                "values": ["Window Size", "Image Size", "Resizable Window"]
-            }
-        }
+        self.properties = [{"name": "Window Title",
+                            "label": "title",
+                            "type": HARPIA_STRING
+                            },
+                           {"name": "Window Type",
+                            "label": "window_type",
+                            "type": HARPIA_COMBO,
+                            "values": ["Window Size",
+                                       "Image Size",
+                                       "Resizable Window"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
 

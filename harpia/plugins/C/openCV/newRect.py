@@ -23,36 +23,35 @@ class NewRect(OpenCVPlugin):
         self.out_types = ["HRP_RECT"]
         self.group = "Basic Data Type"
 
-        self.properties = {
-            "x0": {
-                "name": "X",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "y0": {
-                "name": "Y",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "width": {
-                "name": "Width",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "height": {
-                "name": "Height",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "X",
+                            "label": "x0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Y",
+                            "label": "y0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Width",
+                            "label": "width",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Height",
+                            "label": "Height",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

@@ -30,26 +30,28 @@ class Canny(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Gradients, Edges and Corners"
 
-        self.properties = {
-            "apertureSize": {"name": "Aperture Size",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 10,
-                "step": 1
-            },
-            "threshold1": {"name": "Threshold 1",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 100,
-                "step": 1
-            },
-            "threshold2": {"name": "Threshold 2",
-                           "type": HARPIA_INT,
-                           "lower": 1,
-                           "upper": 100,
-                           "step": 1
-                           }
-        }
+        self.properties = [{"name": "Aperture Size",
+                            "label": "apertureSize",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 10,
+                            "step": 1
+                            },
+                           {"name": "Threshold 1",
+                            "label": "threshold1",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 100,
+                            "step": 1
+                            },
+                           {"name": "Threshold 2",
+                            "label": "threshold2",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 100,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------------C/OpenCV code----------------------------
         self.vars = \
@@ -79,7 +81,8 @@ class Canny(OpenCVPlugin):
             "cvCanny(tmpImg$id$, tmpImg$id$, block$id$_int_i2," + \
             " block$id$_int_i1, block$id$_int_i3);\n" + \
             "\tif(block$id$_img_i0->nChannels == 3){\n" + \
-            "    \t\tcvCvtColor(tmpImg$id$, block$id$_img_o0,CV_GRAY2RGB);\n" + \
+            "    \t\tcvCvtColor(tmpImg$id$, " + \
+            "block$id$_img_o0,CV_GRAY2RGB);\n" + \
             "\t}else{\n" + \
             "    \t\tcvCopyImage(tmpImg$id$, block$id$_img_o0);\n" + \
             "\t}\n" + \

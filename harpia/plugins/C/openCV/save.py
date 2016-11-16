@@ -22,12 +22,11 @@ class Save(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "filename": {
-                "name": "File Name",
-                "type": HARPIA_SAVE_FILE
-            }
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "filename",
+                            "type": HARPIA_SAVE_FILE
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

@@ -22,23 +22,22 @@ class MatchTem(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Feature Detection"
 
-        self.properties = {
-            "scaleFactor": {
-                "name": "Scale Factor",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 99,
-                "step": 1
-            },
-            "method": {
-                "name": "Method",
-                "type": HARPIA_COMBO,
-                "values": ["CV_TM_CCOEFF_NORMED", "CV_TM_CCOEFF",
-                           "CV_TM_CCORR_NORMED", "CV_TM_CCORR",
-                           "CV_TM_SQDIFF_NORMED", "CV_TM_SQDIFF"
+        self.properties = [{"name": "Scale Factor",
+                            "label": "scaleFactor",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 99,
+                            "step": 1
+                            },
+                           {"name": "Method",
+                            "label": "method",
+                            "type": HARPIA_COMBO,
+                            "values": ["CV_TM_CCOEFF_NORMED", "CV_TM_CCOEFF",
+                                       "CV_TM_CCORR_NORMED", "CV_TM_CCORR",
+                                       "CV_TM_SQDIFF_NORMED", "CV_TM_SQDIFF"
+                                       ]
+                            }
                            ]
-            }
-        }
 
         # ------------------------------C/OpenCv code--------------------------
         self.vars = \
