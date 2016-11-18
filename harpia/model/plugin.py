@@ -38,6 +38,7 @@ class Plugin(object):
     def get_help(self):
         """
         Return the plugin help text.
+
         Args:
             None
 
@@ -50,6 +51,7 @@ class Plugin(object):
     def get_label(self):
         """
         Return the plugin label.
+
         Args:
             None
 
@@ -62,6 +64,7 @@ class Plugin(object):
     def get_icon(self):
         """
         Return the plugin icon path.
+
         Args:
             None
 
@@ -75,6 +78,7 @@ class Plugin(object):
     def get_color(self):
         """
         Get the color in RGB format and return in hexadecimal.
+
         Args:
             None
 
@@ -94,6 +98,7 @@ class Plugin(object):
     def get_in_types(self):
         """
         Return types of plugin entries.
+        
         Args:
             None
 
