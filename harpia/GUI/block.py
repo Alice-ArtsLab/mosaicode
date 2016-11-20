@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the information about each block.
+The block class is in this file.
+"""
 import gi
 import os
 gi.require_version('Gtk', '3.0')
@@ -25,10 +28,16 @@ OUTPUT_WIDTH = 24
 
 
 class Block(GooCanvas.CanvasGroup, BlockModel):
+    """
+    This class contains the methods about blocks.
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, diagram, plugin):
+        """
+        This method is the constuctor.
+        """
         GooCanvas.CanvasGroup.__init__(self)
         BlockModel.__init__(self, plugin)
         self.diagram = diagram
@@ -52,6 +61,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
+        """
+        This method monitors the when the button is pressed.
+        Args:
+
+        Returns:
+            True(boolean): Indicates the button is pressed.
+        """
         # with Shift
         if event.state == Gdk.ModifierType.SHIFT_MASK \
                 | Gdk.ModifierType.MOD2_MASK:
@@ -110,6 +126,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_rect(self):
+        """
+        This method draw a rectangle.
+        Args:
+            None
+        Returns:
+            None
+        """
         rect = GooCanvas.CanvasRect(parent=self,
                                     x=0,
                                     y=0,
@@ -124,6 +147,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_icon(self):
+        """
+        This method draw a icon.
+        Args:
+            None.
+        Returns:
+            None.
+        """
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                                                 self.get_icon())
         image = GooCanvas.CanvasImage(parent=self,
@@ -137,6 +167,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_inputs(self):
+        """
+        This method draw the inputs.
+        Args:
+            None.
+        Returns:
+            None.
+        """
         ins = []
         x = 0
         for in_type in self.get_in_types():
@@ -163,6 +200,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, args):
+        """
+        This method return true if a input was connected.
+        Args:
+
+        Returns:
+            True(boolean): Indicates the input as connected.
+        """
         self.diagram.end_connection(self, args)
         return True
 
@@ -172,6 +216,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_outputs(self):
+        """
+            This method draw the outputs.
+            Args:
+                None.
+            Returns:
+                None.
+        """
         outs = []
         x = 0
         for out_type in self.get_out_types():
@@ -236,7 +287,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def build(self):
-        maxIO = max(len(self.get_in_types()),len(self.get_out_types()))
+        maxIO = max(len(self.get_in_types()), len(self.get_out_types()))
 
         # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
