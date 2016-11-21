@@ -34,13 +34,13 @@ from gi.repository import Gtk
 
 
 class BlockMenu(Gtk.Menu):
-        """
-        This method define the menu of each block.
-        Args:
-            GTK.Menu
-        Returns:
-            None
-        """
+    """
+    This method define the menu of each block.
+    Args:
+        GTK.Menu
+    Returns:
+        None
+    """
 
     # ----------------------------------------------------------------------
     def __init__(self, block, event):
