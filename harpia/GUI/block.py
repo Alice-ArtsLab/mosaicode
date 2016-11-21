@@ -98,6 +98,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
+         """
+        This method monitors the motion.
+        Args:
+        Returns:
+        """
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
             return False
         if self.diagram.curr_connector is not None:
@@ -110,12 +115,22 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
+        """
+        This method monitors the motion.
+        Args:
+        Returns:
+        """
         self.focus = True
         self.__update_state()
         return False
 
     # ----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
+         """
+        This method monitors the motion.
+        Args:
+        Returns:
+        """
         self.focus = False
         self.__update_state()
         return False
