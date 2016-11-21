@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+This file contains the class About.
+"""
 import gi
 import os
 from gi.repository import Gtk
@@ -8,8 +11,20 @@ _ = gettext.gettext
 
 
 class About(Gtk.Window):
+    """
+    This class contain the window about.
+    This class contains the information about the project.
+    Args:
+        Gtk.window
+
+    Return:
+        None
+    """
 
     def __init__(self, main_window):
+        """
+        This method is the constuctor.
+        """
         self.data_dir = os.environ['HARPIA_DATA_DIR']
         Gtk.Window.__init__(self, title=_("About Harpia"))
         self.set_default_size(650, 480)

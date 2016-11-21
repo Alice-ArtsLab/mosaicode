@@ -25,16 +25,32 @@
 #    this software.
 #
 # ----------------------------------------------------------------------
-
+"""
+This file contains the BlockMenu class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
 class BlockMenu(Gtk.Menu):
+        """
+        This method define the menu of each block.
+        Args:
+            GTK.Menu
+        Returns:
+            None
+        """
 
     # ----------------------------------------------------------------------
     def __init__(self, block, event):
+        """
+        This method show the block menu.
+        Args:
+
+        Returns:
+            None
+        """
         Gtk.Notebook.__init__(self)
         self.block = block
 
@@ -48,4 +64,11 @@ class BlockMenu(Gtk.Menu):
 
     # ----------------------------------------------------------------------
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
+        """
+        This method monitors if the button delete was clikcked.
+        Args:
+
+        Returns:
+            None
+        """
         self.block.delete()
