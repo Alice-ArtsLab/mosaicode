@@ -9,10 +9,12 @@ from gi.repository import Gtk
 import gettext
 _ = gettext.gettext
 
+
 class Toolbar(Gtk.Toolbar):
     """
     This class construct the toolbar menu.
     """
+
     def __init__(self, main_window):
         """
         This method is the constructor is creates each menu button.

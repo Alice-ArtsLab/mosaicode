@@ -283,7 +283,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     # ----------------------------------------------------------------------
     def __on_output_release(self, canvas_item, target_item, event, args):
         """
-        This method monitors the output state, monitors if output was release. 
+        This method monitors the output state, monitors if output was release.
         Args:
         Returns:
             boolean.
