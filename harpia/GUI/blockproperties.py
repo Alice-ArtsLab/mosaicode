@@ -40,8 +40,8 @@ class BlockProperties(Gtk.Notebook):
         help_scrolled_window = Gtk.ScrolledWindow()
         help_scrolled_window.set_border_width(10)
         help_scrolled_window.set_policy(
-            Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        self.help = Gtk.TextView()This method set properties of each block.
+        Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        self.help = Gtk.TextView()
         self.help.set_wrap_mode(Gtk.WrapMode.WORD)
         self.help.set_editable(False)
         self.help.set_left_margin(2)
