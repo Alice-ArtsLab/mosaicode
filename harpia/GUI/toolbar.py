@@ -81,4 +81,3 @@ class Toolbar(Gtk.Toolbar):
             None
         """
         self.actions[widget]()
->>>>>>> e892e556aa3fa62c114a8a96170a451f22ac860a
