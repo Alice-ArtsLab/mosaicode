@@ -98,7 +98,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
-         """
+        """
         This method monitors the motion.
         Args:
         Returns:
@@ -126,7 +126,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
-         """
+        """
         This method monitors the motion.
         Args:
         Returns:
@@ -227,7 +227,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_input_release(self, canvas_item, target_item, event, args):
-          """
+        """
         This method monitors the input release.
         Args:
 
@@ -271,7 +271,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
-         """
+        """
         This method monitors the output state, monitors if output was pressed.
         Args:
         Returns:
@@ -292,7 +292,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_label(self):
-         """
+        """
         This method draw the label.
         Args:
         Returns:
@@ -333,7 +333,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def build(self):
-         """
+        """
         This method build the block.
         Args:
         Returns:
@@ -377,7 +377,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_output_pos(self, output_id):
-         """
+        """
         This method get output position.
         Args:
         Returns:
@@ -392,7 +392,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def move(self, x, y):
-         """
+        """
         This method move a block.
         Args:
         Returns:
@@ -411,7 +411,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_position(self):
-         """
+        """
         This method get position the block.
         Args:
         Returns:
@@ -431,7 +431,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_properties(self):
-         """
+        """
         This method get properties of each block.
         Args:
         Returns:
@@ -441,7 +441,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def update_flow(self):
-         """
+        """
         This method update flow.
         Args:
         Returns:
@@ -461,7 +461,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __update_state(self):
-         """
+        """
         This method update the Line state.
         Args:
             Self
