@@ -212,6 +212,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_input_release(self, canvas_item, target_item, event, args):
+          """
+        This method monitors the input release.
+        Args:
+
+        Return:
+            True(boolean)
+        """
         return True
 
     # ----------------------------------------------------------------------
@@ -249,15 +256,33 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
+         """
+        This method monitors the output state, monitors if output was pressed.
+        Args:
+        Returns:
+            None.
+        """
         self.diagram.start_connection(self, args)
         return True
 
     # ----------------------------------------------------------------------
     def __on_output_release(self, canvas_item, target_item, event, args):
+          """
+        This method monitors the output state, monitors if output was release. 
+        Args:
+        Returns:
+            boolean.
+        """
         return True
 
     # ----------------------------------------------------------------------
     def __draw_label(self):
+         """
+        This method draw the label.
+        Args:
+        Returns:
+            None
+        """
         text_label = "<span font_family ='Arial' " + \
             "size = '10000' weight = 'ultralight'> " + \
             self.get_label() + "</span>"
@@ -279,6 +304,12 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def rebuild(self):
+        """
+        This method rebuild the block.
+        Args:
+        Returns:
+            None.
+        """
         self.widgets = {}
         # remove all elements
         while self.get_root_item().get_n_children() != 0:
@@ -287,6 +318,12 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def build(self):
+         """
+        This method build the block.
+        Args:
+        Returns:
+            None
+        """
         maxIO = max(len(self.get_in_types()), len(self.get_out_types()))
 
         # Generates the block size, based on the number of inputs,outputs
@@ -310,6 +347,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_input_pos(self, input_id):
+        """
+        This method get input position.
+        Args:
+        Returns:
+        """
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
         y = (RADIUS +  # upper border
@@ -320,6 +362,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_output_pos(self, output_id):
+         """
+        This method get output position.
+        Args:
+        Returns:
+        """
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
         y = (RADIUS +  # upper border
@@ -330,29 +377,61 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def move(self, x, y):
+         """
+        This method move a block.
+        Args:
+        Returns:
+        """
         self.translate(x, y)
 
     # ----------------------------------------------------------------------
     def delete(self):
+        """
+        This method delete a block.
+        Args:
+        Returns:
+        """
         self.diagram.delete_block(self)
         self.diagram.update_flows()
 
     # ----------------------------------------------------------------------
     def get_position(self):
+         """
+        This method get position the block.
+        Args:
+        Returns:
+        """
         isSet, x, y, scale, rotation = self.get_simple_transform()
         return x, y
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
+        """
+        This method set properties of each block.
+        Args:
+        Returns:
+        """
         self.diagram.do("Set block property")
         BlockModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------
     def get_properties(self):
+         """
+        This method get properties of each block.
+        Args:
+        Returns:
+            Properties.
+        """
         return BlockModel.get_properties(self)
 
     # ----------------------------------------------------------------------
     def update_flow(self):
+         """
+        This method update flow.
+        Args:
+        Returns:
+            None
+        """
         self.has_flow = True
         distinct_con = []
         for conn in self.diagram.connectors:
@@ -367,6 +446,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __update_state(self):
+         """
+        This method update the Line state.
+        Args:
+            Self
+        Returns:
+            None
+        """
         # Not connected: Color = red
         if self.has_flow:
             self.widgets["Rect"].set_property("stroke_color", 'black')
