@@ -20,6 +20,8 @@ from harpia.system import System as System
 import gettext
 
 _ = gettext.gettext
+
+
 class PluginManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
@@ -165,7 +167,7 @@ class PluginManager(Gtk.Dialog):
         field_type = self.field_type.get_value()
         configuration = component_list[field_type].get_configuration()
         for key in configuration:
-            data = {"label": _(key), "value":str(configuration[key])}
+            data = {"label": _(key), "value": str(configuration[key])}
             field = StringField(data, None)
             self.configuration_panel.pack_start(field, False, False, 1)
 # ----------------------------------------------------------------------

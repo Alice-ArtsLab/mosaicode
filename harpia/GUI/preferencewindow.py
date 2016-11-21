@@ -10,6 +10,8 @@ from harpia.GUI.components.openfilefield import OpenFileField
 import gettext
 
 _ = gettext.gettext
+
+
 class PreferenceWindow(Gtk.Dialog):
 
     def __init__(self, main_window):
@@ -42,8 +44,8 @@ class PreferenceWindow(Gtk.Dialog):
         vbox.add(self.error_log_file)
 
         vbox.add(Gtk.Label(_("\nname wildcards:\n" +
-                           "\t%d = Date | %n = diagram name |"
-                           " %t = time value | %l = language\n")))
+                             "\t%d = Date | %n = diagram name |"
+                             " %t = time value | %l = language\n")))
 
         self.show_all()
         response = self.run()

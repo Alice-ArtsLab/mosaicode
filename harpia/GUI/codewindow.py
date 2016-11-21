@@ -26,7 +26,8 @@ class CodeWindow(Gtk.Dialog):
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         lang_manager = GtkSource.LanguageManager()
-        textbuffer = GtkSource.Buffer.new_with_language(lang_manager.get_language('c'))
+        textbuffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('c'))
         textview = GtkSource.View.new_with_buffer(textbuffer)
         textview.set_show_line_numbers(True)
         textview.set_left_margin(10)

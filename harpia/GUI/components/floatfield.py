@@ -10,16 +10,16 @@ from harpia.GUI.components.field import Field
 class FloatField(Field, Gtk.HBox):
 
     configuration = {
-            "label": "",
-            "value": 0,
-            "name": "",
-            "lower": 0,
-            "upper": 9223372036854775807,
-            "step": 1,
-            "page_inc": 10,
-            "page_size": 10,
-            "digits": 2
-            }
+        "label": "",
+        "value": 0,
+        "name": "",
+        "lower": 0,
+        "upper": 9223372036854775807,
+        "step": 1,
+        "page_inc": 10,
+        "page_size": 10,
+        "digits": 2
+    }
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):

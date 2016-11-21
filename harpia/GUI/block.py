@@ -236,7 +236,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def build(self):
-        maxIO = max(len(self.get_in_types()),len(self.get_out_types()))
+        maxIO = max(len(self.get_in_types()), len(self.get_out_types()))
 
         # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...

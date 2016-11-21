@@ -7,6 +7,7 @@ from gi.repository import Gtk
 import gettext
 _ = gettext.gettext
 
+
 class Toolbar(Gtk.Toolbar):
 
     def __init__(self, main_window):

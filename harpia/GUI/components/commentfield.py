@@ -7,11 +7,11 @@ from harpia.GUI.components.field import Field
 class CommentField(Field, Gtk.VBox):
 
     configuration = {"label": "",
-            "value": "",
-            "name": "",
-            "height": 80,
-            "width": 50
-            }
+                     "value": "",
+                     "name": "",
+                     "height": 80,
+                     "width": 50
+                     }
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):

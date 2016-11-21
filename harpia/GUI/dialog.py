@@ -10,6 +10,7 @@ from harpia.GUI.components.stringfield import StringField
 import gettext
 _ = gettext.gettext
 
+
 class Dialog():
 
     # ----------------------------------------------------------------------

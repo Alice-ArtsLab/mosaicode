@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the menu bar.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -9,11 +11,14 @@ import gettext
 
 _ = gettext.gettext
 
+
 class Menu(Gtk.MenuBar):
 
+    """This class contain menu."""
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
+        """Constructor."""
         Gtk.MenuBar.__init__(self)
         self.main_window = main_window
 
@@ -23,7 +28,6 @@ class Menu(Gtk.MenuBar):
         # dictionary component: action
         self.list_of_examples = []
         self.actions = {}
-
         # -------------------------- File -------------------------------------
         file_menu = Gtk.Menu()
         self.recent_files_menu = Gtk.Menu()
@@ -38,7 +42,7 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(_("Rename"), None, file_menu, mc.rename_tab)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(_("Export Diagram As PNG"), "<Control>E",
-            file_menu, mc.export_diagram)
+                           file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)
         self.__add_menu_category(_("File"), file_menu)
@@ -72,13 +76,16 @@ class Menu(Gtk.MenuBar):
         # -------------------------- Process --------------------------------
         process_menu = Gtk.Menu()
         self.__create_menu(_("Run"), "<Control>R", process_menu, mc.run)
-        self.__create_menu(_("Save Source"), None, process_menu, mc.save_source)
-        self.__create_menu(_("View Source"), None, process_menu, mc.view_source)
+        self.__create_menu(_("Save Source"), None,
+                           process_menu, mc.save_source)
+        self.__create_menu(_("View Source"), None,
+                           process_menu, mc.view_source)
         self.__add_menu_category(_("Process"), process_menu)
 
         # -------------------------- Plugin --------------------------------
         plugin_menu = Gtk.Menu()
-        self.__create_menu(_("Plugin Manager"), None, plugin_menu, mc.new_plugin)
+        self.__create_menu(_("Plugin Manager"), None,
+                           plugin_menu, mc.new_plugin)
         self.__add_menu_category(_("Plugins"), plugin_menu)
 
         # -------------------------- Help -----------------------------------
@@ -93,6 +100,17 @@ class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------
     def __create_menu(self, name, accel, menu, action):
+        """
+        This method create the menu
+            Args:
+                name(str): Name the menu.
+                accel(str): String.
+                menu(Gtk.Menu): GTK.Menu().
+                action(Objeto): Instance.
+            Returns:
+                Return menu.
+
+        """
         item = Gtk.MenuItem(name)
         if accel is not None:
             key, mod = Gtk.accelerator_parse(accel)
@@ -106,6 +124,14 @@ class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------
     def __add_menu_category(self, name, submenu):
+        """
+        This method add a category in menu.
+            Args:
+                name(str): String
+                submenu(str):
+            Return:
+                None.
+        """
         menu_item = Gtk.MenuItem(name)
         menu_item.show()
         menu_item.set_submenu(submenu)
@@ -113,14 +139,37 @@ class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------
     def __menu_clicked(self, widget, data):
+        """
+        This method monitors if the menu was cliked.
+        Args:
+            widget:
+            data:
+        Returns:
+            None.
+        """
         self.actions[widget]()
 
     # ----------------------------------------------------------------------
     def __load_recent(self, widget, data):
+        """
+        This method monitors the lasts files loaded.
+        Args:
+            widget:
+            data:
+        Return:
+            None.
+        """
         self.main_window.main_control.open(widget.get_label())
 
     # ----------------------------------------------------------------------
     def add_example(self, example):
+        """
+        This method add a file at list of examples.
+            Args:
+                example: The example.
+            Returns:
+                None.
+        """
         self.list_of_examples.append(example)
         menu_item = Gtk.MenuItem(example.split("/").pop())
         self.example_menu.append(menu_item)
@@ -130,10 +179,28 @@ class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------
     def __load_example(self, widget, data):
+        """
+        This method load a example.
+
+        Args:
+            widget:
+            data:
+        Returns:
+            None.
+
+        """
         self.main_window.main_control.open(self.list_of_examples[int(data)])
 
     # ----------------------------------------------------------------------
     def update_recent_file(self):
+        """
+        This method update recent files.
+        Args:
+            None.
+        Returns:
+            None.
+
+        """
         for widget in self.recent_files_menu.get_children():
             self.recent_files_menu.remove(widget)
         for recent_file in System.properties.get_recent_files_as_array():
@@ -141,6 +208,12 @@ class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------
     def __add_recent_file(self, recent_file):
+        """
+        This method add a file in recent files.
+            recent_file: The file to add.
+        Return:
+            None.
+        """
         menu_item = Gtk.MenuItem(recent_file)
         self.recent_files_menu.append(menu_item)
         menu_item.connect("activate", self.__load_recent, None)
