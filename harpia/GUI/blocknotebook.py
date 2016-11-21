@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This file contains the BlockNotebook class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -9,8 +11,14 @@ from harpia.system import System as System
 
 
 class BlockNotebook(Gtk.Notebook):
+    """
+    This class contains methods related the BlockNotebook class.
+    """
 
     def __init__(self, main_window):
+        """
+        This method is the constructor.
+        """
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
         self.set_scrollable(True)
@@ -30,6 +38,12 @@ class BlockNotebook(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def get_current_tab(self):
+        """
+        This method get current diagram page.
+        Args:
+        Returns:
+            None.
+        """
         if self.get_current_page() > -1:
             return self.tabs[self.get_current_page()]
         else:
@@ -37,5 +51,10 @@ class BlockNotebook(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def get_tabs(self):
+        """
+        This method return the diagram pages.
+        Args:
+        Returns:
+        """
         return self.tabs
 # ----------------------------------------------------------------------

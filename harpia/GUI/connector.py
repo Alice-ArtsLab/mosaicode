@@ -126,9 +126,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         if not self.__widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(
-                    parent=self,
-                    data=path
-                    )
+                parent=self,
+                data=path
+            )
             self.__widgets["Line"] = widget
         else:
             self.__widgets["Line"].set_property("data", path)

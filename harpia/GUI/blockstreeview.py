@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This file contains the BlocksTreeView class.
+"""
 import os
 import gi
 gi.require_version('Gtk', '3.0')
@@ -13,6 +15,9 @@ _ = gettext.gettext
 
 
 class BlocksTreeView(Gtk.ScrolledWindow):
+    """
+    This class contains the methods related to BlocksTreeView class.
+    """
 
     def __init__(self, main_window, language):
         Gtk.ScrolledWindow.__init__(self)
@@ -59,6 +64,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
+        """
+        This method add a block in blockstreeview.
+        Args:
+        Returns:
+            None
+        """
         category = self.__contains_category(block.get_group())
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(
             os.environ['HARPIA_DATA_DIR'] + block.get_icon())

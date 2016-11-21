@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This file contains the Status class.
+"""
 import gi
 import datetime
 gi.require_version('Gtk', '3.0')
@@ -9,10 +11,21 @@ from gi.repository import Pango
 
 
 class Status(Gtk.ScrolledWindow):
+    """
+    This class generate the state log.
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
+        """
+        This method is the constructor.
+        Args:
+            self(Status)
+            main_window()
+        Returns:
+            None
+        """
         Gtk.ScrolledWindow.__init__(self)
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.main_window = main_window
@@ -30,10 +43,25 @@ class Status(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def clear(self):
+        """
+        The method clear the buffer.
+        Args:
+            self(Status): the class.
+        Returns:
+            None
+        """
         self.status.get_buffer().set_text("")
 
     # ----------------------------------------------------------------------
     def append_text(self, text):
+        """
+        This method append a text in text buffer.
+        Args:
+            self(Status):The class.
+            text(string): the text.
+        Returns:
+            None.
+        """
         textbuffer = self.status.get_buffer()
         end_iter = textbuffer.get_end_iter()
         msg = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -47,6 +75,14 @@ class Status(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def log(self, text):
+        """
+        This method set the log.
+        Args:
+        self(Status)
+        text(string)
+        Returns:
+            None
+        """
         self.append_text(text)
 
 # ----------------------------------------------------------------------

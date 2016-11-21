@@ -8,6 +8,7 @@ from harpia.GUI.dialog import Dialog
 import gettext
 _ = gettext.gettext
 
+
 class WorkArea(Gtk.Notebook):
 
     def __init__(self, main_window):
@@ -48,10 +49,10 @@ class WorkArea(Gtk.Notebook):
 
         if diagram.get_modified():
             dialog = Dialog().confirm_dialog(_("Diagram ") +
-                           diagram.get_file_name() +
-                           _(" is not saved. \nIf you close it"
-                           ", changes will be lost.\n"
-                           "Confirm?"), self.main_window)
+                                             diagram.get_file_name() +
+                                             _("is not saved.\nIf you close it"
+                                               ", changes will be lost.\n"
+                                               "Confirm?"), self.main_window)
             result = dialog.run()
             dialog.destroy()
             if result == Gtk.ResponseType.CANCEL:

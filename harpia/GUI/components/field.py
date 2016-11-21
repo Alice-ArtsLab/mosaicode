@@ -2,6 +2,7 @@ class Field(object):
 
     configuration = {}
     # ----------------------------------------------------------------------
+
     def __init__(self, data, event):
         self.data = data
 

@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+This file contains the class About.
+"""
 import gi
 import os
 from gi.repository import Gtk
@@ -6,9 +9,22 @@ gi.require_version('Gtk', '3.0')
 import gettext
 _ = gettext.gettext
 
+
 class About(Gtk.Window):
+    """
+    This class contain the window about.
+    This class contains the information about the project.
+    Args:
+        Gtk.window
+
+    Return:
+        None
+    """
 
     def __init__(self, main_window):
+        """
+        This method is the constuctor.
+        """
         self.data_dir = os.environ['HARPIA_DATA_DIR']
         Gtk.Window.__init__(self, title=_("About Harpia"))
         self.set_default_size(650, 480)
@@ -31,52 +47,52 @@ class About(Gtk.Window):
 # --------------------------------------------------------------------#
 # -------------------------------About Text---------------------------#
         labelAbout = Gtk.Label(_('Harpia Project was one of the aproved'
-                               'projects under CT-INFO 2003 Edital.\n' +
-                               'This project intends to build a ' +
-                               'graphical environment for learning,\n' +
-                               'implementing and management of machine' +
-                               ' vision systems.\n\n The system is ' +
-                               '(would-be) made of several software ' +
-                               'modules for hardware\n comunication,' +
-                               ' image (signal) processing and remote ' +
-                               'management of vision\nsystems.\n\n' +
-                               'The system could be used in industries' +
-                               ' or acadamics, making easier to \n' +
-                               'develop quality control systems, and ' +
-                               'vision system based process,\n' +
-                               'helping the learning and spreading of ' +
-                               'vision systems.'))
+                                 'projects under CT-INFO 2003 Edital.\n' +
+                                 'This project intends to build a ' +
+                                 'graphical environment for learning,\n' +
+                                 'implementing and management of machine' +
+                                 ' vision systems.\n\n The system is ' +
+                                 '(would-be) made of several software ' +
+                                 'modules for hardware\n comunication,' +
+                                 ' image (signal) processing and remote ' +
+                                 'management of vision\nsystems.\n\n' +
+                                 'The system could be used in industries' +
+                                 ' or acadamics, making easier to \n' +
+                                 'develop quality control systems, and ' +
+                                 'vision system based process,\n' +
+                                 'helping the learning and spreading of ' +
+                                 'vision systems.'))
         aboutBox = Gtk.Box()
         aboutBox.add(labelAbout)
         aboutBox.set_border_width(35)
 # --------------------------------------------------------------------#
 # ----------------------------License Text----------------------------#
         labelLicense = Gtk.Label(_('Harpia\n' +
-                                 'Copyright (C) 2007 S2i-das-ufsc\n\n' +
-                                 'This program is free software: you can ' +
-                                 ' redistribute it and/or modify\n' +
-                                 'it under the terms of the GNU General  ' +
-                                 'Public License as published by\n' +
-                                 'the Free Software Foundation, either  ' +
-                                 'version 3 of the License, or\n' +
-                                 '(at your option) any later version.\n\n' +
-                                 'This program is distributed in the hope  ' +
-                                 'that it will be useful,\n' +
-                                 'but WITHOUT ANY WARRANTY; without even  ' +
-                                 'the implied warranty of\n' +
-                                 'MERCHANTABILITY or FITNESS FOR A  ' +
-                                 'PARTICULAR PURPOSE.  See the\n' +
-                                 'GNU General Public License for more  ' +
-                                 'details.\n\n' +
-                                 'You should have received a copy of the  ' +
-                                 'GNU General Public License\n' +
-                                 'along with this program.  If not, s ' +
-                                 'ee www.gnu.org/licenses.\n\n' +
-                                 'This Program uses the Amara software,\n' +
-                                 'Copyright 2006 Uche Ogbuji\n' +
-                                 '(http://uche.ogbuji.net), more ' +
-                                 'information\nfound in the copyright ' +
-                                 'archive \nprovided with this software.'))
+                                   'Copyright (C) 2007 S2i-das-ufsc\n\n' +
+                                   'This program is free software: you can ' +
+                                   ' redistribute it and/or modify\n' +
+                                   'it under the terms of the GNU General  ' +
+                                   'Public License as published by\n' +
+                                   'the Free Software Foundation, either  ' +
+                                   'version 3 of the License, or\n' +
+                                   '(at your option) any later version.\n\n' +
+                                   'This program is distributed in the hope' +
+                                   'that it will be useful,\n' +
+                                   'but WITHOUT ANY WARRANTY; without even  ' +
+                                   'the implied warranty of\n' +
+                                   'MERCHANTABILITY or FITNESS FOR A  ' +
+                                   'PARTICULAR PURPOSE.  See the\n' +
+                                   'GNU General Public License for more  ' +
+                                   'details.\n\n' +
+                                   'You should have received a copy of the  ' +
+                                   'GNU General Public License\n' +
+                                   'along with this program.  If not, s ' +
+                                   'ee www.gnu.org/licenses.\n\n' +
+                                   'This Program uses the Amara software,\n' +
+                                   'Copyright 2006 Uche Ogbuji\n' +
+                                   '(http://uche.ogbuji.net), more ' +
+                                   'information\nfound in the copyright ' +
+                                   'archive \nprovided with this software.'))
 
         labelLicense.set_justify(Gtk.Justification.CENTER)
 
@@ -101,7 +117,7 @@ class About(Gtk.Window):
         imgbox2.set_border_width(2)
 
         labelFinep = Gtk.Label(_('FINEP\n Financiadora de estudos e' +
-                               'Pesquisas\n http://www.finep.gov.br/'))
+                                 'Pesquisas\n http://www.finep.gov.br/'))
 
         labelFinep.set_justify(Gtk.Justification.CENTER)
 
@@ -133,12 +149,12 @@ class About(Gtk.Window):
         imageDevelopment.set_from_file(self.data_dir + "images/s2ilogo.png")
 
         labelDevelopmentText = Gtk.Label(_('Sistemas Industriais ' +
-                                         'Inteligentes\n' +
-                                         'Departamento de Automação' +
-                                         ' e Sistemas\n' +
-                                         'Universidade Federal de ' +
-                                         'Santa Catarina\n' +
-                                         'http://s2i.das.ufsc.br/'))
+                                           'Inteligentes\n' +
+                                           'Departamento de Automação' +
+                                           ' e Sistemas\n' +
+                                           'Universidade Federal de ' +
+                                           'Santa Catarina\n' +
+                                           'http://s2i.das.ufsc.br/'))
         labelDevelopmentText.set_justify(Gtk.Justification.CENTER)
 
         textBox2 = Gtk.Box()
@@ -174,44 +190,44 @@ class About(Gtk.Window):
         hbox.pack_start(vbox_right, True, True, 0)
 
         labelNames = Gtk.Label(_('Alberto Xavier Pavim\n\n' +
-                               'Christian Emanuel Silvano\n\n' +
-                               'Clovis Peruchi Scotti\n\n' +
-                               'Fábio Pedrotti Terra\n\n' +
-                               'Fabrício Luchesi Forgerini\n\n' +
-                               'Fernando Deschamps\n\n' +
-                               'Guilherme Augusto Rutzen\n\n' +
-                               'Luís Carlos Dill Junges\n\n' +
-                               'Marcelo Ricardo Stemmer\n\n' +
-                               'Mário Lúcio Roloff\n\n' +
-                               'Mathias José Kreutz Erdtmann\n\n' +
-                               'José Luiz Bittencourt\n\n' +
-                               'Ricardo Grützmacher'))
+                                 'Christian Emanuel Silvano\n\n' +
+                                 'Clovis Peruchi Scotti\n\n' +
+                                 'Fábio Pedrotti Terra\n\n' +
+                                 'Fabrício Luchesi Forgerini\n\n' +
+                                 'Fernando Deschamps\n\n' +
+                                 'Guilherme Augusto Rutzen\n\n' +
+                                 'Luís Carlos Dill Junges\n\n' +
+                                 'Marcelo Ricardo Stemmer\n\n' +
+                                 'Mário Lúcio Roloff\n\n' +
+                                 'Mathias José Kreutz Erdtmann\n\n' +
+                                 'José Luiz Bittencourt\n\n' +
+                                 'Ricardo Grützmacher'))
 
         vbox_left.pack_start(labelNames, True, True, 0)
 
         labelJobs = Gtk.Label(_('Tutor\n\nDeveloper\n\n' +
-                              'Present Developer\n\n' +
-                              'Developer\n\nTutor\n\nTutor\n\n' +
-                              'Developer\n\n' +
-                              'Developer\n\nCoordinator\n\n' +
-                              'Tutor\n\nDeveloper\n\n' +
-                              'Developer\n\nDeveloper'))
+                                'Present Developer\n\n' +
+                                'Developer\n\nTutor\n\nTutor\n\n' +
+                                'Developer\n\n' +
+                                'Developer\n\nCoordinator\n\n' +
+                                'Tutor\n\nDeveloper\n\n' +
+                                'Developer\n\nDeveloper'))
 
         vbox_center.pack_start(labelJobs, True, True, 0)
 
         labelEMAILS = Gtk.Label(_('axpavim@gmail.com\n\n' +
-                                'silvano@das.ufsc.br\n\n' +
-                                'scotti@ieee.org\n\n' +
-                                'fpterra@yahoo.com.br\n\n' +
-                                'fabricio_forgerini@hotmail.com\n\n' +
-                                'fernando' +
-                                '.deschamps@terra.com.br\n\n' +
-                                'rutzen@das.ufsc.br\n\n' +
-                                'lcdjunges@yahoo.com.br\n\n' +
-                                'marcelo@das.ufsc.br\n\n' +
-                                'roloff@cefetsc.edu.br\n\n' +
-                                'erdtmann@das.ufsc.br\n\n' +
-                                'jlbitt@yahoo.com\n\ngrutz@terra.com.br'))
+                                  'silvano@das.ufsc.br\n\n' +
+                                  'scotti@ieee.org\n\n' +
+                                  'fpterra@yahoo.com.br\n\n' +
+                                  'fabricio_forgerini@hotmail.com\n\n' +
+                                  'fernando' +
+                                  '.deschamps@terra.com.br\n\n' +
+                                  'rutzen@das.ufsc.br\n\n' +
+                                  'lcdjunges@yahoo.com.br\n\n' +
+                                  'marcelo@das.ufsc.br\n\n' +
+                                  'roloff@cefetsc.edu.br\n\n' +
+                                  'erdtmann@das.ufsc.br\n\n' +
+                                  'jlbitt@yahoo.com\n\ngrutz@terra.com.br'))
 
         vbox_right.pack_start(labelEMAILS, True, True, 0)
 
@@ -227,8 +243,8 @@ class About(Gtk.Window):
         gridFrame3.attach_next_to(y, hbox, Gtk.PositionType.BOTTOM, 1, 2)
 
         labelFinal = Gtk.Label(_('Any bugs or sugestions\n' +
-                               'should be directed to\n' +
-                               'scotti@ieee.org'))
+                                 'should be directed to\n' +
+                                 'scotti@ieee.org'))
 
         labelFinal.set_justify(Gtk.Justification.CENTER)
 

@@ -23,14 +23,13 @@ HARPIA_COMBO = "Combo"
 HARPIA_CHECK = "Check"
 
 component_list = {
-        HARPIA_INT: IntField,
-        HARPIA_CHECK: CheckField,
-        HARPIA_COLOR: ColorField,
-        HARPIA_COMBO: ComboField,
-        HARPIA_FLOAT: FloatField,
-        HARPIA_STRING: StringField,
-        HARPIA_COMMENT: CommentField,
-        HARPIA_OPEN_FILE: OpenFileField,
-        HARPIA_SAVE_FILE: SaveFileField
-        }
-
+    HARPIA_INT: IntField,
+    HARPIA_CHECK: CheckField,
+    HARPIA_COLOR: ColorField,
+    HARPIA_COMBO: ComboField,
+    HARPIA_FLOAT: FloatField,
+    HARPIA_STRING: StringField,
+    HARPIA_COMMENT: CommentField,
+    HARPIA_OPEN_FILE: OpenFileField,
+    HARPIA_SAVE_FILE: SaveFileField
+}

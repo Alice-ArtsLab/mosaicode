@@ -1,15 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This file contains the Toolbar class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import gettext
 _ = gettext.gettext
 
+
 class Toolbar(Gtk.Toolbar):
+    """
+    This class construct the toolbar menu.
+    """
 
     def __init__(self, main_window):
+        """
+        This method is the constructor is creates each menu button.
+        """
         Gtk.Toolbar.__init__(self)
         self.main_window = main_window
         self.set_style(Gtk.ToolbarStyle.BOTH)
@@ -51,6 +60,12 @@ class Toolbar(Gtk.Toolbar):
         self.show_all()
 
     def __create_button(self, stock, name, action):
+        """
+        This method create a button on menu.
+        Args:
+        Returns:
+            button(Gtk.ToolButton)
+        """
         button = Gtk.ToolButton.new_from_stock(stock)
         button.set_expand(False)
         button.set_label(name)
@@ -61,4 +76,10 @@ class Toolbar(Gtk.Toolbar):
         return button
 
     def __button_clicked(self, widget, data):
+        """
+        This method monitors if the button was clicked.
+        Args:
+        Returns:
+            None
+        """
         self.actions[widget]()

@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This file contains the BlockProperties.
+"""
 
 import gi
 from gi.repository import Gtk
@@ -8,11 +11,18 @@ gi.require_version('Gtk', '3.0')
 import gettext
 _ = gettext.gettext
 
+
 class BlockProperties(Gtk.Notebook):
+    """
+    This class contains the methods related to BlockProperties class.
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
+        """
+        This method is the constuctor.
+        """
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
 
@@ -23,13 +33,14 @@ class BlockProperties(Gtk.Notebook):
             Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.property_box = PropertyBox(self.main_window)
         properties_scrolled_window.add(self.property_box)
-        self.append_page(properties_scrolled_window, Gtk.Label(_("Properties")))
+        self.append_page(
+            properties_scrolled_window, Gtk.Label(_("Properties")))
 
         # Help tab
         help_scrolled_window = Gtk.ScrolledWindow()
         help_scrolled_window.set_border_width(10)
         help_scrolled_window.set_policy(
-            Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+        Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.help = Gtk.TextView()
         self.help.set_wrap_mode(Gtk.WrapMode.WORD)
         self.help.set_editable(False)
@@ -40,6 +51,12 @@ class BlockProperties(Gtk.Notebook):
 
 # ----------------------------------------------------------------------
     def set_block(self, block):
+        """
+        This method set properties of each block.
+        Args:
+        Returns:
+            None
+        """
         self.help.get_buffer().set_text(block.get_help())
         self.property_box.set_block(block)
 

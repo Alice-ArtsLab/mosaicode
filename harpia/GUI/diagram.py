@@ -41,6 +41,7 @@ from harpia.model.diagrammodel import DiagramModel
 import gettext
 _ = gettext.gettext
 
+
 class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------

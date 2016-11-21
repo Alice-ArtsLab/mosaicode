@@ -9,6 +9,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from harpia.GUI.fieldtypes import *
 
+
 class PropertyBox(Gtk.VBox):
 
     # ----------------------------------------------------------------------
