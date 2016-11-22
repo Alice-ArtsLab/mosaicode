@@ -156,7 +156,7 @@ class Menu(Gtk.MenuBar):
             Parameters:
                 widget:
                 data:
-            Return:
+            Returns:
                 None.
         """
         self.main_window.main_control.open(widget.get_label())
@@ -166,7 +166,8 @@ class Menu(Gtk.MenuBar):
         """
         This method add a file at list of examples.
             Parameters:
-                example: The example.
+                * **self** (:class:`Menu<harpia.GUI.menu>`)
+                * **example** (:class:`str<str>`)
             Returns:
                 None.
         """
@@ -196,8 +197,7 @@ class Menu(Gtk.MenuBar):
         
         This method update recent files.
             Parameters:
-                * **self** (:class:`<python:int.int>`)
-                * **self** (Int)
+                * **self** (:class:`Menu<harpia.GUI.menu>`)
             Returns:
                 None.
         """
