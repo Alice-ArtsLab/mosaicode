@@ -22,6 +22,9 @@ class BlockProperties(Gtk.Notebook):
     def __init__(self, main_window):
         """
         This method is the constuctor.
+            Parameters:
+            Returns:
+                None
         """
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
@@ -40,7 +43,7 @@ class BlockProperties(Gtk.Notebook):
         help_scrolled_window = Gtk.ScrolledWindow()
         help_scrolled_window.set_border_width(10)
         help_scrolled_window.set_policy(
-        Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+            Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         self.help = Gtk.TextView()
         self.help.set_wrap_mode(Gtk.WrapMode.WORD)
         self.help.set_editable(False)
@@ -53,9 +56,9 @@ class BlockProperties(Gtk.Notebook):
     def set_block(self, block):
         """
         This method set properties of each block.
-        Args:
-        Returns:
-            None
+            Parameters:
+            Returns:
+                None
         """
         self.help.get_buffer().set_text(block.get_help())
         self.property_box.set_block(block)

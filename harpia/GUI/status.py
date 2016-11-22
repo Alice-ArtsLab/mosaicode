@@ -20,11 +20,11 @@ class Status(Gtk.ScrolledWindow):
     def __init__(self, main_window):
         """
         This method is the constructor.
-        Args:
-            self(Status)
-            main_window()
-        Returns:
-            None
+            Args:
+                self(Status)
+                main_window()
+            Returns:
+                None
         """
         Gtk.ScrolledWindow.__init__(self)
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)

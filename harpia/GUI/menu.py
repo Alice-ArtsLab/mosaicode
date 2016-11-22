@@ -102,7 +102,7 @@ class Menu(Gtk.MenuBar):
     def __create_menu(self, name, accel, menu, action):
         """
         This method create the menu
-            Args:
+            Parameters:
                 name(str): Name the menu.
                 accel(str): String.
                 menu(Gtk.Menu): GTK.Menu().
@@ -126,7 +126,7 @@ class Menu(Gtk.MenuBar):
     def __add_menu_category(self, name, submenu):
         """
         This method add a category in menu.
-            Args:
+            Parameters:
                 name(str): String
                 submenu(str):
             Return:
@@ -141,11 +141,11 @@ class Menu(Gtk.MenuBar):
     def __menu_clicked(self, widget, data):
         """
         This method monitors if the menu was cliked.
-        Args:
-            widget:
-            data:
-        Returns:
-            None.
+            Parameters:
+                widget:
+                data:
+            Returns:
+                None.
         """
         self.actions[widget]()
 
@@ -153,11 +153,11 @@ class Menu(Gtk.MenuBar):
     def __load_recent(self, widget, data):
         """
         This method monitors the lasts files loaded.
-        Args:
-            widget:
-            data:
-        Return:
-            None.
+            Parameters:
+                widget:
+                data:
+            Returns:
+                None.
         """
         self.main_window.main_control.open(widget.get_label())
 
@@ -165,8 +165,9 @@ class Menu(Gtk.MenuBar):
     def add_example(self, example):
         """
         This method add a file at list of examples.
-            Args:
-                example: The example.
+            Parameters:
+                * **self** (:class:`Menu<harpia.GUI.menu>`)
+                * **example** (:class:`str<str>`)
             Returns:
                 None.
         """
@@ -181,12 +182,11 @@ class Menu(Gtk.MenuBar):
     def __load_example(self, widget, data):
         """
         This method load a example.
-
-        Args:
-            widget:
-            data:
-        Returns:
-            None.
+            Parameters:
+                widget:
+                data:
+            Returns:
+                None.
 
         """
         self.main_window.main_control.open(self.list_of_examples[int(data)])
@@ -194,25 +194,26 @@ class Menu(Gtk.MenuBar):
     # ----------------------------------------------------------------------
     def update_recent_file(self):
         """
+        
         This method update recent files.
-        Args:
-            None.
-        Returns:
-            None.
-
+            Parameters:
+                * **self** (:class:`Menu<harpia.GUI.menu>`)
+            Returns:
+                None.
         """
         for widget in self.recent_files_menu.get_children():
             self.recent_files_menu.remove(widget)
         for recent_file in System.properties.get_recent_files_as_array():
-            self.__add_recent_file(recent_file)
+            self.add_recent_file(recent_file)
 
     # ----------------------------------------------------------------------
-    def __add_recent_file(self, recent_file):
+    def add_recent_file(self, recent_file):
         """
         This method add a file in recent files.
-            recent_file: The file to add.
-        Return:
-            None.
+            Parameters:
+                recent_file: The file to add.
+            Return:
+                None.
         """
         menu_item = Gtk.MenuItem(recent_file)
         self.recent_files_menu.append(menu_item)
