@@ -69,7 +69,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def __add_item(self, block):
         """
         This method add a block in blockstreeview.
-            Args:
+            Parameters:
             Returns:
                 None
         """
@@ -80,6 +80,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
+        """
+
+        """
         iter = self.tree_store.get_iter_first()
         while iter is not None:
             if category_name in self.tree_store[iter][:]:
