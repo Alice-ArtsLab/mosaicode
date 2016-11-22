@@ -18,6 +18,8 @@ class BlockNotebook(Gtk.Notebook):
     def __init__(self, main_window):
         """
         This method is the constructor.
+            Parameters:
+            Returns:
         """
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
@@ -40,9 +42,9 @@ class BlockNotebook(Gtk.Notebook):
     def get_current_tab(self):
         """
         This method get current diagram page.
-        Args:
-        Returns:
-            None.
+            Parameters:
+            Returns:
+                None.
         """
         if self.get_current_page() > -1:
             return self.tabs[self.get_current_page()]
@@ -53,8 +55,8 @@ class BlockNotebook(Gtk.Notebook):
     def get_tabs(self):
         """
         This method return the diagram pages.
-        Args:
-        Returns:
+            Parameters:
+            Returns:
         """
         return self.tabs
 # ----------------------------------------------------------------------

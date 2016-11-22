@@ -12,6 +12,7 @@ from gi.repository import GtkSource
 
 
 class CodeWindow(Gtk.Dialog):
+
     """
     This class contains the methods related to CodeWindow class.
     """

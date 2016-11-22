@@ -14,11 +14,11 @@ class About(Gtk.Window):
     """
     This class contain the window about.
     This class contains the information about the project.
-    Args:
-        Gtk.window
+      Parameters:
+          Gtk.window
 
-    Return:
-        None
+      Return:
+          None
     """
 
     def __init__(self, main_window):
