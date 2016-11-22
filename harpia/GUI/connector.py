@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This file contains the Connector class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
@@ -11,10 +13,16 @@ from harpia.model.connectionmodel import ConnectionModel
 
 
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
+    """
+    This class contains the methods related to Connector class.
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, diagram, source, source_port, conn_type):
+        """
+        This method is the constructor.
+        """
         GooCanvas.CanvasGroup.__init__(self)
         ConnectionModel.__init__(self, diagram, source, source_port, conn_type)
 
@@ -38,11 +46,18 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def delete(self):
+        """
+        This method delete connection.
+        Args:
+        Returns:
+        """
         self.get_diagram().delete_connection(self)
         self.get_diagram().update_flows()
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
+        """
+        """
         Gtk.Widget.grab_focus(self.get_diagram())
         if event.button.button == 3:
             ConnectorMenu(self, event)
