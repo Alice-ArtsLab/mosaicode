@@ -26,7 +26,7 @@
 #
 # ----------------------------------------------------------------------
 """
-This file contains the BlockMenu class.
+This module contains the BlockMenu class.
 """
 import gi
 gi.require_version('Gtk', '3.0')
@@ -35,11 +35,7 @@ from gi.repository import Gtk
 
 class BlockMenu(Gtk.Menu):
     """
-    This method define the menu of each block.
-        Parameters:
-            GTK.Menu
-        Returns:
-            None
+    This class contains methods related the BlockMenu class
     """
 
     # ----------------------------------------------------------------------
@@ -65,7 +61,7 @@ class BlockMenu(Gtk.Menu):
     # ----------------------------------------------------------------------
     def __delete_clicked(self, *Parameters):  # strongly depends on garbage collector
         """
-        This method monitors if the button delete was clikcked.
+        This method monitors if the button delete was clicked.
             Parameters:
 
             Returns:

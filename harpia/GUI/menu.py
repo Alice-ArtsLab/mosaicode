@@ -13,8 +13,9 @@ _ = gettext.gettext
 
 
 class Menu(Gtk.MenuBar):
-
-    """This class contain menu."""
+    """
+    This class contains methods related the Menu class
+    """
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):

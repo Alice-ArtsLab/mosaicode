@@ -48,8 +48,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def delete(self):
         """
         This method delete connection.
-        Args:
-        Returns:
+            Parameters:
+            Returns:
         """
         self.get_diagram().delete_connection(self)
         self.get_diagram().update_flows()
@@ -57,6 +57,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         """
+        This method monitors if on button was pressed.
         """
         Gtk.Widget.grab_focus(self.get_diagram())
         if event.button.button == 3:
@@ -84,12 +85,25 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def set_end(self, sink, sink_port):
+        """
+        This method set the end of connection.
+            Parameters:
+            Returns:
+                None
+        """
         ConnectionModel.set_end(self, sink, sink_port)
         self.__to_point = sink.get_input_pos(self.sink_port)
         self.update_tracking(self.__to_point)
 
     # ----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
+        """
+        This method update Tracking.
+            Parameters:
+                newEnd
+            Returns:
+                None
+        """
         if newEnd is None:
             newEnd = self.__from_point
         a = newEnd[0] - self.__from_point[0]
@@ -110,6 +124,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def update_flow(self):
+        """
+        This method update the flow.
+        """
         self.__from_point = self.source.get_output_pos(self.source_port)
         self.__to_point = self.sink.get_input_pos(self.sink_port)
         self.__update_draw()

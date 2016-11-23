@@ -12,7 +12,7 @@ _ = gettext.gettext
 
 class About(Gtk.Window):
     """
-    This class contain the window about.
+    This class contains methods related the About class
     This class contains the information about the project.
       Parameters:
           Gtk.window
@@ -24,6 +24,10 @@ class About(Gtk.Window):
     def __init__(self, main_window):
         """
         This method is the constuctor.
+        	Parameters:
+				main_window
+        	Returns:
+        		None
         """
         self.data_dir = os.environ['HARPIA_DATA_DIR']
         Gtk.Window.__init__(self, title=_("About Harpia"))
