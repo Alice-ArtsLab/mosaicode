@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This file contains the CodeWindow class.
+This module contains the CodeWindow class.
 """
 import gi
 gi.require_version('Gtk', '3.0')

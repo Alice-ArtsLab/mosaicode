@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This file contains the class About.
+This module contains the class About.
 """
 import gi
 import os

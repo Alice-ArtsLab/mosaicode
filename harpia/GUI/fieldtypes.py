@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the fieldtypes.
+"""
 from harpia.GUI.components.intfield import IntField
 from harpia.GUI.components.checkfield import CheckField
 from harpia.GUI.components.colorfield import ColorField

@@ -21,7 +21,7 @@ from harpia.control.maincontrol import MainControl
 
 class MainWindow(Gtk.Window):
     """
-    This class contains methods related the MainWindow class
+    This class contains methods related the MainWindow class.
     """
 
     def __init__(self):

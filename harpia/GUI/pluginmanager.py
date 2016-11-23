@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the PluginManager class.
+"""
 import os
 import gi
 gi.require_version('Gtk', '3.0')
@@ -23,6 +25,9 @@ _ = gettext.gettext
 
 
 class PluginManager(Gtk.Dialog):
+    """
+    This class contains methods related the PluginManager class
+    """
 
     # ----------------------------------------------------------------------
     def __init__(self, main_window):
@@ -138,10 +143,24 @@ class PluginManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def set_block(self, plugin):
+        """
+        This method call add_block.
+            Parameters:
+                plugin
+            Returns:
+                None.
+        """
         self.add_block(plugin)
 
     # ----------------------------------------------------------------------
     def add_block(self, plugin):
+        """
+        This method add a plugin.
+            Parameters:
+                plugin
+            Returns:
+                None
+        """
         self.type.set_value(plugin.get_type())
         self.language.set_value(plugin.get_language())
         self.language.set_value(plugin.language)

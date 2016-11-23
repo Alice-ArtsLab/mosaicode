@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This file contains the Toolbar class.
+This module contains the Toolbar class.
 """
 import gi
 gi.require_version('Gtk', '3.0')
@@ -12,7 +12,7 @@ _ = gettext.gettext
 
 class Toolbar(Gtk.Toolbar):
     """
-    This class construct the toolbar menu.
+    This class contains methods related the Toolbar class.
     """
 
     def __init__(self, main_window):
@@ -62,9 +62,9 @@ class Toolbar(Gtk.Toolbar):
     def __create_button(self, stock, name, action):
         """
         This method create a button on menu.
-        Args:
-        Returns:
-            button(Gtk.ToolButton)
+            Parameters:
+            Returns:
+                
         """
         button = Gtk.ToolButton.new_from_stock(stock)
         button.set_expand(False)
@@ -78,8 +78,8 @@ class Toolbar(Gtk.Toolbar):
     def __button_clicked(self, widget, data):
         """
         This method monitors if the button was clicked.
-        Args:
-        Returns:
-            None
+            Parameters:
+            Returns:
+                None
         """
         self.actions[widget]()

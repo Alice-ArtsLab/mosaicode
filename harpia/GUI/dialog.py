@@ -23,6 +23,11 @@ class Dialog():
     def open_dialog(self, title, main_window):
         """
         This method open dialog box.
+            Parameters:
+                * **name** (:class:`str<str>`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+            Returns:
+                * **file_name** (:class:`str<str>`)
         """
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.OPEN,
@@ -51,7 +56,7 @@ class Dialog():
                 * **name** (:class:`str<str>`)
                 * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
             Returns:
-                None
+                Boolean
         """
         if os.path.exists(name) is False:
             return True
@@ -128,7 +133,8 @@ class Dialog():
         """
         This method open message dialog.
             Parameters:
-
+                * **title** (:class:`str<str>`)
+                * **message** (:class:`str<str>`)
                 * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
             Returns:
                 None
@@ -144,7 +150,8 @@ class Dialog():
         """
         This method open confirm dialog.
             Parameters:
-
+                * **message** (:class:`str<str>`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
             Returns:
                 None
         """
@@ -156,6 +163,13 @@ class Dialog():
 
 # ----------------------------------------------------------------------
     def rename_dialog(self, main_window, diagram):
+        """
+        This method open rename dialog.
+            Parameters:
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+                * **diagram** (:class:`Diagram<harpia.GUI.diagram`)
+            Returns:
+        """
         dialog = Gtk.Dialog(_("Rename"), main_window,
                             0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
