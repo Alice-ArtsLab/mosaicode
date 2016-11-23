@@ -39,11 +39,9 @@ class Plugin(object):
         """
         Return the plugin help text.
 
-        Args:
-            None
-
-        Returns:
-            string: The return value.
+            Returns:
+                * **Types**: :class:`str<str>`
+                The return value.
         """
         return self.help
 
@@ -52,11 +50,9 @@ class Plugin(object):
         """
         Return the plugin label.
 
-        Args:
-            None
-
         Returns:
-            string: The return value.
+            * **Types**: :class:`str<str>`
+            The return value.
         """
         return self.label
 
@@ -65,11 +61,9 @@ class Plugin(object):
         """
         Return the plugin icon path.
 
-        Args:
-            None
-
         Returns:
-            string: The return value is the icon path.
+            * **Types**: :class:`str<str>`
+            The return value is the icon path.
         """
 
         return self.icon
@@ -79,11 +73,9 @@ class Plugin(object):
         """
         Get the color in RGB format and return in hexadecimal.
 
-        Args:
-            None
-
         Returns:
-            hex: The return is the hex value reference to color
+            * **Types**: :class:`str<str>`
+            The return is the hex value reference to color. The hex value is a **str** type.
         """
 
         color = self.color.split(":")
@@ -99,32 +91,67 @@ class Plugin(object):
         """
         Return types of plugin entries.
 
-        Args:
-            None
-
         Returns:
-            List: The return is a list of types plugin entries.
+            * **Types**: :class:`list<list>`
+            The return is a list of types plugin entries.
         """
         return self.in_types
 
     # ----------------------------------------------------------------------
     def get_out_types(self):
+        """
+        Return types of plugin outputs.
+
+        Returns:
+            * **Types**: :class:`list<list>`
+            The return is a list of types plugin outputs.
+        """
         return self.out_types
 
     # ----------------------------------------------------------------------
     def get_group(self):
+        """
+        Returns the group name that plugin belongs.
+
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return value.
+        """
         return self.group
 
     # ----------------------------------------------------------------------
     def get_output_port_name(self, number):
+        """
+        Returns output port name
+        Parameters:
+            * **number** (:class:`int<int>`): The output port number
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return value.
+        """
         return "block_" + str(self.id) + "o" + str(number)
 
     # ----------------------------------------------------------------------
     def get_input_port_name(self, number):
+        """
+        Returns input port name
+        Parameters:
+            * **number** (:class:`int<int>`): The input port number
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return value.
+        """
         return "block_" + str(self.id) + "i" + str(number)
 
     # ----------------------------------------------------------------------
     def get_position(self):
+        """
+        Return the plugin position on the work area.
+
+        Returns:
+            * **Types**: :class:`int<int>` and :class:`int<int>`
+            Returns the **x** and **y** position of the plugin
+        """
         return (self.x, self.y)
 
     # ----------------------------------------------------------------------
@@ -145,10 +172,6 @@ class Plugin(object):
             return self.language
         except:
             return None
-
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
 
     # ----------------------------------------------------------------------
     def generate_header(self):
