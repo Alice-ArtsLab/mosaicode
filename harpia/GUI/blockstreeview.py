@@ -69,7 +69,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def __add_item(self, block):
         """
         This method add a block in blockstreeview.
-            Args:
+            Parameters:
             Returns:
                 None
         """
@@ -80,6 +80,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
+        """
+        This method verify if category name already exists.
+        """
         iter = self.tree_store.get_iter_first()
         while iter is not None:
             if category_name in self.tree_store[iter][:]:
@@ -89,6 +92,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __filter_func(self, model, iter, data):
+        """
+        This methods filters the functions.
+        """
         if self.current_filter is None:
             return True
         if self.current_filter == "None":
@@ -101,6 +107,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_tree_selection_changed(self, treeview):
+        """
+        This method monitors if tree selection was changed.
+        """
         treeViewSelection = self.blocks_tree_view.get_selection()
         (tree_view_model, iter) = treeViewSelection.get_selected()
 
@@ -116,7 +125,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def search(self, key):
         """
         This method search the key in blocks_tree_view.
-            Args:
+            Parameters:
                 key:
             Returns:
 
@@ -144,7 +153,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def get_selected_block(self):
         """
         This method get the block selected.
-            Args:
+            Parameters:
             Returns:
                 block
         """

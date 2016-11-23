@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This file contains the BlockNotebook class.
+This module contains the BlockNotebook class.
 """
 import gi
 gi.require_version('Gtk', '3.0')
@@ -19,6 +19,7 @@ class BlockNotebook(Gtk.Notebook):
         """
         This method is the constructor.
             Parameters:
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
         """
         Gtk.Notebook.__init__(self)
@@ -57,6 +58,7 @@ class BlockNotebook(Gtk.Notebook):
         This method return the diagram pages.
             Parameters:
             Returns:
+                * **tabs** (:class:`BlockNotebook<harpia.GUI.blocknotebook>`)
         """
         return self.tabs
 # ----------------------------------------------------------------------

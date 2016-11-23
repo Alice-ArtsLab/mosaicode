@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
-
+"""
+This module contains the Dialog class.
+"""
 import gi
 import os
 from filefilters import *
@@ -12,10 +14,16 @@ _ = gettext.gettext
 
 
 class Dialog():
+    """
+    This class contains methods related the Dialog class.
+    """
 
     # ----------------------------------------------------------------------
 
     def open_dialog(self, title, main_window):
+        """
+        This method open dialog box.
+        """
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.OPEN,
                                        (Gtk.STOCK_CANCEL,
@@ -37,6 +45,14 @@ class Dialog():
     # ----------------------------------------------------------------------
 
     def confirm_overwrite(self, name, main_window):
+        """
+        This method confirm overwrite of the file.
+            Parameters:
+                * **name** (:class:`str<str>`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+            Returns:
+                None
+        """
         if os.path.exists(name) is False:
             return True
 
@@ -52,6 +68,14 @@ class Dialog():
 
     # ----------------------------------------------------------------------
     def save_dialog(self, title, main_window):
+        """
+        This method open save dialog.
+            Parameters:
+
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+            Returns:
+                * **file_name** (:class:`str<str>`)
+        """
         diagram = main_window.work_area.get_current_diagram()
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.SAVE,
@@ -74,6 +98,14 @@ class Dialog():
 
     # ----------------------------------------------------------------------
     def save_png_dialog(self, title, main_window):
+        """
+        This method open save png dialog.
+            Parameters:
+                * **title** (:class:`str<str>`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+            Returns:
+                * **file_name** (:class:`str<str>`)
+        """
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.SAVE,
                                        (Gtk.STOCK_CANCEL,
@@ -93,6 +125,14 @@ class Dialog():
 
 # ----------------------------------------------------------------------
     def message_dialog(self, title, message, main_window):
+        """
+        This method open message dialog.
+            Parameters:
+
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+            Returns:
+                None
+        """
         dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
                                    Gtk.ButtonsType.OK, title)
         dialog.format_secondary_text(message)
@@ -101,6 +141,13 @@ class Dialog():
 
 # ----------------------------------------------------------------------
     def confirm_dialog(self, message, main_window):
+        """
+        This method open confirm dialog.
+            Parameters:
+
+            Returns:
+                None
+        """
         dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
                                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                     Gtk.STOCK_OK, Gtk.ResponseType.OK),  "")

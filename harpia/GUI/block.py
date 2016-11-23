@@ -29,7 +29,7 @@ OUTPUT_WIDTH = 24
 
 class Block(GooCanvas.CanvasGroup, BlockModel):
     """
-    This class contains the methods about blocks.
+    This class contains methods related the Block class
     """
 
     # ----------------------------------------------------------------------
@@ -100,7 +100,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __on_motion_notify(self, canvas_item, target_item, event=None):
         """
         This method monitors the motion.
-            Args:
+            Parameters:
             Returns:
         """
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
@@ -117,7 +117,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __on_enter_notify(self, canvas_item, target_item, event=None):
         """
         This method monitors the motion.
-            Args:
+            Parameters:
             Returns:
         """
         self.focus = True
@@ -128,7 +128,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __on_leave_notify(self, canvas_item, target_item, event=None):
         """
         This method monitors the motion.
-            Args:
+            Parameters:
             Returns:
         """
         self.focus = False
@@ -143,10 +143,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __draw_rect(self):
         """
         This method draw a rectangle.
-        Args:
-            None
-        Returns:
-            None
+            Parameters:
+                None
+            Returns:
+                None
         """
         rect = GooCanvas.CanvasRect(parent=self,
                                     x=0,
@@ -164,7 +164,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __draw_icon(self):
         """
         This method draw a icon.
-            Args:
+            Parameters:
                 None.
             Returns:
                 None.
@@ -184,7 +184,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __draw_inputs(self):
         """
         This method draw the inputs.
-            Args:
+            Parameters:
                 None.
             Returns:
                 None.
@@ -240,7 +240,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __draw_outputs(self):
         """
         This method draw the outputs.
-            Args:
+            Parameters:
                 None.
             Returns:
                 None.
@@ -273,9 +273,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __on_output_press(self, canvas_item, target_item, event, args):
         """
         This method monitors the output state, monitors if output was pressed.
-        Args:
-        Returns:
-            None.
+            Parameters:
+            Returns:
+                None.
         """
         self.diagram.start_connection(self, args)
         return True
@@ -284,9 +284,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __on_output_release(self, canvas_item, target_item, event, args):
         """
         This method monitors the output state, monitors if output was release.
-        Args:
-        Returns:
-            boolean.
+            Parameters:
+            Returns:
+                boolean.
         """
         return True
 
@@ -294,9 +294,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __draw_label(self):
         """
         This method draw the label.
-        Args:
-        Returns:
-            None
+            Parameters:
+            Returns:
+                None
         """
         text_label = "<span font_family ='Arial' " + \
             "size = '10000' weight = 'ultralight'> " + \
@@ -321,7 +321,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def rebuild(self):
         """
         This method rebuild the block.
-            Args:
+            Parameters:
             Returns:
                 None.
         """
@@ -335,7 +335,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def build(self):
         """
         This method build the block.
-            Args:
+            Parameters:
             Returns:
                 None
         """
@@ -364,7 +364,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def get_input_pos(self, input_id):
         """
         This method get input position.
-            Args:
+            Parameters:
             Returns:
         """
         isSet, x, y, scale, rotation = self.get_simple_transform()
@@ -379,7 +379,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def get_output_pos(self, output_id):
         """
         This method get output position.
-            Args:
+            Parameters:
             Returns:
         """
         isSet, x, y, scale, rotation = self.get_simple_transform()
@@ -394,7 +394,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def move(self, x, y):
         """
         This method move a block.
-            Args:
+            Parameters:
             Returns:
         """
         self.translate(x, y)
@@ -403,7 +403,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def delete(self):
         """
         This method delete a block.
-            Args:
+            Parameters:
             Returns:
         """
         self.diagram.delete_block(self)
@@ -413,7 +413,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def get_position(self):
         """
         This method get position the block.
-            Args:
+            Parameters:
             Returns:
         """
         isSet, x, y, scale, rotation = self.get_simple_transform()
@@ -423,7 +423,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def set_properties(self, data):
         """
         This method set properties of each block.
-            Args:
+            Parameters:
             Returns:
         """
         self.diagram.do("Set block property")
@@ -433,7 +433,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def get_properties(self):
         """
         This method get properties of each block.
-            Args:
+            Parameters:
             Returns:
                 Properties.
         """
@@ -443,7 +443,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def update_flow(self):
         """
         This method update flow.
-            Args:
+            Parameters:
             Returns:
                 None
         """
@@ -463,10 +463,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __update_state(self):
         """
         This method update the Line state.
-        Args:
-            Self
-        Returns:
-            None
+            Parameters:
+                Self
+            Returns:
+                None
         """
         # Not connected: Color = red
         if self.has_flow:

@@ -57,6 +57,7 @@ class BlockProperties(Gtk.Notebook):
         """
         This method set properties of each block.
             Parameters:
+            * **block** (:class:`block<harpia.GUI.block>`)
             Returns:
                 None
         """
