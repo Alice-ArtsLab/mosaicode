@@ -89,6 +89,13 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
+        """
+        This method set scrolled window.
+
+            Parameters:
+                * **frame**
+
+        """
         self.scrolled_window = frame
 
     # ----------------------------------------------------------------------
@@ -226,6 +233,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def update_scrolling(self):
+        """
+        This method update scrolling.
+
+        """
         x, y, width, height = self.get_min_max()
         if x >= 0 and y >= 0:
             self.update_flows()
@@ -239,9 +250,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def add_block(self, plugin):
         """
         This method add a block in the diagram.
+
             Parameters:
+                * **plugin**
             Returns:
-                None
+                * **Types** (:class:`boolean<boolean>`)
         """
         new_block = Block(self, plugin)
         if DiagramModel.add_block(self, new_block):
@@ -254,6 +267,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
 
     def __valid_connector(self, newCon):
+        """
+        Returns
+             * **Types** (:class:`boolean<boolean>`)
+        """
         for oldCon in self.connectors:
             if oldCon.sink == newCon.sink \
                     and oldCon.sink_port == newCon.sink_port\
@@ -278,8 +295,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def start_connection(self, block, output):
         """
         This method start a connection.
+
             Parameters:
-            Returns:
+                * **block**
+                * **output**
 
         """
         self.__abort_connection()  # abort any possibly running connections
@@ -292,8 +311,12 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def end_connection(self, block, block_input):
         """
         This method end a connection.
+
             Parameters:
+                * **block**
+                * **block_input**
             Returns:
+                * **Types** (:class:`boolean<boolean>`)
         """
         if self.curr_connector is None:
             return False
@@ -345,10 +368,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def set_file_name(self, file_name):
         """
         This method set name of diagram file.
+
             Parameters:
                 * **file_name** (:class:`str<str>`)
-            Returns:
-                None
 
         """
         DiagramModel.set_file_name(self, file_name)
@@ -364,10 +386,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def set_zoom(self, zoom):
         """
         This method set zoom.
+
             Parameters:
-                zoom
-            Returns:
-                None
+                * **zoom**
         """
         DiagramModel.set_zoom(self, zoom)
         self.__apply_zoom()
@@ -376,10 +397,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def change_zoom(self, value):
         """
         This method change zoom.
+
             Parameters:
                * **value** (:class:`float<float>`)
-            Returns:
-                None
         """
         zoom = self.get_zoom()
         if value == System.ZOOM_ORIGINAL:
@@ -395,10 +415,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def show_block_property(self, block):
         """
         This method show block property.
+
             Parameters:
                 * **block**(:class: `Block<harpia.GUI.block>`)
-            Returns:
-                None
         """
         self.__main_window.main_control.show_block_property(block)
 
@@ -406,6 +425,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def resize(self, data):
         """
         This method resize diagram.
+
+            Parameters:
+               * **data**
         """
         self.set_property("x2", self.__main_window.get_size()[0])
         self.white_board.set_property(
@@ -427,8 +449,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def move_selected_blocks(self, x, y):
         """
         This method move selected blocks.
+
             Parameters:
-            Returns:
+                * **(x,y)** (:class:`float<float>`)
+    
         """
         self.do("Move blocks")
         for block_id in self.blocks:
@@ -440,6 +464,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def delete(self):
         """
         This method delete a block.
+
         """
         if len(self.current_widgets) < 1:
             return
@@ -513,6 +538,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def delete_connection(self, connection):
         """
         This method delete a connection.
+
+            Parameters:
+                connection
         """
         DiagramModel.delete_connection(self, connection)
         connection.remove()
@@ -521,10 +549,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def delete_block(self, block):
         """
         This method delete a block.
+
             Parameters:
                 block
-            Returns:
-                None
         """
         if not DiagramModel.delete_block(self, block):
             return
@@ -536,6 +563,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def set_modified(self, state):
         """
         This method set a modification.
+
+            Parameters:
+                * **state**
         """
         DiagramModel.set_modified(self, state)
         self.__main_window.work_area.rename_diagram(self)
@@ -544,6 +574,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def grab_focus(self):
         """
         This method define focus.
+
         """
         Gtk.Widget.grab_focus(self)
 
@@ -563,6 +594,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def do(self, new_msg):
         """
+        This method do something
+            Parameters:
+                * **new_msg** (:class:`str<str>`)
         """
         self.set_modified(True)
         action = (copy.copy(self.blocks), copy.copy(self.connectors), new_msg)
@@ -607,6 +641,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def get_min_max(self):
         """
         This method get min and max.
+            Returns
+                
         """
         min_x = self.__main_window.get_size()[0]
         min_y = self.__main_window.get_size()[1]

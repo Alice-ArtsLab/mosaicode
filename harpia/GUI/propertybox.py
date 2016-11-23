@@ -34,6 +34,7 @@ class PropertyBox(Gtk.VBox):
     def set_block(self, block):
         """
         This method set properties the block.
+
             Parameters:
                 * **block** (:class:`PropertyBox<harpia.GUI.propertybox>`)
             Returns:
@@ -56,7 +57,7 @@ class PropertyBox(Gtk.VBox):
 # ----------------------------------------------------------------------
     def notify(self, widget=None, data=None):
         """
-
+        This method notify modifications in propertybox
         """
         # It is time to look for values
         self.__recursive_search(self)

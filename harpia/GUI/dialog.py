@@ -23,11 +23,12 @@ class Dialog():
     def open_dialog(self, title, main_window):
         """
         This method open dialog box.
+
             Parameters:
                 * **name** (:class:`str<str>`)
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
-                * **file_name** (:class:`str<str>`)
+                * **Types** (:class:`str<str>`)
         """
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.OPEN,
@@ -52,11 +53,12 @@ class Dialog():
     def confirm_overwrite(self, name, main_window):
         """
         This method confirm overwrite of the file.
+
             Parameters:
                 * **name** (:class:`str<str>`)
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
-                Boolean
+                * **Types** (:class:`boolean<boolean>`)
         """
         if os.path.exists(name) is False:
             return True
@@ -75,11 +77,11 @@ class Dialog():
     def save_dialog(self, title, main_window):
         """
         This method open save dialog.
-            Parameters:
 
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+            Parameters:
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
-                * **file_name** (:class:`str<str>`)
+                * **Types** (:class:`str<str>`)
         """
         diagram = main_window.work_area.get_current_diagram()
         dialog = Gtk.FileChooserDialog(title, main_window,
@@ -105,11 +107,13 @@ class Dialog():
     def save_png_dialog(self, title, main_window):
         """
         This method open save png dialog.
+
             Parameters:
                 * **title** (:class:`str<str>`)
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
-                * **file_name** (:class:`str<str>`)
+
+                * **Types** (:class:`str<str>`): Return file name.
         """
         dialog = Gtk.FileChooserDialog(title, main_window,
                                        Gtk.FileChooserAction.SAVE,
@@ -132,12 +136,11 @@ class Dialog():
     def message_dialog(self, title, message, main_window):
         """
         This method open message dialog.
+
             Parameters:
                 * **title** (:class:`str<str>`)
                 * **message** (:class:`str<str>`)
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
-            Returns:
-                None
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
         """
         dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
                                    Gtk.ButtonsType.OK, title)
@@ -149,11 +152,12 @@ class Dialog():
     def confirm_dialog(self, message, main_window):
         """
         This method open confirm dialog.
+
             Parameters:
                 * **message** (:class:`str<str>`)
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
-                None
+               * **Types:** (:class:`gtk.message.dialog<GTK.MessageDialog>`)
         """
         dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
                                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -165,10 +169,10 @@ class Dialog():
     def rename_dialog(self, main_window, diagram):
         """
         This method open rename dialog.
+
             Parameters:
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow`)
-                * **diagram** (:class:`Diagram<harpia.GUI.diagram`)
-            Returns:
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
+                * **diagram** (:class:`Diagram<harpia.GUI.diagram>`)
         """
         dialog = Gtk.Dialog(_("Rename"), main_window,
                             0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,

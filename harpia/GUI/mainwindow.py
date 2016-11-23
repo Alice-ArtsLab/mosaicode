@@ -149,6 +149,7 @@ class MainWindow(Gtk.Window):
     def set_title(self, title):
         """
         This method set title.
+        
             Parameters:
                 * **title** (:class:`str<str>`)
             Returns:

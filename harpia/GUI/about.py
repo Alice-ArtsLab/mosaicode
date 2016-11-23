@@ -14,20 +14,14 @@ class About(Gtk.Window):
     """
     This class contains methods related the About class
     This class contains the information about the project.
-      Parameters:
-          Gtk.window
-
-      Return:
-          None
     """
 
     def __init__(self, main_window):
         """
         This method is the constuctor.
-                Parameters:
-                                main_window
-                Returns:
-                        None
+        
+          Parameters:
+            * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
         """
         self.data_dir = os.environ['HARPIA_DATA_DIR']
         Gtk.Window.__init__(self, title=_("About Harpia"))
@@ -93,7 +87,7 @@ class About(Gtk.Window):
                                    'along with this program.  If not, s ' +
                                    'ee www.gnu.org/licenses.\n\n' +
                                    'This Program uses the Amara software,\n' +
-                                   'Copyright 2006 Uche Ogbuji\n' +
+                                   'Copyright 2006-2016 Uche Ogbuji\n' +
                                    '(http://uche.ogbuji.net), more ' +
                                    'information\nfound in the copyright ' +
                                    'archive \nprovided with this software.'))

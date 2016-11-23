@@ -23,8 +23,7 @@ class BlockProperties(Gtk.Notebook):
         """
         This method is the constuctor.
             Parameters:
-            Returns:
-                None
+                main_window
         """
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
@@ -56,10 +55,9 @@ class BlockProperties(Gtk.Notebook):
     def set_block(self, block):
         """
         This method set properties of each block.
+        
             Parameters:
             * **block** (:class:`block<harpia.GUI.block>`)
-            Returns:
-                None
         """
         self.help.get_buffer().set_text(block.get_help())
         self.property_box.set_block(block)

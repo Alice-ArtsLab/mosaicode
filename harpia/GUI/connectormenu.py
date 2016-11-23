@@ -63,6 +63,9 @@ class ConnectorMenu(Gtk.Menu):
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
         """
         This method delete connection.
+        
+        Returns:
+            * **Types** (:class:`boolean<boolean>`)
         """
         self.connector.delete()
         return True

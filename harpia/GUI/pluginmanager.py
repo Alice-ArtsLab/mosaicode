@@ -145,6 +145,7 @@ class PluginManager(Gtk.Dialog):
     def set_block(self, plugin):
         """
         This method call add_block.
+        
             Parameters:
                 plugin
             Returns:
@@ -156,6 +157,7 @@ class PluginManager(Gtk.Dialog):
     def add_block(self, plugin):
         """
         This method add a plugin.
+
             Parameters:
                 plugin
             Returns:
