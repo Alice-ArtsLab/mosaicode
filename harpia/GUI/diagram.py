@@ -452,7 +452,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def paste(self):
         """
-            This method paste a block.
+        This method paste a block.
         """
         replace = {}
         self.current_widgets = []

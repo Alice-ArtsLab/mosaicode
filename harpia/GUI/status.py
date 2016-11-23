@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This file contains the Status class.
+This module contains the Status class.
 """
 import gi
 import datetime
@@ -12,7 +12,7 @@ from gi.repository import Pango
 
 class Status(Gtk.ScrolledWindow):
     """
-    This class generate the state log.
+    This class contains methods related the Status class
     """
 
     # ----------------------------------------------------------------------
@@ -45,10 +45,9 @@ class Status(Gtk.ScrolledWindow):
     def clear(self):
         """
         The method clear the buffer.
-        Args:
-            self(Status): the class.
-        Returns:
-            None
+            Parameters:
+            Returns:
+                None
         """
         self.status.get_buffer().set_text("")
 
@@ -56,11 +55,11 @@ class Status(Gtk.ScrolledWindow):
     def append_text(self, text):
         """
         This method append a text in text buffer.
-        Args:
-            self(Status):The class.
-            text(string): the text.
-        Returns:
-            None.
+            Parameters:
+                * **self** (:class:`Status<harpia.GUI.status>`):The class.
+                * **text** (:class:`str<str>`)
+            Returns:
+                None.
         """
         textbuffer = self.status.get_buffer()
         end_iter = textbuffer.get_end_iter()
@@ -77,11 +76,10 @@ class Status(Gtk.ScrolledWindow):
     def log(self, text):
         """
         This method set the log.
-        Args:
-        self(Status)
-        text(string)
-        Returns:
-            None
+            Parameters:
+                * **text** (:class:`str<str>`)
+            Returns:
+                None
         """
         self.append_text(text)
 

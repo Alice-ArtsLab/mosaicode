@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.model.plugin import Plugin
 
+
 class TestPlugin(TestCase):
 
     def test_setUp(self):
@@ -79,5 +80,3 @@ class TestPlugin(TestCase):
     # ----------------------------------------------------------------------x
     def test_generate_out_dealloc(self):
         self.plugin.generate_out_dealloc()
-
-    

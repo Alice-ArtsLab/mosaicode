@@ -98,7 +98,7 @@ class Plugin(object):
     def get_in_types(self):
         """
         Return types of plugin entries.
-        
+
         Args:
             None
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This file contains the BlockProperties.
+This module contains the BlockProperties.
 """
 
 import gi

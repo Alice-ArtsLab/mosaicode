@@ -60,44 +60,44 @@ block_$id$_i[1] = function(value){
 };
 """
         self.properties = [
-            {"name":"a",
-                  "label": "Attack",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1,
-                  "value": 5
-                  },
+            {"name": "a",
+             "label": "Attack",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 5
+             },
             {"name": "d",
-                  "label": "Delay",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1,
-                  "value": 2
-                  },
+             "label": "Delay",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 2
+             },
             {"name": "s",
                 "label": "Sustain",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1,
-                  "value": 100
-                  },
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 100
+             },
             {"name": "r",
-            "label": "Release",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1,
-                  "value": 50
-                  },
+             "label": "Release",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 50
+             },
             {"name": "g",
-            "label":"Gain",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1,
-                  "value": 0.5
-                  }
+             "label": "Gain",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 0.5
+             }
         ]

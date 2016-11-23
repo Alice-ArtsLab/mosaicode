@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the PreferenceWindow class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -13,8 +15,14 @@ _ = gettext.gettext
 
 
 class PreferenceWindow(Gtk.Dialog):
+    """
+    This class contains methods related the PreferenceWindow class
+    """
 
     def __init__(self, main_window):
+        """
+        This method is the constructor.
+        """
         Gtk.Dialog.__init__(self, _("Code Window"), main_window,
                             0, (Gtk.STOCK_CANCEL,
                                 Gtk.ResponseType.CANCEL,

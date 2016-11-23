@@ -35,41 +35,43 @@ from gi.repository import Gtk
 from harpia.control.codegenerator import CodeGenerator
 
 FRAMERATE = 25
+
+
 class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
-    def __init__(self, diagram = None):
+    def __init__(self, diagram=None):
         CodeGenerator.__init__(self, diagram)
         self.connectors = {
-        "HRP_INT":{
-            "icon_in":"images/conn_int_in.png",
-            "icon_out":"images/conn_int_out.png",
-            "multiple": False,
-            "code": 'block$sink$_int_i$sink_port$ = block$source$_int_o$source_port$;// INT conection\n'
+            "HRP_INT": {
+                "icon_in": "images/conn_int_in.png",
+                "icon_out": "images/conn_int_out.png",
+                "multiple": False,
+                "code": 'block$sink$_int_i$sink_port$ = block$source$_int_o$source_port$;// INT conection\n'
             },
-        "HRP_DOUBLE":{
-            "icon_in":"images/conn_double_in.png",
-            "icon_out":"images/conn_double_out.png",
-            "multiple": False,
-            "code": 'block$sink$_double_i$sink_port$ = block$source$_double_o$source_port$;// DOUBLE conection\n'
+            "HRP_DOUBLE": {
+                "icon_in": "images/conn_double_in.png",
+                "icon_out": "images/conn_double_out.png",
+                "multiple": False,
+                "code": 'block$sink$_double_i$sink_port$ = block$source$_double_o$source_port$;// DOUBLE conection\n'
             },
-        "HRP_RECT":{
-            "icon_in":"images/conn_rect_in.png",
-            "icon_out":"images/conn_rect_out.png",
-            "multiple": False,
-            "code": 'block$sink$_rect_i$sink_port$ = block$source$_rect_o$source_port$;// RECT conection\n'
+            "HRP_RECT": {
+                "icon_in": "images/conn_rect_in.png",
+                "icon_out": "images/conn_rect_out.png",
+                "multiple": False,
+                "code": 'block$sink$_rect_i$sink_port$ = block$source$_rect_o$source_port$;// RECT conection\n'
             },
-        "HRP_IMAGE":{
-            "icon_in":"images/conn_image_in.png",
-            "icon_out":"images/conn_image_out.png",
-            "multiple": False,
-            "code": 'block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n'
+            "HRP_IMAGE": {
+                "icon_in": "images/conn_image_in.png",
+                "icon_out": "images/conn_image_out.png",
+                "multiple": False,
+                "code": 'block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n'
             },
-        "HRP_POINT":{
-            "icon_in":"images/conn_point_in.png",
-            "icon_out":"images/conn_point_out.png",
-            "multiple": False,
-            "code": 'block$sink$_point_i$sink_port$ = block$source$_point_o$source_port$;// POINT conection\n'
+            "HRP_POINT": {
+                "icon_in": "images/conn_point_in.png",
+                "icon_out": "images/conn_point_out.png",
+                "multiple": False,
+                "code": 'block$sink$_point_i$sink_port$ = block$source$_point_o$source_port$;// POINT conection\n'
             }
         }
 
@@ -106,7 +108,7 @@ class CGenerator(CodeGenerator):
 #include <opencv/highgui.h>
 #include <math.h>
 
-#define FRAMERATE """+ str(int((1.0 / FRAMERATE) * 1000.0)) +"""
+#define FRAMERATE """ + str(int((1.0 / FRAMERATE) * 1000.0)) + """
 
 """
 
@@ -131,7 +133,7 @@ class CGenerator(CodeGenerator):
         declaration_block += 'while((key = (char)cvWaitKey(FRAMERATE)) != 27){\n'
 
         execution = "\n//execution block\n"
-        for x,y in zip(self.functionCalls, self.connections):
+        for x, y in zip(self.functionCalls, self.connections):
             execution += x
             execution += y
 
@@ -162,18 +164,18 @@ class CGenerator(CodeGenerator):
         codeFile.close()
 
         if os.name == "nt":
-            makeFilename = self.filename +'.Makefile.bat'
+            makeFilename = self.filename + '.Makefile.bat'
             makeFileEntry = '"/\\bin\\gcc.exe" ' + codeFilename + \
-                    " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
+                " -o " + codeFilename[:-2] + ".exe -lcv -lcxcore -lhighgui"
             makeFile = open(makeFilename, 'w')
             makeFile.write(makeFileEntry)
             makeFile.close()
         else:
-            makeFilename = self.filename +'.Makefile'
+            makeFilename = self.filename + '.Makefile'
             makeFileEntry = "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib/;\n"
             makeFileEntry += "export PKG_CONFIG_PATH=/lib/pkgconfig/;\n"
             makeFileEntry += "g++ " + codeFilename + " -o " + \
-                    self.filename + " `pkg-config --cflags --libs opencv`\n"
+                self.filename + " `pkg-config --cflags --libs opencv`\n"
             makeFile = open(makeFilename, 'w')
             makeFile.write(makeFileEntry)
             makeFile.close()
@@ -185,12 +187,12 @@ class CGenerator(CodeGenerator):
         self.save_code()
         self.change_directory()
         if os.name == "nt":
-            i, o = os.popen4(self.filename +'.Makefile.bat')
+            i, o = os.popen4(self.filename + '.Makefile.bat')
             o.readlines()
             o.close()
             i.close()
         else:
-            i, o = os.popen4("sh " + self.filename +'.Makefile')
+            i, o = os.popen4("sh " + self.filename + '.Makefile')
             errors = o.read()
             from harpia.system import System as System
             System.log(errors)
@@ -212,7 +214,8 @@ class CGenerator(CodeGenerator):
             o.close()
             i.close()
         else:
-            command = "LD_LIBRARY_PATH=/lib/ ./" + self.filename + " 2> Error" + self.error_log_file
+            command = "LD_LIBRARY_PATH=/lib/ ./" + \
+                self.filename + " 2> Error" + self.error_log_file
             program = Thread(target=os.system, args=(command,))
             program.start()
             while program.isAlive():

@@ -2,6 +2,9 @@ import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
+"""
+This module contains the AllFileFilter class, HarpiaFileFilter and PNGFileFilter class.
+"""
 
 
 class AllFileFilter(Gtk.FileFilter):

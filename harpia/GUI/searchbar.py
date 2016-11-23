@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This modules contains the SearchBar class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
 class SearchBar(Gtk.Box, Gtk.SearchBar):
+    """
+    This class contains methods related the SearchBar class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -20,6 +25,12 @@ class SearchBar(Gtk.Box, Gtk.SearchBar):
 
     # ----------------------------------------------------------------------
     def search_changed(self, data):
+        """
+        This method monitors if search was search_changed.
+            Parameter:
+            Returns:
+                * **SearchBar** (:class:`SearchBar<harpia.GUI.searchbar>`)
+        """
         self.main_window.main_control.search(
             self.search_entry.get_text().upper())
         return self.search_entry.get_text()

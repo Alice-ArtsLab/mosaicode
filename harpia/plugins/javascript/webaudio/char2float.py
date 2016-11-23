@@ -41,10 +41,10 @@ block_$id$_i[0] = function(value){
                                      "upper": 20000,
                                      "step": 1,
                                      "value": 60
-                                     },
+                            },
                            {"name": "char",
                             "label": "Input Char",
                             "type": HARPIA_STRING,
                             "value": "a"
-                                    }
+                            }
                            ]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This file contains the BlocksTreeView class.
+This module contains the BlocksTreeView class.
 """
 import os
 import gi

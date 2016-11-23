@@ -195,7 +195,7 @@ class Menu(Gtk.MenuBar):
     # ----------------------------------------------------------------------
     def update_recent_file(self):
         """
-        
+
         This method update recent files.
             Parameters:
                 * **self** (:class:`Menu<harpia.GUI.menu>`)
