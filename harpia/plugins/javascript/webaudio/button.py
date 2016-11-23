@@ -46,10 +46,10 @@ id="block_$id$">$label$</button><br>
                             "upper": 20000,
                             "step": 1,
                             "value": 1
-                                     },
+                            },
                            {"name": "label",
                             "label": "Label",
                             "type": HARPIA_STRING,
-                            "value" : "Label"
-                                     }
+                            "value": "Label"
+                            }
                            ]

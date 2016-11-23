@@ -64,7 +64,7 @@ class Toolbar(Gtk.Toolbar):
         This method create a button on menu.
             Parameters:
             Returns:
-                
+
         """
         button = Gtk.ToolButton.new_from_stock(stock)
         button.set_expand(False)

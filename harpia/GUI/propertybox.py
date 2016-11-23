@@ -56,7 +56,7 @@ class PropertyBox(Gtk.VBox):
 # ----------------------------------------------------------------------
     def notify(self, widget=None, data=None):
         """
-        
+
         """
         # It is time to look for values
         self.__recursive_search(self)

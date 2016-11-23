@@ -6,6 +6,7 @@ from gi.repository import Gtk
 This module contains the AllFileFilter class, HarpiaFileFilter and PNGFileFilter class.
 """
 
+
 class AllFileFilter(Gtk.FileFilter):
 
     def __init__(self):

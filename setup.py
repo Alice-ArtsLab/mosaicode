@@ -66,6 +66,6 @@ setup(name='harpia',
                   ('/usr/share/pixmaps',
                    ['app_data/images/harpia.svg']),
                   ('/usr/share/icons/hicolor/24x24/apps',
-                  ['app_data/images/harpia.png']), ],
+                   ['app_data/images/harpia.png']), ],
       **config
       )

@@ -11,6 +11,7 @@ from harpia.system import System as System
 
 
 class BlockNotebook(Gtk.Notebook):
+
     """
     This class contains methods related the BlockNotebook class.
     """
@@ -44,6 +45,7 @@ class BlockNotebook(Gtk.Notebook):
         """
         This method get current diagram page.
             Parameters:
+                None
             Returns:
                 None.
         """
@@ -56,7 +58,9 @@ class BlockNotebook(Gtk.Notebook):
     def get_tabs(self):
         """
         This method return the diagram pages.
+
             Parameters:
+                none
             Returns:
                 * **tabs** (:class:`BlockNotebook<harpia.GUI.blocknotebook>`)
         """

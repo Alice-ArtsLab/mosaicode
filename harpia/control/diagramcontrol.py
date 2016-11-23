@@ -83,7 +83,8 @@ class DiagramControl():
             "connections").getChildTags("connection")
         for conn in connections:
             try:
-                from_block = self.diagram.blocks[int(conn.getAttr("from_block"))]
+                from_block = self.diagram.blocks[
+                    int(conn.getAttr("from_block"))]
                 to_block = self.diagram.blocks[int(conn.getAttr("to_block"))]
             except:
                 continue
@@ -111,18 +112,17 @@ class DiagramControl():
             props = self.diagram.blocks[block_id].get_properties()
             for prop in props:
                 parser.appendToLastTag('block',
-                            'property',
-                            key=str(prop["name"]),
-                            value=str(prop["value"]))
+                                       'property',
+                                       key=str(prop["name"]),
+                                       value=str(prop["value"]))
 
         parser.appendToTag('harpia', 'connections')
         for connector in self.diagram.connectors:
             parser.appendToTag('connections', 'connection',
-                    from_block=connector.source.get_id(),
-                    from_out= int(connector.source_port) + 1,
-                    to_block=connector.sink.get_id(),
-                    to_in=int(connector.sink_port) + 1)
-
+                               from_block=connector.source.get_id(),
+                               from_out=int(connector.source_port) + 1,
+                               to_block=connector.sink.get_id(),
+                               to_in=int(connector.sink_port) + 1)
 
         if file_name is not None:
             self.diagram.set_file_name(file_name)

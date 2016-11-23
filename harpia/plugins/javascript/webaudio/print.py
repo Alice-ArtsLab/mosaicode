@@ -35,8 +35,8 @@ block_$id$_i[1] = function(value){
 $label$ <span id="block_$id$"></span><br>
 """
         self.properties = [{"name": "label",
-                            "label" : "Label",
-                            "value" : "Label",
+                            "label": "Label",
+                            "value": "Label",
                             "type": HARPIA_STRING
-                                     }
+                            }
                            ]

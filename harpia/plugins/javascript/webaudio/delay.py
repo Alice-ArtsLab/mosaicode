@@ -34,6 +34,6 @@ block_$id$_i[0].delayTime.value = $time$;
                             "lower": 0,
                             "upper": 10000,
                             "step": 1,
-                            "value":1
-                                    }
+                            "value": 1
+                            }
                            ]

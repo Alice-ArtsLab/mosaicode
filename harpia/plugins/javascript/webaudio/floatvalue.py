@@ -39,12 +39,12 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$"
 
         self.properties = [{"name": "value",
                             "label": "Value",
-                           "type": HARPIA_FLOAT,
-                           "lower": 0,
-                           "upper": 20000,
-                           "step": 1,
-                           "value": 1
-                           },
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 1
+                            },
                            {"name": "min",
                             "label": "Min",
                             "type": HARPIA_FLOAT,

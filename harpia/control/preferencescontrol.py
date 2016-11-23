@@ -41,9 +41,9 @@ class PreferencesControl():
         parser.addTag('HarpiaProperties')
         for key in self.hp.__dict__:
             parser.appendToTag('HarpiaProperties',
-                    'property',
-                    key=key,
-                    value=self.hp.__dict__[key])
+                               'property',
+                               key=key,
+                               value=self.hp.__dict__[key])
         try:
             confFile = file(os.path.expanduser(self.hp.conf_file_path), 'w')
             confFile.write(parser.prettify())

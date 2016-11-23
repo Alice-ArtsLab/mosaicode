@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.control.codegenerator import CodeGenerator
 
+
 class TestCodeGenerator(TestCase):
 
     def setUp(self):
