@@ -48,8 +48,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def delete(self):
         """
         This method delete connection.
-            Parameters:
-            Returns:
         """
         self.get_diagram().delete_connection(self)
         self.get_diagram().update_flows()
@@ -87,9 +85,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def set_end(self, sink, sink_port):
         """
         This method set the end of connection.
+
             Parameters:
-            Returns:
-                None
+                * **sink_port**
+                * **sink**
         """
         ConnectionModel.set_end(self, sink, sink_port)
         self.__to_point = sink.get_input_pos(self.sink_port)
@@ -99,10 +98,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def update_tracking(self, newEnd=None):
         """
         This method update Tracking.
+
             Parameters:
-                newEnd
-            Returns:
-                None
+                * **newEnd**
         """
         if newEnd is None:
             newEnd = self.__from_point
@@ -126,6 +124,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def update_flow(self):
         """
         This method update the flow.
+        
         """
         self.__from_point = self.source.get_output_pos(self.source_port)
         self.__to_point = self.sink.get_input_pos(self.sink_port)
@@ -169,6 +168,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def __update_state(self):
+        """
+        This method update the connector state.
+        """
+
         # With focus: line width = 3
         if self.__focus:
             self.__widgets["Line"].set_property("line-width", 3)

@@ -62,6 +62,7 @@ class Toolbar(Gtk.Toolbar):
     def __create_button(self, stock, name, action):
         """
         This method create a button on menu.
+
             Parameters:
             Returns:
 
@@ -78,6 +79,7 @@ class Toolbar(Gtk.Toolbar):
     def __button_clicked(self, widget, data):
         """
         This method monitors if the button was clicked.
+        
             Parameters:
             Returns:
                 None

@@ -166,6 +166,7 @@ class Menu(Gtk.MenuBar):
     def add_example(self, example):
         """
         This method add a file at list of examples.
+
             Parameters:
                 * **self** (:class:`Menu<harpia.GUI.menu>`)
                 * **example** (:class:`str<str>`)
@@ -183,6 +184,7 @@ class Menu(Gtk.MenuBar):
     def __load_example(self, widget, data):
         """
         This method load a example.
+
             Parameters:
                 widget:
                 data:
@@ -197,6 +199,7 @@ class Menu(Gtk.MenuBar):
         """
 
         This method update recent files.
+
             Parameters:
                 * **self** (:class:`Menu<harpia.GUI.menu>`)
             Returns:
@@ -211,6 +214,7 @@ class Menu(Gtk.MenuBar):
     def add_recent_file(self, recent_file):
         """
         This method add a file in recent files.
+        
             Parameters:
                 recent_file: The file to add.
             Return:

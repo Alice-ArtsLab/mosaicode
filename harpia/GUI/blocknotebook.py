@@ -19,9 +19,9 @@ class BlockNotebook(Gtk.Notebook):
     def __init__(self, main_window):
         """
         This method is the constructor.
+
             Parameters:
                 * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
-            Returns:
         """
         Gtk.Notebook.__init__(self)
         self.main_window = main_window
@@ -44,10 +44,10 @@ class BlockNotebook(Gtk.Notebook):
     def get_current_tab(self):
         """
         This method get current diagram page.
-            Parameters:
-                None
+
             Returns:
-                None.
+                * **Types** (:class:`int<int>`): Return number current page.
+                
         """
         if self.get_current_page() > -1:
             return self.tabs[self.get_current_page()]
@@ -59,10 +59,8 @@ class BlockNotebook(Gtk.Notebook):
         """
         This method return the diagram pages.
 
-            Parameters:
-                none
             Returns:
-                * **tabs** (:class:`BlockNotebook<harpia.GUI.blocknotebook>`)
+                * **Types** (:class:`BlockNotebook<harpia.GUI.blocknotebook>`)
         """
         return self.tabs
 # ----------------------------------------------------------------------

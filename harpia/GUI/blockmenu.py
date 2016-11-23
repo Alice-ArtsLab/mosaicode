@@ -42,10 +42,10 @@ class BlockMenu(Gtk.Menu):
     def __init__(self, block, event):
         """
         This method show the block menu.
-            Parameters:
 
-            Returns:
-                None
+            Parameters:
+                * **block**
+                * **event**
         """
         Gtk.Notebook.__init__(self)
         self.block = block
@@ -59,12 +59,12 @@ class BlockMenu(Gtk.Menu):
         self.popup(None, None, None, None, event.button.button, event.time)
 
     # ----------------------------------------------------------------------
-    def __delete_clicked(self, *Parameters):  # strongly depends on garbage collector
+    def __delete_clicked(self, *args):  # strongly depends on garbage collector
         """
         This method monitors if the button delete was clicked.
+        
             Parameters:
-
-            Returns:
-                None
+            * **args**
+       
         """
         self.block.delete()

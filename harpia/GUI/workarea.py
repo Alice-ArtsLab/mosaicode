@@ -37,6 +37,7 @@ class WorkArea(Gtk.Notebook):
     def add_diagram(self, diagram):
         """
         This method add a  new diagram page.
+
             Parameters:
                 * **diagram** (:class:`Diagram<harpia.GUI.diagram`)
             Returns:
@@ -56,6 +57,7 @@ class WorkArea(Gtk.Notebook):
     def close_tab(self, position=None):
         """
         This method close a tab.
+
             Parameters:
                 * **position**
             Returns:
@@ -121,6 +123,7 @@ class WorkArea(Gtk.Notebook):
     def rename_diagram(self, diagram):
         """
         This method rename a diagram page.
+
             Parameters:
                 * **diagram** (:class:`diagram<harpia.GUI.diagram>`)
             Returns:
@@ -148,9 +151,9 @@ class WorkArea(Gtk.Notebook):
     def resize(self, data):
         """
         This method resize a diagram page.
+
             Parameters:
-            Returns:
-                None
+                * **data**
 
         """
         for diagram in self.diagrams:
@@ -160,7 +163,7 @@ class WorkArea(Gtk.Notebook):
     def close_tabs(self):
         """
         This method close tabs.
-            Parameters:
+        
             Returns:
                * **boolean** (:class:`boolean<boolean>`)
         """

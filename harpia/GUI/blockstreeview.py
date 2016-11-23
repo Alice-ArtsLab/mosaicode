@@ -69,9 +69,10 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def __add_item(self, block):
         """
         This method add a block in blockstreeview.
+
             Parameters:
-            Returns:
-                None
+                * **block**
+         
         """
         category = self.__contains_category(block.get_group())
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(
@@ -127,7 +128,6 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         This method search the key in blocks_tree_view.
             Parameters:
                 key:
-            Returns:
 
         """
         self.blocks_tree_view.expand_all()
@@ -153,9 +153,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     def get_selected_block(self):
         """
         This method get the block selected.
-            Parameters:
+
             Returns:
-                block
+                * **Types**<block(:class:`block<harpia.GUI.blockstreeview>`) or None
         """
         treeselection = self.blocks_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
