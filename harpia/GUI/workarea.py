@@ -40,8 +40,6 @@ class WorkArea(Gtk.Notebook):
 
             Parameters:
                 * **diagram** (:class:`Diagram<harpia.GUI.diagram`)
-            Returns:
-                None.
         """
         frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
@@ -61,7 +59,7 @@ class WorkArea(Gtk.Notebook):
             Parameters:
                 * **position**
             Returns:
-                * **boolean** (:class:`boolean<boolean>`)
+                * **Types** (:class:`boolean<boolean>`)
         """
         if position is None:
             position = self.get_current_page()
@@ -85,6 +83,13 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def __create_tab_label(self, text, frame):
+        """
+        This method create a tab label.
+            Parameters:
+                * **text** (:class:`str<str>`)
+            Returns:
+                * **box**
+        """
         box = Gtk.HBox()
         button = Gtk.Button()
         image = Gtk.Image().new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
@@ -111,7 +116,7 @@ class WorkArea(Gtk.Notebook):
         """
         This method get current diagram page.
             Return
-                * **diagram** (:class:`digram<harpia.GUI.digram>`)
+                * **Types** (:class:`int<int>`)
         """
 
         if self.get_current_page() > -1:
@@ -126,9 +131,6 @@ class WorkArea(Gtk.Notebook):
 
             Parameters:
                 * **diagram** (:class:`diagram<harpia.GUI.diagram>`)
-            Returns:
-                None
-
         """
         index = -1
         for scrolled_window in self.get_children():
@@ -163,7 +165,7 @@ class WorkArea(Gtk.Notebook):
     def close_tabs(self):
         """
         This method close tabs.
-        
+
             Returns:
                * **boolean** (:class:`boolean<boolean>`)
         """

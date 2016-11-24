@@ -145,7 +145,7 @@ class PluginManager(Gtk.Dialog):
     def set_block(self, plugin):
         """
         This method call add_block.
-        
+
             Parameters:
                 plugin
             Returns:
@@ -159,9 +159,7 @@ class PluginManager(Gtk.Dialog):
         This method add a plugin.
 
             Parameters:
-                plugin
-            Returns:
-                None
+                * **plugin** (:class:`<>`)
         """
         self.type.set_value(plugin.get_type())
         self.language.set_value(plugin.get_language())

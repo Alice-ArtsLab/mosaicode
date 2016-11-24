@@ -157,7 +157,7 @@ class Dialog():
                 * **message** (:class:`str<str>`)
                 * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
             Returns:
-               * **Types:** (:class:`gtk.message.dialog<GTK.MessageDialog>`)
+               * **Types:** (:class:`dialog<GTK.MessageDialog>`)
         """
         dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
                                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,

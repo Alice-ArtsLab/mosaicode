@@ -8,12 +8,17 @@ from harpia.GUI.components.field import Field
 
 
 class CheckField(Field, Gtk.HBox):
-
+    """
+    This class contains methods related the CheckField class.
+    """
     # ------------------------------------------------------------------------------
 
     configuration = {"label": "", "value": False, "name": ""}
 
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)
@@ -44,6 +49,9 @@ class CheckField(Field, Gtk.HBox):
 
     # ------------------------------------------------------------------------------
     def get_type(self):
+        """
+        This method get type.
+        """
         from harpia.GUI.fieldtypes import *
         return HARPIA_CHECK
 

@@ -124,7 +124,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     def update_flow(self):
         """
         This method update the flow.
-        
+
         """
         self.__from_point = self.source.get_output_pos(self.source_port)
         self.__to_point = self.sink.get_input_pos(self.sink_port)
@@ -132,6 +132,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def __update_draw(self):
+        """
+        This method update draw.
+        """
         # svg M L bezier curve
         path = ""
         x0 = self.__from_point[0]

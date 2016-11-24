@@ -268,6 +268,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     def __valid_connector(self, newCon):
         """
+        Parameters:
+        
         Returns
              * **Types** (:class:`boolean<boolean>`)
         """
@@ -436,7 +438,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def select_all(self):
         """
-        This method select all blocks in diagram. 
+        This method select all blocks in diagram.
         """
         self.current_widgets = []
         for block_id in self.blocks:
@@ -452,7 +454,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
             Parameters:
                 * **(x,y)** (:class:`float<float>`)
-    
+
         """
         self.do("Move blocks")
         for block_id in self.blocks:
@@ -642,7 +644,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         This method get min and max.
             Returns
-                
+
         """
         min_x = self.__main_window.get_size()[0]
         min_y = self.__main_window.get_size()[1]

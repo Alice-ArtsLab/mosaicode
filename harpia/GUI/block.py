@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the information about each block.
-The block class is in this file.
+This module contains the Block class.
 """
 import gi
 import os
@@ -224,7 +223,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         This method return true if a input was connected.
 
             Parameters:
-                * **canvas_item** 
+                * **canvas_item**
                 * **target_item**
                 * **event**
             Returns:
