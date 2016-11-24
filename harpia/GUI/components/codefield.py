@@ -24,6 +24,9 @@ class CodeField(Field, Gtk.VBox):
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)
