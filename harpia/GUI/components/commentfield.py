@@ -1,3 +1,6 @@
+"""
+This module contains the CommentField class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -5,6 +8,9 @@ from harpia.GUI.components.field import Field
 
 
 class CommentField(Field, Gtk.VBox):
+    """
+    This class contains methods related the CommentField class.
+    """
 
     configuration = {"label": "",
                      "value": "",
@@ -15,6 +21,9 @@ class CommentField(Field, Gtk.VBox):
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)

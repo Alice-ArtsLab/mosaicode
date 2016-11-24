@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the FloatField class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -8,6 +10,9 @@ from harpia.GUI.components.field import Field
 
 
 class FloatField(Field, Gtk.HBox):
+    """
+    This class contains methods related the FloatField class.
+    """
 
     configuration = {
         "label": "",
@@ -23,6 +28,9 @@ class FloatField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)

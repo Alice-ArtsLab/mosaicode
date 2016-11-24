@@ -1,9 +1,20 @@
+"""
+This module contains the Field class.
+"""
+
+
 class Field(object):
+    """
+    This class contains methods related the Field class.
+    """
 
     configuration = {}
     # ----------------------------------------------------------------------
 
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         self.data = data
 
     # ----------------------------------------------------------------------

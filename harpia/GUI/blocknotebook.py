@@ -46,8 +46,8 @@ class BlockNotebook(Gtk.Notebook):
         This method get current diagram page.
 
             Returns:
-                * **Types** (:class:`int<int>`): Return number current page.
-                
+                * **Types** (:class:`int<int>`) or None: Return number current page.
+
         """
         if self.get_current_page() > -1:
             return self.tabs[self.get_current_page()]
@@ -60,7 +60,7 @@ class BlockNotebook(Gtk.Notebook):
         This method return the diagram pages.
 
             Returns:
-                * **Types** (:class:`BlockNotebook<harpia.GUI.blocknotebook>`)
+                * **Types** (:class:`list<list>`)
         """
         return self.tabs
 # ----------------------------------------------------------------------

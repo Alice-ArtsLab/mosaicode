@@ -19,9 +19,9 @@ class About(Gtk.Window):
     def __init__(self, main_window):
         """
         This method is the constuctor.
-        
+
           Parameters:
-            * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
+            * **Types** (:class:`MainWindow<harpia.GUI.mainwindow>`)
         """
         self.data_dir = os.environ['HARPIA_DATA_DIR']
         Gtk.Window.__init__(self, title=_("About Harpia"))
