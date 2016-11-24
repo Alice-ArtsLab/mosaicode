@@ -62,9 +62,9 @@ class BlockMenu(Gtk.Menu):
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
         """
         This method monitors if the button delete was clicked.
-        
+
             Parameters:
             * **args**
-       
+
         """
         self.block.delete()

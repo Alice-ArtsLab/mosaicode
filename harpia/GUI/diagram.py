@@ -269,7 +269,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __valid_connector(self, newCon):
         """
         Parameters:
-        
+
         Returns
              * **Types** (:class:`boolean<boolean>`)
         """

@@ -22,7 +22,7 @@ class BlockProperties(Gtk.Notebook):
     def __init__(self, main_window):
         """
         This method is the constuctor.
-        
+
             Parameters:
                 main_window
         """

@@ -12,7 +12,6 @@ class ComboField(Field, Gtk.HBox):
     This class contains methods related the ComboField class.
     """
 
-
     configuration = {"label": "", "value": "", "name": "", "values": []}
 
     # ------------------------------------------------------------------------------

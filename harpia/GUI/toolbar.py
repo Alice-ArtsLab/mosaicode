@@ -79,7 +79,7 @@ class Toolbar(Gtk.Toolbar):
     def __button_clicked(self, widget, data):
         """
         This method monitors if the button was clicked.
-        
+
             Parameters:
             Returns:
                 None
