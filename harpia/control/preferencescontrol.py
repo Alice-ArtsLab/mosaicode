@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
-
+"""
+This module contains the PreferencesControl class.
+"""
 import os
 from harpia.utils.XMLUtils import XMLParser
 
 
 class PreferencesControl():
+    """
+    This class contains methods related the PreferencesControl class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -18,6 +23,13 @@ class PreferencesControl():
 
     # ----------------------------------------------------------------------
     def load(self):
+        """
+        This method loads the diagram.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
         # load the diagram
         file_name = os.path.expanduser(self.hp.conf_file_path)
         if os.path.exists(file_name) is False:
@@ -37,6 +49,13 @@ class PreferencesControl():
 
     # ----------------------------------------------------------------------
     def save(self):
+        """
+        This method save the diagram.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
         parser = XMLParser()
         parser.addTag('HarpiaProperties')
         for key in self.hp.__dict__:

@@ -25,11 +25,16 @@
 #    this software.
 #
 # ----------------------------------------------------------------------
-
+"""
+This module contains the XMLParser class.
+"""
 from bs4 import BeautifulSoup
 
 
 class XMLParser(object):
+    """
+    This class contains methods related the XMLParser class.
+    """
 
     def __init__(self, source=None, fromString=False, fromTag=False):
 

@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Closing class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Closing(OpenCVPlugin):
+    """
+    This class contains methods related the Closing class.
+    """
 
     # -------------------------------------------------------------------------
     def __init__(self):

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the MainControl class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -16,6 +18,9 @@ from harpia.control.preferencescontrol import PreferencesControl
 
 
 class MainControl():
+    """
+    This class contains methods related the MainControl class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -26,10 +31,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def new(self):
+        """
+        This method create a new the diagram file.
+        """
         self.main_window.work_area.add_diagram(Diagram(self.main_window))
 
     # ----------------------------------------------------------------------
     def select_open(self):
+        """
+        This method open a selected file.
+        """
         file_name = Dialog().open_dialog("Open Diagram", self.main_window)
         if file_name is None or file_name == "":
             return
@@ -37,6 +48,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def open(self, file_name):
+        """
+        This method open a file.
+        """
         diagram = Diagram(self.main_window)
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
@@ -46,10 +60,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def close(self):
+        """
+        This method closes a tab on the work area.
+        """
         self.main_window.work_area.close_tab()
 
     # ----------------------------------------------------------------------
     def save(self, save_as=False):
+        """
+        This method save the file.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -73,10 +93,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save_as(self):
+        """
+        This method save as.
+        """
         self.save(save_as=True)
 
     # ----------------------------------------------------------------------
     def rename_tab(self):
+        """
+        This method rename a tab.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -84,6 +110,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def export_diagram(self):
+        """
+        This method exports the diagram.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -105,6 +134,13 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def exit(self, widget=None, data=None):
+        """
+        This method close main window.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
         PreferencesControl(System.properties).save()
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
@@ -121,6 +157,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def cut(self):
+        """
+        This method cut a block on work area.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -128,6 +167,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def copy(self):
+        """
+        This method copy a block.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -135,6 +177,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def paste(self):
+        """
+        This method paste a block.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -142,18 +187,29 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def get_clipboard(self):
+        """
+        This method return the clipboard.
+        """
         return self.clipboard
 
     # ----------------------------------------------------------------------
     def reset_clipboard(self):
+        """
+        This method clear the clipboard.
+        """
         self.clipboard = []
 
     # ----------------------------------------------------------------------
     def preferences(self):
+        """
+        """
         PreferenceWindow(self.main_window)
 
     # ----------------------------------------------------------------------
     def delete(self):
+        """
+        This method delete a block.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -161,6 +217,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def run(self):
+        """
+        This method run the code.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -168,6 +227,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save_source(self):
+        """
+        This metho save the source code.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -175,6 +237,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def view_source(self):
+        """
+        This method view the source code.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -183,24 +248,46 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def about(self):
+        """
+        This method open the about window.
+        """
         About(self.main_window).show_all()
 
     # ----------------------------------------------------------------------
     def search(self, query):
+        """
+        This method search the query in the blocks_tree_view.
+        """
         for blocks_tree_view in self.main_window.block_notebook.get_tabs():
             blocks_tree_view.search(query)
 
     # ----------------------------------------------------------------------
     def set_block(self, block):
+        """
+        This method set the block properties.
+        """
         self.main_window.block_properties.set_block(block)
         pass
 
     # ----------------------------------------------------------------------
     def append_status_log(self, text):
+        """
+        This method append a text on status log.
+        """
         self.main_window.status.append_text(text)
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
+        """
+        This method add a block.
+
+        Parameters:
+
+                * **Types** (:class:`block<>`)
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
@@ -214,6 +301,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
+        """
+        This method get the tree view block.
+        """
         blocks_tree_view = self.main_window.block_notebook.get_current_tab()
         if blocks_tree_view is None:
             return False
@@ -221,6 +311,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
+        """
+        This method increases the zoom value.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -228,6 +321,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
+        """
+        This method decreasses the zoom.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -235,6 +331,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
+        """
+        Set the zoom value to normal.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -242,14 +341,23 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
+        """
+        This method show the block properties.
+        """
         self.main_window.block_properties.set_block(block)
 
     # ----------------------------------------------------------------------
     def clear_console(self):
+        """
+        This method clear the console.
+        """
         self.main_window.status.clear()
 
     # ----------------------------------------------------------------------
     def undo(self):
+        """
+        Undo a modification.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -257,12 +365,18 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def redo(self):
+        """
+        Redo a modification.
+        """
         if self.main_window.work_area.get_current_diagram() is None:
             return
         self.main_window.work_area.get_current_diagram().redo()
 
     # ----------------------------------------------------------------------
     def reload(self):
+        """
+        Reload the diagram.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -270,6 +384,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def new_plugin(self):
+        """
+        This add a new plugin.
+        """
         PluginManager(self.main_window)
 
 # ----------------------------------------------------------------------

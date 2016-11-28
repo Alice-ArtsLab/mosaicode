@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the FillRect class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class FillRect(OpenCVPlugin):
-
+    """
+    This class contains methods related the FillRect class.
+    """
     # -------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)

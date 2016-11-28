@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Division class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Division(OpenCVPlugin):
+    """
+    This class contains methods related the Division class.
+    """
 
     # -------------------------------------------------------------------------
     def __init__(self):

@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the HaarDetect class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class HaarDetect(OpenCVPlugin):
-
+    """
+    This class contains methods related the HaarDetect class.
+    """
     # -------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
+"""
+This module contains the DiagramControl class.
+"""
 import os
 import gi
 gi.require_version('Gdk', '3.0')
@@ -10,6 +13,9 @@ from harpia.control.codegenerator import CodeGenerator
 
 
 class DiagramControl():
+    """
+    This class contains methods related the DiagramControl class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -31,6 +37,12 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def load(self, file_name=None):
+        """
+        This method load a file.
+
+        Returns:
+            * **Types** (:class:`boolean<boolean>`)
+        """
         if file_name is not None:
             self.diagram.set_file_name(file_name)
         else:
@@ -96,6 +108,13 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def save(self, file_name=None):
+        """
+        This method save a file.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
 
         parser = XMLParser()
         parser.addTag('harpia')
@@ -144,6 +163,13 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def export_png(self, file_name="diagrama.png"):
+        """
+        This method export a png.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`): True to Success.
+        """
         if file_name is None:
             file_name = "diagrama.png"
 

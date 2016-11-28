@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Comment class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Comment(OpenCVPlugin):
+    """
+    This class contains methods related the Comment class.
+    """
 
     # -------------------------------------------------------------------------
     def __init__(self):
