@@ -2,7 +2,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from harpia.GUI.fieldtypes import *
 from harpia.GUI.components.field import Field
 
 
@@ -60,6 +59,7 @@ class CodeField(Field, Gtk.VBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
+        from harpia.GUI.fieldtypes import HARPIA_CODE
         return HARPIA_CODE
 
     # --------------------------------------------------------------------------

@@ -32,7 +32,7 @@ class StringField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_STRING
         return HARPIA_STRING
 
     # --------------------------------------------------------------------------

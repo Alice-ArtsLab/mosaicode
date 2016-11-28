@@ -106,9 +106,6 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_row_activated(self, tree_view, path, column):
-        tree_view_model = tree_view.get_model()
-        block_name = tree_view_model.get_value(
-            tree_view_model.get_iter(path), 0)
         block = self.get_selected_block()
         if block is not None:
             self.main_window.main_control.add_block(block)
@@ -126,7 +123,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
         block_name = model.get_value(
             model.get_iter(path), 1)  # 1 is the name position
-        for x in self.blocks:                                 # 0 is the icon
+        for x in self.blocks:         # 0 is the icon
             block = self.blocks[x]()
             if block.get_label() == block_name:
                 return block

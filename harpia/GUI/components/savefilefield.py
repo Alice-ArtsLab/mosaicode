@@ -61,7 +61,7 @@ class SaveFileField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_SAVE_FILE
         return HARPIA_SAVE_FILE
 
     # --------------------------------------------------------------------------

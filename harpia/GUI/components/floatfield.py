@@ -56,7 +56,7 @@ class FloatField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_FLOAT
         return HARPIA_FLOAT
 
     # --------------------------------------------------------------------------

@@ -7,7 +7,7 @@ class Field(object):
 
     # ----------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_NONE
         return HARPIA_NONE
 
     # ----------------------------------------------------------------------

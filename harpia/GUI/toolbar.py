@@ -9,6 +9,7 @@ _ = gettext.gettext
 
 class Toolbar(Gtk.Toolbar):
 
+    # ----------------------------------------------------------------------
     def __init__(self, main_window):
         Gtk.Toolbar.__init__(self)
         self.main_window = main_window
@@ -50,6 +51,7 @@ class Toolbar(Gtk.Toolbar):
                              self.main_window.main_control.reload)
         self.show_all()
 
+    # ----------------------------------------------------------------------
     def __create_button(self, stock, name, action):
         button = Gtk.ToolButton.new_from_stock(stock)
         button.set_expand(False)
@@ -60,5 +62,6 @@ class Toolbar(Gtk.Toolbar):
         self.actions[button] = action
         return button
 
+    # ----------------------------------------------------------------------
     def __button_clicked(self, widget, data):
         self.actions[widget]()

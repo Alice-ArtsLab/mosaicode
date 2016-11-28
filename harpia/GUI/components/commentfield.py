@@ -53,7 +53,7 @@ class CommentField(Field, Gtk.VBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_COMMENT
         return HARPIA_COMMENT
 
     # --------------------------------------------------------------------------

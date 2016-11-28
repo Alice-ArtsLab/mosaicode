@@ -41,7 +41,7 @@ class CheckField(Field, Gtk.HBox):
 
     # ------------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_CHECK
         return HARPIA_CHECK
 
     # ------------------------------------------------------------------------------

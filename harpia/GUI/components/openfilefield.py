@@ -70,7 +70,7 @@ class OpenFileField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_OPEN_FILE
         return HARPIA_OPEN_FILE
 
     # --------------------------------------------------------------------------

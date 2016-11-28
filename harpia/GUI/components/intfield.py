@@ -53,7 +53,7 @@ class IntField(Field, Gtk.HBox):
 
     # ------------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_INT
         return HARPIA_INT
 
     # ------------------------------------------------------------------------------

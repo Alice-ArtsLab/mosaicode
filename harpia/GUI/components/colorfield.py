@@ -57,7 +57,7 @@ class ColorField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_type(self):
-        from harpia.GUI.fieldtypes import *
+        from harpia.GUI.fieldtypes import HARPIA_COLOR
         return HARPIA_COLOR
 
     # --------------------------------------------------------------------------
@@ -67,7 +67,8 @@ class ColorField(Field, Gtk.HBox):
     # --------------------------------------------------------------------------
     def set_value(self, value):
         try:
-            self.color = Gdk.color_parse(value)
+            self.color = Gdk.RGBA()
+            self.color.parse(value)
             self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         except:
             pass

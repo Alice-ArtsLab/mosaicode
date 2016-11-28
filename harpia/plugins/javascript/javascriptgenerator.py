@@ -75,6 +75,7 @@ class JavascriptGenerator(CodeGenerator):
         header = r"""<html>
 <head>
 <meta http-equiv="Cache-Control" content="no-store" />
+<title>Exemplos do Flávio</title>
 </head>
 <body>
 <script>
