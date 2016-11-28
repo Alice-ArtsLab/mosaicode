@@ -12,6 +12,7 @@ class HaarDetect(OpenCVPlugin):
     This class contains methods related the HaarDetect class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.cascade_name = "/usr/share/harpia/images/" + \

@@ -12,6 +12,7 @@ class MatchTem(OpenCVPlugin):
     This class contains methods related the MatchTem class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.method = 'CV_TM_SQDIFF'

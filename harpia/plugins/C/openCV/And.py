@@ -12,6 +12,7 @@ class And(OpenCVPlugin):
     This class contains methods related the And class.
     """
     # ------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
 

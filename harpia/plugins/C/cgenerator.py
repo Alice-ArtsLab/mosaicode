@@ -45,7 +45,6 @@ class CGenerator(CodeGenerator):
     This class contains methods related the CGenerator class.
     """
 
-    #----------------------------------------------------------------------
     def __init__(self, diagram=None):
         CodeGenerator.__init__(self, diagram)
         self.connectors = {

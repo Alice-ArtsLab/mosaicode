@@ -12,6 +12,7 @@ class Log(OpenCVPlugin):
     This class contains methods related the Log class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
 

@@ -12,6 +12,7 @@ class LiveDelay(OpenCVPlugin):
     This class contains methods related the liveDelay class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.frameNumber = 5

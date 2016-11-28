@@ -14,6 +14,7 @@ class LiveMode(OpenCVPlugin):
     This class contains methods related the LiveMode class.
     """
     # --------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.camera = "/dev/video0"

@@ -45,9 +45,6 @@ class Status(Gtk.ScrolledWindow):
     def clear(self):
         """
         The method clear the buffer.
-            Parameters:
-            Returns:
-                None
         """
         self.status.get_buffer().set_text("")
 
@@ -55,11 +52,10 @@ class Status(Gtk.ScrolledWindow):
     def append_text(self, text):
         """
         This method append a text in text buffer.
+        
             Parameters:
                 * **self** (:class:`Status<harpia.GUI.status>`):The class.
                 * **text** (:class:`str<str>`)
-            Returns:
-                None.
         """
         textbuffer = self.status.get_buffer()
         end_iter = textbuffer.get_end_iter()
@@ -76,10 +72,9 @@ class Status(Gtk.ScrolledWindow):
     def log(self, text):
         """
         This method set the log.
+
             Parameters:
                 * **text** (:class:`str<str>`)
-            Returns:
-                None
         """
         self.append_text(text)
 

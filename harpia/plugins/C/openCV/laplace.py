@@ -12,6 +12,7 @@ class Laplace(OpenCVPlugin):
     This class contains methods related the laplace class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.masksize = "3"

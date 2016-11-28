@@ -12,6 +12,7 @@ class IsOnRect(OpenCVPlugin):
     This class contains methods related the IsOnRect class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
 

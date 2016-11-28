@@ -12,6 +12,7 @@ class AddBorder(OpenCVPlugin):
     This class contains methods related the AddBorder class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.border = 50

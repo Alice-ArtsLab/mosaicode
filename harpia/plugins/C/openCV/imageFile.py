@@ -12,6 +12,7 @@ class ImageFile(OpenCVPlugin):
     This class contains methods related the ImageFile class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.filename = "/usr/share/harpia/images/lenna.png"

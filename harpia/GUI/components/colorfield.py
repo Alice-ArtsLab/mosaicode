@@ -9,9 +9,9 @@ from harpia.GUI.components.field import Field
 
 
 class ColorField(Field, Gtk.HBox):
-        """
-        This class contains methods related the ColorField class.
-        """
+    """
+    This class contains methods related the ColorField class.
+    """
     configuration = {"label": "", "value": "#ffff00000000", "name": ""}
 
     # --------------------------------------------------------------------------

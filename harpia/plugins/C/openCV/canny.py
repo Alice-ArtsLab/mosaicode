@@ -12,6 +12,7 @@ class Canny(OpenCVPlugin):
     This class contains methods related the Canny class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.apertureSize = 3

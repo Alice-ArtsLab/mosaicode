@@ -12,6 +12,7 @@ class Circle(OpenCVPlugin):
     This class contains methods related the Circle class.
     """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.x0 = 100
