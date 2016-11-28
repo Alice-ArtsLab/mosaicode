@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Capture class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 import os
@@ -8,8 +10,11 @@ from glob import glob
 
 
 class Capture(OpenCVPlugin):
-
+    """
+    This class contains methods related the Capture class.
+    """
     # ------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.camera = "/dev/video0"
@@ -34,6 +39,10 @@ class Capture(OpenCVPlugin):
 
     # ----------------------------------------------------------------------
     def get_properties(self):
+        """
+        This method get the properties.
+
+        """
         available_cams = 4
         device_list = []
 

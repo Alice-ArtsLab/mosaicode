@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This module contains the Sobel class.
+"""
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Sobel(OpenCVPlugin):
-
+    """
+    This class contains methods related the Sobel class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.masksize = 3

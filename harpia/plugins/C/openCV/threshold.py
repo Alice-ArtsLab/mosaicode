@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Threshold class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Threshold(OpenCVPlugin):
-
+    """
+    This class contains methods related the Threshold class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.threshold = 122

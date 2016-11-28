@@ -26,6 +26,9 @@
 #    For further information, check the COPYING file distributed with this software.
 #
 # ----------------------------------------------------------------------
+"""
+This module contains the CGenerator class.
+"""
 import os
 import time
 import gi
@@ -38,8 +41,10 @@ FRAMERATE = 25
 
 
 class CGenerator(CodeGenerator):
+    """
+    This class contains methods related the CGenerator class.
+    """
 
-    #----------------------------------------------------------------------
     def __init__(self, diagram=None):
         CodeGenerator.__init__(self, diagram)
         self.connectors = {
@@ -77,6 +82,9 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def generate_code(self):
+        """
+        This method generate the code.
+        """
         CodeGenerator.generate_code(self)
 
         self.sort_blocks()
@@ -86,8 +94,8 @@ class CGenerator(CodeGenerator):
 /*
 *	In order to compile this source code run, in a terminal window, the following command:
 *	gcc sourceCodeName.c `pkg-config --libs --cflags opencv` -o outputProgramName
-*	
-*	the `pkg-config ... opencv` parameter is a inline command that returns the path to both 
+*
+*	the `pkg-config ... opencv` parameter is a inline command that returns the path to both
 *	the libraries and the headers necessary when using opencv. The command also returns other necessary compiler options.
 */
 
@@ -155,6 +163,9 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def save_code(self):
+        """
+        This method save the source code.
+        """
         CodeGenerator.save_code(self)
         self.change_directory()
         codeFilename = self.filename + '.c'
@@ -183,6 +194,9 @@ class CGenerator(CodeGenerator):
 
     #----------------------------------------------------------------------
     def compile(self):
+        """
+        This method compile the source.
+        """
         CodeGenerator.compile(self)
         self.save_code()
         self.change_directory()

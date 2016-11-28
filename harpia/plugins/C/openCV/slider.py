@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Slider class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Slider(OpenCVPlugin):
-
+    """
+    This class contains methods related the Slider class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.intVal = 1

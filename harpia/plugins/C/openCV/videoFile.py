@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the VideoFile class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class VideoFile(OpenCVPlugin):
-
+    """
+    This class contains methods related the VideoFile class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.filename = "/usr/share/harpia/images/vLeft.mpg"

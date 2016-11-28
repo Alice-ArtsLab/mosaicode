@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Log class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Log(OpenCVPlugin):
-
+    """
+    This class contains methods related the Log class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
 

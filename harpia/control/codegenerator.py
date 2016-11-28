@@ -32,6 +32,9 @@
 #    software.
 #
 # ----------------------------------------------------------------------
+"""
+This module contains the CodeGenerator class.
+"""
 import os
 import time
 import datetime
@@ -46,6 +49,9 @@ gettext.textdomain(System.APP)
 
 
 class CodeGenerator():
+    """
+    This class contains methods related the CodeGenerator class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -80,6 +86,13 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def replace_wildcards(self, text):
+        """
+        This method replace the wildcards.
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
         result = text.replace("%t", str(time.time()))
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
@@ -90,6 +103,13 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def get_dir_name(self):
+        """
+        This method return the directory name.
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
         name = System.properties.get_default_directory()
         name = self.replace_wildcards(name)
         if not name.endswith("/"):
@@ -98,12 +118,22 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def get_filename(self):
+        """
+        This method return the filename
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
         name = System.properties.get_default_filename()
         name = self.replace_wildcards(name)
         return name
 
     # ----------------------------------------------------------------------
     def change_directory(self):
+        """
+        This method change the directory.
+        """
         try:
             os.makedirs(self.dir_name)
         except:
@@ -112,10 +142,16 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def return_to_old_directory(self):
+        """
+        This method return path to old directory.
+        """
         os.chdir(self.old_path)
 
     # ----------------------------------------------------------------------
     def sort_blocks(self):
+        """
+        This method sorts the blocks.
+        """
         for block_key in self.diagram.blocks:
             block = self.diagram.blocks[block_key]
 
@@ -151,6 +187,13 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def get_max_weight(self):
+        """
+        This method get max weight.
+
+        Returns:
+        
+            * **Types** (:class:`int<int>`)
+        """
         biggestWeight = -1
         for block in self.blockList:
             if block.weight > biggestWeight:
@@ -159,6 +202,9 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def generate_parts(self):
+        """
+        This metho generate parts.
+        """
         biggestWeight = self.get_max_weight()
         for activeWeight in range(biggestWeight):
             activeWeight += 1
@@ -168,6 +214,9 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def generate_block_code(self, block):
+        """
+        This method generate the block code.
+        """
         plugin = block.get_plugin()
         header = plugin.generate_header()
         declaration = plugin.generate_vars()
@@ -235,15 +284,24 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def save_code(self):
+        """
+        This method generate the save log.
+        """
         System.log("Saving Code to " + self.dir_name + self.filename)
 
     # ----------------------------------------------------------------------
     def compile(self):
+        """
+        This method generate the compile log.
+        """
         System.log("Compiling " + self.dir_name + self.filename)
         pass
 
     # ----------------------------------------------------------------------
     def execute(self):
+        """
+        This method generate the executing log.
+        """
         System.log("Executing Code")
         pass
 
