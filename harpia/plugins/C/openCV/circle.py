@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Circle class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Circle(OpenCVPlugin):
-
+    """
+    This class contains methods related the Circle class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.x0 = 100
@@ -31,26 +36,25 @@ class Circle(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Basic Shapes"
 
-        self.properties = {
-            "x0": {
-                "name": "x0",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 800,
-                "step": 1
-            },
-            "y0": {
-                "name": "y0",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 1000,
-                "step": 1
-            },
-            "circle_color": {
-                "name": "Color",
-                "type": HARPIA_COLOR
-            }
-        }
+        self.properties = [{"name": "x0",
+                            "label": "x0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 800,
+                            "step": 1
+                            },
+                           {"name": "y0",
+                            "label": "y0",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 1000,
+                            "step": 1
+                            },
+                           {"name": "Color",
+                            "label": "circle_color",
+                            "type": HARPIA_COLOR
+                            }
+                           ]
 
         # -----------------C/OpenCv code ---------------------------
         self.vars = \

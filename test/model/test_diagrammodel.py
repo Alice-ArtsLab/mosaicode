@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.model.diagrammodel import DiagramModel
 
+
 class TestDiagramModel(TestCase):
 
     def setUp(self):

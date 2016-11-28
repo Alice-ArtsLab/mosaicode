@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Oscillator class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -51,14 +53,14 @@ block_$id$.start(0);
                                     "upper": 20000,
                                     "step": 1,
                                     "value": 440
-                                    },
+                            },
                            {"name": "oscillator_type",
                             "label": "Type",
-                             "type": HARPIA_COMBO,
-                             "values": ["square",
-                             "sine",
-                             "sawtooth",
-                            "triangle"],
+                            "type": HARPIA_COMBO,
+                            "values": ["square",
+                                       "sine",
+                                       "sawtooth",
+                                       "triangle"],
                             "value": "sine"
                             }
                            ]

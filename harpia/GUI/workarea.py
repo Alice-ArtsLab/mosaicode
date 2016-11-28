@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the WorkArea class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -8,7 +10,11 @@ from harpia.GUI.dialog import Dialog
 import gettext
 _ = gettext.gettext
 
+
 class WorkArea(Gtk.Notebook):
+    """
+    This class contains methods related the WorkArea class.
+    """
 
     def __init__(self, main_window):
         Gtk.Notebook.__init__(self)
@@ -29,6 +35,12 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def add_diagram(self, diagram):
+        """
+        This method add a  new diagram page.
+
+            Parameters:
+                * **diagram** (:class:`Diagram<harpia.GUI.diagram`)
+        """
         frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.add(diagram)
@@ -41,6 +53,14 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def close_tab(self, position=None):
+        """
+        This method close a tab.
+
+            Parameters:
+                * **position**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
         if position is None:
             position = self.get_current_page()
         tab = self.get_nth_page(position)
@@ -48,10 +68,10 @@ class WorkArea(Gtk.Notebook):
 
         if diagram.get_modified():
             dialog = Dialog().confirm_dialog(_("Diagram ") +
-                           diagram.get_file_name() +
-                           _(" is not saved. \nIf you close it"
-                           ", changes will be lost.\n"
-                           "Confirm?"), self.main_window)
+                                             diagram.get_file_name() +
+                                             _("is not saved.\nIf you close it"
+                                               ", changes will be lost.\n"
+                                               "Confirm?"), self.main_window)
             result = dialog.run()
             dialog.destroy()
             if result == Gtk.ResponseType.CANCEL:
@@ -63,6 +83,13 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def __create_tab_label(self, text, frame):
+        """
+        This method create a tab label.
+            Parameters:
+                * **text** (:class:`str<str>`)
+            Returns:
+                * **box**
+        """
         box = Gtk.HBox()
         button = Gtk.Button()
         image = Gtk.Image().new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
@@ -86,6 +113,12 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def get_current_diagram(self):
+        """
+        This method get current diagram page.
+            Return
+                * **Types** (:class:`int<int>`)
+        """
+
         if self.get_current_page() > -1:
             return self.diagrams[self.get_current_page()]
         else:
@@ -93,6 +126,12 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def rename_diagram(self, diagram):
+        """
+        This method rename a diagram page.
+
+            Parameters:
+                * **diagram** (:class:`diagram<harpia.GUI.diagram>`)
+        """
         index = -1
         for scrolled_window in self.get_children():
             index += 1
@@ -112,11 +151,24 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def resize(self, data):
+        """
+        This method resize a diagram page.
+
+            Parameters:
+                * **data**
+
+        """
         for diagram in self.diagrams:
             diagram.resize(data)
 
     # ----------------------------------------------------------------------
     def close_tabs(self):
+        """
+        This method close tabs.
+
+            Returns:
+               * **boolean** (:class:`boolean<boolean>`)
+        """
         n_pages = self.get_n_pages()
         for i in range(n_pages):
             if not self.close_tab(0):

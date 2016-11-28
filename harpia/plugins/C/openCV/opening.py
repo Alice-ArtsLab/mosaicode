@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This module contains the Opening class.
+"""
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Opening(OpenCVPlugin):
-
+    """
+    This class contains methods related the Opening class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.masksize = "3x3"
@@ -22,13 +28,12 @@ class Opening(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Morphological Operations"
 
-        self.properties = {
-            "masksize": {
-                "name": "Mask Size",
-                "type": HARPIA_COMBO,
-                "values": ["1x1", "3x3", "5x5", "7x7"]
-            }
-        }
+        self.properties = [{"name": "Mask Size",
+                            "label": "masksize",
+                            "type": HARPIA_COMBO,
+                            "values": ["1x1", "3x3", "5x5", "7x7"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

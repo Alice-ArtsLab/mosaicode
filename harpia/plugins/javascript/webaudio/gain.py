@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Gain class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -39,6 +41,6 @@ block_$id$_i[2] = function(value){
                             "type": HARPIA_FLOAT,
                             "lower": 0,
                             "upper": 32000,
-                            "value":1
-                                    }
+                            "value": 1
+                            }
                            ]

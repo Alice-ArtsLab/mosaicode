@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the SaveVideo class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class SaveVideo(OpenCVPlugin):
-
+    """
+    This class contains methods related the SaveVideo class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.filename = "~/Output.mpeg"
@@ -23,25 +28,24 @@ class SaveVideo(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "filename": {
-                "name": "File Name",
-                "type": HARPIA_SAVE_FILE
-            },
-            "framerate": {
-                "name": "Frame Rate",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 99,
-                "step": 1
-            },
-            "codecSelection": {
-                "name": "Encoding Codec",
-                "type": HARPIA_COMBO,
-                "values": ["MPEG1", "mjpeg", "MPEG4.2", "MPEG4.3",
-                           "MPEG4", "H263", "H263I", "FLV1"]
-            }
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "filename",
+                            "type": HARPIA_SAVE_FILE
+                            },
+                           {"name": "Frame Rate",
+                            "label": "framerate",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 99,
+                            "step": 1
+                            },
+                           {"name": "Encoding Codec",
+                            "label": "codecSelection",
+                            "type": HARPIA_COMBO,
+                            "values": ["MPEG1", "mjpeg", "MPEG4.2", "MPEG4.3",
+                                       "MPEG4", "H263", "H263I", "FLV1"]
+                            }
+                           ]
 
         # --------------------C/OpenCv code------------------------------------
         self.vars = \

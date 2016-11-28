@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This module contains the CropImage class.
+"""
 
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class CropImage(OpenCVPlugin):
+    """
+    This class contains methods related the CropImage class.
+    """
 
     # -------------------------------------------------------------------------
     def __init__(self):
@@ -24,32 +30,35 @@ class CropImage(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Experimental"
 
-        self.properties = {
-            "x0": {"name": "X",
-                   "type": HARPIA_INT,
-                   "lower": 1,
-                   "upper": 65535,
-                   "step": 1
-                   },
-            "y0": {"name": "Y",
-                   "type": HARPIA_INT,
-                   "lower": 1,
-                   "upper": 65535,
-                   "step": 1
-                   },
-            "width": {"name": "Width",
-                      "type": HARPIA_INT,
-                      "lower": 1,
-                      "upper": 65535,
-                      "step": 1
-                      },
-            "height": {"name": "Height",
-                       "type": HARPIA_INT,
-                       "lower": 1,
-                       "upper": 65535,
-                       "step": 1
-                       }
-        }
+        self.properties = [{"name": "X",
+                            "label": "x0",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Y",
+                            "label": "y0",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Width",
+                            "label": "width",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Height",
+                            "label": "height",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
 
         # ------------------------C/OpenCv code--------------------------------
         self.vars = \

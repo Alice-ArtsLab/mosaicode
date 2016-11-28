@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.model.connectionmodel import ConnectionModel
 
+
 class TestConnectionModel(TestCase):
 
     def setUp(self):

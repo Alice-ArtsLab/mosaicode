@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This module contains the WebaudioPlugin class.
+"""
 from harpia.model.plugin import Plugin
 
 

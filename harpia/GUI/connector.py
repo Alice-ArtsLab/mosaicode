@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the Connector class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
@@ -11,10 +13,16 @@ from harpia.model.connectionmodel import ConnectionModel
 
 
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
+    """
+    This class contains the methods related to Connector class.
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, diagram, source, source_port, conn_type):
+        """
+        This method is the constructor.
+        """
         GooCanvas.CanvasGroup.__init__(self)
         ConnectionModel.__init__(self, diagram, source, source_port, conn_type)
 
@@ -38,11 +46,17 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def delete(self):
+        """
+        This method delete connection.
+        """
         self.get_diagram().delete_connection(self)
         self.get_diagram().update_flows()
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
+        """
+        This method monitors if on button was pressed.
+        """
         Gtk.Widget.grab_focus(self.get_diagram())
         if event.button.button == 3:
             ConnectorMenu(self, event)
@@ -69,12 +83,25 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def set_end(self, sink, sink_port):
+        """
+        This method set the end of connection.
+
+            Parameters:
+                * **sink_port**
+                * **sink**
+        """
         ConnectionModel.set_end(self, sink, sink_port)
         self.__to_point = sink.get_input_pos(self.sink_port)
         self.update_tracking(self.__to_point)
 
     # ----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
+        """
+        This method update Tracking.
+
+            Parameters:
+                * **newEnd**
+        """
         if newEnd is None:
             newEnd = self.__from_point
         a = newEnd[0] - self.__from_point[0]
@@ -95,12 +122,19 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def update_flow(self):
+        """
+        This method update the flow.
+
+        """
         self.__from_point = self.source.get_output_pos(self.source_port)
         self.__to_point = self.sink.get_input_pos(self.sink_port)
         self.__update_draw()
 
     # ----------------------------------------------------------------------
     def __update_draw(self):
+        """
+        This method update draw.
+        """
         # svg M L bezier curve
         path = ""
         x0 = self.__from_point[0]
@@ -126,9 +160,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         if not self.__widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(
-                    parent=self,
-                    data=path
-                    )
+                parent=self,
+                data=path
+            )
             self.__widgets["Line"] = widget
         else:
             self.__widgets["Line"].set_property("data", path)
@@ -137,6 +171,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def __update_state(self):
+        """
+        This method update the connector state.
+        """
+
         # With focus: line width = 3
         if self.__focus:
             self.__widgets["Line"].set_property("line-width", 3)

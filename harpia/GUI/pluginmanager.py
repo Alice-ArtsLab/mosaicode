@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the PluginManager class.
+"""
 import os
 import gi
 gi.require_version('Gtk', '3.0')
@@ -21,7 +23,12 @@ from harpia.system import System as System
 import gettext
 
 _ = gettext.gettext
+
+
 class PluginManager(Gtk.Dialog):
+    """
+    This class contains methods related the PluginManager class
+    """
 
     # ----------------------------------------------------------------------
     def __init__(self, main_window):
@@ -275,6 +282,43 @@ class PluginManager(Gtk.Dialog):
         self.configuration_panel.pack_start(self.field_type, False, False, 1)
 
     # ----------------------------------------------------------------------
+    def set_block(self, plugin):
+        """
+        This method call add_block.
+
+            Parameters:
+                plugin
+            Returns:
+                None.
+        """
+        self.add_block(plugin)
+
+    # ----------------------------------------------------------------------
+    def add_block(self, plugin):
+        """
+        This method add a plugin.
+
+            Parameters:
+                * **plugin** (:class:`<>`)
+        """
+        self.type.set_value(plugin.get_type())
+        self.language.set_value(plugin.get_language())
+        self.language.set_value(plugin.language)
+        self.framework.set_value(plugin.framework)
+
+        self.label.set_value(plugin.get_label())
+        self.group.set_value(plugin.get_group())
+        self.icon.set_value(os.environ['HARPIA_DATA_DIR'] + plugin.get_icon())
+        self.color.set_value(plugin.get_color())
+        self.help.set_value(plugin.get_help())
+
+        self.header.set_value(plugin.generate_header())
+        self.vars.set_value(plugin.generate_vars())
+        self.function_call.set_value(plugin.generate_function_call())
+        self.dealloc.set_value(plugin.generate_dealloc())
+        self.out_dealloc.set_value(plugin.generate_out_dealloc())
+
+    # ----------------------------------------------------------------------
     def __select_field_type(self, widget=None, data=None):
         # Clean configuration panel
         for widget in self.configuration_panel.get_children():
@@ -282,7 +326,7 @@ class PluginManager(Gtk.Dialog):
         field_type = self.field_type.get_value()
         configuration = component_list[field_type].get_configuration()
         for key in configuration:
-            data = {"label": _(key), "value":str(configuration[key])}
+            data = {"label": _(key), "value": str(configuration[key])}
             field = StringField(data, None)
             self.configuration_panel.pack_start(field, False, False, 1)
 

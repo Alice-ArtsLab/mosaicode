@@ -28,7 +28,9 @@
 #
 #    For further information, check the COPYING file distributed with this
 #    software.
-
+"""
+This module contains the System class.
+"""
 import os
 import sys
 import copy
@@ -41,6 +43,9 @@ from harpia.model.preferences import Preferences
 
 
 class System(object):
+    """
+    This class contains methods related the System class.
+    """
 
     APP = 'harpia'
     DIR = '/usr/share/harpia/po'
@@ -130,6 +135,9 @@ class System(object):
     # ----------------------------------------------------------------------
     @classmethod
     def set_log(cls, Logger):
+        """
+        This method set the log.
+        """
         try:
             cls.instance.Log = Logger
         except:
@@ -138,6 +146,7 @@ class System(object):
     # ----------------------------------------------------------------------
     @classmethod
     def log(cls, msg):
+        "This metho show the log."
         try:
             cls.instance.Log.log(msg)
         except:

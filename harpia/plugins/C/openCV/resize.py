@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Resize class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Resize(OpenCVPlugin):
-
+    """
+    This class contains methods related the Resize class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.method = "CV_INTER_LINEAR"
@@ -22,14 +27,15 @@ class Resize(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Experimental"
 
-        self.properties = {
-            "method": {
-                "name": "Method",
-                "type": HARPIA_COMBO,
-                "values": ["CV_INTER_NN", "CV_INTER_LINEAR",
-                           "CV_INTER_AREA", "CV_INTER_CUBIC"]
-            }
-        }
+        self.properties = [{"name": "Method",
+                            "label": "method",
+                            "type": HARPIA_COMBO,
+                            "values": ["CV_INTER_NN",
+                                       "CV_INTER_LINEAR",
+                                       "CV_INTER_AREA",
+                                       "CV_INTER_CUBIC"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

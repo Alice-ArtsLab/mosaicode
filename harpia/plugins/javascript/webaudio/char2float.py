@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Char2Float class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -41,10 +43,10 @@ block_$id$_i[0] = function(value){
                                      "upper": 20000,
                                      "step": 1,
                                      "value": 60
-                                     },
+                            },
                            {"name": "char",
                             "label": "Input Char",
                             "type": HARPIA_STRING,
                             "value": "a"
-                                    }
+                            }
                            ]

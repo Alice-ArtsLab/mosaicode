@@ -26,7 +26,7 @@ config['classifiers'] = [
 ]
 
 setup(name='harpia',
-      install_requires=['beautifulsoup4', 'pip'],
+      install_requires=['beautifulsoup4', 'pip', 'Python>=2.7'],
       tests_require=['pytest'],
       test_suite='test',
       version='1.0a3',
@@ -66,6 +66,6 @@ setup(name='harpia',
                   ('/usr/share/pixmaps',
                    ['app_data/images/harpia.svg']),
                   ('/usr/share/icons/hicolor/24x24/apps',
-                  ['app_data/images/harpia.png']), ],
+                   ['app_data/images/harpia.png']), ],
       **config
       )

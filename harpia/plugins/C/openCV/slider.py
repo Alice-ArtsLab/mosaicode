@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Slider class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Slider(OpenCVPlugin):
-
+    """
+    This class contains methods related the Slider class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.intVal = 1
@@ -23,30 +28,29 @@ class Slider(OpenCVPlugin):
         self.out_types = ["HRP_INT"]
         self.group = "Basic Data Type"
 
-        self.properties = {
-            "intVal": {
-                "name": "Value",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "maxVal": {
-                "name": "Max Value",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "label": {
-                "name": "Label",
-                "type": HARPIA_STRING
-            },
-            "window_name": {
-                "name": "Window Title",
-                "type": HARPIA_STRING
-            }
-        }
+        self.properties = [{"name": "Value",
+                            "label": "intVal",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Max Value",
+                            "label": "maxVal",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Label",
+                            "label": "label",
+                            "type": HARPIA_STRING
+                            },
+                           {"name": "Window Title",
+                            "label": "window_name",
+                            "type": HARPIA_STRING
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

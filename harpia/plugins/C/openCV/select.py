@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Select class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Select(OpenCVPlugin):
-
+    """
+    This class contains methods related the Select class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.key = "a"
@@ -21,13 +26,12 @@ class Select(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "key": {
-                "name": "Key",
-                "type": HARPIA_STRING,
-                "maxlength": 1
-            }
-        }
+        self.properties = [{"name": "Key",
+                            "label": "key",
+                            "type": HARPIA_STRING,
+                            "maxlength": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars += 'IplImage * block$id$_img_i0 = NULL;\n'

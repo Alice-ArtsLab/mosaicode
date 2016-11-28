@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the HaarDetect class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class HaarDetect(OpenCVPlugin):
-
+    """
+    This class contains methods related the HaarDetect class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.cascade_name = "/usr/share/harpia/images/" + \
@@ -29,19 +34,18 @@ class HaarDetect(OpenCVPlugin):
         self.out_types = ["HRP_POINT", "HRP_RECT", "HRP_IMAGE", "HRP_DOUBLE"]
         self.group = "Feature Detection"
 
-        self.properties = {
-            "cascade_name": {
-                "name": "File Name",
-                "type": HARPIA_SAVE_FILE
-            },
-            "min_neighbors": {
-                "name": "Min neighbors",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 99,
-                "step": 1
-            },
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "cascade_name",
+                            "type": HARPIA_SAVE_FILE
+                            },
+                           {"name": "Min neighbors",
+                            "label": "min_neighbors",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 99,
+                            "step": 1
+                            },
+                           ]
 
         # ------------------------------C/OpenCv code--------------------------
         self.vars = \

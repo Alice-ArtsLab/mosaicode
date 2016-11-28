@@ -2,6 +2,7 @@ from unittest import TestCase
 from harpia.control.maincontrol import MainControl
 from harpia.GUI.mainwindow import MainWindow
 
+
 class TestMainControl(TestCase):
 
     def setUp(self):
@@ -52,7 +53,7 @@ class TestMainControl(TestCase):
     # ----------------------------------------------------------------------
     def test_copy(self):
         self.main_control.copy()
-        
+
     # ----------------------------------------------------------------------
     def test_paste(self):
         self.main_control.paste()

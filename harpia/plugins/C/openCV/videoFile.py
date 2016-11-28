@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the VideoFile class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class VideoFile(OpenCVPlugin):
-
+    """
+    This class contains methods related the VideoFile class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.filename = "/usr/share/harpia/images/vLeft.mpg"
@@ -24,16 +29,15 @@ class VideoFile(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"
 
-        self.properties = {
-            "filename": {
-                "name": "File Name",
-                "type": HARPIA_OPEN_FILE
-            },
-            "key": {
-                "name": "Reset Key",
-                "type": HARPIA_STRING
-            }
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "filename",
+                            "type": HARPIA_OPEN_FILE
+                            },
+                           {"name": "Reset Key",
+                            "label": "key",
+                            "type": HARPIA_STRING
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the UpToBottom class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class UpToBottom(OpenCVPlugin):
-
+    """
+    This class contains methods related the UpToBottom class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
 
@@ -19,8 +24,6 @@ class UpToBottom(OpenCVPlugin):
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]
         self.group = "Arithmetic and logical operations"
-
-        self.properties = {}
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

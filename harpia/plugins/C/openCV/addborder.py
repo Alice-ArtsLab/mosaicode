@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the AddBorder class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class AddBorder(OpenCVPlugin):
-
+    """
+    This class contains methods related the AddBorder class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.border = 50
@@ -22,7 +27,6 @@ class AddBorder(OpenCVPlugin):
         self.green = int(self.green, 16) / 257
         self.blue = int(self.blue, 16) / 257
 
-
         # Appearance
         self.help = "Adiciona bordas na imagem."
         self.label = "Add Border"
@@ -32,17 +36,23 @@ class AddBorder(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Experimental"
 
-        self.properties = {
-            "color": {
-                "name": "Color", "type": HARPIA_COLOR},
-            "border_type": {
-                "name": "Type", "type": HARPIA_COMBO,
-                "values": ["IPL_BORDER_CONSTANT",
-                           "IPL_BORDER_REPLICATE",
-                           "IPL_BORDER_REFLECT",
-                           "IPL_BORDER_WRAP"]},
-            "border": {"name": "Border Size", "type": HARPIA_INT}
-        }
+        self.properties = [{"name": "Color",
+                            "label": "color",
+                            "type": HARPIA_COLOR
+                            },
+                           {"name": "Type",
+                            "label": "border_type",
+                            "type": HARPIA_COMBO,
+                            "values": ["IPL_BORDER_CONSTANT",
+                                       "IPL_BORDER_REPLICATE",
+                                       "IPL_BORDER_REFLECT",
+                                       "IPL_BORDER_WRAP"]
+                            },
+                           {"name": "Border Size",
+                            "label": "border",
+                            "type": HARPIA_INT
+                            }
+                           ]
 
         # --------------------c/OpneCV code----------------------------
         self.vars = \

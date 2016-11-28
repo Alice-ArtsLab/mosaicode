@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the IntField class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -8,20 +10,26 @@ from harpia.GUI.components.field import Field
 
 
 class IntField(Field, Gtk.HBox):
+    """
+    This class contains methods related the IntField class.
+    """
 
     configuration = {
-            "label": "",
-            "value": 0,
-            "name": "",
-            "lower": 0,
-            "upper": 9223372036854775807,
-            "step": 1,
-            "page_inc": 10,
-            "page_size": 10
-            }
+        "label": "",
+        "value": 0,
+        "name": "",
+        "lower": 0,
+        "upper": 9223372036854775807,
+        "step": 1,
+        "page_inc": 10,
+        "page_size": 10
+    }
 
     # ------------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)

@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the ColorConversion class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class ColorConversion(OpenCVPlugin):
+    """
+    This class contains methods related the ColorConversion class.
+    """
 
     # -------------------------------------------------------------------------
     def __init__(self):
@@ -22,24 +27,24 @@ class ColorConversion(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Filters and Color Conversion"
 
-        self.properties = {
-            "conversion_type": {"name": "Conversion Type",
-                                "type": HARPIA_COMBO,
-                                "values": ["RGB -> GRAY",
-                                           "RGB -> YCrCb",
-                                           "YCrCb -> RGB",
-                                           "RGB -> HSV",
-                                           "HSV -> RGB",
-                                           "RGB -> HLS",
-                                           "HLS -> RGB",
-                                           "RGB -> CIE.XYZ",
-                                           "CIE.XYZ -> RGB",
-                                           "RGB -> CIE.LAB",
-                                           "CIE.LAB -> RGB",
-                                           "RGB -> CIE.LUV",
-                                           "CIE.LUV -> RGB"]
-                                }
-        }
+        self.properties = [{"name": "Conversion Type",
+                            "label": "conversion_type",
+                            "type": HARPIA_COMBO,
+                            "values": ["RGB -> GRAY",
+                                       "RGB -> YCrCb",
+                                       "YCrCb -> RGB",
+                                       "RGB -> HSV",
+                                       "HSV -> RGB",
+                                       "RGB -> HLS",
+                                       "HLS -> RGB",
+                                       "RGB -> CIE.XYZ",
+                                       "CIE.XYZ -> RGB",
+                                       "RGB -> CIE.LAB",
+                                       "CIE.LAB -> RGB",
+                                       "RGB -> CIE.LUV",
+                                       "CIE.LUV -> RGB"]
+                            }
+                           ]
 
         self.vars =  \
             'IplImage * block$id$_img_i0 = NULL;\n' + \

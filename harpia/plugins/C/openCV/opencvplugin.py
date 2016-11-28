@@ -1,11 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This module contains the OpenCVPlugin class.
+"""
 from harpia.model.plugin import Plugin
 
 
 class OpenCVPlugin(Plugin):
-
+    """
+    This class contains methods related the OpenCVPlugin class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         Plugin.__init__(self)
         self.language = "C"
@@ -18,7 +24,8 @@ class OpenCVPlugin(Plugin):
         count = 0
         for in_type in self.get_in_types():
             if in_type == "HRP_IMAGE":
-                value += 'IplImage * block$id$_img_i' + str(count) + ' = NULL;\n'
+                value += 'IplImage * block$id$_img_i' + \
+                    str(count) + ' = NULL;\n'
             if in_type == "HRP_INT":
                 value += 'int block$id$_int_i' + str(count) + ' = 0;\n'
             if in_type == "HRP_RECT":
@@ -33,7 +40,8 @@ class OpenCVPlugin(Plugin):
         count = 0
         for out_type in self.get_out_types():
             if out_type == "HRP_IMAGE":
-                value += 'IplImage * block$id$_img_o' + str(count) + ' = NULL;\n'
+                value += 'IplImage * block$id$_img_o' + \
+                    str(count) + ' = NULL;\n'
             if out_type == "HRP_INT":
                 value += 'int block$id$_int_o' + str(count) + ' = 0;\n'
             if out_type == "HRP_RECT":
@@ -56,12 +64,14 @@ class OpenCVPlugin(Plugin):
         count = 0
         for x in self.get_in_types():
             if x == "HRP_IMAGE":
-                value += 'cvReleaseImage(&block$id$_img_i' + str(count) + ');\n'
+                value += 'cvReleaseImage(&block$id$_img_i' + \
+                    str(count) + ');\n'
             count += 1
         count = 0
         for x in self.get_out_types():
             if x == "HRP_IMAGE":
-                value += 'cvReleaseImage(&block$id$_img_o' + str(count) + ');\n'
+                value += 'cvReleaseImage(&block$id$_img_o' + \
+                    str(count) + ');\n'
             count += 1
         return value
 

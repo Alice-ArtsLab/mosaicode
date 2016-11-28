@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Smooth class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Smooth(OpenCVPlugin):
-
+    """
+    This class contains methods related the Smooth class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.smooth_type = "CV_GAUSSIAN"
@@ -24,27 +29,26 @@ class Smooth(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT"]
         self.group = "Filters and Color Conversion"
 
-        self.properties = {
-            "smooth_type": {
-                "name": "Type",
-                "type": HARPIA_COMBO,
-                "values": ["CV_GAUSSIAN", "CV_BLUR", "CV_MEDIAN"]
-            },
-            "param1": {
-                "name": "Parameter 1",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 99,
-                "step": 1
-            },
-            "param2": {
-                "name": "Parameter 2",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 99,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Type",
+                            "label": "smooth_type",
+                            "type": HARPIA_COMBO,
+                            "values": ["CV_GAUSSIAN", "CV_BLUR", "CV_MEDIAN"]
+                            },
+                           {"name": "Parameter 1",
+                            "label": "param1",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 99,
+                            "step": 1
+                            },
+                           {"name": "Parameter 2",
+                            "label": "param2",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 99,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

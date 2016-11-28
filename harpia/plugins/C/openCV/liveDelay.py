@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the LiveDelay class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class LiveDelay(OpenCVPlugin):
-
+    """
+    This class contains methods related the liveDelay class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.frameNumber = 5
@@ -21,15 +26,15 @@ class LiveDelay(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "frameNumber": {
-                "name": "Time (in frames)",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 200,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Time (in frames)",
+                            "label": "frameNumber",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 200,
+                            "step": 1
+                            }
+                           ]
+
         # ------------------------------C/OpenCv code--------------------------
         self.function_call = '''
             if(block$id$_img_i0){

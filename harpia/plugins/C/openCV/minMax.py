@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the MinMax class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class MinMax(OpenCVPlugin):
-
+    """
+    This class contains methods related the MinMax class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.minX = 0
@@ -29,60 +34,59 @@ class MinMax(OpenCVPlugin):
         self.out_types = ["HRP_DOUBLE", "HRP_POINT"]
         self.group = "Feature Detection"
 
-        self.properties = {
-            "minX": {
-                "name": "Min X",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "maxX": {
-                "name": "Max X",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "minY": {
-                "name": "Min Y",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "maxY": {
-                "name": "Max Y",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "minVal": {
-                "name": "Min Val",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "maxVal": {
-                "name": "Max Val",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "minORmax": {
-                "name": "Min Or Max",
-                "type": HARPIA_COMBO,
-                "values": ["min", "max"]
-            },
-            "criteria": {
-                "name": "Criteria",
-                "type": HARPIA_COMBO,
-                "values": ["pos", "val"]
-            }
-        }
+        self.properties = [{"name": "Min X",
+                            "label": "minX",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Max X",
+                            "label": "maxX",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Min Y",
+                            "label": "minY",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Max Y",
+                            "label": "maxY",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Min Val",
+                            "label": "minVal",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Max Val",
+                            "label": "maxVal",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Min Or Max",
+                            "label": "minORmax",
+                            "type": HARPIA_COMBO,
+                            "values": ["min", "max"]
+                            },
+                           {"name": "Criteria",
+                            "label": "criteria",
+                            "type": HARPIA_COMBO,
+                            "values": ["pos", "val"]
+                            }
+                           ]
         # ------------------------------C/OpenCv code--------------------------
 
     # ----------------------------------------------------------------------

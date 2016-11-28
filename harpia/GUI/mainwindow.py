@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the MainWindow class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -18,8 +20,14 @@ from harpia.control.maincontrol import MainControl
 
 
 class MainWindow(Gtk.Window):
+    """
+    This class contains methods related the MainWindow class.
+    """
 
     def __init__(self):
+        """
+        This method is constructor.
+        """
         System()
         Gtk.Window.__init__(self, title="Harpia")
         # self.set_default_size(800,600)
@@ -139,5 +147,12 @@ class MainWindow(Gtk.Window):
 
     # ----------------------------------------------------------------------
     def set_title(self, title):
+        """
+        This method set title.
+
+            Parameters:
+                * **title** (:class:`str<str>`)
+
+        """
         Gtk.Window.set_title(self, "Harpia (" + title + ")")
 # ----------------------------------------------------------------------

@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the MoveRct class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class MoveRct(OpenCVPlugin):
-
+    """
+    This class contains methods related the MoveRct class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.offset_x = 0
@@ -22,22 +27,21 @@ class MoveRct(OpenCVPlugin):
         self.out_types = ["HRP_RECT"]
         self.group = "Experimental"
 
-        self.properties = {
-            "offset_x": {
-                "name": "Offset x",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            },
-            "offset_y": {
-                "name": "Offset Y",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 65535,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Offset x",
+                            "label": "offset_x",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            },
+                           {"name": "Offset Y",
+                            "label": "offset_y",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 65535,
+                            "step": 1
+                            }
+                           ]
         # --------------------C/OpenCv code--------------------------------
         self.vars = \
             'CvRect block$id$_rect_i0;\n' + \

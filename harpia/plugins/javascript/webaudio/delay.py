@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Delay class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -34,6 +36,6 @@ block_$id$_i[0].delayTime.value = $time$;
                             "lower": 0,
                             "upper": 10000,
                             "step": 1,
-                            "value":1
-                                    }
+                            "value": 1
+                            }
                            ]

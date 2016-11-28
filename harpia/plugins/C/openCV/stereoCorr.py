@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the StereoCorr class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class StereoCorr(OpenCVPlugin):
-
+    """
+    This class contains methods related the StereoCorr class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.maxDist = 60
@@ -22,15 +27,14 @@ class StereoCorr(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Feature Detection"
 
-        self.properties = {
-            "maxDist": {
-                "name": "Max Distance",
-                "type": HARPIA_INT,
-                "lower": 0,
-                "upper": 655,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Max Distance",
+                            "label": "maxDist",
+                            "type": HARPIA_INT,
+                            "lower": 0,
+                            "upper": 655,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

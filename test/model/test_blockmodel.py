@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.model.blockmodel import BlockModel
 
+
 class TestBlockModel(TestCase):
 
     def test_setUp(self):
@@ -79,5 +80,3 @@ class TestBlockModel(TestCase):
     # ----------------------------------------------------------------------x
     def test_generate_out_dealloc(self):
         self.block_model.generate_out_dealloc()
-
-    

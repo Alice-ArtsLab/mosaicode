@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the BlocksTreeView class.
+"""
 import os
 import gi
 gi.require_version('Gtk', '3.0')
@@ -13,8 +15,14 @@ _ = gettext.gettext
 
 
 class BlocksTreeView(Gtk.ScrolledWindow):
+    """
+    This class contains the methods related to BlocksTreeView class.
+    """
 
     def __init__(self, main_window, language):
+        """
+        This method is the constructor.
+        """
         Gtk.ScrolledWindow.__init__(self)
         self.main_window = main_window
         self.current_filter = None
@@ -59,6 +67,13 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
+        """
+        This method add a block in blockstreeview.
+
+            Parameters:
+                * **block**
+
+        """
         category = self.__contains_category(block.get_group())
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(
             os.environ['HARPIA_DATA_DIR'] + block.get_icon())
@@ -66,6 +81,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
+        """
+        This method verify if category name already exists.
+        """
         iter = self.tree_store.get_iter_first()
         while iter is not None:
             if category_name in self.tree_store[iter][:]:
@@ -75,6 +93,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __filter_func(self, model, iter, data):
+        """
+        This methods filters the functions.
+        """
         if self.current_filter is None:
             return True
         if self.current_filter == "None":
@@ -87,6 +108,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_tree_selection_changed(self, treeview):
+        """
+        This method monitors if tree selection was changed.
+        """
         treeViewSelection = self.blocks_tree_view.get_selection()
         (tree_view_model, iter) = treeViewSelection.get_selected()
 
@@ -100,6 +124,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def search(self, key):
+        """
+        This method search the key in blocks_tree_view.
+
+            Parameters:
+                * **key** (:class:`str<str>`)
+        """
         self.blocks_tree_view.expand_all()
         self.current_filter = key
         self.filter.refilter()
@@ -112,12 +142,21 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __drag_data(self, treeview, context, selection, target_id, etime):
+        """
+        This method drag the a selection data.
+        """
         block = self.get_selected_block()
         if block is not None:
             selection.set_text(block.get_label(), -1)
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
+        """
+        This method get the block selected.
+
+            Returns:
+                * **Types** (:class:`<>`) or None
+        """
         treeselection = self.blocks_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         path = model.get_path(iterac)

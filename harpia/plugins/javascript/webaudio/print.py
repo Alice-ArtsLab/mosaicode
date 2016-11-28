@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Print class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -35,8 +37,8 @@ block_$id$_i[1] = function(value){
 $label$ <span id="block_$id$"></span><br>
 """
         self.properties = [{"name": "label",
-                            "label" : "Label",
-                            "value" : "Label",
+                            "label": "Label",
+                            "value": "Label",
                             "type": HARPIA_STRING
-                                     }
+                            }
                            ]

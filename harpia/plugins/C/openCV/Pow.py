@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Pow class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Pow(OpenCVPlugin):
-
+    """
+    This class contains methods related the Pow class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.exponent = 1
@@ -22,19 +27,16 @@ class Pow(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Math Functions"
 
-        self.properties = {
-            "exponent": {
-                "name": "Exponent",
-                "type": HARPIA_INT,
-                "lower": 1,
-                "upper": 10,
-                "step": 1
-            }
-        }
+        self.properties = [{"name": "Exponent",
+                            "label": "exponent",
+                            "type": HARPIA_INT,
+                            "lower": 1,
+                            "upper": 10,
+                            "step": 1
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = ""
-
         self.function_call = \
             '\nif(block$id$_img_i0){\n' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \

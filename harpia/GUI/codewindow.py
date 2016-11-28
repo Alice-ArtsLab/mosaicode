@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the CodeWindow class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
@@ -11,9 +13,16 @@ from gi.repository import GtkSource
 
 class CodeWindow(Gtk.Dialog):
 
+    """
+    This class contains the methods related to CodeWindow class.
+    """
+
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window, code):
+        """
+        This method is the constructor.
+        """
         Gtk.Dialog.__init__(self, "Code Window", main_window,
                             Gtk.DialogFlags.DESTROY_WITH_PARENT |
                             Gtk.DialogFlags.MODAL,
@@ -26,7 +35,8 @@ class CodeWindow(Gtk.Dialog):
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         lang_manager = GtkSource.LanguageManager()
-        textbuffer = GtkSource.Buffer.new_with_language(lang_manager.get_language('c'))
+        textbuffer = GtkSource.Buffer.new_with_language(
+            lang_manager.get_language('c'))
         textview = GtkSource.View.new_with_buffer(textbuffer)
         textview.set_show_line_numbers(True)
         textview.set_left_margin(10)

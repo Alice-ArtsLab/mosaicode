@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Button class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -46,10 +48,10 @@ id="block_$id$">$label$</button><br>
                             "upper": 20000,
                             "step": 1,
                             "value": 1
-                                     },
+                            },
                            {"name": "label",
                             "label": "Label",
                             "type": HARPIA_STRING,
-                            "value" : "Label"
-                                     }
+                            "value": "Label"
+                            }
                            ]

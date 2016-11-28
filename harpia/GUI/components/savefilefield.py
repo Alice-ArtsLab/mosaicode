@@ -1,3 +1,6 @@
+"""
+This module contains the SaveFileField class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -5,11 +8,17 @@ from harpia.GUI.components.field import Field
 
 
 class SaveFileField(Field, Gtk.HBox):
+    """
+    This class contains methods related the SaveFileField class.
+    """
 
     configuration = {"label": "", "value": "", "name": ""}
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)

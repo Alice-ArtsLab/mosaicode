@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # [HARPIA PROJECT]
-
+"""
+This module contains the OpenFileField class.
+"""
 import gi
 import os
 gi.require_version('Gtk', '3.0')
@@ -9,11 +11,17 @@ from harpia.GUI.components.field import Field
 
 
 class OpenFileField(Field, Gtk.HBox):
+    """
+    This class contains methods related the OpenFileField class.
+    """
 
     configuration = {"label": "", "value": "", "name": ""}
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)

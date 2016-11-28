@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
+"""
+This module contains the DiagramControl class.
+"""
 import os
 import gi
 gi.require_version('Gdk', '3.0')
@@ -10,6 +13,9 @@ from harpia.control.codegenerator import CodeGenerator
 
 
 class DiagramControl():
+    """
+    This class contains methods related the DiagramControl class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -31,6 +37,12 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def load(self, file_name=None):
+        """
+        This method load a file.
+
+        Returns:
+            * **Types** (:class:`boolean<boolean>`)
+        """
         if file_name is not None:
             self.diagram.set_file_name(file_name)
         else:
@@ -83,7 +95,8 @@ class DiagramControl():
             "connections").getChildTags("connection")
         for conn in connections:
             try:
-                from_block = self.diagram.blocks[int(conn.getAttr("from_block"))]
+                from_block = self.diagram.blocks[
+                    int(conn.getAttr("from_block"))]
                 to_block = self.diagram.blocks[int(conn.getAttr("to_block"))]
             except:
                 continue
@@ -95,6 +108,13 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def save(self, file_name=None):
+        """
+        This method save a file.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
 
         parser = XMLParser()
         parser.addTag('harpia')
@@ -111,18 +131,17 @@ class DiagramControl():
             props = self.diagram.blocks[block_id].get_properties()
             for prop in props:
                 parser.appendToLastTag('block',
-                            'property',
-                            key=str(prop["name"]),
-                            value=str(prop["value"]))
+                                       'property',
+                                       key=str(prop["name"]),
+                                       value=str(prop["value"]))
 
         parser.appendToTag('harpia', 'connections')
         for connector in self.diagram.connectors:
             parser.appendToTag('connections', 'connection',
-                    from_block=connector.source.get_id(),
-                    from_out= int(connector.source_port) + 1,
-                    to_block=connector.sink.get_id(),
-                    to_in=int(connector.sink_port) + 1)
-
+                               from_block=connector.source.get_id(),
+                               from_out=int(connector.source_port) + 1,
+                               to_block=connector.sink.get_id(),
+                               to_in=int(connector.sink_port) + 1)
 
         if file_name is not None:
             self.diagram.set_file_name(file_name)
@@ -144,6 +163,13 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def export_png(self, file_name="diagrama.png"):
+        """
+        This method export a png.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`): True to Success.
+        """
         if file_name is None:
             file_name = "diagrama.png"
 

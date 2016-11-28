@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the Block class.
+"""
 import gi
 import os
 gi.require_version('Gtk', '3.0')
@@ -25,10 +27,16 @@ OUTPUT_WIDTH = 24
 
 
 class Block(GooCanvas.CanvasGroup, BlockModel):
+    """
+    This class contains methods related the Block class
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, diagram, plugin):
+        """
+        This method is the constuctor.
+        """
         GooCanvas.CanvasGroup.__init__(self)
         BlockModel.__init__(self, plugin)
         self.diagram = diagram
@@ -52,6 +60,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
+        """
+        This method monitors the when the button is pressed.
+
+            Parameters:
+                canvas_item
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+                Indicates the button is pressed.
+            """
         # with Shift
         if event.state == Gdk.ModifierType.SHIFT_MASK \
                 | Gdk.ModifierType.MOD2_MASK:
@@ -82,6 +99,17 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
+        """
+        This method monitors the motion.
+
+            Parameters:
+                canvas_item
+                target_item
+
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+
+        """
         if not event.state & Gdk.ModifierType.BUTTON1_MASK:
             return False
         if self.diagram.curr_connector is not None:
@@ -94,12 +122,31 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
+        """
+        This method monitors the motion.
+
+            Parameters:
+                canvas_item
+            Returns:
+                * **TYpes** (:class:`boolean<boolean>`)
+        """
         self.focus = True
         self.__update_state()
         return False
 
     # ----------------------------------------------------------------------
     def __on_leave_notify(self, canvas_item, target_item, event=None):
+        """
+        This method monitors the motion.
+
+            Parameters:
+                canvas_item
+                target_item
+
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+
+        """
         self.focus = False
         self.__update_state()
         return False
@@ -110,6 +157,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_rect(self):
+        """
+        This method draw a rectangle.
+        """
         rect = GooCanvas.CanvasRect(parent=self,
                                     x=0,
                                     y=0,
@@ -124,6 +174,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_icon(self):
+        """
+        This method draw a icon.
+        """
         pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
                                                 self.get_icon())
         image = GooCanvas.CanvasImage(parent=self,
@@ -137,6 +190,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __draw_inputs(self):
+        """
+        This method draw the inputs.
+        """
         ins = []
         x = 0
         for in_type in self.get_in_types():
@@ -163,15 +219,38 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, args):
+        """
+        This method return true if a input was connected.
+
+            Parameters:
+                * **canvas_item**
+                * **target_item**
+                * **event**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`): Indicates the input as connected.
+        """
         self.diagram.end_connection(self, args)
         return True
 
     # ----------------------------------------------------------------------
     def __on_input_release(self, canvas_item, target_item, event, args):
+        """
+        This method monitors the input release.
+
+            Parameters:
+                * **canvas_item**
+                * **target_item**
+                * **event **
+            Return:
+                * **Types** (:class:`boolean<boolean>`)
+        """
         return True
 
     # ----------------------------------------------------------------------
     def __draw_outputs(self):
+        """
+        This method draw the outputs.
+        """
         outs = []
         x = 0
         for out_type in self.get_out_types():
@@ -198,15 +277,36 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __on_output_press(self, canvas_item, target_item, event, args):
+        """
+        This method monitors the output state, monitors if output was pressed.
+
+            Parameters:
+                canvas_item
+                target_item
+                event
+                args
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
         self.diagram.start_connection(self, args)
         return True
 
     # ----------------------------------------------------------------------
     def __on_output_release(self, canvas_item, target_item, event, args):
+        """
+        This method monitors the output state, monitors if output was release.
+
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
         return True
 
     # ----------------------------------------------------------------------
     def __draw_label(self):
+        """
+        This method draw the label.
+
+        """
         text_label = "<span font_family ='Arial' " + \
             "size = '10000' weight = 'ultralight'> " + \
             self.get_label() + "</span>"
@@ -228,6 +328,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def rebuild(self):
+        """
+        This method rebuild the block.
+        """
         self.widgets = {}
         # remove all elements
         while self.get_root_item().get_n_children() != 0:
@@ -236,7 +339,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def build(self):
-        maxIO = max(len(self.get_in_types()),len(self.get_out_types()))
+        """
+        This method build the block.
+        """
+        maxIO = max(len(self.get_in_types()), len(self.get_out_types()))
 
         # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
@@ -259,6 +365,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_input_pos(self, input_id):
+        """
+        This method get input position.
+
+            Parameters:
+                * **input_id**
+            Returns:
+                * **Types** (:class:`float<float>`)
+        """
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
         y = (RADIUS +  # upper border
@@ -269,6 +383,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def get_output_pos(self, output_id):
+        """
+        This method get output position.
+
+            Parameters:
+                * **output_id**
+            Returns:
+                * **Types** (:class:`float<float>`)
+
+        """
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
         y = (RADIUS +  # upper border
@@ -279,29 +402,64 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def move(self, x, y):
+        """
+        This method move a block.
+
+            Parameters:
+                * **(x,y)** (:class:`float<float>`)
+            Returns:
+                * **Types** (:class:`float<float>`)
+        """
         self.translate(x, y)
 
     # ----------------------------------------------------------------------
     def delete(self):
+        """
+        This method delete a block.
+        """
         self.diagram.delete_block(self)
         self.diagram.update_flows()
 
     # ----------------------------------------------------------------------
     def get_position(self):
+        """
+        This method get position the block.
+
+             Returns:
+                * **Types** (:class:`float<float>`)
+        """
         isSet, x, y, scale, rotation = self.get_simple_transform()
         return x, y
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
+        """
+        This method set properties of each block.
+
+            Parameters:
+                * **data**
+        """
         self.diagram.do("Set block property")
         BlockModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------
     def get_properties(self):
+        """
+        This method get properties of each block.
+
+            Returns:
+                * **Types** ()
+        """
         return BlockModel.get_properties(self)
 
     # ----------------------------------------------------------------------
     def update_flow(self):
+        """
+        This method update flow.
+
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
         self.has_flow = True
         distinct_con = []
         for conn in self.diagram.connectors:
@@ -316,6 +474,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __update_state(self):
+        """
+        This method update the Line state.
+        """
         # Not connected: Color = red
         if self.has_flow:
             self.widgets["Rect"].set_property("stroke_color", 'black')

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the FloatValue class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -39,12 +41,12 @@ $label$ <input type="number" id="block_$id$" value="$value$" min="$min$"
 
         self.properties = [{"name": "value",
                             "label": "Value",
-                           "type": HARPIA_FLOAT,
-                           "lower": 0,
-                           "upper": 20000,
-                           "step": 1,
-                           "value": 1
-                           },
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 1
+                            },
                            {"name": "min",
                             "label": "Min",
                             "type": HARPIA_FLOAT,

@@ -31,6 +31,9 @@
 #    software.
 #
 # ----------------------------------------------------------------------
+"""
+This module contains the JavascriptGenerator class.
+"""
 import os
 import webbrowser  # to open HTML file
 
@@ -38,8 +41,11 @@ from harpia.control.codegenerator import CodeGenerator
 
 
 class JavascriptGenerator(CodeGenerator):
-
+    """
+    This class contains methods related the JavascriptGenerator class.
+    """
     # ----------------------------------------------------------------------
+
     def __init__(self, diagram=None):
         CodeGenerator.__init__(self, diagram)
         self.connectors = {
@@ -68,6 +74,9 @@ class JavascriptGenerator(CodeGenerator):
 
     # ----------------------------------------------------------------------
     def generate_code(self):
+        """
+        This method generate the code.
+        """
         CodeGenerator.generate_code(self)
         self.sort_blocks()
         self.generate_parts()
@@ -123,6 +132,9 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     # ----------------------------------------------------------------------
     def save_code(self):
+        """
+        This method the save code.
+        """
         CodeGenerator.save_code(self)
         self.change_directory()
         codeFile = open(self.filename + '.html', 'w')
@@ -133,10 +145,16 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
 
     # ----------------------------------------------------------------------
     def compile(self):
+        """
+        This method compile the code.
+        """
         self.save_code()
 
     # ----------------------------------------------------------------------
     def execute(self):
+        """
+        This method run the source code.
+        """
         CodeGenerator.execute(self)
         self.compile()
         self.change_directory()

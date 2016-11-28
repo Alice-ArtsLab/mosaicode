@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Fill class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Fill(OpenCVPlugin):
-
+    """
+    This class contains methods related the Fill class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.rect_color = "#0000ffff0000"
@@ -21,12 +26,11 @@ class Fill(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "rect_color": {
-                "name": "Color",
-                "type": HARPIA_COLOR
-            }
-        }
+        self.properties = [{"name": "rect_Color",
+                            "label": "rect_color",
+                            "type": HARPIA_COLOR
+                            }
+                           ]
 
         # ------------------------------C/OpenCv code--------------------------
 

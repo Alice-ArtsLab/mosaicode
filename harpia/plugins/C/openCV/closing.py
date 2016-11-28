@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Closing class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Closing(OpenCVPlugin):
+    """
+    This class contains methods related the Closing class.
+    """
 
     # -------------------------------------------------------------------------
     def __init__(self):
@@ -23,12 +28,12 @@ class Closing(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Morphological Operations"
 
-        self.properties = {
-            "masksize": {"name": "Mask Size",
-                         "type": HARPIA_COMBO,
-                         "values": ["1x1", "3x3", "5x5", "7x7"]
-                         }
-        }
+        self.properties = [{"name": "Mask Size",
+                            "label": "masksize",
+                            "type": HARPIA_COMBO,
+                            "values": ["1x1", "3x3", "5x5", "7x7"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code---------------------------------
         self.vars = \

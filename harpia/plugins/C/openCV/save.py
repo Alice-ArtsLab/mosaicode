@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Save class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Save(OpenCVPlugin):
-
+    """
+    This class contains methods related the Save class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.filename = ""
@@ -22,12 +27,11 @@ class Save(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "General"
 
-        self.properties = {
-            "filename": {
-                "name": "File Name",
-                "type": HARPIA_SAVE_FILE
-            }
-        }
+        self.properties = [{"name": "File Name",
+                            "label": "filename",
+                            "type": HARPIA_SAVE_FILE
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.function_call = \

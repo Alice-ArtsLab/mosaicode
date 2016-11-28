@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the PlotHistogram class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class PlotHistogram(OpenCVPlugin):
-
+    """
+    This class contains methods related the PlotHistogram class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.channel = "All"
@@ -22,13 +27,15 @@ class PlotHistogram(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Histograms"
 
-        self.properties = {
-            "channel": {
-                "name": "Channels",
-                "type": HARPIA_COMBO,
-                "values": ["All", "Red", "Green", "Blue"]
-            }
-        }
+        self.properties = [{"name": "Channels",
+                            "label": "channel",
+                            "type": HARPIA_COMBO,
+                            "values": ["All",
+                                       "Red",
+                                       "Green",
+                                       "Blue"]
+                            }
+                           ]
 
         # -------------------C/OpenCv code------------------------------------
         self.vars = \

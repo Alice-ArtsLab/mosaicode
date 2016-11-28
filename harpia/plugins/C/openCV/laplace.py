@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Laplace class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.C.openCV.opencvplugin import OpenCVPlugin
 
 
 class Laplace(OpenCVPlugin):
-
+    """
+    This class contains methods related the laplace class.
+    """
     # -------------------------------------------------------------------------
+
     def __init__(self):
         OpenCVPlugin.__init__(self)
         self.masksize = "3"
@@ -23,13 +28,12 @@ class Laplace(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Gradients, Edges and Corners"
 
-        self.properties = {
-            "masksize": {
-                "name": "Mask Size",
-                "type": HARPIA_COMBO,
-                "values": ["1", "3", "5", "7", "9", "11", "13"]
-            }
-        }
+        self.properties = [{"name": "Mask Size",
+                            "label": "masksize",
+                            "type": HARPIA_COMBO,
+                            "values": ["1", "3", "5", "7", "9", "11", "13"]
+                            }
+                           ]
 
         # ------------------------------C/OpenCv code--------------------------
         self.vars = \

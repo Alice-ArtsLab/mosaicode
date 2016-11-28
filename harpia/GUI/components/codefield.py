@@ -1,3 +1,6 @@
+"""
+This module contains the CodeField class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -6,17 +9,23 @@ from harpia.GUI.components.field import Field
 
 
 class CodeField(Field, Gtk.VBox):
+    """
+    This class contains methods related the CodeField class.
+    """
 
     configuration = {"label": "",
-            "value": "",
-            "name": "",
-            "height": 80,
-            "width": 50,
-            "language": "c"
-            }
+                     "value": "",
+                     "name": "",
+                     "height": 80,
+                     "width": 50,
+                     "language": "c"
+                     }
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
+        """
+        This method is the constructor.
+        """
         if not isinstance(data, dict):
             return
         Field.__init__(self, data, event)
@@ -41,7 +50,7 @@ class CodeField(Field, Gtk.VBox):
 
         lang_manager = GtkSource.LanguageManager()
         self.text_buffer = GtkSource.Buffer.new_with_language(
-                lang_manager.get_language(self.data["language"]))
+            lang_manager.get_language(self.data["language"]))
         textview = GtkSource.View.new_with_buffer(self.text_buffer)
         textview.set_show_line_numbers(True)
         textview.set_left_margin(10)

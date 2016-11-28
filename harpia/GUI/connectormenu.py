@@ -25,15 +25,24 @@
 #    software.
 #
 # ----------------------------------------------------------------------
-
+"""
+This module contains the ConnectorMenu class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 
 class ConnectorMenu(Gtk.Menu):
+    """
+    This class contains the methods related to ConnectorMenu class.
+    """
 
     def __init__(self, connector, event):
+        """
+        This method is the constructor.
+        """
+
         Gtk.Notebook.__init__(self)
         self.connector = connector
 
@@ -52,5 +61,11 @@ class ConnectorMenu(Gtk.Menu):
 
 # ----------------------------------------------------------------------
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
+        """
+        This method delete connection.
+
+        Returns:
+            * **Types** (:class:`boolean<boolean>`)
+        """
         self.connector.delete()
         return True
