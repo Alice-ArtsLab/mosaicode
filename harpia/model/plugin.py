@@ -123,6 +123,7 @@ class Plugin(object):
     def get_output_port_name(self, number):
         """
         Returns output port name
+        
         Parameters:
             * **number** (:class:`int<int>`): The output port number
         Returns:
@@ -222,10 +223,6 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
         return self.out_dealloc
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):

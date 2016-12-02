@@ -41,10 +41,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.update_tracking()
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def delete(self):
         """
         This method delete connection.

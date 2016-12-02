@@ -84,10 +84,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.show()
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
         """
         This method set scrolled window.
