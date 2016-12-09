@@ -56,10 +56,6 @@ class ConnectorMenu(Gtk.Menu):
         self.popup(None, None, None, None, event.button.button, event.time)
 
 # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-# ----------------------------------------------------------------------
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
         """
         This method delete connection.

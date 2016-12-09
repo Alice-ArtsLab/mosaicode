@@ -18,10 +18,6 @@ class PreferencesControl():
         self.hp = harpia_properties
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def load(self):
         """
         This method loads the diagram.

@@ -58,6 +58,19 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_ZOOM_FIT,
                              _("Fit on screen"),
                              self.main_window.main_control.reload)
+        self.__create_button(Gtk.STOCK_GO_UP,
+                             _("Align Top"),
+                             self.main_window.main_control.align_top)
+        self.__create_button(Gtk.STOCK_GO_DOWN,
+                             _("Align Bottom"),
+                             self.main_window.main_control.align_bottom)
+        self.__create_button(Gtk.STOCK_GO_BACK,
+                             _("Align Left"),
+                             self.main_window.main_control.align_left)
+        self.__create_button(Gtk.STOCK_GO_FORWARD,
+                             _("Align Right"),
+                             self.main_window.main_control.align_right)
+
         self.show_all()
 
     # ----------------------------------------------------------------------
@@ -84,6 +97,6 @@ class Toolbar(Gtk.Toolbar):
         This method monitors if the button was clicked.
 
             Parameters:
-            
+
         """
         self.actions[widget]()

@@ -23,10 +23,6 @@ class DiagramControl():
         self.diagram = diagram
 
 # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-# ----------------------------------------------------------------------
     def get_generator(self):
         try:
             generator = System.generators[self.diagram.language](self.diagram)

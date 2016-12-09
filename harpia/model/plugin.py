@@ -123,6 +123,7 @@ class Plugin(object):
     def get_output_port_name(self, number):
         """
         Returns output port name
+        
         Parameters:
             * **number** (:class:`int<int>`): The output port number
         Returns:
@@ -156,18 +157,48 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def get_type(self):
+        """
+        Return the plugin type.
+
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return value is the class module. Like:
+                * *"harpia.plugins.C.openCV.xor"*
+                * *"harpia.plugins.javascript.webaudio.addfloat"*
+        """
         return self.type
 
     # ----------------------------------------------------------------------
     def set_id(self, value):
+        """
+        Set the plugin id.
+
+        Parameters:
+            * **value** (:class:`int<int>`): The plugin id number.
+        """
         self.id = value
 
     # ----------------------------------------------------------------------
     def get_id(self):
+        """
+        Return the plugin id.
+
+        Returns:
+            * **Types**: :class:`int<int>`
+            The return value.
+        """
         return self.id
 
     # ----------------------------------------------------------------------
     def get_language(self):
+        """
+        Return the plugin programming language.
+
+        Returns:
+            * **Types**: :class:`str`<str>
+            The return value.
+        """
+
         try:
             return self.language
         except:
@@ -192,10 +223,6 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def generate_out_dealloc(self):
         return self.out_dealloc
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):

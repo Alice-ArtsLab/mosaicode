@@ -152,10 +152,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         return False
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def __draw_rect(self):
         """
         This method draw a rectangle.
