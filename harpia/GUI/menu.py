@@ -59,6 +59,10 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(_("Copy"), "<Control>C", edit_menu, mc.copy)
         self.__create_menu(_("Paste"), "<Control>V", edit_menu, mc.paste)
         self.__create_menu(_("Delete"), "Delete", edit_menu, mc.delete)
+        self.__create_menu(_("Align Top"), "<Control>1", edit_menu, mc.align_top)
+        self.__create_menu(_("Align Bottom"), "<Control>2", edit_menu, mc.align_bottom)
+        self.__create_menu(_("Align Left"), "<Control>3", edit_menu, mc.align_left)
+        self.__create_menu(_("Align Right"), "<Control>4", edit_menu, mc.align_right)
         edit_menu.append(Gtk.SeparatorMenuItem())
         self.__create_menu(
             _("Clear Console"), "<Control>L", edit_menu, mc.clear_console)
