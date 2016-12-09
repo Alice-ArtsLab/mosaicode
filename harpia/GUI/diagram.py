@@ -459,6 +459,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.update_scrolling()
 
     # ---------------------------------------------------------------------
+    def get_selected_blocks_id(self):
+        selected_blocks_id = []
+
+        for block_id in self.blocks:
+            if self.blocks[block_id] in self.current_widgets:
+                selected_blocks_id.append(block_id)
+
+        return selected_blocks_id
+
+    # ---------------------------------------------------------------------
     def delete(self):
         """
         This method delete a block.
@@ -660,5 +670,48 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if y + block.height > max_y:
                 max_y = y + block.height
         return min_x, min_y, max_x - min_x, max_y - min_y
+
+    # ---------------------------------------------------------------------
+    def align_top(self):
+        blocks_id = self.get_selected_blocks_id()
+
+        for block_id in blocks_id:
+            block = self.blocks[block_id]
+            x, y = block.get_position()
+            self.blocks[block_id].move(0, -y)
+            self.update_scrolling()
+
+    # ----------------------------------------------------------------------
+    def align_bottom(self):
+        blocks_id = self.get_selected_blocks_id()
+
+        for block_id in blocks_id:
+            block = self.blocks[block_id]
+            x, y = block.get_position()
+
+            self.blocks[block_id].move(0, self.__main_window.get_size()[1] - y)
+            self.update_scrolling()
+
+    # ----------------------------------------------------------------------
+    def align_left(self):
+        blocks_id = self.get_selected_blocks_id()
+        
+        for block_id in blocks_id:
+            block = self.blocks[block_id]
+            x, y = block.get_position()
+
+            self.blocks[block_id].move(-x + 30, 0)
+            self.update_scrolling()
+
+    # ----------------------------------------------------------------------
+    def align_right(self):
+        blocks_id = self.get_selected_blocks_id()
+
+        for block_id in blocks_id:
+            block = self.blocks[block_id]
+            x, y = block.get_position()
+
+            self.blocks[block_id].move(self.__main_window.get_size()[0] -x -150, 0)
+            self.update_scrolling()
 
 # ----------------------------------------------------------------------
