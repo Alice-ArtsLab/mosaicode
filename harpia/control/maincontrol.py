@@ -267,7 +267,6 @@ class MainControl():
         This method set the block properties.
         """
         self.main_window.block_properties.set_block(block)
-        pass
 
     # ----------------------------------------------------------------------
     def append_status_log(self, text):
@@ -391,17 +390,32 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def align_top(self):
-        pass
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
 
+        diagram.align_top()
     # ----------------------------------------------------------------------
     def align_bottom(self):
-        pass
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+
+        diagram.align_bottom()
 
     # ----------------------------------------------------------------------
     def align_left(self):
-        pass
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+
+        diagram.align_left()
 
     # ----------------------------------------------------------------------
     def align_right(self):
-        pass
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+
+        diagram.align_right()
 # ----------------------------------------------------------------------
