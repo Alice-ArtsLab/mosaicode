@@ -454,9 +454,34 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         self.do("Move blocks")
         for block_id in self.blocks:
-            if self.blocks[block_id] in self.current_widgets:
+            block_pos_x, block_pos_y = self.blocks[block_id].get_position()
+            x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
+            
+            if (self.blocks[block_id] in self.current_widgets):
                 self.blocks[block_id].move(x, y)
         self.update_scrolling()
+
+    # ---------------------------------------------------------------------
+    def check_limit(self, x, y, block_pos_x, block_pos_y):
+        min_x = 30
+        min_y = 0
+        max_x = self.__main_window.get_size()[0] - 150
+        max_y = self.__main_window.get_size()[1]
+
+        new_x = x + block_pos_x
+        new_y = y + block_pos_y
+
+        if new_x < min_x:
+            x = min_x - block_pos_x
+        elif new_x > max_x:
+            x = max_x - block_pos_x
+
+        if new_y < min_y:
+            y = min_y - block_pos_y
+        elif new_y > max_y:
+            y = max_y - block_pos_y
+
+        return x, y
 
     # ---------------------------------------------------------------------
     def get_selected_blocks_id(self):
@@ -678,7 +703,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for block_id in blocks_id:
             block = self.blocks[block_id]
             x, y = block.get_position()
-            self.blocks[block_id].move(0, -y)
+            block.move(0, -y)
             self.update_scrolling()
 
     # ----------------------------------------------------------------------
@@ -689,18 +714,18 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             block = self.blocks[block_id]
             x, y = block.get_position()
 
-            self.blocks[block_id].move(0, self.__main_window.get_size()[1] - y)
+            block.move(0, self.__main_window.get_size()[1] - y)
             self.update_scrolling()
 
     # ----------------------------------------------------------------------
     def align_left(self):
         blocks_id = self.get_selected_blocks_id()
-        
+
         for block_id in blocks_id:
             block = self.blocks[block_id]
             x, y = block.get_position()
 
-            self.blocks[block_id].move(-x + 30, 0)
+            block.move(-x + 30, 0)
             self.update_scrolling()
 
     # ----------------------------------------------------------------------
@@ -711,7 +736,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             block = self.blocks[block_id]
             x, y = block.get_position()
 
-            self.blocks[block_id].move(self.__main_window.get_size()[0] -x -150, 0)
+            block.move(self.__main_window.get_size()[0] -x -150, 0)
             self.update_scrolling()
 
 # ----------------------------------------------------------------------
