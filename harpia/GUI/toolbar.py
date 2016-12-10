@@ -37,6 +37,8 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_SAVE,
                              _("Save Project"),
                              self.main_window.main_control.save)
+
+        self.add(Gtk.SeparatorToolItem())
         self.__create_button(Gtk.STOCK_EXECUTE,
                              _("Run"),
                              self.main_window.main_control.run)
@@ -46,6 +48,8 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_SELECT_ALL,
                              _("View Source"),
                              self.main_window.main_control.view_source)
+
+        self.add(Gtk.SeparatorToolItem())
         self.__create_button(Gtk.STOCK_ZOOM_OUT,
                              _("Zoom Out"),
                              self.main_window.main_control.zoom_out)
@@ -58,6 +62,8 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_ZOOM_FIT,
                              _("Fit on screen"),
                              self.main_window.main_control.reload)
+                             
+        self.add(Gtk.SeparatorToolItem())
         self.__create_button(Gtk.STOCK_GO_UP,
                              _("Align Top"),
                              self.main_window.main_control.align_top)
