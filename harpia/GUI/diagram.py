@@ -456,7 +456,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for block_id in self.blocks:
             block_pos_x, block_pos_y = self.blocks[block_id].get_position()
             x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
-            
+
             if (self.blocks[block_id] in self.current_widgets):
                 self.blocks[block_id].move(x, y)
         self.update_scrolling()
@@ -699,44 +699,65 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def align_top(self):
         blocks_id = self.get_selected_blocks_id()
+        top = self.__main_window.get_size()[1]
 
         for block_id in blocks_id:
-            block = self.blocks[block_id]
-            x, y = block.get_position()
-            block.move(0, -y)
-            self.update_scrolling()
+            x, y = self.blocks[block_id].get_position()
+            if top > y:
+                top = y
+
+        for block_id in blocks_id:
+            x, y = self.blocks[block_id].get_position()
+            self.blocks[block_id].move(0, top -y)
+
+        self.update_scrolling()
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         blocks_id = self.get_selected_blocks_id()
+        bottom = 0
 
         for block_id in blocks_id:
-            block = self.blocks[block_id]
-            x, y = block.get_position()
+            x, y = self.blocks[block_id].get_position()
+            if bottom < y:
+                bottom = y
 
-            block.move(0, self.__main_window.get_size()[1] - y)
-            self.update_scrolling()
+        for block_id in blocks_id:
+            x, y = self.blocks[block_id].get_position()
+            self.blocks[block_id].move(0, bottom -y)
+
+        self.update_scrolling()
 
     # ----------------------------------------------------------------------
     def align_left(self):
         blocks_id = self.get_selected_blocks_id()
+        left = self.__main_window.get_size()[0]
 
         for block_id in blocks_id:
-            block = self.blocks[block_id]
-            x, y = block.get_position()
+            x, y = self.blocks[block_id].get_position()
+            if left > x:
+                left = x
 
-            block.move(-x + 30, 0)
-            self.update_scrolling()
+        for block_id in blocks_id:
+            x, y = self.blocks[block_id].get_position()
+            self.blocks[block_id].move(left -x, 0)
+
+        self.update_scrolling()
 
     # ----------------------------------------------------------------------
     def align_right(self):
         blocks_id = self.get_selected_blocks_id()
+        right = 0
 
         for block_id in blocks_id:
-            block = self.blocks[block_id]
-            x, y = block.get_position()
+            x, y = self.blocks[block_id].get_position()
+            if right < x:
+                right = x
 
-            block.move(self.__main_window.get_size()[0] -x -150, 0)
-            self.update_scrolling()
+        for block_id in blocks_id:
+            x, y = self.blocks[block_id].get_position()
+            self.blocks[block_id].move(right -x, 0)
+
+        self.update_scrolling()
 
 # ----------------------------------------------------------------------
