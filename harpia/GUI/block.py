@@ -13,7 +13,7 @@ from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
 from harpia.system import System as System
 from harpia.GUI.blockmenu import BlockMenu
-from harpia.model.blockmodel import BlockModel
+from harpia.model.plugin import Plugin
 
 WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
@@ -26,7 +26,7 @@ OUTPUT_HEIGHT = 24
 OUTPUT_WIDTH = 24
 
 
-class Block(GooCanvas.CanvasGroup, BlockModel):
+class Block(GooCanvas.CanvasGroup, Plugin):
     """
     This class contains methods related the Block class
     """
@@ -38,7 +38,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         This method is the constuctor.
         """
         GooCanvas.CanvasGroup.__init__(self)
-        BlockModel.__init__(self, plugin)
+        Plugin.__init__(self, plugin)
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
 
@@ -436,7 +436,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 * **data**
         """
         self.diagram.do("Set block property")
-        BlockModel.set_properties(self, data)
+        Plugin.set_properties(self, data)
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -446,7 +446,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** ()
         """
-        return BlockModel.get_properties(self)
+        return Plugin.get_properties(self)
 
     # ----------------------------------------------------------------------
     def update_flow(self):

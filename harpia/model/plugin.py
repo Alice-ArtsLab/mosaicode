@@ -9,7 +9,7 @@ class Plugin(object):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self):
+    def __init__(self, plugin = None):
         self.type = self.__class__.__module__
         self.language = ""
         self.framework = ""
@@ -33,6 +33,11 @@ class Plugin(object):
         self.in_types = []
         self.out_types = []
         self.group = "Undefined"
+        
+        if plugin == None: return
+        for key in plugin.__dict__:
+            self.__dict__[key] = plugin.__dict__[key]
+
 
     # ----------------------------------------------------------------------
     def get_help(self):
