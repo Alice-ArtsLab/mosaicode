@@ -49,13 +49,9 @@ class Capture(OpenCVPlugin):
         if os.name == 'posix':
             device_list = glob("/dev/video*")
 
-        return {
-            "camera": {
-                "name": "Camera",
-                "type": HARPIA_COMBO,
-                "values": device_list
-            }
-        }
+        return [{"name": "Camera",
+                 "type": HARPIA_COMBO,
+                 "values": device_list}]
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):

@@ -32,8 +32,7 @@ class Closing(OpenCVPlugin):
                             "label": "masksize",
                             "type": HARPIA_COMBO,
                             "values": ["1x1", "3x3", "5x5", "7x7"]
-                            }
-                           ]
+                           }]
 
         # -------------------C/OpenCv code---------------------------------
         self.vars = \
