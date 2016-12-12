@@ -77,6 +77,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
 
         self.white_board = None
+        self.show_grid = False
         self.select_rect = None
         self.__update_white_board()
         self.scrolled_window = None
@@ -341,15 +342,47 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __update_white_board(self):
+        width = self.__main_window.get_size()[0]
+        height = self.__main_window.get_size()[1]
         self.white_board = GooCanvas.CanvasRect(
             parent=self.get_root_item(),
             x=0,
             y=0,
-            width=self.__main_window.get_size()[0],
-            height=self.__main_window.get_size()[1],
+            width=width,
+            height=height,
             stroke_color="white",
             fill_color="white")
+
+        self.__draw_grid()
+
         self.white_board.connect("focus-in-event", self.__white_board_event)
+
+    # ----------------------------------------------------------------------
+    def __draw_grid(self):
+        if self.show_grid:
+            width = self.__main_window.get_size()[0]
+            height = self.__main_window.get_size()[1]
+
+            i = 0
+            while i < height:
+                GooCanvas.CanvasPath(
+                        parent=self.get_root_item(),
+                        stroke_color="#F9F9F9",
+                        data="M 0 " + str(i) + " L "+ str(width) +" "+ str(i) + ""
+                        )
+                i = i + System.properties.get_grid()
+            i = 0
+            while i < width:
+                GooCanvas.CanvasPath(
+                        parent=self.get_root_item(),
+                        stroke_color="#F9F9F9",
+                        data="M " + str(i) + " 0 L "+ str(i) + " "+ str(height) +""
+                        )
+                i = i + System.properties.get_grid()
+
+    # ----------------------------------------------------------------------
+    def set_show_grid(self, bool):
+        self.show_grid = bool
 
     # ----------------------------------------------------------------------
     def update_flows(self):

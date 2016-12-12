@@ -9,6 +9,7 @@ from gi.repository import Gtk
 from harpia.system import System as System
 from harpia.GUI.components.stringfield import StringField
 from harpia.GUI.components.openfilefield import OpenFileField
+from harpia.GUI.components.intfield import IntField
 import gettext
 
 _ = gettext.gettext
@@ -51,6 +52,12 @@ class PreferenceWindow(Gtk.Dialog):
         self.error_log_file = StringField(data, None)
         vbox.add(self.error_log_file)
 
+        # Grid
+        data = {"label": _("Grid size"),
+                "value": self.properties.get_grid()}
+        self.grid = IntField(data, None)
+        vbox.add(self.grid)
+
         vbox.add(Gtk.Label(_("\nname wildcards:\n" +
                              "\t%d = Date | %n = diagram name |"
                              " %t = time value | %l = language\n")))
@@ -64,6 +71,8 @@ class PreferenceWindow(Gtk.Dialog):
                 self.default_directory.get_value())
             self.properties.set_default_filename(
                 self.default_filename.get_value())
+            self.properties.set_grid(
+                self.grid.get_value())
 
         self.close()
         self.destroy()
