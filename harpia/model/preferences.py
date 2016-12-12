@@ -12,6 +12,7 @@ class Preferences(object):
         self.default_directory = "/tmp/%l/%n-%t"
         self.default_filename = "%n"
         self.error_log_file = "ErrorLog"
+        self.grid = 10
 
         # GUI stuff
         self.width = 900
@@ -106,5 +107,13 @@ class Preferences(object):
     # ----------------------------------------------------------------------
     def set_vpaned_left(self, vpaned_left):
         self.vpaned_left = vpaned_left
+
+    # ----------------------------------------------------------------------
+    def set_grid(self, size):
+        self.grid = size
+
+    # ----------------------------------------------------------------------
+    def get_grid(self):
+        return int(self.grid)
 
 # ------------------------------------------------------------------------------

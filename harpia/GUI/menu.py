@@ -76,6 +76,9 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(_("Zoom Out"), None, view_menu, mc.zoom_out)
         self.__create_menu(
             _("Normal Size"), "<Control>0", view_menu, mc.zoom_normal)
+
+        edit_menu.append(Gtk.SeparatorMenuItem())
+        self.__create_check_menu(_("Show Grid"), "<Control>g", view_menu, mc.show_grid)
         self.__add_menu_category(_("View"), view_menu)
 
         # -------------------------- Process --------------------------------
@@ -124,6 +127,18 @@ class Menu(Gtk.MenuBar):
         menu.append(item)
         if action is not None:
             item.connect("activate", self.__menu_clicked, None)
+            self.actions[item] = action
+        return item
+
+    def __create_check_menu(self, name, accel, menu, action):
+        item = Gtk.CheckMenuItem(name)
+        if accel is not None:
+            key, mod = Gtk.accelerator_parse(accel)
+            item.add_accelerator(
+                "activate", self.accel_group, key, mod, Gtk.AccelFlags.VISIBLE)
+        menu.append(item)
+        if action is not None:
+            item.connect("activate", action)
             self.actions[item] = action
         return item
 

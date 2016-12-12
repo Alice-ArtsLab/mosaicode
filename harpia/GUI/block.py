@@ -406,7 +406,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
-        self.translate(x, y)
+        new_x = x - x % System.properties.get_grid()
+        new_y = y - y % System.properties.get_grid()
+
+        self.translate(new_x, new_y)
 
     # ----------------------------------------------------------------------
     def delete(self):
