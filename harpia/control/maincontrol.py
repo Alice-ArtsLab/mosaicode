@@ -418,4 +418,14 @@ class MainControl():
             return False
 
         diagram.align_right()
+
+    # ----------------------------------------------------------------------
+    def redraw(self, show_grid):
+        diagram = self.main_window.work_area.get_current_diagram()
+        diagram.set_show_grid(show_grid)
+        diagram.redraw()
+
+    # ----------------------------------------------------------------------
+    def show_grid(self, event):
+        self.redraw(event.get_active())
 # ----------------------------------------------------------------------
