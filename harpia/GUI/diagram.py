@@ -381,6 +381,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def set_show_grid(self, bool):
+        if bool is None:
+            bool = self.show_grid
+
         self.show_grid = bool
 
     # ----------------------------------------------------------------------
