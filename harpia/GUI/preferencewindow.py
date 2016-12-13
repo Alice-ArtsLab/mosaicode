@@ -73,6 +73,7 @@ class PreferenceWindow(Gtk.Dialog):
                 self.default_filename.get_value())
             self.properties.set_grid(
                 self.grid.get_value())
+            main_window.main_control.redraw(None)
 
         self.close()
         self.destroy()
