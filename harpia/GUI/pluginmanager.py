@@ -60,7 +60,7 @@ class PluginManager(Gtk.Dialog):
         hbox.add1(vbox)
         self.tabs = Gtk.Notebook()
         self.tabs.set_scrollable(True)
-        hbox.add2(self.tabs)
+        hbox.add1(self.tabs)
 
         # ----------------------------------------------------------------------
         # Common properties Section

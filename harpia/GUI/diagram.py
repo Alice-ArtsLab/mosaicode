@@ -382,11 +382,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def set_show_grid(self, bool):
-        if bool is None:
-            bool = self.show_grid
-
-        self.show_grid = bool
-
+        if bool is not None:
+            self.show_grid = bool
+            
     # ----------------------------------------------------------------------
     def update_flows(self):
         """

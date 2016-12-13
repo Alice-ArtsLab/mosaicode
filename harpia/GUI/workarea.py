@@ -125,6 +125,10 @@ class WorkArea(Gtk.Notebook):
             return None
 
     # ----------------------------------------------------------------------
+    def get_diagrams(self):
+        return self.diagrams
+
+    # ----------------------------------------------------------------------
     def rename_diagram(self, diagram):
         """
         This method rename a diagram page.
