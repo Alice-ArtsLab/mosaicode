@@ -421,9 +421,11 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):
-        diagram = self.main_window.work_area.get_current_diagram()
-        diagram.set_show_grid(show_grid)
-        diagram.redraw()
+        diagrams = self.main_window.work_area.get_diagrams()
+
+        for diagram in diagrams:
+            diagram.set_show_grid(show_grid)
+            diagram.redraw()
 
     # ----------------------------------------------------------------------
     def show_grid(self, event):
