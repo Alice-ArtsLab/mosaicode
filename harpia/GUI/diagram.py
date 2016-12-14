@@ -84,6 +84,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_property("has-tooltip", True)  # Allow tooltip on elements
         self.show()
 
+        # Used for cycle detection
+        self.__marks = None
+
     # ----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
         """
@@ -275,10 +278,33 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                     and not System.connectors[newCon.type]["multiple"]:
                 System.log(_("Connector Already exists"))
                 return False
-        if newCon.sink == newCon.source:
+        if (newCon.sink == newCon.source) or self.__cycle_detection(newCon):
             System.log(_("Recursive connection is not allowed"))
             return False
         return True
+
+    # ----------------------------------------------------------------------
+    def __cycle_detection(self, newCon):
+        self.__marks = {}
+        self.__marks[newCon.source] = None
+        self.__marks[newCon.sink] = None
+        if self.__dfs(newCon.sink):
+            return True
+        return False
+
+    # Depth-First Search
+    # ----------------------------------------------------------------------
+    def __dfs(self, sink):
+        for connection in self.connectors:
+            if (connection.source != sink):
+                continue
+            adjacent = connection.sink
+            if adjacent in self.__marks:
+                return True
+            self.__marks[adjacent] = None
+            if self.__dfs(adjacent):
+                return True
+        return False
 
     # ----------------------------------------------------------------------
     def __abort_connection(self):
@@ -383,7 +409,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def set_show_grid(self, bool):
         if bool is not None:
             self.show_grid = bool
-            
+
     # ----------------------------------------------------------------------
     def update_flows(self):
         """
