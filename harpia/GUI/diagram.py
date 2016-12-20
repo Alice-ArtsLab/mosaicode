@@ -513,10 +513,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         self.do("Move blocks")
         for block_id in self.blocks:
-            block_pos_x, block_pos_y = self.blocks[block_id].get_position()
-            x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
-
             if (self.blocks[block_id] in self.current_widgets):
+                block_pos_x, block_pos_y = self.blocks[block_id].get_position()
+                x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
                 self.blocks[block_id].move(x, y)
         self.update_scrolling()
 
