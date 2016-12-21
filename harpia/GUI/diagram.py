@@ -128,19 +128,21 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state == \
-                Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        grid = System.properties.get_grid()
+        modifier_mask = Gtk.accelerator_get_default_mod_mask()
+        event.state = event.state & modifier_mask
+        if event.state == Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Up:
-                self.move_selected_blocks(0, -5)
+                self.move_selected_blocks(0, -grid*5)
                 return True
             if event.keyval == Gdk.KEY_Down:
-                self.move_selected_blocks(0, 5)
+                self.move_selected_blocks(0, grid*5)
                 return True
             if event.keyval == Gdk.KEY_Left:
-                self.move_selected_blocks(-5, 0)
+                self.move_selected_blocks(-grid*5, 0)
                 return True
             if event.keyval == Gdk.KEY_Right:
-                self.move_selected_blocks(5, 0)
+                self.move_selected_blocks(grid*5, 0)
                 return True
 
         if event.keyval == Gdk.KEY_Delete:
@@ -148,16 +150,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return True
 
         if event.keyval == Gdk.KEY_Up:
-            self.move_selected_blocks(0, -1)
+            self.move_selected_blocks(0, -grid)
             return True
         if event.keyval == Gdk.KEY_Down:
-            self.move_selected_blocks(0, 1)
+            self.move_selected_blocks(0, grid)
             return True
         if event.keyval == Gdk.KEY_Left:
-            self.move_selected_blocks(-1, 0)
+            self.move_selected_blocks(-grid, 0)
             return True
         if event.keyval == Gdk.KEY_Right:
-            self.move_selected_blocks(1, 0)
+            self.move_selected_blocks(grid, 0)
             return True
 
     # ----------------------------------------------------------------------
