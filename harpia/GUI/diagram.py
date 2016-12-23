@@ -524,7 +524,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ---------------------------------------------------------------------
     def check_limit(self, x, y, block_pos_x, block_pos_y):
-        min_x = 30
+        min_x = 0
         min_y = 0
         max_x = self.__main_window.get_size()[0] - 150
         max_y = self.__main_window.get_size()[1]
@@ -682,6 +682,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.__update_white_board()
         for block_id in self.blocks:
             self.get_root_item().add_child(self.blocks[block_id], -1)
+            self.blocks[block_id].adjust_position()
         for connector in self.connectors:
             self.get_root_item().add_child(connector, -1)
 
