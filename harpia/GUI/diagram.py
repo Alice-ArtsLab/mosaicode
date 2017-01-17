@@ -261,7 +261,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return False
 
     # ----------------------------------------------------------------------
-
     def __valid_connector(self, newCon):
         """
         Parameters:

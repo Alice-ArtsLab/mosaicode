@@ -126,10 +126,12 @@ class DiagramControl():
             parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
             props = self.diagram.blocks[block_id].get_properties()
             for prop in props:
+                print prop
                 parser.appendToLastTag('block',
                                        'property',
                                        key=str(prop["name"]),
-                                       value=str(prop["value"]))
+                                       value=str(prop["value"])
+                                       )
 
         parser.appendToTag('harpia', 'connections')
         for connector in self.diagram.connectors:

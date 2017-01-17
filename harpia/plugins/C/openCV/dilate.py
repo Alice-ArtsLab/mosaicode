@@ -15,9 +15,6 @@ class Dilate(OpenCVPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.masksize = "3x3"
-        self.iterations = 1
-
         # Appearance
         self.help = "Operação morfológica que provoca dilatação " + \
             "nos objetos de uma imagem, aumentando suas dimensões."
@@ -28,17 +25,19 @@ class Dilate(OpenCVPlugin):
         self.out_types = ["HRP_IMAGE"]
         self.group = "Morphological Operations"
 
-        self.properties = [{"name": "Mask Size",
-                            "label": "masksize",
+        self.properties = [{"label": "Mask Size",
+                            "name": "masksize",
                             "type": HARPIA_COMBO,
-                            "values": ["1x1", "3x3", "5x5", "7x7"]
+                            "values": ["1x1", "3x3", "5x5", "7x7"],
+                            "value":"3x3"
                             },
-                           {"name": "Iterations",
-                            "label": "iterations",
+                           {"label": "Iterations",
+                            "name": "iterations",
                             "type": HARPIA_INT,
                             "lower": 0,
                             "upper": 65535,
-                            "step": 1
+                            "step": 1, 
+                            "value":1
                             }
                            ]
 

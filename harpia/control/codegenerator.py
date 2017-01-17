@@ -213,11 +213,10 @@ class CodeGenerator():
                     self.generate_block_code(block)
 
     # ----------------------------------------------------------------------
-    def generate_block_code(self, block):
+    def generate_block_code(self, plugin):
         """
         This method generate the block code.
         """
-        plugin = block.get_plugin()
         header = plugin.generate_header()
         declaration = plugin.generate_vars()
         functionCall = plugin.generate_function_call()
@@ -251,7 +250,7 @@ class CodeGenerator():
         self.outDeallocations.append(outDealloc)
 
         connections = ""
-        for x in block.connections:
+        for x in plugin.connections:
             code = System.connectors[x.type]["code"]
             # Replace all connection properties by their values
             for key in x.__dict__:

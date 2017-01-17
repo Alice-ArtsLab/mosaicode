@@ -243,10 +243,6 @@ class Plugin(object):
         return self.properties
 
     # ----------------------------------------------------------------------
-    def get_plugin(self):
-        return self
-
-    # ----------------------------------------------------------------------
     def __str__(self):
         return str(self.get_id())
 
