@@ -77,11 +77,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
 
         self.white_board = None
+        self.show_grid = False
         self.select_rect = None
         self.__update_white_board()
         self.scrolled_window = None
         self.set_property("has-tooltip", True)  # Allow tooltip on elements
         self.show()
+
+        # Used for cycle detection
+        self.__marks = None
 
     # ----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
@@ -124,19 +128,21 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        if event.state == \
-                Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
+        grid = System.properties.get_grid()
+        modifier_mask = Gtk.accelerator_get_default_mod_mask()
+        event.state = event.state & modifier_mask
+        if event.state == Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Up:
-                self.move_selected_blocks(0, -5)
+                self.move_selected_blocks(0, -grid*5)
                 return True
             if event.keyval == Gdk.KEY_Down:
-                self.move_selected_blocks(0, 5)
+                self.move_selected_blocks(0, grid*5)
                 return True
             if event.keyval == Gdk.KEY_Left:
-                self.move_selected_blocks(-5, 0)
+                self.move_selected_blocks(-grid*5, 0)
                 return True
             if event.keyval == Gdk.KEY_Right:
-                self.move_selected_blocks(5, 0)
+                self.move_selected_blocks(grid*5, 0)
                 return True
 
         if event.keyval == Gdk.KEY_Delete:
@@ -144,16 +150,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return True
 
         if event.keyval == Gdk.KEY_Up:
-            self.move_selected_blocks(0, -1)
+            self.move_selected_blocks(0, -grid)
             return True
         if event.keyval == Gdk.KEY_Down:
-            self.move_selected_blocks(0, 1)
+            self.move_selected_blocks(0, grid)
             return True
         if event.keyval == Gdk.KEY_Left:
-            self.move_selected_blocks(-1, 0)
+            self.move_selected_blocks(-grid, 0)
             return True
         if event.keyval == Gdk.KEY_Right:
-            self.move_selected_blocks(1, 0)
+            self.move_selected_blocks(grid, 0)
             return True
 
     # ----------------------------------------------------------------------
@@ -274,10 +280,33 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                     and not System.connectors[newCon.type]["multiple"]:
                 System.log(_("Connector Already exists"))
                 return False
-        if newCon.sink == newCon.source:
+        if (newCon.sink == newCon.source) or self.__cycle_detection(newCon):
             System.log(_("Recursive connection is not allowed"))
             return False
         return True
+
+    # ----------------------------------------------------------------------
+    def __cycle_detection(self, newCon):
+        self.__marks = {}
+        self.__marks[newCon.source] = None
+        self.__marks[newCon.sink] = None
+        if self.__dfs(newCon.sink):
+            return True
+        return False
+
+    # Depth-First Search
+    # ----------------------------------------------------------------------
+    def __dfs(self, sink):
+        for connection in self.connectors:
+            if (connection.source != sink):
+                continue
+            adjacent = connection.sink
+            if adjacent in self.__marks:
+                return True
+            self.__marks[adjacent] = None
+            if self.__dfs(adjacent):
+                return True
+        return False
 
     # ----------------------------------------------------------------------
     def __abort_connection(self):
@@ -340,15 +369,48 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __update_white_board(self):
+        width = self.__main_window.get_size()[0]
+        height = self.__main_window.get_size()[1]
         self.white_board = GooCanvas.CanvasRect(
             parent=self.get_root_item(),
             x=0,
             y=0,
-            width=self.__main_window.get_size()[0],
-            height=self.__main_window.get_size()[1],
+            width=width,
+            height=height,
             stroke_color="white",
             fill_color="white")
+
+        self.__draw_grid()
+
         self.white_board.connect("focus-in-event", self.__white_board_event)
+
+    # ----------------------------------------------------------------------
+    def __draw_grid(self):
+        if self.show_grid:
+            width = self.__main_window.get_size()[0]
+            height = self.__main_window.get_size()[1]
+
+            i = 0
+            while i < height:
+                GooCanvas.CanvasPath(
+                        parent=self.get_root_item(),
+                        stroke_color="#F9F9F9",
+                        data="M 0 " + str(i) + " L "+ str(width) +" "+ str(i) + ""
+                        )
+                i = i + System.properties.get_grid()
+            i = 0
+            while i < width:
+                GooCanvas.CanvasPath(
+                        parent=self.get_root_item(),
+                        stroke_color="#F9F9F9",
+                        data="M " + str(i) + " 0 L "+ str(i) + " "+ str(height) +""
+                        )
+                i = i + System.properties.get_grid()
+
+    # ----------------------------------------------------------------------
+    def set_show_grid(self, bool):
+        if bool is not None:
+            self.show_grid = bool
 
     # ----------------------------------------------------------------------
     def update_flows(self):
@@ -453,16 +515,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         self.do("Move blocks")
         for block_id in self.blocks:
-            block_pos_x, block_pos_y = self.blocks[block_id].get_position()
-            x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
-
             if (self.blocks[block_id] in self.current_widgets):
+                block_pos_x, block_pos_y = self.blocks[block_id].get_position()
+                x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
                 self.blocks[block_id].move(x, y)
         self.update_scrolling()
 
     # ---------------------------------------------------------------------
     def check_limit(self, x, y, block_pos_x, block_pos_y):
-        min_x = 30
+        min_x = 0
         min_y = 0
         max_x = self.__main_window.get_size()[0] - 150
         max_y = self.__main_window.get_size()[1]
@@ -620,6 +681,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.__update_white_board()
         for block_id in self.blocks:
             self.get_root_item().add_child(self.blocks[block_id], -1)
+            self.blocks[block_id].adjust_position()
         for connector in self.connectors:
             self.get_root_item().add_child(connector, -1)
 
