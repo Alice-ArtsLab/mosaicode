@@ -49,32 +49,32 @@ class CGenerator(CodeGenerator):
         CodeGenerator.__init__(self, diagram)
         self.connectors = {
             "HRP_INT": {
-                "icon_in": "images/conn_int_in.png",
-                "icon_out": "images/conn_int_out.png",
+                "label":"INT",
+                "color":"#F00",
                 "multiple": False,
                 "code": 'block$sink$_int_i$sink_port$ = block$source$_int_o$source_port$;// INT conection\n'
             },
             "HRP_DOUBLE": {
-                "icon_in": "images/conn_double_in.png",
-                "icon_out": "images/conn_double_out.png",
+                "label":"DOUBLE",
+                "color":"#0F0",
                 "multiple": False,
                 "code": 'block$sink$_double_i$sink_port$ = block$source$_double_o$source_port$;// DOUBLE conection\n'
             },
             "HRP_RECT": {
-                "icon_in": "images/conn_rect_in.png",
-                "icon_out": "images/conn_rect_out.png",
+                "label":"RECT",
+                "color":"#00F",
                 "multiple": False,
                 "code": 'block$sink$_rect_i$sink_port$ = block$source$_rect_o$source_port$;// RECT conection\n'
             },
             "HRP_IMAGE": {
-                "icon_in": "images/conn_image_in.png",
-                "icon_out": "images/conn_image_out.png",
+                "label":"IMG",
+                "color":"#F0F",
                 "multiple": False,
                 "code": 'block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n'
             },
             "HRP_POINT": {
-                "icon_in": "images/conn_point_in.png",
-                "icon_out": "images/conn_point_out.png",
+                "label":"POINT",
+                "color":"#0FF",
                 "multiple": False,
                 "code": 'block$sink$_point_i$sink_port$ = block$source$_point_o$source_port$;// POINT conection\n'
             }

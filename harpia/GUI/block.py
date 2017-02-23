@@ -7,24 +7,22 @@ import gi
 import os
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
+gi.require_version('PangoCairo', '1.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
+from gi.repository import Pango
 from harpia.system import System as System
 from harpia.GUI.blockmenu import BlockMenu
 from harpia.model.plugin import Plugin
 
-WIDTH_2_TEXT_OFFSET = 22
 WIDTH_DEFAULT = 112
 HEIGHT_DEFAULT = 60
 PORT_SENSITIVITY = 12
-RADIUS = 15
+RADIUS = 25
 INPUT_WIDTH = 24
-INPUT_HEIGHT = 24
-OUTPUT_HEIGHT = 24
-OUTPUT_WIDTH = 24
-
+INPUT_HEIGHT = 12
 
 class Block(GooCanvas.CanvasGroup, Plugin):
     """
@@ -180,7 +178,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                       x=(self.width / 2) -
                                       (pixbuf.props.width / 2),
                                       y=(self.height / 2) -
-                                      (pixbuf.props.height / 2)
+                                      (pixbuf.props.height / 2) + 10
                                       )
         self.widgets["Icon"] = image
 
@@ -191,25 +189,23 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         ins = []
         x = 0
-        for in_type in self.get_in_types():
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(
-                    self.data_dir +
-                    System.connectors[in_type]["icon_in"])
-            except:
-                pass
-
-            image = GooCanvas.CanvasImage(parent=self,
-                                          pixbuf=pixbuf,
-                                          x=0,
-                                          y=(RADIUS +  # upper border
-                                             (x * 5) +  # spacing betwen ports
-                                              x * INPUT_HEIGHT)  # prev ports
-                                          )
-            image.set_property("tooltip", in_type)
-            image.connect("button-press-event", self.__on_input_press, x)
-            image.connect("button-release-event", self.__on_input_release, x)
-            ins.append(image)
+        for port_type in self.get_in_types():
+            text_name = self.__get_port_label(port_type);
+            inp = GooCanvas.CanvasText(parent=self,
+                                 text=text_name,
+                                 fill_color='black',
+                                 anchor=GooCanvas.CanvasAnchorType.WEST,
+                                 alignment = Pango.Alignment.LEFT,
+                                 x=2,
+                                 y=(RADIUS +  # upper border
+                                     (x * 5) +  # spacing betwen ports
+                                      x * INPUT_HEIGHT),  # prev ports
+                                 use_markup=True
+                                 )
+            inp.set_property("tooltip", port_type)
+            inp.connect("button-press-event", self.__on_input_press, x)
+            inp.connect("button-release-event", self.__on_input_release, x)
+            ins.append(inp)
             x += 1
         self.widgets["Inputs"] = ins
 
@@ -249,25 +245,24 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         outs = []
         x = 0
-        for out_type in self.get_out_types():
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(
-                    self.data_dir +
-                    System.connectors[out_type]["icon_out"])
-            except:
-                pass
+        for port_type in self.get_out_types():
+            text_name = self.__get_port_label(port_type);
+            out = GooCanvas.CanvasText(parent=self,
+                                 text=text_name,
+                                 fill_color='black',
+                                 anchor=GooCanvas.CanvasAnchorType.EAST,
+                                 alignment = Pango.Alignment.RIGHT,
+                                 x=(self.width - 1),
+                                 y=(RADIUS +  # upper border
+                                     (x * 5) +  # spacing betwen ports
+                                      x * INPUT_HEIGHT),  # prev ports
+                                 use_markup=True
+                                 )
 
-            image = GooCanvas.CanvasImage(parent=self,
-                                          pixbuf=pixbuf,
-                                          x=(self.width - OUTPUT_WIDTH),
-                                          y=(RADIUS +  # upper border
-                                             (x * 5) +  # spacing betwen ports
-                                              x * OUTPUT_HEIGHT)  # prev ports
-                                          )
-            image.set_property("tooltip", out_type)
-            image.connect("button-press-event", self.__on_output_press, x)
-            image.connect("button-release-event", self.__on_output_release, x)
-            outs.append(image)
+            out.set_property("tooltip", port_type)
+            out.connect("button-press-event", self.__on_output_press, x)
+            out.connect("button-release-event", self.__on_output_release, x)
+            outs.append(out)
             x += 1
         self.widgets["Outputs"] = outs
 
@@ -312,13 +307,13 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                      fill_color='black',
                                      anchor=GooCanvas.CanvasAnchorType.CENTER,
                                      x=(self.width / 2),
-                                     y=(self.height - 10),
+                                     y=(10),
                                      use_markup=True
                                      )
 
         text_width = label.get_property('width')
         oldX, oldY = ((self.width / 2), (self.height - 10))
-        self.width = max(text_width + WIDTH_2_TEXT_OFFSET, self.width)
+        self.width = max(text_width + 22, self.width)
         label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
         self.widgets["Label"] = label
 
@@ -503,4 +498,10 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             self.widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
+    def __get_port_label(self, port_type):
+        return \
+            "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
+            "<span color = '" + System.connectors[port_type]["color"] + "'>" + \
+            System.connectors[port_type]["label"] + \
+            "</span>}</span>"
 # ----------------------------------------------------------------------
