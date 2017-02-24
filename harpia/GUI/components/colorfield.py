@@ -55,7 +55,8 @@ class ColorField(Field, Gtk.HBox):
         if self.event is not None:
             color_selection_dialog.connect("destroy", self.event)
         color_selection = color_selection_dialog.get_color_selection()
-        color_selection.set_current_color(self.color)
+        if self.color is not None:
+            color_selection.set_current_color(self.color)
         response = color_selection_dialog.run()
 
         if response == Gtk.ResponseType.OK:
@@ -79,8 +80,8 @@ class ColorField(Field, Gtk.HBox):
             b = (value >> 8) & 255
             g = (value >> 16) & 255
             r = (value >> 24) & 255
-            value = "rgba(" + str(r) + "," + str(g) + "," + str(b) + "," + str(a) + ")"
-
+            value = "rgba(" + str(r) + "," + str(g) + "," + str(b) + \
+                    "," + str(a) + ")"
 
         if ":" in value:
             vlist = value.split(":")
@@ -98,8 +99,8 @@ class ColorField(Field, Gtk.HBox):
             self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         except Exception as inst:
             pass
-            print type(inst)
-            print inst.args
-            print inst
+#            print type(inst)
+#            print inst.args
+#            print inst
 
 #------------------------------------------------------------------------------
