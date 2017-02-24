@@ -10,7 +10,7 @@ from gi.repository import Gtk
 from gi.repository import GooCanvas
 from connectormenu import ConnectorMenu
 from harpia.model.connectionmodel import ConnectionModel
-
+from harpia.system import System as System
 
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     """
@@ -157,6 +157,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         if not self.__widgets.has_key("Line"):
             widget = GooCanvas.CanvasPath(
                 parent=self,
+                stroke_color = System.connectors[self.conn_type]["color"],
                 data=path
             )
             self.__widgets["Line"] = widget
@@ -185,8 +186,3 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.__widgets["Line"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
-        # not connected: Color = red
-        if self.sink_port == -1:
-            self.__widgets["Line"].set_property("stroke-color", "red")
-        else:
-            self.__widgets["Line"].set_property("stroke-color", "black")

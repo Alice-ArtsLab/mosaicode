@@ -251,7 +251,7 @@ class CodeGenerator():
 
         connections = ""
         for x in plugin.connections:
-            code = System.connectors[x.type]["code"]
+            code = System.connectors[x.conn_type]["code"]
             # Replace all connection properties by their values
             for key in x.__dict__:
                 value = str(x.__dict__[key])
