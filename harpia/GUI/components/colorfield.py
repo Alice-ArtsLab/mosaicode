@@ -74,13 +74,32 @@ class ColorField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def set_value(self, value):
+        if isinstance(value, int):
+            a = value & 255
+            b = (value >> 8) & 255
+            g = (value >> 16) & 255
+            r = (value >> 24) & 255
+            value = "rgba(" + str(r) + "," + str(g) + "," + str(b) + "," + str(a) + ")"
+
+
+        if ":" in value:
+            vlist = value.split(":")
+            if len(value_list) == 3:
+                value = "rgb(" + vlist[0] + "," + vlist[1] + \
+                        "," + vlist[2] + ")"
+            if len(value_list) == 4:
+                value = "rgba(" + vlist[0] + "," + vlist[1] + \
+                        "," + vlist[2] + "," + vlist[3] + ")"
+
         try:
-            (result,self.color) = Gdk.Color.parse(value)
+            color = Gdk.RGBA()
+            result = color.parse(value)
+            self.color = color.to_color()
             self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
         except Exception as inst:
             pass
-#            print type(inst)
-#            print inst.args
-#            print inst
+            print type(inst)
+            print inst.args
+            print inst
 
 #------------------------------------------------------------------------------
