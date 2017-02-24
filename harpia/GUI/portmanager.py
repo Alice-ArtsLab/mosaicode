@@ -18,6 +18,7 @@ from harpia.GUI.components.codefield import CodeField
 from harpia.GUI.components.openfilefield import OpenFileField
 from harpia.GUI.fieldtypes import *
 from harpia.GUI.porteditor import PortEditor
+from harpia.GUI.dialog import Dialog
 from harpia.model.plugin import Plugin
 from harpia.system import System as System
 import gettext
@@ -48,6 +49,7 @@ class PortManager(Gtk.Dialog):
 
         col = Gtk.TreeViewColumn(_("Available Ports"))
         self.tree_view.append_column(col)
+        self.tree_view.connect("row-activated", self.__on_row_activated)
         cellrenderertext = Gtk.CellRendererText()
         col.pack_end(cellrenderertext, True)
         col.add_attribute(cellrenderertext, "text", 0)
@@ -80,6 +82,10 @@ class PortManager(Gtk.Dialog):
         self.__update()
 
     # ----------------------------------------------------------------------
+    def __on_row_activated(self, tree_view, path, column):
+        PortEditor(self, self.__get_selected())
+
+    # ----------------------------------------------------------------------
     def __get_selected(self):
         treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
@@ -97,8 +103,12 @@ class PortManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):
-        self.main_window.main_control.delete_port(self.__get_selected())
-        self.__update()
+        dialog = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = dialog.run()
+        dialog.destroy()
+        if result == Gtk.ResponseType.OK:
+            self.main_window.main_control.delete_port(self.__get_selected())
+            self.__update()
 
     # ----------------------------------------------------------------------
     def __update(self):
