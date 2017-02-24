@@ -48,8 +48,8 @@ class Dilate(OpenCVPlugin):
             'int block$id$_arg_iterations = $iterations$;\n' + \
             'IplConvKernel * block$id$_arg_mask = ' + \
             'cvCreateStructuringElementEx(' + \
-            str(self.masksize[0]) + ' , ' + \
-            str(self.masksize[2]) + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
+            str(self.properties[0]["value"][0]) + ' , ' + \
+            str(self.properties[0]["value"][2]) + ', 1, 1,CV_SHAPE_RECT,NULL);\n'
 
         self.function_call = '''
             if(block$id$_img_i0){

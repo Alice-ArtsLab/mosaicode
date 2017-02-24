@@ -48,11 +48,11 @@ block_$id$.start(0);
 """
         self.properties = [{"name": "freq",
                             "label": "Frequency",
-                                    "type": HARPIA_FLOAT,
-                                    "lower": 20,
-                                    "upper": 20000,
-                                    "step": 1,
-                                    "value": 440
+                            "type": HARPIA_FLOAT,
+                            "lower": 20,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 440
                             },
                            {"name": "oscillator_type",
                             "label": "Type",
