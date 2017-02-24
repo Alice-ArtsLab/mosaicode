@@ -50,6 +50,7 @@ class JavascriptGenerator(CodeGenerator):
         CodeGenerator.__init__(self, diagram)
         self.connectors = {
             "HRP_WEBAUDIO_SOUND": {
+                "language":"javascript",
                 "label":"SOUND",
                 "color":"#F00",
                 "multiple": True,
@@ -57,6 +58,7 @@ class JavascriptGenerator(CodeGenerator):
                 'block_$sink$_i[$sink_port$])\n'
             },
             "HRP_WEBAUDIO_FLOAT": {
+                "language":"javascript",
                 "label":"FLOAT",
                 "color":"#000",
                 "multiple": True,
@@ -64,6 +66,7 @@ class JavascriptGenerator(CodeGenerator):
                 'block_$sink$_i[$sink_port$])\n'
             },
             "HRP_WEBAUDIO_CHAR": {
+                "language":"javascript",
                 "label":"CHAR",
                 "color":"#00F",
                 "multiple": True,

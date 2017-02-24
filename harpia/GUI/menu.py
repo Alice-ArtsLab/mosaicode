@@ -94,6 +94,8 @@ class Menu(Gtk.MenuBar):
         plugin_menu = Gtk.Menu()
         self.__create_menu(_("Plugin Manager"), None,
                            plugin_menu, mc.new_plugin)
+        self.__create_menu(_("Port Manager"), None,
+                           plugin_menu, mc.new_port)
         self.__add_menu_category(_("Plugins"), plugin_menu)
 
         # -------------------------- Help -----------------------------------

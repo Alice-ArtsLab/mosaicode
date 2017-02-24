@@ -11,6 +11,7 @@ from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
 from harpia.GUI.pluginmanager import PluginManager
+from harpia.GUI.portmanager import PortManager
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
@@ -389,6 +390,13 @@ class MainControl():
         PluginManager(self.main_window)
 
     # ----------------------------------------------------------------------
+    def new_port(self):
+        """
+        This add a new port.
+        """
+        PortManager(self.main_window)
+
+    # ----------------------------------------------------------------------
     def align_top(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
@@ -430,4 +438,12 @@ class MainControl():
     # ----------------------------------------------------------------------
     def show_grid(self, event):
         self.redraw(event.get_active())
+
+    # ----------------------------------------------------------------------
+    def add_port(self, port):
+        System.connectors.update(port)
+
+    # ----------------------------------------------------------------------
+    def delete_port(self, port_key):
+        System.connectors.pop(port_key, None)
 # ----------------------------------------------------------------------
