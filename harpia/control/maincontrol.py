@@ -304,10 +304,7 @@ class MainControl():
         """
         This method get the tree view block.
         """
-        blocks_tree_view = self.main_window.block_notebook.get_current_tab()
-        if blocks_tree_view is None:
-            return False
-        return blocks_tree_view.get_selected_block()
+        return self.main_window.block_notebook.get_selected_block()
 
     # ----------------------------------------------------------------------
     def zoom_in(self):

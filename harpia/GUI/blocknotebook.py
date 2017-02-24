@@ -63,4 +63,11 @@ class BlockNotebook(Gtk.Notebook):
                 * **Types** (:class:`list<list>`)
         """
         return self.tabs
+
+    # ----------------------------------------------------------------------
+    def get_selected_block(self):
+        current_tab = self.get_current_tab()
+        if current_tab is None:
+            return
+        return current_tab.get_selected_block()
 # ----------------------------------------------------------------------
