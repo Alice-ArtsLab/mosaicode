@@ -75,10 +75,12 @@ class ColorField(Field, Gtk.HBox):
     # --------------------------------------------------------------------------
     def set_value(self, value):
         try:
-            self.color = Gdk.RGBA()
-            self.color.parse(value)
+            (result,self.color) = Gdk.Color.parse(value)
             self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
-        except:
+        except Exception as inst:
             pass
+#            print type(inst)
+#            print inst.args
+#            print inst
 
-# ------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
