@@ -70,14 +70,6 @@ class PortManager(Gtk.Dialog):
         button.connect("clicked", self.__delete, None)
         button_bar.pack_start(button, False, False, 0)
 
-        button = Gtk.Button.new_with_label("Export Python Class")
-        button.connect("clicked", self.__export_python, None)
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.Button.new_with_label("Export XML")
-        button.connect("clicked", self.__export_xml, None)
-        button_bar.pack_start(button, False, False, 0)
-
         vbox.pack_start(button_bar, False, False, 0)
 
         self.__update()
@@ -97,6 +89,8 @@ class PortManager(Gtk.Dialog):
     def __get_selected(self):
         treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
+        if iterac is None:
+            return None
         path = model.get_path(iterac)
         name = model.get_value(model.get_iter(path), 0)
         return name
@@ -107,15 +101,21 @@ class PortManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __edit(self, widget=None, data=None):
-        PortEditor(self, self.__get_selected())
+        name = self.__get_selected()
+        if name is None:
+            return
+        PortEditor(self, name)
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):
+        name = self.__get_selected()
+        if name is None:
+            return
         dialog = Dialog().confirm_dialog(_("Are you sure?"), self)
         result = dialog.run()
         dialog.destroy()
         if result == Gtk.ResponseType.OK:
-            self.main_window.main_control.delete_port(self.__get_selected())
+            self.main_window.main_control.delete_port(name)
             self.__update()
 
     # ----------------------------------------------------------------------
@@ -124,13 +124,5 @@ class PortManager(Gtk.Dialog):
         self.tree_store.clear()
         for x in System.connectors:
             self.tree_store.append(None, [x])
-
-    # ----------------------------------------------------------------------
-    def __export_python(self, widget=None, data=None):
-        self.main_window.main_control.export_port_as_python()
-
-    # ----------------------------------------------------------------------
-    def __export_xml(self, widget=None, data=None):
-        self.main_window.main_control.export_port_as_xml()
 
 # ----------------------------------------------------------------------

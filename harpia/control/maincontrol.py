@@ -440,20 +440,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def delete_port(self, port_key):
-        PortControl().delete_port(port_key)
-
-    # ----------------------------------------------------------------------
-    def export_port_as_xml(self):
-        name = Dialog().save_dialog("Export Port As XML", self.main_window)
-        if name is None:
-            return
-        PortControl().export_port_as_xml(name)
-
-    # ----------------------------------------------------------------------
-    def export_port_as_python(self):
-        name = Dialog().save_dialog("Export Port As Python", self.main_window)
-        if name is None:
-            return
-        PortControl().export_port_as_python(name)
+        if not PortControl().delete_port(port_key):
+            print "It is a python file. Sorry. I can't remove it"
 
 # ----------------------------------------------------------------------

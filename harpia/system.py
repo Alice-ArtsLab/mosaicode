@@ -39,6 +39,7 @@ import pkgutil  # For dynamic package load
 import harpia.plugins
 from glob import glob  # To load examples
 from harpia.control.preferencescontrol import PreferencesControl
+from harpia.control.portcontrol import PortControl
 from harpia.model.preferences import Preferences
 
 
@@ -75,6 +76,7 @@ class System(object):
         # ----------------------------------------------------------------------
         def __load(self):
             self.__load_blocks()
+            PortControl().load_ports(self)
             examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
             for example in examples:
                 self.list_of_examples.append(example)
@@ -85,7 +87,6 @@ class System(object):
         def __load_blocks(self):
             from harpia.control.codegenerator import CodeGenerator
             from harpia.model.plugin import Plugin
-            from harpia.model.port import Port
             for importer, modname, ispkg in pkgutil.walk_packages(
                     harpia.plugins.__path__,
                     harpia.plugins.__name__ + ".",
@@ -112,13 +113,9 @@ class System(object):
                     if isinstance(instance, CodeGenerator):
                         language = instance.__class__.__module__.split(".")[2]
                         self.generators[language] = obj
-                        self.connectors.update(instance.connectors)
-                    if isinstance(instance, Port):
-                        self.connectors[instance.get_type()] = instance
 
     # Instance variable to the singleton
     instance = None
-
     # ----------------------------------------------------------------------
     def __init__(self):
         if not System.instance:
@@ -154,5 +151,12 @@ class System(object):
             cls.instance.Log.log(msg)
         except:
             print msg
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_user_dir(cls):
+        home_dir = os.path.expanduser("~")
+        home_dir = home_dir + "/harpia"
+        return home_dir
 
 # ------------------------------------------------------------------------------

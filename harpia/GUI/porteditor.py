@@ -30,9 +30,9 @@ class PortEditor(Gtk.Dialog):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, window, port):
-        self.main_window = window
-        Gtk.Dialog.__init__(self, _("Port Editor"), self.main_window,
+    def __init__(self, port_manager, port):
+        self.port_manager = port_manager
+        Gtk.Dialog.__init__(self, _("Port Editor"), self.port_manager,
                             0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
 
@@ -82,6 +82,6 @@ class PortEditor(Gtk.Dialog):
         port.color = self.color.get_value()
         port.multiple = self.multiple.get_value()
         port.code = self.code.get_value()
-        self.main_window.add_port(port)
+        self.port_manager.add_port(port)
 
 # ----------------------------------------------------------------------

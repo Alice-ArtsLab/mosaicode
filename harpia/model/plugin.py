@@ -38,7 +38,6 @@ class Plugin(object):
         for key in plugin.__dict__:
             self.__dict__[key] = plugin.__dict__[key]
 
-
     # ----------------------------------------------------------------------
     def get_help(self):
         """
