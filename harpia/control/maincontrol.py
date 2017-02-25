@@ -16,6 +16,7 @@ from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
+from harpia.control.portcontrol import PortControl
 
 
 class MainControl():
@@ -398,14 +399,13 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-
         diagram.align_top()
+
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-
         diagram.align_bottom()
 
     # ----------------------------------------------------------------------
@@ -413,7 +413,6 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-
         diagram.align_left()
 
     # ----------------------------------------------------------------------
@@ -421,7 +420,6 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-
         diagram.align_right()
 
     # ----------------------------------------------------------------------
@@ -438,9 +436,24 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def add_port(self, port):
-        System.connectors.update(port)
+        PortControl().add_port(port)
 
     # ----------------------------------------------------------------------
     def delete_port(self, port_key):
-        System.connectors.pop(port_key, None)
+        PortControl().delete_port(port_key)
+
+    # ----------------------------------------------------------------------
+    def export_port_as_xml(self):
+        name = Dialog().save_dialog("Export Port As XML", self.main_window)
+        if name is None:
+            return
+        PortControl().export_port_as_xml(name)
+
+    # ----------------------------------------------------------------------
+    def export_port_as_python(self):
+        name = Dialog().save_dialog("Export Port As Python", self.main_window)
+        if name is None:
+            return
+        PortControl().export_port_as_python(name)
+
 # ----------------------------------------------------------------------

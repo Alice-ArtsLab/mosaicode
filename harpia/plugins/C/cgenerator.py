@@ -47,43 +47,6 @@ class CGenerator(CodeGenerator):
 
     def __init__(self, diagram=None):
         CodeGenerator.__init__(self, diagram)
-        self.connectors = {
-            "HRP_INT": {
-                "language":"C",
-                "label":"INT",
-                "color":"#F00",
-                "multiple": False,
-                "code": 'block$sink$_int_i$sink_port$ = block$source$_int_o$source_port$;// INT conection\n'
-            },
-            "HRP_DOUBLE": {
-                "language":"C",
-                "label":"DOUBLE",
-                "color":"#0F0",
-                "multiple": False,
-                "code": 'block$sink$_double_i$sink_port$ = block$source$_double_o$source_port$;// DOUBLE conection\n'
-            },
-            "HRP_RECT": {
-                "language":"C",
-                "label":"RECT",
-                "color":"#00F",
-                "multiple": False,
-                "code": 'block$sink$_rect_i$sink_port$ = block$source$_rect_o$source_port$;// RECT conection\n'
-            },
-            "HRP_IMAGE": {
-                "language":"C",
-                "label":"IMG",
-                "color":"#F0F",
-                "multiple": False,
-                "code": 'block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n'
-            },
-            "HRP_POINT": {
-                "language":"C",
-                "label":"POINT",
-                "color":"#0FF",
-                "multiple": False,
-                "code": 'block$sink$_point_i$sink_port$ = block$source$_point_o$source_port$;// POINT conection\n'
-            }
-        }
 
     #----------------------------------------------------------------------
     def generate_code(self):

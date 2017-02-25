@@ -171,8 +171,9 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         This method draw a icon.
         """
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-                                                self.get_icon())
+#        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
+#                                                self.get_icon())
+        pixbuf = Gtk.IconTheme.get_default().load_icon(Gtk.stock_list_ids()[10],24,0)
         image = GooCanvas.CanvasImage(parent=self,
                                       pixbuf=pixbuf,
                                       x=(self.width / 2) -
@@ -308,7 +309,8 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                      anchor=GooCanvas.CanvasAnchorType.CENTER,
                                      x=(self.width / 2),
                                      y=(10),
-                                     use_markup=True
+                                     use_markup=True,
+                                     stroke_color='black'
                                      )
 
         text_width = label.get_property('width')
@@ -498,10 +500,11 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             self.widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
+    # ----------------------------------------------------------------------
     def __get_port_label(self, port_type):
         return \
             "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
-            "<span color = '" + System.connectors[port_type]["color"] + "'>" + \
-            System.connectors[port_type]["label"] + \
-            "</span>}</span>"
+            "<span color = '" + \
+            System.connectors[port_type].get_color() + "'>" + \
+            System.connectors[port_type].get_label() + "</span>}</span>"
 # ----------------------------------------------------------------------

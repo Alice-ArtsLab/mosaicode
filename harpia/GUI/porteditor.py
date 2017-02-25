@@ -17,7 +17,7 @@ from harpia.GUI.components.commentfield import CommentField
 from harpia.GUI.components.codefield import CodeField
 from harpia.GUI.components.openfilefield import OpenFileField
 from harpia.GUI.fieldtypes import *
-from harpia.model.plugin import Plugin
+from harpia.model.port import Port
 from harpia.system import System as System
 import gettext
 
@@ -43,23 +43,23 @@ class PortEditor(Gtk.Dialog):
         box = self.get_content_area()
         box.pack_start(vbox, True, True, 0)
 
-        self.key = StringField({"label": _("Key")}, None)
+        self.type = StringField({"label": _("Type")}, None)
         self.language = StringField({"label": _("Language")}, None)
         self.label = StringField({"label": _("Label")}, None)
         self.color = ColorField({"label": _("Color")}, None)
         self.color.set_parent_window(self)
-        self.code = CommentField({"label": _("Code")}, None)
+        self.code = CodeField({"label": _("Code")}, None)
         self.multiple = CheckField({"label": _("Multiple")}, None)
         if port is not None:
             System()
-            self.key.set_value(port)
-            self.language.set_value(System.connectors[port]["language"])
-            self.label.set_value(System.connectors[port]["label"])
-            self.color.set_value(System.connectors[port]["color"])
-            self.code.set_value(System.connectors[port]["code"])
-            self.multiple.set_value(System.connectors[port]["multiple"])
+            self.type.set_value(port)
+            self.language.set_value(System.connectors[port].get_language())
+            self.label.set_value(System.connectors[port].get_label())
+            self.color.set_value(System.connectors[port].get_color())
+            self.code.set_value(System.connectors[port].get_code())
+            self.multiple.set_value(System.connectors[port].get_multiple())
 
-        vbox.pack_start(self.key, False, False, 1)
+        vbox.pack_start(self.type, False, False, 1)
         vbox.pack_start(self.language, False, False, 1)
         vbox.pack_start(self.label, False, False, 1)
         vbox.pack_start(self.color, False, False, 1)
@@ -75,15 +75,13 @@ class PortEditor(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __save(self):
-        port = {
-            self.key.get_value(): {
-                "language" : self.language.get_value(),
-                "label" : self.label.get_value(),
-                "color" : self.color.get_value(),
-                "multiple" : self.multiple.get_value(),
-                "code": self.code.get_value()
-                }
-            }
+        port = Port()
+        port.type = self.type.get_value()
+        port.language = self.language.get_value()
+        port.label = self.label.get_value()
+        port.color = self.color.get_value()
+        port.multiple = self.multiple.get_value()
+        port.code = self.code.get_value()
         self.main_window.add_port(port)
 
 # ----------------------------------------------------------------------

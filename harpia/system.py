@@ -85,6 +85,7 @@ class System(object):
         def __load_blocks(self):
             from harpia.control.codegenerator import CodeGenerator
             from harpia.model.plugin import Plugin
+            from harpia.model.port import Port
             for importer, modname, ispkg in pkgutil.walk_packages(
                     harpia.plugins.__path__,
                     harpia.plugins.__name__ + ".",
@@ -112,6 +113,8 @@ class System(object):
                         language = instance.__class__.__module__.split(".")[2]
                         self.generators[language] = obj
                         self.connectors.update(instance.connectors)
+                    if isinstance(instance, Port):
+                        self.connectors[instance.get_type()] = instance
 
     # Instance variable to the singleton
     instance = None

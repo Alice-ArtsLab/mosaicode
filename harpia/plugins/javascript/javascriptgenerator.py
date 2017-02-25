@@ -39,7 +39,6 @@ import webbrowser  # to open HTML file
 
 from harpia.control.codegenerator import CodeGenerator
 
-
 class JavascriptGenerator(CodeGenerator):
     """
     This class contains methods related the JavascriptGenerator class.
@@ -48,32 +47,6 @@ class JavascriptGenerator(CodeGenerator):
 
     def __init__(self, diagram=None):
         CodeGenerator.__init__(self, diagram)
-        self.connectors = {
-            "HRP_WEBAUDIO_SOUND": {
-                "language":"javascript",
-                "label":"SOUND",
-                "color":"#F00",
-                "multiple": True,
-                "code": 'block_$source$.connect(' +
-                'block_$sink$_i[$sink_port$])\n'
-            },
-            "HRP_WEBAUDIO_FLOAT": {
-                "language":"javascript",
-                "label":"FLOAT",
-                "color":"#000",
-                "multiple": True,
-                "code": 'block_$source$_o$source_port$.push(' +
-                'block_$sink$_i[$sink_port$])\n'
-            },
-            "HRP_WEBAUDIO_CHAR": {
-                "language":"javascript",
-                "label":"CHAR",
-                "color":"#00F",
-                "multiple": True,
-                "code": 'block_$source$_o$source_port$.push(' +
-                'block_$sink$_i[$sink_port$])\n'
-            }
-        }
 
     # ----------------------------------------------------------------------
     def generate_code(self):
@@ -111,7 +84,7 @@ var context = new (window.AudioContext || window.webkitAudioContext)();
         declaration_block += "\n//connections\n"
 
         for conn in self.connections:
-            declaration_block += conn
+            declaration_block += conn + "\n"
 
         execution = "\n\t//execution block\n"
         for x in self.functionCalls:
