@@ -22,7 +22,8 @@ class PortControl():
         pass
 
     # ----------------------------------------------------------------------
-    def load_ports(self, system):
+    @classmethod
+    def load_ports(cls, system):
         system.connectors.clear()
         # First load ports on python classes.
         # They are installed with harpia as root 
@@ -55,16 +56,17 @@ class PortControl():
         for file in os.listdir(home_dir):
             if not file.endswith(".xml"):
                 continue
-            port = self.load(home_dir + "/" + file)
+            port = PortControl.load(home_dir + "/" + file)
             if port is None:
                 continue
             port.source = "xml"
             system.connectors[port.get_type()] = port
 
     # ----------------------------------------------------------------------
-    def load(self, file_name):
+    @classmethod
+    def load(cls, file_name):
         """
-        This method loads the diagram.
+        This method loads the port from XML file.
 
         Returns:
 
@@ -89,7 +91,8 @@ class PortControl():
         return port
 
     # ----------------------------------------------------------------------
-    def save(self, port):
+    @classmethod
+    def save(cls, port):
         """
         This method save the port in user space.
 
@@ -114,21 +117,23 @@ class PortControl():
         return True
 
     # ----------------------------------------------------------------------
-    def add_port(self, port):
+    @classmethod
+    def add_port(cls, port):
         # first, save it
-        self.save(port)
+        PortControl.save(port)
         # Then add it to system
         from harpia.system import System
         System.connectors[port.get_type()] = port
 
     # ----------------------------------------------------------------------
-    def delete_port(self, port_key):
+    @classmethod
+    def delete_port(cls, port_key):
         from harpia.system import System
         port = System.connectors[port_key]
         if port.source == "xml":
             file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
             os.remove(file_name)
-            self.load_ports(System)
+            PortControl.load_ports(System)
             return True
         else:
             return False

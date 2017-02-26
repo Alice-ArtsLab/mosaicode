@@ -121,8 +121,12 @@ class PortManager(Gtk.Dialog):
     # ----------------------------------------------------------------------
     def __update(self):
         System()
-        self.tree_store.clear()
+        port_list = []
         for x in System.connectors:
-            self.tree_store.append(None, [x])
+            port_list.append([x])
+        port_list.sort()
+        self.tree_store.clear()
+        for x in port_list:
+            self.tree_store.append(None, x)
 
 # ----------------------------------------------------------------------

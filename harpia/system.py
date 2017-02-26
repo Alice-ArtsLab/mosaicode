@@ -76,7 +76,7 @@ class System(object):
         # ----------------------------------------------------------------------
         def __load(self):
             self.__load_blocks()
-            PortControl().load_ports(self)
+            PortControl.load_ports(self)
             examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
             for example in examples:
                 self.list_of_examples.append(example)

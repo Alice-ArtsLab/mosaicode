@@ -381,20 +381,6 @@ class MainControl():
         diagram.update_scrolling()
 
     # ----------------------------------------------------------------------
-    def new_plugin(self):
-        """
-        This add a new plugin.
-        """
-        PluginManager(self.main_window)
-
-    # ----------------------------------------------------------------------
-    def new_port(self):
-        """
-        This add a new port.
-        """
-        PortManager(self.main_window)
-
-    # ----------------------------------------------------------------------
     def align_top(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
@@ -435,12 +421,28 @@ class MainControl():
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
+    def new_plugin(self):
+        """
+        This add a new plugin.
+        """
+        PluginManager(self.main_window)
+
+    # ----------------------------------------------------------------------
+    def new_port(self):
+        """
+        This add a new port.
+        """
+        PortManager(self.main_window)
+
+    # ----------------------------------------------------------------------
     def add_port(self, port):
-        PortControl().add_port(port)
+        PortControl.add_port(port)
 
     # ----------------------------------------------------------------------
     def delete_port(self, port_key):
-        if not PortControl().delete_port(port_key):
-            print "It is a python file. Sorry. I can't remove it"
+        if not PortControl.delete_port(port_key):
+            message = "This port is a python file installed in the System.\n"
+            message = message + "Sorry, you can't remove it"
+            Dialog().message_dialog("Error", message, self.main_window)
 
 # ----------------------------------------------------------------------
