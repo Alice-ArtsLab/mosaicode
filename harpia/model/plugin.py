@@ -91,6 +91,18 @@ class Plugin(object):
         return color
 
     # ----------------------------------------------------------------------
+    def get_color_as_rgba(self):
+        """
+        Returns the color in RGBA format.
+
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return is the RGBA color. The hex value is a **str** type.
+        """
+
+        return "rgba(" + self.color.replace(":", ",") + ")"
+
+    # ----------------------------------------------------------------------
     def get_in_types(self):
         """
         Return types of plugin entries.

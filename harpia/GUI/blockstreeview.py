@@ -27,7 +27,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.main_window = main_window
         self.current_filter = None
 
-        self.tree_store = Gtk.TreeStore(GdkPixbuf.Pixbuf, str)
+        self.tree_store = Gtk.TreeStore(str, str, str, str)
         self.filter = self.tree_store.filter_new()
         self.filter.set_visible_func(self.__filter_func)
         self.blocks_tree_view = Gtk.TreeView.new_with_model(self.filter)
@@ -36,9 +36,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         col = Gtk.TreeViewColumn(_("Available Blocks"))
         self.blocks_tree_view.append_column(col)
 
-        cellrenderimage = Gtk.CellRendererPixbuf()
-        col.pack_start(cellrenderimage, False)
-        col.add_attribute(cellrenderimage, "pixbuf", 0)
+        cellrenderertext = Gtk.CellRendererText()
+        col.pack_start(cellrenderertext, False)
+        cellrenderertext.set_property('background-set' , True)
+        cellrenderertext.set_property('foreground-set' , True)
+        col.add_attribute(cellrenderertext, "text", 0)
+        col.set_attributes(cellrenderertext, text=0, foreground=2, background=3)
 
         cellrenderertext = Gtk.CellRendererText()
         col.pack_end(cellrenderertext, True)
@@ -46,8 +49,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
         self.blocks_tree_view.set_enable_search(False)
         self.blocks_tree_view.connect("row-activated", self.__on_row_activated)
-        self.blocks_tree_view.connect(
-            "cursor-changed", self.__on_tree_selection_changed)
+        self.blocks_tree_view.connect("cursor-changed",
+                    self.__on_tree_selection_changed)
 
         self.blocks_tree_view.enable_model_drag_source(
             Gdk.ModifierType.BUTTON1_MASK,
@@ -75,9 +78,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
 
         """
         category = self.__contains_category(block.get_group())
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file(
-            os.environ['HARPIA_DATA_DIR'] + block.get_icon())
-        self.tree_store.append(category, [pixbuf, block.get_label()])
+        self.tree_store.append(category,
+                        [block.get_label().title()[0],
+                        block.get_label(),
+                        "white",
+                        block.get_color_as_rgba()
+                        ])
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
@@ -89,7 +95,9 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             if category_name in self.tree_store[iter][:]:
                 return iter
             iter = self.tree_store.iter_next(iter)
-        return self.tree_store.append(None, [None, str(category_name)])
+        return self.tree_store.append(None, [None, str(category_name),
+                    "white",
+                    "white"])
 
     # ----------------------------------------------------------------------
     def __filter_func(self, model, iter, data):

@@ -171,17 +171,70 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         This method draw a icon.
         """
+        text_label = "<span font_family ='Arial' " + \
+            "size = '25000' weight = 'bold' > " + \
+            self.get_label().title()[0] + "</span>"
+
+        icon = GooCanvas.CanvasText(parent=self,
+                                     text=text_label,
+                                     fill_color='white',
+                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
+                                     x=(self.width / 2),
+                                     y=(self.height / 2),
+                                     use_markup=True,
+                                     stroke_color='black'
+                                     )
+
+        width = Pango.Rectangle()
+        width2 = Pango.Rectangle()
+        icon.get_natural_extents(width, width2)
+        text_width = width2.width / 1000
+        oldX, oldY = ((self.width / 2), (self.height / 2))
+        self.width = max(text_width + 22, self.width)
+        icon.translate((self.width / 2) - oldX, (self.height / 2) - oldY)
+        self.widgets["Label"] = icon
+
 #        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
 #                                                self.get_icon())
-        pixbuf = Gtk.IconTheme.get_default().load_icon(Gtk.stock_list_ids()[10],24,0)
-        image = GooCanvas.CanvasImage(parent=self,
-                                      pixbuf=pixbuf,
-                                      x=(self.width / 2) -
-                                      (pixbuf.props.width / 2),
-                                      y=(self.height / 2) -
-                                      (pixbuf.props.height / 2) + 10
-                                      )
-        self.widgets["Icon"] = image
+#        pixbuf = Gtk.IconTheme.get_default().load_icon(Gtk.stock_list_ids()[10],24,0)
+#        image = GooCanvas.CanvasImage(parent=self,
+#                                      pixbuf=pixbuf,
+#                                      x=(self.width / 2) -
+#                                      (pixbuf.props.width / 2),
+#                                      y=(self.height / 2) -
+#                                      (pixbuf.props.height / 2) + 10
+#                                      )
+
+#        self.widgets["Icon"] = image
+
+    # ----------------------------------------------------------------------
+    def __draw_label(self):
+        """
+        This method draw the label.
+
+        """
+        text_label = "<span font_family ='Arial' " + \
+            "size = '10000' weight = 'ultralight'> " + \
+            self.get_label() + "</span>"
+
+        label = GooCanvas.CanvasText(parent=self,
+                                     text=text_label,
+                                     fill_color='black',
+                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
+                                     x=(self.width / 2),
+                                     y=(10),
+                                     use_markup=True,
+                                     stroke_color='black'
+                                     )
+
+        width = Pango.Rectangle()
+        width2 = Pango.Rectangle()
+        label.get_natural_extents(width, width2)
+        text_width = width2.width / 1000
+        oldX, oldY = ((self.width / 2), (self.height - 10))
+        self.width = max(text_width + 22, self.width)
+        label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
+        self.widgets["Label"] = label
 
     # ----------------------------------------------------------------------
     def __draw_inputs(self):
@@ -292,32 +345,6 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                 * **Types** (:class:`boolean<boolean>`)
         """
         return True
-
-    # ----------------------------------------------------------------------
-    def __draw_label(self):
-        """
-        This method draw the label.
-
-        """
-        text_label = "<span font_family ='Arial' " + \
-            "size = '10000' weight = 'ultralight'> " + \
-            self.get_label() + "</span>"
-
-        label = GooCanvas.CanvasText(parent=self,
-                                     text=text_label,
-                                     fill_color='black',
-                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
-                                     x=(self.width / 2),
-                                     y=(10),
-                                     use_markup=True,
-                                     stroke_color='black'
-                                     )
-
-        text_width = label.get_property('width')
-        oldX, oldY = ((self.width / 2), (self.height - 10))
-        self.width = max(text_width + 22, self.width)
-        label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
-        self.widgets["Label"] = label
 
     # ----------------------------------------------------------------------
     def rebuild(self):

@@ -45,7 +45,6 @@ class PluginEditor(Gtk.Dialog):
         self.tabs.set_scrollable(True)
         box.pack_start(self.tabs, True, True, 0)
 
-
         # ----------------------------------------------------------------------
         # Common properties Section
         # ----------------------------------------------------------------------
@@ -54,19 +53,19 @@ class PluginEditor(Gtk.Dialog):
         self.tabs.append_page(self.common_properties, Gtk.Label(_("Common Properties")))
         self.__create_common_properties_tab()
         # ----------------------------------------------------------------------
+        # Properties section
+        # ----------------------------------------------------------------------
+        self.configuration = Gtk.ScrolledWindow()
+        self.configuration.set_shadow_type(Gtk.ShadowType.IN)
+        self.tabs.append_page(self.configuration, Gtk.Label(_("Properties")))
+        self.__create_configuration_tab()
+        # ----------------------------------------------------------------------
         # Connections Section
         # ----------------------------------------------------------------------
         self.connections = Gtk.ScrolledWindow()
         self.connections.set_shadow_type(Gtk.ShadowType.IN)
-        self.tabs.append_page(self.connections, Gtk.Label(_("Connections")))
+        self.tabs.append_page(self.connections, Gtk.Label(_("Ports")))
         self.__create_connection_tab()
-        # ----------------------------------------------------------------------
-        # Configuration section
-        # ----------------------------------------------------------------------
-        self.configuration = Gtk.ScrolledWindow()
-        self.configuration.set_shadow_type(Gtk.ShadowType.IN)
-        self.tabs.append_page(self.configuration, Gtk.Label(_("Configuration")))
-        self.__create_configuration_tab()
         # ----------------------------------------------------------------------
         # Code section
         # ----------------------------------------------------------------------
@@ -97,20 +96,18 @@ class PluginEditor(Gtk.Dialog):
         self.type = StringField({"label": _("Plugin Type")}, None)
         self.language = ComboField(data, None)
         self.framework = StringField({"label": _("Framework")}, None)
+        self.label = StringField({"label": _("Label")}, None)
+        self.group = StringField({"label": _("Group")}, None)
+        self.color = ColorField({"label": _("Color")}, None)
+        self.color.set_parent_window(self)
+        self.help = CommentField({"label": _("Help")}, None)
+
         vbox.pack_start(self.type, False, False, 1)
         vbox.pack_start(self.language, False, False, 1)
         vbox.pack_start(self.framework, False, False, 1)
-        self.label = StringField({"label": _("Label")}, None)
         vbox.pack_start(self.label, False, False, 1)
-        self.group = StringField({"label": _("Group")}, None)
         vbox.pack_start(self.group, False, False, 1)
-        self.icon = OpenFileField({"label": _("Icon")}, None)
-        self.icon.set_parent_window(self)
-        vbox.pack_start(self.icon, False, False, 1)
-        self.color = ColorField({"label": _("Color")}, None)
-        self.color.set_parent_window(self)
         vbox.pack_start(self.color, False, False, 1)
-        self.help = CommentField({"label": _("Help")}, None)
         vbox.pack_start(self.help, False, False, 1)
 
         self.type.set_value(self.plugin.get_type())
@@ -119,7 +116,6 @@ class PluginEditor(Gtk.Dialog):
         self.framework.set_value(self.plugin.framework)
         self.label.set_value(self.plugin.get_label())
         self.group.set_value(self.plugin.get_group())
-        self.icon.set_value(os.environ['HARPIA_DATA_DIR'] + self.plugin.get_icon())
         self.color.set_value(self.plugin.get_color())
         self.help.set_value(self.plugin.get_help())
         self.common_properties.show_all()
@@ -178,6 +174,15 @@ class PluginEditor(Gtk.Dialog):
         self.configuration.show_all()
 
     # ----------------------------------------------------------------------
+    def __new_configuration_panel(self, widget=None, data=None):
+        fieldtypes = []
+        for key in component_list:
+            fieldtypes.append(key)
+        data = {"label": _("Field Type"), "values": fieldtypes}
+        self.field_type = ComboField(data, self.__select_field_type)
+        self.configuration_panel.pack_start(self.field_type, False, False, 1)
+
+    # ----------------------------------------------------------------------
     def __create_code_tab(self):
         for widget in self.code.get_children():
             self.code.remove(widget)
@@ -229,15 +234,6 @@ class PluginEditor(Gtk.Dialog):
         self.connections.show_all()
 
     # ----------------------------------------------------------------------
-    def __new_configuration_panel(self, widget=None, data=None):
-        fieldtypes = []
-        for key in component_list:
-            fieldtypes.append(key)
-        data = {"label": _("Field Type"), "values": fieldtypes}
-        self.field_type = ComboField(data, self.__select_field_type)
-        self.configuration_panel.pack_start(self.field_type, False, False, 1)
-
-    # ----------------------------------------------------------------------
     def add_block(self, plugin):
         """
         This method add a plugin.
@@ -252,7 +248,6 @@ class PluginEditor(Gtk.Dialog):
 
         self.label.set_value(plugin.get_label())
         self.group.set_value(plugin.get_group())
-        self.icon.set_value(os.environ['HARPIA_DATA_DIR'] + plugin.get_icon())
         self.color.set_value(plugin.get_color())
         self.help.set_value(plugin.get_help())
 

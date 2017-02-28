@@ -80,8 +80,7 @@ class PluginManager(Gtk.Dialog):
     # ----------------------------------------------------------------------
     def set_block(self, plugin):
         """
-        This method call add_block.
-
+        This method is called when a block is selected. Nothing to do here.
             Parameters:
                 plugin
             Returns:
@@ -92,10 +91,10 @@ class PluginManager(Gtk.Dialog):
     # ----------------------------------------------------------------------
     def add_block(self, plugin):
         """
-        This method add a plugin.
+        This method is called when a block is double clicked.
 
             Parameters:
                 * **plugin** (:class:`<>`)
         """
-        pass
+        PluginEditor(self, self.blocks.get_selected_block())
 # ----------------------------------------------------------------------
