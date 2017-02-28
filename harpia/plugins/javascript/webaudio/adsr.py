@@ -16,7 +16,6 @@ class ADSR(WebaudioPlugin):
         # Appearance
         self.help = "ADSR"
         self.label = "ADSR"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
         self.in_types = ["HRP_WEBAUDIO_SOUND", "HRP_WEBAUDIO_FLOAT"]
         self.out_types = ["HRP_WEBAUDIO_SOUND"]
@@ -79,7 +78,7 @@ block_$id$_i[1] = function(value){
              "value": 2
              },
             {"name": "s",
-                "label": "Sustain",
+             "label": "Sustain",
              "type": HARPIA_FLOAT,
              "lower": 0,
              "upper": 10000,

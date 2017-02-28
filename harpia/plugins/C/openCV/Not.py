@@ -20,7 +20,6 @@ class Not(OpenCVPlugin):
         self.help = "Realiza a negação lógica de uma imagem. " + \
             "Corresponde à negativa da imagem."
         self.label = "Not"
-        self.icon = "images/not.png"
         self.color = "10:180:10:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

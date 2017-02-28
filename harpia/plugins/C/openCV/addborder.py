@@ -30,7 +30,6 @@ class AddBorder(OpenCVPlugin):
         # Appearance
         self.help = "Adiciona bordas na imagem."
         self.label = "Add Border"
-        self.icon = "images/and.png"
         self.color = "0:180:210:150"
         self.in_types = ["HRP_IMAGE", "HRP_INT"]
         self.out_types = ["HRP_IMAGE"]

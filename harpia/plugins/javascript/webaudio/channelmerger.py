@@ -16,7 +16,6 @@ class ChannelMerger(WebaudioPlugin):
         # Appearance
         self.help = "Channel Merger"
         self.label = "Channel Merger"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
         self.in_types = ["HRP_WEBAUDIO_SOUND", "HRP_WEBAUDIO_SOUND"]
         self.out_types = ["HRP_WEBAUDIO_SOUND"]

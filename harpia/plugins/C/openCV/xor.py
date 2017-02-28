@@ -19,7 +19,6 @@ class Xor(OpenCVPlugin):
         # Appearance
         self.help = "Realiza a operação lógica XOR entre duas imagens."
         self.label = "Xor"
-        self.icon = "images/xor.png"
         self.color = "10:180:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

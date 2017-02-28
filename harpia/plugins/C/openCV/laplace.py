@@ -22,7 +22,6 @@ class Laplace(OpenCVPlugin):
             "Laplaciano de uma imagem," + \
             "realçando cantos e bordas de objetos."
         self.label = "Laplace"
-        self.icon = "images/laplace.png"
         self.color = "250:180:80:150"
         self.in_types = ["HRP_IMAGE", "HRP_INT"]
         self.out_types = ["HRP_IMAGE"]

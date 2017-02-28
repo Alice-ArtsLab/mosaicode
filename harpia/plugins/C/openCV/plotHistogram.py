@@ -21,7 +21,6 @@ class PlotHistogram(OpenCVPlugin):
         self.help = "Create a representation of the light " + \
             "intensity levels as an histogram."
         self.label = "Histogram"
-        self.icon = "images/plotHistogram.png"
         self.color = "0:0:0:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

@@ -20,7 +20,6 @@ class Fill(OpenCVPlugin):
         # Appearance
         self.help = "Preenche toda a imagem de uma cor."
         self.label = "Fill image"
-        self.icon = "images/fill.png"
         self.color = "50:100:200:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

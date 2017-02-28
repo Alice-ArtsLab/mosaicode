@@ -16,7 +16,6 @@ class Oscillator(WebaudioPlugin):
         # Appearance
         self.help = "Sound output"
         self.label = "Oscillator"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
         self.in_types = ["HRP_WEBAUDIO_SOUND",
                          "HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]

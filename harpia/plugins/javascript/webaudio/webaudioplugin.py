@@ -12,3 +12,4 @@ class WebaudioPlugin(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.language = "javascript"
+        self.framework = "webaudio"

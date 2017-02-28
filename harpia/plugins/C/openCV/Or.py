@@ -24,7 +24,6 @@ class Or(OpenCVPlugin):
             "Segunda: Executa a operação entre um valor " + \
             "constante e cada ponto da imagem."
         self.label = "Or"
-        self.icon = "images/or.png"
         self.color = "10:180:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

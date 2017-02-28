@@ -16,7 +16,6 @@ class Delay(WebaudioPlugin):
         # Appearance
         self.help = "Delay"
         self.label = "Delay"
-        self.icon = "images/show.png"
         self.color = "150:150:250:150"
         self.in_types = ["HRP_WEBAUDIO_SOUND"]
         self.out_types = ["HRP_WEBAUDIO_SOUND"]

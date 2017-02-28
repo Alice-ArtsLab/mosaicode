@@ -16,7 +16,6 @@ class Mouse(WebaudioPlugin):
         # Appearance
         self.help = "Mouse Position"
         self.label = "Mouse Position"
-        self.icon = "images/show.png"
         self.color = "50:50:50:150"
         self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
         self.group = "Interface"

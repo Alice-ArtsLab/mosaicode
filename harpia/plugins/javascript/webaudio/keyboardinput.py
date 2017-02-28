@@ -16,7 +16,6 @@ class KeyboardInput(WebaudioPlugin):
         # Appearance
         self.help = "Keyboard Input"
         self.label = "Keyboard Input"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
         self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_CHAR"]
         self.group = "Interface"

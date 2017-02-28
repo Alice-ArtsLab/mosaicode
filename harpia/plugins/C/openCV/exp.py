@@ -21,7 +21,6 @@ class Exp(OpenCVPlugin):
             "eleva a constante neperiana ao valor " + \
             "de intensidade luminosa de cada ponto da imagem."
         self.label = "Exp"
-        self.icon = "images/exp.png"
         self.color = "230:230:60:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

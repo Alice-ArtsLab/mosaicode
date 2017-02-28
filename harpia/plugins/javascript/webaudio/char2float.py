@@ -16,7 +16,6 @@ class Char2Float(WebaudioPlugin):
         # Appearance
         self.help = "Char to Float"
         self.label = "Char 2 Float"
-        self.icon = "images/show.png"
         self.color = "200:200:25:150"
         self.in_types = ["HRP_WEBAUDIO_CHAR"]
         self.out_types = ["HRP_WEBAUDIO_FLOAT"]

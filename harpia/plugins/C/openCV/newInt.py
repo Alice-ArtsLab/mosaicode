@@ -20,7 +20,6 @@ class NewInt(OpenCVPlugin):
         # Appearance
         self.help = "Creates new literal value (Int)."
         self.label = "New Int"
-        self.icon = "images/newDouble.png"
         self.color = "50:50:200:150"
         self.out_types = ["HRP_INT"]
         self.group = "Basic Data Type"

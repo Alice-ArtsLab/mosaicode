@@ -16,7 +16,6 @@ class SubtractFloat(WebaudioPlugin):
         # Appearance
         self.help = "Subtract Float"
         self.label = "Subtract Float"
-        self.icon = "images/show.png"
         self.color = "200:200:25:150"
         self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
         self.out_types = ["HRP_WEBAUDIO_FLOAT"]

@@ -21,7 +21,6 @@ class Save(OpenCVPlugin):
         self.help = "Salva uma imagem em uma mídia indicada pelo usuário." + \
             "Atualmente a imagem é salva como PNG por padrão."
         self.label = "Save Image"
-        self.icon = "images/save.png"
         self.color = "50:100:200:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

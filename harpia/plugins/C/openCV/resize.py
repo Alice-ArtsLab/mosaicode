@@ -21,7 +21,6 @@ class Resize(OpenCVPlugin):
         self.help = "Resizes the input image to the " + \
             "dimensions of the input rectangle."
         self.label = "Resize Image"
-        self.icon = "images/resize.png"
         self.color = "20:80:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_RECT"]
         self.out_types = ["HRP_IMAGE"]

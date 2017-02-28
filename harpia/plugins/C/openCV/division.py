@@ -19,7 +19,6 @@ class Division(OpenCVPlugin):
         # Appearance
         self.help = "Realiza a divisão de duas imagens."
         self.label = "Division"
-        self.icon = "images/division.png"
         self.color = "180:10:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

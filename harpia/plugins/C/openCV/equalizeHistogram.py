@@ -21,7 +21,6 @@ class EqualizeHistogram(OpenCVPlugin):
             "alcançar maior contraste entre os " + \
             "diversos elementos de uma imagem."
         self.label = "Equalize Histogram"
-        self.icon = "images/equalizeHistogram.png"
         self.color = "0:0:0:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

@@ -22,7 +22,6 @@ class LiveMode(OpenCVPlugin):
         # Appearance
         self.help = "Realiza a aquisição de uma imagem a partir de câmera."
         self.label = "Live Mode"
-        self.icon = "images/acquisition.png"
         self.color = "50:100:200:150"
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"

@@ -21,7 +21,6 @@ class Pow(OpenCVPlugin):
         self.help = "Eleva cada ponto de uma " + \
             "imagem a um valor fixo de potência."
         self.label = "Pow"
-        self.icon = "images/pow.png"
         self.color = "230:230:60:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

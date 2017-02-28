@@ -16,7 +16,6 @@ class Speaker(WebaudioPlugin):
         # Appearance
         self.help = "Sound output"
         self.label = "Speaker"
-        self.icon = "images/show.png"
         self.color = "150:150:250:150"
         self.in_types = ["HRP_WEBAUDIO_SOUND"]
         self.group = "Sound"

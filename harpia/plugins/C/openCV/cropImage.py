@@ -24,7 +24,6 @@ class CropImage(OpenCVPlugin):
         # Appearance
         self.help = "Corta a Imagem de acordo com o Retangulo de entrada."
         self.label = "Crop Image"
-        self.icon = "images/cropImage.png"
         self.color = "50:50:200:150"
         self.in_types = ["HRP_IMAGE", "HRP_RECT"]
         self.out_types = ["HRP_IMAGE"]

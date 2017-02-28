@@ -21,7 +21,6 @@ class NewPoint(OpenCVPlugin):
         # Appearance
         self.help = "Creates a new Point."
         self.label = "New Point"
-        self.icon = "images/newPoint.png"
         self.color = "50:50:200:150"
         self.out_types = ["HRP_POINT"]
         self.group = "Basic Data Type"

@@ -23,7 +23,6 @@ class Threshold(OpenCVPlugin):
         self.help = "Operador de binarização da imagem, de acordo " + \
             "com um valor fixo de intensidade luminosa (valor de limiar)."
         self.label = "Threshold"
-        self.icon = "images/threshold.png"
         self.color = "50:125:50:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

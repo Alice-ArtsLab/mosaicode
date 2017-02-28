@@ -16,7 +16,6 @@ class WhiteNoise(WebaudioPlugin):
         # Appearance
         self.help = "White Noise"
         self.label = "White Noise"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
         self.out_types = ["HRP_WEBAUDIO_SOUND"]
         self.group = "Sound"

@@ -19,7 +19,6 @@ class ComposeRGB(OpenCVPlugin):
         # Appearance
         self.help = "BLOCO Composição RGB"
         self.label = "Compose RGB"
-        self.icon = "images/composeRGB.png"
         self.color = "50:125:50:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

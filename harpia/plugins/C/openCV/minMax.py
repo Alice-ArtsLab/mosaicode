@@ -28,7 +28,6 @@ class MinMax(OpenCVPlugin):
         self.help = "Finds min or max from input image and judges " + \
             "it according to a custom criteria."
         self.label = "Find Min or Max"
-        self.icon = "images/minMax.png"
         self.color = "50:50:200:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_DOUBLE", "HRP_POINT"]

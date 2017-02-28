@@ -22,7 +22,6 @@ class Erode(OpenCVPlugin):
         self.help = "Operação morfológica que provoca erosão " + \
             "nos objetos de uma imagem, reduzindo suas dimensões."
         self.label = "Erosion"
-        self.icon = "images/erode.png"
         self.color = "180:230:220:150"
         self.in_types = ["HRP_IMAGE", "HRP_INT"]
         self.out_types = ["HRP_IMAGE"]

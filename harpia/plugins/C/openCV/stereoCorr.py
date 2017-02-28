@@ -21,7 +21,6 @@ class StereoCorr(OpenCVPlugin):
         self.help = 'Input1 is the left image and Input2 " + \
             "is the right image. Output is the depth image.'
         self.label = "images/stereoCorr.png"
-        self.icon = "images/and.png"
         self.color = "10:10:20:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

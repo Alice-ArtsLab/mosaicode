@@ -20,7 +20,6 @@ class Comment(OpenCVPlugin):
         # Appearance
         self.help = "Insert a comment"
         self.label = "Comment"
-        self.icon = "images/comment.png"
         self.color = "50:100:200:150"
         self.group = "General"
 

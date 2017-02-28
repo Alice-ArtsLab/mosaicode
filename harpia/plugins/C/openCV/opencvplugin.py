@@ -15,6 +15,7 @@ class OpenCVPlugin(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.language = "C"
+        self.framework = "opencv"
 
     # ----------------------------------------------------------------------
     def generate_vars(self):

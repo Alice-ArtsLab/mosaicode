@@ -16,7 +16,6 @@ class AddFloat(WebaudioPlugin):
         # Appearance
         self.help = "Add Float"
         self.label = "Add Float"
-        self.icon = "images/dilate.png"
         self.color = "200:200:25:150"
         self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
         self.out_types = ["HRP_WEBAUDIO_FLOAT"]

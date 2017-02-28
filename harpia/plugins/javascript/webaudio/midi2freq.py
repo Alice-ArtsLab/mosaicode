@@ -16,12 +16,10 @@ class Midi2Freq(WebaudioPlugin):
         # Appearance
         self.help = "midi to freq"
         self.label = "Midi 2 Freq"
-        self.icon = "images/show.png"
         self.color = "200:200:25:150"
         self.in_types = ["HRP_WEBAUDIO_FLOAT"]
         self.out_types = ["HRP_WEBAUDIO_FLOAT"]
         self.group = "Conversion"
-
         self.vars = """
 // block_$id$ = Midi 2 Freq
 var block_$id$_o0 = [];

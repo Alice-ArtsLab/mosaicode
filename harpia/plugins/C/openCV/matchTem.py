@@ -21,7 +21,6 @@ class MatchTem(OpenCVPlugin):
         # Appearance
         self.help = "Operação de filtragem destinada a suavizar uma imagem."
         self.label = "Match Template"
-        self.icon = "images/matchTem.png"
         self.color = "180:180:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

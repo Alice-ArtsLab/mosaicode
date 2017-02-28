@@ -19,7 +19,6 @@ class Sum(OpenCVPlugin):
         # Appearance
         self.help = "Realiza a soma de duas imagens."
         self.label = "Sum"
-        self.icon = "images/sum.png"
         self.color = "180:10:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

@@ -20,7 +20,6 @@ class FillRect(OpenCVPlugin):
         # Appearance
         self.help = "Preenche o retângulo de uma cor."
         self.label = "Fill Rectangle"
-        self.icon = "images/fill.png"
         self.color = "50:100:200:150"
         self.in_types = ["HRP_IMAGE", "HRP_RECT"]
         self.out_types = ["HRP_IMAGE"]

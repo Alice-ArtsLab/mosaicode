@@ -22,7 +22,6 @@ class SaveVideo(OpenCVPlugin):
         # Appearance
         self.help = "Save Video needs its description."
         self.label = "Save Video"
-        self.icon = "images/saveVideo.png"
         self.color = "120:20:20:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

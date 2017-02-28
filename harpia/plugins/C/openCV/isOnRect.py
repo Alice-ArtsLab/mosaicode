@@ -20,7 +20,6 @@ class IsOnRect(OpenCVPlugin):
         self.help = "Checks Wheather the given " + \
             "point is inside the given rectangle."
         self.label = "Check Point"
-        self.icon = "images/isOnRect.png"
         self.color = "50:50:200:150"
         self.in_types = ["HRP_POINT", "HRP_RECT"]
         self.out_types = ["HRP_DOUBLE"]

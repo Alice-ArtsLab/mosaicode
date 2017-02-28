@@ -20,7 +20,6 @@ class NewDouble(OpenCVPlugin):
         # Appearance
         self.help = "Creates new literal value (Double)."
         self.label = "New Double"
-        self.icon = "images/newDouble.png"
         self.color = "50:50:200:150"
         self.out_types = ["HRP_DOUBLE"]
         self.group = "Basic Data Type"

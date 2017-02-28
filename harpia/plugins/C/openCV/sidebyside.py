@@ -19,7 +19,6 @@ class SideBySide(OpenCVPlugin):
         # Appearance
         self.help = "Coloca uma imagem do lado da outra."
         self.label = "Side By Side"
-        self.icon = "images/and.png"
         self.color = "10:180:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

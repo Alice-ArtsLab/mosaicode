@@ -23,7 +23,6 @@ class NewRect(OpenCVPlugin):
         # Appearance
         self.help = "Creates new rectangle"
         self.label = "New Rectangle"
-        self.icon = "images/newRect.png"
         self.color = "50:50:200:150"
         self.out_types = ["HRP_RECT"]
         self.group = "Basic Data Type"

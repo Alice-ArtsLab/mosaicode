@@ -24,7 +24,6 @@ class Sobel(OpenCVPlugin):
         self.help = "Operação de filtragem que utiliza uma máscara " + \
             "Sobel para realçar cantos e bordas da imagem."
         self.label = "Sobel"
-        self.icon = "images/sobel.png"
         self.color = "250:180:80:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

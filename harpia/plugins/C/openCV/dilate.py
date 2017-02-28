@@ -19,7 +19,6 @@ class Dilate(OpenCVPlugin):
         self.help = "Operação morfológica que provoca dilatação " + \
             "nos objetos de uma imagem, aumentando suas dimensões."
         self.label = "Dilate"
-        self.icon = "images/dilate.png"
         self.color = "180:230:220:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

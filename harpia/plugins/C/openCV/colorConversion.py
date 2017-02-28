@@ -21,7 +21,6 @@ class ColorConversion(OpenCVPlugin):
         self.help = "Realiza a conversão de cores entre diferentes " + \
             "padrões de imagens coloridas e tons de cinza."
         self.label = "Color Conversion"
-        self.icon = "images/colorConversion.png"
         self.color = "50:125:50:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

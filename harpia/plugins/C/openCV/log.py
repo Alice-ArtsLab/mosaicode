@@ -21,7 +21,6 @@ class Log(OpenCVPlugin):
             "calcula o logarítmo natural do valor de intensidade" + \
             " luminosa de cada ponto da imagem."
         self.label = "Log"
-        self.icon = "images/log.png"
         self.color = "230:230:60:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

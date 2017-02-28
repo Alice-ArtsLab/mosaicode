@@ -22,7 +22,6 @@ class Closing(OpenCVPlugin):
             "fechamento da imagem de acordo com o elemento estruturante." + \
             "Equivale a aplicação de uma dilatação seguida de uma erosão."
         self.label = "Closing"
-        self.icon = "images/closing.png"
         self.color = "180:230:220:150"
         self.in_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT"]
         self.out_types = ["HRP_IMAGE"]

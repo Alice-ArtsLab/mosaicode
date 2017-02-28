@@ -23,7 +23,6 @@ class ImageFile(OpenCVPlugin):
             "seja este uma mídia ou um dispositivo de " + \
             "aquisição de imagens (câmera, scanner)."
         self.label = "Image File"
-        self.icon = "images/acquisition.png"
         self.color = "50:100:200:150"
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"

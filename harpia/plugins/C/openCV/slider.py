@@ -23,7 +23,6 @@ class Slider(OpenCVPlugin):
         # Appearance
         self.help = "Creates Slider to int value."
         self.label = "Slider"
-        self.icon = "images/newDouble.png"
         self.color = "50:50:200:150"
         self.out_types = ["HRP_INT"]
         self.group = "Basic Data Type"

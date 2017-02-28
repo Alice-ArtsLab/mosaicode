@@ -19,7 +19,6 @@ class UpToBottom(OpenCVPlugin):
         # Appearance
         self.help = "Coloca uma imagem debaixo da outra."
         self.label = "Up to Bottom"
-        self.icon = "images/and.png"
         self.color = "10:180:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

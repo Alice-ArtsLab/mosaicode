@@ -21,7 +21,6 @@ class NewImage(OpenCVPlugin):
         # Appearance
         self.help = "Cria uma nova imagem."
         self.label = "New Image"
-        self.icon = "images/acquisition.png"
         self.color = "50:100:200:150"
         self.out_types = ["HRP_IMAGE"]
         self.group = "Image Source"

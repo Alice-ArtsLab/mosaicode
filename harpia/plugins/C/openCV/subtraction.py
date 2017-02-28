@@ -19,7 +19,6 @@ class Subtraction(OpenCVPlugin):
         # Appearance
         self.help = "Realiza a subtração de duas imagens."
         self.label = "Subtraction"
-        self.icon = "images/subtraction.png"
         self.color = "180:10:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

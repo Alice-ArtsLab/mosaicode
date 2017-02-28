@@ -22,7 +22,6 @@ class Opening(OpenCVPlugin):
         self.help = "Operação morfológica que visa " + \
             "desconectar objetos em uma imagem ou suprimir ruídos."
         self.label = "Opening"
-        self.icon = "images/opening.png"
         self.color = "180:230:220:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

@@ -20,7 +20,6 @@ class LiveDelay(OpenCVPlugin):
         # Appearance
         self.help = "Inserts a delay inside a live stream."
         self.label = "Live Delay"
-        self.icon = "images/liveDelay.png"
         self.color = "250:20:30:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

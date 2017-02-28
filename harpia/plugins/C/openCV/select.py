@@ -20,7 +20,6 @@ class Select(OpenCVPlugin):
         # Appearance
         self.help = "Select between two images."
         self.label = "Select"
-        self.icon = "images/select.png"
         self.color = "50:100:200:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

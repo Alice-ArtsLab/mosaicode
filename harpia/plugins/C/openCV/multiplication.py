@@ -19,7 +19,6 @@ class Multiplication(OpenCVPlugin):
         # Appearance
         self.help = "Realiza a multiplicação de duas imagens."
         self.label = "Multiplication"
-        self.icon = "images/multiplication.png"
         self.color = "180:10:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_IMAGE"]
         self.out_types = ["HRP_IMAGE"]

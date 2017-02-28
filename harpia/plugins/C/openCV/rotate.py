@@ -25,7 +25,6 @@ class Rotate(OpenCVPlugin):
         # Appearance
         self.help = "Adiciona bordas na imagem."
         self.label = "Rotate Image"
-        self.icon = "images/rotate.png"
         self.color = "90:5:10:150"
         self.in_types = ["HRP_IMAGE", "HRP_DOUBLE"]
         self.out_types = ["HRP_IMAGE"]

@@ -21,7 +21,6 @@ class MoveRct(OpenCVPlugin):
         # Appearance
         self.help = "Move Rectangle`s (0,0) point to input point"
         self.label = "Move Rectangle"
-        self.icon = "images/moveRct.png"
         self.color = "50:50:200:150"
         self.in_types = ["HRP_RECT", "HRP_POINT"]
         self.out_types = ["HRP_RECT"]

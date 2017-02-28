@@ -21,7 +21,6 @@ class Show(OpenCVPlugin):
         # Appearance
         self.help = "Mostra uma imagem da cadeia de processamento de imagens."
         self.label = "Show Image"
-        self.icon = "images/show.png"
         self.color = "50:100:200:150"
         self.in_types = ["HRP_IMAGE"]
         self.group = "General"

@@ -19,7 +19,6 @@ class GetSize(OpenCVPlugin):
         # Appearance
         self.help = "Extracts the input image size."
         self.label = "Get Size"
-        self.icon = "images/getSize.xpm"
         self.color = "250:20:30:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_RECT"]

@@ -28,7 +28,6 @@ class HaarDetect(OpenCVPlugin):
             'the detected features tagged by a red circle.\n' + \
             'The last output is the number of detected faces.'
         self.label = "Haar Detector"
-        self.icon = "images/haarDetect.png"
         self.color = "50:220:40:150"
         self.in_types = ["HRP_IMAGE"]
         self.out_types = ["HRP_POINT", "HRP_RECT", "HRP_IMAGE", "HRP_DOUBLE"]

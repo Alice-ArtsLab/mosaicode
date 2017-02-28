@@ -29,7 +29,6 @@ class Canny(OpenCVPlugin):
             "O maior valor é utilizado para encontrar" + \
             " segmentos iniciais das bordas mais significativas."
         self.label = "Canny"
-        self.icon = "images/canny.png"
         self.color = "50:180:80:150"
         self.in_types = ["HRP_IMAGE", "HRP_INT", "HRP_INT", "HRP_INT"]
         self.out_types = ["HRP_IMAGE"]
