@@ -9,9 +9,9 @@ import pkgutil  # For dynamic package load
 import harpia.plugins
 from os.path import expanduser
 from harpia.utils.XMLUtils import XMLParser
-from harpia.model.port import Port
+from harpia.model.plugin import Plugin
 
-class PortControl():
+class PluginControl():
     """
     This class contains methods related the PortControl class.
     """
@@ -22,8 +22,9 @@ class PortControl():
         pass
 
     # ----------------------------------------------------------------------
-    def load_ports(self, system):
-        system.connectors.clear()
+    @classmethod
+    def load_plugins(cls, system):
+        system.plugins.clear()
         # First load ports on python classes.
         # They are installed with harpia as root 
         for importer, modname, ispkg in pkgutil.walk_packages(
@@ -40,10 +41,11 @@ class PortControl():
                 if not modname.startswith("harpia.plugins"):
                     continue
                 instance = obj()
-                if not isinstance(instance, Port):
+                if not isinstance(instance, Plugin):
                     continue
-                instance.source = "Python"
-                system.connectors[instance.get_type()] = instance
+                if instance.get_label() == "":
+                    continue
+                system.plugins[instance.type] = obj
 
         #Now load the XML from user space
         from harpia.system import System
@@ -55,16 +57,17 @@ class PortControl():
         for file in os.listdir(home_dir):
             if not file.endswith(".xml"):
                 continue
-            port = self.load(home_dir + "/" + file)
-            if port is None:
+            plugin = PluginControl.load(home_dir + "/" + file)
+            if plugin is None:
                 continue
-            port.source = "xml"
-            system.connectors[port.get_type()] = port
+            plugin.source = "xml"
+            system.plugins[plugin.get_type()] = plugin
 
     # ----------------------------------------------------------------------
-    def load(self, file_name):
+    @classmethod
+    def load(cls, file_name):
         """
-        This method loads the port from XML file.
+        This method loads the plugin from XML file.
 
         Returns:
 
@@ -74,61 +77,64 @@ class PortControl():
         if os.path.exists(file_name) is False:
             return
         xml_loader = XMLParser(file_name)
-        properties = xml_loader.getTag(
-                "HarpiaPort").getChildTags("property")
-        port = Port()
+        properties = xml_loader.getTag("HarpiaPlugin").getChildTags("property")
+        plugin = Plugin()
         for prop in properties:
             try:
                 prop.getAttr("key")
             except:
                 continue
-            if prop.getAttr("key") in port.__dict__:
-                port.__dict__[prop.getAttr("key")] = prop.getAttr("value")
-        if port.get_type() == "":
+            if prop.getAttr("key") in plugin.__dict__:
+                plugin.__dict__[prop.getAttr("key")] = prop.getAttr("value")
+        if plugin.get_type() == "harpia.model.plugin":
             return None
-        return port
+        return plugin
 
     # ----------------------------------------------------------------------
-    def save(self, port):
+    @classmethod
+    def save(cls, plugin):
         """
-        This method save the port in user space.
+        This method save the plugin in user space.
 
         Returns:
 
             * **Types** (:class:`boolean<boolean>`)
         """
         from harpia.system import System
-        port.source = "xml"
+        plugin.source = "xml"
         parser = XMLParser()
-        parser.addTag('HarpiaPort')
+        parser.addTag('HarpiaPlugin')
         for key in port.__dict__:
-            parser.appendToTag('HarpiaPort', 'property',
-                               key=key, value=port.__dict__[key])
+            parser.appendToTag('HarpiaPlugin', 'property',
+                               key=key,
+                               value=plugin.__dict__[key])
         try:
-            file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
-            port_file = file(os.path.expanduser(file_name), 'w')
-            port_file.write(parser.prettify())
-            port_file.close()
+            file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"
+            plugin_file = file(os.path.expanduser(file_name), 'w')
+            plugin_file.write(parser.prettify())
+            plugin_file.close()
         except IOError as e:
             return False
         return True
 
     # ----------------------------------------------------------------------
-    def add_port(self, port):
+    @classmethod
+    def add_plugin(cls, plugin):
         # first, save it
-        self.save(port)
+        PluginControl.save(plugin)
         # Then add it to system
         from harpia.system import System
-        System.connectors[port.get_type()] = port
+        System.plugins[plugin.get_type()] = plugin
 
     # ----------------------------------------------------------------------
-    def delete_port(self, port_key):
+    @classmethod
+    def delete_plugin(cls, plugin_key):
         from harpia.system import System
-        port = System.connectors[port_key]
-        if port.source == "xml":
-            file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
+        plugin = System.plugins[plugin_key]
+        if plugin.source == "xml":
+            file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"
             os.remove(file_name)
-            self.load_ports(System)
+            PluginControl.load_plugin(System)
             return True
         else:
             return False

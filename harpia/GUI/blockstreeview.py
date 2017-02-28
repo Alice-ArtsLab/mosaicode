@@ -60,13 +60,14 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.blocks = {}
 
         # Load blocks
-        for x in System.blocks:
-            name = System.blocks[x].language
-            name += "/" + System.blocks[x].framework
+        for x in System.plugins:
+            instance = System.plugins[x]()
+            name = instance.language
+            name += "/" + instance.framework
             if name != language:
                 continue
-            self.blocks[x] = System.blocks[x]
-            self.__add_item(System.blocks[x]())
+            self.blocks[x] = System.plugins[x]
+            self.__add_item(System.plugins[x]())
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):

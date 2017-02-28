@@ -529,9 +529,12 @@ class Block(GooCanvas.CanvasGroup, Plugin):
 
     # ----------------------------------------------------------------------
     def __get_port_label(self, port_type):
-        return \
-            "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
-            "<span color = '" + \
-            System.connectors[port_type].get_color() + "'>" + \
-            System.connectors[port_type].get_label() + "</span>}</span>"
+        if port_type in System.connectors:
+            return \
+                "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
+                "<span color = '" + \
+                System.connectors[port_type].get_color() + "'>" + \
+                System.connectors[port_type].get_label() + "</span>}</span>"
+        else:
+            return "??"
 # ----------------------------------------------------------------------

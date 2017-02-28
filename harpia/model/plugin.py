@@ -17,6 +17,14 @@ class Plugin(object):
         self.x = 0
         self.y = 0
 
+        # Appearance
+        self.help = ""
+        self.label = ""
+        self.color = "200:200:25:150"
+        self.in_types = []
+        self.out_types = []
+        self.group = "Undefined"
+
         # Code generation
         self.properties = []
         self.header = ""
@@ -25,15 +33,6 @@ class Plugin(object):
         self.dealloc = ""
         self.out_dealloc = ""
 
-        # Appearance
-        self.help = ""
-        self.label = ""
-        self.icon = "images/show.png"
-        self.color = "200:200:25:150"
-        self.in_types = []
-        self.out_types = []
-        self.group = "Undefined"
-        
         if plugin == None: return
         for key in plugin.__dict__:
             self.__dict__[key] = plugin.__dict__[key]

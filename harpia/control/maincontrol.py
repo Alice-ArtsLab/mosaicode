@@ -421,14 +421,14 @@ class MainControl():
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
-    def new_plugin(self):
+    def plugin_manager(self):
         """
         This add a new plugin.
         """
         PluginManager(self.main_window)
 
     # ----------------------------------------------------------------------
-    def new_port(self):
+    def port_manager(self):
         """
         This add a new port.
         """

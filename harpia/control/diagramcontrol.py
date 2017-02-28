@@ -67,7 +67,7 @@ class DiagramControl():
             "blocks").getChildTags("block")
         for block in blocks:
             block_type = block.getAttr("type")
-            if block_type not in System.blocks:
+            if block_type not in System.plugins:
                 continue
             block_id = block.getAttr("id")
             position = block.getTag("position")
@@ -80,7 +80,7 @@ class DiagramControl():
                     props[prop.key] = prop.value
                 except:
                     pass
-            new_block = System.blocks[block_type]()
+            new_block = System.plugins[block_type]()
             new_block.set_properties(props)
             new_block.set_id(block_id)
             new_block.x = float(x)

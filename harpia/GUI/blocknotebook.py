@@ -29,9 +29,10 @@ class BlockNotebook(Gtk.Notebook):
         # Load blocks
         languages = []
         self.tabs = []
-        for x in System.blocks:
-            name = System.blocks[x].language
-            name += "/" + System.blocks[x].framework
+        for x in System.plugins:
+            instance = System.plugins[x]()
+            name = instance.language
+            name += "/" + instance.framework
             if name in languages:
                 continue
             languages.append(name)

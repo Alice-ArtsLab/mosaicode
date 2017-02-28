@@ -40,6 +40,7 @@ import harpia.plugins
 from glob import glob  # To load examples
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
+from harpia.control.plugincontrol import PluginControl
 from harpia.model.preferences import Preferences
 
 
@@ -68,15 +69,16 @@ class System(object):
             self.Log = None
             self.properties = Preferences()
             self.generators = {}
-            self.blocks = {}
+            self.plugins = {}
             self.list_of_examples = []
             self.connectors = {}
             self.__load()
 
         # ----------------------------------------------------------------------
         def __load(self):
-            self.__load_blocks()
+            self.__load_plugins()
             PortControl.load_ports(self)
+            PluginControl.load_plugins(self)
             examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
             for example in examples:
                 self.list_of_examples.append(example)
@@ -84,9 +86,8 @@ class System(object):
             PreferencesControl(self.properties).load()
 
         # ----------------------------------------------------------------------
-        def __load_blocks(self):
+        def __load_plugins(self):
             from harpia.control.codegenerator import CodeGenerator
-            from harpia.model.plugin import Plugin
             for importer, modname, ispkg in pkgutil.walk_packages(
                     harpia.plugins.__path__,
                     harpia.plugins.__name__ + ".",
@@ -101,15 +102,6 @@ class System(object):
                     if not modname.startswith("harpia.plugins"):
                         continue
                     instance = obj()
-                    if isinstance(instance, Plugin) and \
-                            instance.get_label() != "":
-                        obj_type = instance.type
-                        language = obj_type.split(".")[2]
-                        framework = obj_type.split(".")[3]
-                        # Adding a property do class dinamically
-                        obj.language = language
-                        obj.framework = framework
-                        self.blocks[obj_type] = obj
                     if isinstance(instance, CodeGenerator):
                         language = instance.__class__.__module__.split(".")[2]
                         self.generators[language] = obj
@@ -127,7 +119,7 @@ class System(object):
             System.instance = System.__Singleton()
             # Add properties dynamically
             cls.properties = System.instance.properties
-            cls.blocks = System.instance.blocks
+            cls.plugins = System.instance.plugins
             cls.list_of_examples = System.instance.list_of_examples
             cls.connectors = System.instance.connectors
             cls.generators = System.instance.generators
