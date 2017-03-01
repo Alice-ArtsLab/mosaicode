@@ -52,6 +52,9 @@ class XMLParser(object):
     def getTagAttr(self, tag, attr):
         return getattr(self.parsedXML, tag)[attr]
 
+    def setTagAttr(self, tag, attr, value):
+        getattr(self.parsedXML, tag)[attr] = value
+
     def getAttr(self, attr):
         return self.parsedXML[attr]
 
