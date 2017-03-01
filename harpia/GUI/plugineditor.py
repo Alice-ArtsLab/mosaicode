@@ -19,6 +19,7 @@ from harpia.GUI.components.openfilefield import OpenFileField
 from harpia.GUI.blocknotebook import BlockNotebook
 from harpia.GUI.fieldtypes import *
 from harpia.model.plugin import Plugin
+from harpia.GUI.dialog import Dialog
 from harpia.system import System as System
 import gettext
 
@@ -92,9 +93,12 @@ class PluginEditor(Gtk.Dialog):
         vbox = Gtk.VBox()
         self.common_properties.add(vbox)
 
-        self.label = StringField({"label": _("Label")}, self.notify)
-        self.language = StringField({"label": _("Language")}, self.notify)
-        self.framework = StringField({"label": _("Framework")}, self.notify)
+        self.label = StringField({"label": _("Label")},
+                    self.__common_properties_notify)
+        self.language = StringField({"label": _("Language")},
+                    self.__common_properties_notify)
+        self.framework = StringField({"label": _("Framework")},
+                    self.__common_properties_notify)
         self.type = StringField({"label": _("Plugin Type")}, None)
         self.group = StringField({"label": _("Group")}, None)
         self.color = ColorField({"label": _("Color")}, None)
@@ -111,7 +115,7 @@ class PluginEditor(Gtk.Dialog):
         vbox.pack_start(self.help, False, False, 1)
 
     # ----------------------------------------------------------------------
-    def notify(self, widget=None, data=None):
+    def __common_properties_notify(self, widget=None, data=None):
         self.type.set_value("harpia.plugins." + \
                 self.language.get_value().lower() + "." + \
                 self.framework.get_value().lower() + "." + \
@@ -167,12 +171,18 @@ class PluginEditor(Gtk.Dialog):
         hbox.pack_start(vbox, True, True, 2)
         self.props_panel = Gtk.VBox()
         vbox.pack_start(self.props_panel, True, True, 1)
+        self.__populate_property()
 
+    # ----------------------------------------------------------------------
+    def __populate_property(self):
+        self.props_store.clear()
         for prop in self.plugin.get_properties():
             self.props_store.append([prop.get("label")])
 
     # ----------------------------------------------------------------------
     def __property_new(self, widget=None, data=None):
+        for widget in self.props_panel.get_children():
+            self.props_panel.remove(widget)
         fieldtypes = []
         for key in component_list:
             fieldtypes.append(key)
@@ -182,46 +192,113 @@ class PluginEditor(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __property_delete(self, widget=None, data=None):
-        pass
+        treeselection = self.props_tree_view.get_selection()
+        model, iterac = treeselection.get_selected()
+        if iterac is None:
+            return None
+        dialog = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = dialog.run()
+        dialog.destroy()
+        if result != Gtk.ResponseType.OK:
+            return
+        path = model.get_path(iterac)
+        del self.plugin.get_properties()[int(str(path))]
+        self.__populate_property()
+        self.__clean_props_panel()
 
     # ----------------------------------------------------------------------
     def __property_up(self, widget=None, data=None):
-        pass
+        treeselection = self.props_tree_view.get_selection()
+        model, iterac = treeselection.get_selected()
+        if iterac is None:
+            return None
+        path = model.get_path(iterac)
+        if int(str(path)) == 0:
+            return
+        self.plugin.get_properties()[int(str(path))], \
+            self.plugin.get_properties()[int(str(path)) - 1] = \
+            self.plugin.get_properties()[int(str(path)) - 1], \
+            self.plugin.get_properties()[int(str(path))]
+        self.__populate_property()
 
     # ----------------------------------------------------------------------
     def __property_down(self, widget=None, data=None):
-        pass
+        treeselection = self.props_tree_view.get_selection()
+        model, iterac = treeselection.get_selected()
+        if iterac is None:
+            return None
+        path = model.get_path(iterac)
+        if int(str(path)) == len(self.plugin.get_properties()) - 1:
+            return
+        self.plugin.get_properties()[int(str(path))], \
+            self.plugin.get_properties()[int(str(path)) + 1] = \
+            self.plugin.get_properties()[int(str(path)) + 1], \
+            self.plugin.get_properties()[int(str(path))]
+        self.__populate_property()
 
     # ----------------------------------------------------------------------
-    def __select_property_field_type(self, widget=None, data=None):
-        # Clean configuration panel
+    def __clean_props_panel(self):
         for widget in self.props_panel.get_children():
             self.props_panel.remove(widget)
-        field_type = self.field_type.get_value()
-        configuration = component_list[field_type].get_configuration()
-        for key in configuration:
-            data = {"label": _(key), "value": str(configuration[key])}
-            field = StringField(data, None)
-            self.props_panel.pack_start(field, False, False, 1)
 
     # ----------------------------------------------------------------------
-    def __on_props_row_activated(self, tree_view, path, column):
-        configuration = self.plugin.get_properties()[int(str(path))]
-        for widget in self.props_panel.get_children():
-            self.props_panel.remove(widget)
+    def __create_props_panel(self, configuration):
+        self.__clean_props_panel()
         for key in configuration:
             data = {"label": _(key),
                     "name":key,
                     "value":str(configuration[key])}
             field = StringField(data, None)
+            if key == "type":
+                field.field.set_property("editable", False)
             self.props_panel.pack_start(field, False, False, 1)
         button = Gtk.Button.new_with_label("Save")
-        button.connect("clicked", self.__on_props_edit_ok, path)
+        button.connect("clicked", self.__on_props_edit_ok, None)
         self.props_panel.pack_start(button, False, False, 1)
+        self.props_panel.show_all()
+
+    # ----------------------------------------------------------------------
+    def __select_property_field_type(self, widget=None, data=None):
+        field_type = self.field_type.get_value()
+        configuration = component_list[field_type].get_configuration()
+        configuration["type"] = field_type
+        self.__create_props_panel(configuration)
+
+    # ----------------------------------------------------------------------
+    def __on_props_row_activated(self, tree_view, path, column):
+        configuration = self.plugin.get_properties()[int(str(path))]
+        self.__create_props_panel(configuration)
 
     # ----------------------------------------------------------------------
     def __on_props_edit_ok(self, widget=None, data=None):
-        pass
+        configuration = {}
+        for widget in self.props_panel.get_children():
+            try:
+                configuration[widget.get_name()] = widget.get_value()
+            except:
+                pass
+        if "label" not in configuration or "name" not in configuration or \
+                "value" not in configuration:
+            return
+        if configuration["label"] == "":
+            message = "Label can not be empty"
+            Dialog().message_dialog("Error", message, self)
+            return
+        if configuration["name"] == "":
+            message = "Name can not be empty"
+            Dialog().message_dialog("Error", message, self)
+            return
+        contains = False
+        i = 0
+        for props in self.plugin.properties:
+            if props["label"] == configuration["label"]:
+                self.plugin.properties[i] = configuration
+                contains = True
+            i += 1
+        if not contains:
+            self.plugin.properties.append(configuration)
+        self.__populate_property()
+        self.__clean_props_panel()
 
     # ----------------------------------------------------------------------
     def __create_code_tab(self):
