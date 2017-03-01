@@ -51,19 +51,19 @@ class DiagramControl():
             return False
 
         # load the diagram
-        xml_loader = XMLParser(self.diagram.get_file_name())
+        parser = XMLParser(self.diagram.get_file_name())
 
-        zoom = xml_loader.getTag("harpia").getTag("zoom").getAttr("value")
+        zoom = parser.getTag("harpia").getTag("zoom").getAttr("value")
         self.diagram.set_zoom(float(zoom))
         try:
-            language = xml_loader.getTag("harpia").getTag(
+            language = parser.getTag("harpia").getTag(
                 "language").getAttr("value")
             self.diagram.language = language
         except:
             pass
 
         # new version load
-        blocks = xml_loader.getTag("harpia").getTag(
+        blocks = parser.getTag("harpia").getTag(
             "blocks").getChildTags("block")
         for block in blocks:
             block_type = block.getAttr("type")
@@ -80,14 +80,14 @@ class DiagramControl():
                     props[prop.key] = prop.value
                 except:
                     pass
-            new_block = System.plugins[block_type]()
+            new_block = System.plugins[block_type]
             new_block.set_properties(props)
             new_block.set_id(block_id)
             new_block.x = float(x)
             new_block.y = float(y)
             self.diagram.add_block(new_block)
 
-        connections = xml_loader.getTag("harpia").getTag(
+        connections = parser.getTag("harpia").getTag(
             "connections").getChildTags("connection")
         for conn in connections:
             try:
@@ -126,7 +126,6 @@ class DiagramControl():
             parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
             props = self.diagram.blocks[block_id].get_properties()
             for prop in props:
-                print prop
                 parser.appendToLastTag('block',
                                        'property',
                                        key=str(prop["name"]),

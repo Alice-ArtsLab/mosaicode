@@ -13,9 +13,8 @@ class Plugin(object):
         self.type = self.__class__.__module__
         self.language = ""
         self.framework = ""
+        self.source = "python"
         self.id = -1
-        self.x = 0
-        self.y = 0
 
         # Appearance
         self.help = ""
@@ -81,13 +80,27 @@ class Plugin(object):
             The return is the hex value reference to color. The hex value is a **str** type.
         """
 
-        color = self.color.split(":")
-        color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
-        color = int(color[0]) * 0x1000000 + \
-            int(color[1]) * 0x10000 + \
-            int(color[2]) * 0x100 + \
-            int(color[3]) * 0x01
-        return color
+        if self.color.startswith("#"):
+            color = self.color.replace("#", "")
+            if len(color) == 12: # RGB
+                color = [int(color[0:2],16),
+                         int(color[4:6],16),
+                         int(color[8:10],16)]
+                color = int(color[0]) * 0x1000000 + \
+                        int(color[1]) * 0x10000 + \
+                        int(color[2]) * 0x100 + \
+                        150 * 0x01 # Transparency
+                return color
+
+        if ":" in self.color:
+            color = self.color.split(":")
+            color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
+            color = int(color[0]) * 0x1000000 + \
+                    int(color[1]) * 0x10000 + \
+                    int(color[2]) * 0x100 + \
+                    int(color[3]) * 0x01
+            return color
+        return 0
 
     # ----------------------------------------------------------------------
     def get_color_as_rgba(self):
@@ -99,6 +112,8 @@ class Plugin(object):
             The return is the RGBA color. The hex value is a **str** type.
         """
 
+        if self.color.startswith("#"):
+            return self.color
         return "rgba(" + self.color.replace(":", ",") + ")"
 
     # ----------------------------------------------------------------------

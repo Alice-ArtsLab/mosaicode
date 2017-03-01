@@ -30,14 +30,14 @@ This module contains the Diagram class.
 """
 import gi
 import copy
-from block import Block
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-from connector import Connector
 from gi.repository import GObject
 from gi.repository import GooCanvas
+from block import Block
+from connector import Connector
 from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
 import gettext
@@ -258,7 +258,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
-        new_block = Block(self, plugin)
+        new_block = Block(self, copy.deepcopy(plugin))
         if DiagramModel.add_block(self, new_block):
             self.do("Add")
             self.get_root_item().add_child(new_block, -1)

@@ -24,51 +24,49 @@ class BlockNotebook(Gtk.Notebook):
                 * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
         """
         Gtk.Notebook.__init__(self)
+        self.tabs = []
         self.main_window = main_window
         self.set_scrollable(True)
-        # Load blocks
+        self.update()
+
+    # ----------------------------------------------------------------------
+    def update(self):
         languages = []
-        self.tabs = []
+
+        while self.get_n_pages() > 0:
+            self.remove_page(0)
+
+        System()
         for x in System.plugins:
-            instance = System.plugins[x]()
+            instance = System.plugins[x]
             name = instance.language
             name += "/" + instance.framework
             if name in languages:
                 continue
             languages.append(name)
+
         for language in languages:
             treeview = BlocksTreeView(self.main_window, language)
             self.append_page(treeview, Gtk.Label(language))
-            self.tabs.append(treeview)
+        self.show_all()
 
     # ----------------------------------------------------------------------
-    def get_current_tab(self):
+    def search(self, query):
         """
-        This method get current diagram page.
-
-            Returns:
-                * **Types** (:class:`int<int>`) or None: Return number current page.
-
-        """
-        if self.get_current_page() > -1:
-            return self.tabs[self.get_current_page()]
-        else:
-            return None
-
-    # ----------------------------------------------------------------------
-    def get_tabs(self):
-        """
-        This method return the diagram pages.
+        This method search for a plugin.
 
             Returns:
                 * **Types** (:class:`list<list>`)
         """
-        return self.tabs
+        for blocks_tree_view in self.tabs:
+            blocks_tree_view.search(query)
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
-        current_tab = self.get_current_tab()
+        current_tab = None
+        if self.get_current_page() > -1:
+            current_tab = self.get_nth_page(self.get_current_page())
         if current_tab is None:
-            return
+            return None
         return current_tab.get_selected_block()
 # ----------------------------------------------------------------------

@@ -19,6 +19,7 @@ from harpia.GUI.components.openfilefield import OpenFileField
 from harpia.GUI.blocknotebook import BlockNotebook
 from harpia.GUI.fieldtypes import *
 from harpia.GUI.plugineditor import PluginEditor
+from harpia.GUI.dialog import Dialog
 from harpia.model.plugin import Plugin
 from harpia.system import System as System
 import gettext
@@ -35,6 +36,7 @@ class PluginManager(Gtk.Dialog):
     def __init__(self, main_window):
         Gtk.Dialog.__init__(self, _("Plugin Manager"), main_window, 0, ())
 
+        self.main_window = main_window
         self.plugin = Plugin()
         self.main_control = self
         self.set_default_size(400, 300)
@@ -43,7 +45,7 @@ class PluginManager(Gtk.Dialog):
         box.pack_start(vbox, True, True, 0)
 
         # Plugin List
-        self.blocks = BlockNotebook(self)
+        self.block_notebook = BlockNotebook(self)
 
         # Button bar
         button_bar = Gtk.HBox()
@@ -59,7 +61,7 @@ class PluginManager(Gtk.Dialog):
         button.connect("clicked", self.__delete, None)
         button_bar.pack_start(button, False, False, 0)
 
-        vbox.pack_start(self.blocks, True, True, 0)
+        vbox.pack_start(self.block_notebook, True, True, 0)
         vbox.pack_start(button_bar, False, False, 0)
 
         self.show_all()
@@ -71,11 +73,22 @@ class PluginManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __edit(self, widget=None, data=None):
-        PluginEditor(self, self.blocks.get_selected_block())
+        plugin = self.block_notebook.get_selected_block()
+        if plugin is None:
+            return
+        PluginEditor(self, plugin)
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):
-        pass
+        plugin = self.block_notebook.get_selected_block()
+        if plugin is None:
+            return
+        dialog = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = dialog.run()
+        dialog.destroy()
+        if result == Gtk.ResponseType.OK:
+            self.main_window.main_control.delete_plugin(plugin)
+            self.__update()
 
     # ----------------------------------------------------------------------
     def set_block(self, plugin):
@@ -96,5 +109,14 @@ class PluginManager(Gtk.Dialog):
             Parameters:
                 * **plugin** (:class:`<>`)
         """
-        PluginEditor(self, self.blocks.get_selected_block())
+        PluginEditor(self, self.block_notebook.get_selected_block())
+
+    # ----------------------------------------------------------------------
+    def add_plugin(self, plugin):
+        self.main_window.main_control.add_plugin(plugin)
+        self.__update()
+
+    # ----------------------------------------------------------------------
+    def __update(self):
+        self.block_notebook.update()
 # ----------------------------------------------------------------------

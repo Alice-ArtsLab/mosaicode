@@ -37,6 +37,9 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         GooCanvas.CanvasGroup.__init__(self)
         Plugin.__init__(self, plugin)
+        self.x = 0
+        self.y = 0
+
         self.diagram = diagram
         self.data_dir = os.environ['HARPIA_DATA_DIR']
 
@@ -54,7 +57,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
-        self.move(self.x, self.y)
+        self.move(int(float(self.x)), int(float(self.y)))
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -430,8 +433,8 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
-        new_x = x - x % System.properties.get_grid()
-        new_y = y - y % System.properties.get_grid()
+        new_x = x - (x % System.properties.get_grid())
+        new_y = y - (y % System.properties.get_grid())
         self.translate(new_x, new_y)
 
     # ----------------------------------------------------------------------

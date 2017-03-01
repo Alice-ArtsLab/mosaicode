@@ -3,6 +3,7 @@
 """
 This module contains the PortControl class.
 """
+import ast
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
@@ -45,7 +46,7 @@ class PluginControl():
                     continue
                 if instance.get_label() == "":
                     continue
-                system.plugins[instance.type] = obj
+                system.plugins[instance.type] = instance
 
         #Now load the XML from user space
         from harpia.system import System
@@ -57,11 +58,11 @@ class PluginControl():
         for file in os.listdir(home_dir):
             if not file.endswith(".xml"):
                 continue
-            plugin = PluginControl.load(home_dir + "/" + file)
-            if plugin is None:
+            instance = PluginControl.load(home_dir + "/" + file)
+            if instance is None:
                 continue
-            plugin.source = "xml"
-            system.plugins[plugin.get_type()] = plugin
+            instance.source = "xml"
+            system.plugins[instance.type] = instance
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -73,19 +74,32 @@ class PluginControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        # load the port
         if os.path.exists(file_name) is False:
             return
-        xml_loader = XMLParser(file_name)
-        properties = xml_loader.getTag("HarpiaPlugin").getChildTags("property")
+        parser = XMLParser(file_name)
         plugin = Plugin()
-        for prop in properties:
-            try:
-                prop.getAttr("key")
-            except:
-                continue
-            if prop.getAttr("key") in plugin.__dict__:
-                plugin.__dict__[prop.getAttr("key")] = prop.getAttr("value")
+
+        plugin.type = parser.getTagAttr("HarpiaPlugin", "type")
+        plugin.language = parser.getTagAttr("HarpiaPlugin",  "language")
+        plugin.framework = parser.getTagAttr("HarpiaPlugin",  "framework")
+
+        plugin.label = parser.getTagAttr("HarpiaPlugin",  "label")
+        plugin.group = parser.getTagAttr("HarpiaPlugin",  "group")
+        plugin.color = parser.getTagAttr("HarpiaPlugin",  "color")
+        plugin.help = parser.getTagAttr("HarpiaPlugin",  "help")
+        plugin.source = parser.getTagAttr("HarpiaPlugin",  "source")
+
+        plugin.header = parser.getTagAttr("HarpiaPlugin",  "header")
+        plugin.vars = parser.getTagAttr("HarpiaPlugin",  "vars")
+        plugin.function_call = parser.getTagAttr("HarpiaPlugin",  "function_call")
+        plugin.dealloc = parser.getTagAttr("HarpiaPlugin",  "dealloc")
+        plugin.out_dealloc = parser.getTagAttr("HarpiaPlugin",  "out_dealloc")
+
+        props = parser.getTag("HarpiaPlugin").getTag(
+                    "properties").getChildTags("property")
+        for prop in props:
+            plugin.properties.append(ast.literal_eval(prop.getAttr("value")))
+
         if plugin.get_type() == "harpia.model.plugin":
             return None
         return plugin
@@ -104,14 +118,31 @@ class PluginControl():
         plugin.source = "xml"
         parser = XMLParser()
         parser.addTag('HarpiaPlugin')
-        for key in port.__dict__:
-            parser.appendToTag('HarpiaPlugin', 'property',
-                               key=key,
-                               value=plugin.__dict__[key])
+        parser.setTagAttr('HarpiaPlugin','type', plugin.type)
+        parser.setTagAttr('HarpiaPlugin','language', plugin.language)
+        parser.setTagAttr('HarpiaPlugin','framework', plugin.framework)
+
+        parser.setTagAttr('HarpiaPlugin','label', plugin.label)
+        parser.setTagAttr('HarpiaPlugin','group', plugin.group)
+        parser.setTagAttr('HarpiaPlugin','color', plugin.color)
+        parser.setTagAttr('HarpiaPlugin','help', plugin.help)
+        parser.setTagAttr('HarpiaPlugin','source', plugin.source)
+
+        parser.setTagAttr('HarpiaPlugin','header', plugin.header)
+        parser.setTagAttr('HarpiaPlugin','vars', plugin.vars)
+        parser.setTagAttr('HarpiaPlugin','function_call', plugin.function_call)
+        parser.setTagAttr('HarpiaPlugin','dealloc', plugin.dealloc)
+        parser.setTagAttr('HarpiaPlugin','out_dealloc', plugin.out_dealloc)
+
+        parser.appendToTag('HarpiaPlugin', 'properties')
+
+        for key in plugin.properties:
+            parser.appendToTag('properties', 'property', value=key)
+
         try:
             file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"
             plugin_file = file(os.path.expanduser(file_name), 'w')
-            plugin_file.write(parser.prettify())
+            plugin_file.write(parser.getXML())
             plugin_file.close()
         except IOError as e:
             return False
@@ -128,13 +159,12 @@ class PluginControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def delete_plugin(cls, plugin_key):
+    def delete_plugin(cls, plugin):
         from harpia.system import System
-        plugin = System.plugins[plugin_key]
         if plugin.source == "xml":
             file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"
             os.remove(file_name)
-            PluginControl.load_plugin(System)
+            PluginControl.load_plugins(System)
             return True
         else:
             return False

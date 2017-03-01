@@ -57,17 +57,15 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             [('text/plain', Gtk.TargetFlags.SAME_APP, 1)],
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
         self.blocks_tree_view.connect("drag-data-get", self.__drag_data)
-        self.blocks = {}
 
         # Load blocks
         for x in System.plugins:
-            instance = System.plugins[x]()
+            instance = System.plugins[x]
             name = instance.language
             name += "/" + instance.framework
             if name != language:
                 continue
-            self.blocks[x] = System.plugins[x]
-            self.__add_item(System.plugins[x]())
+            self.__add_item(System.plugins[x])
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
@@ -168,11 +166,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         """
         treeselection = self.blocks_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
+        if iterac is None:
+            return None
         path = model.get_path(iterac)
-        block_name = model.get_value(
-            model.get_iter(path), 1)  # 1 is the name position
-        for x in self.blocks:         # 0 is the icon
-            block = self.blocks[x]()
+        block_name = model.get_value(model.get_iter(path), 1)
+        for x in System.plugins:
+            block = System.plugins[x]
             if block.get_label() == block_name:
                 return block
         return None

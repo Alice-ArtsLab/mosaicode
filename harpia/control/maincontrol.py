@@ -17,6 +17,7 @@ from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
+from harpia.control.plugincontrol import PluginControl
 
 
 class MainControl():
@@ -260,8 +261,7 @@ class MainControl():
         """
         This method search the query in the blocks_tree_view.
         """
-        for blocks_tree_view in self.main_window.block_notebook.get_tabs():
-            blocks_tree_view.search(query)
+        self.main_window.block_notebook.search(query)
 
     # ----------------------------------------------------------------------
     def set_block(self, block):
@@ -445,4 +445,16 @@ class MainControl():
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
 
+    # ----------------------------------------------------------------------
+    def add_plugin(self, plugin):
+        PluginControl.add_plugin(plugin)
+        self.main_window.block_notebook.update()
+
+    # ----------------------------------------------------------------------
+    def delete_plugin(self, plugin):
+        if not PluginControl.delete_plugin(plugin):
+            message = "This plugin is a python file installed in the System.\n"
+            message = message + "Sorry, you can't remove it"
+            Dialog().message_dialog("Error", message, self.main_window)
+        self.main_window.block_notebook.update()
 # ----------------------------------------------------------------------
