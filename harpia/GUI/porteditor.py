@@ -53,11 +53,11 @@ class PortEditor(Gtk.Dialog):
         if port is not None:
             System()
             self.type.set_value(port)
-            self.language.set_value(System.connectors[port].get_language())
-            self.label.set_value(System.connectors[port].get_label())
-            self.color.set_value(System.connectors[port].get_color())
-            self.code.set_value(System.connectors[port].get_code())
-            self.multiple.set_value(System.connectors[port].get_multiple())
+            self.language.set_value(System.ports[port].get_language())
+            self.label.set_value(System.ports[port].get_label())
+            self.color.set_value(System.ports[port].get_color())
+            self.code.set_value(System.ports[port].get_code())
+            self.multiple.set_value(System.ports[port].get_multiple())
 
         vbox.pack_start(self.type, False, False, 1)
         vbox.pack_start(self.language, False, False, 1)

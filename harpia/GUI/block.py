@@ -246,8 +246,8 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         ins = []
         x = 0
-        for port_type in self.get_in_types():
-            text_name = self.__get_port_label(port_type);
+        for port in self.get_in_ports():
+            text_name = self.__get_port_label(port["type"]);
             inp = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
                                  fill_color='black',
@@ -259,7 +259,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                       x * INPUT_HEIGHT),  # prev ports
                                  use_markup=True
                                  )
-            inp.set_property("tooltip", port_type)
+            inp.set_property("tooltip", port["label"])
             inp.connect("button-press-event", self.__on_input_press, x)
             inp.connect("button-release-event", self.__on_input_release, x)
             ins.append(inp)
@@ -302,8 +302,8 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         outs = []
         x = 0
-        for port_type in self.get_out_types():
-            text_name = self.__get_port_label(port_type);
+        for port in self.get_out_ports():
+            text_name = self.__get_port_label(port["type"]);
             out = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
                                  fill_color='black',
@@ -316,7 +316,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                  use_markup=True
                                  )
 
-            out.set_property("tooltip", port_type)
+            out.set_property("tooltip", port["label"])
             out.connect("button-press-event", self.__on_output_press, x)
             out.connect("button-release-event", self.__on_output_release, x)
             outs.append(out)
@@ -365,7 +365,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         This method build the block.
         """
-        maxIO = max(len(self.get_in_types()), len(self.get_out_types()))
+        maxIO = max(len(self.get_in_ports()), len(self.get_out_ports()))
 
         # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
@@ -500,7 +500,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                 continue
             if conn.sink_port not in distinct_con:
                 distinct_con.append(conn.sink_port)
-        if len(distinct_con) < len(self.get_in_types()):
+        if len(distinct_con) < len(self.get_in_ports()):
             self.has_flow = False
         self.__update_state()
         return self.has_flow
@@ -532,12 +532,12 @@ class Block(GooCanvas.CanvasGroup, Plugin):
 
     # ----------------------------------------------------------------------
     def __get_port_label(self, port_type):
-        if port_type in System.connectors:
+        if port_type in System.ports:
             return \
                 "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
                 "<span color = '" + \
-                System.connectors[port_type].get_color() + "'>" + \
-                System.connectors[port_type].get_label() + "</span>}</span>"
+                System.ports[port_type].get_color() + "'>" + \
+                System.ports[port_type].get_label() + "</span>}</span>"
         else:
             return "??"
 # ----------------------------------------------------------------------

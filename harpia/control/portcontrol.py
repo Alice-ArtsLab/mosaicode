@@ -24,7 +24,7 @@ class PortControl():
     # ----------------------------------------------------------------------
     @classmethod
     def load_ports(cls, system):
-        system.connectors.clear()
+        system.ports.clear()
         # First load ports on python classes.
         # They are installed with harpia as root 
         for importer, modname, ispkg in pkgutil.walk_packages(
@@ -44,7 +44,7 @@ class PortControl():
                 if not isinstance(instance, Port):
                     continue
                 instance.source = "Python"
-                system.connectors[instance.get_type()] = instance
+                system.ports[instance.get_type()] = instance
 
         #Now load the XML from user space
         from harpia.system import System
@@ -60,7 +60,7 @@ class PortControl():
             if port is None:
                 continue
             port.source = "xml"
-            system.connectors[port.get_type()] = port
+            system.ports[port.get_type()] = port
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -123,13 +123,13 @@ class PortControl():
         PortControl.save(port)
         # Then add it to system
         from harpia.system import System
-        System.connectors[port.get_type()] = port
+        System.ports[port.get_type()] = port
 
     # ----------------------------------------------------------------------
     @classmethod
     def delete_port(cls, port_key):
         from harpia.system import System
-        port = System.connectors[port_key]
+        port = System.ports[port_key]
         if port.source == "xml":
             file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
             os.remove(file_name)

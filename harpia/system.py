@@ -71,7 +71,7 @@ class System(object):
             self.generators = {}
             self.plugins = {}
             self.list_of_examples = []
-            self.connectors = {}
+            self.ports = {}
             self.__load()
 
         # ----------------------------------------------------------------------
@@ -121,7 +121,7 @@ class System(object):
             cls.properties = System.instance.properties
             cls.plugins = System.instance.plugins
             cls.list_of_examples = System.instance.list_of_examples
-            cls.connectors = System.instance.connectors
+            cls.ports = System.instance.ports
             cls.generators = System.instance.generators
 
     # ----------------------------------------------------------------------

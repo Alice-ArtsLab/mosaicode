@@ -100,6 +100,16 @@ class PluginControl():
         for prop in props:
             plugin.properties.append(ast.literal_eval(prop.getAttr("value")))
 
+        in_ports = parser.getTag("HarpiaPlugin").getTag(
+                    "in_ports").getChildTags("port")
+        for port in in_ports:
+            plugin.in_ports.append(ast.literal_eval(port.getAttr("value")))
+
+        out_ports = parser.getTag("HarpiaPlugin").getTag(
+                    "out_ports").getChildTags("port")
+        for port in out_ports:
+            plugin.out_ports.append(ast.literal_eval(port.getAttr("value")))
+
         if plugin.get_type() == "harpia.model.plugin":
             return None
         return plugin
@@ -135,9 +145,17 @@ class PluginControl():
         parser.setTagAttr('HarpiaPlugin','out_dealloc', plugin.out_dealloc)
 
         parser.appendToTag('HarpiaPlugin', 'properties')
-
         for key in plugin.properties:
             parser.appendToTag('properties', 'property', value=key)
+
+        parser.appendToTag('HarpiaPlugin', 'in_ports')
+        for key in plugin.get_in_ports():
+            parser.appendToTag('in_ports', 'port', value=key)
+
+        parser.appendToTag('HarpiaPlugin', 'out_ports')
+        for key in plugin.get_out_ports():
+            parser.appendToTag('out_ports', 'port', value=key)
+
 
         try:
             file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"

@@ -29,7 +29,7 @@ class ColorField(Field, Gtk.HBox):
         self.set_name(self.data["name"])
         self.parent_window = None
         self.event = event
-        self.color = Gdk.color_parse(self.data["value"])
+        self.set_value(self.data["value"])
         self.label = Gtk.Label(self.data["label"])
         self.add(self.label)
         self.label.set_property("halign", Gtk.Align.START)

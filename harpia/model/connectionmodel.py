@@ -19,17 +19,9 @@ class ConnectionModel(object):
 
     # -------------------------------------------------------------------------
     def type_match(self):
-        outType = self.source.get_out_types()[int(self.source_port)]
-        inType = self.sink.get_in_types()[int(self.sink_port)]
+        outType = self.source.get_out_ports()[int(self.source_port)]["type"]
+        inType = self.sink.get_in_ports()[int(self.sink_port)]["type"]
         return outType == inType
-
-    # -------------------------------------------------------------------------
-    def get_source_port_name(self):
-        return self.source.get_input_port_name(self.source_port)
-
-    # -------------------------------------------------------------------------
-    def get_sink_port_name(self):
-        return self.sink.get_output_port_name(self.sink_port)
 
     # ----------------------------------------------------------------------
     def set_end(self, sink, sink_port):

@@ -20,8 +20,8 @@ class Plugin(object):
         self.help = ""
         self.label = ""
         self.color = "200:200:25:150"
-        self.in_types = []
-        self.out_types = []
+        self.in_ports = []
+        self.out_ports = []
         self.group = "Undefined"
 
         # Code generation
@@ -117,7 +117,7 @@ class Plugin(object):
         return "rgba(" + self.color.replace(":", ",") + ")"
 
     # ----------------------------------------------------------------------
-    def get_in_types(self):
+    def get_in_ports(self):
         """
         Return types of plugin entries.
 
@@ -125,10 +125,10 @@ class Plugin(object):
             * **Types**: :class:`list<list>`
             The return is a list of types plugin entries.
         """
-        return self.in_types
+        return self.in_ports
 
     # ----------------------------------------------------------------------
-    def get_out_types(self):
+    def get_out_ports(self):
         """
         Return types of plugin outputs.
 
@@ -136,7 +136,7 @@ class Plugin(object):
             * **Types**: :class:`list<list>`
             The return is a list of types plugin outputs.
         """
-        return self.out_types
+        return self.out_ports
 
     # ----------------------------------------------------------------------
     def get_group(self):
@@ -148,31 +148,6 @@ class Plugin(object):
             The return value.
         """
         return self.group
-
-    # ----------------------------------------------------------------------
-    def get_output_port_name(self, number):
-        """
-        Returns output port name
-        
-        Parameters:
-            * **number** (:class:`int<int>`): The output port number
-        Returns:
-            * **Types**: :class:`str<str>`
-            The return value.
-        """
-        return "block_" + str(self.id) + "o" + str(number)
-
-    # ----------------------------------------------------------------------
-    def get_input_port_name(self, number):
-        """
-        Returns input port name
-        Parameters:
-            * **number** (:class:`int<int>`): The input port number
-        Returns:
-            * **Types**: :class:`str<str>`
-            The return value.
-        """
-        return "block_" + str(self.id) + "i" + str(number)
 
     # ----------------------------------------------------------------------
     def get_position(self):
@@ -231,6 +206,21 @@ class Plugin(object):
 
         try:
             return self.language
+        except:
+            return None
+
+    # ----------------------------------------------------------------------
+    def get_framework(self):
+        """
+        Return the plugin framework.
+
+        Returns:
+            * **Types**: :class:`str`<str>
+            The return value.
+        """
+
+        try:
+            return self.framework
         except:
             return None
 

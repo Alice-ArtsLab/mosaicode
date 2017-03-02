@@ -17,10 +17,38 @@ class Oscillator(WebaudioPlugin):
         self.help = "Sound output"
         self.label = "Oscillator"
         self.color = "50:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND",
-                         "HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                           "label":"Osc Frequency",
+                           "name":"osc_freq"},
+                         {"type":"HRP_WEBAUDIO_FLOAT",
+                         "label":"Frequency",
+                         "name":"freq"},
+                         {"type":"HRP_WEBAUDIO_FLOAT",
+                         "name":"detune",
+                         "label":"Detune"}]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                         "name":"sound_output",
+                         "label":"Sound Output"}]
         self.group = "Sound"
+
+        self.properties = [{"name": "freq",
+                            "label": "Frequency",
+                            "type": HARPIA_FLOAT,
+                            "lower": 20,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 440
+                            },
+                           {"name": "oscillator_type",
+                            "label": "Type",
+                            "type": HARPIA_COMBO,
+                            "values": ["square",
+                                       "sine",
+                                       "sawtooth",
+                                       "triangle"],
+                            "value": "sine"
+                            }
+                           ]
 
         self.vars = """
 // block_$id$ = Oscillator
@@ -45,21 +73,3 @@ block_$id$.frequency.value = $freq$; // value in hertz
 block_$id$.detune.value = 100; // value in cents
 block_$id$.start(0);
 """
-        self.properties = [{"name": "freq",
-                            "label": "Frequency",
-                            "type": HARPIA_FLOAT,
-                            "lower": 20,
-                            "upper": 20000,
-                            "step": 1,
-                            "value": 440
-                            },
-                           {"name": "oscillator_type",
-                            "label": "Type",
-                            "type": HARPIA_COMBO,
-                            "values": ["square",
-                                       "sine",
-                                       "sawtooth",
-                                       "triangle"],
-                            "value": "sine"
-                            }
-                           ]
