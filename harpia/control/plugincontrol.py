@@ -89,11 +89,11 @@ class PluginControl():
         plugin.help = parser.getTagAttr("HarpiaPlugin",  "help")
         plugin.source = parser.getTagAttr("HarpiaPlugin",  "source")
 
-        plugin.header = parser.getTagAttr("HarpiaPlugin",  "header")
-        plugin.vars = parser.getTagAttr("HarpiaPlugin",  "vars")
-        plugin.function_call = parser.getTagAttr("HarpiaPlugin",  "function_call")
-        plugin.dealloc = parser.getTagAttr("HarpiaPlugin",  "dealloc")
-        plugin.out_dealloc = parser.getTagAttr("HarpiaPlugin",  "out_dealloc")
+        plugin.header = parser.getTag("HarpiaPlugin").getTag("header").getText()
+        plugin.vars = parser.getTag("HarpiaPlugin").getTag("vars").getText()
+        plugin.function_call = parser.getTag("HarpiaPlugin").getTag("function_call").getText()
+        plugin.dealloc = parser.getTag("HarpiaPlugin").getTag("dealloc").getText()
+        plugin.out_dealloc = parser.getTag("HarpiaPlugin").getTag("out_dealloc").getText()
 
         props = parser.getTag("HarpiaPlugin").getTag(
                     "properties").getChildTags("property")
@@ -127,7 +127,7 @@ class PluginControl():
         from harpia.system import System
         plugin.source = "xml"
         parser = XMLParser()
-        parser.addTag('HarpiaPlugin')
+        main = parser.addTag('HarpiaPlugin')
         parser.setTagAttr('HarpiaPlugin','type', plugin.type)
         parser.setTagAttr('HarpiaPlugin','language', plugin.language)
         parser.setTagAttr('HarpiaPlugin','framework', plugin.framework)
@@ -138,11 +138,11 @@ class PluginControl():
         parser.setTagAttr('HarpiaPlugin','help', plugin.help)
         parser.setTagAttr('HarpiaPlugin','source', plugin.source)
 
-        parser.setTagAttr('HarpiaPlugin','header', plugin.header)
-        parser.setTagAttr('HarpiaPlugin','vars', plugin.vars)
-        parser.setTagAttr('HarpiaPlugin','function_call', plugin.function_call)
-        parser.setTagAttr('HarpiaPlugin','dealloc', plugin.dealloc)
-        parser.setTagAttr('HarpiaPlugin','out_dealloc', plugin.out_dealloc)
+        parser.appendToTag('HarpiaPlugin','header').string = str(plugin.header)
+        parser.appendToTag('HarpiaPlugin', 'vars').string = str(plugin.vars)
+        parser.appendToTag('HarpiaPlugin','function_call').string = str(plugin.function_call)
+        parser.appendToTag('HarpiaPlugin','dealloc').string = str(plugin.dealloc)
+        parser.appendToTag('HarpiaPlugin','out_dealloc').string = str(plugin.out_dealloc)
 
         parser.appendToTag('HarpiaPlugin', 'properties')
         for key in plugin.properties:
