@@ -33,7 +33,7 @@ class StringField(Field, Gtk.HBox):
 
         self.field = Gtk.Entry()
         self.field.set_text(self.data["value"])
-        self.field.set_property("max-length", self.data["maxlength"])
+        self.field.set_property("max-length", int(self.data["maxlength"]))
         if event is not None:
             self.field.connect("changed", event)
         self.add(self.field)
