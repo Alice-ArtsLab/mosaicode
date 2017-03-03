@@ -88,7 +88,7 @@ class PluginManager(Gtk.Dialog):
         dialog.destroy()
         if result == Gtk.ResponseType.OK:
             self.main_window.main_control.delete_plugin(plugin)
-            self.__update()
+            self.update()
 
     # ----------------------------------------------------------------------
     def set_block(self, plugin):
@@ -112,11 +112,6 @@ class PluginManager(Gtk.Dialog):
         PluginEditor(self, self.block_notebook.get_selected_block())
 
     # ----------------------------------------------------------------------
-    def add_plugin(self, plugin):
-        self.main_window.main_control.add_plugin(plugin)
-        self.__update()
-
-    # ----------------------------------------------------------------------
-    def __update(self):
+    def update(self):
         self.block_notebook.update()
 # ----------------------------------------------------------------------

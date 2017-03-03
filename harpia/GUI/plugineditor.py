@@ -65,17 +65,9 @@ class PluginEditor(Gtk.Dialog):
         self.show_all()
         result = self.run()
         if result == Gtk.ResponseType.OK:
-            self.__save()
+            self.plugin_manager.main_control.add_plugin(plugin)
+            self.plugin_manager.update()
         self.close()
         self.destroy()
-
-    # ----------------------------------------------------------------------
-    def __save(self):
-        """
-        This method save the plugin.
-            Parameters:
-                * **plugin** (:class:`<>`)
-        """
-        self.plugin_manager.add_plugin(self.plugin)
 
 # ----------------------------------------------------------------------

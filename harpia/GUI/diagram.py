@@ -57,7 +57,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_property("expand", True)
 
         self.last_clicked_point = (None, None)
-        self.__main_window = main_window
+        self.main_window = main_window
 
         self.curr_connector = None
         self.current_widgets = []
@@ -226,11 +226,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def __drag_data_received(self, widget, context, x, y, selection,
                              targetType, time):
-        block = self.__main_window.main_control.get_selected_block()
+        block = self.main_window.main_control.get_selected_block()
         if block is not None:
             block.x = x
             block.y = y
-            self.__main_window.main_control.add_block(block)
+            self.main_window.main_control.add_block(block)
         return
 
     # ----------------------------------------------------------------------
@@ -369,8 +369,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __update_white_board(self):
-        width = self.__main_window.get_size()[0]
-        height = self.__main_window.get_size()[1]
+        width = self.main_window.get_size()[0]
+        height = self.main_window.get_size()[1]
         self.white_board = GooCanvas.CanvasRect(
             parent=self.get_root_item(),
             x=0,
@@ -387,8 +387,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def __draw_grid(self):
         if self.show_grid:
-            width = self.__main_window.get_size()[0]
-            height = self.__main_window.get_size()[1]
+            width = self.main_window.get_size()[0]
+            height = self.main_window.get_size()[1]
 
             i = 0
             while i < height:
@@ -433,7 +433,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         DiagramModel.set_file_name(self, file_name)
-        self.__main_window.work_area.rename_diagram(self)
+        self.main_window.work_area.rename_diagram(self)
 
     # ----------------------------------------------------------------------
     def __apply_zoom(self):
@@ -478,7 +478,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 * **block**(:class: `Block<harpia.GUI.block>`)
         """
-        self.__main_window.main_control.show_block_property(block)
+        self.main_window.main_control.show_block_property(block)
 
     # ----------------------------------------------------------------------
     def resize(self, data):
@@ -488,9 +488,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                * **data**
         """
-        self.set_property("x2", self.__main_window.get_size()[0])
+        self.set_property("x2", self.main_window.get_size()[0])
         self.white_board.set_property(
-            "width", self.__main_window.get_size()[0])
+            "width", self.main_window.get_size()[0])
 
     # ----------------------------------------------------------------------
     def select_all(self):
@@ -525,8 +525,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def check_limit(self, x, y, block_pos_x, block_pos_y):
         min_x = 0
         min_y = 0
-        max_x = self.__main_window.get_size()[0] - 150
-        max_y = self.__main_window.get_size()[1]
+        max_x = self.main_window.get_size()[0] - 150
+        max_y = self.main_window.get_size()[1]
 
         new_x = x + block_pos_x
         new_y = y + block_pos_y
@@ -575,7 +575,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         replace = {}
         self.current_widgets = []
         # interact into blocks, add blocks and change their id
-        clipboard = self.__main_window.main_control.get_clipboard()
+        clipboard = self.main_window.main_control.get_clipboard()
         for widget in clipboard:
             if not isinstance(widget, Block):
                 continue
@@ -583,7 +583,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             plugin.x += 20
             plugin.y += 20
             plugin.set_id(-1)
-            if not self.__main_window.main_control.add_block(plugin):
+            if not self.main_window.main_control.add_block(plugin):
                 return
             replace[widget.get_id()] = plugin
             self.current_widgets.append(plugin)
@@ -610,9 +610,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         This method copy a block.
         """
-        self.__main_window.main_control.reset_clipboard()
+        self.main_window.main_control.reset_clipboard()
         for widget in self.current_widgets:
-            self.__main_window.main_control.get_clipboard().append(widget)
+            self.main_window.main_control.get_clipboard().append(widget)
 
     # ---------------------------------------------------------------------
     def cut(self):
@@ -622,9 +622,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         if len(self.current_widgets) < 1:
             return
         self.do(_("Cut"))
-        self.__main_window.main_control.reset_clipboard()
+        self.main_window.main_control.reset_clipboard()
         for widget in self.current_widgets:
-            self.__main_window.main_control.get_clipboard().append(widget)
+            self.main_window.main_control.get_clipboard().append(widget)
             widget.delete()
 
     # ----------------------------------------------------------------------
@@ -661,7 +661,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 * **state**
         """
         DiagramModel.set_modified(self, state)
-        self.__main_window.work_area.rename_diagram(self)
+        self.main_window.work_area.rename_diagram(self)
 
     # ---------------------------------------------------------------------
     def grab_focus(self):
@@ -738,8 +738,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Returns
 
         """
-        min_x = self.__main_window.get_size()[0]
-        min_y = self.__main_window.get_size()[1]
+        min_x = self.main_window.get_size()[0]
+        min_y = self.main_window.get_size()[1]
 
         max_x = 0
         max_y = 0
@@ -760,7 +760,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def align_top(self):
         blocks_id = self.get_selected_blocks_id()
-        top = self.__main_window.get_size()[1]
+        top = self.main_window.get_size()[1]
 
         for block_id in blocks_id:
             x, y = self.blocks[block_id].get_position()
@@ -792,7 +792,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def align_left(self):
         blocks_id = self.get_selected_blocks_id()
-        left = self.__main_window.get_size()[0]
+        left = self.main_window.get_size()[0]
 
         for block_id in blocks_id:
             x, y = self.blocks[block_id].get_position()

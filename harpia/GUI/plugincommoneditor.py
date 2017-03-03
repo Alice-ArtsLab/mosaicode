@@ -62,7 +62,7 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
 
         data = {"label": _("Color"), "value": plugin.get_color()}
         self.color_field = ColorField(data, self._on_edit)
-        self.color_field.set_parent_window(self)
+        self.color_field.set_parent_window(self.plugin_editor)
 
         data = {"label": _("Help"), "value": plugin.get_help()}
         self.help_field = CommentField(data, self._on_edit)

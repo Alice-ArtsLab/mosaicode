@@ -31,7 +31,7 @@ This module contains the BlockMenu class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
+from harpia.GUI.plugineditor import PluginEditor
 
 class BlockMenu(Gtk.Menu):
     """
@@ -54,12 +54,16 @@ class BlockMenu(Gtk.Menu):
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
+        menu_item = Gtk.MenuItem("Edit")
+        menu_item.connect("activate", self.__edit_clicked)
+        self.append(menu_item)
+
         # Shows the menu
         self.show_all()
         self.popup(None, None, None, None, event.button.button, event.time)
 
     # ----------------------------------------------------------------------
-    def __delete_clicked(self, *args):  # strongly depends on garbage collector
+    def __delete_clicked(self, *args):
         """
         This method monitors if the button delete was clicked.
 
@@ -68,3 +72,16 @@ class BlockMenu(Gtk.Menu):
 
         """
         self.block.delete()
+        
+    # ----------------------------------------------------------------------
+    def __edit_clicked(self, *args):
+        """
+        This method monitors if the button delete was clicked.
+
+            Parameters:
+            * **args**
+
+        """
+        from harpia.system import System as System
+        PluginEditor(self.block.diagram.main_window,
+                System.plugins[self.block.type])

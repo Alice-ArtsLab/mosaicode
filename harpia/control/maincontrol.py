@@ -457,4 +457,9 @@ class MainControl():
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
         self.main_window.block_notebook.update()
+
+    # ----------------------------------------------------------------------
+    def update_all(self):
+        for diagram in self.main_window.work_area.get_diagrams():
+            diagram.update()
 # ----------------------------------------------------------------------

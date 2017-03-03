@@ -54,7 +54,7 @@ class DiagramModel(object):
 
     # ----------------------------------------------------------------------
     def connect_blocks(self, source, source_port, sink, sink_port):
-        out_type = source.get_out_types()[source_port]
+        out_type = source.get_out_ports()[source_port]["type"]
         connection = ConnectionModel(self, source, source_port, out_type)
         connection.sink = sink
         connection.sink_port = sink_port

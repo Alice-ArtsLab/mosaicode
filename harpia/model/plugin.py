@@ -172,7 +172,7 @@ class Plugin(object):
         Returns:
             * **Types**: :class:`str<str>`
             The return value is the class module. Like:
-                * *"harpia.plugins.C.openCV.xor"*
+                * *"harpia.plugins.c.opencv.xor"*
                 * *"harpia.plugins.javascript.webaudio.addfloat"*
         """
         return self.type
