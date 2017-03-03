@@ -43,7 +43,8 @@ class AddBorder(OpenCVPlugin):
 
         self.properties = [{"name": "Color",
                             "label": "color",
-                            "type": HARPIA_COLOR
+                            "type": HARPIA_COLOR,
+                            "value":"#FF0000"
                             },
                            {"name": "Type",
                             "label": "border_type",

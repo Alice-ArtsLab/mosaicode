@@ -30,11 +30,16 @@ class Not(OpenCVPlugin):
                            "label":"Output Image"}]
         self.group = "Arithmetic and logical operations"
 
-        # -------------------C/OpenCv code------------------------------------
         self.function_call = \
             'if(block$id$_img_i0){\n' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'cvNot(block$id$_img_i0, block$id$_img_o0);\n' + \
             '}\n'
+
+        self.vars = "IplImage * block$id$_img_i0 = NULL;\n" + \
+                    "IplImage * block$id$_img_o0 = NULL;\n"
+
+        self.dealloc = "cvReleaseImage(&block$id$_img_i0);\n" + \
+                       "cvReleaseImage(&block$id$_img_o0);\n"
 
 # -----------------------------------------------------------------------------

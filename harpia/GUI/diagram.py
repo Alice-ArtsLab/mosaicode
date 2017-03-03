@@ -277,7 +277,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for oldCon in self.connectors:
             if oldCon.sink == newCon.sink \
                     and oldCon.sink_port == newCon.sink_port\
-                    and not System.ports[newCon.type].get_multiple():
+                    and not System.ports[newCon.conn_type].get_multiple():
                 System.log(_("Connector Already exists"))
                 return False
         if (newCon.sink == newCon.source) or self.__cycle_detection(newCon):
@@ -328,6 +328,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         self.__abort_connection()  # abort any possibly running connections
+        if output >= len(block.get_out_ports()):
+            return 
         conn_type = block.get_out_ports()[output]["type"]
         self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)

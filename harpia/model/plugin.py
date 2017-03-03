@@ -11,6 +11,7 @@ class Plugin(object):
     # ----------------------------------------------------------------------
     def __init__(self, plugin = None):
 
+        self.id = -1
         self.x = 0
         self.y = 0
 
@@ -18,7 +19,6 @@ class Plugin(object):
         self.language = ""
         self.framework = ""
         self.source = "python"
-        self.id = -1
 
         # Appearance
         self.help = ""
@@ -185,7 +185,7 @@ class Plugin(object):
         Parameters:
             * **value** (:class:`int<int>`): The plugin id number.
         """
-        self.id = value
+        self.id = int(value)
 
     # ----------------------------------------------------------------------
     def get_id(self):
@@ -196,7 +196,7 @@ class Plugin(object):
             * **Types**: :class:`int<int>`
             The return value.
         """
-        return self.id
+        return int(self.id)
 
     # ----------------------------------------------------------------------
     def get_language(self):

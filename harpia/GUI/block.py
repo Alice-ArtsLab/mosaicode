@@ -165,6 +165,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                     stroke_color="black",
                                     fill_color_rgba=self.get_color()
                                     )
+        rect.set_property("tooltip", str(self.get_id()))
         self.widgets["Rect"] = rect
 
     # ----------------------------------------------------------------------
@@ -193,21 +194,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
         icon.translate((self.width / 2) - oldX, (self.height / 2) - oldY)
-        self.widgets["Label"] = icon
-
-#        pixbuf = GdkPixbuf.Pixbuf.new_from_file(self.data_dir +
-#                                                self.get_icon())
-#        pixbuf = Gtk.IconTheme.get_default().load_icon(Gtk.stock_list_ids()[10],24,0)
-#        image = GooCanvas.CanvasImage(parent=self,
-#                                      pixbuf=pixbuf,
-#                                      x=(self.width / 2) -
-#                                      (pixbuf.props.width / 2),
-#                                      y=(self.height / 2) -
-#                                      (pixbuf.props.height / 2) + 10
-#                                      )
-
-#        self.widgets["Icon"] = image
-
+        self.widgets["Icon"] = icon
     # ----------------------------------------------------------------------
     def __draw_label(self):
         """

@@ -8,7 +8,7 @@ class DiagramModel(object):
 
     # ----------------------------------------------------------------------
     def __init__(self):
-        self.block_id = 1  # first block is n1, increments to each new block
+        self.last_id = 1  # first block is n1, increments to each new block
         self.blocks = {}  # GUI blocks
         self.connectors = []
         self.__zoom = 1.0  # pixels per unit
@@ -22,19 +22,23 @@ class DiagramModel(object):
     # ----------------------------------------------------------------------
     def add_block(self, block):
         if self.language is not None and self.language != block.get_language():
+            System.log("Block language is different from diagram language.")
             return False
         if self.language is None or self.language == 'None':
             self.language = block.get_language()
+
+        self.last_id = max(int(self.last_id), int(block.get_id()))
         if block.get_id() < 0:
-            block.set_id(self.block_id)
-        self.blocks[int(block.get_id())] = block
-        self.block_id = self.block_id + 1
-        self.block_id = max(int(self.block_id), int(block.get_id()))
+            block.set_id(self.last_id)
+        self.blocks[block.get_id()] = block
+        self.last_id += 1
         return True
 
     # ----------------------------------------------------------------------
     def delete_block(self, block):
         if block.get_id() not in self.blocks:
+            System.log("Block " + block.get_id() + " is not present" + \
+                "this diagram.")
             return False
         for idx in reversed(range(len(self.connectors))):
             if self.connectors[idx].source == block \

@@ -67,7 +67,7 @@ class MatchTem(OpenCVPlugin):
             '\tblock$id$_img_o0 = cvCreateImage(size$id$,8,1);\n' + \
             '\tcvMatchTemplate(block$id$_img_i0 , block$id$_img_i1, ' + \
             'block$id$_img_t0, $method$);\n' + \
-            '\tcvConvertScale(block$id$_img_t0, block$id$_img_o0, 10 ** -($scaleFactor$,0);\n' + \
+            '\tcvConvertScale(block$id$_img_t0, block$id$_img_o0, pow(10,-($scaleFactor$)),0);\n' + \
             '}\n'
 
         self.dealloc = \
