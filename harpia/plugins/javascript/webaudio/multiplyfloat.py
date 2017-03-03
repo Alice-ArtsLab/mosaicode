@@ -17,8 +17,17 @@ class MultiplyFloat(WebaudioPlugin):
         self.help = "Multiply float values"
         self.label = "Multiply Float"
         self.color = "200:200:25:150"
-        self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"first_number",
+                "label":"First Number"},
+                {"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"second_number",
+                "label":"Second Number"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Result",
+                "name":"result"}
+            ]
         self.group = "Arithmetics"
 
         self.vars = """

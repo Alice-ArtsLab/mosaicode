@@ -17,9 +17,18 @@ class Gain(WebaudioPlugin):
         self.help = "Sound output"
         self.label = "Gain"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_SOUND",
-                          "HRP_WEBAUDIO_SOUND",
-                          "HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                           "label":"Sound Input",
+                           "name":"sound_input"},
+                        {"type":"HRP_WEBAUDIO_SOUND",
+                           "label":"Gain Input",
+                           "name":"gain_input"},
+                        {"type":"HRP_WEBAUDIO_FLOAT",
+                         "label":"Gain Value",
+                         "name":"gain_value"}]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                         "name":"sound_output",
+                         "label":"Sound Output"}]
         self.group = "Sound"
 
         self.vars = """

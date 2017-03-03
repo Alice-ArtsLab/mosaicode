@@ -17,8 +17,15 @@ class Delay(WebaudioPlugin):
         self.help = "Delay"
         self.label = "Delay"
         self.color = "150:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND"]
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input",
+                "name":"sound_input"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
+
         self.group = "Sound"
 
         self.vars = """

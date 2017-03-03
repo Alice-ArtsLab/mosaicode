@@ -17,8 +17,14 @@ class Midi2Freq(WebaudioPlugin):
         self.help = "midi to freq"
         self.label = "Midi 2 Freq"
         self.color = "200:200:25:150"
-        self.in_types = ["HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"midi_value",
+                "label":"Midi Value"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Frequency",
+                "name":"frequency"}
+            ]
         self.group = "Conversion"
         self.vars = """
 // block_$id$ = Midi 2 Freq

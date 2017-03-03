@@ -17,8 +17,15 @@ class Char2Float(WebaudioPlugin):
         self.help = "Char to Float"
         self.label = "Char 2 Float"
         self.color = "200:200:25:150"
-        self.in_types = ["HRP_WEBAUDIO_CHAR"]
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_CHAR",
+                "label":"Char Input",
+                "name":"char_input"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Float Output",
+                "name":"float_output"}
+            ]
+
         self.group = "Conversion"
 
         self.vars = """

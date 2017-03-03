@@ -17,8 +17,17 @@ class AddFloat(WebaudioPlugin):
         self.help = "Add Float"
         self.label = "Add Float"
         self.color = "200:200:25:150"
-        self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"first_number",
+                "label":"First Number"},
+                {"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"second_number",
+                "label":"Second Number"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Result",
+                "name":"result"}
+            ]
         self.group = "Arithmetics"
 
         self.vars = """
@@ -36,6 +45,7 @@ block_$id$_i[0] = function(value){
     }
     return true;
     };
+
 block_$id$_i[1] = function(value){
     block_$id$_arg2 = parseFloat(value);
     result = parseFloat(block_$id$_arg1) + parseFloat(block_$id$_arg2);

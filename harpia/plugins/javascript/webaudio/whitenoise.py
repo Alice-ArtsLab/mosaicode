@@ -17,7 +17,10 @@ class WhiteNoise(WebaudioPlugin):
         self.help = "White Noise"
         self.label = "White Noise"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
         self.group = "Sound"
 
         self.header = """
@@ -40,6 +43,6 @@ WhiteNoise.prototype.process = function(e) {
 }
 """
         self.vars = """
-// block_$id$ = White Noise
+// block_$id$ = $label$
 var block_$id$ =  new WhiteNoise(context).node;
 """

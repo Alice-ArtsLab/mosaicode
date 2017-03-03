@@ -17,11 +17,14 @@ class Speaker(WebaudioPlugin):
         self.help = "Sound output"
         self.label = "Speaker"
         self.color = "150:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input",
+                "name":"sound_input"}
+            ]
         self.group = "Sound"
 
         self.vars = """
-// block_$id$ = Speaker
+// block_$id$ = $label$
 var block_$id$_i = []
 block_$id$_i[0] = context.destination;
 """

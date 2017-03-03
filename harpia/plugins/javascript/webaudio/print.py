@@ -17,11 +17,17 @@ class Print(WebaudioPlugin):
         self.help = "Print value"
         self.label = "Print"
         self.color = "50:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_CHAR"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"float_value",
+                "label":"Float Value"},
+                {"type":"HRP_WEBAUDIO_CHAR",
+                "name":"Char Value",
+                "label":"char_value"}
+                ]
         self.group = "Interface"
 
         self.vars = """
-// block_$id$ = Print
+// block_$id$ = $name$
 var block_$id$_i = [];
 block_$id$_i[0] = function(value){
     document.getElementById("block_$id$").innerHTML = value;

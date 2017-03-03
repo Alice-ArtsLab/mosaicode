@@ -17,7 +17,13 @@ class KeyboardInput(WebaudioPlugin):
         self.help = "Keyboard Input"
         self.label = "Keyboard Input"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_CHAR"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Float Output",
+                "name":"float_output"},
+                {"type":"HRP_WEBAUDIO_CHAR",
+                "label":"Char Output",
+                "name":"char_output"}
+            ]
         self.group = "Interface"
 
         self.vars = """

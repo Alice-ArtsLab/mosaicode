@@ -17,7 +17,10 @@ class FloatValue(WebaudioPlugin):
         self.help = "Double value"
         self.label = "FloatValue"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Float Value",
+                "name":"float_value"}
+            ]
         self.group = "Interface"
 
         self.vars = """

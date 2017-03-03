@@ -10,6 +10,10 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def __init__(self, plugin = None):
+
+        self.x = 0
+        self.y = 0
+
         self.type = self.__class__.__module__
         self.language = ""
         self.framework = ""

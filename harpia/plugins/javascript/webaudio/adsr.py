@@ -17,8 +17,19 @@ class ADSR(WebaudioPlugin):
         self.help = "ADSR"
         self.label = "ADSR"
         self.color = "50:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND", "HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input",
+                "name":"sound_input"},
+                {"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Event Play",
+                "name":"play"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
+
         self.group = "Sound"
 
         self.header = """

@@ -17,7 +17,11 @@ class Button(WebaudioPlugin):
         self.help = "Button"
         self.label = "Button"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Click",
+                "name":"click"}
+            ]
+
         self.group = "Interface"
 
         self.vars = """

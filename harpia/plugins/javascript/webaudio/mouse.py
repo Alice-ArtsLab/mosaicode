@@ -18,6 +18,13 @@ class Mouse(WebaudioPlugin):
         self.label = "Mouse Position"
         self.color = "50:50:50:150"
         self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"x",
+                "label":"X"},
+                {"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"y",
+                "label":"Y Number"}
+                ]
         self.group = "Interface"
 
         self.vars = """

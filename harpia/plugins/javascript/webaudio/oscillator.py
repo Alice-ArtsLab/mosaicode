@@ -34,8 +34,7 @@ class Oscillator(WebaudioPlugin):
         self.properties = [{"name": "freq",
                             "label": "Frequency",
                             "type": HARPIA_FLOAT,
-                            "lower": 20,
-                            "upper": 20000,
+                            "lower": 0,
                             "step": 1,
                             "value": 440
                             },
