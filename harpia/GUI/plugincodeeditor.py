@@ -47,36 +47,34 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
 
         # Button bar
         button_bar = Gtk.HBox()
-        data = {"label": _("Properties"), "values": ["id", "language", "framework"]}
-        properties = ComboField(data, None)
-        button_bar.pack_start(properties, False, False, 0)
         vbox.pack_start(button_bar, False, False, 1)
+        self.__populate_combos(button_bar)
 
-        codes = Gtk.Notebook()
-        codes.set_scrollable(True)
-        vbox.pack_start(codes, True, True, 1)
+        self.codes = Gtk.Notebook()
+        self.codes.set_scrollable(True)
+        vbox.pack_start(self.codes, True, True, 1)
 
         data = {"label": _("Header"), "value": plugin.generate_header()}
-        self.header = CodeField(data, None)
+        self.header = CodeField(data, self.__on_edit)
         data = {"label": _("Vars"), "value": plugin.generate_vars()}
-        self.vars = CodeField(data, None)
+        self.vars = CodeField(data, self.__on_edit)
         data = {"label": _("Function Call"), "value": plugin.generate_function_call()}
-        self.function_call = CodeField(data, None)
+        self.function_call = CodeField(data, self.__on_edit)
         data = {"label": _("Dealloc"), "value": plugin.generate_dealloc()}
-        self.dealloc = CodeField(data, None)
+        self.dealloc = CodeField(data, self.__on_edit)
         data = {"label": _("Out Dealloc"), "value": plugin.generate_out_dealloc()}
-        self.out_dealloc = CodeField(data, None)
+        self.out_dealloc = CodeField(data, self.__on_edit)
 
-        codes.append_page(self.header, Gtk.Label(_("Header")))
-        codes.append_page(self.vars, Gtk.Label(_("Vars")))
-        codes.append_page(self.function_call, Gtk.Label(_("Function Call")))
-        codes.append_page(self.dealloc, Gtk.Label(_("Dealloc")))
-        codes.append_page(self.out_dealloc, Gtk.Label(_("Out Dealloc")))
+        self.codes.append_page(self.header, Gtk.Label(_("Header")))
+        self.codes.append_page(self.vars, Gtk.Label(_("Vars")))
+        self.codes.append_page(self.function_call, Gtk.Label(_("Function Call")))
+        self.codes.append_page(self.dealloc, Gtk.Label(_("Dealloc")))
+        self.codes.append_page(self.out_dealloc, Gtk.Label(_("Out Dealloc")))
 
         self.show_all()
 
     # ----------------------------------------------------------------------
-    def _on_edit(self, widget=None, data=None):
+    def __on_edit(self, widget=None, data=None):
         """
         This method save the plugin.
             Parameters:
@@ -89,4 +87,41 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
         self.plugin.dealloc = self.dealloc.get_value()
         self.plugin.out_dealloc = self.out_dealloc.get_value()
 
+    # ----------------------------------------------------------------------
+    def __populate_combos(self, button_bar):
+        data = {"label": _("Common Properties"),
+                "name": "common",
+                "values": ["id",
+                           "label",
+                           "x",
+                           "y",
+                           "type",
+                           "language",
+                           "framework",
+                           "group",
+                           "color",
+                           "help"]}
+        self.commons = ComboField(data, self.__on_select)
+        button_bar.pack_start(self.commons, False, False, 0)
+
+        values = []
+        for prop in self.plugin.get_properties():
+            values.append("prop[" + prop["name"] + "]")
+        values.sort()
+        data = {"label": _("Plugin Properties"),
+                "name":"props",
+                "values": values}
+        self.props = ComboField(data, self.__on_select)
+        button_bar.pack_start(self.props, False, False, 0)
+
+    # ----------------------------------------------------------------------
+    def __get_current_code_area(self):
+        current_tab = self.codes.get_nth_page(self.codes.get_current_page())
+        return current_tab
+
+    # ----------------------------------------------------------------------
+    def __on_select(self, widget=None, data=None):
+        code_area = self.__get_current_code_area()
+        value = widget.get_parent().get_value()
+        code_area.set_value(code_area.get_value() + "$" + value + "$")
 # ----------------------------------------------------------------------

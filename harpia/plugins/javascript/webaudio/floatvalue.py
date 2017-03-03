@@ -25,7 +25,7 @@ class FloatValue(WebaudioPlugin):
 
         self.vars = """
 // block_$id$ = Float Value
-var block_$id$_value = $value$;
+var block_$id$_value = $prop[value]$;
 var block_$id$_o0 = [];
 """
         self.function_call = """
@@ -37,8 +37,8 @@ function change_$id$_value(){
 };
 """
         self.dealloc = """
-$label$ <input type="number" id="block_$id$" value="$value$" min="$min$"
-        max="$max$" onChange="change_$id$_value();"><br>
+$prop[label]$ <input type="number" id="block_$id$" value="$prop[value]$" min="$prop[min]$"
+        max="$prop[max]$" onChange="change_$id$_value();"><br>
 """
 
         self.properties = [{"name": "value",

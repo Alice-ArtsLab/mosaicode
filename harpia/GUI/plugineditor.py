@@ -45,7 +45,6 @@ class PluginEditor(Gtk.Dialog):
 
         self.plugin_manager = plugin_manager
         self.plugin = plugin
-        self.main_control = self
         self.set_default_size(800, 600)
         box = self.get_content_area()
 

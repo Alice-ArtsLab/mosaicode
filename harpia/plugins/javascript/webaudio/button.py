@@ -26,7 +26,7 @@ class Button(WebaudioPlugin):
 
         self.vars = """
 // block_$id$ = Button
-var block_$id$_value = $value$;
+var block_$id$_value = $prop[value]$;
 var block_$id$_o0 = [];
 """
 
@@ -40,8 +40,8 @@ function click_$id$(){
 """
 
         self.dealloc = """
-<button type="button" value="$value$" onClick="click_$id$();"
-id="block_$id$">$label$</button><br>
+<button type="button" value="$prop[value]$" onClick="click_$id$();"
+id="block_$id$">$prop[label]$</button><br>
 """
 
         self.properties = [{"name": "value",

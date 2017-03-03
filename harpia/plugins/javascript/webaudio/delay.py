@@ -33,7 +33,7 @@ class Delay(WebaudioPlugin):
 var block_$id$ = context.createDelay();
 var block_$id$_i = []
 block_$id$_i[0] = block_$id$
-block_$id$_i[0].delayTime.value = $time$;
+block_$id$_i[0].delayTime.value = $prop[time]$;
 """
 
         self.properties = [{"name": "time",

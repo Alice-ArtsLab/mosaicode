@@ -42,7 +42,7 @@ block_$id$_i[2] = function(value){
     };
 """
 
-        self.function_call = "block_$id$.gain.value = $gain$;\n"
+        self.function_call = "block_$id$.gain.value = $prop[gain]$;\n"
 
         self.properties = [{"name": "gain",
                             "label": "Gain",

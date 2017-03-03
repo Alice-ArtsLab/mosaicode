@@ -15,21 +15,27 @@ class Laplace(OpenCVPlugin):
 
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.masksize = "3"
-
-        # Appearance
         self.help = "Operação de filtragem que calcula o " + \
             "Laplaciano de uma imagem," + \
             "realçando cantos e bordas de objetos."
         self.label = "Laplace"
         self.color = "250:180:80:150"
-        self.in_types = ["HRP_IMAGE", "HRP_INT"]
-        self.out_types = ["HRP_IMAGE"]
+        self.in_ports = [{"type":"HRP_IMAGE",
+                          "name":"input_image",
+                          "label":"Input Image"},
+                          {"type":"HRP_INT",
+                          "name":"masksize",
+                          "label":"Mask Size"}
+                         ]
+        self.out_ports = [{"type":"HRP_IMAGE",
+                           "name":"output_image",
+                           "label":"Output Image"}]
         self.group = "Gradients, Edges and Corners"
 
-        self.properties = [{"name": "Mask Size",
-                            "label": "masksize",
+        self.properties = [{"label": "Mask Size",
+                            "name": "masksize",
                             "type": HARPIA_COMBO,
+                            "value":3,
                             "values": ["1", "3", "5", "7", "9", "11", "13"]
                             }
                            ]
@@ -38,7 +44,7 @@ class Laplace(OpenCVPlugin):
         self.vars = \
             'IplImage * block$id$_img_i0 = NULL; //Laplace In \n' + \
             'IplImage * block$id$_img_o0 = NULL; //Laplace Out \n' + \
-            'int block$id$_int_i1 = $masksize$; // Laplace Mask Size\n'
+            'int block$id$_int_i1 = $prop[masksize]$; // Laplace Mask Size\n'
 
         self.function_call = \
             '\nif(block$id$_img_i0){\n' + \
@@ -51,10 +57,5 @@ class Laplace(OpenCVPlugin):
             '(size$id$, IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n' + \
             'cvLaplace(block$id$_img_i0, block$id$_img_o0, ' + \
             'block$id$_int_i1);}\n'
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        self.masksize = int(self.masksize)
-        return self.vars
 
 # ------------------------------------------------------------------------------

@@ -41,15 +41,15 @@ class Show(OpenCVPlugin):
                            ]
 
         self.vars = "IplImage * block$id$_img_i0 = NULL;\n" + \
-                "if (strcmp(\"Window Size\", \"$window_type$\") == 0)\n" + \
-                "cvNamedWindow(\"$title$\",CV_WINDOW_NORMAL);\n" + \
+                "if (strcmp(\"Window Size\", \"$prop[window_type]$\") == 0)\n" + \
+                "cvNamedWindow(\"$prop[title]$\",CV_WINDOW_NORMAL);\n" + \
                 "else\n" + \
-                "cvNamedWindow(\"$title$\",CV_WINDOW_AUTOSIZE);\n"
+                "cvNamedWindow(\"$prop[title]$\",CV_WINDOW_AUTOSIZE);\n"
 
         self.function_call = "\nif(block$id$_img_i0){\n" + \
-            "cvShowImage(\"$title$\",block$id$_img_i0);\n" + \
-            "if (strcmp(\"Window Size\", \"$window_type$\") == 0)\n" + \
-            "cvSetWindowProperty(\"$title$\", " + \
+            "cvShowImage(\"$prop[title]$\",block$id$_img_i0);\n" + \
+            "if (strcmp(\"Window Size\", \"$prop[window_type]$\") == 0)\n" + \
+            "cvSetWindowProperty(\"$prop[title]$\", " + \
             "CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);\n" + \
             "}\n"
 

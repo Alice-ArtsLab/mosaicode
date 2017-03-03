@@ -25,23 +25,6 @@ class Char2Float(WebaudioPlugin):
                 "label":"Float Output",
                 "name":"float_output"}
             ]
-
-        self.group = "Conversion"
-
-        self.vars = """
-// block_$id$ = Char 2 Float
-var block_$id$_o0 = [];
-var block_$id$_i = [];
-block_$id$_i[0] = function(value){
-    if (value != '$char$')
-        return true;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i]($float$);
-    }
-    return true;
-    };
-"""
-
         self.properties = [{"name": "float",
                             "label": "Output float",
                                      "type": HARPIA_FLOAT,
@@ -56,3 +39,18 @@ block_$id$_i[0] = function(value){
                             "value": "a"
                             }
                            ]
+        self.group = "Conversion"
+
+        self.vars = """
+// block_$id$ = Char 2 Float
+var block_$id$_o0 = [];
+var block_$id$_i = [];
+block_$id$_i[0] = function(value){
+    if (value != '$prop[char]$')
+        return true;
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i]($prop[float]$);
+    }
+    return true;
+    };
+"""

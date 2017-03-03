@@ -24,7 +24,7 @@ class NewRect(OpenCVPlugin):
         self.group = "Basic Data Type"
 
         self.properties = [{"label": "X",
-                            "name": "x0",
+                            "name": "x",
                             "type": HARPIA_INT,
                             "lower": 0,
                             "upper": 65535,
@@ -32,7 +32,7 @@ class NewRect(OpenCVPlugin):
                             "value":0
                             },
                            {"label": "Y",
-                            "name": "y0",
+                            "name": "y",
                             "type": HARPIA_INT,
                             "lower": 0,
                             "upper": 65535,
@@ -57,8 +57,8 @@ class NewRect(OpenCVPlugin):
                             }
                            ]
 
-        # -------------------C/OpenCv code------------------------------------
+        self.vars = "CvRect block$id$_rect_o0 = cvRect( 0, 0, 1, 1);"
         self.function_call = \
-            'block$id$_rect_o0 = cvRect($x0$, $y0$, $width$, $height$);\n'
+            'block$id$_rect_o0 = cvRect($prop[x]$, $prop[y]$, $prop[width]$, $prop[height]$);\n'
 
 # -----------------------------------------------------------------------------

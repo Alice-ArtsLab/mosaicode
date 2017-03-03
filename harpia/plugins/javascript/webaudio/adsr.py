@@ -63,7 +63,7 @@ this.node.gain.linearRampToValueAtTime(0, time);
 """
         self.vars = """
 // block_$id$ = ADSR
-var block_$id$_obj = new Envelope(context, $a$, $d$, $s$, $r$, $g$);
+var block_$id$_obj = new Envelope(context, $prop[a]$, $prop[d]$, $prop[s]$, $prop[r]$, $prop[g]$);
 var block_$id$ =  block_$id$_obj.node;
 var block_$id$_i = [];
 block_$id$_i[0] = block_$id$_obj.node;

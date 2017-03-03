@@ -15,15 +15,6 @@ class AddBorder(OpenCVPlugin):
 
     def __init__(self):
         OpenCVPlugin.__init__(self)
-        self.color = "#0000ffff0000"
-
-        self.red = self.color[1:5]
-        self.green = self.color[5:9]
-        self.blue = self.color[9:13]
-
-        self.red = int(self.red, 16) / 257
-        self.green = int(self.green, 16) / 257
-        self.blue = int(self.blue, 16) / 257
 
         # Appearance
         self.help = "Adiciona bordas na imagem."
@@ -41,13 +32,13 @@ class AddBorder(OpenCVPlugin):
                            "label":"Output Image"}]
         self.group = "Experimental"
 
-        self.properties = [{"name": "Color",
-                            "label": "color",
+        self.properties = [{"label": "Color",
+                            "name": "color",
                             "type": HARPIA_COLOR,
                             "value":"#FF0000"
                             },
-                           {"name": "Type",
-                            "label": "border_type",
+                           {"name": "type",
+                            "label": "Type",
                             "type": HARPIA_COMBO,
                             "value":"IPL_BORDER_CONSTANT",
                             "values": ["IPL_BORDER_CONSTANT",
@@ -55,17 +46,37 @@ class AddBorder(OpenCVPlugin):
                                        "IPL_BORDER_REFLECT",
                                        "IPL_BORDER_WRAP"]
                             },
-                           {"name": "Border Size",
-                            "label": "border",
+                           {"label": "Border Size",
+                            "name": "border_size",
                             "type": HARPIA_INT,
                             "value":"50"
                             }
                            ]
 
-        # --------------------c/OpneCV code----------------------------
+        self.header = \
+            "CvScalar get_scalar_color(const char * rgbColor){\n" + \
+            "   if (strlen(rgbColor) < 13 || rgbColor[0] != '#')\n" + \
+            "       return cvScalar(0,0,0,0);\n" + \
+            "   char r[4], g[4], b[4];\n" + \
+            "   strncpy(r, rgbColor+1, 4);\n" + \
+            "   strncpy(g, rgbColor+5, 4);\n" + \
+            "   strncpy(b, rgbColor+9, 4);\n" + \
+            "\n" + \
+            "   int ri, gi, bi = 0;\n" + \
+            "   ri = (int)strtol(r, NULL, 16);\n" + \
+            "   gi = (int)strtol(g, NULL, 16);\n" + \
+            "   bi = (int)strtol(b, NULL, 16);\n" + \
+            "\n" + \
+            "   ri /= 257;\n" + \
+            "   gi /= 257;\n" + \
+            "   bi /= 257;\n" + \
+            "   \n" + \
+            "   return cvScalar(bi, gi, ri, 0);\n" + \
+            "}\n"
+
         self.vars = \
             "IplImage * block$id$_img_i0 = NULL;\n" + \
-            "int block$id$_int_i1 = $border$;\n" + \
+            "int block$id$_int_i1 = $prop[border_size]$;\n" + \
             "IplImage * block$id$_img_o0 = NULL;\n"
 
         self.function_call = \
@@ -77,20 +88,9 @@ class AddBorder(OpenCVPlugin):
             ' block$id$_img_i0->depth,block$id$_img_i0->nChannels);\n' + \
             '\tCvPoint point$id$ = cvPoint' + \
             '(block$id$_int_i1, block$id$_int_i1);\n' + \
-            '\tCvScalar color = cvScalar($blue$,$green$,$red$,0);\n' + \
+            '\tCvScalar color = get_scalar_color("$prop[color]$");\n' + \
             '\tcvCopyMakeBorder(block$id$_img_i0, block$id$_img_o0,' + \
-            ' point$id$, $border_type$, color);\n' + \
+            ' point$id$, $prop[type]$, color);\n' + \
             '}\n'
-
-    # ----------------------------------------------------------------------
-    def set_properties(self, data):
-        OpenCVPlugin.set_properties(self, data)
-        self.red = self.color[1:5]
-        self.green = self.color[5:9]
-        self.blue = self.color[9:13]
-
-        self.red = int(self.red, 16) / 257
-        self.green = int(self.green, 16) / 257
-        self.blue = int(self.blue, 16) / 257
 
 # -----------------------------------------------------------------------------

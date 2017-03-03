@@ -74,9 +74,9 @@ class Canny(OpenCVPlugin):
             '// $id$ Canny\n' + \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
-            'int block$id$_int_i1 = $apertureSize$;\n' + \
-            'int block$id$_int_i2 = $threshold1$;\n' + \
-            'int block$id$_int_i3 = $threshold2$;\n'
+            'int block$id$_int_i1 = $prop[apertureSize]$;\n' + \
+            'int block$id$_int_i2 = $prop[threshold1]$;\n' + \
+            'int block$id$_int_i3 = $prop[threshold2]$;\n'
 
         self.function_call = \
             "if(block$id$_img_i0){ //Canny Code\n" + \

@@ -46,26 +46,26 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
         self.add(vbox)
 
         data = {"label": _("Label"), "value": plugin.get_label()}
-        self.label_field = StringField(data, self._on_edit)
+        self.label_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Language"), "value": plugin.get_language()}
-        self.language_field = StringField(data, self._on_edit)
+        self.language_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Framework"), "value": plugin.get_framework()}
-        self.framework_field = StringField(data, self._on_edit)
+        self.framework_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Plugin Type"), "value": plugin.get_type()}
-        self.type_field = StringField(data, self._on_edit)
+        self.type_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Group"), "value": plugin.get_group()}
-        self.group_field = StringField(data, self._on_edit)
+        self.group_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Color"), "value": plugin.get_color()}
-        self.color_field = ColorField(data, self._on_edit)
+        self.color_field = ColorField(data, self.__on_edit)
         self.color_field.set_parent_window(self.plugin_editor)
 
         data = {"label": _("Help"), "value": plugin.get_help()}
-        self.help_field = CommentField(data, self._on_edit)
+        self.help_field = CommentField(data, self.__on_edit)
 
         vbox.pack_start(self.label_field, False, False, 1)
         vbox.pack_start(self.language_field, False, False, 1)
@@ -78,7 +78,7 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
         self.show_all()
 
     # ----------------------------------------------------------------------
-    def _on_edit(self, widget=None, data=None):
+    def __on_edit(self, widget=None, data=None):
         self.type_field.set_value("harpia.plugins." + \
                 self.language_field.get_value().lower() + "." + \
                 self.framework_field.get_value().lower() + "." + \

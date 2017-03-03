@@ -112,6 +112,10 @@ class PluginManager(Gtk.Dialog):
         PluginEditor(self, self.block_notebook.get_selected_block())
 
     # ----------------------------------------------------------------------
+    def add_plugin(self, plugin):
+        self.main_window.main_control.add_plugin(plugin)
+
+    # ----------------------------------------------------------------------
     def update(self):
         self.block_notebook.update()
 # ----------------------------------------------------------------------

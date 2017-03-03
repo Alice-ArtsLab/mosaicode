@@ -54,7 +54,7 @@ class BlockMenu(Gtk.Menu):
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
-        menu_item = Gtk.MenuItem("Edit")
+        menu_item = Gtk.MenuItem("Edit Plugin")
         menu_item.connect("activate", self.__edit_clicked)
         self.append(menu_item)
 

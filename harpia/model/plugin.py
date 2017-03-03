@@ -255,7 +255,8 @@ class Plugin(object):
             if key in data:
                 prop["value"] = data[key]
             else:
-                print "Plugin.set_property ERROR: key ", key, "not present"
+                print "Plugin.set_property (" + self.type + \
+                        ") ERROR: key ", key, "not present"
 
     # ----------------------------------------------------------------------
     def get_properties(self):

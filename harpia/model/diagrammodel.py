@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from harpia.model.connectionmodel import ConnectionModel as ConnectionModel
-
+from harpia.system import System as System
 
 class DiagramModel(object):
 

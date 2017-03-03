@@ -39,7 +39,7 @@ block_$id$_i[1] = function(value){
     };
 """
         self.dealloc = """
-$label$ <span id="block_$id$"></span><br>
+$prop[label]$ <span id="block_$id$"></span><br>
 """
         self.properties = [{"name": "label",
                             "label": "Label",

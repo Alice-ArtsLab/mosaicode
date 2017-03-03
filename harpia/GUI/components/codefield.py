@@ -51,17 +51,17 @@ class CodeField(Field, Gtk.VBox):
         lang_manager = GtkSource.LanguageManager()
         self.text_buffer = GtkSource.Buffer.new_with_language(
             lang_manager.get_language(self.data["language"]))
-        textview = GtkSource.View.new_with_buffer(self.text_buffer)
-        textview.set_show_line_numbers(True)
-        textview.set_left_margin(10)
-        textview.set_right_margin(10)
-        textview.get_buffer().set_text(self.data["value"])
+        self.field = GtkSource.View.new_with_buffer(self.text_buffer)
+        self.field.set_show_line_numbers(True)
+        self.field.set_left_margin(10)
+        self.field.set_right_margin(10)
+        self.field.get_buffer().set_text(self.data["value"])
 
-        textview.set_wrap_mode(Gtk.WrapMode.WORD)
+        self.field.set_wrap_mode(Gtk.WrapMode.WORD)
         if event is not None:
             self.field.connect("focus-out-event", event)
 
-        scrolled_window.add(textview)
+        scrolled_window.add(self.field)
 
         self.pack_start(scrolled_window, True, True, 0)
         self.show_all()

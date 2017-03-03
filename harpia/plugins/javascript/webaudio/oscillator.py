@@ -38,7 +38,7 @@ class Oscillator(WebaudioPlugin):
                             "step": 1,
                             "value": 440
                             },
-                           {"name": "oscillator_type",
+                           {"name": "type",
                             "label": "Type",
                             "type": HARPIA_COMBO,
                             "values": ["square",
@@ -67,8 +67,8 @@ block_$id$_i[2] = function(value){
 };
 """
         self.function_call = """
-block_$id$.type = '$oscillator_type$';
-block_$id$.frequency.value = $freq$; // value in hertz
+block_$id$.type = '$prop[type]$';
+block_$id$.frequency.value = $prop[freq]$; // value in hertz
 block_$id$.detune.value = 100; // value in cents
 block_$id$.start(0);
 """

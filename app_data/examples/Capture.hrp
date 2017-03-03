@@ -5,13 +5,13 @@
  <language value="C"/>
  <blocks>
   <block id="1" type="harpia.plugins.C.openCV.capture">
-   <position x="200" y="0"/>
-   <property key="camera" value="/dev/video0"/>
+   <position x="80.0" y="60.0"/>
+   <property key="camera" value="0"/>
   </block>
   <block id="2" type="harpia.plugins.C.openCV.show">
-   <position x="400" y="0"/>
+   <position x="270.0" y="120.0"/>
+   <property key="title" value="My Image"/>
    <property key="window_type" value="Image Size"/>
-   <property key="title" value="My Image - Add Capture"/>
   </block>
  </blocks>
  <connections>
