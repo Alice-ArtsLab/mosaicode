@@ -226,7 +226,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_generator().execute()
+        DiagramControl(diagram).get_code_template().execute()
 
     # ----------------------------------------------------------------------
     def save_source(self):
@@ -236,7 +236,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_generator().save_code()
+        DiagramControl(diagram).get_code_template().save_code()
 
     # ----------------------------------------------------------------------
     def view_source(self):
@@ -246,7 +246,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        code = DiagramControl(diagram).get_generator().generate_code()
+        code = DiagramControl(diagram).get_code_template().generate_code()
         CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------

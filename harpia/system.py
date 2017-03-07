@@ -42,6 +42,7 @@ from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
 from harpia.control.plugincontrol import PluginControl
 from harpia.model.preferences import Preferences
+from harpia.model.codetemplate import CodeTemplate
 
 
 class System(object):
@@ -68,7 +69,7 @@ class System(object):
             os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
             self.Log = None
             self.properties = Preferences()
-            self.generators = {}
+            self.code_templates = {}
             self.plugins = {}
             self.list_of_examples = []
             self.ports = {}
@@ -76,7 +77,6 @@ class System(object):
 
         # ----------------------------------------------------------------------
         def __load(self):
-            self.__load_plugins()
             PortControl.load_ports(self)
             PluginControl.load_plugins(self)
             examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
@@ -84,10 +84,11 @@ class System(object):
                 self.list_of_examples.append(example)
             self.list_of_examples.sort()
             PreferencesControl(self.properties).load()
+            self.__load_plugins()
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
-            from harpia.control.codegenerator import CodeGenerator
+            from harpia.model.codetemplate import CodeTemplate
             for importer, modname, ispkg in pkgutil.walk_packages(
                     harpia.plugins.__path__,
                     harpia.plugins.__name__ + ".",
@@ -102,9 +103,8 @@ class System(object):
                     if not modname.startswith("harpia.plugins"):
                         continue
                     instance = obj()
-                    if isinstance(instance, CodeGenerator):
-                        language = instance.__class__.__module__.split(".")[2]
-                        self.generators[language] = obj
+                    if isinstance(instance, CodeTemplate):
+                        self.code_templates[instance.language] = instance
 
     # Instance variable to the singleton
     instance = None
@@ -122,7 +122,7 @@ class System(object):
             cls.plugins = System.instance.plugins
             cls.list_of_examples = System.instance.list_of_examples
             cls.ports = System.instance.ports
-            cls.generators = System.instance.generators
+            cls.code_templates = System.instance.code_templates
 
     # ----------------------------------------------------------------------
     @classmethod

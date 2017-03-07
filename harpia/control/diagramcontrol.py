@@ -10,6 +10,7 @@ from gi.repository import Gdk
 from harpia.utils.XMLUtils import XMLParser
 from harpia.system import System as System
 from harpia.control.codegenerator import CodeGenerator
+from harpia.model.codetemplate import CodeTemplate
 
 
 class DiagramControl():
@@ -23,11 +24,12 @@ class DiagramControl():
         self.diagram = diagram
 
 # ----------------------------------------------------------------------
-    def get_generator(self):
+    def get_code_template(self):
         try:
-            generator = System.generators[self.diagram.language](self.diagram)
+            generator = CodeGenerator(self.diagram,
+                    System.code_templates[self.diagram.language])
         except:
-            generator = CodeGenerator(self.diagram)
+            generator = CodeGenerator(self.diagram, CodeTemplate())
             System.log("Language generator not available")
         return generator
 

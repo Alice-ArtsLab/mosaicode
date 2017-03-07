@@ -39,8 +39,12 @@ import os
 import time
 import datetime
 import gettext
-from harpia.system import System as System
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
+from threading import Thread
+from harpia.system import System as System
 
 # i18n
 _ = gettext.gettext
@@ -55,12 +59,14 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram=None):
-        self.diagram = diagram
+    def __init__(self, diagram=None, code_template=None):
         if diagram is None:
+            return
+        if code_template is None:
             return
 
         self.diagram = diagram
+        self.code_template = code_template
 
         if self.diagram.language is None:
             System.log("No language, no block, no code")
@@ -277,31 +283,111 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def generate_code(self):
-        System.log("Parsing Code")
-        return "Houston, we have a problem!"
+        """
+        This method generate the source code.
+
+        """
+        System.log("Generating Code")
+        self.sort_blocks()
+        self.generate_parts()
+
+        code = self.code_template.code
+
+        # Adds only if it does not contains
+        temp_header = []
+        header = ""
+        for header_code in self.headers:
+            if header_code not in temp_header:
+                temp_header.append(header_code)
+
+        for header_code in temp_header:
+            header += header_code
+
+        code = code.replace("$originalheader$", header)
+
+        declaration_block = ""
+        for var in self.declarations:
+            declaration_block += var
+
+        code = code.replace("$declaration$", declaration_block)
+
+        execution = ""
+        for x, y in zip(self.functionCalls, self.connections):
+            execution += x
+            execution += y
+        code = code.replace("$execution$", execution)
+
+        connection_block = ""
+        for conn in self.connections:
+            connection_block += conn + "\n"
+        code = code.replace("$connections$", connection_block)
+
+        function_calls = ""
+        for x in self.functionCalls:
+            function_calls += x
+        code = code.replace("$function_calls$", function_calls)
+
+        deallocating = ""
+        for x in self.deallocations:
+            deallocating += x
+        code = code.replace("$deallocating$", deallocating)
+
+        closing = ""
+        for outDea in self.outDeallocations:
+            closing += outDea
+        code = code.replace("$closing$", closing)
+
+        return code
 
     # ----------------------------------------------------------------------
     def save_code(self):
         """
         This method generate the save log.
         """
-        System.log("Saving Code to " + self.dir_name + self.filename)
-
-    # ----------------------------------------------------------------------
-    def compile(self):
-        """
-        This method generate the compile log.
-        """
-        System.log("Compiling " + self.dir_name + self.filename)
-        pass
+        System.log("Saving Code to " + \
+                self.dir_name + \
+                self.filename + \
+                self.code_template.extension)
+        self.change_directory()
+        codeFile = open(self.filename + self.code_template.extension , 'w')
+        code = self.generate_code()
+        codeFile.write(code)
+        codeFile.close()
+        self.return_to_old_directory()
 
     # ----------------------------------------------------------------------
     def execute(self):
         """
-        This method generate the executing log.
+        This method executes the code.
         """
-        System.log("Executing Code")
-        pass
+        command = self.code_template.command
+        command = command.replace("$filename$", self.filename)
+        command = command.replace("$extension$", self.code_template.extension)
+        command = command.replace("$dir_name$", self.dir_name)
+        command = command.replace("$error_log_file$", self.error_log_file)
+
+        self.save_code()
+        self.change_directory()
+
+        from harpia.system import System as System
+        System.log("Executing Code: " + command)
+
+        program = Thread(target=os.system, args=(command,))
+        program.start()
+
+        while program.isAlive():
+            program.join(0.4)
+            while Gtk.events_pending():
+                Gtk.main_iteration()
+
+        try:
+            o = open("Run" + self.error_log_file, "r")
+            errors = o.read()
+            System.log(errors)
+            o.close()
+        except:
+            pass
+        self.return_to_old_directory()
 
     # ----------------------------------------------------------------------
     def __set_error_log(self, error):
