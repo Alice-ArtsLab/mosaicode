@@ -36,9 +36,8 @@ class DivideFloat(WebaudioPlugin):
 var block_$id$_arg1 = 0;
 var block_$id$_arg2 = 0;
 var block_$id$_o0 = [];
-var block_$id$_i = [];
 
-block_$id$_i[0] = function(value){
+var block_$id$_i0 = function(value){
     block_$id$_arg1 = parseFloat(value);
     block_$id$_arg2 = (parseFloat(block_$id$_arg2) == 0) ?
             1 : parseFloat(block_$id$_arg2);
@@ -48,7 +47,8 @@ block_$id$_i[0] = function(value){
     }
     return true;
     };
-block_$id$_i[1] = function(value){
+
+var block_$id$_i1 = function(value){
     block_$id$_arg2 = parseFloat(value);
     block_$id$_arg2 = (parseFloat(block_$id$_arg2) == 0) ?
             1 : parseFloat(block_$id$_arg2);

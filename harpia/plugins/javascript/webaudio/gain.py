@@ -34,15 +34,16 @@ class Gain(WebaudioPlugin):
         self.vars = """
 // block_$id$ = Gain
 var block_$id$ = context.createGain();
-var block_$id$_i = [];
-block_$id$_i[0] = block_$id$;
-block_$id$_i[1] = block_$id$.gain;
-block_$id$_i[2] = function(value){
+var block_$id$_o0 = null;
+var block_$id$_i0 = block_$id$;
+var block_$id$_i1 = block_$id$.gain;
+var block_$id$_i2 = function(value){
     block_$id$.gain.value = value;
     };
 """
 
-        self.function_call = "block_$id$.gain.value = $prop[gain]$;\n"
+        self.function_call = "block_$id$_o0 = block_$id$;\n" + \
+            "block_$id$.gain.value = $prop[gain]$;\n"
 
         self.properties = [{"name": "gain",
                             "label": "Gain",

@@ -25,6 +25,5 @@ class Speaker(WebaudioPlugin):
 
         self.vars = """
 // block_$id$ = $label$
-var block_$id$_i = []
-block_$id$_i[0] = context.destination;
+var block_$id$_i0 = context.destination;
 """

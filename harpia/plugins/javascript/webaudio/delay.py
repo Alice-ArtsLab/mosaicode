@@ -28,14 +28,6 @@ class Delay(WebaudioPlugin):
 
         self.group = "Sound"
 
-        self.vars = """
-// block_$id$ = Delay
-var block_$id$ = context.createDelay();
-var block_$id$_i = []
-block_$id$_i[0] = block_$id$
-block_$id$_i[0].delayTime.value = $prop[time]$;
-"""
-
         self.properties = [{"name": "time",
                             "label": "Time",
                             "type": HARPIA_FLOAT,
@@ -45,3 +37,15 @@ block_$id$_i[0].delayTime.value = $prop[time]$;
                             "value": 1
                             }
                            ]
+
+        self.vars = """
+// block_$id$ = Delay
+var block_$id$ = context.createDelay();
+var block_$id$_o0 = null;
+var block_$id$_i0 = null;
+"""
+
+        self.function_call = "block_$id$_i0 = block_$id$;\n" + \
+            "var block_$id$.delayTime.value = $prop[time]$\n;" + \
+            "block_$id$_o0 = block_$id$;\n"
+

@@ -44,5 +44,8 @@ WhiteNoise.prototype.process = function(e) {
 """
         self.vars = """
 // block_$id$ = $label$
-var block_$id$ =  new WhiteNoise(context).node;
+var block_$id$ =  new WhiteNoise(context);
+var block_$id$_o0 = null;
 """
+
+        self.function_call = "block_$id$_o0 = block_$id$.node;\n"

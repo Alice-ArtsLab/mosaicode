@@ -52,12 +52,11 @@ class Oscillator(WebaudioPlugin):
         self.vars = """
 // block_$id$ = Oscillator
 var block_$id$ =  context.createOscillator();
-var block_$id$_i = [];
-block_$id$_i[0] = block_$id$.frequency;
-block_$id$_i[1] = function(value){
+var block_$id$_o0 = null;
+var block_$id$_i1 = function(value){
     block_$id$.frequency.value = value;
 };
-block_$id$_i[2] = function(value){
+var block_$id$_i2 = function(value){
     oscillator = ''
     if (value < 1) oscillator = 'square';
     if (value == 1) oscillator = 'sine';
@@ -67,6 +66,7 @@ block_$id$_i[2] = function(value){
 };
 """
         self.function_call = """
+block_$id$_o0 = block_$id$.frequency;
 block_$id$.type = '$prop[type]$';
 block_$id$.frequency.value = $prop[freq]$; // value in hertz
 block_$id$.detune.value = 100; // value in cents

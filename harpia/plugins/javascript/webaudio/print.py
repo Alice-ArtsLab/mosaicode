@@ -26,14 +26,20 @@ class Print(WebaudioPlugin):
                 ]
         self.group = "Interface"
 
+        self.properties = [{"name": "label",
+                            "label": "Label",
+                            "value": "Label",
+                            "type": HARPIA_STRING
+                            }
+                           ]
+
         self.vars = """
 // block_$id$ = $name$
-var block_$id$_i = [];
-block_$id$_i[0] = function(value){
+var block_$id$_i0 = function(value){
     document.getElementById("block_$id$").innerHTML = value;
     return true;
     };
-block_$id$_i[1] = function(value){
+var block_$id$_i1 = function(value){
     document.getElementById("block_$id$").innerHTML = value;
     return true;
     };
@@ -41,9 +47,3 @@ block_$id$_i[1] = function(value){
         self.dealloc = """
 $prop[label]$ <span id="block_$id$"></span><br>
 """
-        self.properties = [{"name": "label",
-                            "label": "Label",
-                            "value": "Label",
-                            "type": HARPIA_STRING
-                            }
-                           ]

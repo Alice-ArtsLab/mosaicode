@@ -65,9 +65,8 @@ this.node.gain.linearRampToValueAtTime(0, time);
 // block_$id$ = ADSR
 var block_$id$_obj = new Envelope(context, $prop[a]$, $prop[d]$, $prop[s]$, $prop[r]$, $prop[g]$);
 var block_$id$ =  block_$id$_obj.node;
-var block_$id$_i = [];
-block_$id$_i[0] = block_$id$_obj.node;
-block_$id$_i[1] = function(value){
+var block_$id$_i0 = block_$id$_obj.node;
+var block_$id$_i1 = function(value){
     block_$id$_obj.play();
 };
 """

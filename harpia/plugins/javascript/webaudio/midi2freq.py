@@ -27,11 +27,10 @@ class Midi2Freq(WebaudioPlugin):
             ]
         self.group = "Conversion"
         self.vars = """
-// block_$id$ = Midi 2 Freq
+// block_$id$ = $label$
 var block_$id$_o0 = [];
-var block_$id$_i = [];
 
-block_$id$_i[0] = function(value){
+var block_$id$_i0 = function(value){
     value = (value < 0) ? 0 : value;
     value = (value >127) ? 127 : value;
     var arg = ((parseFloat(value) - 69.0) / 12.0);

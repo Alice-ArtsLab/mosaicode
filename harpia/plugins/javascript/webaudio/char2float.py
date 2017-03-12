@@ -44,8 +44,7 @@ class Char2Float(WebaudioPlugin):
         self.vars = """
 // block_$id$ = Char 2 Float
 var block_$id$_o0 = [];
-var block_$id$_i = [];
-block_$id$_i[0] = function(value){
+var block_$id$_i0 = function(value){
     if (value != '$prop[char]$')
         return true;
     for (var i = 0; i < block_$id$_o0.length ; i++){

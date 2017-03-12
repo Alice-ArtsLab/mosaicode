@@ -15,6 +15,10 @@ class Port(object):
         self.multiple = False
         self.code = ""
         self.source = "Python"
+        self.input_vars = ""
+        self.output_vars = ""
+        self.input_dealloc = ""
+        self.output_dealloc = ""
 
     # ----------------------------------------------------------------------
     def get_type(self):
@@ -44,4 +48,19 @@ class Port(object):
     def get_source(self):
         return self.source
 
+    # ----------------------------------------------------------------------
+    def get_input_vars(self):
+        return self.input_vars
+
+    # ----------------------------------------------------------------------
+    def get_output_vars(self):
+        return self.output_vars
+
+   # ----------------------------------------------------------------------
+    def get_input_dealloc(self):
+        return self.input_dealloc
+
+    # ----------------------------------------------------------------------
+    def get_output_dealloc(self):
+        return self.output_dealloc
 # ------------------------------------------------------------------------------

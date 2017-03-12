@@ -53,7 +53,6 @@ Merger.prototype.process = function(e) {
 // block_$id$ = Channel Merger
 var block_$id$_obj = new Merger(context);
 var block_$id$ = block_$id$_obj.node;
-var block_$id$_i = [];
-block_$id$_i[0] = block_$id$_obj.node;
-block_$id$_i[1] = block_$id$_obj.node;
+var block_$id$_i0 = block_$id$_obj.node;
+var block_$id$_i1 = block_$id$_obj.node;
 """

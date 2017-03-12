@@ -13,7 +13,6 @@ class FloatValue(WebaudioPlugin):
     def __init__(self):
         WebaudioPlugin.__init__(self)
 
-        # Appearance
         self.help = "Double value"
         self.label = "FloatValue"
         self.color = "50:150:250:150"
@@ -22,24 +21,6 @@ class FloatValue(WebaudioPlugin):
                 "name":"float_value"}
             ]
         self.group = "Interface"
-
-        self.vars = """
-// block_$id$ = Float Value
-var block_$id$_value = $prop[value]$;
-var block_$id$_o0 = [];
-"""
-        self.function_call = """
-function change_$id$_value(){
-    value = document.getElementById("block_$id$").value;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](value);
-    }
-};
-"""
-        self.dealloc = """
-$prop[label]$ <input type="number" id="block_$id$" value="$prop[value]$" min="$prop[min]$"
-        max="$prop[max]$" onChange="change_$id$_value();"><br>
-"""
 
         self.properties = [{"name": "value",
                             "label": "Value",
@@ -71,3 +52,22 @@ $prop[label]$ <input type="number" id="block_$id$" value="$prop[value]$" min="$p
                             "value": "Label"
                             }
                            ]
+
+        self.vars = """
+// block_$id$ = Float Value
+var block_$id$_value = $prop[value]$;
+var block_$id$_o0 = [];
+"""
+        self.function_call = """
+function change_$id$_value(){
+    value = document.getElementById("block_$id$").value;
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](value);
+    }
+};
+"""
+        self.dealloc = """
+$prop[label]$ <input type="number" id="block_$id$" value="$prop[value]$" min="$prop[min]$"
+        max="$prop[max]$" onChange="change_$id$_value();"><br>
+"""
+

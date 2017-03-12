@@ -25,7 +25,7 @@ class Button(WebaudioPlugin):
         self.group = "Interface"
 
         self.vars = """
-// block_$id$ = Button
+// block_$id$ = $label$
 var block_$id$_value = $prop[value]$;
 var block_$id$_o0 = [];
 """

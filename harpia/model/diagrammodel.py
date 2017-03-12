@@ -37,8 +37,8 @@ class DiagramModel(object):
     # ----------------------------------------------------------------------
     def delete_block(self, block):
         if block.get_id() not in self.blocks:
-            System.log("Block " + block.get_id() + " is not present" + \
-                "this diagram.")
+            System.log("Block " + str(block.get_id()) + \
+                " is not present in this diagram.")
             return False
         for idx in reversed(range(len(self.connectors))):
             if self.connectors[idx].source == block \
