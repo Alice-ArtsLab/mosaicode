@@ -41,6 +41,7 @@ from glob import glob  # To load examples
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
 from harpia.control.plugincontrol import PluginControl
+from harpia.control.codetemplatecontrol import CodeTemplateControl
 from harpia.model.preferences import Preferences
 from harpia.model.codetemplate import CodeTemplate
 
@@ -79,32 +80,12 @@ class System(object):
         def __load(self):
             PortControl.load_ports(self)
             PluginControl.load_plugins(self)
+            CodeTemplateControl.load_code_templates(self)
             examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
             for example in examples:
                 self.list_of_examples.append(example)
             self.list_of_examples.sort()
             PreferencesControl(self.properties).load()
-            self.__load_plugins()
-
-        # ----------------------------------------------------------------------
-        def __load_plugins(self):
-            from harpia.model.codetemplate import CodeTemplate
-            for importer, modname, ispkg in pkgutil.walk_packages(
-                    harpia.plugins.__path__,
-                    harpia.plugins.__name__ + ".",
-                    None):
-                if ispkg:
-                    continue
-                module = __import__(modname, fromlist="dummy")
-                for name, obj in inspect.getmembers(module):
-                    if not inspect.isclass(obj):
-                        continue
-                    modname = inspect.getmodule(obj).__name__
-                    if not modname.startswith("harpia.plugins"):
-                        continue
-                    instance = obj()
-                    if isinstance(instance, CodeTemplate):
-                        self.code_templates[instance.language] = instance
 
     # Instance variable to the singleton
     instance = None
