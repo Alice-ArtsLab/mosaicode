@@ -60,21 +60,12 @@ class CodeGenerator():
     # ----------------------------------------------------------------------
 
     def __init__(self, diagram=None, code_template=None):
-        if diagram is None:
-            return
-        if code_template is None:
-            return
-
         self.diagram = diagram
         self.code_template = code_template
 
-        if self.diagram.language is None:
-            System.log("No language, no block, no code")
-            return
-        self.dir_name = self.get_dir_name()
-        self.filename = self.get_filename()
-        self.error_log_file = System.properties.get_error_log_file()
-        self.error_log_file = self.replace_wildcards(self.error_log_file)
+        self.dir_name = ""
+        self.filename = ""
+        self.error_log_file = ""
         self.old_path = os.path.realpath(os.curdir)
 
         self.blockList = []
@@ -85,9 +76,24 @@ class CodeGenerator():
         self.declarations = []
         self.deallocations = []
 
+        if diagram is None:
+            return
+
+        if code_template is None:
+            return
+
+        if self.diagram.language is None:
+            System.log("No language, no block, no code")
+            return
+
         if not len(self.diagram.blocks) > 0:
             System.log("Diagram is empty. Nothing to generate.")
             return
+
+        self.dir_name = self.get_dir_name()
+        self.filename = self.get_filename()
+        self.error_log_file = System.properties.get_error_log_file()
+        self.error_log_file = self.replace_wildcards(self.error_log_file)
 
     # ----------------------------------------------------------------------
     def replace_wildcards(self, text):
@@ -388,15 +394,5 @@ class CodeGenerator():
         except:
             pass
         self.return_to_old_directory()
-
-    # ----------------------------------------------------------------------
-    def __set_error_log(self, error):
-        if os.name == 'nt':
-            Error = file(self.error_log_file, 'wb')
-        else:
-            Error = file(self.error_log_file, 'w')
-        System.Log.log(error)
-        Error.write(error)
-        Error.close()
 
 # -------------------------------------------------------------------------

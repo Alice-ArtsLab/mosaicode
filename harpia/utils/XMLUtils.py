@@ -95,7 +95,10 @@ class XMLParser(object):
         return tag.prettify()
 
     def getTag(self, tag):
-        return XMLParser(getattr(self.parsedXML, tag), fromTag=True)
+        if self.parsedXML.find(tag):
+            return XMLParser(getattr(self.parsedXML, tag), fromTag=True)
+        else:
+            return None
 
     def getTagChild(self, parent, child):
         return getattr(getattr(self.parsedXML, parent), child)

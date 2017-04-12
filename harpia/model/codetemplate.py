@@ -12,7 +12,8 @@ class CodeTemplate(object):
         self.description = ""
         self.language = ""
         self.command = ""
-        self.extension = '.c'
-        self.code = ""
+        self.extension = ""
+        self.code = "Invalid Code Template"
+        self.source = "python"
 
 # ------------------------------------------------------------------------------

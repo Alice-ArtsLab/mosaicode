@@ -42,7 +42,7 @@ class CodeTemplateControl():
                     continue
                 instance = obj()
                 if isinstance(instance, CodeTemplate):
-                    system.code_templates[instance.language] = instance
+                    system.code_templates[instance.name] = instance
 
         #Now load the XML from user space
         from harpia.system import System
@@ -58,7 +58,7 @@ class CodeTemplateControl():
             if code_template is None:
                 continue
             code_template.source = "xml"
-            system.code_templates[code_template.language] = code_template
+            system.code_templates[code_template.name] = code_template
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -73,18 +73,23 @@ class CodeTemplateControl():
         # load the code_template
         if os.path.exists(file_name) is False:
             return
-        xml_loader = XMLParser(file_name)
-        properties = xml_loader.getTag(
-                "HarpiaCodeTemplate").getChildTags("property")
+        parser = XMLParser(file_name)
+
+        if parser.getTag("HarpiaCodeTemplate") is None:
+            return None
+
+        properties = parser.getTag("HarpiaCodeTemplate").getChildTags("property")
+
         code_template = CodeTemplate()
-        for prop in properties:
-            try:
-                prop.getAttr("key")
-            except:
-                continue
-            if prop.getAttr("key") in code_template.__dict__:
-                code_template.__dict__[prop.getAttr("key")] = prop.getAttr("value")
-        if code_template.language == "":
+        code_template.name = parser.getTagAttr("HarpiaCodeTemplate",  "name")
+        code_template.description = parser.getTagAttr("HarpiaCodeTemplate",  "description")
+        code_template.language = parser.getTagAttr("HarpiaCodeTemplate",  "language")
+        code_template.extension = parser.getTagAttr("HarpiaCodeTemplate",  "extension")
+        code_template.source = parser.getTagAttr("HarpiaCodeTemplate",  "source")
+        code_template.command = parser.getTag("HarpiaCodeTemplate").getTag("command").getText()
+        code_template.code = parser.getTag("HarpiaCodeTemplate").getTag("code").getText()
+
+        if code_template.name == "":
             return None
         return code_template
 
@@ -102,9 +107,14 @@ class CodeTemplateControl():
         code_template.source = "xml"
         parser = XMLParser()
         parser.addTag('HarpiaCodeTemplate')
-        for key in code_template.__dict__:
-            parser.appendToTag('HarpiaCodeTemplate', 'property',
-                               key=key, value=code_template.__dict__[key])
+        parser.setTagAttr('HarpiaCodeTemplate','name', code_template.name)
+        parser.setTagAttr('HarpiaCodeTemplate','description', code_template.description)
+        parser.setTagAttr('HarpiaCodeTemplate','language', code_template.language)
+        parser.setTagAttr('HarpiaCodeTemplate','extension', code_template.extension)
+        parser.setTagAttr('HarpiaCodeTemplate','source', code_template.source)
+        parser.appendToTag('HarpiaCodeTemplate','command').string = str(code_template.command)
+        parser.appendToTag('HarpiaCodeTemplate','code').string = str(code_template.code)
+
         try:
             file_name = System.get_user_dir() + "/" + code_template.name + ".xml"
             code_template_file = file(os.path.expanduser(file_name), 'w')
@@ -121,7 +131,7 @@ class CodeTemplateControl():
         CodeTemplateControl.save(code_template)
         # Then add it to system
         from harpia.system import System
-        System.code_templates[code_template.language] = code_template
+        System.code_templates[code_template.name] = code_template
 
     # ----------------------------------------------------------------------
     @classmethod

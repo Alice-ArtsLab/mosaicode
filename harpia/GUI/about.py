@@ -23,7 +23,7 @@ class About(Gtk.Window):
           Parameters:
             * **Types** (:class:`MainWindow<harpia.GUI.mainwindow>`)
         """
-        self.data_dir = os.environ['HARPIA_DATA_DIR']
+        self.data_dir = System.DATA_DIR
         Gtk.Window.__init__(self, title=_("About Harpia"))
         self.set_default_size(650, 480)
 

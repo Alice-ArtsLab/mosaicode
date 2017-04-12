@@ -10,6 +10,7 @@ from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
+from harpia.GUI.codetemplatemanager import CodeTemplateManager
 from harpia.GUI.pluginmanager import PluginManager
 from harpia.GUI.portmanager import PortManager
 from harpia.GUI.preferencewindow import PreferenceWindow
@@ -18,6 +19,7 @@ from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
 from harpia.control.plugincontrol import PluginControl
+from harpia.control.codetemplatecontrol import CodeTemplateControl
 
 
 class MainControl():
@@ -421,6 +423,14 @@ class MainControl():
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
+    def code_template_manager(self):
+        """
+        This add a new Code Template.
+        """
+        CodeTemplateManager(self.main_window)
+
+
+    # ----------------------------------------------------------------------
     def plugin_manager(self):
         """
         This add a new plugin.
@@ -433,6 +443,17 @@ class MainControl():
         This add a new port.
         """
         PortManager(self.main_window)
+
+    # ----------------------------------------------------------------------
+    def add_code_template(self, code_template):
+        CodeTemplateControl.add_code_template(code_template)
+
+    # ----------------------------------------------------------------------
+    def delete_code_template(self, code_template_name):
+        if not CodeTemplateControl.delete_code_template(code_template_name):
+            message = "This code template is a python file installed in the System.\n"
+            message = message + "Sorry, you can't remove it"
+            Dialog().message_dialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
     def add_port(self, port):

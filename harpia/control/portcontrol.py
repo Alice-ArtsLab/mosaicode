@@ -76,6 +76,8 @@ class PortControl():
         if os.path.exists(file_name) is False:
             return
         xml_loader = XMLParser(file_name)
+        if xml_loader.getTag("HarpiaPort") is None:
+            return None
         properties = xml_loader.getTag(
                 "HarpiaPort").getChildTags("property")
         port = Port()

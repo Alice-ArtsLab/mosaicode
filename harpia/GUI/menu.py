@@ -93,6 +93,8 @@ class Menu(Gtk.MenuBar):
 
         # -------------------------- Plugin --------------------------------
         plugin_menu = Gtk.Menu()
+        self.__create_menu(_("Code Template Manager"), None,
+                           plugin_menu, mc.code_template_manager)
         self.__create_menu(_("Plugin Manager"), None,
                            plugin_menu, mc.plugin_manager)
         self.__create_menu(_("Port Manager"), None,

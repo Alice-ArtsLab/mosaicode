@@ -39,7 +39,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         Plugin.__init__(self, plugin)
 
         self.diagram = diagram
-        self.data_dir = os.environ['HARPIA_DATA_DIR']
+        self.data_dir = System.DATA_DIR
 
         self.remember_x = 0
         self.remember_y = 0

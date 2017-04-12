@@ -25,12 +25,12 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def get_code_template(self):
-        try:
-            generator = CodeGenerator(self.diagram,
-                    System.code_templates[self.diagram.language])
-        except:
-            generator = CodeGenerator(self.diagram, CodeTemplate())
-            System.log("Language generator not available")
+        code_template = CodeTemplate()
+        for key in System.code_templates:
+            if System.code_templates[key].language == self.diagram.language:
+                code_template = System.code_templates[key]
+                break
+        generator = CodeGenerator(self.diagram, code_template)
         return generator
 
 # ----------------------------------------------------------------------

@@ -52,6 +52,7 @@ class System(object):
     """
 
     APP = 'harpia'
+    DATA_DIR = "/usr/share/harpia/"
     DIR = '/usr/share/harpia/po'
 
     ZOOM_ORIGINAL = 1
@@ -67,7 +68,6 @@ class System(object):
         # ----------------------------------------------------------------------
 
         def __init__(self):
-            os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
             self.Log = None
             self.properties = Preferences()
             self.code_templates = {}
@@ -81,7 +81,7 @@ class System(object):
             PortControl.load_ports(self)
             PluginControl.load_plugins(self)
             CodeTemplateControl.load_code_templates(self)
-            examples = glob(os.environ['HARPIA_DATA_DIR'] + "examples/*")
+            examples = glob(System.DATA_DIR + "examples/*")
             for example in examples:
                 self.list_of_examples.append(example)
             self.list_of_examples.sort()
@@ -129,7 +129,7 @@ class System(object):
     @classmethod
     def get_user_dir(cls):
         home_dir = os.path.expanduser("~")
-        home_dir = home_dir + "/harpia"
+        home_dir = home_dir + "/" + System.APP
         return home_dir
 
 # ------------------------------------------------------------------------------

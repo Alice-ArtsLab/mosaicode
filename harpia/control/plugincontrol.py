@@ -77,6 +77,10 @@ class PluginControl():
         if os.path.exists(file_name) is False:
             return
         parser = XMLParser(file_name)
+
+        if parser.getTag("HarpiaPlugin") is None:
+            return None
+
         plugin = Plugin()
 
         plugin.type = parser.getTagAttr("HarpiaPlugin", "type")
