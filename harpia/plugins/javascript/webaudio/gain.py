@@ -29,9 +29,18 @@ class Gain(WebaudioPlugin):
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
                          "name":"sound_output",
                          "label":"Sound Output"}]
+        self.properties = [{"name": "gain",
+                            "label": "Gain",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 32000,
+                            "value": 1
+                            }
+                           ]
+
         self.group = "Sound"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Gain
 var block_$id$ = context.createGain();
 var block_$id$_o0 = null;
@@ -42,14 +51,5 @@ var block_$id$_i2 = function(value){
     };
 """
 
-        self.function_call = "block_$id$_o0 = block_$id$;\n" + \
+        self.codes[2] = "block_$id$_o0 = block_$id$;\n" + \
             "block_$id$.gain.value = $prop[gain]$;\n"
-
-        self.properties = [{"name": "gain",
-                            "label": "Gain",
-                            "type": HARPIA_FLOAT,
-                            "lower": 0,
-                            "upper": 32000,
-                            "value": 1
-                            }
-                           ]

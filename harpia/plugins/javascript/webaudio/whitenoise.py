@@ -23,7 +23,7 @@ class WhiteNoise(WebaudioPlugin):
             ]
         self.group = "Sound"
 
-        self.header = """
+        self.codes[0] = """
 WhiteNoise = function(context) {
   var that = this;
   this.x = 0; // Initial sample number
@@ -42,10 +42,10 @@ WhiteNoise.prototype.process = function(e) {
   }
 }
 """
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = $label$
 var block_$id$ =  new WhiteNoise(context);
 var block_$id$_o0 = null;
 """
 
-        self.function_call = "block_$id$_o0 = block_$id$.node;\n"
+        self.codes[2] = "block_$id$_o0 = block_$id$.node;\n"

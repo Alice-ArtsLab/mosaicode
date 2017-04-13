@@ -75,19 +75,25 @@ class PortControl():
         # load the port
         if os.path.exists(file_name) is False:
             return
-        xml_loader = XMLParser(file_name)
-        if xml_loader.getTag("HarpiaPort") is None:
+        parser = XMLParser(file_name)
+        if parser.getTag("HarpiaPort") is None:
             return None
-        properties = xml_loader.getTag(
-                "HarpiaPort").getChildTags("property")
+
         port = Port()
-        for prop in properties:
-            try:
-                prop.getAttr("key")
-            except:
-                continue
-            if prop.getAttr("key") in port.__dict__:
-                port.__dict__[prop.getAttr("key")] = prop.getAttr("value")
+        port.type = parser.getTagAttr("HarpiaPort", "type")
+        port.language = parser.getTagAttr("HarpiaPort", "language")
+        port.label = parser.getTagAttr("HarpiaPort", "label")
+        port.color = parser.getTagAttr("HarpiaPort", "color")
+        port.multiple = parser.getTagAttr("HarpiaPort", "multiple")
+        port.source = parser.getTagAttr("HarpiaPort", "source")
+        port.code = parser.getTag("HarpiaPort").getTag("code").getText()
+
+        count = 0
+        for code in port.input_codes:
+            port.input_codes[count] = parser.getTag('HarpiaPort').getTag('input_code' + str(count)).getText()
+            port.output_codes[count] = parser.getTag('HarpiaPort').getTag('output_code' + str(count)).getText()
+            count = count + 1
+
         if port.get_type() == "":
             return None
         return port
@@ -106,9 +112,24 @@ class PortControl():
         port.source = "xml"
         parser = XMLParser()
         parser.addTag('HarpiaPort')
-        for key in port.__dict__:
-            parser.appendToTag('HarpiaPort', 'property',
-                               key=key, value=port.__dict__[key])
+
+        parser.setTagAttr('HarpiaPort','type', port.type)
+        parser.setTagAttr('HarpiaPort','language', port.language)
+        parser.setTagAttr('HarpiaPort','label', port.label)
+        parser.setTagAttr('HarpiaPort','color', port.color)
+        parser.setTagAttr('HarpiaPort','multiple', port.multiple)
+        parser.setTagAttr('HarpiaPort','source', port.source)
+        parser.appendToTag('HarpiaPort','code').string = str(port.code)
+
+        count = 0
+        for code in port.input_codes:
+            parser.appendToTag('HarpiaPort', 'input_code' + \
+                        str(count)).string = str(port.input_codes[count])
+            parser.appendToTag('HarpiaPort', 'output_code' + \
+                        str(count)).string = str(port.output_codes[count])
+            count = count + 1
+
+
         try:
             file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
             port_file = file(os.path.expanduser(file_name), 'w')

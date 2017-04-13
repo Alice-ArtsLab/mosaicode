@@ -32,44 +32,6 @@ class ADSR(WebaudioPlugin):
 
         self.group = "Sound"
 
-        self.header = """
-Envelope = function(context, a, d, s, r, g) {
-this.node = context.createGain()
-this.context = context;
-this.node.gain.value = 0;
-this.a = a / 1000.0;
-this.d = d / 1000.0;
-this.s = s / 1000.0;
-this.r = r / 1000.0;
-this.g = g;
-}
-
-Envelope.prototype.play = function(e) {
-var time = this.context.currentTime;
-// Zero
-this.node.gain.linearRampToValueAtTime(0, time);
-// Attack time
-time += this.a;
-this.node.gain.linearRampToValueAtTime(1, time);
-// Decay time
-time += this.d;
-this.node.gain.linearRampToValueAtTime(0.5, time);
-// Sustain time (do nothing)
-time += this.s;
-// Release time
-time += this.r;
-this.node.gain.linearRampToValueAtTime(0, time);
-}
-"""
-        self.vars = """
-// block_$id$ = ADSR
-var block_$id$_obj = new Envelope(context, $prop[a]$, $prop[d]$, $prop[s]$, $prop[r]$, $prop[g]$);
-var block_$id$ =  block_$id$_obj.node;
-var block_$id$_i0 = block_$id$_obj.node;
-var block_$id$_i1 = function(value){
-    block_$id$_obj.play();
-};
-"""
         self.properties = [
             {"name": "a",
              "label": "Attack",
@@ -112,3 +74,43 @@ var block_$id$_i1 = function(value){
              "value": 0.5
              }
         ]
+        
+        self.codes[0] = """
+Envelope = function(context, a, d, s, r, g) {
+this.node = context.createGain()
+this.context = context;
+this.node.gain.value = 0;
+this.a = a / 1000.0;
+this.d = d / 1000.0;
+this.s = s / 1000.0;
+this.r = r / 1000.0;
+this.g = g;
+}
+
+Envelope.prototype.play = function(e) {
+var time = this.context.currentTime;
+// Zero
+this.node.gain.linearRampToValueAtTime(0, time);
+// Attack time
+time += this.a;
+this.node.gain.linearRampToValueAtTime(1, time);
+// Decay time
+time += this.d;
+this.node.gain.linearRampToValueAtTime(0.5, time);
+// Sustain time (do nothing)
+time += this.s;
+// Release time
+time += this.r;
+this.node.gain.linearRampToValueAtTime(0, time);
+}
+"""
+        self.codes[1] = """
+// block_$id$ = ADSR
+var block_$id$_obj = new Envelope(context, $prop[a]$, $prop[d]$, $prop[s]$, $prop[r]$, $prop[g]$);
+var block_$id$ =  block_$id$_obj.node;
+var block_$id$_i0 = block_$id$_obj.node;
+var block_$id$_i1 = function(value){
+    block_$id$_obj.play();
+};
+"""
+

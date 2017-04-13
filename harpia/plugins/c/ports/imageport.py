@@ -10,8 +10,8 @@ class ImagePort(Port):
         self.color = "#F0F"
         self.multiple = False
         self.code = "block$sink$_img_i$sink_port$ = cvCloneImage(block$source$_img_o$source_port$);// IMG conection\n"
-        self.input_vars = "IplImage * block$id$_img_i$port_number$ = NULL;\n"
-        self.output_vars = "IplImage * block$id$_img_o$port_number$ = NULL;\n"
-        self.input_dealloc = "cvReleaseImage(&block$id$_img_i$port_number$);\n"
-        self.output_dealloc = "cvReleaseImage(&block$id$_img_o$port_number$);\n"
+        self.input_codes[1] = "IplImage * block$id$_img_i$port_number$ = NULL;\n"
+        self.output_codes[1] = "IplImage * block$id$_img_o$port_number$ = NULL;\n"
+        self.input_codes[3] = "cvReleaseImage(&block$id$_img_i$port_number$);\n"
+        self.output_codes[3] = "cvReleaseImage(&block$id$_img_o$port_number$);\n"
 

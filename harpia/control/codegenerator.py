@@ -69,12 +69,8 @@ class CodeGenerator():
         self.old_path = os.path.realpath(os.curdir)
 
         self.blockList = []
-        self.outDeallocations = []
-        self.functionCalls = []
         self.connections = []
-        self.headers = []
-        self.declarations = []
-        self.deallocations = []
+        self.codes=[[],[],[],[],[]]
 
         if diagram is None:
             return
@@ -228,37 +224,37 @@ class CodeGenerator():
         """
         This method generate the block code.
         """
-        header = plugin.generate_header()
-        declaration = plugin.generate_vars()
-        functionCall = plugin.generate_function_call()
-        dealloc = plugin.generate_dealloc()
-        outDealloc = plugin.generate_out_dealloc()
+        code0 = plugin.codes[0]
+        code1 = plugin.codes[1]
+        code2 = plugin.codes[2]
+        code3 = plugin.codes[3]
+        code4 = plugin.codes[4]
 
         # First we replace object attributes by their values
         for key in plugin.__dict__:
             value = str(plugin.__dict__[key])
             my_key = "$" + key + "$"
-            header = header.replace(my_key, value)
-            declaration = declaration.replace(my_key, value)
-            functionCall = functionCall.replace(my_key, value)
-            dealloc = dealloc.replace(my_key, value)
-            outDealloc = outDealloc.replace(my_key, value)
+            code0 = code0.replace(my_key, value)
+            code1 = code1.replace(my_key, value)
+            code2 = code2.replace(my_key, value)
+            code3 = code3.replace(my_key, value)
+            code4 = code4.replace(my_key, value)
 
         # Then we replace properties by their values
         for prop in plugin.get_properties():
             my_key = "$prop[" + prop.get("name") + "]$"
             value = str(prop.get("value"))
-            header = header.replace(my_key, value)
-            declaration = declaration.replace(my_key, value)
-            functionCall = functionCall.replace(my_key, value)
-            dealloc = dealloc.replace(my_key, value)
-            outDealloc = outDealloc.replace(my_key, value)
+            code0 = code0.replace(my_key, value)
+            code1 = code1.replace(my_key, value)
+            code2 = code2.replace(my_key, value)
+            code3 = code3.replace(my_key, value)
+            code4 = code4.replace(my_key, value)
 
-        self.headers.append(header)
-        self.declarations.append(declaration)
-        self.functionCalls.append(functionCall)
-        self.deallocations.append(dealloc)
-        self.outDeallocations.append(outDealloc)
+        self.codes[0].append(code0)
+        self.codes[1].append(code1)
+        self.codes[2].append(code2)
+        self.codes[3].append(code3)
+        self.codes[4].append(code4)
 
         connections = ""
         for x in plugin.connections:
@@ -291,57 +287,58 @@ class CodeGenerator():
     def generate_code(self):
         """
         This method generate the source code.
-
         """
+
         System.log("Generating Code")
         self.sort_blocks()
         self.generate_parts()
 
         code = self.code_template.code
 
-        # Adds only if it does not contains
-        temp_header = []
-        header = ""
-        for header_code in self.headers:
-            if header_code not in temp_header:
-                temp_header.append(header_code)
+        # Replace single code
+        count = 0
+        for codex in self.codes:
+            code_name = "$single_code["+ str(count) + "]$"
+            if code_name in code:
+                temp_header = []
+                temp_code = ""
+                for header_code in codex:
+                    if header_code.strip() not in temp_header:
+                        temp_header.append(header_code.strip())
+                for header_code in temp_header:
+                    temp_code += header_code
+                code = code.replace(code_name, temp_code)
+            count = count + 1
 
-        for header_code in temp_header:
-            header += header_code
+        # Replace code
+        count = 0
+        for codex in self.codes:
+            code_name = "$code["+ str(count) + "]$"
+            if code_name in code:
+                temp_code = ""
+                for x in codex:
+                    temp_code += x
+                code = code.replace(code_name, temp_code)
+            count = count + 1
 
-        code = code.replace("$originalheader$", header)
+        # Replace code + connection
+        count = 0
+        for codex in self.codes:
+            code_name = "$code["+ str(count) + ", connection]$"
+            if code_name in code:
+                temp_code = ""
+                for x,y in codex, self.connections:
+                    temp_code += x
+                    temp_code += y
+                code = code.replace(code_name, temp_code)
+            count = count + 1
 
-        declaration_block = ""
-        for var in self.declarations:
-            declaration_block += var
-
-        code = code.replace("$declaration$", declaration_block)
-
-        execution = ""
-        for x, y in zip(self.functionCalls, self.connections):
-            execution += x
-            execution += y
-        code = code.replace("$execution$", execution)
-
+        # Replace only connection
         connection_block = ""
         for conn in self.connections:
             connection_block += conn + "\n"
         code = code.replace("$connections$", connection_block)
 
-        function_calls = ""
-        for x in self.functionCalls:
-            function_calls += x
-        code = code.replace("$function_calls$", function_calls)
-
-        deallocating = ""
-        for x in self.deallocations:
-            deallocating += x
-        code = code.replace("$deallocating$", deallocating)
-
-        closing = ""
-        for outDea in self.outDeallocations:
-            closing += outDea
-        code = code.replace("$closing$", closing)
 
         return code
 

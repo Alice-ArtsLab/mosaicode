@@ -24,8 +24,8 @@ class Oscillator(WebaudioPlugin):
                          "label":"Frequency",
                          "name":"freq"},
                          {"type":"HRP_WEBAUDIO_FLOAT",
-                         "name":"detune",
-                         "label":"Detune"}]
+                         "name":"type",
+                         "label":"Type"}]
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
                          "name":"sound_output",
                          "label":"Sound Output"}]
@@ -49,9 +49,10 @@ class Oscillator(WebaudioPlugin):
                             }
                            ]
 
-        self.vars = """
+        self.codes[0] = """
 // block_$id$ = Oscillator
 var block_$id$ =  context.createOscillator();
+var block_$id$_i0 = block_$id$.frequency;
 var block_$id$_o0 = null;
 var block_$id$_i1 = function(value){
     block_$id$.frequency.value = value;
@@ -65,7 +66,7 @@ var block_$id$_i2 = function(value){
     block_$id$.type = oscillator;
 };
 """
-        self.function_call = """
+        self.codes[1] = """
 block_$id$_o0 = block_$id$.frequency;
 block_$id$.type = '$prop[type]$';
 block_$id$.frequency.value = $prop[freq]$; // value in hertz

@@ -41,7 +41,7 @@ class Char2Float(WebaudioPlugin):
                            ]
         self.group = "Conversion"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Char 2 Float
 var block_$id$_o0 = [];
 var block_$id$_i0 = function(value){

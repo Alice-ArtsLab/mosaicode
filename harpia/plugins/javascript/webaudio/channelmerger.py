@@ -32,7 +32,7 @@ class ChannelMerger(WebaudioPlugin):
 
         self.group = "Sound"
 
-        self.header = """
+        self.codes[0] = """
 Merger = function(context) {
   var that = this;
   this.x = 0; // Initial sample number
@@ -49,7 +49,7 @@ Merger.prototype.process = function(e) {
   }
 }
 """
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Channel Merger
 var block_$id$_obj = new Merger(context);
 var block_$id$ = block_$id$_obj.node;

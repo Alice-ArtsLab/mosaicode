@@ -21,29 +21,6 @@ class Button(WebaudioPlugin):
                 "label":"Click",
                 "name":"click"}
             ]
-
-        self.group = "Interface"
-
-        self.vars = """
-// block_$id$ = $label$
-var block_$id$_value = $prop[value]$;
-var block_$id$_o0 = [];
-"""
-
-        self.function_call = """
-function click_$id$(){
-    value = document.getElementById("block_$id$").value;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](value);
-    }
-};
-"""
-
-        self.dealloc = """
-<button type="button" value="$prop[value]$" onClick="click_$id$();"
-id="block_$id$">$prop[label]$</button><br>
-"""
-
         self.properties = [{"name": "value",
                             "label": "Value",
                             "type": HARPIA_FLOAT,
@@ -58,3 +35,25 @@ id="block_$id$">$prop[label]$</button><br>
                             "value": "Label"
                             }
                            ]
+        self.group = "Interface"
+
+        self.codes[1] = """
+// block_$id$ = $label$
+var block_$id$_value = $prop[value]$;
+var block_$id$_o0 = [];
+"""
+
+        self.codes[2] = """
+function click_$id$(){
+    value = document.getElementById("block_$id$").value;
+    for (var i = 0; i < block_$id$_o0.length ; i++){
+        block_$id$_o0[i](value);
+    }
+};
+"""
+
+        self.codes[3] = """
+<button type="button" value="$prop[value]$" onClick="click_$id$();"
+id="block_$id$">$prop[label]$</button><br>
+"""
+

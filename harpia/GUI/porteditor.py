@@ -17,6 +17,7 @@ from harpia.GUI.components.commentfield import CommentField
 from harpia.GUI.components.codefield import CodeField
 from harpia.GUI.components.openfilefield import OpenFileField
 from harpia.GUI.fieldtypes import *
+from harpia.model.plugin import Plugin
 from harpia.model.port import Port
 from harpia.system import System as System
 import gettext
@@ -49,11 +50,14 @@ class PortEditor(Gtk.Dialog):
         self.color = ColorField({"label": _("Color")}, None)
         self.color.set_parent_window(self)
         self.code = CodeField({"label": _("Code")}, None)
-        self.input_vars = CodeField({"label": _("Input Declaration")}, None)
-        self.output_vars = CodeField({"label": _("Output Declaration")}, None)
-        self.input_dealloc = CodeField({"label": _("Input Deallocation")}, None)
-        self.output_dealloc = CodeField({"label": _("Output Deallocation")}, None)
         self.multiple = CheckField({"label": _("Multiple")}, None)
+
+        self.input_code_widgets = []
+        self.output_code_widgets = []
+        for code in Plugin().codes:
+            self.input_code_widgets.append(CodeField({"label": ""}, None))
+            self.output_code_widgets.append(CodeField({"label": ""}, None))
+
         if port is not None:
             System()
             self.type.set_value(port)
@@ -61,11 +65,15 @@ class PortEditor(Gtk.Dialog):
             self.label.set_value(System.ports[port].get_label())
             self.color.set_value(System.ports[port].get_color())
             self.code.set_value(System.ports[port].get_code())
-            self.input_vars.set_value(System.ports[port].get_input_vars())
-            self.output_vars.set_value(System.ports[port].get_output_vars())
-            self.input_dealloc.set_value(System.ports[port].get_input_dealloc())
-            self.output_dealloc.set_value(System.ports[port].get_output_dealloc())
             self.multiple.set_value(System.ports[port].get_multiple())
+
+            count = 0
+            for code in Plugin().codes:
+                self.input_code_widgets[count].set_value(
+                        System.ports[port].input_codes[count])
+                self.output_code_widgets[count].set_value(
+                        System.ports[port].output_codes[count])
+                count = count + 1
 
         vbox.pack_start(self.type, False, False, 1)
         vbox.pack_start(self.language, False, False, 1)
@@ -73,15 +81,22 @@ class PortEditor(Gtk.Dialog):
         vbox.pack_start(self.color, False, False, 1)
         vbox.pack_start(self.multiple, False, False, 1)
 
-        self.codes = Gtk.Notebook()
-        self.codes.set_scrollable(True)
-        vbox.pack_start(self.codes, True, True, 1)
+        self.code_notebook = Gtk.Notebook()
+        self.code_notebook.set_scrollable(True)
+        vbox.pack_start(self.code_notebook, True, True, 1)
+        self.code_notebook.append_page(self.code, Gtk.Label(_("Connection Code")))
 
-        self.codes.append_page(self.code, Gtk.Label(_("Connection Code")))
-        self.codes.append_page(self.input_vars, Gtk.Label(_("Input Vars")))
-        self.codes.append_page(self.output_vars, Gtk.Label(_("Outpur Vars")))
-        self.codes.append_page(self.input_dealloc, Gtk.Label(_("Input Dealloc")))
-        self.codes.append_page(self.output_dealloc, Gtk.Label(_("Output Dealloc")))
+        count = 0
+        for code_widget in self.input_code_widgets:
+            self.code_notebook.append_page(code_widget, Gtk.Label(_("Input Code " + \
+                    str(count))))
+            count = count + 1
+
+        count = 0
+        for code_widget in self.output_code_widgets:
+            self.code_notebook.append_page(code_widget, Gtk.Label(_("Output Code " + \
+                    str(count))))
+            count = count + 1
 
         self.show_all()
         result = self.run()
@@ -99,10 +114,13 @@ class PortEditor(Gtk.Dialog):
         port.color = self.color.get_value()
         port.multiple = self.multiple.get_value()
         port.code = self.code.get_value()
-        port.input_vars = self.input_vars.get_value()
-        port.output_vars = self.output_vars.get_value()
-        port.input_dealloc = self.input_dealloc.get_value()
-        port.output_dealloc = self.output_dealloc.get_value()
+
+        count = 0
+        for code_widget in self.input_code_widgets:
+            port.input_codes[count] = self.input_code_widgets[count].get_value()
+            port.output_codes[count] = self.output_code_widgets[count].get_value()
+            count = count + 1
+
         self.port_manager.add_port(port)
 
 # ----------------------------------------------------------------------

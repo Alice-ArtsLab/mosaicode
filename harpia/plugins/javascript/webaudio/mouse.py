@@ -27,12 +27,12 @@ class Mouse(WebaudioPlugin):
                 ]
         self.group = "Interface"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Mouse
 var block_$id$_o0 = [];
 var block_$id$_o1 = [];
 """
-        self.function_call = """
+        self.codes[0] = """
 // ----------------- Mouse position ----------------------------
 // Detect if the browser is IE or not.
 // If it is not IE, we assume that the browser is NS.

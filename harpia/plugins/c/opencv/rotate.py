@@ -18,8 +18,6 @@ class Rotate(OpenCVPlugin):
         self.isCenter = True
         self.isScalling = True
         self.isFilling = True
-        self.xC = 20
-        self.yC = 20
         self.angle = 0
 
         # Appearance
@@ -43,14 +41,16 @@ class Rotate(OpenCVPlugin):
                             "type": HARPIA_CHECK
                             },
                            {"name": "Point X",
-                            "label": "xC",
+                            "label": "x",
                             "type": HARPIA_INT,
+                            "value": 20,
                             "lower": 0,
                             "upper": 65535,
                             "step": 1
                             },
                            {"name": "Point Y",
-                            "label": "yC",
+                            "label": "y",
+                            "value": 20,
                             "type": HARPIA_INT,
                             "lower": 0,
                             "upper": 65535,
@@ -71,9 +71,7 @@ class Rotate(OpenCVPlugin):
             'double block$id$_double_i1 = $angle$;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n'
 
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return \
+        self.header = \
             "#define PI 3.1415926535898\n" + \
             "double rads(double degs){\n" + \
             "   return (PI/180 * degs);\n" + \
@@ -92,7 +90,7 @@ class Rotate(OpenCVPlugin):
         if self.isCenter == "true":
             value += '      CvPoint2D32f center = cvPoint2D32f(W/2, H/2);\n'
         else:
-            value += '      CvPoint2D32f center = cvPoint2D32f($xC$,$yC$);\n'
+            value += '      CvPoint2D32f center = cvPoint2D32f($props[x]$,$props[y]$);\n'
 
         if self.isScalling == "true":
             value += '      scale = H/(fabs(H*sin(rads' + \

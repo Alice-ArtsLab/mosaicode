@@ -78,8 +78,6 @@ class CodeTemplateControl():
         if parser.getTag("HarpiaCodeTemplate") is None:
             return None
 
-        properties = parser.getTag("HarpiaCodeTemplate").getChildTags("property")
-
         code_template = CodeTemplate()
         code_template.name = parser.getTagAttr("HarpiaCodeTemplate",  "name")
         code_template.description = parser.getTagAttr("HarpiaCodeTemplate",  "description")

@@ -27,17 +27,17 @@ class JavascriptTemplate(CodeTemplate):
 <body>
 <script>
 var context = new (window.AudioContext || window.webkitAudioContext)();
-$originalheader$
+$single_code[0]$
 //declaration block
-$declaration$
+$code[1]$
 //connections
 $connections$
 //function calls
-$function_calls$
+$code[2]$
 </script>
 <! deallocation block --!>
-$deallocating$
-$closing$
+$code[3]$
+$code[4]$
 </body>
 </html>
 """

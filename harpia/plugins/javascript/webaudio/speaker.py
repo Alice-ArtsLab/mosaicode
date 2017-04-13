@@ -23,7 +23,7 @@ class Speaker(WebaudioPlugin):
             ]
         self.group = "Sound"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = $label$
 var block_$id$_i0 = context.destination;
 """

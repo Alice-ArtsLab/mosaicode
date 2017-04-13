@@ -38,14 +38,14 @@ class Delay(WebaudioPlugin):
                             }
                            ]
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Delay
 var block_$id$ = context.createDelay();
 var block_$id$_o0 = null;
 var block_$id$_i0 = null;
 """
 
-        self.function_call = "block_$id$_i0 = block_$id$;\n" + \
+        self.codes[2] = "block_$id$_i0 = block_$id$;\n" + \
             "var block_$id$.delayTime.value = $prop[time]$\n;" + \
             "block_$id$_o0 = block_$id$;\n"
 

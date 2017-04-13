@@ -50,26 +50,18 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
         vbox.pack_start(button_bar, False, False, 1)
         self.__populate_combos(button_bar)
 
-        self.codes = Gtk.Notebook()
-        self.codes.set_scrollable(True)
-        vbox.pack_start(self.codes, True, True, 1)
+        self.code_notebook = Gtk.Notebook()
+        self.code_notebook.set_scrollable(True)
+        vbox.pack_start(self.code_notebook, True, True, 1)
 
-        data = {"label": _("Header"), "value": plugin.generate_header()}
-        self.header = CodeField(data, self.__on_edit)
-        data = {"label": _("Vars"), "value": plugin.generate_vars()}
-        self.vars = CodeField(data, self.__on_edit)
-        data = {"label": _("Function Call"), "value": plugin.generate_function_call()}
-        self.function_call = CodeField(data, self.__on_edit)
-        data = {"label": _("Dealloc"), "value": plugin.generate_dealloc()}
-        self.dealloc = CodeField(data, self.__on_edit)
-        data = {"label": _("Out Dealloc"), "value": plugin.generate_out_dealloc()}
-        self.out_dealloc = CodeField(data, self.__on_edit)
-
-        self.codes.append_page(self.header, Gtk.Label(_("Header")))
-        self.codes.append_page(self.vars, Gtk.Label(_("Vars")))
-        self.codes.append_page(self.function_call, Gtk.Label(_("Function Call")))
-        self.codes.append_page(self.dealloc, Gtk.Label(_("Dealloc")))
-        self.codes.append_page(self.out_dealloc, Gtk.Label(_("Out Dealloc")))
+        self.code_widgets = []
+        count = 0
+        for code_value in self.plugin.codes:
+            data = {"label": _("Code " + str(count)), "value": code_value}
+            self.code_widgets.append(CodeField(data, self.__on_edit))
+            self.code_notebook.append_page(self.code_widgets[count],
+                        Gtk.Label(_("Code " + str(count))))
+            count = count + 1
 
         self.show_all()
 
@@ -80,12 +72,10 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
             Parameters:
                 * **plugin** (:class:`<>`)
         """
-
-        self.plugin.header = self.header.get_value()
-        self.plugin.vars = self.vars.get_value()
-        self.plugin.function_call = self.function_call.get_value()
-        self.plugin.dealloc = self.dealloc.get_value()
-        self.plugin.out_dealloc = self.out_dealloc.get_value()
+        count = 0
+        for code_widget in self.code_widgets:
+            self.plugin.codes[count] = self.code_widgets[count].get_value()
+            count = count + 1
 
     # ----------------------------------------------------------------------
     def __populate_combos(self, button_bar):
@@ -148,36 +138,38 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
         This method monitors if the button was clicked.
 
             Parameters:
-
         """
-        self.vars.set_value(self.vars.get_value() + \
-            "// --------------- Generated dafault Code ---------")
-        self.dealloc.set_value(self.dealloc.get_value() + \
-            "// --------------- Generated dafault Code ---------")
-        i = 0
-        for port in self.plugin.get_in_ports():
-            value = System.ports[port["type"]].input_vars.replace("$port_number$", str(i))
-            self.vars.set_value(self.vars.get_value() + value)
-            value = System.ports[port["type"]].input_dealloc.replace("$port_number$", str(i))
-            self.dealloc.set_value(self.dealloc.get_value() + value)
-            i += 1
+        count = 0
+        for code_value in self.plugin.codes:
+            self.code_widgets[count].set_value(
+                    self.code_widgets[count].get_value() + \
+                    "// --------------- Generated dafault Code ---------\n"
+                    )
+            i = 0
+            for port in self.plugin.get_in_ports():
+                value = System.ports[port["type"]].input_codes[count].replace(
+                        "$port_number$", str(i))
+                self.code_widgets[count].set_value(
+                        self.code_widgets[count].get_value() + value)
+                i += 1
 
-        i = 0
-        for port in self.plugin.get_out_ports():
-            value = System.ports[port["type"]].output_vars.replace("$port_number$", str(i))
-            self.vars.set_value(self.vars.get_value() + value)
-            value = System.ports[port["type"]].output_dealloc.replace("$port_number$", str(i))
-            self.dealloc.set_value(self.dealloc.get_value() + value)
-            i += 1
+            i = 0
+            for port in self.plugin.get_out_ports():
+                value = System.ports[port["type"]].output_codes[count].replace(
+                        "$port_number$", str(i))
+                self.code_widgets[count].set_value(
+                        self.code_widgets[count].get_value() + value)
+                i += 1
 
-        self.vars.set_value(self.vars.get_value() + \
-            "// --------------- End of Generated dafault Code ---------\n")
-        self.dealloc.set_value(self.dealloc.get_value() + \
-            "// --------------- End of Generated dafault Code ---------\n")
+            self.code_widgets[count].set_value(
+                    self.code_widgets[count].get_value() + \
+                    "// --------------- End of Generated dafault Code ----\n"
+                    )
+            count = count + 1
 
     # ----------------------------------------------------------------------
     def __get_current_code_area(self):
-        current_tab = self.codes.get_nth_page(self.codes.get_current_page())
+        current_tab = self.code_notebook.get_nth_page(self.code_notebook.get_current_page())
         return current_tab
 
     # ----------------------------------------------------------------------

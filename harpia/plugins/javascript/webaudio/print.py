@@ -33,7 +33,7 @@ class Print(WebaudioPlugin):
                             }
                            ]
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = $name$
 var block_$id$_i0 = function(value){
     document.getElementById("block_$id$").innerHTML = value;
@@ -44,6 +44,6 @@ var block_$id$_i1 = function(value){
     return true;
     };
 """
-        self.dealloc = """
+        self.codes[3] = """
 $prop[label]$ <span id="block_$id$"></span><br>
 """

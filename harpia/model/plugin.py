@@ -24,12 +24,14 @@ class Plugin(object):
         self.help = ""
         self.label = ""
         self.color = "200:200:25:150"
+        self.group = "Undefined"
         self.in_ports = []
         self.out_ports = []
-        self.group = "Undefined"
 
         # Code generation
         self.properties = []
+        self.codes = ["","","","",""] # Empty array with 5 positions
+
         self.header = ""
         self.vars = ""
         self.function_call = ""
@@ -227,26 +229,6 @@ class Plugin(object):
             return self.framework
         except:
             return None
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return self.header
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return self.out_dealloc
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):

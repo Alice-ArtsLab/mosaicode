@@ -30,7 +30,7 @@ class DivideFloat(WebaudioPlugin):
             ]
         self.group = "Arithmetics"
 
-        self.vars = """
+        self.codes[1] = """
 
 // block_$id$ = Divide Float
 var block_$id$_arg1 = 0;

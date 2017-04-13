@@ -26,7 +26,7 @@ class Midi2Freq(WebaudioPlugin):
                 "name":"frequency"}
             ]
         self.group = "Conversion"
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = $label$
 var block_$id$_o0 = [];
 

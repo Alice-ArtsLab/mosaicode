@@ -53,12 +53,12 @@ class FloatValue(WebaudioPlugin):
                             }
                            ]
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Float Value
 var block_$id$_value = $prop[value]$;
 var block_$id$_o0 = [];
 """
-        self.function_call = """
+        self.codes[2] = """
 function change_$id$_value(){
     value = document.getElementById("block_$id$").value;
     for (var i = 0; i < block_$id$_o0.length ; i++){
@@ -66,7 +66,7 @@ function change_$id$_value(){
     }
 };
 """
-        self.dealloc = """
+        self.codes[3] = """
 $prop[label]$ <input type="number" id="block_$id$" value="$prop[value]$" min="$prop[min]$"
         max="$prop[max]$" onChange="change_$id$_value();"><br>
 """

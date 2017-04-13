@@ -30,7 +30,7 @@ class MultiplyFloat(WebaudioPlugin):
             ]
         self.group = "Arithmetics"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Multiply Float
 var block_$id$_arg1 = 0;
 var block_$id$_arg2 = 0;

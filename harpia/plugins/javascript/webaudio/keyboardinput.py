@@ -26,12 +26,12 @@ class KeyboardInput(WebaudioPlugin):
             ]
         self.group = "Interface"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = KeyBoard Input
 var block_$id$_o0 = [];
 var block_$id$_o1 = [];
 """
-        self.function_call = """
+        self.codes[2] = """
 document.onkeypress = function(evt){
     evt = evt || window.event;
     var value = evt.keyCode || evt.which;

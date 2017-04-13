@@ -30,8 +30,8 @@ class PreferencesControl():
         file_name = os.path.expanduser(self.hp.conf_file_path)
         if os.path.exists(file_name) is False:
             return
-        xml_loader = XMLParser(file_name)
-        properties = xml_loader.getTag(
+        parser = XMLParser(file_name)
+        properties = parser.getTag(
             "HarpiaProperties").getChildTags("property")
 
         for prop in properties:
