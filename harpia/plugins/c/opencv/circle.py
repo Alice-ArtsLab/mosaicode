@@ -56,7 +56,7 @@ class Circle(OpenCVPlugin):
                            ]
 
         # -----------------C/OpenCv code ---------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'int block$id$_int_i1 = $x0$;\n' + \
@@ -67,7 +67,7 @@ class Circle(OpenCVPlugin):
         self.x0 = int(self.x0)
         self.y0 = int(self.y0)
 
-        return self.vars
+        return self.codes[1]
 
     # ----------------------------------------------------------------------
     def generate_function_call(self):

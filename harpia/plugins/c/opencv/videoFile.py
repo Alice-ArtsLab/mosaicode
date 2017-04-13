@@ -39,13 +39,13 @@ class VideoFile(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'CvCapture * block$id$_capture = NULL;\n' + \
             'IplImage * block$id$_frame = NULL;\n' + \
             'block$id$_capture = cvCreateFileCapture("$filename$");\n' + \
             'IplImage * block$id$_img_o0 = NULL; //Capture\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '// Video Mode \n' + \
             'if(key == \'$key$\'){\n' +\
             '\tcvSetCaptureProperty(block$id$_capture, ' + \
@@ -60,9 +60,9 @@ class VideoFile(OpenCVPlugin):
             '}\n' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_frame);\n'
 
-        self.dealloc = "cvReleaseImage(&block$id$_img_o0);\n"
+        self.codes[3] = "cvReleaseImage(&block$id$_img_o0);\n"
 
-        self.out_dealloc = 'cvReleaseCapture(&block$id$_capture);\n'
+        self.codes[4] = 'cvReleaseCapture(&block$id$_capture);\n'
 
 
 # -----------------------------------------------------------------------------

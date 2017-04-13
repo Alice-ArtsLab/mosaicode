@@ -54,7 +54,7 @@ class Threshold(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'cvThreshold(block$id$_img_i0, block$id$_img_o0, ' + \

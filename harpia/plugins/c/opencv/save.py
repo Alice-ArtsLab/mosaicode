@@ -33,7 +33,7 @@ class Save(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.function_call = \
+        self.codes[2] = \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'if(block$id$_img_i0)\n' + \
             'cvSaveImage("$filename$" ,block$id$_img_i0);\n'

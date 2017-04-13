@@ -60,13 +60,13 @@ class CropImage(OpenCVPlugin):
                            ]
 
         # ------------------------C/OpenCv code--------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'CvRect  block$id$_rect_i1 = cvRect' + \
             '($x0$, $y0$, $width$, $height$);\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             '   block$id$_rect_i1.x = MAX' + \
             '(0,block$id$_rect_i1.x);//Check whether point is negative\n' + \

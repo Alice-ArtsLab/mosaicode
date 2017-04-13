@@ -35,7 +35,7 @@ class LiveDelay(OpenCVPlugin):
                            ]
 
         # ------------------------------C/OpenCv code--------------------------
-        self.function_call = '''
+        self.codes[2] = '''
             if(block$id$_img_i0){
                 cvReleaseImage(&(block$id$_buffer[i_$id$]));
                 block$id$_buffer[i_$id$] = cvCloneImage(block$id$_img_i0);
@@ -44,9 +44,9 @@ class LiveDelay(OpenCVPlugin):
                 block$id$_img_o0 = block$id$_buffer[i_$id$];
             }
             '''
-        self.dealloc = 'cvReleaseImage(&block$id$_img_i0);\n'
+        self.codes[3] = 'cvReleaseImage(&block$id$_img_i0);\n'
 
-        self.out_dealloc = '''
+        self.codes[4] = '''
             for(i_$id$=0; i_$id$<$frameNumber$; i_$id$++)
                 if(block$id$_buffer[i_$id$] != NULL)
                     cvReleaseImage(&(block$id$_buffer[i_$id$]));

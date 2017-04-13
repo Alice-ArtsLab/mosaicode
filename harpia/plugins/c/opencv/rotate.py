@@ -66,12 +66,12 @@ class Rotate(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'double block$id$_double_i1 = $angle$;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n'
 
-        self.header = \
+        self.codes[0] = \
             "#define PI 3.1415926535898\n" + \
             "double rads(double degs){\n" + \
             "   return (PI/180 * degs);\n" + \

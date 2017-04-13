@@ -53,14 +53,14 @@ class Closing(OpenCVPlugin):
                             ]
 
         # -------------------C/OpenCv code---------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'int block$id$_int_i1 = $masksizex$;\n' + \
             'int block$id$_int_i2 = $masksizey$;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplConvKernel * block$id$_arg_mask = NULL;\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             'if (block$id$_int_i1 % 2 == 0) block$id$_int_i1++;\n' + \
             'if (block$id$_int_i2 % 2 == 0) block$id$_int_i2++;\n' + \
@@ -73,7 +73,7 @@ class Closing(OpenCVPlugin):
             'cvMorphologyEx(block$id$_img_i0, block$id$_img_o0, NULL,' + \
             'block$id$_arg_mask, CV_MOP_CLOSE, 1);\n}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseStructuringElement(&block$id$_arg_mask);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n'

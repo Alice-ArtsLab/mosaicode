@@ -32,7 +32,7 @@ class Multiplication(OpenCVPlugin):
                            "label":"Output Image"}]
         self.group = "Arithmetic and logical operations"
 
-        self.header = r"""
+        self.codes[0] = r"""
 // And, Xor, Division, subtraction, sum, or,
 //multiplication need images with the same size
 void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
@@ -54,7 +54,7 @@ void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
     }
 }
 """
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0 && block$id$_img_i1){\n' + \
             '\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             '\tadjust_images_size(block$id$_img_i0, ' + \

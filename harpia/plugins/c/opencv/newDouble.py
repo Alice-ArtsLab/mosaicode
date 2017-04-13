@@ -34,7 +34,7 @@ class NewDouble(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = 'double block$id$_double_o0 = ' + \
+        self.codes[1] = 'double block$id$_double_o0 = ' + \
             '$doubleVal$; // New Double Out\n'
 
 # -----------------------------------------------------------------------------

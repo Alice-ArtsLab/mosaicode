@@ -47,15 +47,15 @@ class SaveVideo(OpenCVPlugin):
                            ]
 
         # --------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'CvVideoWriter* block$id$_vidWriter = NULL;\n'
 
-        self.dealloc = 'cvReleaseImage' + \
+        self.codes[3] = 'cvReleaseImage' + \
             '(&block$id$_img_i0); // SaveVideo Dealloc\n'
 
-        self.out_dealloc = 'cvReleaseVideoWriter' + \
+        self.codes[4] = 'cvReleaseVideoWriter' + \
             '(&block$id$_vidWriter); // SaveVideo\n'
 
     # ----------------------------------------------------------------------

@@ -41,12 +41,12 @@ class Laplace(OpenCVPlugin):
                            ]
 
         # ------------------------------C/OpenCv code--------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL; //Laplace In \n' + \
             'IplImage * block$id$_img_o0 = NULL; //Laplace Out \n' + \
             'int block$id$_int_i1 = $prop[masksize]$; // Laplace Mask Size\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             'block$id$_int_i1 = (block$id$_int_i1 > 31)? 31 : ' + \
             'block$id$_int_i1; // Laplace Mask Constraint\n' + \

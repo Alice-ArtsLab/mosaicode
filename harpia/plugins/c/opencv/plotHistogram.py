@@ -37,7 +37,7 @@ class PlotHistogram(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'CvHistogram * block$id$_histogram;\n' + \
@@ -52,7 +52,7 @@ class PlotHistogram(OpenCVPlugin):
             'int block$id$_plotHistChanIter;\n' + \
             'int block$id$_plotHistArrIter;\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'if(block$id$_SourceCx[0]) cvReleaseImage' + \
             '(&block$id$_SourceCx[0]);\n' + \
             'if(block$id$_SourceCx[1]) cvReleaseImage' + \

@@ -76,21 +76,21 @@ class CTemplate(CodeTemplate):
 
 #define FRAMERATE 1000.0 / 25.0
 
-$originalheader$
+$single_code[0]$
 
 int main(int argc, char ** argv){
         char key = ' ';
         //declaration block
-        $declaration$
+        $code[1]$
         while((key = (char)cvWaitKey(FRAMERATE)) != 27){
             //execution block
-            $execution$
+            $code[2, connection]$
 
             //deallocation block
-            $deallocating$
+            $code[3]$
 
         } // End of while
-    $closing$
+    $code[4]$
 
 return 0;
 

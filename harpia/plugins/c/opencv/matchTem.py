@@ -50,13 +50,13 @@ class MatchTem(OpenCVPlugin):
                            ]
 
         # ------------------------------C/OpenCv code--------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_t0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n'
 
-        self.function_call =  \
+        self.codes[2] =  \
             'if(block$id$_img_i0 && block$id$_img_i1){\n' + \
             '\tdouble width$id$ = block$id$_img_i0->width - ' + \
             'block$id$_img_i1->width +1;\n' + \
@@ -70,7 +70,7 @@ class MatchTem(OpenCVPlugin):
             '\tcvConvertScale(block$id$_img_t0, block$id$_img_o0, pow(10,-($scaleFactor$)),0);\n' + \
             '}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseImage(&block$id$_img_t0);\n' + \
             'cvReleaseImage(&block$id$_img_i1);\n' + \

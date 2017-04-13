@@ -34,8 +34,8 @@ class ImageFile(OpenCVPlugin):
                            ]
 
         # ----------------------------C/OpenCv code-------------------------
-        self.vars = 'IplImage * block$id$_img_o0 = NULL;\n'
-        self.vars += 'block$id$_img_o0 = cvLoadImage("$prop[filename]$",-1);\n'
-        self.out_dealloc = "cvReleaseImage(&block$id$_img_o0);\n"
+        self.codes[1] = 'IplImage * block$id$_img_o0 = NULL;\n'
+        self.codes[1] += 'block$id$_img_o0 = cvLoadImage("$prop[filename]$",-1);\n'
+        self.codes[4] = "cvReleaseImage(&block$id$_img_o0);\n"
 
 # -----------------------------------------------------------------------------

@@ -27,14 +27,14 @@ class LiveMode(OpenCVPlugin):
         self.group = "Image Source"
 
         # ------------------------------C/OpenCv code--------------------------
-        self.function_call = \
+        self.codes[2] = \
             '// Live Mode \n' + \
             'int value = cvGrabFrame(block$id$_capture);\n' + \
             'block$id$_frame = cvRetrieveFrame(block$id$_capture);\n' + \
             'if(!block$id$_frame){\ncontinue;\n}\n' +\
             '\tblock$id$_img_o0 = cvCloneImage(block$id$_frame);\n'
 
-        self.out_dealloc = 'cvReleaseCapture(&block$id$_capture);\n'
+        self.codes[4] = 'cvReleaseCapture(&block$id$_capture);\n'
 
     # ----------------------------------------------------------------------
     def get_properties(self):

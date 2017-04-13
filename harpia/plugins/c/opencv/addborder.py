@@ -53,7 +53,7 @@ class AddBorder(OpenCVPlugin):
                             }
                            ]
 
-        self.header = \
+        self.codes[0] = \
             "CvScalar get_scalar_color(const char * rgbColor){\n" + \
             "   if (strlen(rgbColor) < 13 || rgbColor[0] != '#')\n" + \
             "       return cvScalar(0,0,0,0);\n" + \
@@ -74,12 +74,12 @@ class AddBorder(OpenCVPlugin):
             "   return cvScalar(bi, gi, ri, 0);\n" + \
             "}\n"
 
-        self.vars = \
+        self.codes[1] = \
             "IplImage * block$id$_img_i0 = NULL;\n" + \
             "int block$id$_int_i1 = $prop[border_size]$;\n" + \
             "IplImage * block$id$_img_o0 = NULL;\n"
 
-        self.function_call = \
+        self.codes[2] = \
             'if(block$id$_img_i0){\n' + \
             '\tCvSize size$id$ = cvSize(block$id$_img_i0->width +' + \
             ' block$id$_int_i1 * 2, block$id$_img_i0->height' + \

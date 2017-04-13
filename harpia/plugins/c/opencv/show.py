@@ -40,19 +40,19 @@ class Show(OpenCVPlugin):
                             }
                            ]
 
-        self.vars = "IplImage * block$id$_img_i0 = NULL;\n" + \
+        self.codes[1] = "IplImage * block$id$_img_i0 = NULL;\n" + \
                 "if (strcmp(\"Window Size\", \"$prop[window_type]$\") == 0)\n" + \
                 "cvNamedWindow(\"$prop[title]$\",CV_WINDOW_NORMAL);\n" + \
                 "else\n" + \
                 "cvNamedWindow(\"$prop[title]$\",CV_WINDOW_AUTOSIZE);\n"
 
-        self.function_call = "\nif(block$id$_img_i0){\n" + \
+        self.codes[2] = "\nif(block$id$_img_i0){\n" + \
             "cvShowImage(\"$prop[title]$\",block$id$_img_i0);\n" + \
             "if (strcmp(\"Window Size\", \"$prop[window_type]$\") == 0)\n" + \
             "cvSetWindowProperty(\"$prop[title]$\", " + \
             "CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);\n" + \
             "}\n"
 
-        self.dealloc = "cvReleaseImage(&block$id$_img_i0);"
+        self.codes[3] = "cvReleaseImage(&block$id$_img_i0);"
 
 # -----------------------------------------------------------------------------

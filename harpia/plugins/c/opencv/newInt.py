@@ -36,6 +36,6 @@ class NewInt(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
+        self.codes[1] = 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
 # ------------------------------------------------------------------------------

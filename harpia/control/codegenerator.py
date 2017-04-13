@@ -299,38 +299,44 @@ class CodeGenerator():
         count = 0
         for codex in self.codes:
             code_name = "$single_code["+ str(count) + "]$"
-            if code_name in code:
-                temp_header = []
-                temp_code = ""
-                for header_code in codex:
-                    if header_code.strip() not in temp_header:
-                        temp_header.append(header_code.strip())
-                for header_code in temp_header:
-                    temp_code += header_code
-                code = code.replace(code_name, temp_code)
+            if code_name not in code:
+                count = count + 1
+                continue
+            temp_header = []
+            temp_code = ""
+            for header_code in codex:
+                if header_code.strip() not in temp_header:
+                    temp_header.append(header_code.strip())
+            for header_code in temp_header:
+                temp_code += header_code
+            code = code.replace(code_name, temp_code)
             count = count + 1
 
         # Replace code
         count = 0
         for codex in self.codes:
             code_name = "$code["+ str(count) + "]$"
-            if code_name in code:
-                temp_code = ""
-                for x in codex:
-                    temp_code += x
-                code = code.replace(code_name, temp_code)
+            if code_name not in code:
+                count = count + 1
+                continue
+            temp_code = ""
+            for x in codex:
+                temp_code += x
+            code = code.replace(code_name, temp_code)
             count = count + 1
 
         # Replace code + connection
         count = 0
         for codex in self.codes:
             code_name = "$code["+ str(count) + ", connection]$"
-            if code_name in code:
-                temp_code = ""
-                for x,y in codex, self.connections:
-                    temp_code += x
-                    temp_code += y
-                code = code.replace(code_name, temp_code)
+            if code_name not in code:
+                count = count + 1
+                continue
+            temp_code = ""
+            for x,y in zip(codex, self.connections):
+                temp_code += x
+                temp_code += y
+            code = code.replace(code_name, temp_code)
             count = count + 1
 
         # Replace only connection

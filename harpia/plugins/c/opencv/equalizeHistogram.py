@@ -27,13 +27,13 @@ class EqualizeHistogram(OpenCVPlugin):
         self.group = "Histograms"
 
         # -------------------C/OpenCv code-------------------------------------
-        self.vars =  \
+        self.codes[1] =  \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_SourceCx[3];\n' + \
             'IplImage * block$id$_EqCx[3];\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             'CvSize size$id$ = cvGetSize(block$id$_img_i0);\n' + \
             'block$id$_img_o0 = cvCreateImage' + \

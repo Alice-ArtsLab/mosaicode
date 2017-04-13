@@ -42,7 +42,7 @@ class NewImage(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.function_call = \
+        self.codes[2] = \
             'CvSize size$id$ = cvSize($width$,$height$);\n' + \
             'block$id$_img_o0 = cvCreateImage(size$id$,IPL_DEPTH_8U,3);\n' + \
             'cvSetZero(block$id$_img_o0);\n'

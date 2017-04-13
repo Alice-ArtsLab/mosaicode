@@ -39,12 +39,12 @@ class Select(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars += 'IplImage * block$id$_img_i0 = NULL;\n'
-        self.vars += 'IplImage * block$id$_img_i1 = NULL;\n'
-        self.vars += 'IplImage * block$id$_img_o0 = NULL;\n'
-        self.vars += 'char block$id$_key = \'$key$\';\n'
+        self.codes[1] += 'IplImage * block$id$_img_i0 = NULL;\n'
+        self.codes[1] += 'IplImage * block$id$_img_i1 = NULL;\n'
+        self.codes[1] += 'IplImage * block$id$_img_o0 = NULL;\n'
+        self.codes[1] += 'char block$id$_key = \'$key$\';\n'
 
-        self.function_call = 'if(block$id$_img_i0 && block$id$_img_i1){\n' + \
+        self.codes[2] = 'if(block$id$_img_i0 && block$id$_img_i1){\n' + \
             'if (key != -1)\n' + \
             '\tblock$id$_key = key;\n' + \
             'if (block$id$_key == \'$key$\' )\n' + \

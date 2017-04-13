@@ -32,12 +32,6 @@ class Plugin(object):
         self.properties = []
         self.codes = ["","","","",""] # Empty array with 5 positions
 
-        self.header = ""
-        self.vars = ""
-        self.function_call = ""
-        self.dealloc = ""
-        self.out_dealloc = ""
-
         if plugin == None: return
         for key in plugin.__dict__:
             self.__dict__[key] = plugin.__dict__[key]

@@ -47,12 +47,12 @@ class Opening(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplConvKernel * block$id$_arg_mask = cvCreateStructuringElementEx($masksizex$ , $masksizey$, 1, 1,CV_SHAPE_RECT,NULL);\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             'IplImage * block$id$_auxImg;' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
@@ -60,7 +60,7 @@ class Opening(OpenCVPlugin):
             'cvMorphologyEx(block$id$_img_i0, block$id$_img_o0, NULL,' + \
             'block$id$_arg_mask, CV_MOP_OPEN, 1);\n}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseStructuringElement(&block$id$_arg_mask);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n'

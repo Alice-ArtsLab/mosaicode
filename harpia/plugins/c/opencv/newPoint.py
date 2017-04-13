@@ -42,9 +42,9 @@ class NewPoint(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = 'CvPoint block$id$_point_o0 = cvPoint($x0$,$y0$);\n'
+        self.codes[1] = 'CvPoint block$id$_point_o0 = cvPoint($x0$,$y0$);\n'
 
-        self.function_call = \
+        self.codes[2] = \
             'block$id$_point_o0 = cvPoint($x0$,$y0$);\n'
 
 # ------------------------------------------------------------------------------

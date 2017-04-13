@@ -26,7 +26,7 @@ class GetSize(OpenCVPlugin):
         self.time_shifts = False
 
         # ------------------------------C/OpenCv code--------------------------
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0)\n{\n' + \
             '  \tblock$id$_rect_o0 = cvRect( 0, 0, ' + \
             'block$id$_img_i0->width, block$id$_img_i0->height);\n' + \

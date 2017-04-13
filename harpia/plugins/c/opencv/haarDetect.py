@@ -47,7 +47,7 @@ class HaarDetect(OpenCVPlugin):
                            ]
 
         # ------------------------------C/OpenCv code--------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'CvPoint block$id$_point_o0 = cvPoint(0,0);\n' + \
             'CvRect block$id$_rect_o1 = cvRect( 0, 0, 1, 1);\n' + \
@@ -57,7 +57,7 @@ class HaarDetect(OpenCVPlugin):
             'static CvHaarClassifierCascade* block$id$_cascade = 0;\n' + \
             'const char* block$id$_cascade_name = "$cascade_name$";\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             '  double scale = 1.3;\n' + \
             '  block$id$_cascade = (CvHaarClassifierCascade*)' + \
@@ -116,7 +116,7 @@ class HaarDetect(OpenCVPlugin):
             '  cvReleaseImage( &small_img );\n' + \
             '}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_o2);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseMemStorage(&block$id$_storage);\n'

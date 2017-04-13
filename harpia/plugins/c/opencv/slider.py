@@ -52,10 +52,10 @@ class Slider(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
 
-        self.function_call = \
+        self.codes[2] = \
             'cvNamedWindow("$window_name$",CV_WINDOW_AUTOSIZE );\n' + \
             'cvCreateTrackbar("$label$", "$window_name$",' + \
             ' &block$id$_int_o0, $maxVal$, NULL);\n'

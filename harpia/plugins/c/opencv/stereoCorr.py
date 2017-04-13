@@ -36,14 +36,14 @@ class StereoCorr(OpenCVPlugin):
                            ]
 
         # -------------------C/OpenCv code------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_i1 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_img_ts0 = NULL;\n' + \
             'IplImage * block$id$_img_ts1 = NULL;\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0 && block$id$_img_i1)\n{\n' + \
             '   if(!block$id$_img_o0)\n' + \
             '       block$id$_img_o0 = cvCreateImage' + \
@@ -63,7 +63,7 @@ class StereoCorr(OpenCVPlugin):
             'CV_DISPARITY_BIRCHFIELD,' +\
             'block$id$_img_o0, $maxDist$, 15, 3, 6, 8, 15 );\n}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseImage(&block$id$_img_i1);\n' + \

@@ -45,14 +45,14 @@ class ColorConversion(OpenCVPlugin):
                             }
                            ]
 
-        self.vars =  \
+        self.codes[1] =  \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n' + \
             'IplImage * block$id$_img_t = NULL;\n'
 
-        self.function_call = ""
+        self.codes[2] = ""
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_t);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseImage(&block$id$_img_o0);\n'

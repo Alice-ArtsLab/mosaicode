@@ -31,11 +31,11 @@ class SideBySide(OpenCVPlugin):
                            "label":"Output Image"}]
         self.group = "Arithmetic and logical operations"
 
-        self.vars = "IplImage * block$id$_img_i0 = NULL;\n" + \
+        self.codes[1] = "IplImage * block$id$_img_i0 = NULL;\n" + \
                     "IplImage * block$id$_img_i1 = NULL;\n" + \
                     "IplImage * block$id$_img_o0 = NULL;\n"
 
-        self.function_call =  \
+        self.codes[2] =  \
             'if(block$id$_img_i0 && block$id$_img_i1){\n' + \
             'int width=block$id$_img_i0->width' + \
             ' + block$id$_img_i1->width;\n' + \
@@ -55,7 +55,7 @@ class SideBySide(OpenCVPlugin):
             'cvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'if (block$id$_img_o0) cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseImage(&block$id$_img_i1);\n'

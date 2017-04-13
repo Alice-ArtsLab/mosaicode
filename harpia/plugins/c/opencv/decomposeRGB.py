@@ -26,7 +26,7 @@ class DecomposeRGB(OpenCVPlugin):
         self.group = "Filters and Color Conversion"
 
         # ------------------C/OpenCv code--------------------------------------
-        self.vars = \
+        self.codes[1] = \
             'IplImage * block$id$_img_i0 = NULL;\n' + \
             'IplImage * block$id$_img_t0 = NULL;\n' + \
             'IplImage * block$id$_img_t1 = NULL;\n' + \
@@ -35,7 +35,7 @@ class DecomposeRGB(OpenCVPlugin):
             'IplImage * block$id$_img_o1 = NULL;\n' + \
             'IplImage * block$id$_img_o2 = NULL;\n'
 
-        self.function_call = \
+        self.codes[2] = \
             '\nif(block$id$_img_i0){\n' + \
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             'block$id$_img_o1 = cvCloneImage(block$id$_img_i0);\n' + \
@@ -55,7 +55,7 @@ class DecomposeRGB(OpenCVPlugin):
             'cvMerge(block$id$_img_t2 ,block$id$_img_t2, ' + \
             'block$id$_img_t2, NULL, block$id$_img_o2);\n}\n'
 
-        self.dealloc = \
+        self.codes[3] = \
             'cvReleaseImage(&block$id$_img_t0);\n' + \
             'cvReleaseImage(&block$id$_img_t1);\n' + \
             'cvReleaseImage(&block$id$_img_t2);\n' + \

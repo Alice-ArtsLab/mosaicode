@@ -57,8 +57,8 @@ class NewRect(OpenCVPlugin):
                             }
                            ]
 
-        self.vars = "CvRect block$id$_rect_o0 = cvRect( 0, 0, 1, 1);"
-        self.function_call = \
+        self.codes[1] = "CvRect block$id$_rect_o0 = cvRect( 0, 0, 1, 1);"
+        self.codes[2] = \
             'block$id$_rect_o0 = cvRect($prop[x]$, $prop[y]$, $prop[width]$, $prop[height]$);\n'
 
 # -----------------------------------------------------------------------------
