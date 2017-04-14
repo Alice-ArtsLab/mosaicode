@@ -7,7 +7,7 @@ import ast
 class Preferences(object):
 
     def __init__(self):
-        self.conf_file_path = "~/.harpiaConf.xml"
+        self.conf_file_path = "configuration.xml"
         self.recent_files = []
         self.default_directory = "/tmp/%l/%n-%t"
         self.default_filename = "%n"

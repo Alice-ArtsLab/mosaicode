@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarpiaPlugin color="#5329eac5a5c4" framework="webaudio" group="Appearance" help="Changes the background color" label="Background Color" language="javascript" source="xml" type="harpia.plugins.javascript.webaudio.backgroundcolor">
+ <code0>
+  document.body.style.backgroundColor = "$prop[Color]$";
+ </code0>
+ <code1>
+ </code1>
+ <code2>
+ </code2>
+ <code3>
+ </code3>
+ <code4>
+ </code4>
+ <properties>
+  <property value="{'type': 'Color', 'name': 'Color', 'value': u'#ffff00000000', 'label': 'Color'}"/>
+ </properties>
+ <in_ports/>
+ <out_ports/>
+</HarpiaPlugin>

@@ -23,45 +23,6 @@ class CodeTemplateControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def load_code_templates(cls, system):
-        system.code_templates.clear()
-        # First load ports on python classes.
-        # They are installed with harpia as root 
-        for importer, modname, ispkg in pkgutil.walk_packages(
-                harpia.plugins.__path__,
-                harpia.plugins.__name__ + ".",
-                None):
-            if ispkg:
-                continue
-            module = __import__(modname, fromlist="dummy")
-            for name, obj in inspect.getmembers(module):
-                if not inspect.isclass(obj):
-                    continue
-                modname = inspect.getmodule(obj).__name__
-                if not modname.startswith("harpia.plugins"):
-                    continue
-                instance = obj()
-                if isinstance(instance, CodeTemplate):
-                    system.code_templates[instance.name] = instance
-
-        #Now load the XML from user space
-        from harpia.system import System
-        home_dir = System.get_user_dir()
-        if not os.path.isdir(home_dir):
-            return
-        if not os.path.exists(home_dir):
-            return
-        for file in os.listdir(home_dir):
-            if not file.endswith(".xml"):
-                continue
-            code_template = CodeTemplateControl.load(home_dir + "/" + file)
-            if code_template is None:
-                continue
-            code_template.source = "xml"
-            system.code_templates[code_template.name] = code_template
-
-    # ----------------------------------------------------------------------
-    @classmethod
     def load(cls, file_name):
         """
         This method loads the code_template from XML file.
@@ -114,7 +75,8 @@ class CodeTemplateControl():
         parser.appendToTag('HarpiaCodeTemplate','code').string = str(code_template.code)
 
         try:
-            file_name = System.get_user_dir() + "/" + code_template.name + ".xml"
+            data_dir = System.get_user_dir() + "/extensions/"
+            file_name = data_dir + code_template.name + ".xml"
             code_template_file = file(os.path.expanduser(file_name), 'w')
             code_template_file.write(parser.prettify())
             code_template_file.close()
@@ -137,9 +99,10 @@ class CodeTemplateControl():
         from harpia.system import System
         code_template = System.code_templates[code_template_key]
         if code_template.source == "xml":
-            file_name = System.get_user_dir() + "/" + code_template.name + ".xml"
+            data_dir = System.get_user_dir() + "/extensions/"
+            file_name = data_dir + code_template.name + ".xml"
             os.remove(file_name)
-            CodeTemplateControl.load_code_templates(System)
+            System.code_templates.pop(code_template_key, None)
             return True
         else:
             return False

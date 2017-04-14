@@ -46,11 +46,6 @@ from gi.repository import Gtk
 from threading import Thread
 from harpia.system import System as System
 
-# i18n
-_ = gettext.gettext
-gettext.bindtextdomain(System.APP, System.DIR)
-gettext.textdomain(System.APP)
-
 
 class CodeGenerator():
     """

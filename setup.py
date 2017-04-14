@@ -56,7 +56,9 @@ setup(name='harpia',
       url='http://ges.dcomp.ufsj.edu.br/index.php/ouroboros/',
 
       # this is fucked up! must put it in package_data!!
-      data_files=[('/usr/share/harpia/images', glob("app_data/images/*")),
+      data_files=[
+            ('/usr/share/harpia/images', glob("app_data/images/*")),
+            ('/usr/share/harpia/extensions', glob("app_data/extensions/*")),
             ('/usr/share/harpia/po/pt/LC_MESSAGES/',
                    glob("app_data/po/pt/LC_MESSAGES/*")),
             ('/usr/share/harpia/examples', glob("app_data/examples/*.hrp")),

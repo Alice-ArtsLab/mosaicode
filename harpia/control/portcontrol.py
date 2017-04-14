@@ -21,46 +21,6 @@ class PortControl():
     def __init__(self):
         pass
 
-    # ----------------------------------------------------------------------
-    @classmethod
-    def load_ports(cls, system):
-        system.ports.clear()
-        # First load ports on python classes.
-        # They are installed with harpia as root 
-        for importer, modname, ispkg in pkgutil.walk_packages(
-                harpia.plugins.__path__,
-                harpia.plugins.__name__ + ".",
-                None):
-            if ispkg:
-                continue
-            module = __import__(modname, fromlist="dummy")
-            for name, obj in inspect.getmembers(module):
-                if not inspect.isclass(obj):
-                    continue
-                modname = inspect.getmodule(obj).__name__
-                if not modname.startswith("harpia.plugins"):
-                    continue
-                instance = obj()
-                if not isinstance(instance, Port):
-                    continue
-                instance.source = "Python"
-                system.ports[instance.get_type()] = instance
-
-        #Now load the XML from user space
-        from harpia.system import System
-        home_dir = System.get_user_dir()
-        if not os.path.isdir(home_dir):
-            return
-        if not os.path.exists(home_dir):
-            return
-        for file in os.listdir(home_dir):
-            if not file.endswith(".xml"):
-                continue
-            port = PortControl.load(home_dir + "/" + file)
-            if port is None:
-                continue
-            port.source = "xml"
-            system.ports[port.get_type()] = port
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -131,7 +91,8 @@ class PortControl():
 
 
         try:
-            file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
+            data_dir = System.get_user_dir() + "/extensions/"
+            file_name = data_dir + port.get_type() + ".xml"
             port_file = file(os.path.expanduser(file_name), 'w')
             port_file.write(parser.prettify())
             port_file.close()
@@ -154,9 +115,10 @@ class PortControl():
         from harpia.system import System
         port = System.ports[port_key]
         if port.source == "xml":
-            file_name = System.get_user_dir() + "/" + port.get_type() + ".xml"
+            data_dir = System.get_user_dir() + "/extensions/"
+            file_name = data_dir + port.get_type() + ".xml"
             os.remove(file_name)
-            PortControl.load_ports(System)
+            System.ports.pop(port_key, None)
             return True
         else:
             return False

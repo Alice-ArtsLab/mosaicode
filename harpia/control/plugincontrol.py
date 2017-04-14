@@ -24,48 +24,6 @@ class PluginControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def load_plugins(cls, system):
-        system.plugins.clear()
-        # First load ports on python classes.
-        # They are installed with harpia as root 
-        for importer, modname, ispkg in pkgutil.walk_packages(
-                harpia.plugins.__path__,
-                harpia.plugins.__name__ + ".",
-                None):
-            if ispkg:
-                continue
-            module = __import__(modname, fromlist="dummy")
-            for name, obj in inspect.getmembers(module):
-                if not inspect.isclass(obj):
-                    continue
-                modname = inspect.getmodule(obj).__name__
-                if not modname.startswith("harpia.plugins"):
-                    continue
-                instance = obj()
-                if not isinstance(instance, Plugin):
-                    continue
-                if instance.get_label() == "":
-                    continue
-                system.plugins[instance.type] = instance
-
-        #Now load the XML from user space
-        from harpia.system import System
-        home_dir = System.get_user_dir()
-        if not os.path.isdir(home_dir):
-            return
-        if not os.path.exists(home_dir):
-            return
-        for file in os.listdir(home_dir):
-            if not file.endswith(".xml"):
-                continue
-            instance = PluginControl.load(home_dir + "/" + file)
-            if instance is None:
-                continue
-            instance.source = "xml"
-            system.plugins[instance.type] = instance
-
-    # ----------------------------------------------------------------------
-    @classmethod
     def load(cls, file_name):
         """
         This method loads the plugin from XML file.
@@ -84,14 +42,14 @@ class PluginControl():
         plugin = Plugin()
 
         plugin.type = parser.getTagAttr("HarpiaPlugin", "type")
-        plugin.language = parser.getTagAttr("HarpiaPlugin",  "language")
-        plugin.framework = parser.getTagAttr("HarpiaPlugin",  "framework")
+        plugin.language = parser.getTagAttr("HarpiaPlugin", "language")
+        plugin.framework = parser.getTagAttr("HarpiaPlugin", "framework")
 
-        plugin.label = parser.getTagAttr("HarpiaPlugin",  "label")
-        plugin.group = parser.getTagAttr("HarpiaPlugin",  "group")
-        plugin.color = parser.getTagAttr("HarpiaPlugin",  "color")
-        plugin.help = parser.getTagAttr("HarpiaPlugin",  "help")
-        plugin.source = parser.getTagAttr("HarpiaPlugin",  "source")
+        plugin.label = parser.getTagAttr("HarpiaPlugin", "label")
+        plugin.group = parser.getTagAttr("HarpiaPlugin", "group")
+        plugin.color = parser.getTagAttr("HarpiaPlugin", "color")
+        plugin.help = parser.getTagAttr("HarpiaPlugin", "help")
+        plugin.source = parser.getTagAttr("HarpiaPlugin", "source")
 
         count = 0
         for code in plugin.codes:
@@ -158,9 +116,9 @@ class PluginControl():
         for key in plugin.get_out_ports():
             parser.appendToTag('out_ports', 'port', value=key)
 
-
         try:
-            file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"
+            data_dir = System.get_user_dir() + "/extensions/"
+            file_name = data_dir + plugin.get_type() + ".xml"
             plugin_file = file(os.path.expanduser(file_name), 'w')
             plugin_file.write(parser.getXML())
             plugin_file.close()
@@ -182,9 +140,10 @@ class PluginControl():
     def delete_plugin(cls, plugin):
         from harpia.system import System
         if plugin.source == "xml":
-            file_name = System.get_user_dir() + "/" + plugin.get_type() + ".xml"
+            data_dir = System.get_user_dir() + "/extensions/"
+            file_name = data_dir + plugin.get_type() + ".xml"
             os.remove(file_name)
-            PluginControl.load_plugins(System)
+            System.plugins.pop(plugin.get_type(), None)
             return True
         else:
             return False

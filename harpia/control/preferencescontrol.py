@@ -6,7 +6,6 @@ This module contains the PreferencesControl class.
 import os
 from harpia.utils.XMLUtils import XMLParser
 
-
 class PreferencesControl():
     """
     This class contains methods related the PreferencesControl class.
@@ -27,7 +26,9 @@ class PreferencesControl():
             * **Types** (:class:`boolean<boolean>`)
         """
         # load the diagram
-        file_name = os.path.expanduser(self.hp.conf_file_path)
+        from harpia.system import System
+        file_name = System.get_user_dir() + "/" + self.hp.conf_file_path
+        file_name = os.path.expanduser(file_name)
         if os.path.exists(file_name) is False:
             return
         parser = XMLParser(file_name)
@@ -60,7 +61,9 @@ class PreferencesControl():
                                key=key,
                                value=self.hp.__dict__[key])
         try:
-            confFile = file(os.path.expanduser(self.hp.conf_file_path), 'w')
+            from harpia.system import System
+            file_name = System.get_user_dir() + "/" + self.hp.conf_file_path
+            confFile = file(os.path.expanduser(file_name), 'w')
             confFile.write(parser.prettify())
             confFile.close()
         except IOError as e:
