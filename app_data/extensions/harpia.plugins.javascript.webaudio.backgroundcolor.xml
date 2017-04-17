@@ -4,6 +4,9 @@
   document.body.style.backgroundColor = "$prop[Color]$";
  </code0>
  <code1>
+  var block_$id$_i0 = function(value){
+document.body.style.backgroundColor = value;
+};
  </code1>
  <code2>
  </code2>
@@ -12,8 +15,10 @@
  <code4>
  </code4>
  <properties>
-  <property value="{'type': 'Color', 'name': 'Color', 'value': u'#ffff00000000', 'label': 'Color'}"/>
+  <property value="{'label': 'Color', 'type': 'Color', 'name': 'Color', 'value': '#ffff00000000', 'format': 'FF00FF'}"/>
  </properties>
- <in_ports/>
+ <in_ports>
+  <port value="{'type': 'HRP_WEBAUDIO_COLOR', 'name': 'Color', 'label': 'Color'}"/>
+ </in_ports>
  <out_ports/>
 </HarpiaPlugin>

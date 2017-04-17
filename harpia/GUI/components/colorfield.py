@@ -12,7 +12,10 @@ class ColorField(Field, Gtk.HBox):
     """
     This class contains methods related the ColorField class.
     """
-    configuration = {"label": "", "value": "#ffff00000000", "name": ""}
+    configuration = {"label": "",
+                     "value": "#ffff00000000",
+                     "name": "",
+                     "format": "FFFF0000FFFF"}
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
@@ -31,6 +34,7 @@ class ColorField(Field, Gtk.HBox):
         self.event = event
         self.set_value(self.data["value"])
         self.label = Gtk.Label(self.data["label"])
+        self.format = self.data["format"]
         self.add(self.label)
         self.label.set_property("halign", Gtk.Align.START)
 
@@ -71,7 +75,14 @@ class ColorField(Field, Gtk.HBox):
 
     # --------------------------------------------------------------------------
     def get_value(self):
-        return self.color.to_string()
+        result_string = self.color.to_string()
+        if len(self.format) == 6:
+            result = "#" + result_string[1:3] + result_string[5:7] + result_string[9:11]
+            return result
+        if len(self.format) == 3:
+            result = "#" + result_string[1:2] + result_string[5:6] + result_string[9:10]
+            return result
+        return result_string
 
     # --------------------------------------------------------------------------
     def set_value(self, value):

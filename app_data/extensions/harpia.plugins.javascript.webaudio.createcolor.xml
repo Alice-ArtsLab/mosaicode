@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarpiaPlugin color="#c8c87d571919" framework="webaudio" group="Color" help="This plugin creates a color from float input" label="Create Color" language="javascript" source="xml" type="harpia.plugins.javascript.webaudio.createcolor">
+ <code0>
+ </code0>
+ <code1>
+  var block_$id$_color = ["00", "00", "00"];
+
+var block_$id$_i0 = function(value){
+        if (value &lt; 0) value = 0;
+	if (value &gt; 255) value = 255;
+	block_$id$_color[0] = (value &lt; 10) ? "0" + value.toString(16) : value.toString(16);
+	update_block_$id$_o0(value);
+};
+var block_$id$_i1 = function(value){
+        if (value &lt; 0) value = 0;
+	if (value &gt; 255) value = 255;
+	block_$id$_color[1] = (value &lt; 10) ? "0" + value.toString(16) : value.toString(16);
+	update_block_$id$_o0(value);
+};
+var block_$id$_i2 = function(value){
+        if (value &lt; 0) value = 0;
+	if (value &gt; 255) value = 255;
+	block_$id$_color[2] = (value &lt; 10) ? "0" + value.toString(16) : value.toString(16);
+	update_block_$id$_o0(value);
+};
+var block_$id$_o0 = [];
+
+function update_block_$id$_o0(value){
+   color = "#" + block_$id$_color[0] + block_$id$_color[1] + block_$id$_color[2];
+    for (var i = 0; i &lt; block_$id$_o0.length ; i++){
+        block_$id$_o0[i](color);
+    }
+};
+ </code1>
+ <code2>
+ </code2>
+ <code3>
+ </code3>
+ <code4>
+ </code4>
+ <properties/>
+ <in_ports>
+  <port value="{'type': 'HRP_WEBAUDIO_FLOAT', 'name': 'Red', 'label': 'Red'}"/>
+  <port value="{'type': 'HRP_WEBAUDIO_FLOAT', 'name': 'Green', 'label': 'Green'}"/>
+  <port value="{'type': 'HRP_WEBAUDIO_FLOAT', 'name': 'Blue', 'label': 'Blue'}"/>
+ </in_ports>
+ <out_ports>
+  <port value="{'type': 'HRP_WEBAUDIO_COLOR', 'name': 'Color', 'label': 'Color'}"/>
+ </out_ports>
+</HarpiaPlugin>

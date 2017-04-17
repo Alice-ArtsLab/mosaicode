@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarpiaPlugin color="50:150:250:150" framework="webaudio" group="Interface" help="Print value" label="Print" language="javascript" source="xml" type="harpia.plugins.javascript.webaudio.print">
+ <code0>
+ </code0>
+ <code1>
+  // block_$id$ = $name$
+var block_$id$_i0 = function(value){
+    document.getElementById("block_$id$").innerHTML = value;
+    return true;
+    };
+var block_$id$_i1 = function(value){
+    document.getElementById("block_$id$").innerHTML = value;
+    return true;
+    };
+
+var block_$id$_i2 = function(value){
+    document.getElementById("block_$id$").innerHTML = value;
+    return true;
+    };
+ </code1>
+ <code2>
+ </code2>
+ <code3>
+  $prop[label]$ &lt;span id="block_$id$"&gt;&lt;/span&gt;&lt;br&gt;
+ </code3>
+ <code4>
+ </code4>
+ <properties>
+  <property value="{'maxlength': 0, 'type': 'String', 'name': 'label', 'value': 'Label', 'label': 'Label'}"/>
+ </properties>
+ <in_ports>
+  <port value="{'type': 'HRP_WEBAUDIO_FLOAT', 'name': 'float_value', 'label': 'Float Value'}"/>
+  <port value="{'type': 'HRP_WEBAUDIO_CHAR', 'name': 'Char Value', 'label': 'char_value'}"/>
+  <port value="{'type': 'HRP_WEBAUDIO_COLOR', 'name': 'Color', 'label': 'Color'}"/>
+ </in_ports>
+ <out_ports/>
+</HarpiaPlugin>
