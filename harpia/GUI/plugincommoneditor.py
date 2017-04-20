@@ -45,7 +45,7 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
         vbox = Gtk.VBox()
         self.add(vbox)
 
-        data = {"label": _("Label"), "value": plugin.get_label()}
+        data = {"label": _("Label"), "value": plugin.label}
         self.label_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Language"), "value": plugin.get_language()}
@@ -54,17 +54,17 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
         data = {"label": _("Framework"), "value": plugin.get_framework()}
         self.framework_field = StringField(data, self.__on_edit)
 
-        data = {"label": _("Plugin Type"), "value": plugin.get_type()}
+        data = {"label": _("Plugin Type"), "value": plugin.type}
         self.type_field = StringField(data, self.__on_edit)
 
-        data = {"label": _("Group"), "value": plugin.get_group()}
+        data = {"label": _("Group"), "value": plugin.group}
         self.group_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Color"), "value": plugin.get_color()}
         self.color_field = ColorField(data, self.__on_edit)
         self.color_field.set_parent_window(self.plugin_editor)
 
-        data = {"label": _("Help"), "value": plugin.get_help()}
+        data = {"label": _("Help"), "value": plugin.help}
         self.help_field = CommentField(data, self.__on_edit)
 
         vbox.pack_start(self.label_field, False, False, 1)

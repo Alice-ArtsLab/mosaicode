@@ -93,7 +93,7 @@ class System(object):
                 port = PortControl.load(data_dir + "/" + file)
                 if port is not None:
                     port.source = "xml"
-                    self.ports[port.get_type()] = port
+                    self.ports[port.type] = port
                 plugin = PluginControl.load(data_dir + "/" + file)
                 if plugin is not None:
                     plugin.source = "xml"
@@ -139,9 +139,9 @@ class System(object):
                         self.code_templates[instance.name] = instance
                     if isinstance(instance, Port):
                         instance.source = "Python"
-                        self.ports[instance.get_type()] = instance
+                        self.ports[instance.type] = instance
                     if isinstance(instance, Plugin):
-                        if instance.get_label() != "":
+                        if instance.label != "":
                             self.plugins[instance.type] = instance
 
             # Load XML files in application space

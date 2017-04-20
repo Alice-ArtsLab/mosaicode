@@ -79,7 +79,7 @@ class MainControl():
         if diagram is None:
             return
 
-        if diagram.get_file_name() is "Untitled" or save_as:
+        if diagram.file_name is "Untitled" or save_as:
             while True:
                 name = Dialog().save_dialog("Save", self.main_window)
                 if name and not name.endswith("hrp"):
@@ -89,8 +89,8 @@ class MainControl():
                     break
         result, message = False, ""
 
-        if diagram.get_file_name() is not None:
-            if len(diagram.get_file_name()) > 0:
+        if diagram.file_name is not None:
+            if len(diagram.file_name) > 0:
                 result, message = DiagramControl(diagram).save()
 
         if not result:

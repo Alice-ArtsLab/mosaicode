@@ -136,11 +136,11 @@ class PluginPortEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __populate_lists(self):
         self.input_list_store.clear()
-        for port in self.plugin.get_in_ports():
+        for port in self.plugin.in_ports:
             self.input_list_store.append([port.get("label")])
 
         self.output_list_store.clear()
-        for port in self.plugin.get_out_ports():
+        for port in self.plugin.out_ports:
             self.output_list_store.append([port.get("label")])
 
     # ----------------------------------------------------------------------
@@ -168,9 +168,9 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
 
         if data == "Input":
-            del self.plugin.get_in_ports()[int(str(path))]
+            del self.plugin.in_ports[int(str(path))]
         else:
-            del self.plugin.get_out_ports()[int(str(path))]
+            del self.plugin.out_ports[int(str(path))]
         self.__populate_lists()
         self.__clean_side_panel()
 
@@ -189,15 +189,15 @@ class PluginPortEditor(Gtk.ScrolledWindow):
             return
 
         if data == "Input":
-            self.plugin.get_in_ports()[int(str(path))], \
-                self.plugin.get_in_ports()[int(str(path)) - 1] = \
-                self.plugin.get_in_ports()[int(str(path)) - 1], \
-                self.plugin.get_in_ports()[int(str(path))]
+            self.plugin.in_ports[int(str(path))], \
+                self.plugin.in_ports[int(str(path)) - 1] = \
+                self.plugin.in_ports[int(str(path)) - 1], \
+                self.plugin.in_ports[int(str(path))]
         else:
-            self.plugin.get_out_ports()[int(str(path))], \
-                self.plugin.get_out_ports()[int(str(path)) - 1] = \
-                self.plugin.get_out_ports()[int(str(path)) - 1], \
-                self.plugin.get_out_ports()[int(str(path))]
+            self.plugin.out_ports[int(str(path))], \
+                self.plugin.out_ports[int(str(path)) - 1] = \
+                self.plugin.out_ports[int(str(path)) - 1], \
+                self.plugin.out_ports[int(str(path))]
         self.__populate_lists()
 
     # ----------------------------------------------------------------------
@@ -213,19 +213,19 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
 
         if data == "Input":
-            if int(str(path)) == len(self.plugin.get_in_ports()) - 1:
+            if int(str(path)) == len(self.plugin.in_ports) - 1:
                 return
-            self.plugin.get_in_ports()[int(str(path))], \
-                self.plugin.get_in_ports()[int(str(path)) + 1] = \
-                self.plugin.get_in_ports()[int(str(path)) + 1], \
-                self.plugin.get_in_ports()[int(str(path))]
+            self.plugin.in_ports[int(str(path))], \
+                self.plugin.in_ports[int(str(path)) + 1] = \
+                self.plugin.in_ports[int(str(path)) + 1], \
+                self.plugin.in_ports[int(str(path))]
         else:
-            if int(str(path)) == len(self.plugin.get_out_ports()) - 1:
+            if int(str(path)) == len(self.plugin.out_ports) - 1:
                 return
-            self.plugin.get_out_ports()[int(str(path))], \
-                self.plugin.get_out_ports()[int(str(path)) + 1] = \
-                self.plugin.get_out_ports()[int(str(path)) + 1], \
-                self.plugin.get_out_ports()[int(str(path))]
+            self.plugin.out_ports[int(str(path))], \
+                self.plugin.out_ports[int(str(path)) + 1] = \
+                self.plugin.out_ports[int(str(path)) + 1], \
+                self.plugin.out_ports[int(str(path))]
         self.__populate_lists()
 
     # ----------------------------------------------------------------------
@@ -239,7 +239,7 @@ class PluginPortEditor(Gtk.ScrolledWindow):
 
         connectors = []
         for key in System.ports:
-            if System.ports[key].get_language() == self.plugin.language:
+            if System.ports[key].language == self.plugin.language:
                 connectors.append(key)
 
         data = {"label": _("Type"), "name":"type", "values": connectors}
@@ -267,9 +267,9 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         self.selected_port = data
         configuration = None
         if data == "Input":
-            configuration = self.plugin.get_in_ports()[int(str(path))]
+            configuration = self.plugin.in_ports[int(str(path))]
         else:
-            configuration = self.plugin.get_out_ports()[int(str(path))]
+            configuration = self.plugin.out_ports[int(str(path))]
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
@@ -299,9 +299,9 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         i = 0
         collection = None
         if self.selected_port == "Input":
-            collection = self.plugin.get_in_ports()
+            collection = self.plugin.in_ports
         else:
-            collection = self.plugin.get_out_ports()
+            collection = self.plugin.out_ports
         for port in collection:
             if port["label"] == new_port["label"]:
                 collection[i] = new_port

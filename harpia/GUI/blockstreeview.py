@@ -76,10 +76,10 @@ class BlocksTreeView(Gtk.ScrolledWindow):
                 * **block**
 
         """
-        category = self.__contains_category(block.get_group())
+        category = self.__contains_category(block.group)
         self.tree_store.append(category,
-                        [block.get_label().title()[0],
-                        block.get_label(),
+                        [block.label.title()[0],
+                        block.label,
                         "white",
                         block.get_color_as_rgba()
                         ])
@@ -154,7 +154,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         """
         block = self.get_selected_block()
         if block is not None:
-            selection.set_text(block.get_label(), -1)
+            selection.set_text(block.label, -1)
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
@@ -172,7 +172,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         block_name = model.get_value(model.get_iter(path), 1)
         for x in System.plugins:
             block = System.plugins[x]
-            if block.get_label() == block_name:
+            if block.label == block_name:
                 return block
         return None
 # ----------------------------------------------------------------------

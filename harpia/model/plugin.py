@@ -37,40 +37,6 @@ class Plugin(object):
             self.__dict__[key] = plugin.__dict__[key]
 
     # ----------------------------------------------------------------------
-    def get_help(self):
-        """
-        Return the plugin help text.
-
-            Returns:
-                * **Types**: :class:`str<str>`
-                The return value.
-        """
-        return self.help
-
-    # ----------------------------------------------------------------------
-    def get_label(self):
-        """
-        Return the plugin label.
-
-        Returns:
-            * **Types**: :class:`str<str>`
-            The return value.
-        """
-        return self.label
-
-    # ----------------------------------------------------------------------
-    def get_icon(self):
-        """
-        Return the plugin icon path.
-
-        Returns:
-            * **Types**: :class:`str<str>`
-            The return value is the icon path.
-        """
-
-        return self.icon
-
-    # ----------------------------------------------------------------------
     def get_color(self):
         """
         Get the color in RGB format and return in hexadecimal.
@@ -117,39 +83,6 @@ class Plugin(object):
         return "rgba(" + self.color.replace(":", ",") + ")"
 
     # ----------------------------------------------------------------------
-    def get_in_ports(self):
-        """
-        Return types of plugin entries.
-
-        Returns:
-            * **Types**: :class:`list<list>`
-            The return is a list of types plugin entries.
-        """
-        return self.in_ports
-
-    # ----------------------------------------------------------------------
-    def get_out_ports(self):
-        """
-        Return types of plugin outputs.
-
-        Returns:
-            * **Types**: :class:`list<list>`
-            The return is a list of types plugin outputs.
-        """
-        return self.out_ports
-
-    # ----------------------------------------------------------------------
-    def get_group(self):
-        """
-        Returns the group name that plugin belongs.
-
-        Returns:
-            * **Types**: :class:`str<str>`
-            The return value.
-        """
-        return self.group
-
-    # ----------------------------------------------------------------------
     def get_position(self):
         """
         Return the plugin position on the work area.
@@ -159,19 +92,6 @@ class Plugin(object):
             Returns the **x** and **y** position of the plugin
         """
         return (self.x, self.y)
-
-    # ----------------------------------------------------------------------
-    def get_type(self):
-        """
-        Return the plugin type.
-
-        Returns:
-            * **Types**: :class:`str<str>`
-            The return value is the class module. Like:
-                * *"harpia.plugins.c.opencv.xor"*
-                * *"harpia.plugins.javascript.webaudio.addfloat"*
-        """
-        return self.type
 
     # ----------------------------------------------------------------------
     def set_id(self, value):

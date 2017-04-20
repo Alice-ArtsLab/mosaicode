@@ -12,8 +12,8 @@ class DiagramModel(object):
         self.blocks = {}  # GUI blocks
         self.connectors = []
         self.__zoom = 1.0  # pixels per unit
-        self.__file_name = "Untitled"
-        self.__modified = False
+        self.file_name = "Untitled"
+        self.modified = False
         self.language = None
 
         self.undo_stack = []
@@ -58,31 +58,15 @@ class DiagramModel(object):
 
     # ----------------------------------------------------------------------
     def connect_blocks(self, source, source_port, sink, sink_port):
-        out_type = source.get_out_ports()[source_port]["type"]
+        out_type = source.out_ports[source_port]["type"]
         connection = ConnectionModel(self, source, source_port, out_type)
         connection.sink = sink
         connection.sink_port = sink_port
         self.connectors.append(connection)
 
     # ----------------------------------------------------------------------
-    def set_file_name(self, file_name):
-        self.__file_name = file_name
-
-    # ----------------------------------------------------------------------
-    def get_file_name(self):
-        return self.__file_name
-
-    # ----------------------------------------------------------------------
     def get_patch_name(self):
-        return self.__file_name.split("/").pop()
-
-    # ---------------------------------------------------------------------
-    def set_modified(self, state):
-        self.__modified = state
-
-    # ---------------------------------------------------------------------
-    def get_modified(self):
-        return self.__modified
+        return self.file_name.split("/").pop()
 
     # ---------------------------------------------------------------------
     def set_zoom(self, zoom):

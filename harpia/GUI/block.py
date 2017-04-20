@@ -175,7 +175,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         text_label = "<span font_family ='Arial' " + \
             "size = '25000' weight = 'bold' > " + \
-            self.get_label().title()[0] + "</span>"
+            self.label.title()[0] + "</span>"
 
         icon = GooCanvas.CanvasText(parent=self,
                                      text=text_label,
@@ -203,7 +203,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         text_label = "<span font_family ='Arial' " + \
             "size = '10000' weight = 'ultralight'> " + \
-            self.get_label() + "</span>"
+            self.label + "</span>"
 
         label = GooCanvas.CanvasText(parent=self,
                                      text=text_label,
@@ -231,7 +231,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         ins = []
         x = 0
-        for port in self.get_in_ports():
+        for port in self.in_ports:
             text_name = self.__get_port_label(port["type"]);
             inp = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
@@ -287,7 +287,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         outs = []
         x = 0
-        for port in self.get_out_ports():
+        for port in self.out_ports:
             text_name = self.__get_port_label(port["type"]);
             out = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
@@ -350,7 +350,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         This method build the block.
         """
-        maxIO = max(len(self.get_in_ports()), len(self.get_out_ports()))
+        maxIO = max(len(self.in_ports), len(self.out_ports))
 
         # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
@@ -485,7 +485,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                 continue
             if conn.sink_port not in distinct_con:
                 distinct_con.append(conn.sink_port)
-        if len(distinct_con) < len(self.get_in_ports()):
+        if len(distinct_con) < len(self.in_ports):
             self.has_flow = False
         self.__update_state()
         return self.has_flow
@@ -521,8 +521,8 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             return \
                 "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
                 "<span color = '" + \
-                System.ports[port_type].get_color() + "'>" + \
-                System.ports[port_type].get_label() + "</span>}</span>"
+                System.ports[port_type].color + "'>" + \
+                System.ports[port_type].label + "</span>}</span>"
         else:
             return "??"
 # ----------------------------------------------------------------------

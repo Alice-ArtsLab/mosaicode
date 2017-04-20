@@ -184,7 +184,7 @@ class Dialog():
 
         # File name
         data = {"name": _("File name"),
-                "value": diagram.get_file_name()}
+                "value": diagram.file_name}
         self.file_name = StringField(data, None)
         vbox.add(self.file_name)
 

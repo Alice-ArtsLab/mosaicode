@@ -54,7 +54,7 @@ class PortControl():
             port.output_codes[count] = parser.getTag('HarpiaPort').getTag('output_code' + str(count)).getText()
             count = count + 1
 
-        if port.get_type() == "":
+        if port.type == "":
             return None
         return port
 
@@ -92,7 +92,7 @@ class PortControl():
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + port.get_type() + ".xml"
+            file_name = data_dir + port.type + ".xml"
             port_file = file(os.path.expanduser(file_name), 'w')
             port_file.write(parser.prettify())
             port_file.close()
@@ -107,7 +107,7 @@ class PortControl():
         PortControl.save(port)
         # Then add it to system
         from harpia.system import System
-        System.ports[port.get_type()] = port
+        System.ports[port.type] = port
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -116,7 +116,7 @@ class PortControl():
         port = System.ports[port_key]
         if port.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + port.get_type() + ".xml"
+            file_name = data_dir + port.type + ".xml"
             os.remove(file_name)
             System.ports.pop(port_key, None)
             return True

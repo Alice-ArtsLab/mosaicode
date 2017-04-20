@@ -277,7 +277,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for oldCon in self.connectors:
             if oldCon.sink == newCon.sink \
                     and oldCon.sink_port == newCon.sink_port\
-                    and not System.ports[newCon.conn_type].get_multiple():
+                    and not System.ports[newCon.conn_type].multiple:
                 System.log(_("Connector Already exists"))
                 return False
         if (newCon.sink == newCon.source) or self.__cycle_detection(newCon):
@@ -328,9 +328,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         self.__abort_connection()  # abort any possibly running connections
-        if output >= len(block.get_out_ports()):
+        if output >= len(block.out_ports):
             return 
-        conn_type = block.get_out_ports()[output]["type"]
+        conn_type = block.out_ports[output]["type"]
         self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
@@ -348,11 +348,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         if self.curr_connector is None:
             return False
-        self.curr_connector.set_end(block, block_input)
+        self.curr_connector.sink = block
+        self.curr_connector.sink_port = block_input
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return False
-        if not self.curr_connector.type_match():
+
+        out_type = self.curr_connector.source.out_ports[int(self.curr_connector.source_port)]["type"]
+        in_type = self.curr_connector.sink.in_ports[int(self.curr_connector.sink_port)]["type"]
+
+        if not out_type == in_type:
             System.log(_("Connection Types mismatch"))
             self.__abort_connection()
             return False
@@ -434,7 +439,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 * **file_name** (:class:`str<str>`)
 
         """
-        DiagramModel.set_file_name(self, file_name)
+        self.file_name = file_name
         self.main_window.work_area.rename_diagram(self)
 
     # ----------------------------------------------------------------------
@@ -662,7 +667,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 * **state**
         """
-        DiagramModel.set_modified(self, state)
+        self.modified = state
         self.main_window.work_area.rename_diagram(self)
 
     # ---------------------------------------------------------------------

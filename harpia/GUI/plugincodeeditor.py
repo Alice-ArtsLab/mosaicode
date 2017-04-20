@@ -146,7 +146,7 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
                     "// --------------- Generated dafault Code ---------\n"
                     )
             i = 0
-            for port in self.plugin.get_in_ports():
+            for port in self.plugin.in_ports:
                 value = System.ports[port["type"]].input_codes[count].replace(
                         "$port_number$", str(i))
                 self.code_widgets[count].set_value(
@@ -154,7 +154,7 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
                 i += 1
 
             i = 0
-            for port in self.plugin.get_out_ports():
+            for port in self.plugin.out_ports:
                 value = System.ports[port["type"]].output_codes[count].replace(
                         "$port_number$", str(i))
                 self.code_widgets[count].set_value(

@@ -61,11 +61,11 @@ class PortEditor(Gtk.Dialog):
         if port is not None:
             System()
             self.type.set_value(port)
-            self.language.set_value(System.ports[port].get_language())
-            self.label.set_value(System.ports[port].get_label())
-            self.color.set_value(System.ports[port].get_color())
-            self.code.set_value(System.ports[port].get_code())
-            self.multiple.set_value(System.ports[port].get_multiple())
+            self.language.set_value(System.ports[port].language)
+            self.label.set_value(System.ports[port].label)
+            self.color.set_value(System.ports[port].color)
+            self.code.set_value(System.ports[port].code)
+            self.multiple.set_value(System.ports[port].multiple)
 
             count = 0
             for code in Plugin().codes:

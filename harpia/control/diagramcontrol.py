@@ -42,18 +42,18 @@ class DiagramControl():
             * **Types** (:class:`boolean<boolean>`)
         """
         if file_name is not None:
-            self.diagram.set_file_name(file_name)
+            self.diagram.file_name = file_name
         else:
-            if self.diagram.get_file_name() is None:
+            if self.diagram.file_name is None:
                 System.log("Cannot Load without filename")
                 return False
-        if not os.path.exists(self.diagram.get_file_name()):
-            System.log("File '" + self.diagram.get_file_name() +
+        if not os.path.exists(self.diagram.file_name):
+            System.log("File '" + self.diagram.file_name +
                        "' does not exist!")
             return False
 
         # load the diagram
-        parser = XMLParser(self.diagram.get_file_name())
+        parser = XMLParser(self.diagram.file_name)
 
         zoom = parser.getTag("harpia").getTag("zoom").getAttr("value")
         self.diagram.set_zoom(float(zoom))
@@ -122,7 +122,7 @@ class DiagramControl():
 
         parser.appendToTag('harpia', 'blocks')
         for block_id in self.diagram.blocks:
-            block_type = self.diagram.blocks[block_id].get_type()
+            block_type = self.diagram.blocks[block_id].type
             pos = self.diagram.blocks[block_id].get_position()
             parser.appendToTag('blocks', 'block', type=block_type, id=block_id)
             parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
@@ -143,14 +143,14 @@ class DiagramControl():
                                to_in=int(connector.sink_port) + 1)
 
         if file_name is not None:
-            self.diagram.set_file_name(file_name)
-        if self.diagram.get_file_name() is None:
-            self.diagram.set_file_name("Cadeia_" + str(time.time()) + ".hrp")
-        if self.diagram.get_file_name().find(".hrp") == -1:
-            self.diagram.set_file_name(self.diagram.get_file_name() + ".hrp")
+            self.diagram.file_name = file_name
+        if self.diagram.file_name is None:
+            self.diagram.file_name = "Cadeia_" + str(time.time()) + ".hrp"
+        if self.diagram.file_name.find(".hrp") == -1:
+            self.diagram.file_name = self.diagram.file_name + ".hrp"
 
         try:
-            save_file = open(str(self.diagram.get_file_name()), "w")
+            save_file = open(str(self.diagram.file_name), "w")
             save_file.write(parser.prettify())
             save_file.close()
         except IOError as e:

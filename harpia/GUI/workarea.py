@@ -31,7 +31,7 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def __on_switch_page(self, notebook, child, page_num):
-        self.main_window.set_title(child.get_children()[0].get_file_name())
+        self.main_window.set_title(child.get_children()[0].file_name)
 
     # ----------------------------------------------------------------------
     def add_diagram(self, diagram):
@@ -66,9 +66,9 @@ class WorkArea(Gtk.Notebook):
         tab = self.get_nth_page(position)
         diagram = tab.get_children()[0]
 
-        if diagram.get_modified():
+        if diagram.modified:
             dialog = Dialog().confirm_dialog(_("Diagram ") +
-                                             diagram.get_file_name() +
+                                             diagram.file_name +
                                              _("is not saved.\nIf you close it"
                                                ", changes will be lost.\n"
                                                "Confirm?"), self.main_window)
@@ -148,10 +148,10 @@ class WorkArea(Gtk.Notebook):
         hbox = self.get_tab_label(tab)
         label = hbox.get_children()[0]
         name = diagram.get_patch_name()
-        if diagram.get_modified():
+        if diagram.modified:
             name = "* " + name
         label.set_text(name)
-        self.main_window.set_title(diagram.get_file_name())
+        self.main_window.set_title(diagram.file_name)
 
     # ----------------------------------------------------------------------
     def resize(self, data):

@@ -215,66 +215,68 @@ class CodeGenerator():
                     self.generate_block_code(block)
 
     # ----------------------------------------------------------------------
+    def replace_key_value(self, plugin, key, value):
+        i = 0
+        for code in plugin.codes:
+            plugin.codes[i] = code.replace(key, value)
+            i += 1
+
+    # ----------------------------------------------------------------------
     def generate_block_code(self, plugin):
         """
         This method generate the block code.
         """
-        code0 = plugin.codes[0]
-        code1 = plugin.codes[1]
-        code2 = plugin.codes[2]
-        code3 = plugin.codes[3]
-        code4 = plugin.codes[4]
+
+#        # First we replace in ports
+#        cont = 0
+#        for port in plugin.in_ports:
+#            my_key = "$in_ports[" + port["name"] + "]$"
+#            value = System.ports[port["type"]].var_name
+#            value = value.replace("$port_number$", str(cont))
+#            value = value.replace("$port_name$", port["name"])
+#            i = 0
+#            for code in plugin.codes:
+#                plugin.codes[i] = code.replace(my_key, value)
+#                i += 1
+#            cont += 1
+
+#        # First we replace out ports
+#        cont = 0
+#        for port in plugin.out_ports:
+#            my_key = "$out_ports[" + port["name"] + "]$"
+#            value = System.ports[port["type"]].var_name
+#            value = value.replace("$port_number$", str(cont))
+#            value = value.replace("$port_name$", port["name"])
+#            i = 0
+#            for code in plugin.codes:
+#                plugin.codes[i] = code.replace(my_key, value)
+#                i += 1
+#            cont += 1
+
 
         # First we replace object attributes by their values
         for key in plugin.__dict__:
-            value = str(plugin.__dict__[key])
             my_key = "$" + key + "$"
-            code0 = code0.replace(my_key, value)
-            code1 = code1.replace(my_key, value)
-            code2 = code2.replace(my_key, value)
-            code3 = code3.replace(my_key, value)
-            code4 = code4.replace(my_key, value)
+            value = str(plugin.__dict__[key])
+            self.replace_key_value(plugin, my_key, value)
 
         # Then we replace properties by their values
         for prop in plugin.get_properties():
             my_key = "$prop[" + prop.get("name") + "]$"
             value = str(prop.get("value"))
-            code0 = code0.replace(my_key, value)
-            code1 = code1.replace(my_key, value)
-            code2 = code2.replace(my_key, value)
-            code3 = code3.replace(my_key, value)
-            code4 = code4.replace(my_key, value)
+            self.replace_key_value(plugin, my_key, value)
 
-        self.codes[0].append(code0)
-        self.codes[1].append(code1)
-        self.codes[2].append(code2)
-        self.codes[3].append(code3)
-        self.codes[4].append(code4)
+        for code, plugin_code in zip(self.codes, plugin.codes):
+            code.append(plugin_code)
 
         connections = ""
         for x in plugin.connections:
-            code = System.ports[x.conn_type].get_code()
+            code = System.ports[x.conn_type].code
             # Replace all connection properties by their values
             for key in x.__dict__:
                 value = str(x.__dict__[key])
                 my_key = "$" + key + "$"
                 code = code.replace(my_key, value)
-            # Replace all connection methods by their values
-            for func in dir(x):
-                result = ""
-                try:
-                    callable(getattr(x, func))
-                except:
-                    continue
-                # if code does not have the method, we do not execute it
-                key = "$" + str(func) + "$"
-                if key not in code:
-                    continue
-                try:
-                    result = getattr(x, func)()
-                except:
-                    continue
-                code = code.replace(key, str(result))
             connections += code
         self.connections.append(connections)
 

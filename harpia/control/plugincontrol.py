@@ -71,7 +71,7 @@ class PluginControl():
         for port in out_ports:
             plugin.out_ports.append(ast.literal_eval(port.getAttr("value")))
 
-        if plugin.get_type() == "harpia.model.plugin":
+        if plugin.type == "harpia.model.plugin":
             return None
         return plugin
 
@@ -109,16 +109,16 @@ class PluginControl():
             parser.appendToTag('properties', 'property', value=key)
 
         parser.appendToTag('HarpiaPlugin', 'in_ports')
-        for key in plugin.get_in_ports():
+        for key in plugin.in_ports:
             parser.appendToTag('in_ports', 'port', value=key)
 
         parser.appendToTag('HarpiaPlugin', 'out_ports')
-        for key in plugin.get_out_ports():
+        for key in plugin.out_ports:
             parser.appendToTag('out_ports', 'port', value=key)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + plugin.get_type() + ".xml"
+            file_name = data_dir + plugin.type + ".xml"
             plugin_file = file(os.path.expanduser(file_name), 'w')
             plugin_file.write(parser.getXML())
             plugin_file.close()
@@ -133,7 +133,7 @@ class PluginControl():
         PluginControl.save(plugin)
         # Then add it to system
         from harpia.system import System
-        System.plugins[plugin.get_type()] = plugin
+        System.plugins[plugin.type] = plugin
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -141,9 +141,9 @@ class PluginControl():
         from harpia.system import System
         if plugin.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + plugin.get_type() + ".xml"
+            file_name = data_dir + plugin.type + ".xml"
             os.remove(file_name)
-            System.plugins.pop(plugin.get_type(), None)
+            System.plugins.pop(plugin.type, None)
             return True
         else:
             return False
