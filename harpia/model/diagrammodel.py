@@ -20,11 +20,11 @@ class DiagramModel(object):
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
-        if self.language is not None and self.language != block.get_language():
+        if self.language is not None and self.language != block.language:
             System.log("Block language is different from diagram language.")
             return False
         if self.language is None or self.language == 'None':
-            self.language = block.get_language()
+            self.language = block.language
 
         self.last_id = max(int(self.last_id), int(block.get_id()))
         if block.get_id() < 0:

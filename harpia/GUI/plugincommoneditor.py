@@ -48,10 +48,10 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
         data = {"label": _("Label"), "value": plugin.label}
         self.label_field = StringField(data, self.__on_edit)
 
-        data = {"label": _("Language"), "value": plugin.get_language()}
+        data = {"label": _("Language"), "value": plugin.language}
         self.language_field = StringField(data, self.__on_edit)
 
-        data = {"label": _("Framework"), "value": plugin.get_framework()}
+        data = {"label": _("Framework"), "value": plugin.framework}
         self.framework_field = StringField(data, self.__on_edit)
 
         data = {"label": _("Plugin Type"), "value": plugin.type}

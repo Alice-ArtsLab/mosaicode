@@ -1,30 +1,4 @@
 # -*- coding: utf-8 -*-
-# [HARPIA PROJECT]
-#
-#
-# S2i - Intelligent Industrial Systems
-# DAS - Automation and Systems Department
-# UFSC - Federal University of Santa Catarina
-# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
-# S2i (www.s2i.das.ufsc.br)
-#
-#
-#    This program is free software: you can redistribute it and/or modify it
-#    under the terms of the GNU General Public License version 3, as published
-#    by the Free Software Foundation.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranties of
-#    MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-#    PURPOSE.  See the GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#    For further information, check the COPYING file distributed with this
-#    software.
-#
-# ----------------------------------------------------------------------
 """
 This module contains the Diagram class.
 """
@@ -40,6 +14,7 @@ from block import Block
 from connector import Connector
 from harpia.system import System as System
 from harpia.model.diagrammodel import DiagramModel
+from harpia.model.plugin import Plugin
 import gettext
 _ = gettext.gettext
 
@@ -586,7 +561,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for widget in clipboard:
             if not isinstance(widget, Block):
                 continue
-            plugin = copy.deepcopy(widget)
+            plugin = Plugin(widget)
             plugin.x += 20
             plugin.y += 20
             plugin.set_id(-1)

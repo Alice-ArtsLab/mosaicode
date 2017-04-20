@@ -32,8 +32,9 @@ class Plugin(object):
         self.properties = []
         self.codes = ["","","","",""] # Empty array with 5 positions
 
-        if plugin == None: return
-        for key in plugin.__dict__:
+        if plugin == None:
+            return
+        for key in self.__dict__:
             self.__dict__[key] = plugin.__dict__[key]
 
     # ----------------------------------------------------------------------
@@ -113,36 +114,6 @@ class Plugin(object):
             The return value.
         """
         return int(self.id)
-
-    # ----------------------------------------------------------------------
-    def get_language(self):
-        """
-        Return the plugin programming language.
-
-        Returns:
-            * **Types**: :class:`str`<str>
-            The return value.
-        """
-
-        try:
-            return self.language
-        except:
-            return None
-
-    # ----------------------------------------------------------------------
-    def get_framework(self):
-        """
-        Return the plugin framework.
-
-        Returns:
-            * **Types**: :class:`str`<str>
-            The return value.
-        """
-
-        try:
-            return self.framework
-        except:
-            return None
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
