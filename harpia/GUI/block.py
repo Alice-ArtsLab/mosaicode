@@ -418,14 +418,14 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
-        new_x = x - (x % System.properties.get_grid())
-        new_y = y - (y % System.properties.get_grid())
+        new_x = x - (x % System.properties.grid)
+        new_y = y - (y % System.properties.grid)
         self.translate(new_x, new_y)
 
     # ----------------------------------------------------------------------
     def adjust_position(self):
         position = self.get_position()
-        grid = System.properties.get_grid()
+        grid = System.properties.grid
         new_x = position[0] - position[0] % grid
         new_y = position[1] - position[1] % grid
         self.translate(new_x - position[0], new_y - position[1])

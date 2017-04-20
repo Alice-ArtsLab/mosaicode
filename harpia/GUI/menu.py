@@ -222,7 +222,7 @@ class Menu(Gtk.MenuBar):
 
         for widget in self.recent_files_menu.get_children():
             self.recent_files_menu.remove(widget)
-        for recent_file in System.properties.get_recent_files_as_array():
+        for recent_file in System.properties.recent_files:
             self.add_recent_file(recent_file)
 
     # ----------------------------------------------------------------------

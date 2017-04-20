@@ -54,13 +54,10 @@ class PreferenceWindow(Gtk.Dialog):
         response = self.run()
 
         if response == Gtk.ResponseType.OK:
-            self.properties.set_error_log_file(self.error_log_file.get_value())
-            self.properties.set_default_directory(
-                self.default_directory.get_value())
-            self.properties.set_default_filename(
-                self.default_filename.get_value())
-            self.properties.set_grid(
-                self.grid.get_value())
+            self.properties.error_log_file = self.error_log_file.get_value()
+            self.properties.default_directory = self.default_directory.get_value()
+            self.properties.default_filename = self.default_filename.get_value()
+            self.properties.grid = self.grid.get_value()
             main_window.main_control.redraw(None)
 
         self.close()
@@ -73,19 +70,19 @@ class PreferenceWindow(Gtk.Dialog):
         self.default_directory_tab.add(vbox)
 
         data = {"label": _("Default directory:"),
-                "value": self.properties.get_default_directory()}
+                "value": self.properties.default_directory}
         self.default_directory = OpenFileField(data, None)
         vbox.add(self.default_directory)
 
         # Default directory
         data = {"label": _("Default Filename:"),
-                "value": self.properties.get_default_filename()}
+                "value": self.properties.default_filename}
         self.default_filename = StringField(data, None)
         vbox.add(self.default_filename)
 
         # Error Log File
         data = {"label": _("Error Log File:"),
-                "value": self.properties.get_error_log_file()}
+                "value": self.properties.error_log_file}
         self.error_log_file = StringField(data, None)
         vbox.add(self.error_log_file)
 
@@ -101,8 +98,7 @@ class PreferenceWindow(Gtk.Dialog):
         vbox = Gtk.VBox()
         self.grid_preferences_tab.add(vbox)
 
-        data = {"label": _("Grid size"),
-                "value": self.properties.get_grid()}
+        data = {"label": _("Grid size"), "value": self.properties.grid}
         self.grid = IntField(data, None)
         vbox.add(self.grid)
 

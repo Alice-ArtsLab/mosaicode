@@ -1,33 +1,4 @@
 # -*- coding: utf-8 -*-
-# [HARPIA PROJECT]
-#
-#
-# S2i - Intelligent Industrial Systems
-# DAS - Automation and Systems Department
-# UFSC - Federal University of Santa Catarina
-# Copyright: 2006 - 2007 Luis Carlos Dill Junges (lcdjunges@yahoo.com.br),
-#                        Clovis Peruchi Scotti (scotti@ieee.org),
-#                        Guilherme Augusto Rutzen (rutzen@das.ufsc.br),
-#                        Mathias Erdtmann (erdtmann@gmail.com)
-#                        and S2i (www.s2i.das.ufsc.br)
-#            2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
-#                        S2i (www.s2i.das.ufsc.br)
-#
-#
-#    This program is free software: you can redistribute it and/or modify it
-#    under the terms of the GNU General Public License version 3, as published
-#    by the Free Software Foundation.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranties of
-#    MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-#    PURPOSE.  See the GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#    For further information, check the COPYING file distributed with this
-#    software.
 """
 This module contains the System class.
 """
@@ -108,7 +79,7 @@ class System(object):
                 except:
                     pass
             # Load the preferences
-            PreferencesControl(self.properties).load()
+            self.properties = PreferencesControl.load()
             # Load Examples
             examples = glob(System.DATA_DIR + "examples/*")
             for example in examples:

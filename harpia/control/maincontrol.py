@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 This module contains the MainControl class.
@@ -60,7 +59,7 @@ class MainControl():
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
-        System.properties.add_recent_file(file_name)
+        PreferencesControl.add_recent_file(System.properties, file_name)
         self.main_window.menu.update_recent_file()
 
     # ----------------------------------------------------------------------
@@ -146,7 +145,7 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesControl(System.properties).save()
+        PreferencesControl.save(System.properties)
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:

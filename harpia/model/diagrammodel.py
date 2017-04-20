@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from harpia.model.connectionmodel import ConnectionModel as ConnectionModel
