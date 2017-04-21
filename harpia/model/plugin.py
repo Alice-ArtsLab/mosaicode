@@ -5,7 +5,8 @@
 class Plugin(object):
     """
     This class contains the base attributes of each plug-in,
-    their position on the screen, id and others applicable properties for each one.
+    their position on the screen, id and others applicable properties for 
+    each one.
     """
 
     # ----------------------------------------------------------------------
@@ -82,18 +83,6 @@ class Plugin(object):
         if self.color.startswith("#"):
             return self.color
         return "rgba(" + self.color.replace(":", ",") + ")"
-
-    # ----------------------------------------------------------------------
-    @property
-    def position(self):
-        """
-        Return the plugin position on the work area.
-
-        Returns:
-            * **Types**: :class:`int<int>` and :class:`int<int>`
-            Returns the **x** and **y** position of the plugin
-        """
-        return (self.x, self.y)
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
