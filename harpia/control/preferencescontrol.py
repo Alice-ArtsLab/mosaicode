@@ -81,7 +81,7 @@ class PreferencesControl():
         parser.setTagAttr('HarpiaProperties','grid', prefs.grid)
         parser.setTagAttr('HarpiaProperties','width', prefs.width)
         parser.setTagAttr('HarpiaProperties','height', prefs.height)
-        parser.setTagAttr('HarpiaProperties','prefsaned_work_area',
+        parser.setTagAttr('HarpiaProperties','hpaned_work_area',
                 prefs.hpaned_work_area)
         parser.setTagAttr('HarpiaProperties','vpaned_bottom',
                 prefs.vpaned_bottom)

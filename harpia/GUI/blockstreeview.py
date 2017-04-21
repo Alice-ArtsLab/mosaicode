@@ -58,13 +58,24 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             Gdk.DragAction.DEFAULT | Gdk.DragAction.COPY)
         self.blocks_tree_view.connect("drag-data-get", self.__drag_data)
 
-        # Load blocks
+        # To separate blocks of this language
+        block_list = []
+        group_list = []
         for x in System.plugins:
             instance = System.plugins[x]
             name = instance.language
             name += "/" + instance.framework
             if name != language:
                 continue
+            block_list.append(x)
+            if System.plugins[x].group not in group_list:
+                group_list.append(System.plugins[x].group)
+
+        # Sorting groups
+        for group in sorted(group_list):
+            self.__append_category(group)
+
+        for x in sorted(block_list):
             self.__add_item(System.plugins[x])
 
     # ----------------------------------------------------------------------
@@ -85,6 +96,12 @@ class BlocksTreeView(Gtk.ScrolledWindow):
                         ])
 
     # ----------------------------------------------------------------------
+    def __append_category(self, category_name):
+        return self.tree_store.append(None, [None, str(category_name),
+                    "white",
+                    "white"])
+
+    # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
         """
         This method verify if category name already exists.
@@ -94,9 +111,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             if category_name in self.tree_store[iter][:]:
                 return iter
             iter = self.tree_store.iter_next(iter)
-        return self.tree_store.append(None, [None, str(category_name),
-                    "white",
-                    "white"])
+        return __append_category(category_name)
 
     # ----------------------------------------------------------------------
     def __filter_func(self, model, iter, data):
