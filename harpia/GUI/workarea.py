@@ -43,7 +43,7 @@ class WorkArea(Gtk.Notebook):
         frame = Gtk.ScrolledWindow()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.add(diagram)
-        name = diagram.get_patch_name()
+        name = diagram.patch_name
         diagram.set_scrolled_window(frame)
         index = self.append_page(frame, self.__create_tab_label(name, frame))
         self.show_all()
@@ -146,7 +146,7 @@ class WorkArea(Gtk.Notebook):
             return
         hbox = self.get_tab_label(tab)
         label = hbox.get_children()[0]
-        name = diagram.get_patch_name()
+        name = diagram.patch_name
         if diagram.modified:
             name = "* " + name
         label.set_text(name)

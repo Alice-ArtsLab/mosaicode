@@ -165,7 +165,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                     stroke_color="black",
                                     fill_color_rgba=self.get_color()
                                     )
-        rect.set_property("tooltip", str(self.get_id()))
+        rect.set_property("tooltip", str(self.id))
         self.widgets["Rect"] = rect
 
     # ----------------------------------------------------------------------

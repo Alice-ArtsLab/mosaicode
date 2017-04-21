@@ -336,7 +336,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             System.log(_("Connection Types mismatch"))
             self.__abort_connection()
             return False
-        self.add_connection(self.curr_connector)
+        self.connectors.append(self.curr_connector)
         self.curr_connector = None
         self.update_flows()
         return True
@@ -419,7 +419,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __apply_zoom(self):
-        self.set_scale(self.get_zoom())
+        self.set_scale(self.zoom)
         self.update_scrolling()
         self.set_modified(True)
 
@@ -431,7 +431,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 * **zoom**
         """
-        DiagramModel.set_zoom(self, zoom)
+        self.zoom = zoom
         self.__apply_zoom()
 
     # ----------------------------------------------------------------------
@@ -442,14 +442,14 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                * **value** (:class:`float<float>`)
         """
-        zoom = self.get_zoom()
+        zoom = self.zoom
         if value == System.ZOOM_ORIGINAL:
             zoom = System.ZOOM_ORIGINAL
         elif value == System.ZOOM_IN:
             zoom = zoom + 0.1
         elif value == System.ZOOM_OUT:
             zoom = zoom - 0.1
-        DiagramModel.set_zoom(self, zoom)
+        self.zoom = zoom
         self.__apply_zoom()
 
     # ----------------------------------------------------------------------
@@ -564,23 +564,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             plugin = Plugin(widget)
             plugin.x += 20
             plugin.y += 20
-            plugin.set_id(-1)
+            plugin.id = -1
             if not self.main_window.main_control.add_block(plugin):
                 return
-            replace[widget.get_id()] = plugin
+            replace[widget.id] = plugin
             self.current_widgets.append(plugin)
         # interact into connections changing block ids
         for widget in clipboard:
             if not isinstance(widget, Connector):
                 continue
             # if a connector is copied without blocks
-            if widget.source.get_id() not in replace or widget.sink.get_id() \
+            if widget.source.id not in replace or widget.sink.id \
                     not in replace:
                 continue
             print _("continuing...")
-            source = replace[widget.source.get_id()]
+            source = replace[widget.source.id]
             source_port = widget.source_port
-            sink = replace[widget.sink.get_id()]
+            sink = replace[widget.sink.id]
             sink_port = widget.sink_port
             self.start_connection(source, source_port)
             self.current_widgets.append(self.curr_connector)
@@ -617,7 +617,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 connection
         """
-        DiagramModel.delete_connection(self, connection)
+        if connection in self.connectors:
+            self.connectors.remove(connection)
         connection.remove()
 
     # ----------------------------------------------------------------------
@@ -628,10 +629,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 block
         """
-        if not DiagramModel.delete_block(self, block):
+        if block.id not in self.blocks:
+            System.log("Block " + str(block.id) + \
+                " is not present in this diagram.")
             return
-        self.blocks[block.get_id()].remove()
-        del self.blocks[block.get_id()]
+        for idx in reversed(range(len(self.connectors))):
+            if self.connectors[idx].source == block \
+                    or self.connectors[idx].sink == block:
+                self.delete_connection(self.connectors[idx])
+        self.blocks[block.id].remove()
+        del self.blocks[block.id]
         self.update_flows()
 
     # ---------------------------------------------------------------------

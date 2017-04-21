@@ -10,13 +10,18 @@ class DiagramModel(object):
         self.last_id = 1  # first block is n1, increments to each new block
         self.blocks = {}  # GUI blocks
         self.connectors = []
-        self.__zoom = 1.0  # pixels per unit
+        self.zoom = 1.0  # pixels per unit
         self.file_name = "Untitled"
         self.modified = False
         self.language = None
 
         self.undo_stack = []
         self.redo_stack = []
+
+    # ----------------------------------------------------------------------
+    @property
+    def patch_name(self):
+        return self.file_name.split("/").pop()
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
@@ -26,56 +31,11 @@ class DiagramModel(object):
         if self.language is None or self.language == 'None':
             self.language = block.language
 
-        self.last_id = max(int(self.last_id), int(block.get_id()))
-        if block.get_id() < 0:
-            block.set_id(self.last_id)
-        self.blocks[block.get_id()] = block
+        self.last_id = max(int(self.last_id), int(block.id))
+        if block.id < 0:
+            block.id = self.last_id
+        self.blocks[block.id] = block
         self.last_id += 1
         return True
 
-    # ----------------------------------------------------------------------
-    def delete_block(self, block):
-        if block.get_id() not in self.blocks:
-            System.log("Block " + str(block.get_id()) + \
-                " is not present in this diagram.")
-            return False
-        for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].source == block \
-                    or self.connectors[idx].sink == block:
-                self.delete_connection(self.connectors[idx])
-        return True
-
-    # ----------------------------------------------------------------------
-    def add_connection(self, connection):
-        self.connectors.append(connection)
-
-    # ----------------------------------------------------------------------
-    def delete_connection(self, connection):
-        if connection not in self.connectors:
-            return
-        self.connectors.remove(connection)
-
-    # ----------------------------------------------------------------------
-    def connect_blocks(self, source, source_port, sink, sink_port):
-        out_type = source.out_ports[source_port]["type"]
-        connection = ConnectionModel(self, source, source_port, out_type)
-        connection.sink = sink
-        connection.sink_port = sink_port
-        self.connectors.append(connection)
-
-    # ----------------------------------------------------------------------
-    def get_patch_name(self):
-        return self.file_name.split("/").pop()
-
-    # ---------------------------------------------------------------------
-    def set_zoom(self, zoom):
-        self.__zoom = zoom
-
-    # ---------------------------------------------------------------------
-    def get_zoom(self):
-        return self.__zoom
-
-    # ---------------------------------------------------------------------
-    def reset_undo(self):
-        self.redo_stack = []
-        self.undo_stack = []
+# ----------------------------------------------------------------------

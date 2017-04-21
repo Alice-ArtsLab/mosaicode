@@ -66,7 +66,7 @@ class CodeGenerator():
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
         result = result.replace("%l", self.diagram.language)
-        result = result.replace("%n", self.diagram.get_patch_name()[:-4])
+        result = result.replace("%n", self.diagram.patch_name[:-4])
         result = result.replace(" ", "_")
         return result
 

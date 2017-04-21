@@ -56,7 +56,7 @@ class DiagramControl():
         parser = XMLParser(self.diagram.file_name)
 
         zoom = parser.getTag("harpia").getTag("zoom").getAttr("value")
-        self.diagram.set_zoom(float(zoom))
+        self.diagram.zoom = float(zoom)
         try:
             language = parser.getTag("harpia").getTag(
                 "language").getAttr("value")
@@ -71,7 +71,7 @@ class DiagramControl():
             block_type = block.getAttr("type")
             if block_type not in System.plugins:
                 continue
-            block_id = block.getAttr("id")
+            block_id = int(block.getAttr("id"))
             position = block.getTag("position")
             x = position.getAttr("x")
             y = position.getAttr("y")
@@ -84,7 +84,7 @@ class DiagramControl():
                     pass
             new_block = System.plugins[block_type]
             new_block.set_properties(props)
-            new_block.set_id(block_id)
+            new_block.id = block_id
             new_block.x = float(x)
             new_block.y = float(y)
             self.diagram.add_block(new_block)
@@ -102,7 +102,8 @@ class DiagramControl():
             to_block_in = int(conn.getAttr("to_in"))
             self.diagram.start_connection(from_block, int(from_block_out) - 1)
             self.diagram.end_connection(to_block, int(to_block_in) - 1)
-        self.diagram.reset_undo()
+        self.diagram.redo_stack = []
+        self.diagram.undo_stack = []
 
 # ----------------------------------------------------------------------
     def save(self, file_name=None):
@@ -117,7 +118,7 @@ class DiagramControl():
         parser = XMLParser()
         parser.addTag('harpia')
         parser.appendToTag('harpia', 'version', value=System.VERSION)
-        parser.appendToTag('harpia', 'zoom', value=self.diagram.get_zoom())
+        parser.appendToTag('harpia', 'zoom', value=self.diagram.zoom)
         parser.appendToTag('harpia', 'language', value=self.diagram.language)
 
         parser.appendToTag('harpia', 'blocks')
@@ -137,9 +138,9 @@ class DiagramControl():
         parser.appendToTag('harpia', 'connections')
         for connector in self.diagram.connectors:
             parser.appendToTag('connections', 'connection',
-                               from_block=connector.source.get_id(),
+                               from_block=connector.source.id,
                                from_out=int(connector.source_port) + 1,
-                               to_block=connector.sink.get_id(),
+                               to_block=connector.sink.id,
                                to_in=int(connector.sink_port) + 1)
 
         if file_name is not None:

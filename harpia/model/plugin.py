@@ -84,7 +84,8 @@ class Plugin(object):
         return "rgba(" + self.color.replace(":", ",") + ")"
 
     # ----------------------------------------------------------------------
-    def get_position(self):
+    @property
+    def position(self):
         """
         Return the plugin position on the work area.
 
@@ -93,27 +94,6 @@ class Plugin(object):
             Returns the **x** and **y** position of the plugin
         """
         return (self.x, self.y)
-
-    # ----------------------------------------------------------------------
-    def set_id(self, value):
-        """
-        Set the plugin id.
-
-        Parameters:
-            * **value** (:class:`int<int>`): The plugin id number.
-        """
-        self.id = int(value)
-
-    # ----------------------------------------------------------------------
-    def get_id(self):
-        """
-        Return the plugin id.
-
-        Returns:
-            * **Types**: :class:`int<int>`
-            The return value.
-        """
-        return int(self.id)
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
@@ -131,6 +111,6 @@ class Plugin(object):
 
     # ----------------------------------------------------------------------
     def __str__(self):
-        return str(self.get_id())
+        return str(self.id)
 
 # ------------------------------------------------------------------------------
