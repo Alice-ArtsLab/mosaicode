@@ -19,6 +19,8 @@ from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
 from harpia.control.plugincontrol import PluginControl
 from harpia.control.codetemplatecontrol import CodeTemplateControl
+import gettext
+_ = gettext.gettext
 
 
 class MainControl():
@@ -80,7 +82,11 @@ class MainControl():
 
         if diagram.file_name is "Untitled" or save_as:
             while True:
-                name = Dialog().save_dialog("Save", self.main_window)
+                name = Dialog().save_dialog(
+                        self.main_window,
+                        title = _("Save Diagram"),
+                        filename = diagram.file_name,
+                        filetype = "hrp")
                 if name and not name.endswith("hrp"):
                     name = (("%s" + ".hrp") % name)
                 if Dialog().confirm_overwrite(name, self.main_window):
@@ -103,16 +109,6 @@ class MainControl():
         self.save(save_as=True)
 
     # ----------------------------------------------------------------------
-    def rename_tab(self):
-        """
-        This method rename a tab.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        Dialog().rename_dialog(self.main_window, diagram)
-
-    # ----------------------------------------------------------------------
     def export_diagram(self):
         """
         This method exports the diagram.
@@ -122,8 +118,12 @@ class MainControl():
             return
 
         while True:
-            name = Dialog().save_png_dialog("Export Diagram...",
-                                            self.main_window)
+            name = Dialog().save_dialog(
+                        self.main_window,
+                        title = _("Export diagram as png"),
+                        filename = diagram.file_name + ".png",
+                        filetype = "png")
+
             if name is None:
                 return
             if name.find(".png") == -1:
@@ -237,7 +237,17 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_code_template().save_code()
+
+        generator = DiagramControl(diagram).get_code_template()
+        while True:
+            name = Dialog().save_dialog(self.main_window,
+                        filename = generator.get_dir_name() + \
+                            generator.get_filename())
+            if Dialog().confirm_overwrite(name, self.main_window):
+                diagram.set_file_name(name)
+                break
+
+        generator.save_code(name)
 
     # ----------------------------------------------------------------------
     def view_source(self):

@@ -5,7 +5,6 @@ This module contains the Dialog class.
 """
 import gi
 import os
-from filefilters import *
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from harpia.GUI.components.stringfield import StringField
@@ -36,8 +35,15 @@ class Dialog():
                                         Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
 
-        dialog.add_filter(AllFileFilter())
-        dialog.add_filter(HarpiaFileFilter())
+        allfiles = Gtk.FileFilter()
+        allfiles.set_name(_("All Archives"))
+        allfiles.add_pattern("*")
+        dialog.add_filter(allfiles)
+
+        filefilter = Gtk.FileFilter()
+        filefilter.set_name(filetype)
+        filefilter.add_pattern("*." +  filetype)
+        dialog.add_filter(filefilter)
 
         response = dialog.run()
         file_name = ""
@@ -49,7 +55,53 @@ class Dialog():
         return file_name
 
     # ----------------------------------------------------------------------
+    def save_dialog(self,
+                main_window,
+                title = "Save",
+                filename = None,
+                filetype = None):
+        """
+        This method open save dialog.
 
+            Parameters:
+                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
+            Returns:
+                * **Types** (:class:`str<str>`)
+        """
+        diagram = main_window.work_area.get_current_diagram()
+        dialog = Gtk.FileChooserDialog(title,
+                        main_window,
+                        Gtk.FileChooserAction.SAVE,
+                        (Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL,
+                        Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+
+        if filename is not None:
+            dialog.set_filename(filename)
+            dialog.set_current_name(filename)
+
+        allfiles = Gtk.FileFilter()
+        allfiles.set_name(_("All Archives"))
+        allfiles.add_pattern("*.*")
+        dialog.add_filter(allfiles)
+
+        if filetype is not None:
+            filefilter = Gtk.FileFilter()
+            filefilter.set_name(filetype)
+            filefilter.add_pattern("*." +  filetype)
+            dialog.add_filter(filefilter)
+
+        response = dialog.run()
+        file_name = None
+
+        if response == Gtk.ResponseType.OK:
+            file_name = dialog.get_filename()
+        elif response == Gtk.ResponseType.CANCEL:
+            file_name = None
+        dialog.destroy()
+        return file_name
+
+
+    # ----------------------------------------------------------------------
     def confirm_overwrite(self, name, main_window):
         """
         This method confirm overwrite of the file.
@@ -72,65 +124,6 @@ class Dialog():
             return True
         if result == Gtk.ResponseType.CANCEL:
             return False
-
-    # ----------------------------------------------------------------------
-    def save_dialog(self, title, main_window):
-        """
-        This method open save dialog.
-
-            Parameters:
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
-            Returns:
-                * **Types** (:class:`str<str>`)
-        """
-        diagram = main_window.work_area.get_current_diagram()
-        dialog = Gtk.FileChooserDialog(title, main_window,
-                                       Gtk.FileChooserAction.SAVE,
-                                       (Gtk.STOCK_CANCEL,
-                                        Gtk.ResponseType.CANCEL,
-                                        Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
-
-        dialog.add_filter(AllFileFilter())
-        dialog.add_filter(HarpiaFileFilter())
-
-        response = dialog.run()
-        file_name = ""
-
-        if response == Gtk.ResponseType.OK:
-            file_name = dialog.get_filename()
-        elif response == Gtk.ResponseType.CANCEL:
-            file_name = None
-        dialog.destroy()
-        return file_name
-
-    # ----------------------------------------------------------------------
-    def save_png_dialog(self, title, main_window):
-        """
-        This method open save png dialog.
-
-            Parameters:
-                * **title** (:class:`str<str>`)
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
-            Returns:
-
-                * **Types** (:class:`str<str>`): Return file name.
-        """
-        dialog = Gtk.FileChooserDialog(title, main_window,
-                                       Gtk.FileChooserAction.SAVE,
-                                       (Gtk.STOCK_CANCEL,
-                                        Gtk.ResponseType.CANCEL,
-                                        Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
-
-        dialog.add_filter(PNGFileFilter())
-
-        response = dialog.run()
-        file_name = ""
-        if response == Gtk.ResponseType.OK:
-            file_name = dialog.get_filename()
-        elif response == Gtk.ResponseType.CANCEL:
-            file_name = None
-        dialog.destroy()
-        return file_name
 
 # ----------------------------------------------------------------------
     def message_dialog(self, title, message, main_window):
@@ -159,45 +152,12 @@ class Dialog():
             Returns:
                * **Types:** (:class:`dialog<GTK.MessageDialog>`)
         """
-        dialog = Gtk.MessageDialog(main_window, 0, Gtk.MessageType.INFO,
-                                   (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                                    Gtk.STOCK_OK, Gtk.ResponseType.OK),  "")
+        dialog = Gtk.MessageDialog(main_window,
+                            0,
+                            Gtk.MessageType.INFO,
+                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                            Gtk.STOCK_OK, Gtk.ResponseType.OK),  "")
         dialog.format_secondary_text(message)
         return dialog
-
-# ----------------------------------------------------------------------
-    def rename_dialog(self, main_window, diagram):
-        """
-        This method open rename dialog.
-
-            Parameters:
-                * **main_window** (:class:`MainWindow<harpia.GUI.mainwindow>`)
-                * **diagram** (:class:`Diagram<harpia.GUI.diagram>`)
-        """
-        dialog = Gtk.Dialog(_("Rename"), main_window,
-                            0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                                Gtk.STOCK_OK, Gtk.ResponseType.OK))
-
-        box = dialog.get_content_area()
-        vbox = Gtk.VBox()
-        box.add(vbox)
-
-        # File name
-        data = {"name": _("File name"),
-                "value": diagram.file_name}
-        self.file_name = StringField(data, None)
-        vbox.add(self.file_name)
-
-        dialog.show_all()
-        response = dialog.run()
-
-        if response == Gtk.ResponseType.OK:
-            diagram.set_file_name(self.file_name.get_value())
-
-        dialog.close()
-        dialog.destroy()
-
-        return
-
 
 # ----------------------------------------------------------------------

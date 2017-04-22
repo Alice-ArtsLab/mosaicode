@@ -42,9 +42,6 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_EXECUTE,
                              _("Run"),
                              self.main_window.main_control.run)
-        self.__create_button(Gtk.STOCK_EDIT,
-                             _("Save Source"),
-                             self.main_window.main_control.save_source)
         self.__create_button(Gtk.STOCK_SELECT_ALL,
                              _("View Source"),
                              self.main_window.main_control.view_source)

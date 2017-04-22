@@ -9,6 +9,8 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
+import gettext
+_ = gettext.gettext
 
 
 class CodeWindow(Gtk.Dialog):
@@ -28,10 +30,28 @@ class CodeWindow(Gtk.Dialog):
                             Gtk.DialogFlags.MODAL,
                             (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
+        self.main_window = main_window
         self.set_default_size(800, 600)
-        sw = Gtk.ScrolledWindow()
         box = self.get_content_area()
-        box.pack_start(sw, True, True, 0)
+        vbox = Gtk.VBox()
+        box.pack_start(vbox, True, True, 0)
+
+        toolbar = Gtk.Toolbar()
+        toolbar.set_style(Gtk.ToolbarStyle.BOTH)
+        toolbar.set_hexpand(False)
+        toolbar.set_property("expand", False)
+        vbox.pack_start(toolbar, False, False, 0)
+
+
+        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_SAVE)
+        button.set_expand(False)
+        button.set_label(_("Save Source"))
+        button.set_is_important(True)
+        button.connect("clicked", self.__button_clicked, None)
+        toolbar.add(button)
+
+        sw = Gtk.ScrolledWindow()
+        vbox.pack_start(sw, True, True, 0)
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         lang_manager = GtkSource.LanguageManager()
@@ -50,4 +70,15 @@ class CodeWindow(Gtk.Dialog):
         self.run()
         self.close()
         self.destroy()
+
+    # ----------------------------------------------------------------------
+    def __button_clicked(self, widget, data):
+        """
+        This method monitors if the button was clicked.
+
+            Parameters:
+
+        """
+        self.main_window.main_control.save_source()
+
 # ----------------------------------------------------------------------

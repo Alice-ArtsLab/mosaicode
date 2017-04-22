@@ -14,7 +14,6 @@ class DiagramModel(object):
         self.file_name = "Untitled"
         self.modified = False
         self.language = None
-
         self.undo_stack = []
         self.redo_stack = []
 
