@@ -1,5 +1,0 @@
-Name: SMOOTH
-Input: Image
-Output: Image
-Properties: Type (Gaussian, Median, Blur), Paramenter 1(0 - 99), Paramenter 2(0 - 99)
-

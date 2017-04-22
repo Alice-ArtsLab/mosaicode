@@ -1,7 +1,0 @@
- <properties>
-      <block type='03' id=''>
-	<property name='state' value='true' />
-        <property name='type' value='allcolors' />
-        <property name='channel' value='R' />
-      </block>
-</properties>

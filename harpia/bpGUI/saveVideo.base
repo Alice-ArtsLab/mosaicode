@@ -1,4 +1,0 @@
-Name: SAVEVIDEO
-Input: Image
-Output: Image
-Properties: Filename, Frame Rate (FPS), Encoding CODEC

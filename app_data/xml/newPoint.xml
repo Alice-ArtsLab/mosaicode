@@ -1,7 +1,0 @@
-<properties>
-	<block type='901' id=''>
-		<property name='state' value='true' />
-		<property name="x0" value="1" />
-		<property name="y0" value="1" />
-	</block>
-</properties>

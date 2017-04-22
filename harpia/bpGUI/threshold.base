@@ -1,5 +1,0 @@
-Name: THRESHOLD
-Input: Image
-Output: Image
-Properties: Threshold (0 - 255), Threshold Type (Binary,Binary Inv, Trunc, ToZero, ToZero Inv), Max Gray Value (0 - 255)
-

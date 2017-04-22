@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<harpia>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.composeRGB">
+   <position x="200" y="0"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="0"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+  <block id="3" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="100"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+  <block id="4" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="200"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+  <block id="5" type="harpia.plugins.C.openCV.show">
+   <position x="400" y="0"/>
+   <property key="window_type" value="Image Size"/>
+   <property key="title" value="My Image - Compose RGB"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="2" from_out="1" to_block="1" to_in="1"/>
+  <connection from_block="3" from_out="1" to_block="1" to_in="2"/>
+  <connection from_block="4" from_out="1" to_block="1" to_in="3"/>
+  <connection from_block="1" from_out="1" to_block="5" to_in="1"/>
+ </connections>
+</harpia>

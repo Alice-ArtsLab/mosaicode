@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<harpia>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.minMax">
+   <position x="200" y="0"/>
+   <property key="minX" value="0"/>
+   <property key="minY" value="0"/>
+   <property key="maxX" value="500"/>
+   <property key="maxY" value="500"/>
+   <property key="minVal" value="0"/>
+   <property key="criteria" value="pos"/>
+   <property key="maxVal" value="500"/>
+   <property key="minORmax" value="min"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="0"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="2" from_out="1" to_block="1" to_in="1"/>
+ </connections>
+</harpia>

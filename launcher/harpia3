@@ -1,0 +1,158 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Libraries
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+
+from harpia.GUI.mainwindow import MainWindow
+from harpia.control.maincontrol import MainControl
+
+import sys
+import argparse
+import os
+
+#---------------------------------------------------
+#--------HARPIA FRONTEND MAIN FUNCTION--------------
+#---------------------------------------------------
+
+
+def main(argv):
+    """
+            The Harpia-Frontend class is where the main function starts the system.
+            It initializes the interface.
+    """
+
+    os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
+
+    # Initialize the Frontend
+    win = MainWindow()
+    win.show_all()
+
+    # Parameter passing
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file', default=[], nargs='*',
+                        help="List of files to open")
+    parser.add_argument("-x", "--examples",
+                        help="Generate examples", action='store_true')
+    parser.add_argument("-c", "--compile",
+                        help="Compile examples", action='store_true')
+    parser.add_argument(
+        "-t", "--test", help="Test examples", action='store_true')
+    args = parser.parse_args()
+
+    if args.test:
+        print"\nHelp\tGenerate  Description\t Properties\tLabel"
+        print"====\t========  ===========\t ==========\t=====\n"
+
+    for key in s2idirectory.block:
+        obj = s2idirectory.block[key]()
+        obj.x = 200
+        diagram = DiagramModel()
+        diagram.add_block(obj)
+
+        cont = 0
+        intypes = obj.get_description()["InTypes"]
+        for inkey in intypes:
+            if intypes[inkey] == "HRP_IMAGE":
+                block = s2idirectory.block["harpia.plugins.imageFile"]()
+            elif intypes[inkey] == "HRP_INT":
+                block = s2idirectory.block["harpia.plugins.intValue"]()
+            elif intypes[inkey] == "HRP_DOUBLE":
+                block = s2idirectory.block["harpia.plugins.newDouble"]()
+            elif intypes[inkey] == "HRP_RECT":
+                block = s2idirectory.block["harpia.plugins.newRect"]()
+            elif intypes[inkey] == "HRP_POINT":
+                block = s2idirectory.block["harpia.plugins.newPoint"]()
+            diagram.add_block(block)
+            block.y = 100 * cont
+            diagram.connect_blocks(block, 0, obj, cont)
+
+            cont = cont + 1
+
+        cont = 0
+        outtypes = obj.get_description()["OutTypes"]
+        for outkey in outtypes:
+            if outtypes[outkey] == "HRP_IMAGE":
+                show = s2idirectory.block["harpia.plugins.show"]()
+                show.x = 400
+                show.title = "My Image - " + obj.get_description()["Label"]
+                diagram.add_block(show)
+                diagram.connect_blocks(obj, cont, show, 0)
+            cont = cont + 1
+
+        try:
+            obj.get_help()
+        except:
+            print "Error in get_help() of object", obj.get_description()["Label"], obj.__class__
+
+        if args.examples:
+            # Save Examples
+            diagram.set_file_name(
+                "/tmp/" + obj.get_description()["Label"] + ".hrp")
+            print "Generating", diagram.get_file_name(), "file"
+            control = DiagramControl(diagram)
+            control.save()
+
+        if args.compile:
+            # Compile Examples
+            print "Generating code..."
+            generator = CodeGenerator(diagram)
+            generator.compile()
+#            generator.execute()
+            print obj.get_description()["Label"], " - compiled\n"
+
+        if args.test:
+            # Test examples
+            # print "\n\nTesting code: ",
+            # print "\n", obj.get_description()["Label"], " ",
+            # print "Help",
+            # print "\tGenerate",
+            # print"\tDescription\tProperties "
+            #-----------------------
+            if obj.get_help():
+                print "  V\t",
+            else:
+                print "  -\t",
+            #-----------------------
+
+            #-----------------------
+            # if obj.generate:
+            #    print "  V\t",
+            # else:
+            print "  -\t",
+            #-----------------------
+
+            #-----------------------
+            if obj.get_description():
+                print "     V\t\t",
+            else:
+                print "     -\t\t",
+            #-----------------------
+
+            #-----------------------
+            if obj.get_properties():
+                print "    V\t",
+            else:
+                print "    -\t",
+            #----------------------
+            print "\t", obj.get_description()["Label"], " "
+
+        # print obj.get_help()
+    print
+
+    if args.file:
+        for arg in args.file:
+            win.main_control.open(arg)
+    else:
+        win.main_control.new()
+
+    Gtk.main()
+    #----------------------------------------------------------------------
+
+if __name__ == '__main__':
+    main(sys.argv)
+
+    #----------------------------------------------------------------------

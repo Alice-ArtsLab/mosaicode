@@ -1,9 +1,8 @@
 #!/bin/sh
-rm -r /usr/lib/python2.7/site-packages/harpia
-rm -r /usr/share/harpia
-rm -r /usr/bin/harpia
-rm /usr/lib/python2.7/site-packages/harpia-1.0.egg-info
-rm /usr/share/applications/harpia.desktop
-rm /usr/share/icons/hicolor/scalable/apps/harpia.svg
-rm /usr/share/pixmaps/harpia.svg
-rm /usr/share/icons/hicolor/24x24/apps/harpia.png
+python setup.py install --record files.txt
+cat files.txt | xargs rm -rf
+rm -rf files.txt
+rm -rf /usr/share/harpia
+rm -rf build
+rm -rf dist
+rm -rf ~/harpia/configuration.xml

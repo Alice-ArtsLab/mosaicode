@@ -1,0 +1,168 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Libraries
+import gi
+import os
+import sys
+import argparse
+from gi.repository import Gtk
+from harpia.system import System as System
+from harpia.model.diagrammodel import DiagramModel
+from harpia.model.connectionmodel import ConnectionModel
+from harpia.control.diagramcontrol import DiagramControl
+
+gi.require_version('Gtk', '3.0')
+
+# ---------------------------------------------------
+# --------HARPIA FRONTEND MAIN FUNCTION--------------
+# ---------------------------------------------------
+
+
+class Log(object):
+
+    def log(self, msg):
+        print msg.encode('ascii', 'ignore')
+
+
+def save(diagram, obj):
+    diagram.set_file_name("/tmp/" + obj.get_label() + ".hrp")
+    print "Generating", diagram.get_file_name(), "file"
+    control = DiagramControl(diagram)
+    control.save()
+
+
+def main(argv):
+
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    RED = '\x1B[31m'
+
+    os.environ['HARPIA_DATA_DIR'] = "/usr/share/harpia/"
+    System()
+    System.set_log(Log())
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-x", "--examples",
+                        help="Generate examples", action='store_true')
+    parser.add_argument("-c", "--compile",
+                        help="Compile examples", action='store_true')
+    parser.add_argument(
+        "-t", "--test", help="Test examples", action='store_true')
+    args = parser.parse_args()
+
+    if args.test:
+        print OKBLUE + "\nHelp\tGenerate  Description\t Properties\tLabel" + ENDC
+        print"====\t========  ===========\t ==========\t=====\n"
+
+    for key in System.plugins:
+        obj = System.plugins[key]
+        print "Working with", obj.type
+        if obj.language != "c":
+            print "-- Ignoring block", obj.type
+            continue
+        if obj.framework != "opencv":
+            print "-- Ignoring block", obj.type
+            continue
+
+        obj.x = 200
+        diagram = DiagramModel()
+        diagram.set_file_name(
+            "/tmp/" + obj.get_label() + ".hrp")
+        diagram.add_block(obj)
+
+        cont = 0
+        for intypes in obj.get_in_ports():
+            inkey = intypes["type"]
+            if inkey == "HRP_IMAGE":
+                block = System.plugins["harpia.plugins.c.opencv.imageFile"]
+            elif inkey == "HRP_INT":
+                block = System.plugins["harpia.plugins.c.opencv.slider"]
+                block.window_name = "My Image - " + \
+                    obj.get_label()
+                block.label = block.label + " - " + str(cont)
+            elif inkey == "HRP_DOUBLE":
+                block = System.plugins["harpia.plugins.c.opencv.newDouble"]
+            elif inkey == "HRP_RECT":
+                block = System.plugins["harpia.plugins.c.opencv.newRect"]
+            elif inkey == "HRP_POINT":
+                block = System.plugins["harpia.plugins.c.opencv.newPoint"]
+            diagram.add_block(block)
+            block.y = 100 * cont
+            diagram.connect_blocks(block, 0, obj, cont)
+            cont = cont + 1
+
+        cont = 0
+        for outports in obj.get_out_ports():
+            outkey = outports["type"]
+            if outkey == "HRP_IMAGE":
+                show = System.plugins["harpia.plugins.c.opencv.show"]
+                show.x = 400
+                show.title = "My Image - " + obj.get_label()
+                diagram.add_block(show)
+                diagram.connect_blocks(obj, cont, show, 0)
+            cont = cont + 1
+
+        try:
+            obj.get_help()
+        except:
+            print "Error in get_help() of object",
+            obj.get_label(), obj.__class__
+
+        if args.examples:
+            # Save Examples
+            save(diagram, obj)
+
+        if args.compile:
+            # Compile Examples
+            print "Generating code..."
+            generator = DiagramControl(diagram).get_generator()
+            generator.compile()
+            # generator.execute()
+            save(diagram, obj)
+            print obj.get_label(), " - compiled\n"
+
+        if args.test:
+            # Test examples
+            # print "\n\nTesting code: ",
+            # print "\n", obj.get_label(), " ",
+            # print "Help",
+            # print "\tGenerate",
+            # print"\tProperties "
+
+            #-----------------------
+
+            if obj.get_help():
+                print WARNING + "  V\t" + ENDC,
+            else:
+                print "  -\t",
+            # -----------------------
+
+            # -----------------------
+            # if obj.generate:
+            #    print "  V\t",
+            # else:
+            print "  -\t",
+            # -----------------------
+
+            # -----------------------
+            if obj.get_properties():
+                print WARNING + "    V\t" + ENDC,
+            else:
+                print "    -\t",
+            # ----------------------
+            print "\t", obj.get_label(), " "
+
+        # print obj.get_help()
+    print
+
+    # ----------------------------------------------------------------------
+
+if __name__ == '__main__':
+    main(sys.argv)
+
+    # ----------------------------------------------------------------------

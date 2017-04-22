@@ -1,8 +1,0 @@
-<properties>
-  <block type='83'>
-    <property name='state' value='true' />
-    <property name='threshold1' value='16' />
-    <property name='threshold2' value='33' />
-    <property name='apertureSize' value='3' />
-  </block>
-</properties>

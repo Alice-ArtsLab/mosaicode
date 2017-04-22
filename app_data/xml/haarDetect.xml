@@ -1,7 +1,0 @@
-<properties>
-	<block type='610' id=''>
-		<property name='state' value='true' />
-		<property name='cascade_name' value="/usr/share/harpia/images/haarcascade_frontalface_alt2.xml" />
-		<property name='min_neighbors' value="2" />
-	</block>
-</properties>

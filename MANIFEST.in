@@ -1,0 +1,5 @@
+include COPYING
+include scripts/harpia.1
+include app_data/*
+include app_data/examples/*
+include app_data/images/*
