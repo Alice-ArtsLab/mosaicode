@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Midi2Freq class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -14,18 +16,21 @@ class Midi2Freq(WebaudioPlugin):
         # Appearance
         self.help = "midi to freq"
         self.label = "Midi 2 Freq"
-        self.icon = "images/show.png"
         self.color = "200:200:25:150"
-        self.in_types = ["HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"midi_value",
+                "label":"Midi Value"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Frequency",
+                "name":"frequency"}
+            ]
         self.group = "Conversion"
-
-        self.vars = """
-// block_$id$ = Midi 2 Freq
+        self.codes[1] = """
+// block_$id$ = $label$
 var block_$id$_o0 = [];
-var block_$id$_i = [];
 
-block_$id$_i[0] = function(value){
+var block_$id$_i0 = function(value){
     value = (value < 0) ? 0 : value;
     value = (value >127) ? 127 : value;
     var arg = ((parseFloat(value) - 69.0) / 12.0);

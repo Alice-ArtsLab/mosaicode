@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the ADSR class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -10,22 +12,70 @@ class ADSR(WebaudioPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.a = 5
-        self.d = 2
-        self.s = 100
-        self.r = 50
-        self.g = 0.2
 
         # Appearance
         self.help = "ADSR"
         self.label = "ADSR"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND", "HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input",
+                "name":"sound_input"},
+                {"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Event Play",
+                "name":"play"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
+
         self.group = "Sound"
 
-        self.header = """
+        self.properties = [
+            {"name": "a",
+             "label": "Attack",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 5
+             },
+            {"name": "d",
+             "label": "Delay",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 2
+             },
+            {"name": "s",
+             "label": "Sustain",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 100
+             },
+            {"name": "r",
+             "label": "Release",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 50
+             },
+            {"name": "g",
+             "label": "Gain",
+             "type": HARPIA_FLOAT,
+             "lower": 0,
+             "upper": 10000,
+             "step": 1,
+             "value": 0.5
+             }
+        ]
+        
+        self.codes[0] = """
 Envelope = function(context, a, d, s, r, g) {
 this.node = context.createGain()
 this.context = context;
@@ -54,45 +104,13 @@ time += this.r;
 this.node.gain.linearRampToValueAtTime(0, time);
 }
 """
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = ADSR
-var block_$id$_obj = new Envelope(context, $a$, $d$, $s$, $r$, $g$);
+var block_$id$_obj = new Envelope(context, $prop[a]$, $prop[d]$, $prop[s]$, $prop[r]$, $prop[g]$);
 var block_$id$ =  block_$id$_obj.node;
-var block_$id$_i = [];
-block_$id$_i[0] = block_$id$_obj.node;
-block_$id$_i[1] = function(value){
+var block_$id$_i0 = block_$id$_obj.node;
+var block_$id$_i1 = function(value){
     block_$id$_obj.play();
 };
 """
-        self.properties = {
-            "a": {"name": "Attack",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1
-                  },
-            "d": {"name": "Delay",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1
-                  },
-            "s": {"name": "Sustain",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1
-                  },
-            "r": {"name": "Release",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1
-                  },
-            "g": {"name": "Gain",
-                  "type": HARPIA_FLOAT,
-                  "lower": 0,
-                  "upper": 10000,
-                  "step": 1
-                  }
-        }
+

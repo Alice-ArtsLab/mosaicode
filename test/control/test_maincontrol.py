@@ -2,6 +2,7 @@ from unittest import TestCase
 from harpia.control.maincontrol import MainControl
 from harpia.GUI.mainwindow import MainWindow
 
+
 class TestMainControl(TestCase):
 
     def setUp(self):

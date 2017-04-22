@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the DivideFloat class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -14,21 +16,28 @@ class DivideFloat(WebaudioPlugin):
         # Appearance
         self.help = "Divide Float"
         self.label = "Divide Float"
-        self.icon = "images/show.png"
         self.color = "200:200:25:150"
-        self.in_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"first_number",
+                "label":"First Number"},
+                {"type":"HRP_WEBAUDIO_FLOAT",
+                "name":"second_number",
+                "label":"Second Number"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Result",
+                "name":"result"}
+            ]
         self.group = "Arithmetics"
 
-        self.vars = """
+        self.codes[1] = """
 
 // block_$id$ = Divide Float
 var block_$id$_arg1 = 0;
 var block_$id$_arg2 = 0;
 var block_$id$_o0 = [];
-var block_$id$_i = [];
 
-block_$id$_i[0] = function(value){
+var block_$id$_i0 = function(value){
     block_$id$_arg1 = parseFloat(value);
     block_$id$_arg2 = (parseFloat(block_$id$_arg2) == 0) ?
             1 : parseFloat(block_$id$_arg2);
@@ -38,7 +47,8 @@ block_$id$_i[0] = function(value){
     }
     return true;
     };
-block_$id$_i[1] = function(value){
+
+var block_$id$_i1 = function(value){
     block_$id$_arg2 = parseFloat(value);
     block_$id$_arg2 = (parseFloat(block_$id$_arg2) == 0) ?
             1 : parseFloat(block_$id$_arg2);

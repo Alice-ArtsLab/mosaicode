@@ -1,18 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <harpia>
-<version value='0.0.1' />
-<zoom value='1.0' />
-<language value='C' />
-<blocks>
-  	<block type='harpia.plugins.C.openCV.capture' id='1'>
-		<position x="200" y="0"/>
-		<property name='camera' value='/dev/video0' />
-	</block>
-	<block type='harpia.plugins.C.openCV.show' id='2'>
-		<position x="400" y="0"/>
-		<property name='title' value='My Image - Capture' />
-	</block>
-</blocks>
-<connections>
-  	<connection from="1" from_out="1" to="2" to_in="1"/>
-</connections>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.capture">
+   <position x="80.0" y="60.0"/>
+   <property key="camera" value="0"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.show">
+   <position x="270.0" y="120.0"/>
+   <property key="title" value="My Image"/>
+   <property key="window_type" value="Image Size"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="1" from_out="1" to_block="2" to_in="1"/>
+ </connections>
 </harpia>

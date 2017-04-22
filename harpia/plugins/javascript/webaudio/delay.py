@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Delay class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -10,29 +12,40 @@ class Delay(WebaudioPlugin):
     # --------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.time = 0
 
         # Appearance
         self.help = "Delay"
         self.label = "Delay"
-        self.icon = "images/show.png"
         self.color = "150:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND"]
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input",
+                "name":"sound_input"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
+
         self.group = "Sound"
 
-        self.vars = """
+        self.properties = [{"name": "time",
+                            "label": "Time",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 10000,
+                            "step": 1,
+                            "value": 1
+                            }
+                           ]
+
+        self.codes[1] = """
 // block_$id$ = Delay
 var block_$id$ = context.createDelay();
-var block_$id$_i = []
-block_$id$_i[0] = block_$id$
-block_$id$_i[0].delayTime.value = $time$;
+var block_$id$_o0 = null;
+var block_$id$_i0 = null;
 """
 
-        self.properties = {"time": {"name": "Time",
-                                    "type": HARPIA_FLOAT,
-                                    "lower": 0,
-                                    "upper": 10000,
-                                    "step": 1
-                                    }
-                           }
+        self.codes[2] = "block_$id$_i0 = block_$id$;\n" + \
+            "var block_$id$.delayTime.value = $prop[time]$\n;" + \
+            "block_$id$_o0 = block_$id$;\n"
+

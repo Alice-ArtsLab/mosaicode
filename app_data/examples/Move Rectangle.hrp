@@ -1,28 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <harpia>
-<version value='0.0.1' />
-<zoom value='1.0' />
-<language value='C' />
-<blocks>
-  	<block type='harpia.plugins.C.openCV.moveRct' id='1'>
-		<position x="200" y="0"/>
-		<property name='offset_x' value='0' />
-		<property name='offset_y' value='0' />
-	</block>
-	<block type='harpia.plugins.C.openCV.newRect' id='2'>
-		<position x="0" y="0"/>
-		<property name='y0' value='0' />
-		<property name='x0' value='0' />
-		<property name='height' value='480' />
-		<property name='width' value='640' />
-	</block>
-	<block type='harpia.plugins.C.openCV.newPoint' id='3'>
-		<position x="0" y="100"/>
-		<property name='y0' value='0' />
-		<property name='x0' value='0' />
-	</block>
-</blocks>
-<connections>
-  	<connection from="2" from_out="1" to="1" to_in="1"/>
-	<connection from="3" from_out="1" to="1" to_in="2"/>
-</connections>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.moveRct">
+   <position x="200" y="0"/>
+   <property key="offset_x" value="0"/>
+   <property key="offset_y" value="0"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.newRect">
+   <position x="0" y="0"/>
+   <property key="y0" value="0"/>
+   <property key="x0" value="0"/>
+   <property key="height" value="480"/>
+   <property key="width" value="640"/>
+  </block>
+  <block id="3" type="harpia.plugins.C.openCV.newPoint">
+   <position x="0" y="100"/>
+   <property key="y0" value="0"/>
+   <property key="x0" value="0"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="2" from_out="1" to_block="1" to_in="1"/>
+  <connection from_block="3" from_out="1" to_block="1" to_in="2"/>
+ </connections>
 </harpia>

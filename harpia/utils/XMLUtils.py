@@ -1,35 +1,14 @@
 # -*- coding: utf-8 -*-
-# [HARPIA PROJECT]
-#
-#
-# S2i - Intelligent Industrial Systems
-# DAS - Automation and Systems Department
-# UFSC - Federal University of Santa Catarina
-# Copyright: 2007 - 2009 Clovis Peruchi Scotti (scotti@ieee.org),
-# S2i (www.s2i.das.ufsc.br)
-#
-#
-#    This program is free software: you can redistribute it and/or modify it
-#    under the terms of the GNU General Public License version 3, as published
-#    by the Free Software Foundation.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranties of
-#    MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-#    PURPOSE.  See the GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License along
-#    with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-#    For further information, check the COPYING file distributed with
-#    this software.
-#
-# ----------------------------------------------------------------------
-
+"""
+This module contains the XMLParser class.
+"""
 from bs4 import BeautifulSoup
 
 
 class XMLParser(object):
+    """
+    This class contains methods related the XMLParser class.
+    """
 
     def __init__(self, source=None, fromString=False, fromTag=False):
 
@@ -46,6 +25,9 @@ class XMLParser(object):
 
     def getTagAttr(self, tag, attr):
         return getattr(self.parsedXML, tag)[attr]
+
+    def setTagAttr(self, tag, attr, value):
+        getattr(self.parsedXML, tag)[attr] = value
 
     def getAttr(self, attr):
         return self.parsedXML[attr]
@@ -65,12 +47,20 @@ class XMLParser(object):
             tags.append(XMLParser(tag, fromTag=True))
         return tags
 
-    def addTag(self, tagName, attrs):
-        self.parsedXML.append(self.parsedXML.new_tag(tagName, **attrs))
+    def addTag(self, tagName, **attrs):
+        new_tag = self.parsedXML.new_tag(tagName, **attrs)
+        self.parsedXML.append(new_tag)
+        return new_tag
 
-    def appendToTag(self, tagParent, tagChild, attrs):
-        getattr(self.parsedXML, tagParent).append(
-            self.parsedXML.new_tag(tagChild, **attrs))
+    def appendToTag(self, tagParent, tagChild, **attrs):
+        new_tag = self.parsedXML.new_tag(tagChild, **attrs)
+        getattr(self.parsedXML, tagParent).append(new_tag)
+        return new_tag
+
+    def appendToLastTag(self, tagParent, tagChild, **attrs):
+        new_tag = self.parsedXML.new_tag(tagChild, **attrs)
+        self.parsedXML.find_all(tagParent)[-1].append(new_tag)
+        return new_tag
 
     def getXML(self):
         return self.parsedXML.prettify()
@@ -79,7 +69,10 @@ class XMLParser(object):
         return tag.prettify()
 
     def getTag(self, tag):
-        return XMLParser(getattr(self.parsedXML, tag), fromTag=True)
+        if self.parsedXML.find(tag):
+            return XMLParser(getattr(self.parsedXML, tag), fromTag=True)
+        else:
+            return None
 
     def getTagChild(self, parent, child):
         return getattr(getattr(self.parsedXML, parent), child)
@@ -89,6 +82,12 @@ class XMLParser(object):
 
     def getTagChildren(self):
         return self.parsedXML.children
+
+    def getText(self):
+        return self.parsedXML.text
+
+    def prettify(self):
+        return self.parsedXML.prettify()
 
     def __repr__(self):
         return str(self.parsedXML)

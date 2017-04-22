@@ -1,6 +1,7 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the MainControl class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -8,13 +9,24 @@ from harpia.GUI.dialog import Dialog
 from harpia.GUI.about import About
 from harpia.GUI.diagram import Diagram
 from harpia.GUI.codewindow import CodeWindow
+from harpia.GUI.codetemplatemanager import CodeTemplateManager
+from harpia.GUI.pluginmanager import PluginManager
+from harpia.GUI.portmanager import PortManager
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
 from harpia.control.preferencescontrol import PreferencesControl
+from harpia.control.portcontrol import PortControl
+from harpia.control.plugincontrol import PluginControl
+from harpia.control.codetemplatecontrol import CodeTemplateControl
+import gettext
+_ = gettext.gettext
 
 
 class MainControl():
+    """
+    This class contains methods related the MainControl class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -25,10 +37,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def new(self):
+        """
+        This method create a new the diagram file.
+        """
         self.main_window.work_area.add_diagram(Diagram(self.main_window))
 
     # ----------------------------------------------------------------------
     def select_open(self):
+        """
+        This method open a selected file.
+        """
         file_name = Dialog().open_dialog("Open Diagram", self.main_window)
         if file_name is None or file_name == "":
             return
@@ -36,26 +54,39 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def open(self, file_name):
+        """
+        This method open a file.
+        """
         diagram = Diagram(self.main_window)
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
-        System.properties.add_recent_file(file_name)
+        PreferencesControl.add_recent_file(System.properties, file_name)
         self.main_window.menu.update_recent_file()
 
     # ----------------------------------------------------------------------
     def close(self):
+        """
+        This method closes a tab on the work area.
+        """
         self.main_window.work_area.close_tab()
 
     # ----------------------------------------------------------------------
     def save(self, save_as=False):
+        """
+        This method save the file.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
 
-        if diagram.get_file_name() is "Untitled" or save_as:
+        if diagram.file_name is "Untitled" or save_as:
             while True:
-                name = Dialog().save_dialog("Save", self.main_window)
+                name = Dialog().save_dialog(
+                        self.main_window,
+                        title = _("Save Diagram"),
+                        filename = diagram.file_name,
+                        filetype = "hrp")
                 if name and not name.endswith("hrp"):
                     name = (("%s" + ".hrp") % name)
                 if Dialog().confirm_overwrite(name, self.main_window):
@@ -63,8 +94,8 @@ class MainControl():
                     break
         result, message = False, ""
 
-        if diagram.get_file_name() is not None:
-            if len(diagram.get_file_name()) > 0:
+        if diagram.file_name is not None:
+            if len(diagram.file_name) > 0:
                 result, message = DiagramControl(diagram).save()
 
         if not result:
@@ -72,24 +103,27 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def save_as(self):
+        """
+        This method save as.
+        """
         self.save(save_as=True)
 
     # ----------------------------------------------------------------------
-    def rename_tab(self):
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        Dialog().rename_dialog(self.main_window, diagram)
-
-    # ----------------------------------------------------------------------
     def export_diagram(self):
+        """
+        This method exports the diagram.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
 
         while True:
-            name = Dialog().save_png_dialog("Export Diagram...",
-                                            self.main_window)
+            name = Dialog().save_dialog(
+                        self.main_window,
+                        title = _("Export diagram as png"),
+                        filename = diagram.file_name + ".png",
+                        filetype = "png")
+
             if name is None:
                 return
             if name.find(".png") == -1:
@@ -104,7 +138,14 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def exit(self, widget=None, data=None):
-        PreferencesControl(System.properties).save()
+        """
+        This method close main window.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        PreferencesControl.save(System.properties)
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:
@@ -120,6 +161,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def cut(self):
+        """
+        This method cut a block on work area.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -127,6 +171,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def copy(self):
+        """
+        This method copy a block.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -134,6 +181,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def paste(self):
+        """
+        This method paste a block.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -141,18 +191,29 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def get_clipboard(self):
+        """
+        This method return the clipboard.
+        """
         return self.clipboard
 
     # ----------------------------------------------------------------------
     def reset_clipboard(self):
+        """
+        This method clear the clipboard.
+        """
         self.clipboard = []
 
     # ----------------------------------------------------------------------
     def preferences(self):
+        """
+        """
         PreferenceWindow(self.main_window)
 
     # ----------------------------------------------------------------------
     def delete(self):
+        """
+        This method delete a block.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -160,46 +221,85 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def run(self):
+        """
+        This method run the code.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_generator().execute()
+        DiagramControl(diagram).get_code_template().execute()
 
     # ----------------------------------------------------------------------
     def save_source(self):
+        """
+        This metho save the source code.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_generator().save_code()
+
+        generator = DiagramControl(diagram).get_code_template()
+        while True:
+            name = Dialog().save_dialog(self.main_window,
+                        filename = generator.get_dir_name() + \
+                            generator.get_filename())
+            if Dialog().confirm_overwrite(name, self.main_window):
+                diagram.set_file_name(name)
+                break
+
+        generator.save_code(name)
 
     # ----------------------------------------------------------------------
     def view_source(self):
+        """
+        This method view the source code.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        code = DiagramControl(diagram).get_generator().generate_code()
+        code = DiagramControl(diagram).get_code_template().generate_code()
         CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------
     def about(self):
+        """
+        This method open the about window.
+        """
         About(self.main_window).show_all()
 
     # ----------------------------------------------------------------------
     def search(self, query):
-        for blocks_tree_view in self.main_window.block_notebook.get_tabs():
-            blocks_tree_view.search(query)
+        """
+        This method search the query in the blocks_tree_view.
+        """
+        self.main_window.block_notebook.search(query)
 
     # ----------------------------------------------------------------------
     def set_block(self, block):
+        """
+        This method set the block properties.
+        """
         self.main_window.block_properties.set_block(block)
-        pass
 
     # ----------------------------------------------------------------------
     def append_status_log(self, text):
+        """
+        This method append a text on status log.
+        """
         self.main_window.status.append_text(text)
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
+        """
+        This method add a block.
+
+        Parameters:
+
+                * **Types** (:class:`block<>`)
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
@@ -213,13 +313,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
-        blocks_tree_view = self.main_window.block_notebook.get_current_tab()
-        if blocks_tree_view is None:
-            return False
-        return blocks_tree_view.get_selected_block()
+        """
+        This method get the tree view block.
+        """
+        return self.main_window.block_notebook.get_selected_block()
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
+        """
+        This method increases the zoom value.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -227,6 +330,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_out(self):
+        """
+        This method decreasses the zoom.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -234,6 +340,9 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def zoom_normal(self):
+        """
+        Set the zoom value to normal.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -241,14 +350,23 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
+        """
+        This method show the block properties.
+        """
         self.main_window.block_properties.set_block(block)
 
     # ----------------------------------------------------------------------
     def clear_console(self):
+        """
+        This method clear the console.
+        """
         self.main_window.status.clear()
 
     # ----------------------------------------------------------------------
     def undo(self):
+        """
+        Undo a modification.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
@@ -256,15 +374,122 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def redo(self):
+        """
+        Redo a modification.
+        """
         if self.main_window.work_area.get_current_diagram() is None:
             return
         self.main_window.work_area.get_current_diagram().redo()
 
     # ----------------------------------------------------------------------
     def reload(self):
+        """
+        Reload the diagram.
+        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
         diagram.update_scrolling()
 
+    # ----------------------------------------------------------------------
+    def align_top(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        diagram.align_top()
+
+    # ----------------------------------------------------------------------
+    def align_bottom(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        diagram.align_bottom()
+
+    # ----------------------------------------------------------------------
+    def align_left(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        diagram.align_left()
+
+    # ----------------------------------------------------------------------
+    def align_right(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        diagram.align_right()
+
+    # ----------------------------------------------------------------------
+    def redraw(self, show_grid):
+        diagrams = self.main_window.work_area.get_diagrams()
+
+        for diagram in diagrams:
+            diagram.set_show_grid(show_grid)
+            diagram.redraw()
+
+    # ----------------------------------------------------------------------
+    def show_grid(self, event):
+        self.redraw(event.get_active())
+
+    # ----------------------------------------------------------------------
+    def code_template_manager(self):
+        """
+        This add a new Code Template.
+        """
+        CodeTemplateManager(self.main_window)
+
+
+    # ----------------------------------------------------------------------
+    def plugin_manager(self):
+        """
+        This add a new plugin.
+        """
+        PluginManager(self.main_window)
+
+    # ----------------------------------------------------------------------
+    def port_manager(self):
+        """
+        This add a new port.
+        """
+        PortManager(self.main_window)
+
+    # ----------------------------------------------------------------------
+    def add_code_template(self, code_template):
+        CodeTemplateControl.add_code_template(code_template)
+
+    # ----------------------------------------------------------------------
+    def delete_code_template(self, code_template_name):
+        if not CodeTemplateControl.delete_code_template(code_template_name):
+            message = "This code template is a python file installed in the System.\n"
+            message = message + "Sorry, you can't remove it"
+            Dialog().message_dialog("Error", message, self.main_window)
+
+    # ----------------------------------------------------------------------
+    def add_port(self, port):
+        PortControl.add_port(port)
+
+    # ----------------------------------------------------------------------
+    def delete_port(self, port_key):
+        if not PortControl.delete_port(port_key):
+            message = "This port is a python file installed in the System.\n"
+            message = message + "Sorry, you can't remove it"
+            Dialog().message_dialog("Error", message, self.main_window)
+
+    # ----------------------------------------------------------------------
+    def add_plugin(self, plugin):
+        PluginControl.add_plugin(plugin)
+        self.main_window.block_notebook.update()
+
+    # ----------------------------------------------------------------------
+    def delete_plugin(self, plugin):
+        if not PluginControl.delete_plugin(plugin):
+            message = "This plugin is a python file installed in the System.\n"
+            message = message + "Sorry, you can't remove it"
+            Dialog().message_dialog("Error", message, self.main_window)
+        self.main_window.block_notebook.update()
+
+    # ----------------------------------------------------------------------
+    def update_all(self):
+        for diagram in self.main_window.work_area.get_diagrams():
+            diagram.update()
 # ----------------------------------------------------------------------

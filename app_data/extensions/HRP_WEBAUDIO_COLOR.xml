@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarpiaPort color="#ffffcfa50000" label="COLOR" language="javascript" multiple="True" source="xml" type="HRP_WEBAUDIO_COLOR">
+ <code>
+  block_$source$_o$source_port$.push(block_$sink$_i$sink_port$);
+ </code>
+ <input_code0>
+ </input_code0>
+ <output_code0>
+ </output_code0>
+ <input_code1>
+  var block_$id$_i$port_number$ = function(value){
+//Put your code here
+};
+ </input_code1>
+ <output_code1>
+  var block_$id$_o$port_number$ = [];
+
+function update_block_$id$_o$port_number$(value){
+    for (var i = 0; i &lt; block_$id$_o$port_number$.length ; i++){
+        block_$id$_o$port_number$[i](value);
+    }
+}
+ </output_code1>
+ <input_code2>
+ </input_code2>
+ <output_code2>
+ </output_code2>
+ <input_code3>
+ </input_code3>
+ <output_code3>
+ </output_code3>
+ <input_code4>
+ </input_code4>
+ <output_code4>
+ </output_code4>
+</HarpiaPort>

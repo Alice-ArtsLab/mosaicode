@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the WhiteNoise class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -14,12 +16,14 @@ class WhiteNoise(WebaudioPlugin):
         # Appearance
         self.help = "White Noise"
         self.label = "White Noise"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
         self.group = "Sound"
 
-        self.header = """
+        self.codes[0] = """
 WhiteNoise = function(context) {
   var that = this;
   this.x = 0; // Initial sample number
@@ -38,7 +42,10 @@ WhiteNoise.prototype.process = function(e) {
   }
 }
 """
-        self.vars = """
-// block_$id$ = White Noise
-var block_$id$ =  new WhiteNoise(context).node;
+        self.codes[1] = """
+// block_$id$ = $label$
+var block_$id$ =  new WhiteNoise(context);
+var block_$id$_o0 = null;
 """
+
+        self.codes[2] = "block_$id$_o0 = block_$id$.node;\n"

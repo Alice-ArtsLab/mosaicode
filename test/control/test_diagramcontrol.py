@@ -26,5 +26,3 @@ class TestDiagramControl(TestCase):
     # ----------------------------------------------------------------------
     def test_export_png(self):
         self.diagram_control.export_png()
-    # ----------------------------------------------------------------------
-    

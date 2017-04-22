@@ -1,33 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <harpia>
-<version value='0.0.1' />
-<zoom value='1.0' />
-<language value='C' />
-<blocks>
-  	<block type='harpia.plugins.C.openCV.liveMode' id='1'>
-		<position x="19.8409729004" y="82.0894012451"/>
-		<property name='camera' value='/dev/video0' />
-	</block>
-	<block type='harpia.plugins.C.openCV.decomposeRGB' id='2'>
-		<position x="198.688659668" y="99.2193756104"/>
-	</block>
-	<block type='harpia.plugins.C.openCV.sidebyside' id='3'>
-		<position x="412.427062988" y="84.3451385498"/>
-	</block>
-	<block type='harpia.plugins.C.openCV.sidebyside' id='4'>
-		<position x="426.766174316" y="210.59967041"/>
-	</block>
-	<block type='harpia.plugins.C.openCV.show' id='5'>
-		<position x="664.522827148" y="184.177642822"/>
-		<property name='window_type' value='Image Size' />
-		<property name='title' value='My Image' />
-	</block>
-</blocks>
-<connections>
-  	<connection from="1" from_out="1" to="2" to_in="1"/>
-	<connection from="2" from_out="1" to="3" to_in="1"/>
-	<connection from="2" from_out="2" to="3" to_in="2"/>
-	<connection from="2" from_out="3" to="4" to_in="2"/>
-	<connection from="3" from_out="1" to="4" to_in="1"/>
-	<connection from="4" from_out="1" to="5" to_in="1"/>
-</connections>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.sidebyside">
+   <position x="200" y="0"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="0"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+  <block id="3" type="harpia.plugins.C.openCV.imageFile">
+   <position x="0" y="100"/>
+   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+  </block>
+  <block id="4" type="harpia.plugins.C.openCV.show">
+   <position x="400" y="0"/>
+   <property key="window_type" value="Image Size"/>
+   <property key="title" value="My Image - Side By Side"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="2" from_out="1" to_block="1" to_in="1"/>
+  <connection from_block="3" from_out="1" to_block="1" to_in="2"/>
+  <connection from_block="1" from_out="1" to_block="4" to_in="1"/>
+ </connections>
 </harpia>

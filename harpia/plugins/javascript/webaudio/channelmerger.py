@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the ChannelMerger class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -14,13 +16,23 @@ class ChannelMerger(WebaudioPlugin):
         # Appearance
         self.help = "Channel Merger"
         self.label = "Channel Merger"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
-        self.in_types = ["HRP_WEBAUDIO_SOUND", "HRP_WEBAUDIO_SOUND"]
-        self.out_types = ["HRP_WEBAUDIO_SOUND"]
+
+        self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input 1",
+                "name":"sound_input_1"},
+                {"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Input 2",
+                "name":"sound_input_2"}
+                ]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
+                "label":"Sound Output",
+                "name":"sound_output"}
+            ]
+
         self.group = "Sound"
 
-        self.header = """
+        self.codes[0] = """
 Merger = function(context) {
   var that = this;
   this.x = 0; // Initial sample number
@@ -37,11 +49,10 @@ Merger.prototype.process = function(e) {
   }
 }
 """
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = Channel Merger
 var block_$id$_obj = new Merger(context);
 var block_$id$ = block_$id$_obj.node;
-var block_$id$_i = [];
-block_$id$_i[0] = block_$id$_obj.node;
-block_$id$_i[1] = block_$id$_obj.node;
+var block_$id$_i0 = block_$id$_obj.node;
+var block_$id$_i1 = block_$id$_obj.node;
 """

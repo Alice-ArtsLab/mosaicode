@@ -1,6 +1,7 @@
 from unittest import TestCase
 from harpia.model.diagrammodel import DiagramModel
 
+
 class TestDiagramModel(TestCase):
 
     def setUp(self):
@@ -53,5 +54,5 @@ class TestDiagramModel(TestCase):
         self.diagram_model.set_zoom()
 
     # ----------------------------------------------------------------------
-    def test_get_zoom(self):
+    def get_zoom(self):
         self.diagram_model.get_zoom()

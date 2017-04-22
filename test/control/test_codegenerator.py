@@ -5,6 +5,7 @@ from harpia.GUI.block import Block
 from harpia.GUI.mainwindow import MainWindow
 
 
+
 class TestCodeGenerator(TestCase):
 
     def setUp(self):

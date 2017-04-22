@@ -1,19 +1,44 @@
-from harpia.GUI.fieldtypes import *
+"""
+This module contains the Field class.
+"""
 
 
 class Field(object):
+    """
+    This class contains methods related the Field class.
+    """
+
+    configuration = {}
+    # ----------------------------------------------------------------------
 
     def __init__(self, data, event):
-        pass
+        """
+        This method is the constructor.
+        """
+        self.data = data
 
+    # ----------------------------------------------------------------------
     def get_type(self):
+        from harpia.GUI.fieldtypes import HARPIA_NONE
         return HARPIA_NONE
 
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_configuration(cls):
+        return cls.configuration
+
+    # ----------------------------------------------------------------------
     def get_value(self):
         return 0
 
-    def check_value(self, data, key, value):
-        if key in data:
-            return
-        else:
-            data[key] = value
+    # ----------------------------------------------------------------------
+    def set_value(self, value):
+        pass
+
+    # ----------------------------------------------------------------------
+    def check_values(self):
+        for key in self.get_configuration():
+            if key in self.data:
+                continue
+            else:
+                self.data[key] = self.get_configuration()[key]

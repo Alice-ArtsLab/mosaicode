@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the KeyboardInput class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -14,17 +16,22 @@ class KeyboardInput(WebaudioPlugin):
         # Appearance
         self.help = "Keyboard Input"
         self.label = "Keyboard Input"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_CHAR"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Float Output",
+                "name":"float_output"},
+                {"type":"HRP_WEBAUDIO_CHAR",
+                "label":"Char Output",
+                "name":"char_output"}
+            ]
         self.group = "Interface"
 
-        self.vars = """
+        self.codes[1] = """
 // block_$id$ = KeyBoard Input
 var block_$id$_o0 = [];
 var block_$id$_o1 = [];
 """
-        self.function_call = """
+        self.codes[2] = """
 document.onkeypress = function(evt){
     evt = evt || window.event;
     var value = evt.keyCode || evt.which;

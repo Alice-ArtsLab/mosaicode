@@ -3,140 +3,103 @@
 
 
 class Plugin(object):
+    """
+    This class contains the base attributes of each plug-in,
+    their position on the screen, id and others applicable properties for 
+    each one.
+    """
 
     # ----------------------------------------------------------------------
-    def __init__(self):
-        self.type = self.__class__.__module__
+    def __init__(self, plugin = None):
+
         self.id = -1
         self.x = 0
         self.y = 0
 
-        # Code generation
-        self.header = ""
-        self.properties = {}
-        self.vars = ""
-        self.function_call = ""
-        self.dealloc = ""
-        self.out_dealloc = ""
+        self.type = self.__class__.__module__
+        self.language = ""
+        self.framework = ""
+        self.source = "python"
 
         # Appearance
         self.help = ""
         self.label = ""
-        self.icon = "images/show.png"
         self.color = "200:200:25:150"
-        self.in_types = []
-        self.out_types = []
         self.group = "Undefined"
+        self.in_ports = []
+        self.out_ports = []
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
+        # Code generation
+        self.properties = []
+        self.codes = ["","","","",""] # Empty array with 5 positions
 
-    # ----------------------------------------------------------------------
-    def get_label(self):
-        return self.label
-
-    # ----------------------------------------------------------------------
-    def get_icon(self):
-        return self.icon
+        if plugin == None:
+            return
+        for key in self.__dict__:
+            self.__dict__[key] = plugin.__dict__[key]
 
     # ----------------------------------------------------------------------
     def get_color(self):
-        return self.color
+        """
+        Get the color in RGB format and return in hexadecimal.
+
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return is the hex value reference to color. The hex value is a **str** type.
+        """
+
+        if self.color.startswith("#"):
+            color = self.color.replace("#", "")
+            if len(color) == 12: # RGB
+                color = [int(color[0:2],16),
+                         int(color[4:6],16),
+                         int(color[8:10],16)]
+                color = int(color[0]) * 0x1000000 + \
+                        int(color[1]) * 0x10000 + \
+                        int(color[2]) * 0x100 + \
+                        150 * 0x01 # Transparency
+                return color
+
+        if ":" in self.color:
+            color = self.color.split(":")
+            color = [int(color[0]), int(color[1]), int(color[2]), int(color[3])]
+            color = int(color[0]) * 0x1000000 + \
+                    int(color[1]) * 0x10000 + \
+                    int(color[2]) * 0x100 + \
+                    int(color[3]) * 0x01
+            return color
+        return 0
 
     # ----------------------------------------------------------------------
-    def get_in_types(self):
-        return self.in_types
+    def get_color_as_rgba(self):
+        """
+        Returns the color in RGBA format.
 
-    # ----------------------------------------------------------------------
-    def get_out_types(self):
-        return self.out_types
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return is the RGBA color. The hex value is a **str** type.
+        """
 
-    # ----------------------------------------------------------------------
-    def get_group(self):
-        return self.group
-
-    # ----------------------------------------------------------------------
-    def get_output_port_name(self, number):
-        return "block_" + str(self.id) + "o" + str(number)
-
-    # ----------------------------------------------------------------------
-    def get_input_port_name(self, number):
-        return "block_" + str(self.id) + "i" + str(number)
-
-    # ----------------------------------------------------------------------
-    def get_position(self):
-        return (self.x, self.y)
-
-    # ----------------------------------------------------------------------
-    def get_type(self):
-        return self.type
-
-    # ----------------------------------------------------------------------
-    def set_id(self, value):
-        self.id = value
-
-    # ----------------------------------------------------------------------
-    def get_id(self):
-        return self.id
-
-    # ----------------------------------------------------------------------
-    def get_language(self):
-        try:
-            return self.language
-        except:
-            return None
-
-    # ----------------------------------------------------------------------
-    def generate_header(self):
-        return self.header
-
-    # ----------------------------------------------------------------------
-    def generate_vars(self):
-        return self.vars
-
-    # ----------------------------------------------------------------------
-    def generate_function_call(self):
-        return self.function_call
-
-    # ----------------------------------------------------------------------
-    def generate_dealloc(self):
-        return self.dealloc
-
-    # ----------------------------------------------------------------------
-    def generate_out_dealloc(self):
-        return self.out_dealloc
-
-    # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
+        if self.color.startswith("#"):
+            return self.color
+        return "rgba(" + self.color.replace(":", ",") + ")"
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
-        for key in self.get_properties():
-            if key in self.__dict__ and key in data:
-                self.__dict__[key] = data[key]
+        for prop in self.get_properties():
+            key = prop.get("name")
+            if key in data:
+                prop["value"] = data[key]
             else:
-                print "Plugin.set_property ERROR: key ", key, "not present"
+                print "Plugin.set_property (" + self.type + \
+                        ") ERROR: key ", key, "not present"
 
     # ----------------------------------------------------------------------
     def get_properties(self):
         return self.properties
 
     # ----------------------------------------------------------------------
-    def get_plugin(self):
-        return self
-
-    # ----------------------------------------------------------------------
-    def get_xml(self):
-        xml = ""
-        for key in self.get_properties():
-            xml += "\t\t<property name='" + key + \
-                "' value='" + str(self.__dict__[key]) + "' />\n"
-        return xml
-
-    # ----------------------------------------------------------------------
     def __str__(self):
-        return str(self.get_id())
+        return str(self.id)
 
 # ------------------------------------------------------------------------------

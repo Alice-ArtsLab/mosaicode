@@ -1,13 +1,22 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
+"""
+This module contains the DiagramControl class.
+"""
 import os
+import gi
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from harpia.utils.XMLUtils import XMLParser
 from harpia.system import System as System
 from harpia.control.codegenerator import CodeGenerator
+from harpia.model.codetemplate import CodeTemplate
 
 
 class DiagramControl():
+    """
+    This class contains methods related the DiagramControl class.
+    """
 
     # ----------------------------------------------------------------------
 
@@ -15,123 +24,135 @@ class DiagramControl():
         self.diagram = diagram
 
 # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-# ----------------------------------------------------------------------
-    def get_generator(self):
-        try:
-            generator = System.generators[self.diagram.language](self.diagram)
-        except:
-            generator = CodeGenerator(self.diagram)
-            System.log("Language generator not available")
+    def get_code_template(self):
+        code_template = CodeTemplate()
+        for key in System.code_templates:
+            if System.code_templates[key].language == self.diagram.language:
+                code_template = System.code_templates[key]
+                break
+        generator = CodeGenerator(self.diagram, code_template)
         return generator
 
 # ----------------------------------------------------------------------
     def load(self, file_name=None):
+        """
+        This method load a file.
+
+        Returns:
+            * **Types** (:class:`boolean<boolean>`)
+        """
         if file_name is not None:
-            self.diagram.set_file_name(file_name)
+            self.diagram.file_name = file_name
         else:
-            if self.diagram.get_file_name() is None:
+            if self.diagram.file_name is None:
                 System.log("Cannot Load without filename")
                 return False
-        if not os.path.exists(self.diagram.get_file_name()):
-            System.log("File '" + self.diagram.get_file_name() +
+        if not os.path.exists(self.diagram.file_name):
+            System.log("File '" + self.diagram.file_name +
                        "' does not exist!")
             return False
 
         # load the diagram
-        xml_loader = XMLParser(self.diagram.get_file_name())
+        parser = XMLParser(self.diagram.file_name)
 
-        zoom = xml_loader.getTag("harpia").getTag("zoom").getAttr("value")
-        self.diagram.set_zoom(float(zoom))
+        zoom = parser.getTag("harpia").getTag("zoom").getAttr("value")
+        self.diagram.zoom = float(zoom)
         try:
-            language = xml_loader.getTag("harpia").getTag(
+            language = parser.getTag("harpia").getTag(
                 "language").getAttr("value")
             self.diagram.language = language
         except:
             pass
 
         # new version load
-        blocks = xml_loader.getTag("harpia").getTag(
+        blocks = parser.getTag("harpia").getTag(
             "blocks").getChildTags("block")
         for block in blocks:
             block_type = block.getAttr("type")
-            if block_type not in System.blocks:
+            if block_type not in System.plugins:
                 continue
-            block_id = block.getAttr("id")
+            block_id = int(block.getAttr("id"))
             position = block.getTag("position")
             x = position.getAttr("x")
             y = position.getAttr("y")
             properties = block.getChildTags("property")
             props = {}
             for prop in properties:
-                props[prop.name] = prop.value
-            new_block = System.blocks[block_type]()
+                try:
+                    props[prop.key] = prop.value
+                except:
+                    pass
+            new_block = System.plugins[block_type]
             new_block.set_properties(props)
-            new_block.set_id(block_id)
+            new_block.id = block_id
             new_block.x = float(x)
             new_block.y = float(y)
             self.diagram.add_block(new_block)
 
-        connections = xml_loader.getTag("harpia").getTag(
+        connections = parser.getTag("harpia").getTag(
             "connections").getChildTags("connection")
         for conn in connections:
             try:
-                from_block = self.diagram.blocks[int(conn.getAttr("from"))]
-                to_block = self.diagram.blocks[int(conn.getAttr("to"))]
+                from_block = self.diagram.blocks[
+                    int(conn.getAttr("from_block"))]
+                to_block = self.diagram.blocks[int(conn.getAttr("to_block"))]
             except:
                 continue
             from_block_out = int(conn.getAttr("from_out"))
             to_block_in = int(conn.getAttr("to_in"))
             self.diagram.start_connection(from_block, int(from_block_out) - 1)
             self.diagram.end_connection(to_block, int(to_block_in) - 1)
-        self.diagram.update_scrolling()
-        self.diagram.reset_undo()
+        self.diagram.redo_stack = []
+        self.diagram.undo_stack = []
 
 # ----------------------------------------------------------------------
     def save(self, file_name=None):
+        """
+        This method save a file.
 
-        output = "<harpia>\n"
+        Returns:
 
-        output += "<version value='" + str(System.VERSION) + "' />\n"
-        output += "<zoom value='" + str(self.diagram.get_zoom()) + "' />\n"
-        output += "<language value='" + str(self.diagram.language) + "' />\n"
-        output += "<blocks>\n  "
+            * **Types** (:class:`boolean<boolean>`)
+        """
+
+        parser = XMLParser()
+        parser.addTag('harpia')
+        parser.appendToTag('harpia', 'version', value=System.VERSION)
+        parser.appendToTag('harpia', 'zoom', value=self.diagram.zoom)
+        parser.appendToTag('harpia', 'language', value=self.diagram.language)
+
+        parser.appendToTag('harpia', 'blocks')
         for block_id in self.diagram.blocks:
-            block_type = str(self.diagram.blocks[block_id].get_type())
+            block_type = self.diagram.blocks[block_id].type
             pos = self.diagram.blocks[block_id].get_position()
+            parser.appendToTag('blocks', 'block', type=block_type, id=block_id)
+            parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
+            props = self.diagram.blocks[block_id].get_properties()
+            for prop in props:
+                parser.appendToLastTag('block',
+                                       'property',
+                                       key=str(prop["name"]),
+                                       value=str(prop["value"])
+                                       )
 
-            output += "\t<block type='" + block_type + \
-                "' id='" + str(block_id) + "'>\n"
-            output += '\t\t<position x="' + \
-                str(pos[0]) + '" y="' + str(pos[1]) + '"/>\n'
-            output += self.diagram.blocks[block_id].get_xml()
-            output += "\t</block>\n"
-        output += "</blocks>\n"
-
-        output += "<connections>\n  "
+        parser.appendToTag('harpia', 'connections')
         for connector in self.diagram.connectors:
-            output += '\t<connection'
-            output += ' from="' + str(connector.source.get_id()) + '"'
-            output += ' from_out="' + str(int(connector.source_port) + 1) + '"'
-            output += ' to="' + str(connector.sink.get_id()) + '"'
-            output += ' to_in="' + str(int(connector.sink_port) + 1) + '"/>\n'
-        output += "</connections>\n"
-
-        output += "</harpia>\n"
+            parser.appendToTag('connections', 'connection',
+                               from_block=connector.source.id,
+                               from_out=int(connector.source_port) + 1,
+                               to_block=connector.sink.id,
+                               to_in=int(connector.sink_port) + 1)
 
         if file_name is not None:
-            self.diagram.set_file_name(file_name)
-        if self.diagram.get_file_name() is None:
-            self.diagram.set_file_name("Cadeia_" + str(time.time()) + ".hrp")
-        if self.diagram.get_file_name().find(".hrp") == -1:
-            self.diagram.set_file_name(self.diagram.get_file_name() + ".hrp")
+            self.diagram.file_name = file_name
+        if self.diagram.file_name is None:
+            self.diagram.file_name = "Cadeia_" + str(time.time()) + ".hrp"
+        if self.diagram.file_name.find(".hrp") == -1:
+            self.diagram.file_name = self.diagram.file_name + ".hrp"
 
         try:
-            save_file = open(str(self.diagram.get_file_name()), "w")
-            output = output
-            save_file.write(output)
+            save_file = open(str(self.diagram.file_name), "w")
+            save_file.write(parser.prettify())
             save_file.close()
         except IOError as e:
             System.log(e.strerror)
@@ -142,6 +163,13 @@ class DiagramControl():
 
 # ----------------------------------------------------------------------
     def export_png(self, file_name="diagrama.png"):
+        """
+        This method export a png.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`): True to Success.
+        """
         if file_name is None:
             file_name = "diagrama.png"
 

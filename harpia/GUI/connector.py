@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
-
+"""
+This module contains the Connector class.
+"""
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
@@ -9,13 +11,19 @@ from gi.repository import GooCanvas
 from connectormenu import ConnectorMenu
 
 from harpia.model.connectionmodel import ConnectionModel
-
+from harpia.system import System as System
 
 class Connector(GooCanvas.CanvasGroup, ConnectionModel):
+    """
+    This class contains the methods related to Connector class.
+    """
 
     # ----------------------------------------------------------------------
 
     def __init__(self, diagram, source, source_port, conn_type):
+        """
+        This method is the constructor.
+        """
         GooCanvas.CanvasGroup.__init__(self)
         ConnectionModel.__init__(self, diagram, source, source_port, conn_type)
 
@@ -34,26 +42,28 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.update_tracking()
 
     # ----------------------------------------------------------------------
-    def __del__(self):
-        pass
-
-    # ----------------------------------------------------------------------
     def delete(self):
-        self.get_diagram().delete_connection(self)
-        self.get_diagram().update_flows()
+        """
+        This method delete connection.
+        """
+        self.diagram.delete_connection(self)
+        self.diagram.update_flows()
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
-        Gtk.Widget.grab_focus(self.get_diagram())
+        """
+        This method monitors if on button was pressed.
+        """
+        Gtk.Widget.grab_focus(self.diagram)
         if event.button.button == 3:
             ConnectorMenu(self, event)
 
-        if self in self.get_diagram().current_widgets:
-            self.get_diagram().current_widgets = []
+        if self in self.diagram.current_widgets:
+            self.diagram.current_widgets = []
         else:
-            self.get_diagram().current_widgets.append(self)
+            self.diagram.current_widgets.append(self)
 
-        self.get_diagram().update_flows()
+        self.diagram.update_flows()
         return True
 
     # ----------------------------------------------------------------------
@@ -69,13 +79,13 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return False
 
     # ----------------------------------------------------------------------
-    def set_end(self, sink, sink_port):
-        ConnectionModel.set_end(self, sink, sink_port)
-        self.__to_point = sink.get_input_pos(self.sink_port)
-        self.update_tracking(self.__to_point)
-
-    # ----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
+        """
+        This method update Tracking.
+
+            Parameters:
+                * **newEnd**
+        """
         if newEnd is None:
             newEnd = self.__from_point
         a = newEnd[0] - self.__from_point[0]
@@ -96,12 +106,19 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def update_flow(self):
+        """
+        This method update the flow.
+
+        """
         self.__from_point = self.source.get_output_pos(self.source_port)
         self.__to_point = self.sink.get_input_pos(self.sink_port)
         self.__update_draw()
 
     # ----------------------------------------------------------------------
     def __update_draw(self):
+        """
+        This method update draw.
+        """
         # svg M L bezier curve
         path = ""
         x0 = self.__from_point[0]
@@ -127,9 +144,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         if self.__widgets not in "Line":
             widget = GooCanvas.CanvasPath(
-                    parent=self,
-                    data=path
-                    )
+                parent=self,
+                stroke_color = System.ports[self.conn_type].color,
+                data=path
+            )
             self.__widgets["Line"] = widget
         else:
             self.__widgets["Line"].set_property("data", path)
@@ -138,6 +156,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
     def __update_state(self):
+        """
+        This method update the connector state.
+        """
+
         # With focus: line width = 3
         if self.__focus:
             self.__widgets["Line"].set_property("line-width", 3)
@@ -145,15 +167,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.__widgets["Line"].set_property("line-width", 2)
 
         # selected: line style = dashed and line width = 3
-        if self in self.get_diagram().current_widgets:
+        if self in self.diagram.current_widgets:
             self.__widgets["Line"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:
             self.__widgets["Line"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
-        # not connected: Color = red
-        if self.sink_port == -1:
-            self.__widgets["Line"].set_property("stroke-color", "red")
-        else:
-            self.__widgets["Line"].set_property("stroke-color", "black")

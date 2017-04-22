@@ -1,18 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <harpia>
-<version value='0.0.1' />
-<zoom value='1.0' />
-<language value='C' />
-<blocks>
-  	<block type='harpia.plugins.C.openCV.videoFile' id='1'>
-		<position x="200" y="0"/>
-		<property name='filename' value='/usr/share/harpia/images/vLeft.mpg' />
-	</block>
-	<block type='harpia.plugins.C.openCV.show' id='2'>
-		<position x="400" y="0"/>
-		<property name='title' value='My Image - Video File' />
-	</block>
-</blocks>
-<connections>
-  	<connection from="1" from_out="1" to="2" to_in="1"/>
-</connections>
+ <version value="0.0.1"/>
+ <zoom value="1.0"/>
+ <language value="C"/>
+ <blocks>
+  <block id="1" type="harpia.plugins.C.openCV.videoFile">
+   <position x="200" y="0"/>
+   <property key="key" value="a"/>
+   <property key="filename" value="/usr/share/harpia/images/vLeft.mpg"/>
+  </block>
+  <block id="2" type="harpia.plugins.C.openCV.show">
+   <position x="400" y="0"/>
+   <property key="window_type" value="Image Size"/>
+   <property key="title" value="My Image - Video File"/>
+  </block>
+ </blocks>
+ <connections>
+  <connection from_block="1" from_out="1" to_block="2" to_in="1"/>
+ </connections>
 </harpia>

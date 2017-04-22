@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+This module contains the Button class.
+"""
 from harpia.GUI.fieldtypes import *
 from harpia.plugins.javascript.webaudio.webaudioplugin import WebaudioPlugin
 
@@ -10,24 +12,38 @@ class Button(WebaudioPlugin):
     # -------------------------------------------------------------------------
     def __init__(self):
         WebaudioPlugin.__init__(self)
-        self.value = 1
-        self.label = "Label"
 
         # Appearance
         self.help = "Button"
         self.label = "Button"
-        self.icon = "images/show.png"
         self.color = "50:150:250:150"
-        self.out_types = ["HRP_WEBAUDIO_FLOAT"]
+        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+                "label":"Click",
+                "name":"click"}
+            ]
+        self.properties = [{"name": "value",
+                            "label": "Value",
+                            "type": HARPIA_FLOAT,
+                            "lower": 0,
+                            "upper": 20000,
+                            "step": 1,
+                            "value": 1
+                            },
+                           {"name": "label",
+                            "label": "Label",
+                            "type": HARPIA_STRING,
+                            "value": "Label"
+                            }
+                           ]
         self.group = "Interface"
 
-        self.vars = """
-// block_$id$ = Button
-var block_$id$_value = $value$;
+        self.codes[1] = """
+// block_$id$ = $label$
+var block_$id$_value = $prop[value]$;
 var block_$id$_o0 = [];
 """
 
-        self.function_call = """
+        self.codes[2] = """
 function click_$id$(){
     value = document.getElementById("block_$id$").value;
     for (var i = 0; i < block_$id$_o0.length ; i++){
@@ -36,18 +52,8 @@ function click_$id$(){
 };
 """
 
-        self.dealloc = """
-<button type="button" value="$value$" onClick="click_$id$();"
-id="block_$id$">$label$</button><br>
+        self.codes[3] = """
+<button type="button" value="$prop[value]$" onClick="click_$id$();"
+id="block_$id$">$prop[label]$</button><br>
 """
 
-        self.properties = {"value": {"name": "Value",
-                                     "type": HARPIA_FLOAT,
-                                     "lower": 0,
-                                     "upper": 20000,
-                                     "step": 1
-                                     },
-                           "label": {"name": "Label",
-                                     "type": HARPIA_STRING
-                                     }
-                           }
