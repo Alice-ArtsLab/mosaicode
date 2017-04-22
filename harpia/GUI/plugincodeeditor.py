@@ -176,5 +176,5 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
     def __on_select(self, widget=None, data=None):
         code_area = self.__get_current_code_area()
         value = widget.get_parent().get_value()
-        code_area.set_value(code_area.get_value() + "$" + value + "$")
+        code_area.insert_at_cursor("$" + value + "$")
 # ----------------------------------------------------------------------

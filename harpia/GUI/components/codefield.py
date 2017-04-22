@@ -82,4 +82,8 @@ class CodeField(Field, Gtk.VBox):
     def set_value(self, value):
         self.text_buffer.set_text(value)
 
+    # --------------------------------------------------------------------------
+    def insert_at_cursor(self, value):
+        self.text_buffer.insert_at_cursor(value, len(value))
+
 # ------------------------------------------------------------------------------

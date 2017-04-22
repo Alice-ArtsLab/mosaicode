@@ -51,10 +51,10 @@ class CodeGenerator():
         self.dir_name = self.get_dir_name()
         self.filename = self.get_filename()
         self.error_log_file = System.properties.error_log_file
-        self.error_log_file = self.replace_wildcards(self.error_log_file)
+        self.error_log_file = self.__replace_wildcards(self.error_log_file)
 
     # ----------------------------------------------------------------------
-    def replace_wildcards(self, text):
+    def __replace_wildcards(self, text):
         """
         This method replace the wildcards.
 
@@ -80,7 +80,7 @@ class CodeGenerator():
             * **Types** (:class:`str<str>`)
         """
         name = System.properties.default_directory
-        name = self.replace_wildcards(name)
+        name = self.__replace_wildcards(name)
         if not name.endswith("/"):
             name = name + "/"
         return name
@@ -95,7 +95,7 @@ class CodeGenerator():
             * **Types** (:class:`str<str>`)
         """
         name = System.properties.default_filename
-        name = self.replace_wildcards(name)
+        name = self.__replace_wildcards(name)
         return name
 
     # ----------------------------------------------------------------------
@@ -308,7 +308,6 @@ class CodeGenerator():
         for conn in self.connections:
             connection_block += conn + "\n"
         code = code.replace("$connections$", connection_block)
-
 
         return code
 
