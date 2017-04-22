@@ -1,16 +1,22 @@
 from unittest import TestCase
 from harpia.control.codegenerator import CodeGenerator
+from harpia.GUI.diagram import Diagram
+from harpia.GUI.block import Block
+from harpia.GUI.mainwindow import MainWindow
+
 
 class TestCodeGenerator(TestCase):
 
     def setUp(self):
         """Do the test basic setup."""
         win = MainWindow()
-        self.main_control = MainControl(win)
+        diagram = Diagram(win)
+        block = Block()
+        self.code_generator = CodeGenerator(diagram)
 
     # ----------------------------------------------------------------------
     def test_replace_wildcards(self):
-        self.code_generator.replace_wildcards()
+        self.code_generator.replace_wildcards("Teste")
 
     # ----------------------------------------------------------------------
     def test_get_dir_name(self):
@@ -39,6 +45,10 @@ class TestCodeGenerator(TestCase):
     # ----------------------------------------------------------------------
     def test_generate_block_code(self):
         self.code_generator.generate_block_code()
+
+    # ----------------------------------------------------------------------
+    def test_generate_code(self):
+        self.code_generator.generate_code()
 
     # ----------------------------------------------------------------------
     def test_save_code(self):

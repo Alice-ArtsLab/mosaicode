@@ -1,12 +1,14 @@
 from unittest import TestCase
 from harpia.model.connectionmodel import ConnectionModel
+from harpia.GUI.diagram import Diagram
 
 class TestConnectionModel(TestCase):
 
     def setUp(self):
         """Do the test basic setup."""
-        win = MainWindow()
-        self.main_control = MainControl(win)
+        diagram = Diagram()
+
+        self.connection_model = ConnectionModel()
 
     # ----------------------------------------------------------------------
     def test_get_diagram(self):

@@ -88,10 +88,6 @@ class Plugin(object):
             return None
 
     # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.help
-
-    # ----------------------------------------------------------------------
     def generate_header(self):
         return self.header
 

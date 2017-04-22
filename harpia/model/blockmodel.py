@@ -7,6 +7,7 @@ class BlockModel(object):
     # ----------------------------------------------------------------------
 
     def __init__(self, plugin):
+        """ """
         self.__plugin = plugin
         self.x = plugin.x
         self.y = plugin.y
@@ -35,9 +36,6 @@ class BlockModel(object):
     def get_xml(self):
         return self.__plugin.get_xml()
 
-    # ----------------------------------------------------------------------
-    def get_help(self):
-        return self.__plugin.get_help()
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -86,4 +84,3 @@ class BlockModel(object):
     # ----------------------------------------------------------------------
     def get_group(self):
         return self.__plugin.get_group()
-

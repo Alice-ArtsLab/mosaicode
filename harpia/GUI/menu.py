@@ -9,6 +9,7 @@ import gettext
 
 _ = gettext.gettext
 
+
 class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------

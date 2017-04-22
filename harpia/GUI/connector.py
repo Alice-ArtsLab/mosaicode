@@ -7,6 +7,7 @@ gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import GooCanvas
 from connectormenu import ConnectorMenu
+
 from harpia.model.connectionmodel import ConnectionModel
 
 
@@ -124,7 +125,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1 - 4) + " " + str(y1 + 4)
         path += " L " + str(x1) + " " + str(y1)
 
-        if not self.__widgets.has_key("Line"):
+        if self.__widgets not in "Line":
             widget = GooCanvas.CanvasPath(
                     parent=self,
                     data=path

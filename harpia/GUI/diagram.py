@@ -118,11 +118,13 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
+
         if event.state == \
                 Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
             if event.keyval == Gdk.KEY_Up:
                 self.move_selected_blocks(0, -5)
                 return True
+
             if event.keyval == Gdk.KEY_Down:
                 self.move_selected_blocks(0, 5)
                 return True

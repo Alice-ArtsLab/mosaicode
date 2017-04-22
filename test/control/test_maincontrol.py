@@ -22,6 +22,10 @@ class TestMainControl(TestCase):
         self.main_control.open("app_data/examples/Add Border.hrp")
 
     # ----------------------------------------------------------------------
+    def test_close(self):
+        self.main_control.close()
+
+    # ----------------------------------------------------------------------
     def test_save(self):
         self.main_control.save()
 
@@ -52,7 +56,7 @@ class TestMainControl(TestCase):
     # ----------------------------------------------------------------------
     def test_copy(self):
         self.main_control.copy()
-        
+
     # ----------------------------------------------------------------------
     def test_paste(self):
         self.main_control.paste()
@@ -60,6 +64,10 @@ class TestMainControl(TestCase):
     # ----------------------------------------------------------------------
     def test_get_clipboard(self):
         self.main_control.get_clipboard()
+
+    # ----------------------------------------------------------------------
+    def test_reset_clipboard(self):
+        self.main_control.reset_clipboard()
 
     # ----------------------------------------------------------------------
     def test_preferences(self):

@@ -8,12 +8,12 @@ class TestPreferencesControl(TestCase):
     def setUp(self):
         """Do the test basic setup."""
         prop = System.properties
-        self.x = PreferencesControl(prop)
+        self.preferences_control = PreferencesControl(prop)
 
     # ----------------------------------------------------------------------
     def test_load(self):
-        self.x.load()
+        self.preferences_control.load()
 
     # ----------------------------------------------------------------------
     def test_save(self):
-    	self.x.save()
+    	self.preferences_control.save()
