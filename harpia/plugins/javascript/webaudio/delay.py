@@ -18,12 +18,12 @@ class Delay(WebaudioPlugin):
         self.label = "Delay"
         self.color = "150:150:250:150"
         self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                "label":"Sound Input",
-                "name":"sound_input"}
+                "label":"Sound",
+                "name":"sound"}
                 ]
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                "label":"Sound Output",
-                "name":"sound_output"}
+                "label":"Sound",
+                "name":"sound"}
             ]
 
         self.group = "Sound"
@@ -41,11 +41,11 @@ class Delay(WebaudioPlugin):
         self.codes[1] = """
 // block_$id$ = Delay
 var block_$id$ = context.createDelay();
-var block_$id$_o0 = null;
-var block_$id$_i0 = null;
+var $out_ports[sound]$ = null;
+var $in_ports[sound]$ = null;
 """
 
-        self.codes[2] = "block_$id$_i0 = block_$id$;\n" + \
+        self.codes[2] = "$in_ports[sound]$ = block_$id$;\n" + \
             "var block_$id$.delayTime.value = $prop[time]$\n;" + \
-            "block_$id$_o0 = block_$id$;\n"
+            "$out_ports[sound]$ = block_$id$;\n"
 

@@ -18,17 +18,17 @@ class Gain(WebaudioPlugin):
         self.label = "Gain"
         self.color = "50:150:250:150"
         self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                           "label":"Sound Input",
-                           "name":"sound_input"},
+                           "label":"Sound",
+                           "name":"sound"},
                         {"type":"HRP_WEBAUDIO_SOUND",
-                           "label":"Gain Input",
-                           "name":"gain_input"},
+                           "label":"Gain",
+                           "name":"gain"},
                         {"type":"HRP_WEBAUDIO_FLOAT",
                          "label":"Gain Value",
                          "name":"gain_value"}]
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                         "name":"sound_output",
-                         "label":"Sound Output"}]
+                         "name":"sound",
+                         "label":"Sound"}]
         self.properties = [{"name": "gain",
                             "label": "Gain",
                             "type": HARPIA_FLOAT,
@@ -41,15 +41,15 @@ class Gain(WebaudioPlugin):
         self.group = "Sound"
 
         self.codes[1] = """
-// block_$id$ = Gain
+// block_$id$ = $label$
 var block_$id$ = context.createGain();
-var block_$id$_o0 = null;
-var block_$id$_i0 = block_$id$;
-var block_$id$_i1 = block_$id$.gain;
-var block_$id$_i2 = function(value){
+var $out_ports[sound]$ = null;
+var $in_ports[sound]$ = block_$id$;
+var $in_ports[gain]$ = block_$id$.gain;
+var $in_ports[gain_value]$ = function(value){
     block_$id$.gain.value = value;
     };
 """
 
-        self.codes[2] = "block_$id$_o0 = block_$id$;\n" + \
+        self.codes[2] = "$out_ports[sound]$ = block_$id$;\n" + \
             "block_$id$.gain.value = $prop[gain]$;\n"

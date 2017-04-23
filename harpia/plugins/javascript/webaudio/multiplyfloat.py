@@ -34,22 +34,22 @@ class MultiplyFloat(WebaudioPlugin):
 // block_$id$ = Multiply Float
 var block_$id$_arg1 = 0;
 var block_$id$_arg2 = 0;
-var block_$id$_o0 = [];
+var $out_ports[result]$ = [];
 
-var block_$id$_i0 = function(value){
+var $in_ports[first_number]$ = function(value){
     block_$id$_arg1 = parseFloat(value);
     result = parseFloat(block_$id$_arg1) * parseFloat(block_$id$_arg2);
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](result);
+    for (var i = 0; i < $out_ports[result]$.length ; i++){
+        $out_ports[result]$[i](result);
     }
     return true;
     };
 
-var block_$id$_i1 = function(value){
+var $in_ports[second_number]$ = function(value){
     block_$id$_arg2 = parseFloat(value);
     result = parseFloat(block_$id$_arg1) * parseFloat(block_$id$_arg2);
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](result);
+    for (var i = 0; i < $out_ports[result]$.length ; i++){
+        $out_ports[result]$[i](result);
     }
     return true;
     };

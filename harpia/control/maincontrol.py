@@ -47,7 +47,9 @@ class MainControl():
         """
         This method open a selected file.
         """
-        file_name = Dialog().open_dialog("Open Diagram", self.main_window)
+        file_name = Dialog().open_dialog("Open Diagram",
+                        self.main_window,
+                        filetype="hrp")
         if file_name is None or file_name == "":
             return
         self.open(file_name)

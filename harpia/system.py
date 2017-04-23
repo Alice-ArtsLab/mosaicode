@@ -54,18 +54,27 @@ class System(object):
         def __load_xml(self, data_dir):
             if not os.path.exists(data_dir):
                 return
-            for file in os.listdir(data_dir):
-                if not file.endswith(".xml"):
+            for file_name in os.listdir(data_dir):
+                full_file_path = data_dir + "/" + file_name
+
+                # Recursion to make it more interesting...
+                if os.path.isdir(full_file_path):
+                    self.__load_xml(full_file_path)
+
+                if not file_name.endswith(".xml"):
                     continue
-                code_template = CodeTemplateControl.load(data_dir + "/" + file)
+
+                code_template = CodeTemplateControl.load(full_file_path)
                 if code_template is not None:
                     code_template.source = "xml"
                     self.code_templates[code_template.name] = code_template
-                port = PortControl.load(data_dir + "/" + file)
+
+                port = PortControl.load(full_file_path)
                 if port is not None:
                     port.source = "xml"
                     self.ports[port.type] = port
-                plugin = PluginControl.load(data_dir + "/" + file)
+
+                plugin = PluginControl.load(full_file_path)
                 if plugin is not None:
                     plugin.source = "xml"
                     self.plugins[plugin.type] = plugin
@@ -116,9 +125,9 @@ class System(object):
                             self.plugins[instance.type] = instance
 
             # Load XML files in application space
-            self.__load_xml(System.get_user_dir() + "/extensions/")
-            # Load XML files in user space
             self.__load_xml(System.DATA_DIR + "extensions/")
+            # Load XML files in user space
+            self.__load_xml(System.get_user_dir() + "/extensions/")
 
     # ----------------------------------------------------------------------
     def __init__(self):

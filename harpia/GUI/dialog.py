@@ -19,7 +19,7 @@ class Dialog():
 
     # ----------------------------------------------------------------------
 
-    def open_dialog(self, title, main_window):
+    def open_dialog(self, title, main_window, filetype = None):
         """
         This method open dialog box.
 
@@ -40,10 +40,11 @@ class Dialog():
         allfiles.add_pattern("*")
         dialog.add_filter(allfiles)
 
-        filefilter = Gtk.FileFilter()
-        filefilter.set_name(filetype)
-        filefilter.add_pattern("*." +  filetype)
-        dialog.add_filter(filefilter)
+        if filetype is not None:
+            filefilter = Gtk.FileFilter()
+            filefilter.set_name(filetype)
+            filefilter.add_pattern("*." +  filetype)
+            dialog.add_filter(filefilter)
 
         response = dialog.run()
         file_name = ""

@@ -19,15 +19,15 @@ class ADSR(WebaudioPlugin):
         self.color = "50:150:250:150"
 
         self.in_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                "label":"Sound Input",
-                "name":"sound_input"},
+                "label":"Sound",
+                "name":"sound"},
                 {"type":"HRP_WEBAUDIO_FLOAT",
                 "label":"Event Play",
                 "name":"play"}
                 ]
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                "label":"Sound Output",
-                "name":"sound_output"}
+                "label":"Sound",
+                "name":"sound"}
             ]
 
         self.group = "Sound"
@@ -105,11 +105,12 @@ this.node.gain.linearRampToValueAtTime(0, time);
 }
 """
         self.codes[1] = """
-// block_$id$ = ADSR
+// block_$id$ = $label$
 var block_$id$_obj = new Envelope(context, $prop[a]$, $prop[d]$, $prop[s]$, $prop[r]$, $prop[g]$);
-var block_$id$ =  block_$id$_obj.node;
-var block_$id$_i0 = block_$id$_obj.node;
-var block_$id$_i1 = function(value){
+var $out_ports[sound]$ = block_$id$_obj.node;
+var $in_ports[sound]$ = block_$id$_obj.node;
+
+var $in_ports[play]$ = function(value){
     block_$id$_obj.play();
 };
 """

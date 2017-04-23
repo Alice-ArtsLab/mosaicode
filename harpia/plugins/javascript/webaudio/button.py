@@ -40,14 +40,14 @@ class Button(WebaudioPlugin):
         self.codes[1] = """
 // block_$id$ = $label$
 var block_$id$_value = $prop[value]$;
-var block_$id$_o0 = [];
+var $out_ports[click]$ = [];
 """
 
         self.codes[2] = """
 function click_$id$(){
     value = document.getElementById("block_$id$").value;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](value);
+    for (var i = 0; i < $out_ports[click]$.length ; i++){
+        $out_ports[click]$[i](value);
     }
 };
 """

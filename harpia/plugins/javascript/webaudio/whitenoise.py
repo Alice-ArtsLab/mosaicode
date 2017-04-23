@@ -18,8 +18,8 @@ class WhiteNoise(WebaudioPlugin):
         self.label = "White Noise"
         self.color = "50:150:250:150"
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                "label":"Sound Output",
-                "name":"sound_output"}
+                "label":"Sound",
+                "name":"sound"}
             ]
         self.group = "Sound"
 
@@ -45,7 +45,7 @@ WhiteNoise.prototype.process = function(e) {
         self.codes[1] = """
 // block_$id$ = $label$
 var block_$id$ =  new WhiteNoise(context);
-var block_$id$_o0 = null;
+var $out_ports[sound]$ = null;
 """
 
-        self.codes[2] = "block_$id$_o0 = block_$id$.node;\n"
+        self.codes[2] = "$out_ports[output]$ = block_$id$.node;\n"

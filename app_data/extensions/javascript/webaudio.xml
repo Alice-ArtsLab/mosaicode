@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HarpiaCodeTemplate description="Javascript / webaudio code template" extension=".html" language="javascript" name="webaudio" source="xml">
+ <command>
+  chromium-browser $dir_name$$filename$$extension$
+ </command>
+ <code>
+  &lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Cache-Control" content="no-store" /&gt;
+&lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script&gt;
+var context = new (window.AudioContext || window.webkitAudioContext)();
+$single_code[0]$
+//declaration block
+$code[1]$
+//connections
+$connections$
+//function calls
+$code[2]$
+&lt;/script&gt;
+&lt;! deallocation block --!&gt;
+$code[3]$
+$code[4]$
+&lt;/body&gt;
+&lt;/html&gt;
+ </code>
+</HarpiaCodeTemplate>

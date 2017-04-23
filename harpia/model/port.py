@@ -16,6 +16,6 @@ class Port(object):
         self.code = ""
         self.input_codes = ["","","","",""]
         self.output_codes = ["","","","",""]
-        self.var_name = ""
+        self.var_name = "block_$id$_$conn_type$$port_number$"
 
 # ------------------------------------------------------------------------------

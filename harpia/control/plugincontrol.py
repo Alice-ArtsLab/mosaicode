@@ -118,6 +118,12 @@ class PluginControl():
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
+            data_dir = data_dir + plugin.language + "/" + plugin.framework + "/"
+            if not os.path.isdir(data_dir):
+                try:
+                    os.makedirs(data_dir)
+                except:
+                    pass
             file_name = data_dir + plugin.type + ".xml"
             plugin_file = file(os.path.expanduser(file_name), 'w')
             plugin_file.write(parser.getXML())

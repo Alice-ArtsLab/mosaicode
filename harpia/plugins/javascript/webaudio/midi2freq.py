@@ -28,15 +28,15 @@ class Midi2Freq(WebaudioPlugin):
         self.group = "Conversion"
         self.codes[1] = """
 // block_$id$ = $label$
-var block_$id$_o0 = [];
+var $out_ports[frequency]$ = [];
 
-var block_$id$_i0 = function(value){
+var $in_ports[midi_value]$ = function(value){
     value = (value < 0) ? 0 : value;
     value = (value >127) ? 127 : value;
     var arg = ((parseFloat(value) - 69.0) / 12.0);
     result =  Math.pow(2.0, arg) * 440.0;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](result);
+    for (var i = 0; i < $out_ports[frequency]$.length ; i++){
+        $out_ports[frequency]$[i](result);
     }
     return true;
     };

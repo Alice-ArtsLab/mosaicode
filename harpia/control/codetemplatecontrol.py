@@ -76,7 +76,16 @@ class CodeTemplateControl():
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + code_template.name + ".xml"
+            data_dir = data_dir + code_template.language + "/"
+            if not os.path.isdir(data_dir):
+                try:
+                    os.makedirs(data_dir)
+                except:
+                    pass
+            file_name = data_dir + \
+                    "harpia.plugins." + \
+                    code_template.language + "." + \
+                    code_template.name + ".xml"
             code_template_file = file(os.path.expanduser(file_name), 'w')
             code_template_file.write(parser.prettify())
             code_template_file.close()

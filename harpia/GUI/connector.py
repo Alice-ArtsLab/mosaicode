@@ -142,7 +142,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1 - 4) + " " + str(y1 + 4)
         path += " L " + str(x1) + " " + str(y1)
 
-        if self.__widgets not in "Line":
+        if "Line" not in self.__widgets:
             widget = GooCanvas.CanvasPath(
                 parent=self,
                 stroke_color = System.ports[self.conn_type].color,

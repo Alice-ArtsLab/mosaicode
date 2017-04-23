@@ -52,7 +52,7 @@ Merger.prototype.process = function(e) {
         self.codes[1] = """
 // block_$id$ = Channel Merger
 var block_$id$_obj = new Merger(context);
-var block_$id$ = block_$id$_obj.node;
-var block_$id$_i0 = block_$id$_obj.node;
-var block_$id$_i1 = block_$id$_obj.node;
+var $out_ports[sound_output]$ = block_$id$_obj.node;
+var $in_ports[sound_input_1]$ = block_$id$_obj.node;
+var $in_ports[sound_input_2]$ = block_$id$_obj.node;
 """

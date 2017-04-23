@@ -107,7 +107,7 @@ class CodeGenerator():
         os.chdir(self.dir_name)
 
     # ----------------------------------------------------------------------
-    def return_to_old_directory(self):
+    def __return_to_old_directory(self):
         """
         This method return path to old directory.
         """
@@ -152,7 +152,7 @@ class CodeGenerator():
                             modification = True
 
     # ----------------------------------------------------------------------
-    def get_max_weight(self):
+    def __get_max_weight(self):
         """
         This method get max weight.
 
@@ -167,11 +167,11 @@ class CodeGenerator():
         return biggestWeight
 
     # ----------------------------------------------------------------------
-    def generate_parts(self):
+    def __generate_parts(self):
         """
         This metho generate parts.
         """
-        biggestWeight = self.get_max_weight()
+        biggestWeight = self.__get_max_weight()
         for activeWeight in range(biggestWeight):
             activeWeight += 1
             for block in self.blockList:
@@ -191,31 +191,33 @@ class CodeGenerator():
         This method generate the block code.
         """
 
-#        # First we replace in ports
-#        cont = 0
-#        for port in plugin.in_ports:
-#            my_key = "$in_ports[" + port["name"] + "]$"
-#            value = System.ports[port["type"]].var_name
-#            value = value.replace("$port_number$", str(cont))
-#            value = value.replace("$port_name$", port["name"])
-#            i = 0
-#            for code in plugin.codes:
-#                plugin.codes[i] = code.replace(my_key, value)
-#                i += 1
-#            cont += 1
+        # First we replace in ports
+        cont = 0
+        for port in plugin.in_ports:
+            my_key = "$in_ports[" + port["name"] + "]$"
+            value = System.ports[port["type"]].var_name
+            value = value.replace("$port_number$", str(cont))
+            value = value.replace("$port_name$", port["name"])
+            value = value.replace("$conn_type$", "i")
+            i = 0
+            for code in plugin.codes:
+                plugin.codes[i] = code.replace(my_key, value)
+                i += 1
+            cont += 1
 
-#        # First we replace out ports
-#        cont = 0
-#        for port in plugin.out_ports:
-#            my_key = "$out_ports[" + port["name"] + "]$"
-#            value = System.ports[port["type"]].var_name
-#            value = value.replace("$port_number$", str(cont))
-#            value = value.replace("$port_name$", port["name"])
-#            i = 0
-#            for code in plugin.codes:
-#                plugin.codes[i] = code.replace(my_key, value)
-#                i += 1
-#            cont += 1
+        # Then we replace out ports
+        cont = 0
+        for port in plugin.out_ports:
+            my_key = "$out_ports[" + port["name"] + "]$"
+            value = System.ports[port["type"]].var_name
+            value = value.replace("$port_number$", str(cont))
+            value = value.replace("$port_name$", port["name"])
+            value = value.replace("$conn_type$", "o")
+            i = 0
+            for code in plugin.codes:
+                plugin.codes[i] = code.replace(my_key, value)
+                i += 1
+            cont += 1
 
 
         # First we replace object attributes by their values
@@ -252,7 +254,7 @@ class CodeGenerator():
 
         System.log("Generating Code")
         self.__sort_blocks()
-        self.generate_parts()
+        self.__generate_parts()
 
         code = self.code_template.code
 
@@ -314,7 +316,7 @@ class CodeGenerator():
         This method generate the save log.
         """
         System.log("Saving Code to " + \
-                self.dir_name + \   
+                self.dir_name + \
                 self.filename + \
                 self.code_template.extension)
         self.__change_directory()
@@ -322,7 +324,7 @@ class CodeGenerator():
         code = self.generate_code()
         codeFile.write(code)
         codeFile.close()
-        self.return_to_old_directory()
+        self.__return_to_old_directory()
 
     # ----------------------------------------------------------------------
     def execute(self):
@@ -348,6 +350,6 @@ class CodeGenerator():
             while Gtk.events_pending():
                 Gtk.main_iteration()
 
-        self.return_to_old_directory()
+        self.__return_to_old_directory()
 
 # -------------------------------------------------------------------------

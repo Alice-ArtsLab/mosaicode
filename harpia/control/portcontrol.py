@@ -92,7 +92,16 @@ class PortControl():
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + port.type + ".xml"
+            data_dir = data_dir + port.language + "/ports/"
+            if not os.path.isdir(data_dir):
+                try:
+                    os.makedirs(data_dir)
+                except:
+                    pass
+            file_name = data_dir + "harpia.plugins." + \
+                                port.language + "." + \
+                                "ports." + \
+                                port.type + ".xml"
             port_file = file(os.path.expanduser(file_name), 'w')
             port_file.write(parser.prettify())
             port_file.close()

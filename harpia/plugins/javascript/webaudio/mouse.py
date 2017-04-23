@@ -18,19 +18,20 @@ class Mouse(WebaudioPlugin):
         self.label = "Mouse Position"
         self.color = "50:50:50:150"
         self.out_types = ["HRP_WEBAUDIO_FLOAT", "HRP_WEBAUDIO_FLOAT"]
-        self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
+        self.out_ports = [
+                {"type":"HRP_WEBAUDIO_FLOAT",
                 "name":"x",
                 "label":"X"},
                 {"type":"HRP_WEBAUDIO_FLOAT",
                 "name":"y",
-                "label":"Y Number"}
+                "label":"Y"}
                 ]
         self.group = "Interface"
 
         self.codes[1] = """
 // block_$id$ = Mouse
-var block_$id$_o0 = [];
-var block_$id$_o1 = [];
+var $out_ports[x]$ = [];
+var $out_ports[y]$ = [];
 """
         self.codes[0] = """
 // ----------------- Mouse position ----------------------------
@@ -63,12 +64,12 @@ function getMouseXY(e) {
   if (tempY < 0){tempY = 0}
 
     // X value
-    for (var i = 0; i < block_$id$_o0.length ; i++)
-        block_$id$_o0[i](tempX);
+    for (var i = 0; i < $out_ports[x]$.length ; i++)
+        $out_ports[x]$[i](tempX);
 
     // Y value
-    for (var i = 0; i < block_$id$_o1.length ; i++)
-        block_$id$_o1[i](tempY);
+    for (var i = 0; i < $out_ports[y]$.length ; i++)
+        $out_ports[y]$[i](tempY);
   return true
 }
 // ----------------- Mouse position ----------------------------

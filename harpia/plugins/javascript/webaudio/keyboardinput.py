@@ -28,19 +28,19 @@ class KeyboardInput(WebaudioPlugin):
 
         self.codes[1] = """
 // block_$id$ = KeyBoard Input
-var block_$id$_o0 = [];
-var block_$id$_o1 = [];
+var $out_ports[char_output]$ = [];
+var $out_ports[float_output]$ = [];
 """
         self.codes[2] = """
 document.onkeypress = function(evt){
     evt = evt || window.event;
     var value = evt.keyCode || evt.which;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](value);
+    for (var i = 0; i < $out_ports[float_output]$.length ; i++){
+        $out_ports[float_output]$[i](value);
     }
     value = String.fromCharCode(value);
-    for (var i = 0; i < block_$id$_o1.length ; i++){
-        block_$id$_o1[i](value);
+    for (var i = 0; i < $out_ports[char_output]$.length ; i++){
+        $out_ports[char_output]$[i](value);
     }
 };
 """

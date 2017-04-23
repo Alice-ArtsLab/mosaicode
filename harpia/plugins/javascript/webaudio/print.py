@@ -35,14 +35,11 @@ class Print(WebaudioPlugin):
 
         self.codes[1] = """
 // block_$id$ = $name$
-var block_$id$_i0 = function(value){
+var $in_ports[float_value]$ = function(value){
     document.getElementById("block_$id$").innerHTML = value;
     return true;
     };
-var block_$id$_i1 = function(value){
-    document.getElementById("block_$id$").innerHTML = value;
-    return true;
-    };
+var $in_ports[char_value]$ = $in_ports[result]$;
 """
         self.codes[3] = """
 $prop[label]$ <span id="block_$id$"></span><br>

@@ -27,8 +27,8 @@ class Oscillator(WebaudioPlugin):
                          "name":"type",
                          "label":"Type"}]
         self.out_ports = [{"type":"HRP_WEBAUDIO_SOUND",
-                         "name":"sound_output",
-                         "label":"Sound Output"}]
+                         "name":"sound",
+                         "label":"Sound"}]
         self.group = "Sound"
 
         self.properties = [{"name": "freq",
@@ -52,12 +52,12 @@ class Oscillator(WebaudioPlugin):
         self.codes[0] = """
 // block_$id$ = Oscillator
 var block_$id$ =  context.createOscillator();
-var block_$id$_i0 = block_$id$.frequency;
-var block_$id$_o0 = null;
-var block_$id$_i1 = function(value){
+var $in_ports[osc_freq]$ = block_$id$.frequency;
+var $out_ports[sound]$ = null;
+var $in_ports[freq]$ = function(value){
     block_$id$.frequency.value = value;
 };
-var block_$id$_i2 = function(value){
+var $in_ports[type]$ = function(value){
     oscillator = ''
     if (value < 1) oscillator = 'square';
     if (value == 1) oscillator = 'sine';
@@ -67,7 +67,7 @@ var block_$id$_i2 = function(value){
 };
 """
         self.codes[1] = """
-block_$id$_o0 = block_$id$.frequency;
+$out_ports[sound]$ = block_$id$.frequency;
 block_$id$.type = '$prop[type]$';
 block_$id$.frequency.value = $prop[freq]$; // value in hertz
 block_$id$.detune.value = 100; // value in cents

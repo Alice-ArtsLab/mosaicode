@@ -17,8 +17,8 @@ class FloatValue(WebaudioPlugin):
         self.label = "FloatValue"
         self.color = "50:150:250:150"
         self.out_ports = [{"type":"HRP_WEBAUDIO_FLOAT",
-                "label":"Float Value",
-                "name":"float_value"}
+                "label":"Float",
+                "name":"float"}
             ]
         self.group = "Interface"
 
@@ -56,13 +56,13 @@ class FloatValue(WebaudioPlugin):
         self.codes[1] = """
 // block_$id$ = Float Value
 var block_$id$_value = $prop[value]$;
-var block_$id$_o0 = [];
+var $out_ports[float]$ = [];
 """
         self.codes[2] = """
 function change_$id$_value(){
     value = document.getElementById("block_$id$").value;
-    for (var i = 0; i < block_$id$_o0.length ; i++){
-        block_$id$_o0[i](value);
+    for (var i = 0; i < $out_ports[float]$.length ; i++){
+        $out_ports[float]$[i](value);
     }
 };
 """
