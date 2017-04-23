@@ -7,7 +7,6 @@ class Preferences(object):
         self.recent_files = []
         self.default_directory = "/tmp/%l/%n-%t"
         self.default_filename = "%n"
-        self.error_log_file = "ErrorLog"
         self.grid = 10
 
         # GUI stuff

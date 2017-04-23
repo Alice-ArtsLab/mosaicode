@@ -27,7 +27,6 @@ class CodeGenerator():
 
         self.dir_name = ""
         self.filename = ""
-        self.error_log_file = ""
         self.old_path = os.path.realpath(os.curdir)
 
         self.blockList = []
@@ -50,8 +49,6 @@ class CodeGenerator():
 
         self.dir_name = self.get_dir_name()
         self.filename = self.get_filename()
-        self.error_log_file = System.properties.error_log_file
-        self.error_log_file = self.__replace_wildcards(self.error_log_file)
 
     # ----------------------------------------------------------------------
     def __replace_wildcards(self, text):
@@ -99,7 +96,7 @@ class CodeGenerator():
         return name
 
     # ----------------------------------------------------------------------
-    def change_directory(self):
+    def __change_directory(self):
         """
         This method change the directory.
         """
@@ -117,7 +114,7 @@ class CodeGenerator():
         os.chdir(self.old_path)
 
     # ----------------------------------------------------------------------
-    def sort_blocks(self):
+    def __sort_blocks(self):
         """
         This method sorts the blocks.
         """
@@ -254,7 +251,7 @@ class CodeGenerator():
         """
 
         System.log("Generating Code")
-        self.sort_blocks()
+        self.__sort_blocks()
         self.generate_parts()
 
         code = self.code_template.code
@@ -317,10 +314,10 @@ class CodeGenerator():
         This method generate the save log.
         """
         System.log("Saving Code to " + \
-                self.dir_name + \
+                self.dir_name + \   
                 self.filename + \
                 self.code_template.extension)
-        self.change_directory()
+        self.__change_directory()
         codeFile = open(self.filename + self.code_template.extension , 'w')
         code = self.generate_code()
         codeFile.write(code)
@@ -336,10 +333,9 @@ class CodeGenerator():
         command = command.replace("$filename$", self.filename)
         command = command.replace("$extension$", self.code_template.extension)
         command = command.replace("$dir_name$", self.dir_name)
-        command = command.replace("$error_log_file$", self.error_log_file)
 
         self.save_code()
-        self.change_directory()
+        self.__change_directory()
 
         from harpia.system import System as System
         System.log("Executing Code: " + command)
@@ -352,13 +348,6 @@ class CodeGenerator():
             while Gtk.events_pending():
                 Gtk.main_iteration()
 
-        try:
-            o = open("Run" + self.error_log_file, "r")
-            errors = o.read()
-            System.log(errors)
-            o.close()
-        except:
-            pass
         self.return_to_old_directory()
 
 # -------------------------------------------------------------------------

@@ -39,8 +39,6 @@ class PreferencesControl():
                         "default_directory")
             prefs.default_filename = parser.getTagAttr("HarpiaProperties",
                         "default_filename")
-            prefs.error_log_file = parser.getTagAttr("HarpiaProperties",
-                        "error_log_file")
             prefs.grid = int(parser.getTagAttr("HarpiaProperties","grid"))
             prefs.width = int(parser.getTagAttr("HarpiaProperties","width"))
             prefs.height = int(parser.getTagAttr("HarpiaProperties",
@@ -76,8 +74,6 @@ class PreferencesControl():
                 prefs.default_directory)
         parser.setTagAttr('HarpiaProperties','default_filename',
                 prefs.default_filename)
-        parser.setTagAttr('HarpiaProperties','error_log_file',
-                prefs.error_log_file)
         parser.setTagAttr('HarpiaProperties','grid', prefs.grid)
         parser.setTagAttr('HarpiaProperties','width', prefs.width)
         parser.setTagAttr('HarpiaProperties','height', prefs.height)

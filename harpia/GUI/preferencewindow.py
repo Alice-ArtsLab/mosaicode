@@ -54,7 +54,6 @@ class PreferenceWindow(Gtk.Dialog):
         response = self.run()
 
         if response == Gtk.ResponseType.OK:
-            self.properties.error_log_file = self.error_log_file.get_value()
             self.properties.default_directory = self.default_directory.get_value()
             self.properties.default_filename = self.default_filename.get_value()
             self.properties.grid = self.grid.get_value()
@@ -79,12 +78,6 @@ class PreferenceWindow(Gtk.Dialog):
                 "value": self.properties.default_filename}
         self.default_filename = StringField(data, None)
         vbox.add(self.default_filename)
-
-        # Error Log File
-        data = {"label": _("Error Log File:"),
-                "value": self.properties.error_log_file}
-        self.error_log_file = StringField(data, None)
-        vbox.add(self.error_log_file)
 
         vbox.add(Gtk.Label(_("\nName Wildcards:\n" +
                              "\t%d = Date | %n = diagram name |"
