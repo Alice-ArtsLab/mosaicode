@@ -494,4 +494,21 @@ class MainControl():
     def update_all(self):
         for diagram in self.main_window.work_area.get_diagrams():
             diagram.update()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_extensions(cls):
+        System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save(System.plugins[plugin])
+
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save(System.ports[port])
+
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save(System.code_templates[code_template])
+
 # ----------------------------------------------------------------------
