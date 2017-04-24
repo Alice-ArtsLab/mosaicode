@@ -79,7 +79,7 @@ class PluginCommonEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_edit(self, widget=None, data=None):
-        self.type_field.set_value("harpia.plugins." + \
+        self.type_field.set_value("harpia.extensions." + \
                 self.language_field.get_value().lower() + "." + \
                 self.framework_field.get_value().lower() + "." + \
                 self.label_field.get_value().lower().replace(" ","")

@@ -4,7 +4,7 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.newPoint">
+  <block id="1" type="harpia.extensions.c.openCV.newPoint">
    <position x="200" y="0"/>
    <property key="y0" value="0"/>
    <property key="x0" value="0"/>

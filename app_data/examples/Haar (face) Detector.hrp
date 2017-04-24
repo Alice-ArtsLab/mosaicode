@@ -3,16 +3,16 @@
 <zoom value='1.0' />
 <language value='C' />
 <blocks>
-  	<block type='harpia.plugins.C.openCV.haarDetect' id='1'>
+  	<block type='harpia.extensions.c.openCV.haarDetect' id='1'>
 		<position x="200" y="0"/>
 		<property name='cascade_name' value='/usr/share/harpia/images/haarcascade_frontalface_alt2.xml' />
 		<property name='min_neighbors' value='2' />
 	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
+	<block type='harpia.extensions.c.openCV.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.C.openCV.show' id='3'>
+	<block type='harpia.extensions.c.openCV.show' id='3'>
 		<position x="400" y="0"/>
 		<property name='title' value='My Image - Haar (face) Detector' />
 	</block>

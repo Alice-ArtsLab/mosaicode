@@ -6,7 +6,6 @@ This module contains the PortControl class.
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-import harpia.plugins
 from os.path import expanduser
 from harpia.utils.XMLUtils import XMLParser
 from harpia.model.port import Port
@@ -98,10 +97,7 @@ class PortControl():
                     os.makedirs(data_dir)
                 except:
                     pass
-            file_name = data_dir + "harpia.plugins." + \
-                                port.language + "." + \
-                                "ports." + \
-                                port.type + ".xml"
+            file_name = data_dir + port.type + ".xml"
             port_file = file(os.path.expanduser(file_name), 'w')
             port_file.write(parser.prettify())
             port_file.close()

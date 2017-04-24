@@ -4,15 +4,15 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.isOnRect">
+  <block id="1" type="harpia.extensions.c.openCV.isOnRect">
    <position x="200" y="0"/>
   </block>
-  <block id="2" type="harpia.plugins.C.openCV.newPoint">
+  <block id="2" type="harpia.extensions.c.openCV.newPoint">
    <position x="0" y="0"/>
    <property key="y0" value="0"/>
    <property key="x0" value="0"/>
   </block>
-  <block id="3" type="harpia.plugins.C.openCV.newRect">
+  <block id="3" type="harpia.extensions.c.openCV.newRect">
    <position x="0" y="100"/>
    <property key="y0" value="0"/>
    <property key="x0" value="0"/>

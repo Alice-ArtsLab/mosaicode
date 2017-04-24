@@ -4,7 +4,7 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.newDouble">
+  <block id="1" type="harpia.extensions.c.openCV.newDouble">
    <position x="200" y="0"/>
    <property key="doubleVal" value="1"/>
   </block>

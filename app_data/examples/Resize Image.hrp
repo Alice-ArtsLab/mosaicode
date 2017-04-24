@@ -4,22 +4,22 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.resize">
+  <block id="1" type="harpia.extensions.c.openCV.resize">
    <position x="200" y="0"/>
    <property key="method" value="CV_INTER_LINEAR"/>
   </block>
-  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+  <block id="2" type="harpia.extensions.c.openCV.imageFile">
    <position x="0" y="0"/>
    <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
   </block>
-  <block id="3" type="harpia.plugins.C.openCV.newRect">
+  <block id="3" type="harpia.extensions.c.openCV.newRect">
    <position x="0" y="100"/>
    <property key="y0" value="0"/>
    <property key="x0" value="0"/>
    <property key="height" value="480"/>
    <property key="width" value="640"/>
   </block>
-  <block id="4" type="harpia.plugins.C.openCV.show">
+  <block id="4" type="harpia.extensions.c.openCV.show">
    <position x="400" y="0"/>
    <property key="window_type" value="Image Size"/>
    <property key="title" value="My Image - Resize Image"/>

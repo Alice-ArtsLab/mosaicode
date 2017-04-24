@@ -4,17 +4,17 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.saveVideo">
+  <block id="1" type="harpia.extensions.c.openCV.saveVideo">
    <position x="200" y="0"/>
    <property key="codecSelection" value="MPEG1"/>
    <property key="framerate" value="25.0"/>
    <property key="filename" value="~/Output.mpeg"/>
   </block>
-  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+  <block id="2" type="harpia.extensions.c.openCV.imageFile">
    <position x="0" y="0"/>
    <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
   </block>
-  <block id="3" type="harpia.plugins.C.openCV.show">
+  <block id="3" type="harpia.extensions.c.openCV.show">
    <position x="400" y="0"/>
    <property key="window_type" value="Image Size"/>
    <property key="title" value="My Image - Save Video"/>

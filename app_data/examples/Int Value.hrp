@@ -3,7 +3,7 @@
 <zoom value='1.0' />
 <language value='C' />
 <blocks>
-  	<block type='harpia.plugins.C.openCV.intValue' id='1'>
+  	<block type='harpia.extensions.c.openCV.intValue' id='1'>
 		<position x="200" y="0"/>
 		<property name='maxVal' value='31' />
 		<property name='window_name' value='My Image' />

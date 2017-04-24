@@ -7,7 +7,6 @@ import ast
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-import harpia.plugins
 from os.path import expanduser
 from harpia.utils.XMLUtils import XMLParser
 from harpia.model.plugin import Plugin

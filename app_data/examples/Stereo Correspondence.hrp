@@ -3,19 +3,19 @@
 <zoom value='1.0' />
 <language value='C' />
 <blocks>
-  	<block type='harpia.plugins.C.openCV.stereoCorr' id='1'>
+  	<block type='harpia.extensions.c.openCV.stereoCorr' id='1'>
 		<position x="200" y="0"/>
 		<property name='maxDist' value='60' />
 	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='2'>
+	<block type='harpia.extensions.c.openCV.imageFile' id='2'>
 		<position x="0" y="0"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.C.openCV.imageFile' id='3'>
+	<block type='harpia.extensions.c.openCV.imageFile' id='3'>
 		<position x="0" y="100"/>
 		<property name='filename' value='/usr/share/harpia/images/lenna.png' />
 	</block>
-	<block type='harpia.plugins.C.openCV.show' id='4'>
+	<block type='harpia.extensions.c.openCV.show' id='4'>
 		<position x="400" y="0"/>
 		<property name='title' value='My Image - Stereo Correspondence' />
 	</block>

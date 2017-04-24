@@ -28,11 +28,11 @@ class PreferencesControl():
         file_name = System.get_user_dir() + "/" + prefs.conf_file_path
         file_name = os.path.expanduser(file_name)
         if os.path.exists(file_name) is False:
-            return
+            return prefs
         parser = XMLParser(file_name)
 
         if parser.getTag("HarpiaProperties") is None:
-            return None
+            return prefs
 
         try:
             prefs.default_directory = parser.getTagAttr("HarpiaProperties",

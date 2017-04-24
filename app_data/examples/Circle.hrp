@@ -4,31 +4,31 @@
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.plugins.C.openCV.circle">
+  <block id="1" type="harpia.extensions.c.openCV.circle">
    <position x="200" y="0"/>
    <property key="circle_color" value="#0000ffff0000"/>
    <property key="y0" value="100"/>
    <property key="x0" value="100"/>
   </block>
-  <block id="2" type="harpia.plugins.C.openCV.imageFile">
+  <block id="2" type="harpia.extensions.c.openCV.imageFile">
    <position x="0" y="0"/>
    <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
   </block>
-  <block id="3" type="harpia.plugins.C.openCV.slider">
+  <block id="3" type="harpia.extensions.c.openCV.slider">
    <position x="0" y="100"/>
    <property key="maxVal" value="31"/>
    <property key="window_name" value="My Image - Circle"/>
    <property key="intVal" value="1"/>
    <property key="label" value="Slider - 1"/>
   </block>
-  <block id="4" type="harpia.plugins.C.openCV.slider">
+  <block id="4" type="harpia.extensions.c.openCV.slider">
    <position x="0" y="200"/>
    <property key="maxVal" value="31"/>
    <property key="window_name" value="My Image - Circle"/>
    <property key="intVal" value="1"/>
    <property key="label" value="Slider - 2"/>
   </block>
-  <block id="5" type="harpia.plugins.C.openCV.show">
+  <block id="5" type="harpia.extensions.c.openCV.show">
    <position x="400" y="0"/>
    <property key="window_type" value="Image Size"/>
    <property key="title" value="My Image - Circle"/>

@@ -7,7 +7,7 @@ import sys
 import copy
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-import harpia.plugins
+import harpia.extensions
 from glob import glob  # To load examples
 from harpia.control.preferencescontrol import PreferencesControl
 from harpia.control.portcontrol import PortControl
@@ -67,7 +67,7 @@ class System(object):
                 code_template = CodeTemplateControl.load(full_file_path)
                 if code_template is not None:
                     code_template.source = "xml"
-                    self.code_templates[code_template.name] = code_template
+                    self.code_templates[code_template.type] = code_template
 
                 port = PortControl.load(full_file_path)
                 if port is not None:
@@ -102,8 +102,8 @@ class System(object):
             # First load ports on python classes.
             # They are installed with harpia as root 
             for importer, modname, ispkg in pkgutil.walk_packages(
-                    harpia.plugins.__path__,
-                    harpia.plugins.__name__ + ".",
+                    harpia.extensions.__path__,
+                    harpia.extensions.__name__ + ".",
                     None):
                 if ispkg:
                     continue
@@ -112,11 +112,11 @@ class System(object):
                     if not inspect.isclass(obj):
                         continue
                     modname = inspect.getmodule(obj).__name__
-                    if not modname.startswith("harpia.plugins"):
+                    if not modname.startswith("harpia.extensions"):
                         continue
                     instance = obj()
                     if isinstance(instance, CodeTemplate):
-                        self.code_templates[instance.name] = instance
+                        self.code_templates[instance.type] = instance
                     if isinstance(instance, Port):
                         instance.source = "Python"
                         self.ports[instance.type] = instance

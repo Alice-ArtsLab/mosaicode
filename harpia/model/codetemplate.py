@@ -8,6 +8,7 @@ class CodeTemplate(object):
 
     # ----------------------------------------------------------------------
     def __init__(self):
+        self.type = self.__class__.__module__
         self.name = ""
         self.description = ""
         self.language = ""

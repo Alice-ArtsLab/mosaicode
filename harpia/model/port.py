@@ -7,7 +7,7 @@ class Port(object):
 
     # ----------------------------------------------------------------------
     def __init__(self):
-        self.type = ""
+        self.type = self.__class__.__module__
         self.language = ""
         self.label = ""
         self.color = "#000"

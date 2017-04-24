@@ -45,6 +45,7 @@ class CodeTemplateEditor(Gtk.Dialog):
         box.pack_start(vbox, True, True, 0)
 
         self.name = StringField({"label": _("Name")}, None)
+        self.type = StringField({"label": _("Type")}, None)
         self.description = StringField({"label": _("Description")}, None)
         self.language = StringField({"label": _("Language")}, None)
         self.command = CodeField({"label": _("")}, None)
@@ -53,7 +54,8 @@ class CodeTemplateEditor(Gtk.Dialog):
 
         if code_template_name is not None:
             System()
-            self.name.set_value(code_template_name)
+            self.name.set_value(System.code_templates[code_template_name].name)
+            self.type.set_value(System.code_templates[code_template_name].type)
             self.description.set_value(System.code_templates[code_template_name].description)
             self.language.set_value(System.code_templates[code_template_name].language)
             self.command.set_value(System.code_templates[code_template_name].command)
@@ -61,6 +63,7 @@ class CodeTemplateEditor(Gtk.Dialog):
             self.code.set_value(System.code_templates[code_template_name].code)
 
         vbox.pack_start(self.name, False, False, 1)
+        vbox.pack_start(self.type, False, False, 1)
         vbox.pack_start(self.description, False, False, 1)
         vbox.pack_start(self.language, False, False, 1)
         vbox.pack_start(self.extension, False, False, 1)
@@ -84,6 +87,7 @@ class CodeTemplateEditor(Gtk.Dialog):
     def __save(self):
         code_template = CodeTemplate()
         code_template.name = self.name.get_value()
+        code_template.type = self.type.get_value()
         code_template.description = self.description.get_value()
         code_template.language = self.language.get_value()
         code_template.command = self.command.get_value()
