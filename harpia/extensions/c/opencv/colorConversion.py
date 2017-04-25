@@ -4,17 +4,17 @@
 This module contains the ColorConversion class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class ColorConversion(OpenCVPlugin):
+class ColorConversion(Plugin):
     """
     This class contains methods related the ColorConversion class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.conversion_type = 'RGB -> GRAY'
 
         # Appearance
@@ -101,4 +101,7 @@ class ColorConversion(OpenCVPlugin):
             'block$id$_img_t ,NULL ,block$id$_img_o0);\n }\n' + \
             'else\n' + '{ block$id$_img_o0 = cvCloneImage(block$id$_img_t);\n}'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

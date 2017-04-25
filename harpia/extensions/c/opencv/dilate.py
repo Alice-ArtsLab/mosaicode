@@ -4,17 +4,17 @@
 This module contains the Dilate class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Dilate(OpenCVPlugin):
+class Dilate(Plugin):
     """
     This class contains methods related the Dilate class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         # Appearance
         self.help = "Operação morfológica que provoca dilatação " + \
             "nos objetos de uma imagem, aumentando suas dimensões."
@@ -72,4 +72,7 @@ class Dilate(OpenCVPlugin):
                        "cvReleaseImage(&block$id$_img_o0);\n"
 
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -6,17 +6,17 @@ This module contains the LiveMode class.
 import os
 from glob import glob
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class LiveMode(OpenCVPlugin):
+class LiveMode(Plugin):
     """
     This class contains methods related the LiveMode class.
     """
     # --------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.camera = "/dev/video0"
 
         # Appearance
@@ -59,5 +59,6 @@ class LiveMode(OpenCVPlugin):
             'block$id$_capture = cvCaptureFromCAM(' + camera + ');\n' + \
             'IplImage * block$id$_frame = NULL;\n' + \
             'IplImage * block$id$_img_o0 = NULL;\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

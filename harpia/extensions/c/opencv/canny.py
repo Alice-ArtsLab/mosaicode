@@ -4,17 +4,17 @@
 This module contains the Canny class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Canny(OpenCVPlugin):
+class Canny(Plugin):
     """
     This class contains methods related the Canny class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Operacão de filtragem que implementa o algoritmo " + \
             "Canny para detecção de contornos e bordas." + \
             "\nPropriedades\nLimiar 1 e Limiar 2: os dois valores" + \
@@ -108,5 +108,6 @@ class Canny(OpenCVPlugin):
 
         self.codes[3] = "cvReleaseImage(&block$id$_img_i0);\n" + \
                        "cvReleaseImage(&block$id$_img_o0);\n"
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

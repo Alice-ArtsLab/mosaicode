@@ -4,17 +4,17 @@
 This module contains the SideBySide class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class SideBySide(OpenCVPlugin):
+class SideBySide(Plugin):
     """
     This class contains methods related the SideBySide class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         self.help = "Coloca uma imagem do lado da outra."
         self.label = "Side By Side"
@@ -59,5 +59,6 @@ class SideBySide(OpenCVPlugin):
             'if (block$id$_img_o0) cvReleaseImage(&block$id$_img_o0);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseImage(&block$id$_img_i1);\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

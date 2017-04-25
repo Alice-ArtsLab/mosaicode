@@ -4,17 +4,17 @@
 This module contains the Smooth class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Smooth(OpenCVPlugin):
+class Smooth(Plugin):
     """
     This class contains methods related the Smooth class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.smooth_type = "CV_GAUSSIAN"
         self.param1 = 7
         self.param2 = 9
@@ -67,4 +67,7 @@ class Smooth(OpenCVPlugin):
             '$smooth_type$,block$id$_int_i1,block$id$_int_i2,0,0);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

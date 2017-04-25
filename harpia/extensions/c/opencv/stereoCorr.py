@@ -4,17 +4,17 @@
 This module contains the StereoCorr class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class StereoCorr(OpenCVPlugin):
+class StereoCorr(Plugin):
     """
     This class contains methods related the StereoCorr class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.maxDist = 60
 
         # Appearance
@@ -71,4 +71,7 @@ class StereoCorr(OpenCVPlugin):
             '(&block$id$_img_ts0);\n' + \
             'if(block$id$_img_ts1)\n\tcvReleaseImage(&block$id$_img_ts1);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

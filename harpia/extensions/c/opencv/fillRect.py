@@ -4,17 +4,17 @@
 This module contains the FillRect class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class FillRect(OpenCVPlugin):
+class FillRect(Plugin):
     """
     This class contains methods related the FillRect class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.rect_color = "#0000ffff0000"
 
         # Appearance
@@ -75,4 +75,7 @@ class FillRect(OpenCVPlugin):
             '\tcvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

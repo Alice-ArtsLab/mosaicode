@@ -4,17 +4,17 @@
 This module contains the Comment class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Comment(OpenCVPlugin):
+class Comment(Plugin):
     """
     This class contains methods related the Comment class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.comment = ""
 
         # Appearance
@@ -32,4 +32,7 @@ class Comment(OpenCVPlugin):
         # ----------------C/OpenCv code--------------------------------
         self.codes[1] = '/* $comment$ */ \n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

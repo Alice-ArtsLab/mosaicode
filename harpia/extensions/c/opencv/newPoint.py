@@ -4,17 +4,17 @@
 This module contains the NewPoint class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class NewPoint(OpenCVPlugin):
+class NewPoint(Plugin):
     """
     This class contains methods related the NewPoint class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.x0 = 0
         self.y0 = 0
 
@@ -46,5 +46,6 @@ class NewPoint(OpenCVPlugin):
 
         self.codes[2] = \
             'block$id$_point_o0 = cvPoint($x0$,$y0$);\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

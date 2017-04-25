@@ -4,17 +4,17 @@
 This module contains the Show class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Show(OpenCVPlugin):
+class Show(Plugin):
     """
     This class contains methods related the Show class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Mostra uma imagem da cadeia de processamento de imagens."
@@ -55,4 +55,7 @@ class Show(OpenCVPlugin):
 
         self.codes[3] = "cvReleaseImage(&block$id$_img_i0);"
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

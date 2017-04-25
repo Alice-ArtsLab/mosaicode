@@ -4,17 +4,17 @@
 This module contains the PlotHistogram class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class PlotHistogram(OpenCVPlugin):
+class PlotHistogram(Plugin):
     """
     This class contains methods related the PlotHistogram class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.channel = "All"
 
         # Appearance
@@ -177,4 +177,7 @@ class PlotHistogram(OpenCVPlugin):
             '  }\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

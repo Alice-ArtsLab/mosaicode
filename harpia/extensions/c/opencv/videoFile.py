@@ -4,17 +4,17 @@
 This module contains the VideoFile class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class VideoFile(OpenCVPlugin):
+class VideoFile(Plugin):
     """
     This class contains methods related the VideoFile class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Realiza a aquisição de uma imagem a partir " + \
             "de algum dispositivo," + \
             "seja este uma mídia ou um dispositivo " + \
@@ -65,4 +65,7 @@ class VideoFile(OpenCVPlugin):
         self.codes[4] = 'cvReleaseCapture(&block$id$_capture);\n'
 
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

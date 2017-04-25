@@ -4,17 +4,17 @@
 This module contains the GetSize class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class GetSize(OpenCVPlugin):
+class GetSize(Plugin):
     """
     This class contains methods related the GetSize class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Extracts the input image size."
@@ -32,4 +32,7 @@ class GetSize(OpenCVPlugin):
             'block$id$_img_i0->width, block$id$_img_i0->height);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -4,17 +4,17 @@
 This module contains the Circle class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Circle(OpenCVPlugin):
+class Circle(Plugin):
     """
     This class contains methods related the Circle class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.x0 = 100
         self.y0 = 100
         self.circle_color = "#0000ffff0000"
@@ -86,5 +86,6 @@ class Circle(OpenCVPlugin):
             'cvCircle(block$id$_img_i0, center, 10, color, 1, 8, 0);\n' +\
             'block$id$_img_o0 = cvCloneImage(block$id$_img_i0);\n' + \
             '}\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

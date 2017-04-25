@@ -4,17 +4,17 @@
 This module contains the MinMax class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class MinMax(OpenCVPlugin):
+class MinMax(Plugin):
     """
     This class contains methods related the MinMax class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.minX = 0
         self.maxX = 500
         self.minY = 0
@@ -113,4 +113,7 @@ class MinMax(OpenCVPlugin):
 
         return value
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

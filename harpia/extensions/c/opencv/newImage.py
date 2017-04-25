@@ -4,17 +4,17 @@
 This module contains the NewImage class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class NewImage(OpenCVPlugin):
+class NewImage(Plugin):
     """
     This class contains methods related the NewImage class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.width = "640"
         self.height = "480"
 
@@ -46,5 +46,6 @@ class NewImage(OpenCVPlugin):
             'CvSize size$id$ = cvSize($width$,$height$);\n' + \
             'block$id$_img_o0 = cvCreateImage(size$id$,IPL_DEPTH_8U,3);\n' + \
             'cvSetZero(block$id$_img_o0);\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

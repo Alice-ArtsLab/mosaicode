@@ -4,17 +4,17 @@
 This module contains the Pow class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Pow(OpenCVPlugin):
+class Pow(Plugin):
     """
     This class contains methods related the Pow class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         # Appearance
         self.help = "Eleva cada ponto de uma " + \
             "imagem a um valor fixo de potência."
@@ -46,4 +46,7 @@ class Pow(OpenCVPlugin):
             'cvPow(block$id$_img_i0, block$id$_img_o0, $exponent$);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

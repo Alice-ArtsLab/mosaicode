@@ -4,17 +4,17 @@
 This module contains the NewInt class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class NewInt(OpenCVPlugin):
+class NewInt(Plugin):
     """
     This class contains methods related the NewInt class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Creates new literal value (Int)."
@@ -37,5 +37,6 @@ class NewInt(OpenCVPlugin):
 
         # -------------------C/OpenCv code------------------------------------
         self.codes[1] = 'int  block$id$_int_o0 = $intVal$; // New Int Out\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

@@ -4,17 +4,17 @@
 This module contains the Rotate class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Rotate(OpenCVPlugin):
+class Rotate(Plugin):
     """
     This class contains methods related the Rotate class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.isCenter = True
         self.isScalling = True
         self.isFilling = True
@@ -113,4 +113,7 @@ class Rotate(OpenCVPlugin):
         value += '  }\n'
         return value
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -4,19 +4,19 @@
 This module contains the Capture class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 import os
 from glob import glob
 
 
-class Capture(OpenCVPlugin):
+class Capture(Plugin):
     """
     This class contains methods related the Capture class.
     """
     # ------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Realiza a aquisição de uma imagem " + \
             "a partir de algum dispositivo," + \
             " seja este uma mídia ou um dispositivo " + \
@@ -28,6 +28,8 @@ class Capture(OpenCVPlugin):
                           "label":"Input Image"}
                           ]
         self.group = "Image Source"
+        self.language = "c"
+        self.framework = "opencv"
         self.properties = [{"name": "camera",
                  "label": "Camera",
                  "type": HARPIA_INT,
@@ -35,7 +37,6 @@ class Capture(OpenCVPlugin):
                  "lower": 0,
                  "upper": 4}]
 
-        # ---------------------C/OpenCv code-----------------------------------
         self.codes[1] = \
             'IplImage * block$id$_img_o0 = NULL; //Capture\n' + \
             'CvCapture* block$id$_capture = NULL; \n' + \
@@ -52,4 +53,4 @@ class Capture(OpenCVPlugin):
             'counter$id$++;\n' + \
             '}\n'
         self.codes[3] = "cvReleaseImage(&block$id$_img_o0);\n"
-# ------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------

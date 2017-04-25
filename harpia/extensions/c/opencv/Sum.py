@@ -4,17 +4,17 @@
 This module contains the Sum class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Sum(OpenCVPlugin):
+class Sum(Plugin):
     """
     This class contains methods related the Sum class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Realiza a soma de duas imagens."
@@ -73,4 +73,7 @@ void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
                     "cvReleaseImage(&block$id$_img_o0);\n"
 
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

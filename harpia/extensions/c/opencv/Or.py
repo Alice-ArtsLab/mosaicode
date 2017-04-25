@@ -4,17 +4,17 @@
 This module contains the Or class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Or(OpenCVPlugin):
+class Or(Plugin):
     """
     This class contains methods related the Or class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Permite a operação lógica 'OU' entre as " + \
@@ -69,4 +69,7 @@ void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
             'cvResetImageROI(block$id$_img_o0);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -4,17 +4,17 @@
 This module contains the Threshold class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Threshold(OpenCVPlugin):
+class Threshold(Plugin):
     """
     This class contains methods related the Threshold class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.threshold = 122
         self.maxValue = 255
         self.thresholdType = "CV_THRESH_BINARY"
@@ -61,4 +61,7 @@ class Threshold(OpenCVPlugin):
             '$threshold$, $maxValue$, $thresholdType$);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

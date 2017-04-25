@@ -4,17 +4,17 @@
 This module contains the Division class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Division(OpenCVPlugin):
+class Division(Plugin):
     """
     This class contains methods related the Division class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Realiza a divisão de duas imagens."
@@ -64,4 +64,7 @@ void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
             'block$id$_img_o0,1);\n' + \
             'cvResetImageROI(block$id$_img_o0);\n}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

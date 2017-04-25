@@ -4,17 +4,17 @@
 This module contains the ImageFile class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class ImageFile(OpenCVPlugin):
+class ImageFile(Plugin):
     """
     This class contains methods related the ImageFile class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Realiza a aquisição de uma imagem a " + \
             "partir de algum dispositivo, " + \
             "seja este uma mídia ou um dispositivo de " + \
@@ -38,4 +38,7 @@ class ImageFile(OpenCVPlugin):
         self.codes[1] += 'block$id$_img_o0 = cvLoadImage("$prop[filename]$",-1);\n'
         self.codes[4] = "cvReleaseImage(&block$id$_img_o0);\n"
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

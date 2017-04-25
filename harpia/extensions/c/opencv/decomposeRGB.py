@@ -5,17 +5,17 @@ This module contains the DecomposeRGB class.
 """
 
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class DecomposeRGB(OpenCVPlugin):
+class DecomposeRGB(Plugin):
     """
     This class contains methods related the DecomposeRGB class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "BLOCO Decomposição RGB."
@@ -64,4 +64,7 @@ class DecomposeRGB(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_o2);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

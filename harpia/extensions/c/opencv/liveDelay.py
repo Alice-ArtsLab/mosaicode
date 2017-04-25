@@ -4,17 +4,17 @@
 This module contains the LiveDelay class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class LiveDelay(OpenCVPlugin):
+class LiveDelay(Plugin):
     """
     This class contains methods related the liveDelay class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.frameNumber = 5
 
         # Appearance
@@ -75,4 +75,7 @@ class LiveDelay(OpenCVPlugin):
 
         return value
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

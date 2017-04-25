@@ -5,17 +5,17 @@ This module contains the Sobel class.
 """
 
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Sobel(OpenCVPlugin):
+class Sobel(Plugin):
     """
     This class contains methods related the Sobel class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.masksize = 3
         self.xorder = 1
         self.yorder = 1
@@ -72,4 +72,7 @@ class Sobel(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseImage(&block$id$_img_t);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

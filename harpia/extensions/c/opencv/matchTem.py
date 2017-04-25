@@ -4,17 +4,17 @@
 This module contains the MatchTem class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class MatchTem(OpenCVPlugin):
+class MatchTem(Plugin):
     """
     This class contains methods related the MatchTem class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Operação de filtragem destinada a suavizar uma imagem."
         self.label = "Match Template"
         self.color = "180:180:10:150"
@@ -75,5 +75,6 @@ class MatchTem(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_t0);\n' + \
             'cvReleaseImage(&block$id$_img_i1);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

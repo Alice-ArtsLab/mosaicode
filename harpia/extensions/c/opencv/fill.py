@@ -4,17 +4,17 @@
 This module contains the Fill class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Fill(OpenCVPlugin):
+class Fill(Plugin):
     """
     This class contains methods related the Fill class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.rect_color = "#0000ffff0000"
 
         # Appearance
@@ -52,4 +52,7 @@ class Fill(OpenCVPlugin):
             '\tcvSet(block$id$_img_o0, color, NULL);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

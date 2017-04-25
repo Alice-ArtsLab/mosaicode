@@ -5,17 +5,17 @@ This module contains the CropImage class.
 """
 
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class CropImage(OpenCVPlugin):
+class CropImage(Plugin):
     """
     This class contains methods related the CropImage class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.x0 = 0
         self.y0 = 0
         self.width = 640
@@ -91,5 +91,6 @@ class CropImage(OpenCVPlugin):
             '   cvSetImageROI(block$id$_img_i0,block$id$_rect_i1);\n' + \
             '   cvCopyImage(block$id$_img_i0,block$id$_img_o0);\n' + \
             '}\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

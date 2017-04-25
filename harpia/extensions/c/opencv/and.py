@@ -4,17 +4,17 @@
 This module contains the And class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class And(OpenCVPlugin):
+class And(Plugin):
     """
     This class contains methods related the And class.
     """
     # ------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Permite a operação lógica 'E' entre as duas entradas." + \
@@ -79,4 +79,7 @@ void adjust_images_size(IplImage * img1, IplImage * img2, IplImage * img3){
                     "cvReleaseImage(&block$id$_img_i1);\n" + \
                     "cvReleaseImage(&block$id$_img_o0);\n"
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

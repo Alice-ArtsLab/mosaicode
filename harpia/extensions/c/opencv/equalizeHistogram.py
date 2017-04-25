@@ -4,17 +4,17 @@
 This module contains the EqualizeHistogram class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class EqualizeHistogram(OpenCVPlugin):
+class EqualizeHistogram(Plugin):
     """
     This class contains methods related the EqualizeHistogram class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "A equalização do histograma de uma imagem visa " + \
@@ -65,4 +65,7 @@ class EqualizeHistogram(OpenCVPlugin):
             'cvReleaseImage(&block$id$_EqCx[2]);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

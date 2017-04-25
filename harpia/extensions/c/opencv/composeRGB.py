@@ -4,17 +4,17 @@
 This module contains the ComposeRGB class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class ComposeRGB(OpenCVPlugin):
+class ComposeRGB(Plugin):
     """
     This class contains methods related the ComposeRGB class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "BLOCO Composição RGB"
@@ -63,4 +63,7 @@ class ComposeRGB(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_i1);\n' + \
             'cvReleaseImage(&block$id$_img_i2);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

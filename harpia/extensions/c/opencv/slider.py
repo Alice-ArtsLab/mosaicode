@@ -4,17 +4,17 @@
 This module contains the Slider class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Slider(OpenCVPlugin):
+class Slider(Plugin):
     """
     This class contains methods related the Slider class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Creates Slider to int value."
         self.label = "Slider"
         self.color = "50:50:200:150"
@@ -60,4 +60,7 @@ class Slider(OpenCVPlugin):
             'cvCreateTrackbar("$label$", "$window_name$",' + \
             ' &block$id$_int_o0, $maxVal$, NULL);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -4,19 +4,20 @@
 This module contains the AddBorder class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class AddBorder(OpenCVPlugin):
+class AddBorder(Plugin):
     """
     This class contains methods related the AddBorder class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
-        # Appearance
+        self.language = "c"
+        self.framework = "opencv"
         self.help = "Adiciona bordas na imagem."
         self.label = "Add Border"
         self.color = "0:180:210:150"
@@ -92,5 +93,4 @@ class AddBorder(OpenCVPlugin):
             '\tcvCopyMakeBorder(block$id$_img_i0, block$id$_img_o0,' + \
             ' point$id$, $prop[type]$, color);\n' + \
             '}\n'
-
 # -----------------------------------------------------------------------------

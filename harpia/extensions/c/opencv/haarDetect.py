@@ -4,17 +4,17 @@
 This module contains the HaarDetect class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class HaarDetect(OpenCVPlugin):
+class HaarDetect(Plugin):
     """
     This class contains methods related the HaarDetect class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.cascade_name = "/usr/share/harpia/images/" + \
             "haarcascade_frontalface_alt2.xml"
         self.min_neighbors = 2
@@ -121,4 +121,7 @@ class HaarDetect(OpenCVPlugin):
             'cvReleaseImage(&block$id$_img_i0);\n' + \
             'cvReleaseMemStorage(&block$id$_storage);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

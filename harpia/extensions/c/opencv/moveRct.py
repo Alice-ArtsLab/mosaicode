@@ -4,17 +4,17 @@
 This module contains the MoveRct class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class MoveRct(OpenCVPlugin):
+class MoveRct(Plugin):
     """
     This class contains methods related the MoveRct class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.offset_x = 0
         self.offset_y = 0
 
@@ -51,5 +51,6 @@ class MoveRct(OpenCVPlugin):
             'block$id$_rect_o0 = block$id$_rect_i0;\n' + \
             'block$id$_rect_o0.x = block$id$_point_i1.x + $offset_x$;\n' + \
             'block$id$_rect_o0.y = block$id$_point_i1.y + $offset_y$;\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

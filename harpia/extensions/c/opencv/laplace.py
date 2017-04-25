@@ -4,17 +4,17 @@
 This module contains the Laplace class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Laplace(OpenCVPlugin):
+class Laplace(Plugin):
     """
     This class contains methods related the laplace class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Operação de filtragem que calcula o " + \
             "Laplaciano de uma imagem," + \
             "realçando cantos e bordas de objetos."
@@ -57,5 +57,6 @@ class Laplace(OpenCVPlugin):
             '(size$id$, IPL_DEPTH_32F,block$id$_img_i0->nChannels);\n' + \
             'cvLaplace(block$id$_img_i0, block$id$_img_o0, ' + \
             'block$id$_int_i1);}\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

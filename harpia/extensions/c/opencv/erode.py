@@ -4,17 +4,17 @@
 This module contains the Erode class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Erode(OpenCVPlugin):
+class Erode(Plugin):
     """
     This class contains methods related the Erode class.
     """
 
     # -------------------------------------------------------------------------
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.masksize = "3x3"
         self.iterations = 1
 
@@ -72,4 +72,7 @@ class Erode(OpenCVPlugin):
             'block$id$_arg_mask, block$id$_int_i1);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

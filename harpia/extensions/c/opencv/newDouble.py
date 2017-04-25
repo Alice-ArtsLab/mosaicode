@@ -4,17 +4,17 @@
 This module contains the NewDouble class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class NewDouble(OpenCVPlugin):
+class NewDouble(Plugin):
     """
     This class contains methods related the NewDouble class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.doubleVal = 1
 
         # Appearance
@@ -37,4 +37,7 @@ class NewDouble(OpenCVPlugin):
         self.codes[1] = 'double block$id$_double_o0 = ' + \
             '$doubleVal$; // New Double Out\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

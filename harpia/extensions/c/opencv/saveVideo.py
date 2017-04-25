@@ -4,17 +4,17 @@
 This module contains the SaveVideo class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class SaveVideo(OpenCVPlugin):
+class SaveVideo(Plugin):
     """
     This class contains methods related the SaveVideo class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.filename = "~/Output.mpeg"
         self.framerate = 25.0
         self.codecSelection = "MPEG1"
@@ -88,5 +88,6 @@ class SaveVideo(OpenCVPlugin):
             '   cvWriteFrame( block$id$_vidWriter, block$id$_img_i0);\n' + \
             '   block$id$_img_o0 = block$id$_img_i0;\n' + \
             '}\n'
-
-# ------------------------------------------------------------------------------
+        self.language = "c"
+        self.framework = "opencv"
+# -----------------------------------------------------------------------------

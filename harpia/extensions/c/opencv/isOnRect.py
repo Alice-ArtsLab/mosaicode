@@ -4,17 +4,17 @@
 This module contains the IsOnRect class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class IsOnRect(OpenCVPlugin):
+class IsOnRect(Plugin):
     """
     This class contains methods related the IsOnRect class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Checks Wheather the given " + \
@@ -36,4 +36,7 @@ class IsOnRect(OpenCVPlugin):
             'block$id$_rect_i1.height)\n' + \
             '               block$id$_double_o0 = 1.0;\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -4,17 +4,17 @@
 This module contains the Select class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Select(OpenCVPlugin):
+class Select(Plugin):
     """
     This class contains methods related the Select class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Select between two images."
         self.label = "Select"
         self.color = "50:100:200:150"
@@ -53,4 +53,7 @@ class Select(OpenCVPlugin):
             '\tblock$id$_img_o0 = cvCloneImage(block$id$_img_i1);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

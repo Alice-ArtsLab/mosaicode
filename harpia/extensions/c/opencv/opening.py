@@ -5,17 +5,17 @@ This module contains the Opening class.
 """
 
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Opening(OpenCVPlugin):
+class Opening(Plugin):
     """
     This class contains methods related the Opening class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.masksize = "3x3"
 
         # Appearance
@@ -65,4 +65,7 @@ class Opening(OpenCVPlugin):
             'cvReleaseStructuringElement(&block$id$_arg_mask);\n' + \
             'cvReleaseImage(&block$id$_img_i0);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

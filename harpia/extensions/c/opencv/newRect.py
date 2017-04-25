@@ -4,17 +4,17 @@
 This module contains the NewRect class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class NewRect(OpenCVPlugin):
+class NewRect(Plugin):
     """
     This class contains methods related the NewRect class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.help = "Creates new rectangle"
         self.label = "New Rectangle"
         self.color = "50:50:200:150"
@@ -61,4 +61,7 @@ class NewRect(OpenCVPlugin):
         self.codes[2] = \
             'block$id$_rect_o0 = cvRect($prop[x]$, $prop[y]$, $prop[width]$, $prop[height]$);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

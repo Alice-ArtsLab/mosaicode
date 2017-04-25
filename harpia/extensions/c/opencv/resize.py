@@ -4,17 +4,17 @@
 This module contains the Resize class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Resize(OpenCVPlugin):
+class Resize(Plugin):
     """
     This class contains methods related the Resize class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
 
         # Appearance
         self.help = "Resizes the input image to the " + \
@@ -53,4 +53,7 @@ class Resize(OpenCVPlugin):
             'cvResize(block$id$_img_i0, block$id$_img_o0, $method$);\n' + \
             '}\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------

@@ -4,17 +4,17 @@
 This module contains the Save class.
 """
 from harpia.GUI.fieldtypes import *
-from harpia.extensions.c.opencv.opencvplugin import OpenCVPlugin
+from harpia.model.plugin import Plugin
 
 
-class Save(OpenCVPlugin):
+class Save(Plugin):
     """
     This class contains methods related the Save class.
     """
     # -------------------------------------------------------------------------
 
     def __init__(self):
-        OpenCVPlugin.__init__(self)
+        Plugin.__init__(self)
         self.filename = ""
 
         # Appearance
@@ -38,4 +38,7 @@ class Save(OpenCVPlugin):
             'if(block$id$_img_i0)\n' + \
             'cvSaveImage("$filename$" ,block$id$_img_i0);\n'
 
+
+        self.language = "c"
+        self.framework = "opencv"
 # -----------------------------------------------------------------------------
