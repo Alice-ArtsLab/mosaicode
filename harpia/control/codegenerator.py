@@ -199,10 +199,7 @@ class CodeGenerator():
             value = value.replace("$port_number$", str(cont))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", "i")
-            i = 0
-            for code in plugin.codes:
-                plugin.codes[i] = code.replace(my_key, value)
-                i += 1
+            self.replace_key_value(plugin, my_key, value)
             cont += 1
 
         # Then we replace out ports
@@ -213,10 +210,7 @@ class CodeGenerator():
             value = value.replace("$port_number$", str(cont))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", "o")
-            i = 0
-            for code in plugin.codes:
-                plugin.codes[i] = code.replace(my_key, value)
-                i += 1
+            self.replace_key_value(plugin, my_key, value)
             cont += 1
 
 
@@ -311,32 +305,32 @@ class CodeGenerator():
         return code
 
     # ----------------------------------------------------------------------
-    def save_code(self):
+    def save_code(self, name=None, code=None):
         """
         This method generate the save log.
         """
-        System.log("Saving Code to " + \
-                self.dir_name + \
-                self.filename + \
-                self.code_template.extension)
-        self.__change_directory()
-        codeFile = open(self.filename + self.code_template.extension , 'w')
-        code = self.generate_code()
+        if name is None:
+            name = self.dir_name + self.filename + self.code_template.extension
+            self.__change_directory()
+            self.__return_to_old_directory()
+        System.log("Saving Code to " + name)
+        codeFile = open(name, 'w')
+        if code is None:
+            code = self.generate_code()
         codeFile.write(code)
         codeFile.close()
-        self.__return_to_old_directory()
 
     # ----------------------------------------------------------------------
-    def execute(self):
+    def run(self, code = None):
         """
-        This method executes the code.
+        This method runs the code.
         """
         command = self.code_template.command
         command = command.replace("$filename$", self.filename)
         command = command.replace("$extension$", self.code_template.extension)
         command = command.replace("$dir_name$", self.dir_name)
 
-        self.save_code()
+        self.save_code(code = code)
         self.__change_directory()
 
         from harpia.system import System as System

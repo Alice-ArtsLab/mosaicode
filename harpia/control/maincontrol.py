@@ -222,19 +222,19 @@ class MainControl():
         diagram.delete()
 
     # ----------------------------------------------------------------------
-    def run(self):
+    def run(self, code = None):
         """
-        This method run the code.
+        This method runs the code.
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_code_template().execute()
+        DiagramControl(diagram).get_code_template().run(code = code)
 
     # ----------------------------------------------------------------------
-    def save_source(self):
+    def save_source(self, code = None):
         """
-        This metho save the source code.
+        This method saves the source code.
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
@@ -249,7 +249,7 @@ class MainControl():
                 diagram.set_file_name(name)
                 break
 
-        generator.save_code(name)
+        generator.save_code(name=name, code=code)
 
     # ----------------------------------------------------------------------
     def view_source(self):

@@ -43,11 +43,18 @@ class CodeWindow(Gtk.Dialog):
         vbox.pack_start(toolbar, False, False, 0)
 
 
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_SAVE)
+        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_SAVE_AS)
         button.set_expand(False)
         button.set_label(_("Save Source"))
         button.set_is_important(True)
-        button.connect("clicked", self.__button_clicked, None)
+        button.connect("clicked", self.__save_button_clicked, None)
+        toolbar.add(button)
+
+        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_EXECUTE)
+        button.set_expand(False)
+        button.set_label(_("Run this code"))
+        button.set_is_important(True)
+        button.connect("clicked", self.__run_button_clicked, None)
         toolbar.add(button)
 
         sw = Gtk.ScrolledWindow()
@@ -62,6 +69,7 @@ class CodeWindow(Gtk.Dialog):
         textview.set_left_margin(10)
         textview.set_right_margin(10)
         textview.get_buffer().set_text(code)
+        self.buffer = textview.get_buffer()
 
         sw.add(textview)
         textview.show()
@@ -72,13 +80,27 @@ class CodeWindow(Gtk.Dialog):
         self.destroy()
 
     # ----------------------------------------------------------------------
-    def __button_clicked(self, widget, data):
+    def __save_button_clicked(self, widget, data):
         """
         This method monitors if the button was clicked.
 
             Parameters:
 
         """
-        self.main_window.main_control.save_source()
+        code = self.buffer.get_text( self.buffer.get_start_iter(),
+                    self.buffer.get_end_iter(), True)
+        self.main_window.main_control.save_source(code)
+
+    # ----------------------------------------------------------------------
+    def __run_button_clicked(self, widget, data):
+        """
+        This method monitors if the button was clicked.
+
+            Parameters:
+
+        """
+        code = self.buffer.get_text( self.buffer.get_start_iter(),
+                    self.buffer.get_end_iter(), True)
+        self.main_window.main_control.run(code)
 
 # ----------------------------------------------------------------------
