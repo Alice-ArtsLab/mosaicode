@@ -497,7 +497,20 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_extensions(cls):
+    def export_extensions(cls, extension):
+        if extension == 'py':
+            print "Exporting extensions to Python"
+            cls.export_python()
+        else:
+            print "Exporting extensions to XML"
+            cls.export_xml()
+
+    @staticmethod
+    def export_python():
+        pass
+
+    @staticmethod
+    def export_xml():
         System()
         for plugin in System.plugins:
             print "Exporting plugin " + plugin
@@ -510,5 +523,6 @@ class MainControl():
         for code_template in System.code_templates:
             print "Exporting code template " + code_template
             CodeTemplateControl.save(System.code_templates[code_template])
+
 
 # ----------------------------------------------------------------------
