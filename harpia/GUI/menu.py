@@ -97,6 +97,13 @@ class Menu(Gtk.MenuBar):
                            plugin_menu, mc.plugin_manager)
         self.__create_menu(_("Port Manager"), None,
                            plugin_menu, mc.port_manager)
+        plugin_menu.append(Gtk.SeparatorMenuItem())
+        self.export_plugins_menu = Gtk.Menu()
+        export_plugins = self.__create_menu(_("Export Plugins As..."), None, plugin_menu, None)
+        export_plugins.set_submenu(self.export_plugins_menu)
+        self.__create_menu(_("Python"), None, self.export_plugins_menu, mc.export_python)
+        self.__create_menu(_("XML"), None, self.export_plugins_menu, mc.export_xml)
+
         self.__add_menu_category(_("Plugins"), plugin_menu)
 
         # -------------------------- Help -----------------------------------
@@ -236,4 +243,3 @@ class Menu(Gtk.MenuBar):
         self.recent_files_menu.append(menu_item)
         menu_item.connect("activate", self.__load_recent, None)
         self.recent_files_menu.show_all()
-
