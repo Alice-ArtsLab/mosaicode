@@ -119,7 +119,8 @@ class PortControl():
         from harpia.system import System
         parser = PythonParser()
 
-        parser.class_name = 'HarpiaPort'
+        parser.class_name = port.label
+        parser.dependencies = ['Port']
         parser.setAttribute('type', port.type)
         parser.setAttribute('language', port.language)
         parser.setAttribute('label', port.label)

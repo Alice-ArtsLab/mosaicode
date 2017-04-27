@@ -12,6 +12,7 @@ class PythonParser(object):
     def __init__(self, file_name=None):
         if file_name is None:
             self.class_name = None
+            self.dependencies = None
             self.attributes = {}
         else:
             self.__load()
@@ -32,12 +33,21 @@ class PythonParser(object):
         except:
             print "Attribute", attr,"doesn\'t exist!"
             return None
+    def getDependencies(self):
+        if self.dependencies is None:
+            return '(object):'
+        dependencies = '('
+        for dependency in self.dependencies:
+            dependencies += dependency + ', '
+        dependencies = dependencies[:len(dependencies)-2]
+        dependencies += '):'
+        return dependencies
     # ----------------------------------------------------------------------
     def save(self, file_name):
         space = '    '
         f = file(os.path.expanduser(file_name), 'w')
         source = '#!/usr/bin/env python\n' + '# -*- coding: utf-8 -*-\n'
-        source += 'class ' + self.class_name + '(self):\n'
+        source += 'class ' + self.class_name + self.getDependencies()+'\n'
 
         for attr in self.attributes:
             string = str(self.attributes[str(attr)])
