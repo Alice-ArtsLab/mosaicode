@@ -497,21 +497,45 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     @classmethod
+    def print_ports(cls):
+        for port in System.ports:
+            print "--------------------- "
+            PortControl.print_port(System.ports[port])
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_plugins(cls):
+        for plugin in System.plugins:
+            print "--------------------- "
+            PluginControl.print_plugin(System.plugins[plugin])
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_templates(cls):
+        for template in System.code_templates:
+            print "--------------------- "
+            CodeTemplateControl.print_template(System.code_templates[template])
+
+    # ----------------------------------------------------------------------
+    @classmethod
     def export_extensions(cls, extension):
         if extension == 'py':
-            cls.export_python()
+            MainControl.export_python()
         else:
-            cls.export_xml()
+            MainControl.export_xml()
 
-    @staticmethod
-    def export_python():
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_python(cls):
         print "Exporting extensions to Python"
-
+        System()
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save_python(System.ports[port])
         print "Done!"
         pass
 
-    @staticmethod
-    def export_xml():
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_xml(cls):
         print "Exporting extensions to XML"
         System()
         for plugin in System.plugins:

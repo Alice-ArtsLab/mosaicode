@@ -113,4 +113,19 @@ class CodeTemplateControl():
             return True
         else:
             return False
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_template(cls, code_template):
+        """
+        This method prints the CodeTemplate properties.
+        """
+
+        print 'CodeTemplate.type =', code_template.type
+        print 'CodeTemplate.name =', code_template.name  
+        print 'CodeTemplate.description =', code_template.description  
+        print 'CodeTemplate.language =', code_template.language  
+        print 'CodeTemplate.command =', code_template.command  
+        print 'CodeTemplate.extension =', code_template.extension  
+        print 'CodeTemplate.code =', code_template.code
+        print 'CodeTemplate.source =', code_template.source
 # ----------------------------------------------------------------------

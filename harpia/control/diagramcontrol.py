@@ -23,7 +23,7 @@ class DiagramControl():
     def __init__(self, diagram):
         self.diagram = diagram
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def get_code_template(self):
         code_template = CodeTemplate()
         for key in System.code_templates:
@@ -33,7 +33,7 @@ class DiagramControl():
         generator = CodeGenerator(self.diagram, code_template)
         return generator
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def load(self, file_name=None):
         """
         This method load a file.
@@ -105,7 +105,7 @@ class DiagramControl():
         self.diagram.redo_stack = []
         self.diagram.undo_stack = []
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def save(self, file_name=None):
         """
         This method save a file.
@@ -161,7 +161,7 @@ class DiagramControl():
         self.diagram.set_modified(False)
         return True, "Success"
 
-# ----------------------------------------------------------------------
+    # ----------------------------------------------------------------------
     def export_png(self, file_name="diagrama.png"):
         """
         This method export a png.

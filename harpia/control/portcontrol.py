@@ -8,6 +8,7 @@ import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 from os.path import expanduser
 from harpia.utils.XMLUtils import XMLParser
+from harpia.utils.PythonUtils import PythonParser
 from harpia.model.port import Port
 
 class PortControl():
@@ -104,6 +105,66 @@ class PortControl():
         except IOError as e:
             return False
         return True
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def save_python(cls, port):
+        """
+        This method save the port in user space in python extension.
+
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        from harpia.system import System
+        parser = PythonParser()
+
+        parser.class_name = 'HarpiaPort'
+        parser.setAttribute('type', port.type)
+        parser.setAttribute('language', port.language)
+        parser.setAttribute('label', port.label)
+        parser.setAttribute('color', port.color)
+        parser.setAttribute('multiple', port.multiple)
+        parser.setAttribute('source', 'python')
+        parser.setAttribute('code', str(port.code))
+        parser.setAttribute('input_codes', [])
+        parser.setAttribute('output_codes', [])
+
+        for index, code in enumerate(port.input_codes, start=0):
+            parser.attributes['input_codes'].append(str(port.input_codes[index]))
+            parser.attributes['output_codes'].append(str(port.output_codes[index]))
+
+        try:
+            data_dir = System.get_user_dir() + "/extensions/"
+            data_dir = data_dir + port.language + "/ports/"
+            if not os.path.isdir(data_dir):
+                try:
+                    os.makedirs(data_dir)
+                except:
+                    pass
+            file_name = data_dir + port.type + ".py"
+            parser.save(file_name)
+        except IOError as e:
+            return False
+        return True
+
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_port(cls, port):
+        """
+        This method prints the port properties.
+        """
+        print 'Port.type =', port.type
+        print 'Port.language =', port.language
+        print 'Port.label =', port.label
+        print 'Port.color =', port.color
+        print 'Port.multiple =',  port.multiple
+        print 'Port.source =', port.source
+        print 'Port.code =', port.code
+        print 'Port.input_codes =', port.input_codes
+        print 'Port.output_codes =', port.output_codes
+        print 'Port.var_name =', port.var_name
 
     # ----------------------------------------------------------------------
     @classmethod

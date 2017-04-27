@@ -152,4 +152,30 @@ class PluginControl():
             return True
         else:
             return False
-# ----------------------------------------------------------------------
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_plugin(cls, plugin):
+        """
+        This method prints the plugin properties.
+        """
+        print 'Plugin.id =', plugin.id
+        print 'Plugin.x =', plugin.x
+        print 'Plugin.y =', plugin.y
+
+        print 'Plugin.type =', plugin.type
+        print 'Plugin.language =', plugin.language
+        print 'Plugin.framework =', plugin.framework
+        print 'Plugin.source =', plugin.source
+
+        # Appearance
+        print 'Plugin.help =', plugin.help
+        print 'Plugin.label =', plugin.label
+        print 'Plugin.color =', plugin.color
+        print 'Plugin.group =', plugin.group
+        print 'Plugin.in_ports =', plugin.in_ports
+        print 'Plugin.out_ports =', plugin.out_ports
+
+        # Code generation
+        print 'Plugin.properties =', plugin.properties
+        print 'Plugin.codes =', plugin.codes
