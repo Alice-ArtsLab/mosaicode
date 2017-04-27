@@ -48,7 +48,7 @@ class PythonParser(object):
         f = file(os.path.expanduser(file_name), 'w')
         source = '#!/usr/bin/env python\n' + '# -*- coding: utf-8 -*-\n'
         source += 'class ' + self.class_name + self.getDependencies()+'\n'
-
+        source+= space + 'def __init__(self):\n'
         for attr in self.attributes:
             string = str(self.attributes[str(attr)])
             start = 0
@@ -66,7 +66,7 @@ class PythonParser(object):
             if type(self.attributes[attr]) is not type([]):
                 string = '\''+ string+ '\''
 
-            source += space+ 'self.'+str(attr)+ ' = '+ string + '\n'
+            source += space*2+ 'self.'+str(attr)+ ' = '+ string + '\n'
 
         f.write(source)
         f.close()
