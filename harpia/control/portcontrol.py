@@ -120,7 +120,8 @@ class PortControl():
         parser = PythonParser()
 
         parser.class_name = port.label
-        parser.dependencies = ['Port']
+        parser.dependencies = [{'from':'harpia.model.port', 'import':'Port'}]
+        parser.inherited_classes = ['Port']
         parser.setAttribute('type', port.type)
         parser.setAttribute('language', port.language)
         parser.setAttribute('label', port.label)
