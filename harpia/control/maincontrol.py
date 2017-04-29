@@ -527,9 +527,15 @@ class MainControl():
     def export_python(cls):
         print "Exporting extensions to Python"
         System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save_python(System.plugins[plugin])
         for port in System.ports:
             print "Exporting port " + port
             PortControl.save_python(System.ports[port])
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save_python(System.code_templates[code_template])
         print "Done!"
         pass
 

@@ -90,7 +90,17 @@ class CodeTemplateControl():
         except IOError as e:
             return False
         return True
+    # ----------------------------------------------------------------------
+    @classmethod
+    def save_python(cls, code_template):
+        """
+        This method save the port in user space in python extension.
 
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        return True
     # ----------------------------------------------------------------------
     @classmethod
     def add_code_template(cls, code_template):
@@ -121,11 +131,11 @@ class CodeTemplateControl():
         """
 
         print 'CodeTemplate.type =', code_template.type
-        print 'CodeTemplate.name =', code_template.name  
-        print 'CodeTemplate.description =', code_template.description  
-        print 'CodeTemplate.language =', code_template.language  
-        print 'CodeTemplate.command =', code_template.command  
-        print 'CodeTemplate.extension =', code_template.extension  
+        print 'CodeTemplate.name =', code_template.name
+        print 'CodeTemplate.description =', code_template.description
+        print 'CodeTemplate.language =', code_template.language
+        print 'CodeTemplate.command =', code_template.command
+        print 'CodeTemplate.extension =', code_template.extension
         print 'CodeTemplate.code =', code_template.code
         print 'CodeTemplate.source =', code_template.source
 # ----------------------------------------------------------------------

@@ -149,8 +149,6 @@ class PortControl():
         except IOError as e:
             return False
         return True
-
-
     # ----------------------------------------------------------------------
     @classmethod
     def print_port(cls, port):

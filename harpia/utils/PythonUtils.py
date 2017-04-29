@@ -56,6 +56,8 @@ class PythonParser(object):
     def clear_string(self, string):
         start = 0
         end = len(string)
+        if end == 0:
+            return 0
         while (string[start] == '\n' or string[start] == ' '):
             start += 1
             if start == len(string):
@@ -77,9 +79,10 @@ class PythonParser(object):
         source+= space + 'def __init__(self):\n'
         for attr in self.attributes:
             string = str(self.attributes[str(attr)])
-            string = self.clear_string(string)
-            if type(self.attributes[attr]) is not type([]):
+            string = str(self.clear_string(string))
+            if type(self.attributes[attr]) is not (type([]) or type({})):
                 string = '\''+ string+ '\''
+
 
             source += space*2+ 'self.'+str(attr)+ ' = '+ string + '\n'
 

@@ -9,6 +9,7 @@ import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 from os.path import expanduser
 from harpia.utils.XMLUtils import XMLParser
+from harpia.utils.PythonUtils import PythonParser
 from harpia.model.plugin import Plugin
 
 class PluginControl():
@@ -130,7 +131,52 @@ class PluginControl():
         except IOError as e:
             return False
         return True
+    # ----------------------------------------------------------------------
+    @classmethod
+    def save_python(cls, plugin):
+        """
+        This method save the port in user space in python extension.
 
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        from harpia.system import System
+        parser = PythonParser()
+
+        parser.class_name = plugin.label
+        parser.dependencies = [{'from':'harpia.model.plugin', 'import':'Plugin'}]
+        parser.inherited_classes = ['Plugin']
+        parser.setAttribute('id', plugin.id)
+        parser.setAttribute('x', plugin.x)
+        parser.setAttribute('y', plugin.y)
+        parser.setAttribute('type', plugin.type)
+        parser.setAttribute('language', plugin.language)
+        parser.setAttribute('framework', 'python')
+        parser.setAttribute('source', plugin.source)
+        parser.setAttribute('help', plugin.help)
+        parser.setAttribute('label', plugin.label)
+        parser.setAttribute('color', plugin.color)
+        parser.setAttribute('group', plugin.group)
+        parser.setAttribute('help', plugin.help)
+        parser.setAttribute('in_ports', plugin.in_ports)
+        parser.setAttribute('out_ports', plugin.out_ports)
+        parser.setAttribute('properties', plugin.properties)
+        parser.setAttribute('codes', plugin.codes)
+
+        try:
+            data_dir = System.get_user_dir() + "/extensions/"
+            data_dir = data_dir + plugin.language + "/" + plugin.framework + "/"
+            if not os.path.isdir(data_dir):
+                try:
+                    os.makedirs(data_dir)
+                except:
+                    pass
+            file_name = data_dir + plugin.type + ".py"
+            parser.save(file_name)
+        except IOError as e:
+            return False
+        return True
     # ----------------------------------------------------------------------
     @classmethod
     def add_plugin(cls, plugin):
