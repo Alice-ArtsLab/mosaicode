@@ -81,9 +81,7 @@ class PythonParser(object):
             string = str(self.attributes[str(attr)])
             string = str(self.clear_string(string))
             if type(self.attributes[attr]) is not (type([]) or type({})):
-                string = '\''+ string+ '\''
-
-
+                string = '\'\'\''+ string+ '\'\'\''
             source += space*2+ 'self.'+str(attr)+ ' = '+ string + '\n'
 
         f.write(source)
