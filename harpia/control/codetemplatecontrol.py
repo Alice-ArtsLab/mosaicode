@@ -103,7 +103,7 @@ class CodeTemplateControl():
         """
         from harpia.system import System
         parser = PythonParser()
-        parser.class_name = code_template.name
+        parser.class_name = code_template.name.replace(' ', '')
         parser.dependencies = [{'from':'harpia.model.codetemplate', 'import':'CodeTemplate'}]
         parser.inherited_classes = ['CodeTemplate']
         parser.setAttribute('type', code_template.type)
@@ -123,7 +123,7 @@ class CodeTemplateControl():
                     os.makedirs(data_dir)
                 except:
                     pass
-            file_name = data_dir + code_template.type + ".py"
+            file_name = data_dir + code_template.name.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False

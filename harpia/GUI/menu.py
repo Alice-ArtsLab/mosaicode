@@ -99,7 +99,7 @@ class Menu(Gtk.MenuBar):
                            plugin_menu, mc.port_manager)
         plugin_menu.append(Gtk.SeparatorMenuItem())
         self.export_plugins_menu = Gtk.Menu()
-        export_plugins = self.__create_menu(_("Export Plugins As..."), None, plugin_menu, None)
+        export_plugins = self.__create_menu(_("Export As..."), None, plugin_menu, None)
         export_plugins.set_submenu(self.export_plugins_menu)
         self.__create_menu(_("Python"), None, self.export_plugins_menu, mc.export_python)
         self.__create_menu(_("XML"), None, self.export_plugins_menu, mc.export_xml)

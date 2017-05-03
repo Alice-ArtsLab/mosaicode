@@ -27,7 +27,7 @@ class MainControl():
     """
     This class contains methods related the MainControl class.
     """
-
+    main_window = None
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
@@ -537,7 +537,7 @@ class MainControl():
             print "Exporting code template " + code_template
             CodeTemplateControl.save_python(System.code_templates[code_template])
         print "Done!"
-        pass
+        Dialog().message_dialog("Exporting as python", "Exported successfully!", MainControl.main_window)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -556,5 +556,6 @@ class MainControl():
             print "Exporting code template " + code_template
             CodeTemplateControl.save(System.code_templates[code_template])
         print "Done!"
+        Dialog().message_dialog("Exporting as xml", "Exported successfully!", MainControl.main_window)
 
 # ----------------------------------------------------------------------

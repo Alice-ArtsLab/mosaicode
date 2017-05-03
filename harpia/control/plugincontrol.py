@@ -144,12 +144,10 @@ class PluginControl():
         from harpia.system import System
         parser = PythonParser()
 
-        parser.class_name = plugin.label
+        parser.class_name = plugin.label.replace(' ', '')
         parser.dependencies = [{'from':'harpia.model.plugin', 'import':'Plugin'}]
         parser.inherited_classes = ['Plugin']
         parser.setAttribute('id', plugin.id)
-        parser.setAttribute('x', plugin.x)
-        parser.setAttribute('y', plugin.y)
         parser.setAttribute('type', plugin.type)
         parser.setAttribute('language', plugin.language)
         parser.setAttribute('framework', 'python')
@@ -172,7 +170,7 @@ class PluginControl():
                     os.makedirs(data_dir)
                 except:
                     pass
-            file_name = data_dir + plugin.type + ".py"
+            file_name = data_dir + plugin.label.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False

@@ -118,8 +118,7 @@ class PortControl():
         """
         from harpia.system import System
         parser = PythonParser()
-
-        parser.class_name = port.label
+        parser.class_name = port.label.replace(' ', '')
         parser.dependencies = [{'from':'harpia.model.port', 'import':'Port'}]
         parser.inherited_classes = ['Port']
         parser.setAttribute('type', port.type)
@@ -144,7 +143,7 @@ class PortControl():
                     os.makedirs(data_dir)
                 except:
                     pass
-            file_name = data_dir + port.type + ".py"
+            file_name = data_dir + port.label.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False
