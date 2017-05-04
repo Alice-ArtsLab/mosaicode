@@ -27,7 +27,6 @@ class MainControl():
     """
     This class contains methods related the MainControl class.
     """
-    main_window = None
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
@@ -537,7 +536,20 @@ class MainControl():
             print "Exporting code template " + code_template
             CodeTemplateControl.save_python(System.code_templates[code_template])
         print "Done!"
-        Dialog().message_dialog("Exporting as python", "Exported successfully!", MainControl.main_window)
+    # ----------------------------------------------------------------------
+    def export_python(self):
+        System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save_python(System.plugins[plugin])
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save_python(System.ports[port])
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save_python(System.code_templates[code_template])
+        print "Done!"
+        Dialog().message_dialog("Exporting as python", "Exported successfully!", self.main_window)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -556,6 +568,22 @@ class MainControl():
             print "Exporting code template " + code_template
             CodeTemplateControl.save(System.code_templates[code_template])
         print "Done!"
-        Dialog().message_dialog("Exporting as xml", "Exported successfully!", MainControl.main_window)
+    # ----------------------------------------------------------------------
+    def export_xml(self):
+        print "Exporting extensions to XML"
+        System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save(System.plugins[plugin])
+
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save(System.ports[port])
+
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save(System.code_templates[code_template])
+        print "Done!"
+        Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
 
 # ----------------------------------------------------------------------
