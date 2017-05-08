@@ -101,8 +101,8 @@ class Menu(Gtk.MenuBar):
         self.export_plugins_menu = Gtk.Menu()
         export_plugins = self.__create_menu(_("Export As..."), None, plugin_menu, None)
         export_plugins.set_submenu(self.export_plugins_menu)
-        self.__create_menu(_("Python"), None, self.export_plugins_menu, mc.export_python)
-        self.__create_menu(_("XML"), None, self.export_plugins_menu, mc.export_xml)
+        self.__create_menu(_("Python"), None, self.export_plugins_menu, mc.export_python_dialog)
+        self.__create_menu(_("XML"), None, self.export_plugins_menu, mc.export_xml_dialog)
 
         self.__add_menu_category(_("Plugins"), plugin_menu)
 

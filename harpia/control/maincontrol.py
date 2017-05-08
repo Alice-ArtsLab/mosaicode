@@ -537,7 +537,7 @@ class MainControl():
             CodeTemplateControl.save_python(System.code_templates[code_template])
         print "Done!"
     # ----------------------------------------------------------------------
-    def export_python(self):
+    def export_python_dialog(self):
         System()
         for plugin in System.plugins:
             print "Exporting plugin " + plugin
@@ -569,7 +569,7 @@ class MainControl():
             CodeTemplateControl.save(System.code_templates[code_template])
         print "Done!"
     # ----------------------------------------------------------------------
-    def export_xml(self):
+    def export_xml_dialog(self):
         print "Exporting extensions to XML"
         System()
         for plugin in System.plugins:
