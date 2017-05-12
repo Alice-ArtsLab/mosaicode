@@ -27,7 +27,6 @@ class MainControl():
     """
     This class contains methods related the MainControl class.
     """
-
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
@@ -497,7 +496,65 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_extensions(cls):
+    def print_ports(cls):
+        for port in System.ports:
+            print "--------------------- "
+            PortControl.print_port(System.ports[port])
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_plugins(cls):
+        for plugin in System.plugins:
+            print "--------------------- "
+            PluginControl.print_plugin(System.plugins[plugin])
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_templates(cls):
+        for template in System.code_templates:
+            print "--------------------- "
+            CodeTemplateControl.print_template(System.code_templates[template])
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_extensions(cls, extension):
+        if extension == 'py':
+            MainControl.export_python()
+        else:
+            MainControl.export_xml()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_python(cls):
+        print "Exporting extensions to Python"
+        System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save_python(System.plugins[plugin])
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save_python(System.ports[port])
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save_python(System.code_templates[code_template])
+        print "Done!"
+    # ----------------------------------------------------------------------
+    def export_python_dialog(self):
+        System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save_python(System.plugins[plugin])
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save_python(System.ports[port])
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save_python(System.code_templates[code_template])
+        print "Done!"
+        Dialog().message_dialog("Exporting as python", "Exported successfully!", self.main_window)
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_xml(cls):
+        print "Exporting extensions to XML"
         System()
         for plugin in System.plugins:
             print "Exporting plugin " + plugin
@@ -510,5 +567,23 @@ class MainControl():
         for code_template in System.code_templates:
             print "Exporting code template " + code_template
             CodeTemplateControl.save(System.code_templates[code_template])
+        print "Done!"
+    # ----------------------------------------------------------------------
+    def export_xml_dialog(self):
+        print "Exporting extensions to XML"
+        System()
+        for plugin in System.plugins:
+            print "Exporting plugin " + plugin
+            PluginControl.save(System.plugins[plugin])
+
+        for port in System.ports:
+            print "Exporting port " + port
+            PortControl.save(System.ports[port])
+
+        for code_template in System.code_templates:
+            print "Exporting code template " + code_template
+            CodeTemplateControl.save(System.code_templates[code_template])
+        print "Done!"
+        Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
 
 # ----------------------------------------------------------------------

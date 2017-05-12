@@ -8,6 +8,7 @@ import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 from os.path import expanduser
 from harpia.utils.XMLUtils import XMLParser
+from harpia.utils.PythonUtils import PythonParser
 from harpia.model.codetemplate import CodeTemplate
 
 class CodeTemplateControl():
@@ -90,7 +91,43 @@ class CodeTemplateControl():
         except IOError as e:
             return False
         return True
+    # ----------------------------------------------------------------------
+    @classmethod
+    def save_python(cls, code_template):
+        """
+        This method save the codetemplate in user space in python extension.
 
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        from harpia.system import System
+        parser = PythonParser()
+        parser.class_name = code_template.name.replace(' ', '')
+        parser.dependencies = [{'from':'harpia.model.codetemplate', 'import':'CodeTemplate'}]
+        parser.inherited_classes = ['CodeTemplate']
+        parser.setAttribute('type', code_template.type)
+        parser.setAttribute('name', code_template.name)
+        parser.setAttribute('description', code_template.description)
+        parser.setAttribute('language', code_template.language)
+        parser.setAttribute('command', code_template.command)
+        parser.setAttribute('extension', code_template.extension)
+        parser.setAttribute('code', code_template.code)
+        parser.setAttribute('source', 'python')
+
+        try:
+            data_dir = System.get_user_dir() + "/extensions/"
+            data_dir = data_dir + code_template.language + "/"
+            if not os.path.isdir(data_dir):
+                try:
+                    os.makedirs(data_dir)
+                except:
+                    pass
+            file_name = data_dir + code_template.name.lower().replace(' ', '_') + ".py"
+            parser.save(file_name)
+        except IOError as e:
+            return False
+        return True
     # ----------------------------------------------------------------------
     @classmethod
     def add_code_template(cls, code_template):
@@ -113,4 +150,19 @@ class CodeTemplateControl():
             return True
         else:
             return False
+    # ----------------------------------------------------------------------
+    @classmethod
+    def print_template(cls, code_template):
+        """
+        This method prints the CodeTemplate properties.
+        """
+
+        print 'CodeTemplate.type =', code_template.type
+        print 'CodeTemplate.name =', code_template.name
+        print 'CodeTemplate.description =', code_template.description
+        print 'CodeTemplate.language =', code_template.language
+        print 'CodeTemplate.command =', code_template.command
+        print 'CodeTemplate.extension =', code_template.extension
+        print 'CodeTemplate.code =', code_template.code
+        print 'CodeTemplate.source =', code_template.source
 # ----------------------------------------------------------------------

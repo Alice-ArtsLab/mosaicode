@@ -49,15 +49,15 @@ class FloatField(Field, Gtk.HBox):
         except:
             value = 0
         adjustment = Gtk.Adjustment(value=value,
-                                    lower=int(self.data["lower"]),
-                                    upper=int(self.data["upper"]),
-                                    step_incr=int(self.data["step"]),
-                                    page_incr=int(self.data["page_inc"]),
-                                    page_size=int(self.data["page_size"]))
+                                    lower=float(self.data["lower"]),
+                                    upper=float(self.data["upper"]),
+                                    step_incr=float(self.data["step"]),
+                                    page_incr=float(self.data["page_inc"]),
+                                    page_size=float(self.data["page_size"]))
 
         self.field = Gtk.SpinButton()
         self.field.set_adjustment(adjustment)
-        self.field.configure(adjustment, 0.0, self.data["digits"])
+        self.field.configure(adjustment, 0.0, float(self.data["digits"]))
         self.field.set_value(value)
         if event is not None:
             self.field.connect("changed", event)
