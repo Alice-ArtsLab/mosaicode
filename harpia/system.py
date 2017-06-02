@@ -9,9 +9,9 @@ import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 import harpia.extensions
 from glob import glob  # To load examples
-from harpia.control.preferencescontrol import PreferencesControl
+from harpia.persistence.preferencespersistence import PreferencesPersistence
 from harpia.control.portcontrol import PortControl
-from harpia.control.plugincontrol import PluginControl
+from harpia.control.blockcontrol import BlockControl
 from harpia.control.codetemplatecontrol import CodeTemplateControl
 from harpia.model.preferences import Preferences
 from harpia.model.codetemplate import CodeTemplate
@@ -74,7 +74,7 @@ class System(object):
                     port.source = "xml"
                     self.ports[port.type] = port
 
-                plugin = PluginControl.load(full_file_path)
+                plugin = BlockControl.load(full_file_path)
                 if plugin is not None:
                     plugin.source = "xml"
                     self.plugins[plugin.type] = plugin
@@ -88,7 +88,7 @@ class System(object):
                 except:
                     pass
             # Load the preferences
-            self.properties = PreferencesControl.load()
+            self.properties = PreferencesPersistence.load()
             # Load Examples
             examples = glob(System.DATA_DIR + "examples/*")
             for example in examples:

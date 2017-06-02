@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------
 """
-This module contains the PreferencesControl class.
+This module contains the PreferencesPersistence class.
 """
 import os
 import ast
 from harpia.utils.XMLUtils import XMLParser
 from harpia.model.preferences import Preferences
 
-class PreferencesControl():
+class PreferencesPersistence():
     """
-    This class contains methods related the PreferencesControl class.
+    This class contains methods related the PreferencesPersistence class.
     """
 
     # ----------------------------------------------------------------------
@@ -97,14 +97,5 @@ class PreferencesControl():
         except IOError as e:
             return False
         return True
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def add_recent_file(cls, prefs, file_name):
-        if file_name in prefs.recent_files:
-            prefs.recent_files.remove(file_name)
-        prefs.recent_files.insert(0, file_name)
-        if len(prefs.recent_files) > 10:
-            prefs.recent_files.pop()
 
 # ----------------------------------------------------------------------

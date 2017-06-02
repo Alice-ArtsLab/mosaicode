@@ -15,9 +15,9 @@ from harpia.GUI.portmanager import PortManager
 from harpia.GUI.preferencewindow import PreferenceWindow
 from harpia.control.diagramcontrol import DiagramControl
 from harpia.system import System as System
-from harpia.control.preferencescontrol import PreferencesControl
+from harpia.persistence.preferencespersistence import PreferencesPersistence
 from harpia.control.portcontrol import PortControl
-from harpia.control.plugincontrol import PluginControl
+from harpia.control.blockcontrol import BlockControl
 from harpia.control.codetemplatecontrol import CodeTemplateControl
 import gettext
 _ = gettext.gettext
@@ -62,7 +62,7 @@ class MainControl():
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
-        PreferencesControl.add_recent_file(System.properties, file_name)
+        MainControl.add_recent_file(System.properties, file_name)
         self.main_window.menu.update_recent_file()
 
     # ----------------------------------------------------------------------
@@ -146,7 +146,7 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesControl.save(System.properties)
+        PreferencesPersistence.save(System.properties)
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:
@@ -478,12 +478,12 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def add_plugin(self, plugin):
-        PluginControl.add_plugin(plugin)
+        BlockControl.add_plugin(plugin)
         self.main_window.block_notebook.update()
 
     # ----------------------------------------------------------------------
     def delete_plugin(self, plugin):
-        if not PluginControl.delete_plugin(plugin):
+        if not BlockControl.delete_plugin(plugin):
             message = "This plugin is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
@@ -505,7 +505,7 @@ class MainControl():
     def print_plugins(cls):
         for plugin in System.plugins:
             print "--------------------- "
-            PluginControl.print_plugin(System.plugins[plugin])
+            BlockControl.print_plugin(System.plugins[plugin])
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):
@@ -524,66 +524,36 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def export_python(cls):
-        print "Exporting extensions to Python"
         System()
-        for plugin in System.plugins:
-            print "Exporting plugin " + plugin
-            PluginControl.save_python(System.plugins[plugin])
-        for port in System.ports:
-            print "Exporting port " + port
-            PortControl.save_python(System.ports[port])
-        for code_template in System.code_templates:
-            print "Exporting code template " + code_template
-            CodeTemplateControl.save_python(System.code_templates[code_template])
-        print "Done!"
+        BlockControl.export_python()
+        PortControl.export_python()
+        CodeTemplateControl.export_python()
+
     # ----------------------------------------------------------------------
     def export_python_dialog(self):
-        System()
-        for plugin in System.plugins:
-            print "Exporting plugin " + plugin
-            PluginControl.save_python(System.plugins[plugin])
-        for port in System.ports:
-            print "Exporting port " + port
-            PortControl.save_python(System.ports[port])
-        for code_template in System.code_templates:
-            print "Exporting code template " + code_template
-            CodeTemplateControl.save_python(System.code_templates[code_template])
-        print "Done!"
+        MainControl.export_python()
         Dialog().message_dialog("Exporting as python", "Exported successfully!", self.main_window)
 
     # ----------------------------------------------------------------------
     @classmethod
     def export_xml(cls):
-        print "Exporting extensions to XML"
         System()
-        for plugin in System.plugins:
-            print "Exporting plugin " + plugin
-            PluginControl.save(System.plugins[plugin])
+        BlockControl.export_xml()
+        PortControl.export_xml()
+        CodeTemplateControl.export_xml()
 
-        for port in System.ports:
-            print "Exporting port " + port
-            PortControl.save(System.ports[port])
-
-        for code_template in System.code_templates:
-            print "Exporting code template " + code_template
-            CodeTemplateControl.save(System.code_templates[code_template])
-        print "Done!"
     # ----------------------------------------------------------------------
     def export_xml_dialog(self):
-        print "Exporting extensions to XML"
-        System()
-        for plugin in System.plugins:
-            print "Exporting plugin " + plugin
-            PluginControl.save(System.plugins[plugin])
-
-        for port in System.ports:
-            print "Exporting port " + port
-            PortControl.save(System.ports[port])
-
-        for code_template in System.code_templates:
-            print "Exporting code template " + code_template
-            CodeTemplateControl.save(System.code_templates[code_template])
-        print "Done!"
+        MainControl.export_xml()
         Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def add_recent_file(cls, prefs, file_name):
+        if file_name in prefs.recent_files:
+            prefs.recent_files.remove(file_name)
+        prefs.recent_files.insert(0, file_name)
+        if len(prefs.recent_files) > 10:
+            prefs.recent_files.pop()
 
 # ----------------------------------------------------------------------
