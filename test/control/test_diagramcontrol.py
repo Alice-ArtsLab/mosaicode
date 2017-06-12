@@ -1,7 +1,7 @@
 from unittest import TestCase
-from harpia.control.diagramcontrol import DiagramControl
-from harpia.control.maincontrol import MainControl
-from harpia.GUI.mainwindow import MainWindow
+from mosaicode.control.diagramcontrol import DiagramControl
+from mosaicode.control.maincontrol import MainControl
+from mosaicode.GUI.mainwindow import MainWindow
 
 
 class TestDiagramControl(TestCase):

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.propertybox import PropertyBox
+from mosaicode.GUI.propertybox import PropertyBox
 
 class TestPropertyBox(TestCase):
 

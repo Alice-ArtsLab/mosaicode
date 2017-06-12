@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.model.diagrammodel import DiagramModel
+from mosaicode.model.diagrammodel import DiagramModel
 
 
 class TestDiagramModel(TestCase):

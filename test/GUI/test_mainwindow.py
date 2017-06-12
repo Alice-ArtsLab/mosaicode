@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.mainwindow import MainWindow
+from mosaicode.GUI.mainwindow import MainWindow
 
 class TestMainWindow(TestCase):
 

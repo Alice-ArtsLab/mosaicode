@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Mosaicode
+Comment=Image Processing and Computer Vision Automatic Programming Tool
+GenericName=Mosaicode
+Icon=mosaicode
+Exec=mosaicode
+Terminal=false
+Categories=Development;Science;
+MimeType=application/mscd;

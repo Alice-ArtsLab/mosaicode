@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.stringfield import StringField
+from mosaicode.GUI.components.stringfield import StringField
 
 class TestStringField(TestCase):
 

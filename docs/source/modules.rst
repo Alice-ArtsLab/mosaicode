@@ -1,9 +1,9 @@
-harpia
+mosaicode
 ======
 
 .. toctree::
    :maxdepth: 4
 
-   harpia
+   mosaicode
    setup
    test

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<harpia>
+<mosaicode>
  <version value="0.0.1"/>
  <zoom value="1.0"/>
  <language value="c"/>
  <blocks>
-  <block id="1" type="harpia.extensions.c.opencv.show">
+  <block id="1" type="mosaicode.extensions.c.opencv.show">
    <position x="600.0" y="140.0"/>
    <property key="title" value="My Image"/>
    <property key="window_type" value="Image Size"/>
   </block>
-  <block id="2" type="harpia.extensions.c.opencv.imageFile">
+  <block id="2" type="mosaicode.extensions.c.opencv.imageFile">
    <position x="50.0" y="250.0"/>
-   <property key="filename" value="/usr/share/harpia/images/lenna.png"/>
+   <property key="filename" value="/usr/share/mosaicode/images/lenna.png"/>
   </block>
-  <block id="3" type="harpia.extensions.c.opencv.addborder">
+  <block id="3" type="mosaicode.extensions.c.opencv.addborder">
    <position x="220.0" y="210.0"/>
    <property key="color" value="#ef3a610ad6c1"/>
    <property key="type" value="IPL_BORDER_CONSTANT"/>
    <property key="border_size" value="50"/>
   </block>
-  <block id="5" type="harpia.extensions.c.opencv.fillRect">
+  <block id="5" type="mosaicode.extensions.c.opencv.fillRect">
    <position x="400.0" y="170.0"/>
    <property key="color" value="#85a2d0088314"/>
   </block>
-  <block id="6" type="harpia.extensions.c.opencv.newRect">
+  <block id="6" type="mosaicode.extensions.c.opencv.newRect">
    <position x="230.0" y="370.0"/>
    <property key="x" value="100"/>
    <property key="y" value="100"/>
@@ -37,4 +37,4 @@
   <connection from_block="5" from_out="1" to_block="1" to_in="1"/>
   <connection from_block="6" from_out="1" to_block="5" to_in="2"/>
  </connections>
-</harpia>
+</mosaicode>

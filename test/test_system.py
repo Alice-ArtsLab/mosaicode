@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.system import System
+from mosaicode.system import System
 
 
 class Log(object):

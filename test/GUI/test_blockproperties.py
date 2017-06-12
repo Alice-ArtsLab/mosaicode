@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.blockproperties import BlockProperties
+from mosaicode.GUI.blockproperties import BlockProperties
 
 class TestBlockProperties(TestCase):
 

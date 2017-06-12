@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<harpia>
+<mosaicode>
  <version value="0.0.1"/>
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.extensions.c.openCV.newPoint">
+  <block id="1" type="mosaicode.extensions.c.openCV.newPoint">
    <position x="200" y="0"/>
    <property key="y0" value="0"/>
    <property key="x0" value="0"/>
   </block>
  </blocks>
  <connections/>
-</harpia>
+</mosaicode>

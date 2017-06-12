@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.workarea import WorkArea
+from mosaicode.GUI.workarea import WorkArea
 
 class TestWorkArea(TestCase):
 

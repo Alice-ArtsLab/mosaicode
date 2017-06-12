@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.searchbar import SearchBar
+from mosaicode.GUI.searchbar import SearchBar
 
 class TestSearchBar(TestCase):
 

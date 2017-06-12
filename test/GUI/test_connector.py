@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.connector import Connector
+from mosaicode.GUI.connector import Connector
 
 class TestConnector(TestCase):
 

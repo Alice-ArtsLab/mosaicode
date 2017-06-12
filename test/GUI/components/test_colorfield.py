@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.colorfield import ColorField
+from mosaicode.GUI.components.colorfield import ColorField
 
 class TestColorField(TestCase):
 

@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Libraries
+import gi
+import sys
+import argparse
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+from mosaicode.GUI.mainwindow import MainWindow
+from mosaicode.control.maincontrol import MainControl
+
+
+# ---------------------------------------------------
+# --------MOSAICODE FRONTEND MAIN FUNCTION--------------
+# ---------------------------------------------------
+
+def main(argv):
+    """
+        The Mosaicode-Frontend class is where the main function starts the system.
+        It initializes the interface.
+    """
+
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
+    # Initialize the Frontend
+    win = MainWindow()
+    win.show_all()
+
+    # Parameter passing
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file', type=str, nargs='*',
+                        help="List of files to open")
+    parser.add_argument("-x", "--export", type=str, choices=['py', 'xml'],
+                        help="Export extensions to Python or XML format")
+    parser.add_argument("--print_ports", action="store_true", help="Print ports")
+    parser.add_argument("--print_plugins", action="store_true", help="Print plugnis")
+    parser.add_argument("--print_templates", action="store_true", help="Print code templates")
+    args = parser.parse_args()
+
+    if args.export:
+        MainControl.export_extensions(args.export)
+        return
+
+    if args.print_ports:
+        MainControl.print_ports()
+        return
+
+    if args.print_plugins:
+        MainControl.print_plugins()
+        return
+
+    if args.print_templates:
+        MainControl.print_templates()
+        return
+
+
+    if args.file:
+        for arg in args.file:
+            win.main_control.open(arg)
+    else:
+        win.main_control.new()
+
+    # to kill with Terminal Ctrl+C
+    import signal
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    Gtk.main()
+    # ----------------------------------------------------------------------
+
+if __name__ == '__main__':
+    main(sys.argv)
+
+    # ----------------------------------------------------------------------

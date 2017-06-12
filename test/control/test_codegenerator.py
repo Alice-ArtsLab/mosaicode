@@ -1,8 +1,8 @@
 from unittest import TestCase
-from harpia.control.codegenerator import CodeGenerator
-from harpia.GUI.diagram import Diagram
-from harpia.GUI.block import Block
-from harpia.GUI.mainwindow import MainWindow
+from mosaicode.control.codegenerator import CodeGenerator
+from mosaicode.GUI.diagram import Diagram
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.mainwindow import MainWindow
 
 
 

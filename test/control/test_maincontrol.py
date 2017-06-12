@@ -1,6 +1,6 @@
 from unittest import TestCase
-from harpia.control.maincontrol import MainControl
-from harpia.GUI.mainwindow import MainWindow
+from mosaicode.control.maincontrol import MainControl
+from mosaicode.GUI.mainwindow import MainWindow
 
 
 class TestMainControl(TestCase):
@@ -20,7 +20,7 @@ class TestMainControl(TestCase):
 
     # ----------------------------------------------------------------------
     def test_open(self):
-        self.main_control.open("app_data/examples/Add Border.hrp")
+        self.main_control.open("app_data/examples/Add Border.mscd")
 
     # ----------------------------------------------------------------------
     def test_close(self):

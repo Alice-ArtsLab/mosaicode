@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.checkfield import CheckField
+from mosaicode.GUI.components.checkfield import CheckField
 
 class TestCheckField(TestCase):
 

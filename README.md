@@ -1,4 +1,4 @@
-Harpia
+Mosaicode
 ======
 
 **This project is a new vision about how to program.**
@@ -8,12 +8,12 @@ Harpia
 INSTALLATION:
 -------------
 ### Install
-To install Harpia, there is two options by terminal:
+To install Mosaicode, there is two options by terminal:
 
 | | Command |
 | :---: | :---: |
-| *Compactado:* | ``` tar -xvvzf harpia-1.0.tar.gz ``` |
-| *Cloning GitHub:* | `git clone https://github.com/flschiavoni/harpia.git` </br> `git checkout newgui`|
+| *Compactado:* | ``` tar -xvvzf mosaicode-1.0.tar.gz ``` |
+| *Cloning GitHub:* | `git clone https://github.com/flschiavoni/mosaicode.git` </br> `git checkout newgui`|
 
 Then procede with instalation:
 ```
@@ -31,7 +31,7 @@ sudo pip install BeautifulSoup4
 ```
 
 ### Uninstall
-To uninstall Harpia, execute at terminal:
+To uninstall Mosaicode, execute at terminal:
 ```
 sudo ./uninstall.sh
 ```
@@ -57,8 +57,8 @@ SCREENSHOTS:
 FURTHER INFO:
 -------------
 
-[Site original do projeto Harpia]
-(http://s2i.das.ufsc.br/harpia/en/home.html)
+[Site original do projeto Mosaicode]
+(http://s2i.das.ufsc.br/mosaicode/en/home.html)
 
 or asking to:
 * scotti@ieee.org

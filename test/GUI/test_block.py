@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.block import Block
+from mosaicode.GUI.block import Block
 
 class TestBlock(TestCase):
 

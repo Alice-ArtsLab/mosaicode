@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.model.preferences import Preferences
+from mosaicode.model.preferences import Preferences
 
 class TestPreferences(TestCase):
 

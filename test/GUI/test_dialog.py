@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.dialog import Dialog
+from mosaicode.GUI.dialog import Dialog
 
 class TestDialog(TestCase):
 

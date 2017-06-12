@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.blocknotebook import BlockNotebook
+from mosaicode.GUI.blocknotebook import BlockNotebook
 
 class TestBlockNotebook(TestCase):
 

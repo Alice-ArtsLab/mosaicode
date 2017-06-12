@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.commentfield import CommentField
+from mosaicode.GUI.components.commentfield import CommentField
 
 class TestCommentField(TestCase):
 

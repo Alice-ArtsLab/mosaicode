@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.openfilefield import OpenFileField
+from mosaicode.GUI.components.openfilefield import OpenFileField
 
 class TestOpenFileField(TestCase):
 

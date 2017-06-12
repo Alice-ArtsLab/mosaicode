@@ -1,6 +1,6 @@
 from unittest import TestCase
-from harpia.model.connectionmodel import ConnectionModel
-from harpia.GUI.diagram import Diagram
+from mosaicode.model.connectionmodel import ConnectionModel
+from mosaicode.GUI.diagram import Diagram
 
 
 class TestConnectionModel(TestCase):

@@ -1,6 +1,6 @@
 from unittest import TestCase
-from harpia.model.blockmodel import BlockModel
-from harpia.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.plugin import Plugin
 
 
 class TestBlockModel(TestCase):

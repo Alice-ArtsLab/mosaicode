@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.menu import Menu
+from mosaicode.GUI.menu import Menu
 
 class TestMenu(TestCase):
 

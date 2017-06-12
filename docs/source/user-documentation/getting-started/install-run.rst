@@ -1,5 +1,5 @@
 #################################
-Installing and running the Harpia
+Installing and running the Mosaicode
 #################################
 
 **********
@@ -9,8 +9,8 @@ Installing
 .. code-block:: bash
    :linenos:
 
-   # Go to into the Harpia folder that has been downloaded.
-   cd harpia
+   # Go to into the Mosaicode folder that has been downloaded.
+   cd mosaicode
 
    # Change branch
    git checkout newgui
@@ -24,4 +24,4 @@ Running
 .. code-block:: bash
    :linenos:
 
-   harpia
+   mosaicode

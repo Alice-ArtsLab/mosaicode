@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.status import Status
+from mosaicode.GUI.status import Status
 
 class TestStatus(TestCase):
 

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.intfield import IntField
+from mosaicode.GUI.components.intfield import IntField
 
 class TestIntField(TestCase):
 

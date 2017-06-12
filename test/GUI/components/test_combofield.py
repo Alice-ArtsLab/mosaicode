@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.components.combofield import ComboField
+from mosaicode.GUI.components.combofield import ComboField
 
 class TestComboField(TestCase):
 

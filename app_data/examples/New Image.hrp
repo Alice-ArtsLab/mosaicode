@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<harpia>
+<mosaicode>
  <version value="0.0.1"/>
  <zoom value="1.0"/>
  <language value="C"/>
  <blocks>
-  <block id="1" type="harpia.extensions.c.openCV.newImage">
+  <block id="1" type="mosaicode.extensions.c.openCV.newImage">
    <position x="200" y="0"/>
    <property key="width" value="640"/>
    <property key="height" value="480"/>
   </block>
-  <block id="2" type="harpia.extensions.c.openCV.show">
+  <block id="2" type="mosaicode.extensions.c.openCV.show">
    <position x="400" y="0"/>
    <property key="window_type" value="Image Size"/>
    <property key="title" value="My Image - New Image"/>
@@ -18,4 +18,4 @@
  <connections>
   <connection from_block="1" from_out="1" to_block="2" to_in="1"/>
  </connections>
-</harpia>
+</mosaicode>

@@ -1,6 +1,6 @@
 from unittest import TestCase
-from harpia.control.preferencescontrol import PreferencesControl
-from harpia.system import System
+from mosaicode.control.preferencescontrol import PreferencesControl
+from mosaicode.system import System
 
 
 class TestPreferencesControl(TestCase):

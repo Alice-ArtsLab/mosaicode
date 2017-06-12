@@ -1,5 +1,5 @@
 from unittest import TestCase
-from harpia.GUI.blockstreeview import BlocksTreeView
+from mosaicode.GUI.blockstreeview import BlocksTreeView
 
 class TestBlocksTreeView(TestCase):
 
