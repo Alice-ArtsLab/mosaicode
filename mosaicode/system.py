@@ -102,38 +102,37 @@ class System(object):
             # First load ports on python classes.
             # They are installed with mosaicode as root
 
-            module = None
-            for importer, name, ispkg in pkgutil.iter_modules(None, ""):
-                if ispkg and name.startswith(System.APP):
-                    module = __import__(name)
-
-                    for importer, modname, ispkg in pkgutil.walk_packages(
-                        module.__path__,
-                        module.__name__ + ".",
-                        None):
-
+            def my_walk_packages(path=None, name_par=""):
+                for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
+                    if name.startswith(System.APP) or name_par.startswith(System.APP):
                         if ispkg:
-                            
-                            continue
+                            if name_par is not "":
+                                name = name_par + "." + name
+                            __import__(name)
+                            path = getattr(sys.modules[name], '__path__', None) or []
+                            my_walk_packages(path, name)
+                        else:
+                            module = __import__(name, fromlist="dummy")
+                            for class_name, obj in inspect.getmembers(module):
+                                if not inspect.isclass(obj):
+                                    continue
+                                modname = inspect.getmodule(obj).__name__
+                                if not modname.startswith(System.APP):
+                                    continue
 
-                        module = __import__(modname, fromlist="dummy")
-                        for name, obj in inspect.getmembers(module):
-                            if not inspect.isclass(obj):
-                                continue
-                            modname = inspect.getmodule(obj).__name__
+                                instance = obj()
+                                if isinstance(instance, CodeTemplate):
+                                    self.code_templates[instance.type] = instance
+                                if isinstance(instance, Port):
+                                    instance.source = "Python"
+                                    self.ports[instance.type] = instance
+                                if isinstance(instance, Plugin):
+                                    if instance.label != "":
+                                        self.plugins[instance.type] = instance
 
-                            if not modname.startswith(System.APP+"_"):
-                               continue
 
-                            instance = obj()
-                            if isinstance(instance, CodeTemplate):
-                                self.code_templates[instance.type] = instance
-                            if isinstance(instance, Port):
-                                instance.source = "Python"
-                                self.ports[instance.type] = instance
-                            if isinstance(instance, Plugin):
-                                if instance.label != "":
-                                    self.plugins[instance.type] = instance
+
+            my_walk_packages(None, "")
 
             # Load XML files in application space
             self.__load_xml(System.DATA_DIR + "extensions/")
