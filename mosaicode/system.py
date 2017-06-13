@@ -6,8 +6,8 @@ import os
 import sys
 import copy
 import inspect  # For module inspect
-import pkgutil  # For dynamic package load
 import mosaicode.extensions
+import pkgutil  # For dynamic package load
 from glob import glob  # To load examples
 from mosaicode.persistence.preferencespersistence import PreferencesPersistence
 from mosaicode.control.portcontrol import PortControl
@@ -100,29 +100,40 @@ class System(object):
             self.ports.clear()
             self.plugins.clear()
             # First load ports on python classes.
-            # They are installed with mosaicode as root 
-            for importer, modname, ispkg in pkgutil.walk_packages(
-                    mosaicode.extensions.__path__,
-                    mosaicode.extensions.__name__ + ".",
-                    None):
-                if ispkg:
-                    continue
-                module = __import__(modname, fromlist="dummy")
-                for name, obj in inspect.getmembers(module):
-                    if not inspect.isclass(obj):
-                        continue
-                    modname = inspect.getmodule(obj).__name__
-                    if not modname.startswith("mosaicode.extensions"):
-                        continue
-                    instance = obj()
-                    if isinstance(instance, CodeTemplate):
-                        self.code_templates[instance.type] = instance
-                    if isinstance(instance, Port):
-                        instance.source = "Python"
-                        self.ports[instance.type] = instance
-                    if isinstance(instance, Plugin):
-                        if instance.label != "":
-                            self.plugins[instance.type] = instance
+            # They are installed with mosaicode as root
+
+            module = None
+            for importer, name, ispkg in pkgutil.iter_modules(None, ""):
+                if ispkg and name.startswith(System.APP):
+                    module = __import__(name)
+
+                    for importer, modname, ispkg in pkgutil.walk_packages(
+                        module.__path__,
+                        module.__name__ + ".",
+                        None):
+
+                        if ispkg:
+                            
+                            continue
+
+                        module = __import__(modname, fromlist="dummy")
+                        for name, obj in inspect.getmembers(module):
+                            if not inspect.isclass(obj):
+                                continue
+                            modname = inspect.getmodule(obj).__name__
+
+                            if not modname.startswith(System.APP+"_"):
+                               continue
+
+                            instance = obj()
+                            if isinstance(instance, CodeTemplate):
+                                self.code_templates[instance.type] = instance
+                            if isinstance(instance, Port):
+                                instance.source = "Python"
+                                self.ports[instance.type] = instance
+                            if isinstance(instance, Plugin):
+                                if instance.label != "":
+                                    self.plugins[instance.type] = instance
 
             # Load XML files in application space
             self.__load_xml(System.DATA_DIR + "extensions/")
