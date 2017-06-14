@@ -104,7 +104,7 @@ class System(object):
 
             def my_walk_packages(path=None, name_par=""):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    if name.startswith(System.APP) or name_par.startswith(System.APP):
+                    if name.startswith(System.APP+"_") or name_par.startswith(System.APP+"_"):
                         if ispkg:
                             if name_par is not "":
                                 name = name_par + "." + name
@@ -113,11 +113,12 @@ class System(object):
                             my_walk_packages(path, name)
                         else:
                             module = __import__(name, fromlist="dummy")
+                            print name
                             for class_name, obj in inspect.getmembers(module):
                                 if not inspect.isclass(obj):
                                     continue
                                 modname = inspect.getmodule(obj).__name__
-                                if not modname.startswith(System.APP):
+                                if not modname.startswith(System.APP+"_"):
                                     continue
 
                                 instance = obj()
@@ -129,7 +130,6 @@ class System(object):
                                 if isinstance(instance, Plugin):
                                     if instance.label != "":
                                         self.plugins[instance.type] = instance
-
 
 
             my_walk_packages(None, "")
