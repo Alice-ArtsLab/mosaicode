@@ -10,7 +10,7 @@ from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.codewindow import CodeWindow
 from mosaicode.GUI.codetemplatemanager import CodeTemplateManager
-from mosaicode.GUI.pluginmanager import PluginManager
+from mosaicode.GUI.blockmanager import BlockManager
 from mosaicode.GUI.portmanager import PortManager
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.control.diagramcontrol import DiagramControl
@@ -441,11 +441,11 @@ class MainControl():
 
 
     # ----------------------------------------------------------------------
-    def plugin_manager(self):
+    def block_manager(self):
         """
-        This add a new plugin.
+        This add a new Block.
         """
-        PluginManager(self.main_window)
+        BlockManager(self.main_window)
 
     # ----------------------------------------------------------------------
     def port_manager(self):
@@ -477,14 +477,14 @@ class MainControl():
             Dialog().message_dialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
-    def add_plugin(self, plugin):
-        BlockControl.add_plugin(plugin)
+    def add_new_block(self, block):
+        BlockControl.add_new_block(block)
         self.main_window.block_notebook.update()
 
     # ----------------------------------------------------------------------
-    def delete_plugin(self, plugin):
-        if not BlockControl.delete_plugin(plugin):
-            message = "This plugin is a python file installed in the System.\n"
+    def delete_block(self, block):
+        if not BlockControl.delete_block(block):
+            message = "This block is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
         self.main_window.block_notebook.update()
@@ -502,10 +502,10 @@ class MainControl():
             PortControl.print_port(System.ports[port])
     # ----------------------------------------------------------------------
     @classmethod
-    def print_plugins(cls):
-        for plugin in System.plugins:
+    def print_blocks(cls):
+        for block in System.blocks:
             print "--------------------- "
-            BlockControl.print_plugin(System.plugins[plugin])
+            BlockControl.print_block(System.blocks[block])
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):
