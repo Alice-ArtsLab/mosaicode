@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginManager class.
+This module contains the PortManager class.
 """
 import os
 import gi
@@ -19,7 +19,6 @@ from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.porteditor import PortEditor
 from mosaicode.GUI.dialog import Dialog
-from mosaicode.model.plugin import Plugin
 from mosaicode.system import System as System
 import gettext
 

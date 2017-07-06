@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginManager class.
+This module contains the PortEditor class.
 """
 import os
 import gi
@@ -17,7 +17,7 @@ from mosaicomponents.commentfield import CommentField
 from mosaicomponents.codefield import CodeField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.port import Port
 from mosaicode.system import System as System
 import gettext
@@ -54,7 +54,7 @@ class PortEditor(Gtk.Dialog):
 
         self.input_code_widgets = []
         self.output_code_widgets = []
-        for code in Plugin().codes:
+        for code in BlockModel().codes:
             self.input_code_widgets.append(CodeField({"label": ""}, None))
             self.output_code_widgets.append(CodeField({"label": ""}, None))
 
@@ -68,7 +68,7 @@ class PortEditor(Gtk.Dialog):
             self.multiple.set_value(System.ports[port].multiple)
 
             count = 0
-            for code in Plugin().codes:
+            for code in BlockModel().codes:
                 self.input_code_widgets[count].set_value(
                         System.ports[port].input_codes[count])
                 self.output_code_widgets[count].set_value(

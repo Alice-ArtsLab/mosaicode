@@ -31,7 +31,7 @@ This module contains the BlockMenu class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.GUI.plugineditor import PluginEditor
+from mosaicode.GUI.blockeditor import BlockEditor
 
 class BlockMenu(Gtk.Menu):
     """
@@ -54,7 +54,7 @@ class BlockMenu(Gtk.Menu):
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
-        menu_item = Gtk.MenuItem("Edit Plugin")
+        menu_item = Gtk.MenuItem("Edit Block")
         menu_item.connect("activate", self.__edit_clicked)
         self.append(menu_item)
 
@@ -83,5 +83,5 @@ class BlockMenu(Gtk.Menu):
 
         """
         from mosaicode.system import System as System
-        PluginEditor(self.block.diagram.main_window,
-                System.plugins[self.block.type])
+        BlockEditor(self.block.diagram.main_window,
+                System.blocks[self.block.type])

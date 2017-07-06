@@ -61,22 +61,22 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         # To separate blocks of this language
         block_list = []
         group_list = []
-        for x in System.plugins:
-            instance = System.plugins[x]
+        for x in System.blocks:
+            instance = System.blocks[x]
             name = instance.language
             name += "/" + instance.framework
             if name != language:
                 continue
             block_list.append(x)
-            if System.plugins[x].group not in group_list:
-                group_list.append(System.plugins[x].group)
+            if System.blocks[x].group not in group_list:
+                group_list.append(System.blocks[x].group)
 
         # Sorting groups
         for group in sorted(group_list):
             self.__append_category(group)
 
         for x in sorted(block_list):
-            self.__add_item(System.plugins[x])
+            self.__add_item(System.blocks[x])
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
@@ -185,8 +185,8 @@ class BlocksTreeView(Gtk.ScrolledWindow):
             return None
         path = model.get_path(iterac)
         block_name = model.get_value(model.get_iter(path), 1)
-        for x in System.plugins:
-            block = System.plugins[x]
+        for x in System.blocks:
+            block = System.blocks[x]
             if block.label == block_name:
                 return block
         return None

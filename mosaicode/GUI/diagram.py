@@ -14,7 +14,7 @@ from block import Block
 from connector import Connector
 from mosaicode.system import System as System
 from mosaicode.model.diagrammodel import DiagramModel
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
 import gettext
 _ = gettext.gettext
 
@@ -240,16 +240,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         return True
 
     # ----------------------------------------------------------------------
-    def add_block(self, plugin):
+    def add_block(self, block):
         """
         This method add a block in the diagram.
 
             Parameters:
-                * **plugin**
+                * **block**
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
-        new_block = Block(self, copy.deepcopy(plugin))
+        new_block = Block(self, copy.deepcopy(block))
         if self.insert_block(new_block):
             self.do("Add")
             self.get_root_item().add_child(new_block, -1)
@@ -577,14 +577,14 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for widget in clipboard:
             if not isinstance(widget, Block):
                 continue
-            plugin = Plugin(widget)
-            plugin.x += 20
-            plugin.y += 20
-            plugin.id = -1
-            if not self.main_window.main_control.add_block(plugin):
+            block = BlockModel(widget)
+            block.x += 20
+            block.y += 20
+            block.id = -1
+            if not self.main_window.main_control.add_block(block):
                 return
-            replace[widget.id] = plugin
-            self.current_widgets.append(plugin)
+            replace[widget.id] = block
+            self.current_widgets.append(block)
         # interact into connections changing block ids
         for widget in clipboard:
             if not isinstance(widget, Connector):

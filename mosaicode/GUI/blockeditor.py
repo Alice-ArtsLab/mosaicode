@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginManager class.
+This module contains the BlockEditor class.
 """
 import os
 import gi
@@ -19,32 +19,31 @@ from mosaicomponents.openfilefield import OpenFileField
 from mosaicomponents.stringfield import StringField
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.GUI.pluginporteditor import PluginPortEditor
-from mosaicode.GUI.plugincommoneditor import PluginCommonEditor
-from mosaicode.GUI.pluginpropertyeditor import PluginPropertyEditor
-from mosaicode.GUI.plugincodeeditor import PluginCodeEditor
-from mosaicode.model.plugin import Plugin
+from mosaicode.GUI.blockporteditor import BlockPortEditor
+from mosaicode.GUI.blockcommoneditor import BlockCommonEditor
+from mosaicode.GUI.blockpropertyeditor import BlockPropertyEditor
+from mosaicode.GUI.blockcodeeditor import BlockCodeEditor
 from mosaicode.system import System as System
 import gettext
 
 _ = gettext.gettext
 
 
-class PluginEditor(Gtk.Dialog):
+class BlockEditor(Gtk.Dialog):
     """
-    This class contains methods related the PluginManager class
+    This class contains methods related the BlockEditor class
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, plugin_manager, plugin):
-        Gtk.Dialog.__init__(self, _("Plugin Editor"),
-                            plugin_manager,
+    def __init__(self, block_manager, block):
+        Gtk.Dialog.__init__(self, _("Block Editor"),
+                            block_manager,
                             0,
                             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
 
-        self.plugin_manager = plugin_manager
-        self.plugin = plugin
+        self.block_manager = block_manager
+        self.block = block
         self.set_default_size(800, 600)
         box = self.get_content_area()
 
@@ -52,20 +51,20 @@ class PluginEditor(Gtk.Dialog):
         self.tabs.set_scrollable(True)
         box.pack_start(self.tabs, True, True, 0)
 
-        self.tabs.append_page(PluginCommonEditor(self, self.plugin),
+        self.tabs.append_page(BlockCommonEditor(self, self.block),
                     Gtk.Label(_("Common Properties")))
-        self.tabs.append_page(PluginPropertyEditor(self, self.plugin),
+        self.tabs.append_page(BlockPropertyEditor(self, self.block),
                     Gtk.Label(_("Properties")))
-        self.tabs.append_page(PluginPortEditor(self, self.plugin),
+        self.tabs.append_page(BlockPortEditor(self, self.block),
                     Gtk.Label(_("Ports")))
-        self.tabs.append_page(PluginCodeEditor(self, self.plugin),
+        self.tabs.append_page(BlockCodeEditor(self, self.block),
                     Gtk.Label(_("Code")))
 
         self.show_all()
         result = self.run()
         if result == Gtk.ResponseType.OK:
-            self.plugin_manager.main_control.add_plugin(plugin)
-            self.plugin_manager.update()
+            self.block_manager.main_control.add_new_block(block)
+            self.block_manager.update()
         self.close()
         self.destroy()
 

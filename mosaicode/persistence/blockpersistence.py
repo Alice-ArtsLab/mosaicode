@@ -10,7 +10,9 @@ import pkgutil  # For dynamic package load
 from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
+
+tag_name = "MosaicodeBlock"
 
 class BlockPersistence():
     """
@@ -31,104 +33,104 @@ class BlockPersistence():
             return
         parser = XMLParser(file_name)
 
-        if parser.getTag("MosaicodePlugin") is None:
+        if parser.getTag(tag_name) is None:
             return None
 
-        plugin = Plugin()
+        block = BlockModel()
 
-        plugin.type = parser.getTagAttr("MosaicodePlugin", "type")
-        plugin.language = parser.getTagAttr("MosaicodePlugin", "language")
-        plugin.framework = parser.getTagAttr("MosaicodePlugin", "framework")
+        block.type = parser.getTagAttr(tag_name, "type")
+        block.language = parser.getTagAttr(tag_name, "language")
+        block.framework = parser.getTagAttr(tag_name, "framework")
 
-        plugin.label = parser.getTagAttr("MosaicodePlugin", "label")
-        plugin.group = parser.getTagAttr("MosaicodePlugin", "group")
-        plugin.color = parser.getTagAttr("MosaicodePlugin", "color")
-        plugin.help = parser.getTagAttr("MosaicodePlugin", "help")
-        plugin.source = parser.getTagAttr("MosaicodePlugin", "source")
+        block.label = parser.getTagAttr(tag_name, "label")
+        block.group = parser.getTagAttr(tag_name, "group")
+        block.color = parser.getTagAttr(tag_name, "color")
+        block.help = parser.getTagAttr(tag_name, "help")
+        block.source = parser.getTagAttr(tag_name, "source")
 
         count = 0
-        for code in plugin.codes:
-            plugin.codes[count] = parser.getTag("MosaicodePlugin").getTag("code" + str(count)).getText()
+        for code in block.codes:
+            block.codes[count] = parser.getTag(tag_name).getTag("code" + str(count)).getText()
             count = count + 1
 
-        props = parser.getTag("MosaicodePlugin").getTag(
+        props = parser.getTag(tag_name).getTag(
                     "properties").getChildTags("property")
         for prop in props:
-            plugin.properties.append(ast.literal_eval(prop.getAttr("value")))
+            block.properties.append(ast.literal_eval(prop.getAttr("value")))
 
-        in_ports = parser.getTag("MosaicodePlugin").getTag(
+        in_ports = parser.getTag(tag_name).getTag(
                     "in_ports").getChildTags("port")
         for port in in_ports:
-            plugin.in_ports.append(ast.literal_eval(port.getAttr("value")))
+            block.in_ports.append(ast.literal_eval(port.getAttr("value")))
 
-        out_ports = parser.getTag("MosaicodePlugin").getTag(
+        out_ports = parser.getTag(tag_name).getTag(
                     "out_ports").getChildTags("port")
         for port in out_ports:
-            plugin.out_ports.append(ast.literal_eval(port.getAttr("value")))
+            block.out_ports.append(ast.literal_eval(port.getAttr("value")))
 
-        if plugin.type == "mosaicode.model.plugin":
+        if block.type == "mosaicode.model.blockmodel":
             return None
-        return plugin
+        return block
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save(cls, plugin):
+    def save(cls, block):
         """
-        This method save the plugin in user space.
+        This method save the block in user space.
 
         Returns:
 
             * **Types** (:class:`boolean<boolean>`)
         """
         from mosaicode.system import System
-        plugin.source = "xml"
+        block.source = "xml"
         parser = XMLParser()
-        main = parser.addTag('MosaicodePlugin')
-        parser.setTagAttr('MosaicodePlugin','type', plugin.type)
-        parser.setTagAttr('MosaicodePlugin','language', plugin.language)
-        parser.setTagAttr('MosaicodePlugin','framework', plugin.framework)
+        main = parser.addTag(tag_name)
+        parser.setTagAttr(tag_name,'type', block.type)
+        parser.setTagAttr(tag_name,'language', block.language)
+        parser.setTagAttr(tag_name,'framework', block.framework)
 
-        parser.setTagAttr('MosaicodePlugin','label', plugin.label)
-        parser.setTagAttr('MosaicodePlugin','group', plugin.group)
-        parser.setTagAttr('MosaicodePlugin','color', plugin.color)
-        parser.setTagAttr('MosaicodePlugin','help', plugin.help)
-        parser.setTagAttr('MosaicodePlugin','source', plugin.source)
+        parser.setTagAttr(tag_name,'label', block.label)
+        parser.setTagAttr(tag_name,'group', block.group)
+        parser.setTagAttr(tag_name,'color', block.color)
+        parser.setTagAttr(tag_name,'help', block.help)
+        parser.setTagAttr(tag_name,'source', block.source)
 
         count = 0
-        for code in plugin.codes:
-            parser.appendToTag('MosaicodePlugin', 'code' + str(count)).string = str(plugin.codes[count])
+        for code in block.codes:
+            parser.appendToTag(tag_name, 'code' + str(count)).string = str(block.codes[count])
             count = count + 1
 
-        parser.appendToTag('MosaicodePlugin', 'properties')
-        for key in plugin.properties:
+        parser.appendToTag(tag_name, 'properties')
+        for key in block.properties:
             parser.appendToTag('properties', 'property', value=key)
 
-        parser.appendToTag('MosaicodePlugin', 'in_ports')
-        for key in plugin.in_ports:
+        parser.appendToTag(tag_name, 'in_ports')
+        for key in block.in_ports:
             parser.appendToTag('in_ports', 'port', value=key)
 
-        parser.appendToTag('MosaicodePlugin', 'out_ports')
-        for key in plugin.out_ports:
+        parser.appendToTag(tag_name, 'out_ports')
+        for key in block.out_ports:
             parser.appendToTag('out_ports', 'port', value=key)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + plugin.language + "/" + plugin.framework + "/"
+            data_dir = data_dir + block.language + "/" + block.framework + "/"
             if not os.path.isdir(data_dir):
                 try:
                     os.makedirs(data_dir)
                 except:
                     pass
-            file_name = data_dir + plugin.type + ".xml"
-            plugin_file = file(os.path.expanduser(file_name), 'w')
-            plugin_file.write(parser.getXML())
-            plugin_file.close()
+            file_name = data_dir + block.type + ".xml"
+            block_file = file(os.path.expanduser(file_name), 'w')
+            block_file.write(parser.getXML())
+            block_file.close()
         except IOError as e:
             return False
         return True
     # ----------------------------------------------------------------------
     @classmethod
-    def save_python(cls, plugin):
+    def save_python(cls, block):
         """
         This method save the port in user space in python extension.
 
@@ -139,33 +141,33 @@ class BlockPersistence():
         from mosaicode.system import System
         parser = PythonParser()
 
-        parser.class_name = plugin.label.replace(' ', '')
-        parser.dependencies = [{'from':'mosaicode.model.plugin', 'import':'Plugin'}]
-        parser.inherited_classes = ['Plugin']
-        parser.setAttribute('id', plugin.id)
-        parser.setAttribute('type', plugin.type)
-        parser.setAttribute('language', plugin.language)
+        parser.class_name = block.label.replace(' ', '')
+        parser.dependencies = [{'from':'mosaicode.model.blockmodel', 'import':'BlockModel'}]
+        parser.inherited_classes = ['BlockModel']
+        parser.setAttribute('id', block.id)
+        parser.setAttribute('type', block.type)
+        parser.setAttribute('language', block.language)
         parser.setAttribute('framework', 'python')
-        parser.setAttribute('source', plugin.source)
-        parser.setAttribute('help', plugin.help)
-        parser.setAttribute('label', plugin.label)
-        parser.setAttribute('color', plugin.color)
-        parser.setAttribute('group', plugin.group)
-        parser.setAttribute('help', plugin.help)
-        parser.setAttribute('in_ports', plugin.in_ports)
-        parser.setAttribute('out_ports', plugin.out_ports)
-        parser.setAttribute('properties', plugin.properties)
-        parser.setAttribute('codes', plugin.codes)
+        parser.setAttribute('source', block.source)
+        parser.setAttribute('help', block.help)
+        parser.setAttribute('label', block.label)
+        parser.setAttribute('color', block.color)
+        parser.setAttribute('group', block.group)
+        parser.setAttribute('help', block.help)
+        parser.setAttribute('in_ports', block.in_ports)
+        parser.setAttribute('out_ports', block.out_ports)
+        parser.setAttribute('properties', block.properties)
+        parser.setAttribute('codes', block.codes)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + plugin.language + "/" + plugin.framework + "/"
+            data_dir = data_dir + block.language + "/" + block.framework + "/"
             if not os.path.isdir(data_dir):
                 try:
                     os.makedirs(data_dir)
                 except:
                     pass
-            file_name = data_dir + plugin.label.lower().replace(' ', '_') + ".py"
+            file_name = data_dir + block.label.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False

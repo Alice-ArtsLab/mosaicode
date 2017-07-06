@@ -10,7 +10,6 @@ import pkgutil  # For dynamic package load
 from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
-from mosaicode.model.plugin import Plugin
 from mosaicode.persistence.blockpersistence import BlockPersistence
 
 class BlockControl():
@@ -28,18 +27,18 @@ class BlockControl():
     def export_xml(cls):
         from mosaicode.system import System as System
         System()
-        for plugin in System.plugins:
-            print "Exporting plugin " + plugin
-            BlockPersistence.save(System.plugins[plugin])
+        for block in System.blocks:
+            print "Exporting block " + block
+            BlockPersistence.save(System.blocks[block])
 
     # ----------------------------------------------------------------------
     @classmethod
     def export_python(cls):
         from mosaicode.system import System as System
         System()
-        for plugin in System.plugins:
-            print "Exporting plugin " + plugin
-            BlockPersistence.save_python(System.plugins[plugin])
+        for block in System.blocks:
+            print "Exporting block " + block
+            BlockPersistence.save_python(System.blocks[block])
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -54,50 +53,50 @@ class BlockControl():
         BlockPersistence.load(file_name)
     # ----------------------------------------------------------------------
     @classmethod
-    def add_plugin(cls, plugin):
+    def add_new_block(cls, block):
         # first, save it
-        BlockPersistence.save(plugin)
+        BlockPersistence.save(block)
         # Then add it to system
         from mosaicode.system import System
-        System.plugins[plugin.type] = plugin
+        System.blocks[block.type] = block
 
     # ----------------------------------------------------------------------
     @classmethod
-    def delete_plugin(cls, plugin):
+    def delete_block(cls, block):
         from mosaicode.system import System
-        if plugin.source == "xml":
+        if block.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + plugin.type + ".xml"
+            file_name = data_dir + block.type + ".xml"
             os.remove(file_name)
-            System.plugins.pop(plugin.type, None)
+            System.blocks.pop(block.type, None)
             return True
         else:
             return False
 
     # ----------------------------------------------------------------------
     @classmethod
-    def print_plugin(cls, plugin):
+    def print_block(cls, block):
         """
-        This method prints the plugin properties.
+        This method prints the block properties.
         """
-        print 'Plugin.id =', plugin.id
-        print 'Plugin.x =', plugin.x
-        print 'Plugin.y =', plugin.y
+        print 'block.id =', block.id
+        print 'block.x =', block.x
+        print 'block.y =', block.y
 
-        print 'Plugin.type =', plugin.type
-        print 'Plugin.language =', plugin.language
-        print 'Plugin.framework =', plugin.framework
-        print 'Plugin.source =', plugin.source
+        print 'block.type =', block.type
+        print 'block.language =', block.language
+        print 'block.framework =', block.framework
+        print 'block.source =', block.source
 
         # Appearance
-        print 'Plugin.help =', plugin.help
-        print 'Plugin.label =', plugin.label
-        print 'Plugin.color =', plugin.color
-        print 'Plugin.group =', plugin.group
-        print 'Plugin.in_ports =', plugin.in_ports
-        print 'Plugin.out_ports =', plugin.out_ports
+        print 'block.help =', block.help
+        print 'block.label =', block.label
+        print 'block.color =', block.color
+        print 'block.group =', block.group
+        print 'block.in_ports =', block.in_ports
+        print 'block.out_ports =', block.out_ports
 
         # Code generation
-        print 'Plugin.properties =', plugin.properties
-        print 'Plugin.codes =', plugin.codes
+        print 'block.properties =', block.properties
+        print 'block.codes =', block.codes
 # ----------------------------------------------------------------------

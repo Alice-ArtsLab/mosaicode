@@ -37,8 +37,8 @@ class BlockNotebook(Gtk.Notebook):
             self.remove_page(0)
 
         System()
-        for x in System.plugins:
-            instance = System.plugins[x]
+        for x in System.blocks:
+            instance = System.blocks[x]
             name = instance.language
             name += "/" + instance.framework
             if name in languages:
@@ -53,7 +53,7 @@ class BlockNotebook(Gtk.Notebook):
     # ----------------------------------------------------------------------
     def search(self, query):
         """
-        This method search for a plugin.
+        This method search for a block.
 
             Returns:
                 * **Types** (:class:`list<list>`)

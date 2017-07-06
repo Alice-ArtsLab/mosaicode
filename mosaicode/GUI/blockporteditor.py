@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginPortEditor class.
+This module contains the BlockPortEditor class.
 """
 import os
 import gi
@@ -18,7 +18,6 @@ from mosaicomponents.codefield import CodeField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.model.plugin import Plugin
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.system import System as System
 import gettext
@@ -26,17 +25,17 @@ import gettext
 _ = gettext.gettext
 
 
-class PluginPortEditor(Gtk.ScrolledWindow):
+class BlockPortEditor(Gtk.ScrolledWindow):
     """
-    This class contains methods related the PluginPortEditor class
+    This class contains methods related the BlockPortEditor class
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, plugin_editor, plugin):
+    def __init__(self, block_editor, block):
         Gtk.ScrolledWindow.__init__(self)
 
-        self.plugin_editor = plugin_editor
-        self.plugin = plugin
+        self.block_editor = block_editor
+        self.block = block
 
         self.selected_port = None
 
@@ -136,11 +135,11 @@ class PluginPortEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __populate_lists(self):
         self.input_list_store.clear()
-        for port in self.plugin.in_ports:
+        for port in self.block.in_ports:
             self.input_list_store.append([port.get("label")])
 
         self.output_list_store.clear()
-        for port in self.plugin.out_ports:
+        for port in self.block.out_ports:
             self.output_list_store.append([port.get("label")])
 
     # ----------------------------------------------------------------------
@@ -160,7 +159,7 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         if iterac is None:
             return None
         dialog = Dialog().confirm_dialog(_("Are you sure?"),
-                self.plugin_editor)
+                self.block_editor)
         result = dialog.run()
         dialog.destroy()
         if result != Gtk.ResponseType.OK:
@@ -168,9 +167,9 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
 
         if data == "Input":
-            del self.plugin.in_ports[int(str(path))]
+            del self.block.in_ports[int(str(path))]
         else:
-            del self.plugin.out_ports[int(str(path))]
+            del self.block.out_ports[int(str(path))]
         self.__populate_lists()
         self.__clean_side_panel()
 
@@ -189,15 +188,15 @@ class PluginPortEditor(Gtk.ScrolledWindow):
             return
 
         if data == "Input":
-            self.plugin.in_ports[int(str(path))], \
-                self.plugin.in_ports[int(str(path)) - 1] = \
-                self.plugin.in_ports[int(str(path)) - 1], \
-                self.plugin.in_ports[int(str(path))]
+            self.block.in_ports[int(str(path))], \
+                self.block.in_ports[int(str(path)) - 1] = \
+                self.block.in_ports[int(str(path)) - 1], \
+                self.block.in_ports[int(str(path))]
         else:
-            self.plugin.out_ports[int(str(path))], \
-                self.plugin.out_ports[int(str(path)) - 1] = \
-                self.plugin.out_ports[int(str(path)) - 1], \
-                self.plugin.out_ports[int(str(path))]
+            self.block.out_ports[int(str(path))], \
+                self.block.out_ports[int(str(path)) - 1] = \
+                self.block.out_ports[int(str(path)) - 1], \
+                self.block.out_ports[int(str(path))]
         self.__populate_lists()
 
     # ----------------------------------------------------------------------
@@ -213,19 +212,19 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
 
         if data == "Input":
-            if int(str(path)) == len(self.plugin.in_ports) - 1:
+            if int(str(path)) == len(self.block.in_ports) - 1:
                 return
-            self.plugin.in_ports[int(str(path))], \
-                self.plugin.in_ports[int(str(path)) + 1] = \
-                self.plugin.in_ports[int(str(path)) + 1], \
-                self.plugin.in_ports[int(str(path))]
+            self.block.in_ports[int(str(path))], \
+                self.block.in_ports[int(str(path)) + 1] = \
+                self.block.in_ports[int(str(path)) + 1], \
+                self.block.in_ports[int(str(path))]
         else:
-            if int(str(path)) == len(self.plugin.out_ports) - 1:
+            if int(str(path)) == len(self.block.out_ports) - 1:
                 return
-            self.plugin.out_ports[int(str(path))], \
-                self.plugin.out_ports[int(str(path)) + 1] = \
-                self.plugin.out_ports[int(str(path)) + 1], \
-                self.plugin.out_ports[int(str(path))]
+            self.block.out_ports[int(str(path))], \
+                self.block.out_ports[int(str(path)) + 1] = \
+                self.block.out_ports[int(str(path)) + 1], \
+                self.block.out_ports[int(str(path))]
         self.__populate_lists()
 
     # ----------------------------------------------------------------------
@@ -239,7 +238,7 @@ class PluginPortEditor(Gtk.ScrolledWindow):
 
         connectors = []
         for key in System.ports:
-            if System.ports[key].language == self.plugin.language:
+            if System.ports[key].language == self.block.language:
                 connectors.append(key)
 
         data = {"label": _("Type"), "name":"type", "values": connectors}
@@ -267,9 +266,9 @@ class PluginPortEditor(Gtk.ScrolledWindow):
         self.selected_port = data
         configuration = None
         if data == "Input":
-            configuration = self.plugin.in_ports[int(str(path))]
+            configuration = self.block.in_ports[int(str(path))]
         else:
-            configuration = self.plugin.out_ports[int(str(path))]
+            configuration = self.block.out_ports[int(str(path))]
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
@@ -285,23 +284,23 @@ class PluginPortEditor(Gtk.ScrolledWindow):
             return
         if new_port["type"] == "":
             message = "Type can not be empty"
-            Dialog().message_dialog("Error", message, self.plugin_editor)
+            Dialog().message_dialog("Error", message, self.block_editor)
             return
         if new_port["label"] == "":
             message = "Label can not be empty"
-            Dialog().message_dialog("Error", message, self.plugin_editor)
+            Dialog().message_dialog("Error", message, self.block_editor)
             return
         if new_port["name"] == "":
             message = "Name can not be empty"
-            Dialog().message_dialog("Error", message, self.plugin_editor)
+            Dialog().message_dialog("Error", message, self.block_editor)
             return
         contains = False
         i = 0
         collection = None
         if self.selected_port == "Input":
-            collection = self.plugin.in_ports
+            collection = self.block.in_ports
         else:
-            collection = self.plugin.out_ports
+            collection = self.block.out_ports
         for port in collection:
             if port["label"] == new_port["label"]:
                 collection[i] = new_port
