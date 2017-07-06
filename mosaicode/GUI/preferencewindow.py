@@ -7,9 +7,9 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.system import System as System
-from mosaicode.GUI.components.stringfield import StringField
-from mosaicode.GUI.components.openfilefield import OpenFileField
-from mosaicode.GUI.components.intfield import IntField
+from mosaicomponents.stringfield import StringField
+from mosaicomponents.openfilefield import OpenFileField
+from mosaicomponents.intfield import IntField
 import gettext
 
 _ = gettext.gettext
