@@ -31,7 +31,7 @@ class CodeGenerator():
 
         self.blockList = []
         self.connections = []
-        self.codes=[[],[],[],[],[]]
+        self.codes = [[],[],[],[],[]]
 
         if diagram is None:
             return

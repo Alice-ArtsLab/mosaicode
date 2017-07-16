@@ -38,19 +38,41 @@ class CodeTemplateEditor(Gtk.Dialog):
                                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
 
         self.main_control = self
-        self.set_default_size(600, 300)
+        self.set_default_size(800, 300)
 
-        vbox = Gtk.VBox()
+        self.tabs = Gtk.Notebook()
+        self.tabs.set_scrollable(True)
         box = self.get_content_area()
-        box.pack_start(vbox, True, True, 0)
+        box.pack_start(self.tabs, True, True, 0)
 
+        common_tab = Gtk.VBox()
+        code_tab = Gtk.VBox()
+        command_tab = Gtk.VBox()
+
+        self.tabs.append_page(common_tab, Gtk.Label(_("Common")))
+        self.tabs.append_page(code_tab, Gtk.Label(_("Code")))
+        self.tabs.append_page(command_tab, Gtk.Label(_("Command")))
+
+        # First Tab: Common properties
         self.name = StringField({"label": _("Name")}, None)
         self.type = StringField({"label": _("Type")}, None)
         self.description = StringField({"label": _("Description")}, None)
         self.language = StringField({"label": _("Language")}, None)
-        self.command = CodeField({"label": _("")}, None)
         self.extension = StringField({"label": _("Extension")}, None)
+
+        common_tab.pack_start(self.name, False, False, 1)
+        common_tab.pack_start(self.type, False, False, 1)
+        common_tab.pack_start(self.description, False, False, 1)
+        common_tab.pack_start(self.language, False, False, 1)
+        common_tab.pack_start(self.extension, False, False, 1)
+
+        # Second Tab: Code properties
         self.code = CodeField({"label": _("")}, None)
+        code_tab.pack_start(self.code, True, True, 1)
+
+        # Third Tab: Command properties
+        self.command = CodeField({"label": _("")}, None)
+        command_tab.pack_start(self.command, True, True, 1)
 
         if code_template_name is not None:
             System()
@@ -61,20 +83,6 @@ class CodeTemplateEditor(Gtk.Dialog):
             self.command.set_value(System.code_templates[code_template_name].command)
             self.extension.set_value(System.code_templates[code_template_name].extension)
             self.code.set_value(System.code_templates[code_template_name].code)
-
-        vbox.pack_start(self.name, False, False, 1)
-        vbox.pack_start(self.type, False, False, 1)
-        vbox.pack_start(self.description, False, False, 1)
-        vbox.pack_start(self.language, False, False, 1)
-        vbox.pack_start(self.extension, False, False, 1)
-
-        self.codes = Gtk.Notebook()
-        self.codes.set_scrollable(True)
-        vbox.pack_start(self.codes, True, True, 1)
-
-        self.codes.append_page(self.code, Gtk.Label(_("Code")))
-        self.codes.append_page(self.command, Gtk.Label(_("Command")))
-
 
         self.show_all()
         result = self.run()
