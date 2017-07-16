@@ -96,48 +96,35 @@ class CodeGenerator():
         return name
 
     # ----------------------------------------------------------------------
-    def __change_directory(self):
+    def __prepare_block_list(self):
         """
-        This method change the directory.
-        """
-        try:
-            os.makedirs(self.dir_name)
-        except:
-            pass
-        os.chdir(self.dir_name)
-
-    # ----------------------------------------------------------------------
-    def __return_to_old_directory(self):
-        """
-        This method return path to old directory.
-        """
-        os.chdir(self.old_path)
-
-    # ----------------------------------------------------------------------
-    def __sort_blocks(self):
-        """
-        This method sorts the blocks.
+        This method prepare the blocks to code generation.
         """
         for block_key in self.diagram.blocks:
             block = self.diagram.blocks[block_key]
-
             # Creating class attributes on the fly
             try:
-                block.weight = 1
+                block.weight = 0
             except:
-                block.__class__.weight = 1
+                block.__class__.weight = 0
             try:
                 block.connections = []
             except:
                 block.__class__.connections = []
 
+            # Listing all connections that the block is source
             for connection in self.diagram.connectors:
                 if connection.source != block:
                     continue
                 block.connections.append(connection)
             self.blockList.append(block)
 
-        # ajusta o peso de cada bloco
+    # ----------------------------------------------------------------------
+    def __sort_block_list(self):
+        """
+        This method sorts the blocks to code generation.
+        """
+        # adjust the weight of every blocks depending on the connection net
         modification = True
         while modification:
             modification = False
@@ -152,79 +139,61 @@ class CodeGenerator():
                             modification = True
 
     # ----------------------------------------------------------------------
-    def __get_max_weight(self):
+    def __generate_block_list_code(self):
         """
-        This method get max weight.
-
-        Returns:
-        
-            * **Types** (:class:`int<int>`)
+        This metho generate interact block by block to generate all code.
         """
-        biggestWeight = -1
-        for block in self.blockList:
-            if block.weight > biggestWeight:
-                biggestWeight = block.weight
-        return biggestWeight
-
-    # ----------------------------------------------------------------------
-    def __generate_parts(self):
-        """
-        This metho generate parts.
-        """
-        biggestWeight = self.__get_max_weight()
-        for activeWeight in range(biggestWeight):
-            activeWeight += 1
+        active_weight = 0
+        # The maxWeight is, in the worst case, the block list lenght
+        max_weight = len(self.blockList)
+        while active_weight <= max_weight:
+            if len(self.blockList) == 0:
+                break
             for block in self.blockList:
-                if block.weight == activeWeight:
-                    self.generate_block_code(block)
+                if block.weight == active_weight:
+                    # If it your time, lets generate your code and remove you
+                    self.__generate_block_code(block)
+                    self.blockList.remove(block)
+            active_weight += 1
 
     # ----------------------------------------------------------------------
-    def replace_key_value(self, block, key, value):
-        i = 0
-        for code in block.codes:
-            block.codes[i] = code.replace(key, value)
-            i += 1
-
-    # ----------------------------------------------------------------------
-    def generate_block_code(self, block):
+    def __generate_block_code(self, block):
         """
         This method generate the block code.
         """
-
-        # First we replace in ports
-        cont = 0
-        for port in block.in_ports:
-            my_key = "$in_ports[" + port["name"] + "]$"
-            value = System.ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(cont))
-            value = value.replace("$port_name$", port["name"])
-            value = value.replace("$conn_type$", "i")
-            self.replace_key_value(block, my_key, value)
-            cont += 1
-
-        # Then we replace out ports
-        cont = 0
-        for port in block.out_ports:
-            my_key = "$out_ports[" + port["name"] + "]$"
-            value = System.ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(cont))
-            value = value.replace("$port_name$", port["name"])
-            value = value.replace("$conn_type$", "o")
-            self.replace_key_value(block, my_key, value)
-            cont += 1
-
-
-        # First we replace object attributes by their values
-        for key in block.__dict__:
-            my_key = "$" + key + "$"
-            value = str(block.__dict__[key])
-            self.replace_key_value(block, my_key, value)
-
-        # Then we replace properties by their values
-        for prop in block.get_properties():
-            my_key = "$prop[" + prop.get("name") + "]$"
-            value = str(prop.get("value"))
-            self.replace_key_value(block, my_key, value)
+        i = 0
+        for code in block.codes:
+            # First we replace in ports
+            count = 0
+            for port in block.in_ports:
+                value = System.ports[port["type"]].var_name
+                value = value.replace("$port_number$", str(count))
+                value = value.replace("$port_name$", port["name"])
+                value = value.replace("$conn_type$", "i")
+                my_key = "$in_ports[" + port["name"] + "]$"
+                block.codes[i] = block.codes[i].replace(my_key, value)
+                count += 1
+            # Then we replace out ports
+            count = 0
+            for port in block.out_ports:
+                value = System.ports[port["type"]].var_name
+                value = value.replace("$port_number$", str(count))
+                value = value.replace("$port_name$", port["name"])
+                value = value.replace("$conn_type$", "o")
+                my_key = "$out_ports[" + port["name"] + "]$"
+                block.codes[i] = block.codes[i].replace(my_key, value)
+                count += 1
+            # Then we replace object attributes by their values
+            for key in block.__dict__:
+                my_key = "$" + key + "$"
+                value = str(block.__dict__[key])
+                block.codes[i] = block.codes[i].replace(my_key, value)
+            # Then we replace properties by their values
+            for prop in block.get_properties():
+                my_key = "$prop[" + prop.get("name") + "]$"
+                value = str(prop.get("value"))
+                block.codes[i] = block.codes[i].replace(my_key, value)
+            i += 1
 
         for code, block_code in zip(self.codes, block.codes):
             code.append(block_code)
@@ -240,6 +209,7 @@ class CodeGenerator():
             connections += code
         self.connections.append(connections)
 
+
     # ----------------------------------------------------------------------
     def generate_code(self):
         """
@@ -247,53 +217,40 @@ class CodeGenerator():
         """
 
         System.log("Generating Code")
-        self.__sort_blocks()
-        self.__generate_parts()
+        self.__prepare_block_list()
+        self.__sort_block_list()
+        self.__generate_block_list_code()
 
         code = self.code_template.code
 
-        # Replace single code
         count = 0
         for codex in self.codes:
+            # Check for single_code generation
             code_name = "$single_code["+ str(count) + "]$"
-            if code_name not in code:
-                count = count + 1
-                continue
-            temp_header = []
-            temp_code = ""
-            for header_code in codex:
-                if header_code.strip() not in temp_header:
-                    temp_header.append(header_code.strip())
-            for header_code in temp_header:
-                temp_code += header_code
-            code = code.replace(code_name, temp_code)
-            count = count + 1
-
-        # Replace code
-        count = 0
-        for codex in self.codes:
+            if code_name in code:
+                temp_header = []
+                temp_code = ""
+                for header_code in codex:
+                    if header_code.strip() not in temp_header:
+                        temp_header.append(header_code.strip())
+                for header_code in temp_header:
+                    temp_code += header_code
+                code = code.replace(code_name, temp_code)
+            # Check for code generation
             code_name = "$code["+ str(count) + "]$"
-            if code_name not in code:
-                count = count + 1
-                continue
-            temp_code = ""
-            for x in codex:
-                temp_code += x
-            code = code.replace(code_name, temp_code)
-            count = count + 1
-
-        # Replace code + connection
-        count = 0
-        for codex in self.codes:
+            if code_name in code:
+                temp_code = ""
+                for x in codex:
+                    temp_code += x
+                code = code.replace(code_name, temp_code)
+            # Check for code + connections generation
             code_name = "$code["+ str(count) + ", connection]$"
-            if code_name not in code:
-                count = count + 1
-                continue
-            temp_code = ""
-            for x,y in zip(codex, self.connections):
-                temp_code += x
-                temp_code += y
-            code = code.replace(code_name, temp_code)
+            if code_name in code:
+                temp_code = ""
+                for x,y in zip(codex, self.connections):
+                    temp_code += x
+                    temp_code += y
+                code = code.replace(code_name, temp_code)
             count = count + 1
 
         # Replace only connection
@@ -311,8 +268,10 @@ class CodeGenerator():
         """
         if name is None:
             name = self.dir_name + self.filename + self.code_template.extension
-            self.__change_directory()
-            self.__return_to_old_directory()
+            try:
+                os.makedirs(self.dir_name)
+            except:
+                pass
         System.log("Saving Code to " + name)
         codeFile = open(name, 'w')
         if code is None:
@@ -331,9 +290,8 @@ class CodeGenerator():
         command = command.replace("$dir_name$", self.dir_name)
 
         self.save_code(code = code)
-        self.__change_directory()
+        os.chdir(self.dir_name)
 
-        from mosaicode.system import System as System
         System.log("Executing Code: " + command)
 
         program = Thread(target=os.system, args=(command,))
@@ -343,7 +301,6 @@ class CodeGenerator():
             program.join(0.4)
             while Gtk.events_pending():
                 Gtk.main_iteration()
-
-        self.__return_to_old_directory()
+        os.chdir(self.old_path)
 
 # -------------------------------------------------------------------------
