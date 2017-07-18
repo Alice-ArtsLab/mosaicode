@@ -59,12 +59,14 @@ class CodeTemplateEditor(Gtk.Dialog):
         self.description = StringField({"label": _("Description")}, None)
         self.language = StringField({"label": _("Language")}, None)
         self.extension = StringField({"label": _("Extension")}, None)
+        self.code_parts = StringField({"label": _("Code Parts")}, None)
 
         common_tab.pack_start(self.name, False, False, 1)
         common_tab.pack_start(self.type, False, False, 1)
         common_tab.pack_start(self.description, False, False, 1)
         common_tab.pack_start(self.language, False, False, 1)
         common_tab.pack_start(self.extension, False, False, 1)
+        common_tab.pack_start(self.code_parts, False, False, 1)
 
         # Second Tab: Code properties
         self.code = CodeField({"label": _("")}, None)
@@ -83,6 +85,8 @@ class CodeTemplateEditor(Gtk.Dialog):
             self.command.set_value(System.code_templates[code_template_name].command)
             self.extension.set_value(System.code_templates[code_template_name].extension)
             self.code.set_value(System.code_templates[code_template_name].code)
+            code_parts_string = ', '.join(System.code_templates[code_template_name].code_parts)
+            self.code_parts.set_value(code_parts_string)
 
         self.show_all()
         result = self.run()
@@ -101,6 +105,7 @@ class CodeTemplateEditor(Gtk.Dialog):
         code_template.command = self.command.get_value()
         code_template.extension = self.extension.get_value()
         code_template.code = self.code.get_value()
+        code_template.code_parts = self.code_parts.get_value().split(",")
         self.code_template_manager.add_code_template(code_template)
 
 # ----------------------------------------------------------------------

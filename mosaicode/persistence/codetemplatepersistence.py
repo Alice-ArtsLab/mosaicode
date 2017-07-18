@@ -46,6 +46,12 @@ class CodeTemplatePersistence():
             code_template.source = parser.getTagAttr(tag_name,  "source")
             code_template.command = parser.getTag(tag_name).getTag("command").getText()
             code_template.code = parser.getTag(tag_name).getTag("code").getText()
+
+            code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
+            for code_part in code_parts:
+                code_template.code_parts.append(prop.getAttr("value"))
+
+
         except:
             return None
 
@@ -75,6 +81,11 @@ class CodeTemplatePersistence():
         parser.setTagAttr(tag_name,'source', code_template.source)
         parser.appendToTag(tag_name,'command').string = str(code_template.command)
         parser.appendToTag(tag_name,'code').string = str(code_template.code)
+
+        parser.appendToTag(tag_name, 'code_parts')
+        for key in code_template.code_parts:
+            parser.appendToTag('code_parts', 'code_part', value=key)
+
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -114,6 +125,7 @@ class CodeTemplatePersistence():
         parser.setAttribute('command', code_template.command)
         parser.setAttribute('extension', code_template.extension)
         parser.setAttribute('code', code_template.code)
+        parser.setAttribute('code_parts', code_template.code_parts)
         parser.setAttribute('source', 'python')
 
         try:

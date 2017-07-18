@@ -16,6 +16,6 @@ class CodeTemplate(object):
         self.extension = ""
         self.code = "Invalid Code Template"
         self.source = "python"
-        self.keys = []
+        self.code_parts = []
 
 # ------------------------------------------------------------------------------
