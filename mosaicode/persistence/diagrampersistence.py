@@ -10,6 +10,7 @@ from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
 
+tag_name = "mosaicode"
 
 class DiagramPersistence():
     """
@@ -22,21 +23,21 @@ class DiagramPersistence():
         # load the diagram
         parser = XMLParser(diagram.file_name)
 
-        zoom = parser.getTag("mosaicode").getTag("zoom").getAttr("value")
+        zoom = parser.getTag(tag_name).getTag("zoom").getAttr("value")
         diagram.zoom = float(zoom)
         try:
-            language = parser.getTag("mosaicode").getTag(
+            language = parser.getTag(tag_name).getTag(
                 "language").getAttr("value")
             diagram.language = language
         except:
             pass
 
         # new version load
-        blocks = parser.getTag("mosaicode").getTag(
+        blocks = parser.getTag(tag_name).getTag(
             "blocks").getChildTags("block")
         for block in blocks:
             block_type = block.getAttr("type")
-            if block_type not in System.plugins:
+            if block_type not in System.blocks:
                 continue
             block_id = int(block.getAttr("id"))
             position = block.getTag("position")
@@ -49,14 +50,14 @@ class DiagramPersistence():
                     props[prop.key] = prop.value
                 except:
                     pass
-            new_block = System.plugins[block_type]
+            new_block = System.blocks[block_type]
             new_block.set_properties(props)
             new_block.id = block_id
             new_block.x = float(x)
             new_block.y = float(y)
             diagram.add_block(new_block)
 
-        connections = parser.getTag("mosaicode").getTag(
+        connections = parser.getTag(tag_name).getTag(
             "connections").getChildTags("connection")
         for conn in connections:
             try:
@@ -83,12 +84,12 @@ class DiagramPersistence():
         """
 
         parser = XMLParser()
-        parser.addTag('mosaicode')
-        parser.appendToTag('mosaicode', 'version', value=System.VERSION)
-        parser.appendToTag('mosaicode', 'zoom', value=diagram.zoom)
-        parser.appendToTag('mosaicode', 'language', value=diagram.language)
+        parser.addTag(tag_name)
+        parser.appendToTag(tag_name, 'version', value=System.VERSION)
+        parser.appendToTag(tag_name, 'zoom', value=diagram.zoom)
+        parser.appendToTag(tag_name, 'language', value=diagram.language)
 
-        parser.appendToTag('mosaicode', 'blocks')
+        parser.appendToTag(tag_name, 'blocks')
         for block_id in diagram.blocks:
             block_type = diagram.blocks[block_id].type
             pos = diagram.blocks[block_id].get_position()
@@ -102,7 +103,7 @@ class DiagramPersistence():
                                        value=str(prop["value"])
                                        )
 
-        parser.appendToTag('mosaicode', 'connections')
+        parser.appendToTag(tag_name, 'connections')
         for connector in diagram.connectors:
             parser.appendToTag('connections', 'connection',
                                from_block=connector.source.id,

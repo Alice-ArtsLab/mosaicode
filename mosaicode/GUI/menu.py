@@ -89,22 +89,22 @@ class Menu(Gtk.MenuBar):
                            process_menu, mc.view_source)
         self.__add_menu_category(_("Process"), process_menu)
 
-        # -------------------------- Plugin --------------------------------
-        plugin_menu = Gtk.Menu()
+        # -------------------------- Extension --------------------------------
+        extension_menu = Gtk.Menu()
         self.__create_menu(_("Code Template Manager"), None,
-                           plugin_menu, mc.code_template_manager)
-        self.__create_menu(_("Plugin Manager"), None,
-                           plugin_menu, mc.plugin_manager)
+                           extension_menu, mc.code_template_manager)
+        self.__create_menu(_("Block Manager"), None,
+                           extension_menu, mc.block_manager)
         self.__create_menu(_("Port Manager"), None,
-                           plugin_menu, mc.port_manager)
-        plugin_menu.append(Gtk.SeparatorMenuItem())
-        self.export_plugins_menu = Gtk.Menu()
-        export_plugins = self.__create_menu(_("Export As..."), None, plugin_menu, None)
-        export_plugins.set_submenu(self.export_plugins_menu)
-        self.__create_menu(_("Python"), None, self.export_plugins_menu, mc.export_python_dialog)
-        self.__create_menu(_("XML"), None, self.export_plugins_menu, mc.export_xml_dialog)
+                           extension_menu, mc.port_manager)
+        extension_menu.append(Gtk.SeparatorMenuItem())
+        self.export_blocks_menu = Gtk.Menu()
+        export_blocks = self.__create_menu(_("Export As..."), None, extension_menu, None)
+        export_blocks.set_submenu(self.export_blocks_menu)
+        self.__create_menu(_("Python"), None, self.export_blocks_menu, mc.export_python_dialog)
+        self.__create_menu(_("XML"), None, self.export_blocks_menu, mc.export_xml_dialog)
 
-        self.__add_menu_category(_("Plugins"), plugin_menu)
+        self.__add_menu_category(_("Extensions"), extension_menu)
 
         # -------------------------- Help -----------------------------------
         # Cria sub menu

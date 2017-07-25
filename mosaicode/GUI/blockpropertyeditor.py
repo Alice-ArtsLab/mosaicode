@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginPropertyEditor class.
+This module contains the BlockPropertyEditor class.
 """
 import os
 import gi
@@ -10,15 +10,14 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from mosaicode.GUI.components.stringfield import StringField
-from mosaicode.GUI.components.combofield import ComboField
-from mosaicode.GUI.components.colorfield import ColorField
-from mosaicode.GUI.components.commentfield import CommentField
-from mosaicode.GUI.components.codefield import CodeField
-from mosaicode.GUI.components.openfilefield import OpenFileField
+from mosaicomponents.stringfield import StringField
+from mosaicomponents.combofield import ComboField
+from mosaicomponents.colorfield import ColorField
+from mosaicomponents.commentfield import CommentField
+from mosaicomponents.codefield import CodeField
+from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.model.plugin import Plugin
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.system import System as System
 import gettext
@@ -26,18 +25,18 @@ import gettext
 _ = gettext.gettext
 
 
-class PluginPropertyEditor(Gtk.ScrolledWindow):
+class BlockPropertyEditor(Gtk.ScrolledWindow):
     """
-    This class contains methods related the PluginPropertyEditor class
+    This class contains methods related the BlockPropertyEditor class
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, plugin_editor, plugin):
+    def __init__(self, block_editor, block):
 
         Gtk.ScrolledWindow.__init__(self)
 
-        self.plugin_editor = plugin_editor
-        self.plugin = plugin
+        self.block_editor = block_editor
+        self.block = block
 
         for widget in self.get_children():
             self.remove(widget)
@@ -94,7 +93,7 @@ class PluginPropertyEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __populate_property(self):
         self.list_store.clear()
-        for prop in self.plugin.get_properties():
+        for prop in self.block.get_properties():
             self.list_store.append([prop.get("label")])
 
     # ----------------------------------------------------------------------
@@ -115,13 +114,13 @@ class PluginPropertyEditor(Gtk.ScrolledWindow):
         if iterac is None:
             return None
         dialog = Dialog().confirm_dialog(_("Are you sure?"),
-                self.plugin_editor)
+                self.block_editor)
         result = dialog.run()
         dialog.destroy()
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)
-        del self.plugin.get_properties()[int(str(path))]
+        del self.block.get_properties()[int(str(path))]
         self.__populate_property()
         self.__clean_side_panel()
 
@@ -134,10 +133,10 @@ class PluginPropertyEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
         if int(str(path)) == 0:
             return
-        self.plugin.get_properties()[int(str(path))], \
-            self.plugin.get_properties()[int(str(path)) - 1] = \
-            self.plugin.get_properties()[int(str(path)) - 1], \
-            self.plugin.get_properties()[int(str(path))]
+        self.block.get_properties()[int(str(path))], \
+            self.block.get_properties()[int(str(path)) - 1] = \
+            self.block.get_properties()[int(str(path)) - 1], \
+            self.block.get_properties()[int(str(path))]
         self.__populate_property()
 
     # ----------------------------------------------------------------------
@@ -147,12 +146,12 @@ class PluginPropertyEditor(Gtk.ScrolledWindow):
         if iterac is None:
             return None
         path = model.get_path(iterac)
-        if int(str(path)) == len(self.plugin.get_properties()) - 1:
+        if int(str(path)) == len(self.block.get_properties()) - 1:
             return
-        self.plugin.get_properties()[int(str(path))], \
-            self.plugin.get_properties()[int(str(path)) + 1] = \
-            self.plugin.get_properties()[int(str(path)) + 1], \
-            self.plugin.get_properties()[int(str(path))]
+        self.block.get_properties()[int(str(path))], \
+            self.block.get_properties()[int(str(path)) + 1] = \
+            self.block.get_properties()[int(str(path)) + 1], \
+            self.block.get_properties()[int(str(path))]
         self.__populate_property()
 
     # ----------------------------------------------------------------------
@@ -185,7 +184,7 @@ class PluginPropertyEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_props_row_activated(self, tree_view, path, column):
-        configuration = self.plugin.get_properties()[int(str(path))]
+        configuration = self.block.get_properties()[int(str(path))]
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
@@ -201,21 +200,21 @@ class PluginPropertyEditor(Gtk.ScrolledWindow):
             return
         if configuration["label"] == "":
             message = "Label can not be empty"
-            Dialog().message_dialog("Error", message, self.plugin_editor)
+            Dialog().message_dialog("Error", message, self.block_editor)
             return
         if configuration["name"] == "":
             message = "Name can not be empty"
-            Dialog().message_dialog("Error", message, self.plugin_editor)
+            Dialog().message_dialog("Error", message, self.block_editor)
             return
         contains = False
         i = 0
-        for props in self.plugin.properties:
+        for props in self.block.properties:
             if props["label"] == configuration["label"]:
-                self.plugin.properties[i] = configuration
+                self.block.properties[i] = configuration
                 contains = True
             i += 1
         if not contains:
-            self.plugin.properties.append(configuration)
+            self.block.properties.append(configuration)
         self.__populate_property()
         self.__clean_side_panel()
 

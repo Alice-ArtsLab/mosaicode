@@ -6,7 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-import mosaicode.GUI.components
+import mosaicomponents
 from gi.repository import Gtk
 from gi.repository import Gdk
 from mosaicode.GUI.fieldtypes import *

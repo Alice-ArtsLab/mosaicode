@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginManager class.
+This module contains the PortManager class.
 """
 import os
 import gi
@@ -10,16 +10,15 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from mosaicode.GUI.components.stringfield import StringField
-from mosaicode.GUI.components.combofield import ComboField
-from mosaicode.GUI.components.colorfield import ColorField
-from mosaicode.GUI.components.commentfield import CommentField
-from mosaicode.GUI.components.codefield import CodeField
-from mosaicode.GUI.components.openfilefield import OpenFileField
+from mosaicomponents.stringfield import StringField
+from mosaicomponents.combofield import ComboField
+from mosaicomponents.colorfield import ColorField
+from mosaicomponents.commentfield import CommentField
+from mosaicomponents.codefield import CodeField
+from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.porteditor import PortEditor
 from mosaicode.GUI.dialog import Dialog
-from mosaicode.model.plugin import Plugin
 from mosaicode.system import System as System
 import gettext
 

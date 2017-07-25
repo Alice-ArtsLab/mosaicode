@@ -179,58 +179,58 @@ class CodeGenerator():
                     self.generate_block_code(block)
 
     # ----------------------------------------------------------------------
-    def replace_key_value(self, plugin, key, value):
+    def replace_key_value(self, block, key, value):
         i = 0
-        for code in plugin.codes:
-            plugin.codes[i] = code.replace(key, value)
+        for code in block.codes:
+            block.codes[i] = code.replace(key, value)
             i += 1
 
     # ----------------------------------------------------------------------
-    def generate_block_code(self, plugin):
+    def generate_block_code(self, block):
         """
         This method generate the block code.
         """
 
         # First we replace in ports
         cont = 0
-        for port in plugin.in_ports:
+        for port in block.in_ports:
             my_key = "$in_ports[" + port["name"] + "]$"
             value = System.ports[port["type"]].var_name
             value = value.replace("$port_number$", str(cont))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", "i")
-            self.replace_key_value(plugin, my_key, value)
+            self.replace_key_value(block, my_key, value)
             cont += 1
 
         # Then we replace out ports
         cont = 0
-        for port in plugin.out_ports:
+        for port in block.out_ports:
             my_key = "$out_ports[" + port["name"] + "]$"
             value = System.ports[port["type"]].var_name
             value = value.replace("$port_number$", str(cont))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", "o")
-            self.replace_key_value(plugin, my_key, value)
+            self.replace_key_value(block, my_key, value)
             cont += 1
 
 
         # First we replace object attributes by their values
-        for key in plugin.__dict__:
+        for key in block.__dict__:
             my_key = "$" + key + "$"
-            value = str(plugin.__dict__[key])
-            self.replace_key_value(plugin, my_key, value)
+            value = str(block.__dict__[key])
+            self.replace_key_value(block, my_key, value)
 
         # Then we replace properties by their values
-        for prop in plugin.get_properties():
+        for prop in block.get_properties():
             my_key = "$prop[" + prop.get("name") + "]$"
             value = str(prop.get("value"))
-            self.replace_key_value(plugin, my_key, value)
+            self.replace_key_value(block, my_key, value)
 
-        for code, plugin_code in zip(self.codes, plugin.codes):
-            code.append(plugin_code)
+        for code, block_code in zip(self.codes, block.codes):
+            code.append(block_code)
 
         connections = ""
-        for x in plugin.connections:
+        for x in block.connections:
             code = System.ports[x.conn_type].code
             # Replace all connection properties by their values
             for key in x.__dict__:

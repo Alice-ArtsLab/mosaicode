@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the PluginCode class.
+This module contains the BlockCodeEditor class.
 """
 import os
 import gi
@@ -11,34 +11,33 @@ gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from mosaicode.GUI.blocknotebook import BlockNotebook
-from mosaicode.GUI.components.codefield import CodeField
-from mosaicode.GUI.components.colorfield import ColorField
-from mosaicode.GUI.components.combofield import ComboField
-from mosaicode.GUI.components.commentfield import CommentField
-from mosaicode.GUI.components.openfilefield import OpenFileField
-from mosaicode.GUI.components.stringfield import StringField
+from mosaicomponents.codefield import CodeField
+from mosaicomponents.colorfield import ColorField
+from mosaicomponents.combofield import ComboField
+from mosaicomponents.commentfield import CommentField
+from mosaicomponents.openfilefield import OpenFileField
+from mosaicomponents.stringfield import StringField
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.GUI.pluginporteditor import PluginPortEditor
-from mosaicode.GUI.pluginpropertyeditor import PluginPropertyEditor
-from mosaicode.model.plugin import Plugin
+from mosaicode.GUI.blockporteditor import BlockPortEditor
+from mosaicode.GUI.blockpropertyeditor import BlockPropertyEditor
 from mosaicode.system import System as System
 import gettext
 
 _ = gettext.gettext
 
 
-class PluginCodeEditor(Gtk.ScrolledWindow):
+class BlockCodeEditor(Gtk.ScrolledWindow):
     """
-    This class contains methods related the PluginCode class
+    This class contains methods related the BlockCodeEditor class
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, plugin_editor, plugin):
+    def __init__(self, block_editor, block):
         Gtk.ScrolledWindow.__init__(self)
 
-        self.plugin_editor = plugin_editor
-        self.plugin = plugin
+        self.block_editor = block_editor
+        self.block = block
 
         for widget in self.get_children():
             self.remove(widget)
@@ -56,7 +55,7 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
 
         self.code_widgets = []
         count = 0
-        for code_value in self.plugin.codes:
+        for code_value in self.block.codes:
             data = {"label": _("Code " + str(count)), "value": code_value}
             self.code_widgets.append(CodeField(data, self.__on_edit))
             self.code_notebook.append_page(self.code_widgets[count],
@@ -68,13 +67,13 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __on_edit(self, widget=None, data=None):
         """
-        This method save the plugin.
+        This method save the block.
             Parameters:
-                * **plugin** (:class:`<>`)
+                * **block** (:class:`<>`)
         """
         count = 0
         for code_widget in self.code_widgets:
-            self.plugin.codes[count] = self.code_widgets[count].get_value()
+            self.block.codes[count] = self.code_widgets[count].get_value()
             count = count + 1
 
     # ----------------------------------------------------------------------
@@ -83,7 +82,7 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
         for widget in button_bar.get_children():
             button_bar.remove(widget)
 
-        # Plugin Common Properties
+        # Block Common Properties
         data = {"label": _("Common Properties"),
                 "name": "common",
                 "values": ["id",
@@ -99,12 +98,12 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
         self.commons = ComboField(data, self.__on_select)
         button_bar.pack_start(self.commons, False, False, 0)
 
-        # Plugin Properties
+        # Block Properties
         values = []
-        for prop in self.plugin.get_properties():
+        for prop in self.block.get_properties():
             values.append("prop[" + prop["name"] + "]")
         values.sort()
-        data = {"label": _("Plugin Properties"),
+        data = {"label": _("Block Properties"),
                 "name":"props",
                 "values": values}
         self.props = ComboField(data, self.__on_select)
@@ -140,9 +139,9 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
             Parameters:
         """
         count = 0
-        for code_value in self.plugin.codes:
+        for code_value in self.block.codes:
             i = 0
-            for port in self.plugin.in_ports:
+            for port in self.block.in_ports:
                 value = System.ports[port["type"]].input_codes[count].replace(
                         "$port_number$", str(i))
                 self.code_widgets[count].set_value(
@@ -150,7 +149,7 @@ class PluginCodeEditor(Gtk.ScrolledWindow):
                 i += 1
 
             i = 0
-            for port in self.plugin.out_ports:
+            for port in self.block.out_ports:
                 value = System.ports[port["type"]].output_codes[count].replace(
                         "$port_number$", str(i))
                 self.code_widgets[count].set_value(

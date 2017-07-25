@@ -15,7 +15,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from mosaicode.system import System as System
 from mosaicode.GUI.blockmenu import BlockMenu
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
 
 WIDTH_DEFAULT = 112
 HEIGHT_DEFAULT = 60
@@ -24,19 +24,19 @@ RADIUS = 25
 INPUT_WIDTH = 24
 INPUT_HEIGHT = 12
 
-class Block(GooCanvas.CanvasGroup, Plugin):
+class Block(GooCanvas.CanvasGroup, BlockModel):
     """
     This class contains methods related the Block class
     """
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram, plugin):
+    def __init__(self, diagram, block):
         """
         This method is the constuctor.
         """
         GooCanvas.CanvasGroup.__init__(self)
-        Plugin.__init__(self, plugin)
+        BlockModel.__init__(self, block)
 
         self.diagram = diagram
         self.data_dir = System.DATA_DIR
@@ -458,7 +458,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                 * **data**
         """
         self.diagram.do("Set block property")
-        Plugin.set_properties(self, data)
+        BlockModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -468,7 +468,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             Returns:
                 * **Types** ()
         """
-        return Plugin.get_properties(self)
+        return BlockModel.get_properties(self)
 
     # ----------------------------------------------------------------------
     def update_flow(self):

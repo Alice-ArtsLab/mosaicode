@@ -15,7 +15,7 @@ from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.model.preferences import Preferences
 from mosaicode.model.codetemplate import CodeTemplate
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.port import Port
 
 
@@ -45,7 +45,7 @@ class System(object):
             self.Log = None
             self.properties = Preferences()
             self.code_templates = {}
-            self.plugins = {}
+            self.blocks = {}
             self.list_of_examples = []
             self.ports = {}
             self.__load()
@@ -74,10 +74,10 @@ class System(object):
                     port.source = "xml"
                     self.ports[port.type] = port
 
-                plugin = BlockControl.load(full_file_path)
-                if plugin is not None:
-                    plugin.source = "xml"
-                    self.plugins[plugin.type] = plugin
+                block = BlockControl.load(full_file_path)
+                if block is not None:
+                    block.source = "xml"
+                    self.blocks[block.type] = block
 
         # ----------------------------------------------------------------------
         def __load(self):
@@ -95,10 +95,10 @@ class System(object):
                 self.list_of_examples.append(example)
             self.list_of_examples.sort()
 
-            # Load CodeTemplates, Plugins and Ports
+            # Load CodeTemplates, Blocks and Ports
             self.code_templates.clear()
             self.ports.clear()
-            self.plugins.clear()
+            self.blocks.clear()
             # First load ports on python classes.
             # They are installed with mosaicode as root
 
@@ -127,9 +127,9 @@ class System(object):
                                 if isinstance(instance, Port):
                                     instance.source = "Python"
                                     self.ports[instance.type] = instance
-                                if isinstance(instance, Plugin):
+                                if isinstance(instance, BlockModel):
                                     if instance.label != "":
-                                        self.plugins[instance.type] = instance
+                                        self.blocks[instance.type] = instance
 
 
             my_walk_packages(None, "")
@@ -150,7 +150,7 @@ class System(object):
             System.instance = System.__Singleton()
             # Add properties dynamically
             cls.properties = System.instance.properties
-            cls.plugins = System.instance.plugins
+            cls.blocks = System.instance.blocks
             cls.list_of_examples = System.instance.list_of_examples
             cls.ports = System.instance.ports
             cls.code_templates = System.instance.code_templates

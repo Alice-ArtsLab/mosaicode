@@ -2,7 +2,7 @@
 
 class Port(object):
     """
-    This class contains the base attributes of each plugin port.
+    This class contains the base attributes of each block port.
     """
 
     # ----------------------------------------------------------------------

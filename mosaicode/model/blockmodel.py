@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
-class Plugin(object):
+class BlockModel(object):
     """
-    This class contains the base attributes of each plug-in,
+    This class contains the base attributes of each block,
     their position on the screen, id and others applicable properties for 
     each one.
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, plugin = None):
+    def __init__(self, block = None):
 
         self.id = -1
         self.x = 0
@@ -33,10 +33,10 @@ class Plugin(object):
         self.properties = []
         self.codes = ["","","","",""] # Empty array with 5 positions
 
-        if plugin == None:
+        if block == None:
             return
         for key in self.__dict__:
-            self.__dict__[key] = plugin.__dict__[key]
+            self.__dict__[key] = block.__dict__[key]
 
     # ----------------------------------------------------------------------
     def get_color(self):
@@ -91,7 +91,7 @@ class Plugin(object):
             if key in data:
                 prop["value"] = data[key]
             else:
-                print "Plugin.set_property (" + self.type + \
+                print "BlockModel.set_property (" + self.type + \
                         ") ERROR: key ", key, "not present"
 
     # ----------------------------------------------------------------------
