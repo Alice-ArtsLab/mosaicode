@@ -36,7 +36,7 @@ def main(argv):
     parser.add_argument("-x", "--export", type=str, choices=['py', 'xml'],
                         help="Export extensions to Python or XML format")
     parser.add_argument("--print_ports", action="store_true", help="Print ports")
-    parser.add_argument("--print_plugins", action="store_true", help="Print plugnis")
+    parser.add_argument("--print_plugins", action="store_true", help="Print plugins")
     parser.add_argument("--print_templates", action="store_true", help="Print code templates")
     args = parser.parse_args()
 

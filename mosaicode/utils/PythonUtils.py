@@ -34,14 +34,17 @@ class PythonParser(object):
         except:
             print "Attribute", attr,"doesn\'t exist!"
             return None
+
     # ----------------------------------------------------------------------
     def getDependencies(self):
         dependencies = ''
-        for dependency in self.dependencies:
-            dependencies += 'from '+dependency['from']+ ' import ' +dependency['import']+ '\n'
+        if self.dependencies != None:
+            for dependency in self.dependencies:
+                dependencies += 'from '+dependency['from']+ ' import ' +dependency['import']+ '\n'
 
         dependencies += '\n'
         return dependencies
+
     # ----------------------------------------------------------------------
     def getInheritedClasses(self):
         if self.inherited_classes is None:
@@ -52,6 +55,7 @@ class PythonParser(object):
         inherited_classes = inherited_classes[:len(inherited_classes)-2]
         inherited_classes += '):'
         return inherited_classes
+
     # ----------------------------------------------------------------------
     def clear_string(self, string):
         start = 0
@@ -69,6 +73,7 @@ class PythonParser(object):
         string = string[start:end]
 
         return string
+
     # ----------------------------------------------------------------------
     def save(self, file_name):
         space = '    '
@@ -86,4 +91,5 @@ class PythonParser(object):
 
         f.write(source)
         f.close()
+
 # ----------------------------------------------------------------------

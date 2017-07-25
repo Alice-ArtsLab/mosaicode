@@ -439,7 +439,6 @@ class MainControl():
         """
         CodeTemplateManager(self.main_window)
 
-
     # ----------------------------------------------------------------------
     def plugin_manager(self):
         """

@@ -61,6 +61,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         # Used for cycle detection
         self.__marks = None
+        self.language = ""
+        #self.file_name = ""
 
     # ----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
@@ -320,7 +322,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         self.__abort_connection()  # abort any possibly running connections
         if output >= len(block.out_ports):
-            return 
+            return
         conn_type = block.out_ports[output]["type"]
         self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)

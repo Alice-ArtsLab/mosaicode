@@ -6,6 +6,7 @@ import gi
 import os
 from gi.repository import Gtk
 gi.require_version('Gtk', '3.0')
+from mosaicode.system import System as System
 import gettext
 _ = gettext.gettext
 
