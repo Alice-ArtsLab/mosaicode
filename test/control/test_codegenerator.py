@@ -3,7 +3,7 @@ from mosaicode.control.codegenerator import CodeGenerator
 from mosaicode.GUI.diagram import Diagram
 #from mosaicode.GUI.block import Block
 from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.model.codetemplate import CodeTemplate as CodeTemplate
 
@@ -13,29 +13,29 @@ class TestCodeGenerator(TestCase):
 
     def setUp(self):
         """Do the test basic setup."""
-        self.plugin = Plugin()
+        self.blockmodel = BlockModel()
 
-        self.plugin.id = 1
-        self.plugin.x = 2
-        self.plugin.y = 2
+        self.blockmodel.id = 1
+        self.blockmodel.x = 2
+        self.blockmodel.y = 2
 
-        self.plugin.language = "c"
-        self.plugin.framework = "opencv"
-        self.plugin.help = "Adiciona bordas na imagem."
-        self.plugin.label = "Add Border"
-        self.plugin.color = "0:180:210:150"
-        self.plugin.in_ports = [{"type":"mosaicode_c_opencv.extensions.ports.image",
+        self.blockmodel.language = "c"
+        self.blockmodel.framework = "opencv"
+        self.blockmodel.help = "Adiciona bordas na imagem."
+        self.blockmodel.label = "Add Border"
+        self.blockmodel.color = "0:180:210:150"
+        self.blockmodel.in_ports = [{"type":"mosaicode_c_opencv.extensions.ports.image",
                           "name":"input_image",
                           "label":"Input Image"},
                          {"type":"mosaicode_c_opencv.extensions.ports.int",
                           "name":"border_size",
                           "label":"Border Size"}
                          ]
-        self.plugin.out_ports = [{"type":"mosaicode_c_opencv.extensions.ports.image",
+        self.blockmodel.out_ports = [{"type":"mosaicode_c_opencv.extensions.ports.image",
                            "name":"output_image",
                            "label":"Output Image"}]
-        self.plugin.group = "Experimental"
-        self.plugin.properties = [{"label": "Color",
+        self.blockmodel.group = "Experimental"
+        self.blockmodel.properties = [{"label": "Color",
                             "name": "color",
                             "type": MOSAICODE_COLOR,
                             "value":"#FF0000"
@@ -55,7 +55,7 @@ class TestCodeGenerator(TestCase):
                             "value":"50"
                             }
                            ]
-        self.plugin.codes[0] = \
+        self.blockmodel.codes[0] = \
             "CvScalar get_scalar_color(const char * rgbColor){\n" + \
             "   if (strlen(rgbColor) < 13 || rgbColor[0] != '#')\n" + \
             "       return cvScalar(0,0,0,0);\n" + \
@@ -75,11 +75,11 @@ class TestCodeGenerator(TestCase):
             "   \n" + \
             "   return cvScalar(bi, gi, ri, 0);\n" + \
             "}\n"
-        self.plugin.codes[1] = \
+        self.blockmodel.codes[1] = \
             "IplImage * block$id$_img_i0 = NULL;\n" + \
             "int block$id$_int_i1 = $prop[border_size]$;\n" + \
             "IplImage * block$id$_img_o0 = NULL;\n"
-        self.plugin.codes[2] = \
+        self.blockmodel.codes[2] = \
             'if(block$id$_img_i0){\n' + \
             '\tCvSize size$id$ = cvSize(block$id$_img_i0->width +' + \
             ' block$id$_int_i1 * 2, block$id$_img_i0->height' + \
@@ -97,7 +97,7 @@ class TestCodeGenerator(TestCase):
         win = MainWindow()
         self.diagram = Diagram(win)
         self.codetemplate = CodeTemplate()
-        #block = Block(diagram, plugin)
+        #block = Block(diagram, blockmodel)
         #diagram.language = None
         self.code_generator = CodeGenerator(None, None)
         self.diagram.language = None
@@ -144,18 +144,18 @@ class TestCodeGenerator(TestCase):
 
         key = "2"
         value = "3"
-        self.assertIsNone(self.code_generator.replace_key_value(self.plugin, key, value))
+        self.assertIsNone(self.code_generator.replace_key_value(self.blockmodel, key, value))
 
         key = "1"
         value = "1"
-        self.assertIsNone(self.code_generator.replace_key_value(self.plugin, key, value))
+        self.assertIsNone(self.code_generator.replace_key_value(self.blockmodel, key, value))
 
         #self.code_generator.replace_key_value()
 
     # ----------------------------------------------------------------------
     def test_generate_block_code(self):
         #self.code_generator.generate_block_code()
-        self.assertIsNone(self.code_generator.generate_block_code(self.plugin))
+        self.assertIsNone(self.code_generator.generate_block_code(self.blockmodel))
 
     # ----------------------------------------------------------------------
     def test_generate_code(self):

@@ -1,4 +1,4 @@
-mosaicode.plugins.C package
+mosaicode.blockmodels.C package
 ========================
 
 Subpackages
@@ -6,15 +6,15 @@ Subpackages
 
 .. toctree::
 
-    mosaicode.plugins.C.openCV
+    mosaicode.blockmodels.C.openCV
 
 Submodules
 ----------
 
-mosaicode.plugins.C.cgenerator module
+mosaicode.blockmodels.C.cgenerator module
 ----------------------------------
 
-.. automodule:: mosaicode.plugins.C.cgenerator
+.. automodule:: mosaicode.blockmodels.C.cgenerator
     :members:
     :undoc-members:
     :show-inheritance:
@@ -23,7 +23,7 @@ mosaicode.plugins.C.cgenerator module
 Module contents
 ---------------
 
-.. automodule:: mosaicode.plugins.C
+.. automodule:: mosaicode.blockmodels.C
     :members:
     :undoc-members:
     :show-inheritance:

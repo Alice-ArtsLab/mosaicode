@@ -27,11 +27,7 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-<<<<<<< HEAD
-      install_requires=['beautifulsoup4', 'pip', 'python>=2.7'],
-=======
       install_requires=['mosaicomponents','beautifulsoup4', 'pip', 'Python>=2.7'],
->>>>>>> mosaicode/master
       tests_require=['pytest'],
       test_suite='test',
       version='1.0a7',

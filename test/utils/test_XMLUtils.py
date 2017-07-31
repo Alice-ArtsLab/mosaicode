@@ -3,6 +3,8 @@
 from unittest import TestCase
 from mosaicode.utils.XMLUtils import XMLParser
 
+FILES_INPUT = "/home/lucas/Faculdade/2017-1/Iniciacao/Mosaicode/mosaicode/test/files_for_test/input/"
+
 class TestXMLParser(TestCase):
 
     def setUp(self):
@@ -12,10 +14,15 @@ class TestXMLParser(TestCase):
         fromTag = False
         self.xml_parser = XMLParser(source, fromString, fromTag)
 
-        source = "And.mscd"
+        source = FILES_INPUT + "And.mscd"
         fromString = False
         fromTag = False
         self.xml_parser = XMLParser(source, fromString, fromTag)
+
+        # source = FILES_INPUT + "And.mscd"
+        # fromString = True
+        # fromTag = False
+        # self.xml_parser = XMLParser(source, fromString, fromTag)
         #
         # source = "TESTE"
         # fromString = True
@@ -79,59 +86,58 @@ class TestXMLParser(TestCase):
     def test_getChildTags(self):
         child = "position"
         self.assertIsNotNone(self.xml_parser.getChildTags(child))
+        child = "block"
+        self.assertIsNotNone(self.xml_parser.getChildTags(child))
 
     # ----------------------------------------------------------------------
     def test_addTag(self):
         tagName = "position"
-        attr = [1, 3, 4]
-        self.assertIsNone(self.xml_parser.setTagAttr(tagName, attr[0], attr[1]))
+        self.assertIsNotNone(self.xml_parser.addTag(tagName))
 
     # ----------------------------------------------------------------------
     def test_appendToTag(self):
-        tag = "position"
-        attr = "x"
-        self.assertIsNone(self.xml_parser.setTagAttr(tag, attr, 10))
+        tagParent = "position"
+        tagChild = "x"
+        self.assertIsNotNone(self.xml_parser.appendToTag(tagParent, tagChild))
 
     # ----------------------------------------------------------------------
     def test_appendToLastTag(self):
-        tag = "position"
-        attr = "x"
-        self.assertIsNone(self.xml_parser.setTagAttr(tag, attr, 10))
+        tagParent = "position"
+        tagChild = "x"
+        self.assertIsNotNone(self.xml_parser.appendToLastTag(tagParent, tagChild))
 
     # ----------------------------------------------------------------------
     def test_getXML(self):
-        tag = "position"
-        attr = "x"
-        self.assertIsNone(self.xml_parser.setTagAttr(tag, attr, 10))
+        self.assertIsNotNone(self.xml_parser.getXML())
 
     # ----------------------------------------------------------------------
     def test_getTagXML(self):
-        tag = "position"
-        attr = "x"
-        self.assertIsNone(self.xml_parser.setTagAttr(tag, attr, 10))
+        tagName = "position"
+        tag = self.xml_parser.addTag(tagName)
+        self.assertIsNotNone(self.xml_parser.getTagXML(tag))
 
     # ----------------------------------------------------------------------
     def test_getTag(self):
+        tagName = "position"
+        tag = self.xml_parser.addTag(tagName)
+        self.assertIsNone(self.xml_parser.getTag(tag))
+        tag = "ABC"
+        self.assertIsNone(self.xml_parser.getTag(tag))
         tag = "position"
-        attr = "x"
-        self.assertIsNone(self.xml_parser.setTagAttr(tag, attr, 10))
+        self.assertIsNotNone(self.xml_parser.getTag(tag))
 
     # ----------------------------------------------------------------------
     def test_getTagChild(self):
-        tag = "position"
-        attr = "x"
-        self.assertIsNone(self.xml_parser.setTagAttr(tag, attr, 10))
+        parent = "block"
+        child = "position"
+        self.assertIsNotNone(self.xml_parser.getTagChild(parent, child))
 
     # ----------------------------------------------------------------------
     def test_getTagContent(self):
-        tag = "position"
-        attr = "x"
         self.assertIsNotNone(self.xml_parser.getTagContent())
 
     # ----------------------------------------------------------------------
     def test_getTagChildren(self):
-        tag = "position"
-        attr = "x"
         self.assertIsNotNone(self.xml_parser.getTagChildren())
 
     # ----------------------------------------------------------------------

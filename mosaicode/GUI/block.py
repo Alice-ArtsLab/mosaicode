@@ -60,7 +60,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         """
-        This method monitors the when the button is pressed.
+        This method monitors when the button is pressed.
 
             Parameters:
                 canvas_item
@@ -341,8 +341,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         self.widgets = {}
         # remove all elements
-        while self.get_root_item().get_n_children() != 0:
-            self.get_root_item().remove_child(0)
+        while self.diagram.get_root_item().get_n_children() != 0:
+            self.diagram.get_root_item().remove_child(0)
         self.build()
 
     # ----------------------------------------------------------------------

@@ -4,7 +4,7 @@ from unittest import TestCase
 from mosaicode.control.maincontrol import MainControl
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.model.plugin import Plugin
+from mosaicode.model.blockmodel import BlockModel
 
 
 class TestMainControl(TestCase):
@@ -24,7 +24,7 @@ class TestMainControl(TestCase):
 
     # ----------------------------------------------------------------------
     def test_open(self):
-        file_name = "app_data/examples/And.hrp"
+        file_name = "test/files_for_test/And.mscd"
         self.assertIsNone(self.main_control.open(file_name))
         file_name = "app_data/teste/And.mscd"
         self.assertIsNone(self.main_control.open(file_name))
@@ -136,9 +136,9 @@ class TestMainControl(TestCase):
     def test_set_block(self):
         # from mosaicode.GUI.block import Block
         # from mosaicode.GUI.diagram import Diagram as Diagram
-        # from mosaicode.model.plugin import Plugin as Plugin
+        # from mosaicode.model.blockmodel import BlockModel as BlockModel
         #
-        # block = Block(Diagram, Plugin)
+        # block = Block(Diagram, BlockModel)
         # self.assertIsNone(self.main_control.set_block(block))
         self.assertIsNone(self.main_control.set_block("TESTE"))
 
@@ -154,9 +154,9 @@ class TestMainControl(TestCase):
     def test_add_block(self):
         #from mosaicode.GUI.block import Block
         #from mosaicode.GUI.diagram import Diagram as Diagram
-        #from mosaicode.model.plugin import Plugin as Plugin
+        #from mosaicode.model.blockmodel import BlockModel as BlockModel
 
-        #block = Block(Diagram, Plugin)
+        #block = Block(Diagram, BlockModel)
         self.assertFalse(self.main_control.add_block(None))
         #self.assertFalse(self.main_control.add_block(block))
         self.assertFalse(self.main_control.add_block("TESTE"))
@@ -233,8 +233,8 @@ class TestMainControl(TestCase):
         self.assertIsNone(self.main_control.code_template_manager())
 
     # ----------------------------------------------------------------------
-    def test_plugin_manager(self):
-        self.assertIsNone(self.main_control.plugin_manager())
+    def test_blockmodel_manager(self):
+        self.assertIsNone(self.main_control.blockmodel_manager())
 
     # ----------------------------------------------------------------------
     def test_port_manager(self):
@@ -292,12 +292,12 @@ class TestMainControl(TestCase):
         self.assertIsNone(self.main_control.delete_port(port))
 
     # ----------------------------------------------------------------------
-    def test_add_plugin(self):
-        self.assertIsNone(self.main_control.add_plugin(None))
+    def test_add_blockmodel(self):
+        self.assertIsNone(self.main_control.add_blockmodel(None))
 
     # ----------------------------------------------------------------------
-    def test_delete_plugin(self):
-        self.assertIsNone(self.main_control.delete_plugin(None))
+    def test_delete_blockmodel(self):
+        self.assertIsNone(self.main_control.delete_blockmodel(None))
 
     # ----------------------------------------------------------------------
     def test_update_all(self):
@@ -308,8 +308,8 @@ class TestMainControl(TestCase):
         self.assertIsNone(self.main_control.print_ports())
 
     # ----------------------------------------------------------------------
-    def test_print_plugins(self):
-        self.assertIsNone(self.main_control.print_plugins())
+    def test_print_blockmodels(self):
+        self.assertIsNone(self.main_control.print_blockmodels())
 
     # ----------------------------------------------------------------------
     def test_print_templates(self):
@@ -342,5 +342,5 @@ class TestMainControl(TestCase):
 
         prefs = Preferences()
 
-        file_name = "Untitled.mscd"
+        file_name = "../files_for_test/output/Untitled.mscd"
         self.assertIsNone(self.main_control.add_recent_file(prefs, file_name))

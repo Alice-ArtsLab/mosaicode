@@ -58,11 +58,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.scrolled_window = None
         self.set_property("has-tooltip", True)  # Allow tooltip on elements
         self.show()
+        self.language = ""
+        #self.file_name = ""
 
         # Used for cycle detection
         self.__marks = None
-        self.language = ""
-        #self.file_name = ""
 
     # ----------------------------------------------------------------------
     def set_scrolled_window(self, frame):
