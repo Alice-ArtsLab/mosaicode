@@ -4,10 +4,6 @@ from unittest import TestCase
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.GUI.blocknotebook import BlockNotebook
 
-# Se for usar o py.test:
-# Comentar a linha acima, e descomentar a de baixo
-#from mosaicomponents.mosaicomponents.stringfield import StringField
-
 class TestBlockNotebook(TestCase):
 
     def setUp(self):

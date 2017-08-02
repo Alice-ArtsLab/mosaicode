@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from unittest import TestCase
 from mosaicode.control.codegenerator import CodeGenerator
 from mosaicode.GUI.diagram import Diagram
-#from mosaicode.GUI.block import Block
+
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.GUI.fieldtypes import *

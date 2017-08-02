@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from unittest import TestCase
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.GUI.mainwindow import MainWindow

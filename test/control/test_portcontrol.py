@@ -4,7 +4,7 @@ from unittest import TestCase
 from mosaicode.control.portcontrol import PortControl
 from mosaicode.model.port import Port
 
-class TestMainControl(TestCase):
+class TestPortControl(TestCase):
 
     def setUp(self):
         """Do the test basic setup."""
@@ -52,5 +52,11 @@ class TestMainControl(TestCase):
 
     # ----------------------------------------------------------------------
     def test_delete_port(self):
+
+        port_key = -1
+        self.assertIsNone(self.port_control.delete_port(port_key))
+
+        port_key = 0
+        self.assertIsNone(self.port_control.delete_port(port_key))
 
         self.assertIsNone(self.port_control.delete_port(self.port))

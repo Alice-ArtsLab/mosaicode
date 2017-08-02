@@ -9,10 +9,6 @@ from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.GUI.blockmanager import BlockManager
 from mosaicode.model.blockmodel import BlockModel
 
-# Se for usar o py.test:
-# Comentar a linha acima, e descomentar a de baixo
-#from mosaicomponents.mosaicomponents.stringfield import StringField
-
 class TestBlockPortEditor(TestCase):
 
     def setUp(self):

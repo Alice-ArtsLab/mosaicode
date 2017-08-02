@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 from mosaicode.GUI.dialog import Dialog
+
 from mosaicode.GUI.mainwindow import MainWindow
 
 class TestDialog(TestCase):
@@ -14,13 +15,13 @@ class TestDialog(TestCase):
     def test_open_dialog(self):
 
         # Deve-se apertar o botão CANCEL
-        title = None
+        title = "Open"
         main_window = None
         filetype = None
         self.assertIsNone(self.dialog.open_dialog(title, main_window, filetype))
 
         # Deve-se pesquisar um arquivo para abrir
-        title = None
+        title = "Open"
         main_window = MainWindow()
         filetype = "xml"
         self.assertIsNotNone(self.dialog.open_dialog(title, main_window, filetype))
@@ -38,10 +39,17 @@ class TestDialog(TestCase):
         filetype = None
         self.assertIsNone(self.dialog.save_dialog(main_window, title, filetype))
 
+        # TESTANDO O BOTAO CANCEL
         main_window = MainWindow()
         title = "Save"
         filetype = "XML"
         self.assertIsNone(self.dialog.save_dialog(main_window, title, filetype))
+
+        # TESTANDO O BOTAO OK
+        main_window = MainWindow()
+        title = "Save"
+        filetype = "XML"
+        self.assertIsNotNone(self.dialog.save_dialog(main_window, title, filetype))
 
 
     # ----------------------------------------------------------------------x
@@ -73,15 +81,15 @@ class TestDialog(TestCase):
     # ----------------------------------------------------------------------x
     def test_message_dialog(self):
 
-        title = "Testando Message Dialog"
+        title = "Testando Message Dialog 1"
         message = "Realizando teste no message dialog"
         main_window = None
-        self.assertIsNotNone(self.dialog.message_dialog(title, message, main_window))
+        self.assertIsNone(self.dialog.message_dialog(title, message, main_window))
 
-        title = None
-        message = None
-        main_window = None
-        self.assertIsNotNone(self.dialog.message_dialog(title, message, main_window))
+        title = "Testando Message Dialog 2"
+        message = "main_window = MainWindow()"
+        main_window = MainWindow()
+        self.assertIsNone(self.dialog.message_dialog(title, message, main_window))
 
     # ----------------------------------------------------------------------x
     def test_confirm_dialog(self):

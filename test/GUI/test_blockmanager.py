@@ -6,9 +6,6 @@ from mosaicode.GUI.blockmanager import BlockManager
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.block import Block
 from mosaicode.model.blockmodel import BlockModel
-# Se for usar o py.test:
-# Comentar a linha acima, e descomentar a de baixo
-#from mosaicomponents.mosaicomponents.stringfield import StringField
 
 class TestBlockManager(TestCase):
 

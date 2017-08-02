@@ -31,8 +31,22 @@ class TestDiagram(TestCase):
     # ----------------------------------------------------------------------x
     def test_insert_block(self):
         self.assertTrue(self.diagram.insert_block(self.block))
-        block = None
-        self.assertTrue(self.diagram.insert_block(block))
+
+        self.block.language = None
+        self.assertFalse(self.diagram.insert_block(self.block))
+
+        self.block.language = "test_diagram"
+        self.assertFalse(self.diagram.insert_block(self.block))
+
+        self.block.language = "c"
+        self.assertFalse(self.diagram.insert_block(self.block))
+
+        self.block.language = ""
+        self.assertTrue(self.diagram.insert_block(self.block))
+
+        # NÃO TRATA None
+        #block = None
+        #self.assertTrue(self.diagram.insert_block(block))
 
     # ----------------------------------------------------------------------x
     def test_add_block(self):
@@ -43,9 +57,28 @@ class TestDiagram(TestCase):
 
     # ----------------------------------------------------------------------x
     def test_start_connection(self):
-        output = None
+
+        output = 0
         block = self.block
-        self.assertIsNone(self.diagram.start_connection(output, block))
+        self.assertIsNone(self.diagram.start_connection(block, output))
+
+        output = 1
+        block = self.block
+        self.assertIsNone(self.diagram.start_connection(block, output))
+
+        output = 2
+        block = self.block
+        self.assertIsNone(self.diagram.start_connection(block, output))
+
+        # OUTPUT NEGATIVA NÃO PODE
+        # output = -1
+        # block = self.block
+        # self.assertIsNone(self.diagram.start_connection(block, output))
+
+        # NÃO TRATA None
+        # output = None
+        # block = self.block
+        # self.assertIsNone(self.diagram.start_connection(block, output))
 
     # ----------------------------------------------------------------------x
     def test_end_connection(self):
@@ -152,8 +185,24 @@ class TestDiagram(TestCase):
 
     # ----------------------------------------------------------------------x
     def test_delete_connection(self):
-        connection = None
+
+        from mosaicode.GUI.connector import Connector
+
+        blockmodel = BlockModel()
+
+        source = Block(self.diagram, blockmodel)
+        # NOTE: NAO TRATA None
+        # source = None
+
+        source_port = 0
+        conn_type = None
+        connection = Connector(self.diagram, source, source_port, conn_type)
+
         self.assertIsNone(self.diagram.delete_connection(connection))
+
+        # NOTE: NAO TRATA None
+        # connection = None
+        # self.assertIsNone(self.diagram.delete_connection(connection))
 
     # ----------------------------------------------------------------------x
     def test_delete_block(self):

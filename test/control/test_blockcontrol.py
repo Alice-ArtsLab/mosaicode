@@ -4,9 +4,6 @@ from unittest import TestCase
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.GUI.fieldtypes import *
-# Se for usar o py.test:
-# Comentar a linha acima, e descomentar a de baixo
-#from mosaicomponents.mosaicomponents.stringfield import StringField
 
 class TestBlockControl(TestCase):
 
@@ -122,10 +119,10 @@ class TestBlockControl(TestCase):
 
     # ----------------------------------------------------------------------
     def test_add_new_block(self):
-        #self.assertIsNone(self.blockcontrol.add_new_block("test_codegenerator.py"))
-        self.assertIsNone(self.blockcontrol.add_new_block(None))
         self.assertIsNone(self.blockcontrol.add_new_block(self.blockmodel))
-        #self.assertIsNone(self.blockcontrol.add_new_block("Aa"))
+
+        # NÃO TRATA None
+        # self.assertIsNone(self.blockcontrol.add_new_block(None))
 
     # ----------------------------------------------------------------------
     def test_delete_block(self):

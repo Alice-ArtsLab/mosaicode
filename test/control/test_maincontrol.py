@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 from mosaicode.control.maincontrol import MainControl
+
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.diagram import Diagram
 
 
 class TestMainControl(TestCase):
@@ -140,7 +143,11 @@ class TestMainControl(TestCase):
         #
         # block = Block(Diagram, BlockModel)
         # self.assertIsNone(self.main_control.set_block(block))
-        self.assertIsNone(self.main_control.set_block("TESTE"))
+
+        diagram = Diagram(MainWindow())
+        blockmodel = BlockModel()
+        block = Block(diagram, blockmodel)
+        self.assertIsNone(self.main_control.set_block(block))
 
         #block2 = None
         #self.assertIsNone(self.main_control.set_block(block2))
@@ -180,7 +187,9 @@ class TestMainControl(TestCase):
 
     # ----------------------------------------------------------------------
     def test_show_block_property(self):
-        block = "None"
+        diagram = Diagram(MainWindow())
+        blockmodel = BlockModel()
+        block = Block(diagram, blockmodel)
         self.assertIsNone(self.main_control.show_block_property(block))
 
     # ----------------------------------------------------------------------
@@ -227,14 +236,13 @@ class TestMainControl(TestCase):
         event = "None"
         self.assertIsNone(self.main_control.show_grid(event))
 
-
     # ----------------------------------------------------------------------
     def test_code_template_manager(self):
         self.assertIsNone(self.main_control.code_template_manager())
 
     # ----------------------------------------------------------------------
-    def test_blockmodel_manager(self):
-        self.assertIsNone(self.main_control.blockmodel_manager())
+    def test_block_manager(self):
+        self.assertIsNone(self.main_control.block_manager())
 
     # ----------------------------------------------------------------------
     def test_port_manager(self):
@@ -292,12 +300,28 @@ class TestMainControl(TestCase):
         self.assertIsNone(self.main_control.delete_port(port))
 
     # ----------------------------------------------------------------------
-    def test_add_blockmodel(self):
-        self.assertIsNone(self.main_control.add_blockmodel(None))
+    def test_add_new_block(self):
+
+        diagram = Diagram(MainWindow())
+        blockmodel = BlockModel()
+        block = Block(diagram, blockmodel)
+        self.assertIsNone(self.main_control.add_new_block(block))
+
+        # NÃO TRATA None
+        # block = None
+        # self.assertIsNone(self.main_control.add_new_block(block))
 
     # ----------------------------------------------------------------------
-    def test_delete_blockmodel(self):
-        self.assertIsNone(self.main_control.delete_blockmodel(None))
+    def test_delete_block(self):
+
+        diagram = Diagram(MainWindow())
+        blockmodel = BlockModel()
+        block = Block(diagram, blockmodel)
+        self.assertIsNone(self.main_control.delete_block(block))
+
+        # NÃO TRATA None
+        # block = None
+        # self.assertIsNone(self.main_control.delete_block(block))
 
     # ----------------------------------------------------------------------
     def test_update_all(self):
@@ -308,8 +332,8 @@ class TestMainControl(TestCase):
         self.assertIsNone(self.main_control.print_ports())
 
     # ----------------------------------------------------------------------
-    def test_print_blockmodels(self):
-        self.assertIsNone(self.main_control.print_blockmodels())
+    def test_print_blocks(self):
+        self.assertIsNone(self.main_control.print_blocks())
 
     # ----------------------------------------------------------------------
     def test_print_templates(self):

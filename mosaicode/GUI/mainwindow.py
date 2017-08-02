@@ -142,6 +142,7 @@ class MainWindow(Gtk.Window):
         System.properties.vpaned_bottom = self.vpaned_bottom.get_position()
         System.properties.vpaned_left = self.vpaned_left.get_position()
         self.work_area.resize(data)
+
     # ----------------------------------------------------------------------
     def update(self):
         self.main_control.update_all()
