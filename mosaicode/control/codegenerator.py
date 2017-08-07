@@ -31,7 +31,7 @@ class CodeGenerator():
 
         self.blockList = []
         self.connections = []
-        self.codes = [[],[],[],[],[]]
+        self.codes = {}
 
         if diagram is None:
             return
@@ -162,7 +162,7 @@ class CodeGenerator():
         This method generate the block code.
         """
         i = 0
-        for code in block.codes:
+        for key in block.codes:
             # First we replace in ports
             count = 0
             for port in block.in_ports:
@@ -171,7 +171,7 @@ class CodeGenerator():
                 value = value.replace("$port_name$", port["name"])
                 value = value.replace("$conn_type$", "i")
                 my_key = "$in_ports[" + port["name"] + "]$"
-                block.codes[i] = block.codes[i].replace(my_key, value)
+                block.codes[key] = block.codes[key].replace(my_key, value)
                 count += 1
             # Then we replace out ports
             count = 0
@@ -181,22 +181,23 @@ class CodeGenerator():
                 value = value.replace("$port_name$", port["name"])
                 value = value.replace("$conn_type$", "o")
                 my_key = "$out_ports[" + port["name"] + "]$"
-                block.codes[i] = block.codes[i].replace(my_key, value)
+                block.codes[key] = block.codes[key].replace(my_key, value)
                 count += 1
             # Then we replace object attributes by their values
-            for key in block.__dict__:
-                my_key = "$" + key + "$"
-                value = str(block.__dict__[key])
-                block.codes[i] = block.codes[i].replace(my_key, value)
+            for attribute in block.__dict__:
+                my_key = "$" + attribute + "$"
+                value = str(block.__dict__[attribute])
+                block.codes[key] = block.codes[key].replace(my_key, value)
             # Then we replace properties by their values
             for prop in block.get_properties():
                 my_key = "$prop[" + prop.get("name") + "]$"
                 value = str(prop.get("value"))
-                block.codes[i] = block.codes[i].replace(my_key, value)
+                block.codes[key] = block.codes[key].replace(my_key, value)
             i += 1
 
-        for code, block_code in zip(self.codes, block.codes):
-            code.append(block_code)
+        for key in self.codes:
+            if key in block.codes:
+                self.codes[key].append(block.codes[key])
 
         connections = ""
         for x in block.connections:
@@ -219,39 +220,44 @@ class CodeGenerator():
         System.log("Generating Code")
         self.__prepare_block_list()
         self.__sort_block_list()
+
+        # Create an array of codes to each code part
+        for key in self.code_template.code_parts:
+            self.codes[key] = []
+
         self.__generate_block_list_code()
+
+        print self.codes
 
         code = self.code_template.code
 
-        count = 0
-        for codex in self.codes:
+        for key in self.codes:
             # Check for single_code generation
-            code_name = "$single_code["+ str(count) + "]$"
+            code_name = "$single_code["+ key + "]$"
             if code_name in code:
                 temp_header = []
                 temp_code = ""
-                for header_code in codex:
+                for header_code in self.codes[key]:
                     if header_code.strip() not in temp_header:
                         temp_header.append(header_code.strip())
                 for header_code in temp_header:
                     temp_code += header_code
                 code = code.replace(code_name, temp_code)
             # Check for code generation
-            code_name = "$code["+ str(count) + "]$"
+            code_name = "$code["+ key + "]$"
             if code_name in code:
                 temp_code = ""
-                for x in codex:
+                for x in self.codes[key]:
                     temp_code += x
                 code = code.replace(code_name, temp_code)
             # Check for code + connections generation
-            code_name = "$code["+ str(count) + ", connection]$"
+            code_name = "$code["+ key + ", connection]$"
             if code_name in code:
                 temp_code = ""
-                for x,y in zip(codex, self.connections):
+                for x,y in zip(self.codes[key], self.connections):
                     temp_code += x
                     temp_code += y
                 code = code.replace(code_name, temp_code)
-            count = count + 1
 
         # Replace only connection
         connection_block = ""

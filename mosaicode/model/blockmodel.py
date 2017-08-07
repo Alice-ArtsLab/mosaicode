@@ -31,7 +31,8 @@ class BlockModel(object):
 
         # Code generation
         self.properties = []
-        self.codes = ["","","","",""] # Empty array with 5 positions
+        self.code_parts = []
+        self.codes = {}
 
         if block == None:
             return

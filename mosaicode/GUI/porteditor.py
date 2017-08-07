@@ -38,11 +38,18 @@ class PortEditor(Gtk.Dialog):
                                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
 
         self.main_control = self
-        self.set_default_size(600, 300)
+        self.set_default_size(800, 300)
 
-        vbox = Gtk.VBox()
+        self.tabs = Gtk.Notebook()
+        self.tabs.set_scrollable(True)
         box = self.get_content_area()
-        box.pack_start(vbox, True, True, 0)
+        box.pack_start(self.tabs, True, True, 0)
+
+        common_tab = Gtk.VBox()
+        code_tab = Gtk.VBox()
+
+        self.tabs.append_page(common_tab, Gtk.Label(_("Common")))
+        self.tabs.append_page(code_tab, Gtk.Label(_("Code")))
 
         self.type = StringField({"label": _("Type")}, None)
         self.language = StringField({"label": _("Language")}, None)
@@ -51,12 +58,7 @@ class PortEditor(Gtk.Dialog):
         self.color.set_parent_window(self)
         self.code = CodeField({"label": _("Code")}, None)
         self.multiple = CheckField({"label": _("Multiple")}, None)
-
-        self.input_code_widgets = []
-        self.output_code_widgets = []
-        for code in BlockModel().codes:
-            self.input_code_widgets.append(CodeField({"label": ""}, None))
-            self.output_code_widgets.append(CodeField({"label": ""}, None))
+        self.code_parts = StringField({"label": _("Code Parts")}, None)
 
         if port is not None:
             System()
@@ -66,6 +68,21 @@ class PortEditor(Gtk.Dialog):
             self.color.set_value(System.ports[port].color)
             self.code.set_value(System.ports[port].code)
             self.multiple.set_value(System.ports[port].multiple)
+            code_parts_string = ', '.join(System.ports[port].code_parts)
+            self.code_parts.set_value(code_parts_string)
+
+        common_tab.pack_start(self.type, False, False, 1)
+        common_tab.pack_start(self.language, False, False, 1)
+        common_tab.pack_start(self.label, False, False, 1)
+        common_tab.pack_start(self.color, False, False, 1)
+        common_tab.pack_start(self.multiple, False, False, 1)
+        common_tab.pack_start(self.code_parts, False, False, 1)
+
+        self.input_code_widgets = {}
+        self.output_code_widgets = {}
+        for code in BlockModel().codes:
+            self.input_code_widgets.append(CodeField({"label": ""}, None))
+            self.output_code_widgets.append(CodeField({"label": ""}, None))
 
             count = 0
             for code in BlockModel().codes:
@@ -75,15 +92,9 @@ class PortEditor(Gtk.Dialog):
                         System.ports[port].output_codes[count])
                 count = count + 1
 
-        vbox.pack_start(self.type, False, False, 1)
-        vbox.pack_start(self.language, False, False, 1)
-        vbox.pack_start(self.label, False, False, 1)
-        vbox.pack_start(self.color, False, False, 1)
-        vbox.pack_start(self.multiple, False, False, 1)
-
         self.code_notebook = Gtk.Notebook()
         self.code_notebook.set_scrollable(True)
-        vbox.pack_start(self.code_notebook, True, True, 1)
+        code_tab.pack_start(self.code_notebook, True, True, 1)
         self.code_notebook.append_page(self.code, Gtk.Label(_("Connection Code")))
 
         count = 0
@@ -114,12 +125,11 @@ class PortEditor(Gtk.Dialog):
         port.color = self.color.get_value()
         port.multiple = self.multiple.get_value()
         port.code = self.code.get_value()
+        port.code_parts = self.code_parts.get_value().split(",")
 
-        count = 0
-        for code_widget in self.input_code_widgets:
-            port.input_codes[count] = self.input_code_widgets[count].get_value()
-            port.output_codes[count] = self.output_code_widgets[count].get_value()
-            count = count + 1
+        for code_part in port.code_parts:
+            port.input_codes[count] = self.input_code_widgets[code_part].get_value()
+            port.output_codes[count] = self.output_code_widgets[code_part].get_value()
 
         self.port_manager.add_port(port)
 

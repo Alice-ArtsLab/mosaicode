@@ -85,23 +85,23 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
         # Block Common Properties
         data = {"label": _("Common Properties"),
                 "name": "common",
-                "values": ["id",
-                           "label",
-                           "x",
-                           "y",
-                           "type",
-                           "language",
-                           "framework",
-                           "group",
-                           "color",
-                           "help"]}
+                "values": ["$id$",
+                           "$label$",
+                           "$x$",
+                           "$y$",
+                           "$type$",
+                           "$language$",
+                           "$framework$",
+                           "$group$",
+                           "$color$",
+                           "$help$"]}
         self.commons = ComboField(data, self.__on_select)
         button_bar.pack_start(self.commons, False, False, 0)
 
         # Block Properties
         values = []
         for prop in self.block.get_properties():
-            values.append("prop[" + prop["name"] + "]")
+            values.append("$prop[" + prop["name"] + "]$")
         values.sort()
         data = {"label": _("Block Properties"),
                 "name":"props",
@@ -167,5 +167,5 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
     def __on_select(self, widget=None, data=None):
         code_area = self.__get_current_code_area()
         value = widget.get_parent().get_value()
-        code_area.insert_at_cursor("$" + value + "$")
+        code_area.insert_at_cursor(value)
 # ----------------------------------------------------------------------

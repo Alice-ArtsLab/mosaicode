@@ -113,7 +113,6 @@ class System(object):
                             my_walk_packages(path, name)
                         else:
                             module = __import__(name, fromlist="dummy")
-                            print name
                             for class_name, obj in inspect.getmembers(module):
                                 if not inspect.isclass(obj):
                                     continue

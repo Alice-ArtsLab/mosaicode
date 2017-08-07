@@ -32,6 +32,7 @@ class CodeTemplateEditor(Gtk.Dialog):
     # ----------------------------------------------------------------------
     def __init__(self, code_template_manager, code_template_name):
         self.code_template_manager = code_template_manager
+        self.code_template = System.code_templates[code_template_name]
         Gtk.Dialog.__init__(self, _("Code Template Editor"),
                             self.code_template_manager,
                             0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
@@ -69,6 +70,12 @@ class CodeTemplateEditor(Gtk.Dialog):
         common_tab.pack_start(self.code_parts, False, False, 1)
 
         # Second Tab: Code properties
+
+        # Button bar
+        button_bar = Gtk.HBox()
+        code_tab.pack_start(button_bar, False, False, 1)
+        self.__populate_combos(button_bar)
+
         self.code = CodeField({"label": _("")}, None)
         code_tab.pack_start(self.code, True, True, 1)
 
@@ -78,14 +85,14 @@ class CodeTemplateEditor(Gtk.Dialog):
 
         if code_template_name is not None:
             System()
-            self.name.set_value(System.code_templates[code_template_name].name)
-            self.type.set_value(System.code_templates[code_template_name].type)
-            self.description.set_value(System.code_templates[code_template_name].description)
-            self.language.set_value(System.code_templates[code_template_name].language)
-            self.command.set_value(System.code_templates[code_template_name].command)
-            self.extension.set_value(System.code_templates[code_template_name].extension)
-            self.code.set_value(System.code_templates[code_template_name].code)
-            code_parts_string = ', '.join(System.code_templates[code_template_name].code_parts)
+            self.name.set_value(self.code_template.name)
+            self.type.set_value(self.code_template.type)
+            self.description.set_value(self.code_template.description)
+            self.language.set_value(self.code_template.language)
+            self.command.set_value(self.code_template.command)
+            self.extension.set_value(self.code_template.extension)
+            self.code.set_value(self.code_template.code)
+            code_parts_string = ', '.join(self.code_template.code_parts)
             self.code_parts.set_value(code_parts_string)
 
         self.show_all()
@@ -107,5 +114,46 @@ class CodeTemplateEditor(Gtk.Dialog):
         code_template.code = self.code.get_value()
         code_template.code_parts = self.code_parts.get_value().split(",")
         self.code_template_manager.add_code_template(code_template)
+
+    # ----------------------------------------------------------------------
+    def __populate_combos(self, button_bar):
+        # clean the bar
+        for widget in button_bar.get_children():
+            button_bar.remove(widget)
+
+        # Code Parts
+        values = []
+        for code_part in self.code_template.code_parts:
+            values.append("$single_code[" + code_part + "]$")
+            values.append("$code[" + code_part + "]$")
+            values.append("$code[" + code_part + ",connection]$")
+        values.append("$connections$")
+        data = {"label": _("Code Parts"),
+                "name":"code_parts",
+                "values": values}
+        self.select_code_parts = ComboField(data, self.__on_select)
+        button_bar.pack_start(self.select_code_parts, False, False, 0)
+
+        # Refresh Button
+        button = Gtk.Button.new_with_label("Refresh")
+        button.connect("clicked", self.__refresh, button_bar)
+        button_bar.pack_start(button, False, False, 0)
+
+        button_bar.show_all()
+
+    # ----------------------------------------------------------------------
+    def __refresh(self, widget, button_bar):
+        """
+        This method monitors if the button was clicked.
+
+            Parameters:
+
+        """
+        self.__populate_combos(button_bar)
+
+    # ----------------------------------------------------------------------
+    def __on_select(self, widget=None, data=None):
+        value = widget.get_parent().get_value()
+        self.code.insert_at_cursor(value)
 
 # ----------------------------------------------------------------------

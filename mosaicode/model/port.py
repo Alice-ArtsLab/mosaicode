@@ -13,9 +13,10 @@ class Port(object):
         self.color = "#000"
         self.multiple = False
         self.source = "Python"
+        self.code_parts = []
         self.code = ""
-        self.input_codes = ["","","","",""]
-        self.output_codes = ["","","","",""]
+        self.input_codes = {}
+        self.output_codes = {}
         self.var_name = "block_$id$_$conn_type$$port_number$"
 
 # ------------------------------------------------------------------------------

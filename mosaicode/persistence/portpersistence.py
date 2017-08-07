@@ -44,6 +44,10 @@ class PortPersistence():
         port.source = parser.getTagAttr(tag_name, "source")
         port.code = parser.getTag(tag_name).getTag("code").getText()
 
+        code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
+        for code_part in code_parts:
+            port.code_parts.append(prop.getAttr("value"))
+
         count = 0
         for code in port.input_codes:
             port.input_codes[count] = parser.getTag(tag_name).getTag('input_code' + str(count)).getText()
@@ -76,6 +80,10 @@ class PortPersistence():
         parser.setTagAttr(tag_name, 'multiple', port.multiple)
         parser.setTagAttr(tag_name, 'source', port.source)
         parser.appendToTag(tag_name, 'code').string = str(port.code)
+
+        parser.appendToTag(tag_name, 'code_parts')
+        for key in port.code_parts:
+            parser.appendToTag('code_parts', 'code_part', value=key)
 
         count = 0
         for code in port.input_codes:
@@ -124,6 +132,7 @@ class PortPersistence():
         parser.setAttribute('multiple', port.multiple)
         parser.setAttribute('source', 'python')
         parser.setAttribute('code', str(port.code))
+        parser.setAttribute('code_parts', code_template.code_parts)
         parser.setAttribute('input_codes', [])
         parser.setAttribute('output_codes', [])
 

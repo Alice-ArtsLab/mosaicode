@@ -86,7 +86,6 @@ class CodeTemplatePersistence():
         for key in code_template.code_parts:
             parser.appendToTag('code_parts', 'code_part', value=key)
 
-
         try:
             data_dir = System.get_user_dir() + "/extensions/"
             data_dir = data_dir + code_template.language + "/"
