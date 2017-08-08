@@ -20,6 +20,7 @@ from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.buttonbar import ButtonBar
+from mosaicode.GUI.treeview import TreeView
 from mosaicode.system import System as System
 import gettext
 
@@ -47,21 +48,8 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         self.add(hbox)
 
         # INPUT PORTS ----------------------------------------------------------
-        sw = Gtk.ScrolledWindow()
-        self.input_list_store = Gtk.ListStore(str)
-        self.input_tree_view = Gtk.TreeView(self.input_list_store)
-        self.input_tree_view.connect("row-activated",
-                self.__on_row_activated, "Input")
-        sw.add(self.input_tree_view)
-
-        col = Gtk.TreeViewColumn(_("Input Ports"))
-        self.input_tree_view.append_column(col)
-
-        cellrenderertext = Gtk.CellRendererText()
-        col.pack_end(cellrenderertext, True)
-        col.add_attribute(cellrenderertext, "text", 0)
-
-        vbox2.pack_start(sw, True, True, 1)
+        self.input_tree_view = TreeView(_("Input Ports"), self.__on_row_activated, "Input")
+        vbox2.pack_start(self.input_tree_view, True, True, 1)
 
         # Button bar
         button_bar = ButtonBar()
@@ -72,21 +60,8 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         vbox2.pack_start(button_bar, False, False, 1)
 
         # OUTPUT PORTS ---------------------------------------------------------
-        sw = Gtk.ScrolledWindow()
-        self.output_list_store = Gtk.ListStore(str)
-        self.output_tree_view = Gtk.TreeView(self.output_list_store)
-        self.output_tree_view.connect("row-activated",
-                self.__on_row_activated, "Output")
-        sw.add(self.output_tree_view)
-
-        col = Gtk.TreeViewColumn(_("Output Ports"))
-        self.output_tree_view.append_column(col)
-
-        cellrenderertext = Gtk.CellRendererText()
-        col.pack_end(cellrenderertext, True)
-        col.add_attribute(cellrenderertext, "text", 0)
-
-        vbox2.pack_start(sw, True, True, 1)
+        self.output_tree_view = TreeView(_("Output Ports"), self.__on_row_activated, "Output")
+        vbox2.pack_start(self.output_tree_view, True, True, 1)
 
         # Button bar
         button_bar = ButtonBar()
@@ -109,13 +84,15 @@ class BlockPortEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __populate_lists(self):
-        self.input_list_store.clear()
+        labels = []
         for port in self.block.in_ports:
-            self.input_list_store.append([port.get("label")])
+            labels.append(port.get("label"))
+        self.input_tree_view.populate(labels)
 
-        self.output_list_store.clear()
+        labels = []
         for port in self.block.out_ports:
-            self.output_list_store.append([port.get("label")])
+            labels.append(port.get("label"))
+        self.output_tree_view.populate(labels)
 
     # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):

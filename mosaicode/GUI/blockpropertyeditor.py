@@ -20,6 +20,7 @@ from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.buttonbar import ButtonBar
+from mosaicode.GUI.treeview import TreeView
 from mosaicode.system import System as System
 import gettext
 
@@ -45,21 +46,10 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         hbox = Gtk.HBox()
         vbox2 = Gtk.VBox()
         self.add(hbox)
-        sw = Gtk.ScrolledWindow()
-        self.list_store = Gtk.ListStore(str)
-        self.props_tree_view = Gtk.TreeView(self.list_store)
-        self.props_tree_view.connect("row-activated",
-                self.__on_props_row_activated)
-        sw.add(self.props_tree_view)
 
-        col = Gtk.TreeViewColumn(_("Properties"))
-        self.props_tree_view.append_column(col)
-
-        cellrenderertext = Gtk.CellRendererText()
-        col.pack_end(cellrenderertext, True)
-        col.add_attribute(cellrenderertext, "text", 0)
-
-        vbox2.pack_start(sw, True, True, 1)
+        self.tree_view = TreeView(_("Properties"), self.__on_props_row_activated)
+        self.__populate_property()
+        vbox2.pack_start(self.tree_view, True, True, 1)
 
         # Button bar
         button_bar = ButtonBar()
@@ -74,16 +64,16 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         hbox.pack_start(vbox, True, True, 2)
         self.side_panel = Gtk.VBox()
         vbox.pack_start(self.side_panel, True, True, 1)
-        self.__populate_property()
 
         self.set_shadow_type(Gtk.ShadowType.IN)
         self.show_all()
 
     # ----------------------------------------------------------------------
     def __populate_property(self):
-        self.list_store.clear()
+        block_label = []
         for prop in self.block.get_properties():
-            self.list_store.append([prop.get("label")])
+            block_label.append(prop.get("label"))
+        self.tree_view.populate(block_label)
 
     # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):
@@ -98,7 +88,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):
-        treeselection = self.props_tree_view.get_selection()
+        treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
@@ -115,7 +105,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __up(self, widget=None, data=None):
-        treeselection = self.props_tree_view.get_selection()
+        treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
@@ -130,7 +120,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __down(self, widget=None, data=None):
-        treeselection = self.props_tree_view.get_selection()
+        treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
