@@ -58,7 +58,6 @@ class PortEditor(Gtk.Dialog):
         self.color.set_parent_window(self)
         self.code = CodeField({"label": _("Code")}, None)
         self.multiple = CheckField({"label": _("Multiple")}, None)
-        self.code_parts = StringField({"label": _("Code Parts")}, None)
 
         if port is not None:
             System()
@@ -68,15 +67,12 @@ class PortEditor(Gtk.Dialog):
             self.color.set_value(System.ports[port].color)
             self.code.set_value(System.ports[port].code)
             self.multiple.set_value(System.ports[port].multiple)
-            code_parts_string = ', '.join(System.ports[port].code_parts)
-            self.code_parts.set_value(code_parts_string)
 
         common_tab.pack_start(self.type, False, False, 1)
         common_tab.pack_start(self.language, False, False, 1)
         common_tab.pack_start(self.label, False, False, 1)
         common_tab.pack_start(self.color, False, False, 1)
         common_tab.pack_start(self.multiple, False, False, 1)
-        common_tab.pack_start(self.code_parts, False, False, 1)
 
         self.input_code_widgets = {}
         self.output_code_widgets = {}
@@ -125,11 +121,6 @@ class PortEditor(Gtk.Dialog):
         port.color = self.color.get_value()
         port.multiple = self.multiple.get_value()
         port.code = self.code.get_value()
-        port.code_parts = self.code_parts.get_value().split(",")
-
-        for code_part in port.code_parts:
-            port.input_codes[count] = self.input_code_widgets[code_part].get_value()
-            port.output_codes[count] = self.output_code_widgets[code_part].get_value()
 
         self.port_manager.add_port(port)
 

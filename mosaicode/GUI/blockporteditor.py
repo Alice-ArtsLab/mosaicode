@@ -19,6 +19,7 @@ from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.system import System as System
 import gettext
 
@@ -63,24 +64,11 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         vbox2.pack_start(sw, True, True, 1)
 
         # Button bar
-        button_bar = Gtk.HBox()
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_NEW)
-        button.connect("clicked", self.__property_new, "Input")
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_DELETE)
-        button.connect("clicked", self.__property_delete, "Input")
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_GO_UP)
-        button.connect("clicked", self.__property_up, "Input")
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_GO_DOWN)
-        button.connect("clicked", self.__property_down, "Input")
-        button_bar.pack_start(button, False, False, 0)
-
+        button_bar = ButtonBar()
+        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":"Input"})
+        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":"Input"})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_UP, "action": self.__up, "data":"Input"})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_DOWN, "action": self.__down, "data":"Input"})
         vbox2.pack_start(button_bar, False, False, 1)
 
         # OUTPUT PORTS ---------------------------------------------------------
@@ -101,24 +89,11 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         vbox2.pack_start(sw, True, True, 1)
 
         # Button bar
-        button_bar = Gtk.HBox()
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_NEW)
-        button.connect("clicked", self.__property_new, "Output")
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_DELETE)
-        button.connect("clicked", self.__property_delete, "Output")
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_GO_UP)
-        button.connect("clicked", self.__property_up, "Output")
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_GO_DOWN)
-        button.connect("clicked", self.__property_down, "Output")
-        button_bar.pack_start(button, False, False, 0)
-
+        button_bar = ButtonBar()
+        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":"Output"})
+        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":"Output"})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_UP, "action": self.__up, "data":"Output"})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_DOWN, "action": self.__down, "data":"Output"})
         vbox2.pack_start(button_bar, False, False, 1)
         # ---------------------------------------------------------
 
@@ -143,13 +118,13 @@ class BlockPortEditor(Gtk.ScrolledWindow):
             self.output_list_store.append([port.get("label")])
 
     # ----------------------------------------------------------------------
-    def __property_new(self, widget=None, data=None):
+    def __new(self, widget=None, data=None):
         self.selected_port = data
         configuration = None
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
-    def __property_delete(self, widget=None, data=None):
+    def __delete(self, widget=None, data=None):
         treeselection = None
         if data == "Input":
             treeselection = self.input_tree_view.get_selection()
@@ -174,7 +149,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         self.__clean_side_panel()
 
     # ----------------------------------------------------------------------
-    def __property_up(self, widget=None, data=None):
+    def __up(self, widget=None, data=None):
         treeselection = None
         if data == "Input":
             treeselection = self.input_tree_view.get_selection()
@@ -200,7 +175,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         self.__populate_lists()
 
     # ----------------------------------------------------------------------
-    def __property_down(self, widget=None, data=None):
+    def __down(self, widget=None, data=None):
         treeselection = None
         if data == "Input":
             treeselection = self.input_tree_view.get_selection()

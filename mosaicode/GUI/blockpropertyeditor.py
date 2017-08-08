@@ -19,6 +19,7 @@ from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.system import System as System
 import gettext
 
@@ -61,23 +62,11 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         vbox2.pack_start(sw, True, True, 1)
 
         # Button bar
-        button_bar = Gtk.HBox()
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_NEW)
-        button.connect("clicked", self.__property_new, None)
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_DELETE)
-        button.connect("clicked", self.__property_delete, None)
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_GO_UP)
-        button.connect("clicked", self.__property_up, None)
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_GO_DOWN)
-        button.connect("clicked", self.__property_down, None)
-        button_bar.pack_start(button, False, False, 0)
+        button_bar = ButtonBar()
+        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_UP, "action": self.__up, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_DOWN, "action": self.__down, "data":None})
         vbox2.pack_start(button_bar, False, False, 1)
 
         hbox.pack_start(vbox2, True, True, 2)
@@ -97,7 +86,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
             self.list_store.append([prop.get("label")])
 
     # ----------------------------------------------------------------------
-    def __property_new(self, widget=None, data=None):
+    def __new(self, widget=None, data=None):
         for widget in self.side_panel.get_children():
             self.side_panel.remove(widget)
         fieldtypes = []
@@ -108,7 +97,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         self.side_panel.pack_start(self.field_type, False, False, 1)
 
     # ----------------------------------------------------------------------
-    def __property_delete(self, widget=None, data=None):
+    def __delete(self, widget=None, data=None):
         treeselection = self.props_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
@@ -125,7 +114,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         self.__clean_side_panel()
 
     # ----------------------------------------------------------------------
-    def __property_up(self, widget=None, data=None):
+    def __up(self, widget=None, data=None):
         treeselection = self.props_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
@@ -140,7 +129,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         self.__populate_property()
 
     # ----------------------------------------------------------------------
-    def __property_down(self, widget=None, data=None):
+    def __down(self, widget=None, data=None):
         treeselection = self.props_tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
