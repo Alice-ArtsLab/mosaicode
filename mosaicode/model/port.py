@@ -13,7 +13,6 @@ class Port(object):
         self.color = "#000"
         self.multiple = False
         self.source = "Python"
-        self.code_parts = []
         self.code = ""
         self.input_codes = {}
         self.output_codes = {}

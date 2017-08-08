@@ -48,14 +48,8 @@ class BlockPersistence():
         block.help = parser.getTagAttr(tag_name, "help")
         block.source = parser.getTagAttr(tag_name, "source")
 
-        code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
-        for code_part in code_parts:
-            block.code_parts.append(prop.getAttr("value"))
-
-        count = 0
         for code in block.codes:
-            block.codes[count] = parser.getTag(tag_name).getTag("code" + str(count)).getText()
-            count = count + 1
+            block.codes[code] = parser.getTag(tag_name).getTag(code).getText()
 
         props = parser.getTag(tag_name).getTag(
                     "properties").getChildTags("property")
@@ -100,14 +94,8 @@ class BlockPersistence():
         parser.setTagAttr(tag_name,'help', block.help)
         parser.setTagAttr(tag_name,'source', block.source)
 
-        count = 0
         for code in block.codes:
-            parser.appendToTag(tag_name, 'code' + str(count)).string = str(block.codes[count])
-            count = count + 1
-
-        parser.appendToTag(tag_name, 'code_parts')
-        for key in block.code_parts:
-            parser.appendToTag('code_parts', 'code_part', value=key)
+            parser.appendToTag(tag_name, code = block.codes[code])
 
         parser.appendToTag(tag_name, 'properties')
         for key in block.properties:
@@ -165,7 +153,6 @@ class BlockPersistence():
         parser.setAttribute('in_ports', block.in_ports)
         parser.setAttribute('out_ports', block.out_ports)
         parser.setAttribute('properties', block.properties)
-        parser.setAttribute('code_parts', code_template.code_parts)
         parser.setAttribute('codes', block.codes)
 
         try:

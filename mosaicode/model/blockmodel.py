@@ -31,7 +31,6 @@ class BlockModel(object):
 
         # Code generation
         self.properties = []
-        self.code_parts = []
         self.codes = {}
 
         if block == None:
