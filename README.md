@@ -38,12 +38,7 @@ The Mosaicode allows install Blocks separately. There are available two set of b
 * https://github.com/Mosaicode/mosaicode-c-opencv
 * https://github.com/Mosaicode/mosaicode-javascript-webaudio
 
-
---------------
-
 ### Packaging Info
-
----------------
 
 This source distribution was generated with:
 ```
@@ -54,14 +49,10 @@ You can generate a built distribution (:metal:) for your platform using:
 ```
 python setup.py bdist
 ```
---------------
 
 ### Further Info
 
--------------
-
-[Original page of Mosaicode project]
-(https://mosaicode.github.io/)
+Original page of Mosaicode project: [https://mosaicode.github.io/](https://mosaicode.github.io/)
 
 or asking to:
 * mosaicode-dev@googlegroups.com
