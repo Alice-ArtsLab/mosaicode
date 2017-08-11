@@ -231,7 +231,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         ins = []
         x = 0
-        for port in self.in_ports:
+        for port in self.ports:
+            if port["conn_type"] is not "Input":
+                continue
             text_name = self.__get_port_label(port["type"]);
             inp = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
@@ -287,7 +289,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         outs = []
         x = 0
-        for port in self.out_ports:
+        for port in self.ports:
+            if port["conn_type"] is not "Output":
+                continue
             text_name = self.__get_port_label(port["type"]);
             out = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
@@ -350,7 +354,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         This method build the block.
         """
-        maxIO = max(len(self.in_ports), len(self.out_ports))
+        in_count = 0
+        out_count = 0
+        for port in self.ports:
+            if port["conn_type"] == "Input":
+                in_count += 1
+            else:
+                out_count += 1
+        maxIO = max(in_count, out_count)
 
         # Generates the block size, based on the number of inputs,outputs
         # Comment block is too small...
@@ -481,11 +492,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = True
         distinct_con = []
         for conn in self.diagram.connectors:
-            if conn.sink != self:
+            if conn.input != self:
                 continue
-            if conn.sink_port not in distinct_con:
-                distinct_con.append(conn.sink_port)
-        if len(distinct_con) < len(self.in_ports):
+            if conn.input_port not in distinct_con:
+                distinct_con.append(conn.input_port)
+        in_count = 0
+        for port in self.ports:
+            if port["conn_type"] == "Input":
+                in_count += 1
+        if len(distinct_con) < in_count:
             self.has_flow = False
         self.__update_state()
         return self.has_flow

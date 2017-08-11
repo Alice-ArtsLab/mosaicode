@@ -56,15 +56,9 @@ class BlockPersistence():
         for prop in props:
             block.properties.append(ast.literal_eval(prop.getAttr("value")))
 
-        in_ports = parser.getTag(tag_name).getTag(
-                    "in_ports").getChildTags("port")
-        for port in in_ports:
-            block.in_ports.append(ast.literal_eval(port.getAttr("value")))
-
-        out_ports = parser.getTag(tag_name).getTag(
-                    "out_ports").getChildTags("port")
-        for port in out_ports:
-            block.out_ports.append(ast.literal_eval(port.getAttr("value")))
+        ports = parser.getTag(tag_name).getTag("ports").getChildTags("port")
+        for port in ports:
+            block.ports.append(ast.literal_eval(port.getAttr("value")))
 
         if block.type == "mosaicode.model.blockmodel":
             return None
@@ -95,19 +89,15 @@ class BlockPersistence():
         parser.setTagAttr(tag_name,'source', block.source)
 
         for code in block.codes:
-            parser.appendToTag(tag_name, code = block.codes[code])
+            parser.appendToTag(tag_name, code, value=block.codes[code])
 
         parser.appendToTag(tag_name, 'properties')
         for key in block.properties:
             parser.appendToTag('properties', 'property', value=key)
 
-        parser.appendToTag(tag_name, 'in_ports')
-        for key in block.in_ports:
-            parser.appendToTag('in_ports', 'port', value=key)
-
-        parser.appendToTag(tag_name, 'out_ports')
-        for key in block.out_ports:
-            parser.appendToTag('out_ports', 'port', value=key)
+        parser.appendToTag(tag_name, 'ports')
+        for port in block.ports:
+            parser.appendToTag('ports', 'port', value=key)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -150,8 +140,7 @@ class BlockPersistence():
         parser.setAttribute('color', block.color)
         parser.setAttribute('group', block.group)
         parser.setAttribute('help', block.help)
-        parser.setAttribute('in_ports', block.in_ports)
-        parser.setAttribute('out_ports', block.out_ports)
+        parser.setAttribute('ports', block.ports)
         parser.setAttribute('properties', block.properties)
         parser.setAttribute('codes', block.codes)
 

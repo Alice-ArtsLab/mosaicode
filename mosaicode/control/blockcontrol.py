@@ -50,7 +50,11 @@ class BlockControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        BlockPersistence.load(file_name)
+        try:
+            BlockPersistence.load(file_name)
+        except:
+            from mosaicode.system import System
+            System.log("Block " + file_name + " could not load")
     # ----------------------------------------------------------------------
     @classmethod
     def add_new_block(cls, block):
@@ -93,8 +97,7 @@ class BlockControl():
         print 'block.label =', block.label
         print 'block.color =', block.color
         print 'block.group =', block.group
-        print 'block.in_ports =', block.in_ports
-        print 'block.out_ports =', block.out_ports
+        print 'block.ports =', block.ports
 
         # Code generation
         print 'block.properties =', block.properties

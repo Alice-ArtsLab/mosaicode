@@ -47,52 +47,33 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         vbox2 = Gtk.VBox()
         self.add(hbox)
 
-        # INPUT PORTS ----------------------------------------------------------
-        self.input_tree_view = TreeView(_("Input Ports"), self.__on_row_activated, "Input")
-        vbox2.pack_start(self.input_tree_view, True, True, 1)
+        self.tree_view = TreeView(_("Ports"), self.__on_row_activated)
+        vbox2.pack_start(self.tree_view, True, True, 1)
 
         # Button bar
         button_bar = ButtonBar()
-        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":"Input"})
-        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":"Input"})
-        button_bar.add_button({"icone":Gtk.STOCK_GO_UP, "action": self.__up, "data":"Input"})
-        button_bar.add_button({"icone":Gtk.STOCK_GO_DOWN, "action": self.__down, "data":"Input"})
+        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_UP, "action": self.__up, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_GO_DOWN, "action": self.__down, "data":None})
         vbox2.pack_start(button_bar, False, False, 1)
-
-        # OUTPUT PORTS ---------------------------------------------------------
-        self.output_tree_view = TreeView(_("Output Ports"), self.__on_row_activated, "Output")
-        vbox2.pack_start(self.output_tree_view, True, True, 1)
-
-        # Button bar
-        button_bar = ButtonBar()
-        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":"Output"})
-        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":"Output"})
-        button_bar.add_button({"icone":Gtk.STOCK_GO_UP, "action": self.__up, "data":"Output"})
-        button_bar.add_button({"icone":Gtk.STOCK_GO_DOWN, "action": self.__down, "data":"Output"})
-        vbox2.pack_start(button_bar, False, False, 1)
-        # ---------------------------------------------------------
 
         hbox.pack_start(vbox2, True, True, 2)
         vbox = Gtk.VBox()
         hbox.pack_start(vbox, True, True, 2)
         self.side_panel = Gtk.VBox()
         vbox.pack_start(self.side_panel, True, True, 1)
-        self.__populate_lists()
+        self.__populate_list()
 
         self.set_shadow_type(Gtk.ShadowType.IN)
         self.show_all()
 
     # ----------------------------------------------------------------------
-    def __populate_lists(self):
+    def __populate_list(self):
         labels = []
-        for port in self.block.in_ports:
+        for port in self.block.ports:
             labels.append(port.get("label"))
-        self.input_tree_view.populate(labels)
-
-        labels = []
-        for port in self.block.out_ports:
-            labels.append(port.get("label"))
-        self.output_tree_view.populate(labels)
+        self.tree_view.populate(labels)
 
     # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):
@@ -102,11 +83,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):
-        treeselection = None
-        if data == "Input":
-            treeselection = self.input_tree_view.get_selection()
-        else:
-            treeselection = self.output_tree_view.get_selection()
+        treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
@@ -118,66 +95,41 @@ class BlockPortEditor(Gtk.ScrolledWindow):
             return
         path = model.get_path(iterac)
 
-        if data == "Input":
-            del self.block.in_ports[int(str(path))]
-        else:
-            del self.block.out_ports[int(str(path))]
-        self.__populate_lists()
+        del self.block.ports[int(str(path))]
+        self.__populate_list()
         self.__clean_side_panel()
 
     # ----------------------------------------------------------------------
     def __up(self, widget=None, data=None):
-        treeselection = None
-        if data == "Input":
-            treeselection = self.input_tree_view.get_selection()
-        else:
-            treeselection = self.output_tree_view.get_selection()
+        treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
-            return None
+            return
         path = model.get_path(iterac)
         if int(str(path)) == 0:
             return
 
-        if data == "Input":
-            self.block.in_ports[int(str(path))], \
-                self.block.in_ports[int(str(path)) - 1] = \
-                self.block.in_ports[int(str(path)) - 1], \
-                self.block.in_ports[int(str(path))]
-        else:
-            self.block.out_ports[int(str(path))], \
-                self.block.out_ports[int(str(path)) - 1] = \
-                self.block.out_ports[int(str(path)) - 1], \
-                self.block.out_ports[int(str(path))]
-        self.__populate_lists()
+        self.block.ports[int(str(path))], \
+                self.block.ports[int(str(path)) - 1] = \
+                self.block.ports[int(str(path)) - 1], \
+                self.block.ports[int(str(path))]
+        self.__populate_list()
 
     # ----------------------------------------------------------------------
     def __down(self, widget=None, data=None):
-        treeselection = None
-        if data == "Input":
-            treeselection = self.input_tree_view.get_selection()
-        else:
-            treeselection = self.output_tree_view.get_selection()
+        treeselection = self.tree_view.get_selection()
         model, iterac = treeselection.get_selected()
         if iterac is None:
-            return None
+            return
         path = model.get_path(iterac)
 
-        if data == "Input":
-            if int(str(path)) == len(self.block.in_ports) - 1:
-                return
-            self.block.in_ports[int(str(path))], \
-                self.block.in_ports[int(str(path)) + 1] = \
-                self.block.in_ports[int(str(path)) + 1], \
-                self.block.in_ports[int(str(path))]
-        else:
-            if int(str(path)) == len(self.block.out_ports) - 1:
-                return
-            self.block.out_ports[int(str(path))], \
-                self.block.out_ports[int(str(path)) + 1] = \
-                self.block.out_ports[int(str(path)) + 1], \
-                self.block.out_ports[int(str(path))]
-        self.__populate_lists()
+        if int(str(path)) == len(self.block.ports) - 1:
+            return
+        self.block.ports[int(str(path))], \
+                self.block.ports[int(str(path)) + 1] = \
+                self.block.ports[int(str(path)) + 1], \
+                self.block.ports[int(str(path))]
+        self.__populate_list()
 
     # ----------------------------------------------------------------------
     def __clean_side_panel(self):
@@ -193,10 +145,15 @@ class BlockPortEditor(Gtk.ScrolledWindow):
             if System.ports[key].language == self.block.language:
                 connectors.append(key)
 
-        data = {"label": _("Type"), "name":"type", "values": connectors}
+        data = {"label": _("Port Type"), "name":"type", "values": connectors}
         field = ComboField(data, None)
         self.side_panel.pack_start(field, False, False, 1)
         if configuration is not None: field.set_value(configuration["type"])
+
+        data = {"label": _("Connection Type"), "name":"conn_type", "values": ["Input", "Output"]}
+        field = ComboField(data, None)
+        self.side_panel.pack_start(field, False, False, 1)
+        if configuration is not None: field.set_value(configuration["conn_type"])
 
         data = {"label": _("Label"), "name":"label"}
         field = StringField(data, None)
@@ -216,11 +173,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __on_row_activated(self, tree_view, path, column, data):
         self.selected_port = data
-        configuration = None
-        if data == "Input":
-            configuration = self.block.in_ports[int(str(path))]
-        else:
-            configuration = self.block.out_ports[int(str(path))]
+        configuration = self.block.ports[int(str(path))]
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
@@ -248,18 +201,13 @@ class BlockPortEditor(Gtk.ScrolledWindow):
             return
         contains = False
         i = 0
-        collection = None
-        if self.selected_port == "Input":
-            collection = self.block.in_ports
-        else:
-            collection = self.block.out_ports
-        for port in collection:
+        for port in self.block.ports:
             if port["label"] == new_port["label"]:
-                collection[i] = new_port
+                self.block.ports[i] = new_port
                 contains = True
             i += 1
         if not contains:
-            collection.append(new_port)
+            self.block.ports.append(new_port)
         self.__populate_lists()
         self.__clean_side_panel()
 

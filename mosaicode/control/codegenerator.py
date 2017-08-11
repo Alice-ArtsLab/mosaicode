@@ -112,9 +112,9 @@ class CodeGenerator():
             except:
                 block.__class__.connections = []
 
-            # Listing all connections that the block is source
+            # Listing all connections that the block is output
             for connection in self.diagram.connectors:
-                if connection.source != block:
+                if connection.output != block:
                     continue
                 block.connections.append(connection)
             self.blockList.append(block)
@@ -131,7 +131,7 @@ class CodeGenerator():
             for block in self.blockList:
                 for connection in block.connections:
                     for block_target in self.blockList:
-                        if block_target != connection.sink:
+                        if block_target != connection.input:
                             continue
                         weight = block.weight
                         if block_target.weight < weight + 1:
@@ -165,22 +165,12 @@ class CodeGenerator():
         for key in block.codes:
             # First we replace in ports
             count = 0
-            for port in block.in_ports:
+            for port in block.ports:
                 value = System.ports[port["type"]].var_name
                 value = value.replace("$port_number$", str(count))
                 value = value.replace("$port_name$", port["name"])
-                value = value.replace("$conn_type$", "i")
-                my_key = "$in_ports[" + port["name"] + "]$"
-                block.codes[key] = block.codes[key].replace(my_key, value)
-                count += 1
-            # Then we replace out ports
-            count = 0
-            for port in block.out_ports:
-                value = System.ports[port["type"]].var_name
-                value = value.replace("$port_number$", str(count))
-                value = value.replace("$port_name$", port["name"])
-                value = value.replace("$conn_type$", "o")
-                my_key = "$out_ports[" + port["name"] + "]$"
+                value = value.replace("$conn_type$", port["conn_type"])
+                my_key = "$port[" + port["name"] + "]$"
                 block.codes[key] = block.codes[key].replace(my_key, value)
                 count += 1
             # Then we replace object attributes by their values

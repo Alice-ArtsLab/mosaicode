@@ -162,7 +162,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
-    def __on_props_row_activated(self, tree_view, path, column):
+    def __on_props_row_activated(self, tree_view, path, column, data=None):
         configuration = self.block.get_properties()[int(str(path))]
         self.__create_side_panel(configuration)
 
