@@ -28,10 +28,10 @@ mosaicode.model.diagrammodel module
     :undoc-members:
     :show-inheritance:
 
-mosaicode.model.plugin module
+mosaicode.model.blockmodel module
 --------------------------
 
-.. automodule:: mosaicode.model.plugin
+.. automodule:: mosaicode.model.blockmodel
     :members:
     :undoc-members:
     :show-inheritance:

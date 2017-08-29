@@ -2,10 +2,12 @@
 """
 This module contains the class About.
 """
+
 import gi
 import os
-from gi.repository import Gtk
 gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from mosaicode.system import System as System
 import gettext
 _ = gettext.gettext
 
@@ -29,7 +31,9 @@ class About(Gtk.Window):
 
         grid = Gtk.Grid()
         self.add(grid)
-# -----------------------logo mosaicode----------------------------------#
+
+        # -----------------------logo mosaicode----------------------------------#
+
         image = Gtk.Image()
         image.set_from_file(self.data_dir + "images/mosaicode_ave.png")
 
@@ -42,8 +46,10 @@ class About(Gtk.Window):
         frameBorder.add(frame)
 
         grid.add(frameBorder)
-# --------------------------------------------------------------------#
-# -------------------------------About Text---------------------------#
+
+        # --------------------------------------------------------------------#
+        # -------------------------------About Text---------------------------#
+
         labelAbout = Gtk.Label(_('Mosaicode Project was one of the aproved'
                                  'projects under CT-INFO 2003 Edital.\n' +
                                  'This project intends to build a ' +
@@ -63,8 +69,10 @@ class About(Gtk.Window):
         aboutBox = Gtk.Box()
         aboutBox.add(labelAbout)
         aboutBox.set_border_width(35)
-# --------------------------------------------------------------------#
-# ----------------------------License Text----------------------------#
+
+        # --------------------------------------------------------------------#
+        # ----------------------------License Text----------------------------#
+
         labelLicense = Gtk.Label(_('Mosaicode\n' +
                                    'Copyright (C) 2007 S2i-das-ufsc\n\n' +
                                    'This program is free software: you can ' +
@@ -97,10 +105,12 @@ class About(Gtk.Window):
         frameLicense = Gtk.Frame()
         frameLicense.set_border_width(10)
         frameLicense.add(labelLicense)
-# --------------------------------------------------------------------#
-# -----------------------------Development part-----------------------#
+
+        # --------------------------------------------------------------------#
+        # -----------------------------Development part-----------------------#
+
         imageSponsors1 = Gtk.Image()
-        imageSponsors1.set_from_file(self.data_dir + "images/finep_logo.gif")
+        imageSponsors1.set_from_file(self.data_dir + "")
 
         imgbox = Gtk.Box()
         imgbox.set_spacing(10)
@@ -114,8 +124,7 @@ class About(Gtk.Window):
         imgbox2.set_spacing(65)
         imgbox2.set_border_width(2)
 
-        labelFinep = Gtk.Label(_('FINEP\n Financiadora de estudos e' +
-                                 'Pesquisas\n http://www.finep.gov.br/'))
+        labelFinep = Gtk.Label(_('?'))
 
         labelFinep.set_justify(Gtk.Justification.CENTER)
 
@@ -140,19 +149,18 @@ class About(Gtk.Window):
         frame2.set_border_width(10)
         frame2.add(sponsorsBox)
 
+        # ----------------------- DEVELOPMENT --------------------------- #
         labelDevelopment = Gtk.Label(_("Development"))
         labelDevelopment.set_markup(_("<b>Development</b>"))
 
         imageDevelopment = Gtk.Image()
-        imageDevelopment.set_from_file(self.data_dir + "images/s2ilogo.png")
+        imageDevelopment.set_from_file(self.data_dir + "images/dcomp.png")
 
-        labelDevelopmentText = Gtk.Label(_('Sistemas Industriais ' +
-                                           'Inteligentes\n' +
-                                           'Departamento de Automação' +
-                                           ' e Sistemas\n' +
-                                           'Universidade Federal de ' +
-                                           'Santa Catarina\n' +
-                                           'http://s2i.das.ufsc.br/'))
+        labelDevelopmentText = Gtk.Label(_('Departamento ' +
+                                           'de Ciêncas da Computação da\n' +
+                                           'Universidade Federal ' +
+                                           'de São João del Rei\n' +
+                                           'http://mosaicode.github.io/'))
         labelDevelopmentText.set_justify(Gtk.Justification.CENTER)
 
         textBox2 = Gtk.Box()
@@ -187,45 +195,30 @@ class About(Gtk.Window):
         hbox.pack_start(vbox_center, True, True, 0)
         hbox.pack_start(vbox_right, True, True, 0)
 
-        labelNames = Gtk.Label(_('Alberto Xavier Pavim\n\n' +
-                                 'Christian Emanuel Silvano\n\n' +
-                                 'Clovis Peruchi Scotti\n\n' +
-                                 'Fábio Pedrotti Terra\n\n' +
-                                 'Fabrício Luchesi Forgerini\n\n' +
-                                 'Fernando Deschamps\n\n' +
-                                 'Guilherme Augusto Rutzen\n\n' +
-                                 'Luís Carlos Dill Junges\n\n' +
-                                 'Marcelo Ricardo Stemmer\n\n' +
-                                 'Mário Lúcio Roloff\n\n' +
-                                 'Mathias José Kreutz Erdtmann\n\n' +
-                                 'José Luiz Bittencourt\n\n' +
-                                 'Ricardo Grützmacher'))
+        labelNames = Gtk.Label(_('Flávio Luiz Schiavoni\n\n' +
+                                 'Carlos Magno\n\n' +
+                                 'Luan Luiz Gonçalves\n\n'+
+                                 'Valney Faria\n\n' +
+                                 'AAAAAAA\n\n' +
+                                 'Lucas Júnio Calsavara Andrade'))
 
         vbox_left.pack_start(labelNames, True, True, 0)
 
-        labelJobs = Gtk.Label(_('Tutor\n\nDeveloper\n\n' +
-                                'Present Developer\n\n' +
-                                'Developer\n\nTutor\n\nTutor\n\n' +
+        labelJobs = Gtk.Label(_('Tutor\n\n'+
                                 'Developer\n\n' +
-                                'Developer\n\nCoordinator\n\n' +
-                                'Tutor\n\nDeveloper\n\n' +
-                                'Developer\n\nDeveloper'))
+                                'Present Developer\n\n' +
+                                'Developer\n\n' +
+                                'Present Developer\n\n' +
+                                'Present Developer'))
 
         vbox_center.pack_start(labelJobs, True, True, 0)
 
-        labelEMAILS = Gtk.Label(_('axpavim@gmail.com\n\n' +
-                                  'silvano@das.ufsc.br\n\n' +
-                                  'scotti@ieee.org\n\n' +
-                                  'fpterra@yahoo.com.br\n\n' +
-                                  'fabricio_forgerini@hotmail.com\n\n' +
-                                  'fernando' +
-                                  '.deschamps@terra.com.br\n\n' +
-                                  'rutzen@das.ufsc.br\n\n' +
-                                  'lcdjunges@yahoo.com.br\n\n' +
-                                  'marcelo@das.ufsc.br\n\n' +
-                                  'roloff@cefetsc.edu.br\n\n' +
-                                  'erdtmann@das.ufsc.br\n\n' +
-                                  'jlbitt@yahoo.com\n\ngrutz@terra.com.br'))
+        labelEMAILS = Gtk.Label(_('flsfls@teste.com\n\n' +
+                                  'carlosmagno@teste.com\n\n' +
+                                  'luanluiz@teste.com\n\n' +
+                                  'valneyfaria@teste.com\n\n' +
+                                  'aaaaaaa@teste.com\n\n' +
+                                  'lucas_junio_051191@hotmail.com'))
 
         vbox_right.pack_start(labelEMAILS, True, True, 0)
 
@@ -242,7 +235,7 @@ class About(Gtk.Window):
 
         labelFinal = Gtk.Label(_('Any bugs or sugestions\n' +
                                  'should be directed to\n' +
-                                 'scotti@ieee.org'))
+                                 'teste@teste.com'))
 
         labelFinal.set_justify(Gtk.Justification.CENTER)
 
@@ -256,8 +249,10 @@ class About(Gtk.Window):
         gridTeste = Gtk.Grid()
         gridTeste.add(frame2)
         gridTeste.attach_next_to(frame3, frame2, Gtk.PositionType.BOTTOM, 1, 2)
-# --------------------------------------------------------------------#
-# ------------------------------Placing everything--------------------#
+
+        # --------------------------------------------------------------------#
+        # ------------------------------Placing everything--------------------#
+
         notebook = Gtk.Notebook()
         notebook.set_border_width(10)
 

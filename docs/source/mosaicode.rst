@@ -9,7 +9,7 @@ Subpackages
     mosaicode.GUI
     mosaicode.control
     mosaicode.model
-    mosaicode.plugins
+    mosaicode.blockmodels
     mosaicode.utils
 
 Submodules

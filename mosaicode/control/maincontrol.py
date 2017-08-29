@@ -439,7 +439,6 @@ class MainControl():
         """
         CodeTemplateManager(self.main_window)
 
-
     # ----------------------------------------------------------------------
     def block_manager(self):
         """

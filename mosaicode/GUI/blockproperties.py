@@ -5,9 +5,9 @@ This module contains the BlockProperties.
 """
 
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from propertybox import PropertyBox
-gi.require_version('Gtk', '3.0')
 import gettext
 _ = gettext.gettext
 

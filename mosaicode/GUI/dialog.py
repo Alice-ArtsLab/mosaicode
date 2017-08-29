@@ -101,7 +101,6 @@ class Dialog():
         dialog.destroy()
         return file_name
 
-
     # ----------------------------------------------------------------------
     def confirm_overwrite(self, name, main_window):
         """

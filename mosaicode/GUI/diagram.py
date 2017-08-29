@@ -58,6 +58,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.scrolled_window = None
         self.set_property("has-tooltip", True)  # Allow tooltip on elements
         self.show()
+        self.language = ""
+        #self.file_name = ""
 
         # Used for cycle detection
         self.__marks = None
@@ -319,7 +321,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         self.__abort_connection()  # abort any possibly running connections
-        conn_type = block.ports[output]["type"]
+        if output >= len(block.out_ports):
+            return
+        conn_type = block.out_ports[output]["type"]
         self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()

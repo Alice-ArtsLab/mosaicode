@@ -1,4 +1,4 @@
-mosaicode.plugins package
+mosaicode.blockmodels package
 ======================
 
 Subpackages
@@ -6,13 +6,13 @@ Subpackages
 
 .. toctree::
 
-    mosaicode.plugins.C
-    mosaicode.plugins.javascript
+    mosaicode.blockmodels.C
+    mosaicode.blockmodels.javascript
 
 Module contents
 ---------------
 
-.. automodule:: mosaicode.plugins
+.. automodule:: mosaicode.blockmodels
     :members:
     :undoc-members:
     :show-inheritance:

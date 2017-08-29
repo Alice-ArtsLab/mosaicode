@@ -1,157 +1,157 @@
-mosaicode.plugins.javascript.webaudio package
+mosaicode.blockmodels.javascript.webaudio package
 ==========================================
 
 Submodules
 ----------
 
-mosaicode.plugins.javascript.webaudio.addfloat module
+mosaicode.blockmodels.javascript.webaudio.addfloat module
 --------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.addfloat
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.addfloat
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.adsr module
+mosaicode.blockmodels.javascript.webaudio.adsr module
 ----------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.adsr
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.adsr
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.button module
+mosaicode.blockmodels.javascript.webaudio.button module
 ------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.button
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.button
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.channelmerger module
+mosaicode.blockmodels.javascript.webaudio.channelmerger module
 -------------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.channelmerger
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.channelmerger
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.char2float module
+mosaicode.blockmodels.javascript.webaudio.char2float module
 ----------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.char2float
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.char2float
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.delay module
+mosaicode.blockmodels.javascript.webaudio.delay module
 -----------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.delay
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.delay
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.dividefloat module
+mosaicode.blockmodels.javascript.webaudio.dividefloat module
 -----------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.dividefloat
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.dividefloat
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.floatvalue module
+mosaicode.blockmodels.javascript.webaudio.floatvalue module
 ----------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.floatvalue
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.floatvalue
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.gain module
+mosaicode.blockmodels.javascript.webaudio.gain module
 ----------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.gain
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.gain
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.keyboardinput module
+mosaicode.blockmodels.javascript.webaudio.keyboardinput module
 -------------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.keyboardinput
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.keyboardinput
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.midi2freq module
+mosaicode.blockmodels.javascript.webaudio.midi2freq module
 ---------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.midi2freq
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.midi2freq
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.mouse module
+mosaicode.blockmodels.javascript.webaudio.mouse module
 -----------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.mouse
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.mouse
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.multiplyfloat module
+mosaicode.blockmodels.javascript.webaudio.multiplyfloat module
 -------------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.multiplyfloat
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.multiplyfloat
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.oscillator module
+mosaicode.blockmodels.javascript.webaudio.oscillator module
 ----------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.oscillator
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.oscillator
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.print module
+mosaicode.blockmodels.javascript.webaudio.print module
 -----------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.print
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.print
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.speaker module
+mosaicode.blockmodels.javascript.webaudio.speaker module
 -------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.speaker
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.speaker
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.subtractfloat module
+mosaicode.blockmodels.javascript.webaudio.subtractfloat module
 -------------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.subtractfloat
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.subtractfloat
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.webaudioplugin module
+mosaicode.blockmodels.javascript.webaudio.webaudioblockmodel module
 --------------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.webaudioplugin
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.webaudioblockmodel
     :members:
     :undoc-members:
     :show-inheritance:
 
-mosaicode.plugins.javascript.webaudio.whitenoise module
+mosaicode.blockmodels.javascript.webaudio.whitenoise module
 ----------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio.whitenoise
+.. automodule:: mosaicode.blockmodels.javascript.webaudio.whitenoise
     :members:
     :undoc-members:
     :show-inheritance:
@@ -160,7 +160,7 @@ mosaicode.plugins.javascript.webaudio.whitenoise module
 Module contents
 ---------------
 
-.. automodule:: mosaicode.plugins.javascript.webaudio
+.. automodule:: mosaicode.blockmodels.javascript.webaudio
     :members:
     :undoc-members:
     :show-inheritance:

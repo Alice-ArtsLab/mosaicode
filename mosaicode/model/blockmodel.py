@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 class BlockModel(object):
     """
     This class contains the base attributes of each block,
-    their position on the screen, id and others applicable properties for 
+    their position on the screen, id and others applicable properties for
     each one.
     """
 
@@ -23,7 +22,7 @@ class BlockModel(object):
 
         # Appearance
         self.help = ""
-        self.label = ""
+        self.label = "A"
         self.color = "200:200:25:150"
         self.group = "Undefined"
         self.ports = []
@@ -34,7 +33,7 @@ class BlockModel(object):
 
         if block == None:
             return
-        for key in self.__dict__:
+        for key in block.__dict__:
             self.__dict__[key] = block.__dict__[key]
 
     # ----------------------------------------------------------------------
