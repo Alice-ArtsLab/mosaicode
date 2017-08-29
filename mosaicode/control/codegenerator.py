@@ -141,7 +141,7 @@ class CodeGenerator():
     # ----------------------------------------------------------------------
     def __generate_block_list_code(self):
         """
-        This metho generate interact block by block to generate all code.
+        This method interacts block by block to generate all code.
         """
         active_weight = 0
         # The maxWeight is, in the worst case, the block list lenght
@@ -153,7 +153,6 @@ class CodeGenerator():
                 if block.weight == active_weight:
                     # If it your time, lets generate your code and remove you
                     self.__generate_block_code(block)
-                    self.blockList.remove(block)
             active_weight += 1
 
     # ----------------------------------------------------------------------
@@ -226,8 +225,6 @@ class CodeGenerator():
             self.codes[key] = []
 
         self.__generate_block_list_code()
-
-        print self.codes
 
         code = self.code_template.code
 

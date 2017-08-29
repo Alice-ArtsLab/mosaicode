@@ -92,8 +92,8 @@ class BlockModel(object):
             if key in data:
                 prop["value"] = data[key]
             else:
-                print "BlockModel.set_property (" + self.type + \
-                        ") ERROR: key ", key, "not present"
+                System.log("BlockModel.set_property (" + self.type + \
+                        ") ERROR: key ", key, "not present")
 
     # ----------------------------------------------------------------------
     def get_properties(self):
