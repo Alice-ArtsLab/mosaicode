@@ -14,8 +14,6 @@ class Port(object):
         self.multiple = False
         self.source = "Python"
         self.code = ""
-        self.input_codes = ["","","","",""]
-        self.output_codes = ["","","","",""]
-        self.var_name = "block_$id$_$conn_type$$port_number$"
+        self.var_name = "$id$_$conn_type$$port_number$"
 
 # ------------------------------------------------------------------------------

@@ -19,6 +19,7 @@ from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.codetemplateeditor import CodeTemplateEditor
 from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.system import System as System
 import gettext
@@ -57,19 +58,10 @@ class CodeTemplateManager(Gtk.Dialog):
         vbox.pack_start(sw, True, True, 0)
 
         # Button bar
-        button_bar = Gtk.HBox()
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_NEW)
-        button.connect("clicked", self.__new, None)
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_EDIT)
-        button.connect("clicked", self.__edit, None)
-        button_bar.pack_start(button, False, False, 0)
-
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_DELETE)
-        button.connect("clicked", self.__delete, None)
-        button_bar.pack_start(button, False, False, 0)
-
+        button_bar = ButtonBar()
+        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_EDIT, "action": self.__edit, "data":None})
+        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":None})
         vbox.pack_start(button_bar, False, False, 0)
 
         self.__update()

@@ -106,10 +106,10 @@ class DiagramPersistence():
         parser.appendToTag(tag_name, 'connections')
         for connector in diagram.connectors:
             parser.appendToTag('connections', 'connection',
-                               from_block=connector.source.id,
-                               from_out=int(connector.source_port) + 1,
-                               to_block=connector.sink.id,
-                               to_in=int(connector.sink_port) + 1)
+                               from_block=connector.output.id,
+                               from_out=int(connector.output_port) + 1,
+                               to_block=connector.input.id,
+                               to_in=int(connector.input_port) + 1)
 
         try:
             save_file = open(str(diagram.file_name), "w")

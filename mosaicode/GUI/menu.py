@@ -76,7 +76,7 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(
             _("Normal Size"), "<Control>0", view_menu, mc.zoom_normal)
 
-        edit_menu.append(Gtk.SeparatorMenuItem())
+        view_menu.append(Gtk.SeparatorMenuItem())
         self.__create_check_menu(_("Show Grid"), "<Control>g", view_menu, mc.show_grid)
         self.__add_menu_category(_("View"), view_menu)
 

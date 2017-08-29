@@ -25,12 +25,11 @@ class BlockModel(object):
         self.label = "A"
         self.color = "200:200:25:150"
         self.group = "Undefined"
-        self.in_ports = []
-        self.out_ports = []
+        self.ports = []
 
         # Code generation
         self.properties = []
-        self.codes = ["","","","",""] # Empty array with 5 positions
+        self.codes = {}
 
         if block == None:
             return
@@ -90,8 +89,8 @@ class BlockModel(object):
             if key in data:
                 prop["value"] = data[key]
             else:
-                print "BlockModel.set_property (" + self.type + \
-                        ") ERROR: key ", key, "not present"
+                System.log("BlockModel.set_property (" + self.type + \
+                        ") ERROR: key ", key, "not present")
 
     # ----------------------------------------------------------------------
     def get_properties(self):
