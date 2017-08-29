@@ -66,18 +66,12 @@ class BlockCommonEditor(Gtk.ScrolledWindow):
         data = {"label": _("Help"), "value": block.help}
         self.help_field = CommentField(data, self.__on_edit)
 
-        code_parts_string = ', '.join(block.code_parts)
-        data = {"label": _("Code Parts"), "value": code_parts_string}
-        self.code_parts = StringField(data, None)
-
-
         vbox.pack_start(self.label_field, False, False, 1)
         vbox.pack_start(self.language_field, False, False, 1)
         vbox.pack_start(self.framework_field, False, False, 1)
         vbox.pack_start(self.type_field, False, False, 1)
         vbox.pack_start(self.group_field, False, False, 1)
         vbox.pack_start(self.color_field, False, False, 1)
-        vbox.pack_start(self.code_parts, False, False, 1)
         vbox.pack_start(self.help_field, False, False, 1)
 
         self.show_all()
@@ -93,7 +87,6 @@ class BlockCommonEditor(Gtk.ScrolledWindow):
         self.block.type = self.type_field.get_value()
         self.block.language = self.language_field.get_value()
         self.block.framework = self.framework_field.get_value()
-        self.block.code_parts = self.code_parts.get_value().split(",")
 
         self.block.label = self.label_field.get_value()
         self.block.group = self.group_field.get_value()

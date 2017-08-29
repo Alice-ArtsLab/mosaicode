@@ -20,14 +20,14 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram, source, source_port, conn_type):
+    def __init__(self, diagram, output, output_port, conn_type):
         """
         This method is the constructor.
         """
         GooCanvas.CanvasGroup.__init__(self)
-        ConnectionModel.__init__(self, diagram, source, source_port, conn_type)
+        ConnectionModel.__init__(self, diagram, output, output_port, conn_type)
 
-        self.__from_point = self.source.get_output_pos(self.source_port)
+        self.__from_point = self.output.get_output_pos(self.output_port)
         self.__to_point = (0, 0)
 
         self.__focus = False
@@ -110,8 +110,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         This method update the flow.
 
         """
-        self.__from_point = self.source.get_output_pos(self.source_port)
-        self.__to_point = self.sink.get_input_pos(self.sink_port)
+        self.__from_point = self.output.get_output_pos(self.output_port)
+        self.__to_point = self.input.get_input_pos(self.input_port)
         self.__update_draw()
 
     # ----------------------------------------------------------------------

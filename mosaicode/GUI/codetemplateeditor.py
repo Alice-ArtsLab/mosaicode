@@ -31,12 +31,16 @@ class CodeTemplateEditor(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __init__(self, code_template_manager, code_template_name):
-        self.code_template_manager = code_template_manager
-        self.code_template = System.code_templates[code_template_name]
         Gtk.Dialog.__init__(self, _("Code Template Editor"),
-                            self.code_template_manager,
+                            code_template_manager,
                             0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+
+        self.code_template_manager = code_template_manager
+        if code_template_name is not None:
+            self.code_template = System.code_templates[code_template_name]
+        else:
+            self.code_template = CodeTemplate()
 
         self.main_control = self
         self.set_default_size(800, 300)

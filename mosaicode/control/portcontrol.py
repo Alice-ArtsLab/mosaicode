@@ -50,7 +50,6 @@ class PortControl():
         from mosaicode.system import System as System
         System()
         for port in System.ports:
-            print "Exporting port " + port
             PortPersistence.save_python(System.ports[port])
 
     # ----------------------------------------------------------------------

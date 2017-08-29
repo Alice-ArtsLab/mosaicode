@@ -48,29 +48,17 @@ class BlockPersistence():
         block.help = parser.getTagAttr(tag_name, "help")
         block.source = parser.getTagAttr(tag_name, "source")
 
-        code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
-        for code_part in code_parts:
-            block.code_parts.append(prop.getAttr("value"))
-
-        count = 0
         for code in block.codes:
-            block.codes[count] = parser.getTag(tag_name).getTag("code" + str(count)).getText()
-            count = count + 1
+            block.codes[code] = parser.getTag(tag_name).getTag(code).getText()
 
         props = parser.getTag(tag_name).getTag(
                     "properties").getChildTags("property")
         for prop in props:
             block.properties.append(ast.literal_eval(prop.getAttr("value")))
 
-        in_ports = parser.getTag(tag_name).getTag(
-                    "in_ports").getChildTags("port")
-        for port in in_ports:
-            block.in_ports.append(ast.literal_eval(port.getAttr("value")))
-
-        out_ports = parser.getTag(tag_name).getTag(
-                    "out_ports").getChildTags("port")
-        for port in out_ports:
-            block.out_ports.append(ast.literal_eval(port.getAttr("value")))
+        ports = parser.getTag(tag_name).getTag("ports").getChildTags("port")
+        for port in ports:
+            block.ports.append(ast.literal_eval(port.getAttr("value")))
 
         if block.type == "mosaicode.model.blockmodel":
             return None
@@ -100,26 +88,16 @@ class BlockPersistence():
         parser.setTagAttr(tag_name,'help', block.help)
         parser.setTagAttr(tag_name,'source', block.source)
 
-        count = 0
         for code in block.codes:
-            parser.appendToTag(tag_name, 'code' + str(count)).string = str(block.codes[count])
-            count = count + 1
-
-        parser.appendToTag(tag_name, 'code_parts')
-        for key in block.code_parts:
-            parser.appendToTag('code_parts', 'code_part', value=key)
+            parser.appendToTag(tag_name, code, value=block.codes[code])
 
         parser.appendToTag(tag_name, 'properties')
         for key in block.properties:
             parser.appendToTag('properties', 'property', value=key)
 
-        parser.appendToTag(tag_name, 'in_ports')
-        for key in block.in_ports:
-            parser.appendToTag('in_ports', 'port', value=key)
-
-        parser.appendToTag(tag_name, 'out_ports')
-        for key in block.out_ports:
-            parser.appendToTag('out_ports', 'port', value=key)
+        parser.appendToTag(tag_name, 'ports')
+        for port in block.ports:
+            parser.appendToTag('ports', 'port', value=key)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -162,10 +140,8 @@ class BlockPersistence():
         parser.setAttribute('color', block.color)
         parser.setAttribute('group', block.group)
         parser.setAttribute('help', block.help)
-        parser.setAttribute('in_ports', block.in_ports)
-        parser.setAttribute('out_ports', block.out_ports)
+        parser.setAttribute('ports', block.ports)
         parser.setAttribute('properties', block.properties)
-        parser.setAttribute('code_parts', code_template.code_parts)
         parser.setAttribute('codes', block.codes)
 
         try:

@@ -44,16 +44,6 @@ class PortPersistence():
         port.source = parser.getTagAttr(tag_name, "source")
         port.code = parser.getTag(tag_name).getTag("code").getText()
 
-        code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
-        for code_part in code_parts:
-            port.code_parts.append(prop.getAttr("value"))
-
-        count = 0
-        for code in port.input_codes:
-            port.input_codes[count] = parser.getTag(tag_name).getTag('input_code' + str(count)).getText()
-            port.output_codes[count] = parser.getTag(tag_name).getTag('output_code' + str(count)).getText()
-            count = count + 1
-
         if port.type == "":
             return None
         return port
@@ -80,19 +70,6 @@ class PortPersistence():
         parser.setTagAttr(tag_name, 'multiple', port.multiple)
         parser.setTagAttr(tag_name, 'source', port.source)
         parser.appendToTag(tag_name, 'code').string = str(port.code)
-
-        parser.appendToTag(tag_name, 'code_parts')
-        for key in port.code_parts:
-            parser.appendToTag('code_parts', 'code_part', value=key)
-
-        count = 0
-        for code in port.input_codes:
-            parser.appendToTag(tag_name, 'input_code' + \
-                        str(count)).string = str(port.input_codes[count])
-            parser.appendToTag(tag_name, 'output_code' + \
-                        str(count)).string = str(port.output_codes[count])
-            count = count + 1
-
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -132,13 +109,6 @@ class PortPersistence():
         parser.setAttribute('multiple', port.multiple)
         parser.setAttribute('source', 'python')
         parser.setAttribute('code', str(port.code))
-        parser.setAttribute('code_parts', code_template.code_parts)
-        parser.setAttribute('input_codes', [])
-        parser.setAttribute('output_codes', [])
-
-        for index, code in enumerate(port.input_codes, start=0):
-            parser.attributes['input_codes'].append(str(port.input_codes[index]))
-            parser.attributes['output_codes'].append(str(port.output_codes[index]))
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"

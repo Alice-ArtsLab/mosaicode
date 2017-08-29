@@ -266,12 +266,12 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
              * **Types** (:class:`boolean<boolean>`)
         """
         for oldCon in self.connectors:
-            if oldCon.sink == newCon.sink \
-                    and oldCon.sink_port == newCon.sink_port\
+            if oldCon.input == newCon.input \
+                    and oldCon.input_port == newCon.input_port\
                     and not System.ports[newCon.conn_type].multiple:
                 System.log(_("Connector Already exists"))
                 return False
-        if (newCon.sink == newCon.source) or self.__cycle_detection(newCon):
+        if (newCon.input == newCon.output) or self.__cycle_detection(newCon):
             System.log(_("Recursive connection is not allowed"))
             return False
         return True
@@ -279,19 +279,19 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def __cycle_detection(self, newCon):
         self.__marks = {}
-        self.__marks[newCon.source] = None
-        self.__marks[newCon.sink] = None
-        if self.__dfs(newCon.sink):
+        self.__marks[newCon.output] = None
+        self.__marks[newCon.input] = None
+        if self.__dfs(newCon.input):
             return True
         return False
 
     # Depth-First Search
     # ----------------------------------------------------------------------
-    def __dfs(self, sink):
+    def __dfs(self, input):
         for connection in self.connectors:
-            if (connection.source != sink):
+            if (connection.output != input):
                 continue
-            adjacent = connection.sink
+            adjacent = connection.input
             if adjacent in self.__marks:
                 return True
             self.__marks[adjacent] = None
@@ -319,9 +319,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         self.__abort_connection()  # abort any possibly running connections
-        if output >= len(block.out_ports):
-            return 
-        conn_type = block.out_ports[output]["type"]
+        conn_type = block.ports[output]["type"]
         self.curr_connector = Connector(self, block, output, conn_type)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
@@ -339,14 +337,14 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         if self.curr_connector is None:
             return False
-        self.curr_connector.sink = block
-        self.curr_connector.sink_port = block_input
+        self.curr_connector.input = block
+        self.curr_connector.input_port = block_input
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return False
 
-        out_type = self.curr_connector.source.out_ports[int(self.curr_connector.source_port)]["type"]
-        in_type = self.curr_connector.sink.in_ports[int(self.curr_connector.sink_port)]["type"]
+        out_type = self.curr_connector.output.ports[int(self.curr_connector.output_port)]["type"]
+        in_type = self.curr_connector.input.ports[int(self.curr_connector.input_port)]["type"]
 
         if not out_type == in_type:
             System.log(_("Connection Types mismatch"))
@@ -590,17 +588,17 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if not isinstance(widget, Connector):
                 continue
             # if a connector is copied without blocks
-            if widget.source.id not in replace or widget.sink.id \
+            if widget.output.id not in replace or widget.input.id \
                     not in replace:
                 continue
             print _("continuing...")
-            source = replace[widget.source.id]
-            source_port = widget.source_port
-            sink = replace[widget.sink.id]
-            sink_port = widget.sink_port
-            self.start_connection(source, source_port)
+            output = replace[widget.output.id]
+            output_port = widget.output_port
+            input = replace[widget.input.id]
+            input_port = widget.input_port
+            self.start_connection(output, output_port)
             self.current_widgets.append(self.curr_connector)
-            self.end_connection(sink, sink_port)
+            self.end_connection(input, input_port)
         self.update_flows()
 
     # ---------------------------------------------------------------------
@@ -650,8 +648,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 " is not present in this diagram.")
             return
         for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].source == block \
-                    or self.connectors[idx].sink == block:
+            if self.connectors[idx].output == block \
+                    or self.connectors[idx].input == block:
                 self.delete_connection(self.connectors[idx])
         self.blocks[block.id].remove()
         del self.blocks[block.id]
