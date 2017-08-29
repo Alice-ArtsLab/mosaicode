@@ -131,10 +131,10 @@ mosaicode.GUI.menu module
     :undoc-members:
     :show-inheritance:
 
-mosaicode.GUI.pluginmanager module
+mosaicode.GUI.blockmodelmanager module
 -------------------------------
 
-.. automodule:: mosaicode.GUI.pluginmanager
+.. automodule:: mosaicode.GUI.blockmodelmanager
     :members:
     :undoc-members:
     :show-inheritance:

@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from unittest import TestCase
+from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.GUI.blocknotebook import BlockNotebook
 
 class TestBlockNotebook(TestCase):
@@ -6,14 +9,19 @@ class TestBlockNotebook(TestCase):
     def setUp(self):
         """Do the test basic setup."""
         win = MainWindow()
-        self.block_notebook = MainControl(win)
+        self.blocknotebook = BlockNotebook(win)
 
-    # ----------------------------------------------------------------------x
-    def test_get_current_tab(self):
-        self.block_notebook.get_current_tab()
+    # ----------------------------------------------------------------------
+    def test_update(self):
+        self.assertIsNone(self.blocknotebook.update())
 
-    # ----------------------------------------------------------------------x
-    def test_get_tabs(self):
-        self.block_notebook.get_tabs()
+    # ----------------------------------------------------------------------
+    def test_search(self):
+        query = "Testando"
+        self.assertIsNone(self.blocknotebook.search(query))
+        query = None
+        self.assertIsNone(self.blocknotebook.search(query))
 
-    
+    # ----------------------------------------------------------------------
+    def test_get_selected_block(self):
+        self.assertIsNone(self.blocknotebook.get_selected_block())

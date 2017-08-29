@@ -1,4 +1,4 @@
-mosaicode.plugins.javascript package
+mosaicode.blockmodels.javascript package
 =================================
 
 Subpackages
@@ -6,15 +6,15 @@ Subpackages
 
 .. toctree::
 
-    mosaicode.plugins.javascript.webaudio
+    mosaicode.blockmodels.javascript.webaudio
 
 Submodules
 ----------
 
-mosaicode.plugins.javascript.javascriptgenerator module
+mosaicode.blockmodels.javascript.javascriptgenerator module
 ----------------------------------------------------
 
-.. automodule:: mosaicode.plugins.javascript.javascriptgenerator
+.. automodule:: mosaicode.blockmodels.javascript.javascriptgenerator
     :members:
     :undoc-members:
     :show-inheritance:
@@ -23,7 +23,7 @@ mosaicode.plugins.javascript.javascriptgenerator module
 Module contents
 ---------------
 
-.. automodule:: mosaicode.plugins.javascript
+.. automodule:: mosaicode.blockmodels.javascript
     :members:
     :undoc-members:
     :show-inheritance:

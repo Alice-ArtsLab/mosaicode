@@ -1,3 +1,3 @@
 ################
-Building plugins
+Building blockmodels
 ################

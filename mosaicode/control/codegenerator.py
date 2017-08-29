@@ -157,7 +157,7 @@ class CodeGenerator():
         This method get max weight.
 
         Returns:
-        
+
             * **Types** (:class:`int<int>`)
         """
         biggestWeight = -1
