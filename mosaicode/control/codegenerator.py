@@ -191,11 +191,31 @@ class CodeGenerator():
         connections = ""
         for x in block.connections:
             code = System.ports[x.conn_type].code
-            # Replace all connection properties by their values
-            for key in x.__dict__:
-                value = str(x.__dict__[key])
-                my_key = "$" + key + "$"
-                code = code.replace(my_key, value)
+            # Replace output
+            port = x.output.ports[x.output_port]
+            value = System.ports[port["type"]].var_name
+            value = value.replace("$port_number$", str(x.output_port))
+            value = value.replace("$port_name$", port["name"])
+            value = value.replace("$conn_type$", port["conn_type"])
+            for attribute in x.output.__dict__:
+                my_key = "$" + attribute + "$"
+                my_value = str(x.output.__dict__[attribute])
+                value = value.replace(my_key,my_value)
+            code = code.replace("$output$", value)
+
+            # Replace Input
+            port = x.input.ports[x.input_port]
+            value = System.ports[port["type"]].var_name
+            value = value.replace("$port_number$", str(x.input_port))
+            value = value.replace("$port_name$", port["name"])
+            value = value.replace("$conn_type$", port["conn_type"])
+            for attribute in x.input.__dict__:
+                my_key = "$" + attribute + "$"
+                my_value = str(x.input.__dict__[attribute])
+                value = value.replace(my_key,my_value)
+
+            code = code.replace("$input$", value)
+
             connections += code
         self.connections.append(connections)
 
