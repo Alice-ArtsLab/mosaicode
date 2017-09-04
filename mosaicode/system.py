@@ -137,7 +137,6 @@ class System(object):
             self.__load_xml(System.DATA_DIR + "extensions/")
             # Load XML files in user space
             self.__load_xml(System.get_user_dir() + "/extensions/")
-
     # ----------------------------------------------------------------------
     def __init__(self):
         if not System.instance:
