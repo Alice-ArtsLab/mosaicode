@@ -160,7 +160,6 @@ class CodeGenerator():
         """
         This method generate the block code.
         """
-        i = 0
         for key in block.codes:
             # First we replace in ports
             count = 0
@@ -182,40 +181,39 @@ class CodeGenerator():
                 my_key = "$prop[" + prop.get("name") + "]$"
                 value = str(prop.get("value"))
                 block.codes[key] = block.codes[key].replace(my_key, value)
-            i += 1
 
         for key in self.codes:
             if key in block.codes:
                 self.codes[key].append(block.codes[key])
+            else:
+                self.codes[key].append('')
 
         connections = ""
-        for x in block.connections:
-            code = System.ports[x.conn_type].code
+        for connection in block.connections:
+            code = System.ports[connection.conn_type].code
             # Replace output
-            port = x.output.ports[x.output_port]
-            value = System.ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(x.output_port))
+            port = connection.output.ports[connection.output_port]
+            value = System.ports[connection.conn_type].var_name
+            value = value.replace("$port_number$", str(connection.output_port))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", port["conn_type"])
-            for attribute in x.output.__dict__:
+            for attribute in connection.output.__dict__:
                 my_key = "$" + attribute + "$"
-                my_value = str(x.output.__dict__[attribute])
+                my_value = str(connection.output.__dict__[attribute])
                 value = value.replace(my_key,my_value)
             code = code.replace("$output$", value)
 
             # Replace Input
-            port = x.input.ports[x.input_port]
+            port = connection.input.ports[connection.input_port]
             value = System.ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(x.input_port))
+            value = value.replace("$port_number$", str(connection.input_port))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", port["conn_type"])
-            for attribute in x.input.__dict__:
+            for attribute in connection.input.__dict__:
                 my_key = "$" + attribute + "$"
-                my_value = str(x.input.__dict__[attribute])
+                my_value = str(connection.input.__dict__[attribute])
                 value = value.replace(my_key,my_value)
-
             code = code.replace("$input$", value)
-
             connections += code
         self.connections.append(connections)
 
@@ -262,6 +260,15 @@ class CodeGenerator():
             if code_name in code:
                 temp_code = ""
                 for x,y in zip(self.codes[key], self.connections):
+                    temp_code += x
+                    temp_code += y
+                code = code.replace(code_name, temp_code)
+
+            # Check for connections + code generation
+            code_name = "$code[connection, "+ key + "]$"
+            if code_name in code:
+                temp_code = ""
+                for x,y in zip(self.connections, self.codes[key]):
                     temp_code += x
                     temp_code += y
                 code = code.replace(code_name, temp_code)
