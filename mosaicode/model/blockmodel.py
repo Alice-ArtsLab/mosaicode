@@ -91,8 +91,9 @@ class BlockModel(object):
             if key in data:
                 prop["value"] = data[key]
             else:
+                from mosaicode.system import System as System
                 System.log("BlockModel.set_property (" + self.type + \
-                        ") ERROR: key ", key, "not present")
+                        ") ERROR: key " +  key + " not present")
 
     # ----------------------------------------------------------------------
     def get_properties(self):

@@ -231,6 +231,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         ins = []
         x = 0
+        height = 0
         for port in self.ports:
             if port["conn_type"] is not "Input":
                 x += 1
@@ -243,8 +244,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                  alignment = Pango.Alignment.LEFT,
                                  x=2,
                                  y=(RADIUS +  # upper border
-                                     (x * 5) +  # spacing betwen ports
-                                      x * INPUT_HEIGHT),  # prev ports
+                                     (height * 5) +  # spacing betwen ports
+                                      height * INPUT_HEIGHT),  # prev ports
                                  use_markup=True
                                  )
             inp.set_property("tooltip", port["label"])
@@ -252,6 +253,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             inp.connect("button-release-event", self.__on_input_release, x)
             ins.append(inp)
             x += 1
+            height += 1
         self.widgets["Inputs"] = ins
 
     # ----------------------------------------------------------------------
@@ -396,11 +398,21 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
+        height = 0
+        x = 0
+        for port in self.ports:
+            if port["conn_type"] is not "Input":
+                x += 1
+                continue
+            if x == input_id:
+                break
+            x += 1
+            height += 1
         isSet, x, y, scale, rotation = self.get_simple_transform()
         x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
         y = (RADIUS +  # upper border
-             (input_id * 5) +  # spacing betwen ports
-             input_id * INPUT_HEIGHT +  # previous ports
+             (height * 5) +  # spacing betwen ports
+             height * INPUT_HEIGHT +  # previous ports
              INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
