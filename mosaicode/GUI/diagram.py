@@ -226,20 +226,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             block.move(0 - x, 0 - y)
         self.update_flows()
 
-    # ----------------------------------------------------------------------
-    def insert_block(self, block):
-        if self.language is not None and self.language != block.language:
-            System.log("Block language is different from diagram language.")
-            return False
-        if self.language is None or self.language == 'None':
-            self.language = block.language
-
-        self.last_id = max(int(self.last_id), int(block.id))
-        if block.id < 0:
-            block.id = self.last_id
-        self.blocks[block.id] = block
-        self.last_id += 1
-        return True
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
@@ -251,13 +237,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
-        new_block = Block(self, copy.deepcopy(block))
-        if self.insert_block(new_block):
-            self.do("Add")
-            self.get_root_item().add_child(new_block, -1)
-            return True
-        else:
+        new_block = Block(self, block)
+
+        if self.language is not None and self.language != new_block.language:
+            System.log("Block language is different from diagram language.")
             return False
+        if self.language is None or self.language == 'None':
+            self.language = new_block.language
+
+        self.last_id = max(int(self.last_id), int(new_block.id))
+        if new_block.id < 0:
+            new_block.id = self.last_id
+        self.blocks[new_block.id] = new_block
+        self.last_id += 1
+
+        self.do("Add")
+        self.get_root_item().add_child(new_block, -1)
+        return True
 
     # ----------------------------------------------------------------------
     def __valid_connector(self, newCon):
