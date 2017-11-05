@@ -7,7 +7,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from blockstreeview import BlocksTreeView
-from mosaicode.system import System as System
 
 
 class BlockNotebook(Gtk.Notebook):
@@ -16,6 +15,7 @@ class BlockNotebook(Gtk.Notebook):
     This class contains methods related the BlockNotebook class.
     """
 
+    # ----------------------------------------------------------------------
     def __init__(self, main_window):
         """
         This method is the constructor.
@@ -27,18 +27,17 @@ class BlockNotebook(Gtk.Notebook):
         self.tabs = []
         self.main_window = main_window
         self.set_scrollable(True)
-        self.update()
 
     # ----------------------------------------------------------------------
-    def update(self):
+    def update_blocks(self, blocks):
         languages = []
 
         while self.get_n_pages() > 0:
             self.remove_page(0)
+            self.tabs.push()
 
-        System()
-        for x in System.blocks:
-            instance = System.blocks[x]
+        for x in blocks:
+            instance = blocks[x]
             name = instance.language
             name += "/" + instance.framework
             if name in languages:
@@ -46,8 +45,9 @@ class BlockNotebook(Gtk.Notebook):
             languages.append(name)
 
         for language in languages:
-            treeview = BlocksTreeView(self.main_window, language)
+            treeview = BlocksTreeView(self.main_window, language, blocks)
             self.append_page(treeview, Gtk.Label(language))
+            self.tabs.append(treeview)
         self.show_all()
 
     # ----------------------------------------------------------------------

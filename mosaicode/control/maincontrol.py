@@ -35,6 +35,14 @@ class MainControl():
         self.clipboard = []
 
     # ----------------------------------------------------------------------
+    def init(self):
+
+        self.main_window.menu.update_recent_files(System.properties.recent_files)
+        self.main_window.menu.update_examples(System.list_of_examples)
+        self.main_window.menu.update_blocks(System.blocks)
+        self.main_window.block_notebook.update_blocks(System.blocks)
+
+    # ----------------------------------------------------------------------
     def new(self):
         """
         This method create a new the diagram file.
@@ -62,8 +70,13 @@ class MainControl():
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
         diagram.set_modified(False)
-        MainControl.add_recent_file(System.properties, file_name)
-        self.main_window.menu.update_recent_file()
+
+        if file_name in System.properties.recent_files:
+            System.properties.recent_files.remove(file_name)
+        System.properties.recent_files.insert(0, file_name)
+        if len(System.properties.recent_files) > 10:
+            System.properties.recent_files.pop()
+        self.main_window.menu.update_recent_files(System.properties.recent_files)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -313,6 +326,29 @@ class MainControl():
         return True
 
     # ----------------------------------------------------------------------
+    def add_comment(self, block):
+        """
+        This method add a block.
+
+        Parameters:
+
+                * **Types** (:class:`block<>`)
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        if not diagram.add_block(block):
+            message = "Block language is different from diagram language.\n" +\
+                "Diagram is expecting to generate " + diagram.language + \
+                " code while block is writen in " + block.language
+            Dialog().message_dialog("Error", message, self.main_window)
+            return False
+        return True
+
+    # ----------------------------------------------------------------------
     def get_selected_block(self):
         """
         This method get the tree view block.
@@ -478,7 +514,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def add_new_block(self, block):
         BlockControl.add_new_block(block)
-        self.main_window.block_notebook.update()
+        self.main_window.block_notebook.update_blocks(System.blocks)
 
     # ----------------------------------------------------------------------
     def delete_block(self, block):
@@ -486,7 +522,7 @@ class MainControl():
             message = "This block is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
-        self.main_window.block_notebook.update()
+        self.main_window.block_notebook.update_blocks(System.blocks)
 
     # ----------------------------------------------------------------------
     def update_all(self):
@@ -545,14 +581,5 @@ class MainControl():
     def export_xml_dialog(self):
         MainControl.export_xml()
         Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def add_recent_file(cls, prefs, file_name):
-        if file_name in prefs.recent_files:
-            prefs.recent_files.remove(file_name)
-        prefs.recent_files.insert(0, file_name)
-        if len(prefs.recent_files) > 10:
-            prefs.recent_files.pop()
 
 # ----------------------------------------------------------------------
