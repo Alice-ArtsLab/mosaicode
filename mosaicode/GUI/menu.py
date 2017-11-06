@@ -6,7 +6,6 @@ This module contains the menu bar.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.system import System as System
 import gettext
 
 _ = gettext.gettext
@@ -26,8 +25,7 @@ class Menu(Gtk.MenuBar):
         mc = self.main_window.main_control
         self.accel_group = Gtk.AccelGroup()
         self.main_window.add_accel_group(self.accel_group)
-        # dictionary component: action
-        self.list_of_examples = []
+
         self.actions = {}
         # -------------------------- File -------------------------------------
         file_menu = Gtk.Menu()
@@ -80,6 +78,15 @@ class Menu(Gtk.MenuBar):
         self.__create_check_menu(_("Show Grid"), "<Control>g", view_menu, mc.show_grid)
         self.__add_menu_category(_("View"), view_menu)
 
+        # -------------------------- Insert -------------------------------------
+        # Cria sub menu
+        insert_menu = Gtk.Menu()
+        self.block_menu = Gtk.Menu()
+        blocks = self.__create_menu(_("Block"), None, insert_menu, None)
+        blocks.set_submenu(self.block_menu)
+        insert_menu.append(Gtk.SeparatorMenuItem())
+        self.__add_menu_category(_("Insert"), insert_menu)
+
         # -------------------------- Process --------------------------------
         process_menu = Gtk.Menu()
         self.__create_menu(_("Run"), "<Control>R", process_menu, mc.run)
@@ -98,8 +105,8 @@ class Menu(Gtk.MenuBar):
         self.__create_menu(_("Port Manager"), None,
                            extension_menu, mc.port_manager)
         extension_menu.append(Gtk.SeparatorMenuItem())
-        self.export_blocks_menu = Gtk.Menu()
         export_blocks = self.__create_menu(_("Export As..."), None, extension_menu, None)
+        self.export_blocks_menu = Gtk.Menu()
         export_blocks.set_submenu(self.export_blocks_menu)
         self.__create_menu(_("Python"), None, self.export_blocks_menu, mc.export_python_dialog)
         self.__create_menu(_("XML"), None, self.export_blocks_menu, mc.export_xml_dialog)
@@ -140,6 +147,7 @@ class Menu(Gtk.MenuBar):
             self.actions[item] = action
         return item
 
+    # ----------------------------------------------------------------------
     def __create_check_menu(self, name, accel, menu, action):
         item = Gtk.CheckMenuItem(name)
         if accel is not None:
@@ -191,20 +199,83 @@ class Menu(Gtk.MenuBar):
         self.main_window.main_control.open(widget.get_label())
 
     # ----------------------------------------------------------------------
-    def add_example(self, example):
+    def __get_child_by_name(self, container, name):
+        for child in container.get_children():
+            if child.get_name() == name:
+                return child
+        return None
+
+    # ----------------------------------------------------------------------
+    def update_blocks(self, blocks):
+        for widget in self.block_menu.get_children():
+            self.block_menu.remove(widget)
+
+        block_list = []
+        # Copy the list to sort
+        for key in blocks:
+            instance = blocks[key]
+            block_list.append(instance)
+
+        # time to populate
+        for block in sorted(block_list):
+            # first, the language submenu
+            language_menu_item = self.__get_child_by_name(self.block_menu, block.language)
+            if language_menu_item is None:
+                language_menu_item = Gtk.MenuItem(block.language)
+                language_menu_item.set_name(block.language)
+                self.block_menu.append(language_menu_item)
+                language_menu = Gtk.Menu()
+                language_menu_item.set_submenu(language_menu)
+            else:
+                language_menu = language_menu_item.get_submenu()
+
+            framework_menu_item = self.__get_child_by_name(language_menu, block.framework)
+            if framework_menu_item is None:
+                framework_menu_item = Gtk.MenuItem(block.framework)
+                framework_menu_item.set_name(block.framework)
+                language_menu.append(framework_menu_item)
+                framework_menu = Gtk.Menu()
+                framework_menu_item.set_submenu(framework_menu)
+            else:
+                framework_menu = framework_menu_item.get_submenu()
+
+            group_menu_item = self.__get_child_by_name(framework_menu, block.group)
+            if group_menu_item is None:
+                group_menu_item = Gtk.MenuItem(block.group)
+                group_menu_item.set_name(block.group)
+                framework_menu.append(group_menu_item)
+                group_menu = Gtk.Menu()
+                group_menu_item.set_submenu(group_menu)
+            else:
+                group_menu = group_menu_item.get_submenu()
+
+            menu_item = Gtk.MenuItem(block.type)
+            group_menu.append(menu_item)
+            menu_item.connect("activate", self.__add_block, block)
+
+        self.block_menu.show_all()
+
+    # ----------------------------------------------------------------------
+    def __add_block(self, widget, data):
         """
-        This method add a file at list of examples.
+        This method load a example.
 
             Parameters:
-                * **self** (:class:`Menu<mosaicode.GUI.menu>`)
-                * **example** (:class:`str<str>`)
+                widget:
+                data:
 
         """
-        self.list_of_examples.append(example)
-        menu_item = Gtk.MenuItem(example.split("/").pop())
-        self.example_menu.append(menu_item)
-        menu_item.connect(
-            "activate", self.__load_example, len(self.list_of_examples) - 1)
+        self.main_window.main_control.add_block(data)
+
+    # ----------------------------------------------------------------------
+    def update_examples(self, list_of_examples):
+
+        for widget in self.example_menu.get_children():
+            self.example_menu.remove(widget)
+        for example in list_of_examples:
+            menu_item = Gtk.MenuItem(example.split("/").pop())
+            self.example_menu.append(menu_item)
+            menu_item.connect("activate", self.__load_example, example)
         self.example_menu.show_all()
 
     # ----------------------------------------------------------------------
@@ -217,29 +288,22 @@ class Menu(Gtk.MenuBar):
                 data:
 
         """
-        self.main_window.main_control.open(self.list_of_examples[int(data)])
+        self.main_window.main_control.open(data)
+
 
     # ----------------------------------------------------------------------
-    def update_recent_file(self):
+    def update_recent_files(self, list_of_recent_files):
         """
         This method update recent files.
         """
 
         for widget in self.recent_files_menu.get_children():
             self.recent_files_menu.remove(widget)
-        for recent_file in System.properties.recent_files:
-            self.add_recent_file(recent_file)
 
-    # ----------------------------------------------------------------------
-    def add_recent_file(self, recent_file):
-        """
-        This method add a file in recent files.
-
-            Parameters:
-                recent_file: The file to add.
-
-        """
-        menu_item = Gtk.MenuItem(recent_file)
-        self.recent_files_menu.append(menu_item)
-        menu_item.connect("activate", self.__load_recent, None)
+        for recent_file in list_of_recent_files:
+            menu_item = Gtk.MenuItem(recent_file)
+            self.recent_files_menu.append(menu_item)
+            menu_item.connect("activate", self.__load_recent, None)
         self.recent_files_menu.show_all()
+
+

@@ -9,7 +9,6 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-from mosaicode.system import System as System
 import gettext
 _ = gettext.gettext
 
@@ -19,7 +18,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
     This class contains the methods related to BlocksTreeView class.
     """
 
-    def __init__(self, main_window, language):
+    def __init__(self, main_window, language, blocks):
         """
         This method is the constructor.
         """
@@ -27,7 +26,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         self.main_window = main_window
         self.current_filter = None
 
-        self.tree_store = Gtk.TreeStore(str, str, str, str)
+        self.tree_store = Gtk.TreeStore(str, str, str, str, object)
         self.filter = self.tree_store.filter_new()
         self.filter.set_visible_func(self.__filter_func)
         self.blocks_tree_view = Gtk.TreeView.new_with_model(self.filter)
@@ -61,22 +60,23 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         # To separate blocks of this language
         block_list = []
         group_list = []
-        for x in System.blocks:
-            instance = System.blocks[x]
+        for x in blocks:
+            instance = blocks[x]
             name = instance.language
             name += "/" + instance.framework
             if name != language:
                 continue
             block_list.append(x)
-            if System.blocks[x].group not in group_list:
-                group_list.append(System.blocks[x].group)
+            if blocks[x].group not in group_list:
+                group_list.append(blocks[x].group)
 
         # Sorting groups
         for group in sorted(group_list):
             self.__append_category(group)
 
         for x in sorted(block_list):
-            self.__add_item(System.blocks[x])
+            self.__add_item(blocks[x])
+
 
     # ----------------------------------------------------------------------
     def __add_item(self, block):
@@ -92,14 +92,16 @@ class BlocksTreeView(Gtk.ScrolledWindow):
                         [block.label.title()[0],
                         block.label,
                         "white",
-                        block.get_color_as_rgba()
+                        block.get_color_as_rgba(),
+                        block
                         ])
 
     # ----------------------------------------------------------------------
     def __append_category(self, category_name):
         return self.tree_store.append(None, [None, str(category_name),
                     "white",
-                    "white"])
+                    "white",
+                    None])
 
     # ----------------------------------------------------------------------
     def __contains_category(self, category_name):
@@ -184,10 +186,6 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         if iterac is None:
             return None
         path = model.get_path(iterac)
-        block_name = model.get_value(model.get_iter(path), 1)
-        for x in System.blocks:
-            block = System.blocks[x]
-            if block.label == block_name:
-                return block
-        return None
+        block = model.get_value(model.get_iter(path), 4)
+        return block
 # ----------------------------------------------------------------------

@@ -113,9 +113,7 @@ class MainWindow(Gtk.Window):
         self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
 
-        for example in System.list_of_examples:
-            self.menu.add_example(example)
-        self.menu.update_recent_file()
+        self.main_control.init()
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
