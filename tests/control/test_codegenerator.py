@@ -26,14 +26,14 @@ class TestCodeGenerator(TestCase):
         self.blockmodel.help = "Adiciona bordas na imagem."
         self.blockmodel.label = "Add Border"
         self.blockmodel.color = "0:180:210:150"
-        self.blockmodel.in_ports = [{"type":"mosaicode_c_opencv.extensions.ports.image",
+        self.blockmodel.in_ports = [{"type":"mosaicode_lib_c_opencv.extensions.ports.image",
                           "name":"input_image",
                           "label":"Input Image"},
-                         {"type":"mosaicode_c_opencv.extensions.ports.int",
+                         {"type":"mosaicode_lib_c_opencv.extensions.ports.int",
                           "name":"border_size",
                           "label":"Border Size"}
                          ]
-        self.blockmodel.out_ports = [{"type":"mosaicode_c_opencv.extensions.ports.image",
+        self.blockmodel.out_ports = [{"type":"mosaicode_lib_c_opencv.extensions.ports.image",
                            "name":"output_image",
                            "label":"Output Image"}]
         self.blockmodel.group = "Experimental"

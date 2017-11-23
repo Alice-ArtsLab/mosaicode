@@ -17,7 +17,7 @@ from blocknotebook import BlockNotebook
 from mosaicode.system import System as System
 from blockproperties import BlockProperties
 from mosaicode.control.maincontrol import MainControl
-
+from mosaicode.GUI.blockmenu import BlockMenu
 
 class MainWindow(Gtk.Window):
     """
@@ -45,6 +45,15 @@ class MainWindow(Gtk.Window):
         self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
+        self.block_menu = BlockMenu()
+
+        # Load plugins
+        for plugin in System.instance.plugins:
+            plugin.load(self)
+            self.menu.add_plugin_menu(plugin)
+
+        self.menu.add_help()
+
         System.set_log(self.status)
 
         # vbox main

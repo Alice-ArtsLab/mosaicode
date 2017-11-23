@@ -821,4 +821,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         self.update_scrolling()
 
+    def show_block_menu(self, block, event):
+        self.main_window.block_menu.show_block_menu(block, event)
+
 # ----------------------------------------------------------------------

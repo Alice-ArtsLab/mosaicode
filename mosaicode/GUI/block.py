@@ -14,7 +14,6 @@ from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from mosaicode.system import System as System
-from mosaicode.GUI.blockmenu import BlockMenu
 from mosaicode.model.blockmodel import BlockModel
 
 WIDTH_DEFAULT = 112
@@ -89,7 +88,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.remember_y = event.y
 
         elif event.button.button == 3:
-            BlockMenu(self, event)
+            self.diagram.show_block_menu(self, event);
             return True
 
         self.diagram.update_flows()

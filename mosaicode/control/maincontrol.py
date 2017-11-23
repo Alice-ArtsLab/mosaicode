@@ -9,9 +9,6 @@ from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.codewindow import CodeWindow
-from mosaicode.GUI.codetemplatemanager import CodeTemplateManager
-from mosaicode.GUI.blockmanager import BlockManager
-from mosaicode.GUI.portmanager import PortManager
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.system import System as System
@@ -19,6 +16,8 @@ from mosaicode.persistence.preferencespersistence import PreferencesPersistence
 from mosaicode.control.portcontrol import PortControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
+
+
 import gettext
 _ = gettext.gettext
 
@@ -469,27 +468,6 @@ class MainControl():
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
-    def code_template_manager(self):
-        """
-        This add a new Code Template.
-        """
-        CodeTemplateManager(self.main_window)
-
-    # ----------------------------------------------------------------------
-    def block_manager(self):
-        """
-        This add a new Block.
-        """
-        BlockManager(self.main_window)
-
-    # ----------------------------------------------------------------------
-    def port_manager(self):
-        """
-        This add a new port.
-        """
-        PortManager(self.main_window)
-
-    # ----------------------------------------------------------------------
     def add_code_template(self, code_template):
         CodeTemplateControl.add_code_template(code_template)
 
@@ -547,39 +525,5 @@ class MainControl():
         for template in System.code_templates:
             print "--------------------- "
             CodeTemplateControl.print_template(System.code_templates[template])
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_extensions(cls, extension):
-        if extension == 'py':
-            MainControl.export_python()
-        else:
-            MainControl.export_xml()
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_python(cls):
-        System()
-        BlockControl.export_python()
-        PortControl.export_python()
-        CodeTemplateControl.export_python()
-
-    # ----------------------------------------------------------------------
-    def export_python_dialog(self):
-        MainControl.export_python()
-        Dialog().message_dialog("Exporting as python", "Exported successfully!", self.main_window)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_xml(cls):
-        System()
-        BlockControl.export_xml()
-        PortControl.export_xml()
-        CodeTemplateControl.export_xml()
-
-    # ----------------------------------------------------------------------
-    def export_xml_dialog(self):
-        MainControl.export_xml()
-        Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
 
 # ----------------------------------------------------------------------

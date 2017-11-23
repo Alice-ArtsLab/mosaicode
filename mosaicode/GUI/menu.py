@@ -6,6 +6,7 @@ This module contains the menu bar.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
 import gettext
 
 _ = gettext.gettext
@@ -30,48 +31,48 @@ class Menu(Gtk.MenuBar):
         # -------------------------- File -------------------------------------
         file_menu = Gtk.Menu()
         self.recent_files_menu = Gtk.Menu()
-        self.__create_menu(_("New"), "<Control>N", file_menu, mc.new)
-        self.__create_menu(_("Open"), "<Control>O", file_menu, mc.select_open)
-        self.__create_menu(_("Close"), "<Control>W", file_menu, mc.close)
-        recents = self.__create_menu(_("Recents"), None, file_menu, None)
+        self.create_menu(_("New"), "<Control>N", file_menu, mc.new)
+        self.create_menu(_("Open"), "<Control>O", file_menu, mc.select_open)
+        self.create_menu(_("Close"), "<Control>W", file_menu, mc.close)
+        recents = self.create_menu(_("Recents"), None, file_menu, None)
         recents.set_submenu(self.recent_files_menu)
         file_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(_("Save"), "<Control>S", file_menu, mc.save)
-        self.__create_menu(_("Save As..."), None, file_menu, mc.save_as)
-        self.__create_menu(_("Export Diagram As PNG..."), "<Control>E",
+        self.create_menu(_("Save"), "<Control>S", file_menu, mc.save)
+        self.create_menu(_("Save As..."), None, file_menu, mc.save_as)
+        self.create_menu(_("Export Diagram As PNG..."), "<Control>E",
                            file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)
+        self.create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)
         self.__add_menu_category(_("File"), file_menu)
 
         # -------------------------- Edit -------------------------------------
         edit_menu = Gtk.Menu()
-        self.__create_menu(_("Undo"), "<Control>Z", edit_menu, mc.undo)
-        self.__create_menu(_("Redo"), "<Shift><Control>Z", edit_menu, mc.redo)
+        self.create_menu(_("Undo"), "<Control>Z", edit_menu, mc.undo)
+        self.create_menu(_("Redo"), "<Shift><Control>Z", edit_menu, mc.redo)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(
+        self.create_menu(
             _("Select All"), "<Control>A", edit_menu, mc.select_all)
-        self.__create_menu(_("Cut"), "<Control>X", edit_menu, mc.cut)
-        self.__create_menu(_("Copy"), "<Control>C", edit_menu, mc.copy)
-        self.__create_menu(_("Paste"), "<Control>V", edit_menu, mc.paste)
-        self.__create_menu(_("Delete"), "Delete", edit_menu, mc.delete)
+        self.create_menu(_("Cut"), "<Control>X", edit_menu, mc.cut)
+        self.create_menu(_("Copy"), "<Control>C", edit_menu, mc.copy)
+        self.create_menu(_("Paste"), "<Control>V", edit_menu, mc.paste)
+        self.create_menu(_("Delete"), "Delete", edit_menu, mc.delete)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(_("Align Top"), "<Control>1", edit_menu, mc.align_top)
-        self.__create_menu(_("Align Bottom"), "<Control>2", edit_menu, mc.align_bottom)
-        self.__create_menu(_("Align Left"), "<Control>3", edit_menu, mc.align_left)
-        self.__create_menu(_("Align Right"), "<Control>4", edit_menu, mc.align_right)
+        self.create_menu(_("Align Top"), "<Control>1", edit_menu, mc.align_top)
+        self.create_menu(_("Align Bottom"), "<Control>2", edit_menu, mc.align_bottom)
+        self.create_menu(_("Align Left"), "<Control>3", edit_menu, mc.align_left)
+        self.create_menu(_("Align Right"), "<Control>4", edit_menu, mc.align_right)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(
+        self.create_menu(
             _("Clear Console"), "<Control>L", edit_menu, mc.clear_console)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(_("Preferences"), None, edit_menu, mc.preferences)
+        self.create_menu(_("Preferences"), None, edit_menu, mc.preferences)
         self.__add_menu_category(_("Edit"), edit_menu)
 
         # -------------------------- View -------------------------------------
         view_menu = Gtk.Menu()
-        self.__create_menu(_("Zoom In"), None, view_menu, mc.zoom_in)
-        self.__create_menu(_("Zoom Out"), None, view_menu, mc.zoom_out)
-        self.__create_menu(
+        self.create_menu(_("Zoom In"), None, view_menu, mc.zoom_in)
+        self.create_menu(_("Zoom Out"), None, view_menu, mc.zoom_out)
+        self.create_menu(
             _("Normal Size"), "<Control>0", view_menu, mc.zoom_normal)
 
         view_menu.append(Gtk.SeparatorMenuItem())
@@ -82,49 +83,38 @@ class Menu(Gtk.MenuBar):
         # Cria sub menu
         insert_menu = Gtk.Menu()
         self.block_menu = Gtk.Menu()
-        blocks = self.__create_menu(_("Block"), None, insert_menu, None)
+        blocks = self.create_menu(_("Block"), None, insert_menu, None)
         blocks.set_submenu(self.block_menu)
         insert_menu.append(Gtk.SeparatorMenuItem())
         self.__add_menu_category(_("Insert"), insert_menu)
 
         # -------------------------- Process --------------------------------
         process_menu = Gtk.Menu()
-        self.__create_menu(_("Run"), "<Control>R", process_menu, mc.run)
-        self.__create_menu(_("Save Source"), None,
+        self.create_menu(_("Run"), "<Control>R", process_menu, mc.run)
+        self.create_menu(_("Save Source"), None,
                            process_menu, mc.save_source)
-        self.__create_menu(_("View Source"), None,
+        self.create_menu(_("View Source"), None,
                            process_menu, mc.view_source)
         self.__add_menu_category(_("Process"), process_menu)
 
-        # -------------------------- Extension --------------------------------
-        extension_menu = Gtk.Menu()
-        self.__create_menu(_("Code Template Manager"), None,
-                           extension_menu, mc.code_template_manager)
-        self.__create_menu(_("Block Manager"), None,
-                           extension_menu, mc.block_manager)
-        self.__create_menu(_("Port Manager"), None,
-                           extension_menu, mc.port_manager)
-        extension_menu.append(Gtk.SeparatorMenuItem())
-        export_blocks = self.__create_menu(_("Export As..."), None, extension_menu, None)
-        self.export_blocks_menu = Gtk.Menu()
-        export_blocks.set_submenu(self.export_blocks_menu)
-        self.__create_menu(_("Python"), None, self.export_blocks_menu, mc.export_python_dialog)
-        self.__create_menu(_("XML"), None, self.export_blocks_menu, mc.export_xml_dialog)
-
-        self.__add_menu_category(_("Extensions"), extension_menu)
-
-        # -------------------------- Help -----------------------------------
-        # Cria sub menu
-        help_menu = Gtk.Menu()
+        # -------------------------- Help --------------------------------
+        self.help_menu = Gtk.Menu()
         self.example_menu = Gtk.Menu()
-        examples = self.__create_menu(_("Example"), None, help_menu, None)
+        examples = self.create_menu(_("Example"), None, self.help_menu, None)
         examples.set_submenu(self.example_menu)
-        help_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_menu(_("About"), None, help_menu, mc.about)
-        self.__add_menu_category(_("Help"), help_menu)
+        self.help_menu.append(Gtk.SeparatorMenuItem())
+        self.create_menu(_("About"), None, self.help_menu, mc.about)
 
     # ----------------------------------------------------------------------
-    def __create_menu(self, name, accel, menu, action):
+    def add_plugin_menu(self, plugin):
+        self.__add_menu_category(plugin.label, plugin)
+
+    # ----------------------------------------------------------------------
+    def add_help(self):
+        self.__add_menu_category(_("Help"), self.help_menu)
+
+    # ----------------------------------------------------------------------
+    def create_menu(self, name, accel, menu, action):
         """
         This method create the menu
             Parameters:
@@ -305,5 +295,3 @@ class Menu(Gtk.MenuBar):
             self.recent_files_menu.append(menu_item)
             menu_item.connect("activate", self.__load_recent, None)
         self.recent_files_menu.show_all()
-
-

@@ -16,8 +16,8 @@ from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.model.preferences import Preferences
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.plugin import Plugin
 from mosaicode.model.port import Port
-
 
 class System(object):
     """
@@ -48,7 +48,10 @@ class System(object):
             self.blocks = {}
             self.list_of_examples = []
             self.ports = {}
-            self.__load()
+            self.plugins = []
+            self.__load_libs()
+            self.__load_plugins()
+
 
         # ----------------------------------------------------------------------
         def __load_xml(self, data_dir):
@@ -80,7 +83,7 @@ class System(object):
                     self.blocks[block.type] = block
 
         # ----------------------------------------------------------------------
-        def __load(self):
+        def __load_libs(self):
             # Create user directory if does not exist
             if not os.path.isdir(System.get_user_dir() + "/extensions/"):
                 try:
@@ -102,22 +105,22 @@ class System(object):
             # First load ports on python classes.
             # They are installed with mosaicode as root
 
-            def my_walk_packages(path=None, name_par=""):
+            def walk_lib_packages(path=None, name_par=""):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    if name.startswith(System.APP+"_") or name_par.startswith(System.APP+"_"):
+                    if name.startswith(System.APP+"_lib") or name_par.startswith(System.APP+"_lib"):
                         if ispkg:
                             if name_par is not "":
                                 name = name_par + "." + name
                             __import__(name)
                             path = getattr(sys.modules[name], '__path__', None) or []
-                            my_walk_packages(path, name)
+                            walk_lib_packages(path, name)
                         else:
                             module = __import__(name, fromlist="dummy")
                             for class_name, obj in inspect.getmembers(module):
                                 if not inspect.isclass(obj):
                                     continue
                                 modname = inspect.getmodule(obj).__name__
-                                if not modname.startswith(System.APP+"_"):
+                                if not modname.startswith(System.APP+"_lib"):
                                     continue
 
                                 instance = obj()
@@ -130,13 +133,45 @@ class System(object):
                                     if instance.label != "":
                                         self.blocks[instance.type] = instance
 
-
-            my_walk_packages(None, "")
+            walk_lib_packages(None, "")
 
             # Load XML files in application space
             self.__load_xml(System.DATA_DIR + "extensions/")
             # Load XML files in user space
             self.__load_xml(System.get_user_dir() + "/extensions/")
+
+        # ----------------------------------------------------------------------
+        def __load_plugins(self):
+            def walk_plugin_packages(path=None, name_par=""):
+                for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
+                    if name.startswith(System.APP+"_plugin") or name_par.startswith(System.APP+"_plugin"):
+
+                        if ispkg:
+                            if name_par is not "":
+                                name = name_par + "." + name
+                            __import__(name)
+                            path = getattr(sys.modules[name], '__path__', None) or []
+                            walk_plugin_packages(path, name)
+                        else:
+                            module = __import__(name, fromlist="dummy")
+                            for class_name, obj in inspect.getmembers(module):
+                                if not inspect.isclass(obj):
+                                    continue
+                                modname = inspect.getmodule(obj).__name__
+                                if not modname.startswith(System.APP+"_plugin"):
+                                    continue
+
+                                try:
+                                    instance = obj()
+                                except:
+                                    continue
+
+                                if isinstance(instance, Plugin):
+                                    if instance.label != "":
+                                        self.plugins.append(instance)
+
+            walk_plugin_packages(None, "")
+
     # ----------------------------------------------------------------------
     def __init__(self):
         if not System.instance:
@@ -180,4 +215,8 @@ class System(object):
         home_dir = home_dir + "/" + System.APP
         return home_dir
 
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_menu(cls):
+        return System.instance.menu
 # ------------------------------------------------------------------------------
