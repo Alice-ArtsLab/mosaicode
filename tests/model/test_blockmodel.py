@@ -87,7 +87,7 @@ class TestBlockModel_comBlock(TestCase):
     def test_set_properties(self):
         data = None
         self.assertIsNone(self.blockmodel.set_properties(data))
-        data = {"name":"mosaicode_c_opencv.extensions.opencv.not", "label": "Not", "value": "True"}
+        data = {"name":"mosaicode_lib_c_opencv.extensions.opencv.not", "label": "Not", "value": "True"}
         self.assertIsNone(self.blockmodel.set_properties(data))
 
     # ----------------------------------------------------------------------x
