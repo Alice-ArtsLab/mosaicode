@@ -24,14 +24,13 @@ class BlockMenu(Gtk.Menu):
         """
         Gtk.Notebook.__init__(self)
 
-
-    def show_block_menu(self, block, event):
-        self.block = block
-
         menu_item = Gtk.MenuItem("Delete")
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
+    # ----------------------------------------------------------------------
+    def show_block_menu(self, block, event):
+        self.block = block
 
         # Shows the menu
         self.show_all()

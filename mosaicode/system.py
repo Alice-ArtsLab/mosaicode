@@ -215,8 +215,4 @@ class System(object):
         home_dir = home_dir + "/" + System.APP
         return home_dir
 
-    # ----------------------------------------------------------------------
-    @classmethod
-    def get_menu(cls):
-        return System.instance.menu
 # ------------------------------------------------------------------------------
