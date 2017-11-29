@@ -51,7 +51,7 @@ class BlockControl():
             * **Types** (:class:`boolean<boolean>`)
         """
         try:
-            BlockPersistence.load(file_name)
+            return BlockPersistence.load(file_name)
         except:
             from mosaicode.system import System
             System.log("Block " + file_name + " could not load")

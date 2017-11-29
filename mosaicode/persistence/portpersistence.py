@@ -30,7 +30,7 @@ class PortPersistence():
         """
         # load the port
         if os.path.exists(file_name) is False:
-            return
+            return None
         parser = XMLParser(file_name)
         if parser.getTag(tag_name) is None:
             return None
@@ -46,6 +46,7 @@ class PortPersistence():
 
         if port.type == "":
             return None
+        
         return port
 
     # ----------------------------------------------------------------------
