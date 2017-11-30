@@ -33,7 +33,7 @@ class PortControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PortPersistence.load(file_name)
+        return PortPersistence.load(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod

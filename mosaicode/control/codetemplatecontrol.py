@@ -25,7 +25,7 @@ class CodeTemplateControl():
     # ----------------------------------------------------------------------
     @classmethod
     def load(cls, file_name):
-        CodeTemplatePersistence.load(file_name)
+        return CodeTemplatePersistence.load(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod

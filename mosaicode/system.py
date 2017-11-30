@@ -73,6 +73,7 @@ class System(object):
                     self.code_templates[code_template.type] = code_template
 
                 port = PortControl.load(full_file_path)
+
                 if port is not None:
                     port.source = "xml"
                     self.ports[port.type] = port
@@ -136,9 +137,9 @@ class System(object):
             walk_lib_packages(None, "")
 
             # Load XML files in application space
-            self.__load_xml(System.DATA_DIR + "extensions/")
+            self.__load_xml(System.DATA_DIR + "extensions")
             # Load XML files in user space
-            self.__load_xml(System.get_user_dir() + "/extensions/")
+            self.__load_xml(System.get_user_dir() + "/extensions")
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
