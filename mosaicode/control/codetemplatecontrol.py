@@ -33,7 +33,6 @@ class CodeTemplateControl():
         from mosaicode.system import System as System
         System()
         for code_template in System.code_templates:
-            print "Exporting code template " + code_template
             CodeTemplatePersistence.save(System.code_templates[code_template])
 
     # ----------------------------------------------------------------------
@@ -42,7 +41,6 @@ class CodeTemplateControl():
         from mosaicode.system import System as System
         System()
         for code_template in System.code_templates:
-            print "Exporting code template " + code_template
             CodeTemplatePersistence.save_python(System.code_templates[code_template])
 
     # ----------------------------------------------------------------------
