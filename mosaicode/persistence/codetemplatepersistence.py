@@ -30,7 +30,7 @@ class CodeTemplatePersistence():
         """
         # load the code_template
         if os.path.exists(file_name) is False:
-            return
+            return None
         parser = XMLParser(file_name)
 
         if parser.getTag(tag_name) is None:
@@ -49,10 +49,10 @@ class CodeTemplatePersistence():
 
             code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
             for code_part in code_parts:
-                code_template.code_parts.append(prop.getAttr("value"))
+                code_template.code_parts.append(code_part.getAttr("value").strip())
 
-
-        except:
+        except Exception as e:
+            print e
             return None
 
         if code_template.name == "":
@@ -84,7 +84,7 @@ class CodeTemplatePersistence():
 
         parser.appendToTag(tag_name, 'code_parts')
         for key in code_template.code_parts:
-            parser.appendToTag('code_parts', 'code_part', value=key)
+            parser.appendToTag('code_parts', 'code_part', value=key.strip())
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
