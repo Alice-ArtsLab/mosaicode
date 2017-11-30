@@ -493,6 +493,7 @@ class MainControl():
     def add_new_block(self, block):
         BlockControl.add_new_block(block)
         self.main_window.block_notebook.update_blocks(System.blocks)
+        # Update everybody!
 
     # ----------------------------------------------------------------------
     def delete_block(self, block):

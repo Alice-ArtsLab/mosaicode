@@ -293,11 +293,19 @@ class CodeGenerator():
             except:
                 pass
         System.log("Saving Code to " + name)
-        codeFile = open(name, 'w')
-        if code is None:
-            code = self.generate_code()
-        codeFile.write(code)
-        codeFile.close()
+        try:
+            codeFile = open(name, 'w')
+
+            if code is None:
+                code = self.generate_code()
+            codeFile.write(code)
+            codeFile.close()
+            return False
+        except IOError:
+            System.log("File or directory not found!")
+            return True
+
+
 
     # ----------------------------------------------------------------------
     def run(self, code = None):
@@ -309,7 +317,9 @@ class CodeGenerator():
         command = command.replace("$extension$", self.code_template.extension)
         command = command.replace("$dir_name$", self.dir_name)
 
-        self.save_code(code = code)
+        if (self.save_code(code = code)):
+            System.log("Please, save the diagram!")
+            return
         os.chdir(self.dir_name)
 
         System.log("Executing Code: " + command)
