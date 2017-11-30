@@ -34,7 +34,7 @@ class BlockNotebook(Gtk.Notebook):
 
         while self.get_n_pages() > 0:
             self.remove_page(0)
-            self.tabs.push()
+            self.tabs.pop()
 
         for x in blocks:
             instance = blocks[x]
