@@ -70,7 +70,7 @@ class BlockControl():
         from mosaicode.system import System
         if block.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + block.type + ".xml"
+            file_name = data_dir + block.language +"/" +block.framework+"/"+block.type + ".xml"
             os.remove(file_name)
             System.blocks.pop(block.type, None)
             return True
