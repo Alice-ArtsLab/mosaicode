@@ -85,7 +85,7 @@ class PortControl():
         port = System.ports[port_key]
         if port.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + port.type + ".xml"
+            file_name = data_dir + port.language +"/ports/" + port.type + ".xml"
             os.remove(file_name)
             System.ports.pop(port_key, None)
             return True
