@@ -74,6 +74,7 @@ class BlockPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
+
         from mosaicode.system import System
         block.source = "xml"
         parser = XMLParser()
@@ -97,7 +98,7 @@ class BlockPersistence():
 
         parser.appendToTag(tag_name, 'ports')
         for port in block.ports:
-            parser.appendToTag('ports', 'port', value=key)
+            parser.appendToTag('ports', 'port', value=port)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"

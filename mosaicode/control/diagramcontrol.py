@@ -9,8 +9,6 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
-from mosaicode.control.codegenerator import CodeGenerator
-from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.persistence.diagrampersistence import DiagramPersistence
 
 
@@ -23,16 +21,6 @@ class DiagramControl():
 
     def __init__(self, diagram):
         self.diagram = diagram
-
-    # ----------------------------------------------------------------------
-    def get_code_template(self):
-        code_template = CodeTemplate()
-        for key in System.code_templates:
-            if System.code_templates[key].language == self.diagram.language:
-                code_template = System.code_templates[key]
-                break
-        generator = CodeGenerator(self.diagram, code_template)
-        return generator
 
     # ----------------------------------------------------------------------
     def load(self, file_name=None):

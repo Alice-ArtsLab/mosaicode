@@ -33,7 +33,6 @@ class CodeTemplateControl():
         from mosaicode.system import System as System
         System()
         for code_template in System.code_templates:
-            print "Exporting code template " + code_template
             CodeTemplatePersistence.save(System.code_templates[code_template])
 
     # ----------------------------------------------------------------------
@@ -42,7 +41,6 @@ class CodeTemplateControl():
         from mosaicode.system import System as System
         System()
         for code_template in System.code_templates:
-            print "Exporting code template " + code_template
             CodeTemplatePersistence.save_python(System.code_templates[code_template])
 
     # ----------------------------------------------------------------------
@@ -61,7 +59,7 @@ class CodeTemplateControl():
         code_template = System.code_templates[code_template_key]
         if code_template.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + code_template.type + ".xml"
+            file_name = data_dir + code_template.language+ "/"+ code_template.name + ".xml"
             os.remove(file_name)
             System.code_templates.pop(code_template_key, None)
             return True

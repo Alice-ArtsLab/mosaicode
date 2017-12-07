@@ -10,12 +10,15 @@ from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.codewindow import CodeWindow
 from mosaicode.GUI.preferencewindow import PreferenceWindow
-from mosaicode.control.diagramcontrol import DiagramControl
+from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
 from mosaicode.system import System as System
 from mosaicode.persistence.preferencespersistence import PreferencesPersistence
+from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.portcontrol import PortControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
+from mosaicode.control.codegenerator import CodeGenerator
+from mosaicode.model.codetemplate import CodeTemplate
 
 
 import gettext
@@ -233,6 +236,30 @@ class MainControl():
         diagram.delete()
 
     # ----------------------------------------------------------------------
+    def __get_code_generator(self, diagram):
+
+        if diagram.language is None:
+            message = "You shall not generate code of an empty diagram!"
+            Dialog().message_dialog("Error", message, self.main_window)
+            return None
+
+        template_list = []
+        for key in System.code_templates:
+            if System.code_templates[key].language == diagram.language:
+                template_list.append(System.code_templates[key])
+
+        if len(template_list) == 0:
+            message = "Generator not available for the language " + diagram.language + "."
+            Dialog().message_dialog("Error", message, self.main_window)
+            return None
+
+        if len(template_list) == 1:
+            return CodeGenerator(diagram, template_list[0])
+        select = SelectCodeTemplate(self.main_window, template_list)
+        code_template = select.get_value()
+        return CodeGenerator(diagram, code_template)
+
+    # ----------------------------------------------------------------------
     def run(self, code = None):
         """
         This method runs the code.
@@ -240,7 +267,10 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_code_template().run(code = code)
+        generator = self.__get_code_generator(diagram)
+        if generator is not None:
+            generator.run(code = code)
+
 
     # ----------------------------------------------------------------------
     def save_source(self, code = None):
@@ -251,7 +281,10 @@ class MainControl():
         if diagram is None:
             return
 
-        generator = DiagramControl(diagram).get_code_template()
+        generator = self.__get_code_generator(diagram)
+        if generator is None:
+            return
+
         while True:
             name = Dialog().save_dialog(self.main_window,
                         filename = generator.get_dir_name() + \
@@ -270,8 +303,10 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        code = DiagramControl(diagram).get_code_template().generate_code()
-        CodeWindow(self.main_window, code)
+        generator = self.__get_code_generator(diagram)
+        if generator is not None:
+            code = generator.generate_code()
+            CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------
     def about(self):
@@ -493,6 +528,7 @@ class MainControl():
     def add_new_block(self, block):
         BlockControl.add_new_block(block)
         self.main_window.block_notebook.update_blocks(System.blocks)
+        # Update everybody!
 
     # ----------------------------------------------------------------------
     def delete_block(self, block):

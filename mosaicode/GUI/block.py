@@ -232,7 +232,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         x = 0
         height = 0
         for port in self.ports:
-            if port["conn_type"] is not "Input":
+            if port["conn_type"] == "Input":
                 x += 1
                 continue
             text_name = self.__get_port_label(port["type"]);
@@ -293,7 +293,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         x = 0
         height = 0
         for port in self.ports:
-            if port["conn_type"] is not "Output":
+            if port["conn_type"] == "Output":
                 x += 1
                 continue
             text_name = self.__get_port_label(port["type"]);
