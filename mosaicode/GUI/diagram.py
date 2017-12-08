@@ -3,7 +3,8 @@
 This module contains the Diagram class.
 """
 import gi
-import copy
+from copy import deepcopy
+from copy import copy
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
@@ -237,7 +238,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
-        new_block = Block(self, block)
+        new_block = Block(self, deepcopy(block))
 
         if self.language is not None and self.language != new_block.language:
             System.log("Block language is different from diagram language.")
@@ -248,8 +249,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.last_id = max(int(self.last_id), int(new_block.id))
         if new_block.id < 0:
             new_block.id = self.last_id
-        self.blocks[new_block.id] = new_block
         self.last_id += 1
+        self.blocks[new_block.id] = new_block
 
         self.do("Add")
         self.get_root_item().add_child(new_block, -1)
@@ -693,7 +694,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 * **new_msg** (:class:`str<str>`)
         """
         self.set_modified(True)
-        action = (copy.copy(self.blocks), copy.copy(self.connectors), new_msg)
+        action = (copy(self.blocks), copy(self.connectors), new_msg)
         self.undo_stack.append(action)
         System.log(_("Do: " + new_msg))
 

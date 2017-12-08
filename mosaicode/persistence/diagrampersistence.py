@@ -5,6 +5,7 @@ This module contains the DiagramPersistence class.
 """
 import os
 import gi
+from copy import deepcopy
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
@@ -50,7 +51,7 @@ class DiagramPersistence():
                     props[prop.key] = prop.value
                 except:
                     pass
-            new_block = System.blocks[block_type]
+            new_block = deepcopy(System.blocks[block_type])
             new_block.set_properties(props)
             new_block.id = block_id
             new_block.x = float(x)
