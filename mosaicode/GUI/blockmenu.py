@@ -22,8 +22,8 @@ class BlockMenu(Gtk.Menu):
                 * **block**
                 * **event**
         """
-        Gtk.Notebook.__init__(self)
-
+        Gtk.Menu.__init__(self)
+        self.block = None
         menu_item = Gtk.MenuItem("Delete")
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
@@ -34,7 +34,7 @@ class BlockMenu(Gtk.Menu):
 
         # Shows the menu
         self.show_all()
-        self.popup(None, None, None, None, event.button.button, event.time)
+        self.popup(None, None, None, None, event.button, event.time)
 
     # ----------------------------------------------------------------------
     def __delete_clicked(self, *args):

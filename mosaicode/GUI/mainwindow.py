@@ -50,7 +50,6 @@ class MainWindow(Gtk.Window):
         # Load plugins
         for plugin in System.instance.plugins:
             plugin.load(self)
-            self.menu.add_plugin_menu(plugin)
 
         self.menu.add_help()
 

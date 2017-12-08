@@ -83,16 +83,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.diagram.show_block_property(self)
 
         Gtk.Widget.grab_focus(self.diagram)
-        if event.button.button == 1:
+        if event.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
 
-        elif event.button.button == 3:
+        elif event.button == 3:
             self.diagram.show_block_menu(self, event);
             return True
 
         self.diagram.update_flows()
-
         return True
 
     # ----------------------------------------------------------------------
@@ -186,9 +185,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                      stroke_color='black'
                                      )
 
-        width = Pango.Rectangle()
-        width2 = Pango.Rectangle()
-        icon.get_natural_extents(width, width2)
+        width, width2 = icon.get_natural_extents()
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
@@ -214,9 +211,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                      stroke_color='black'
                                      )
 
-        width = Pango.Rectangle()
-        width2 = Pango.Rectangle()
-        label.get_natural_extents(width, width2)
+        width, width2 = label.get_natural_extents()
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height - 10))
         self.width = max(text_width + 22, self.width)

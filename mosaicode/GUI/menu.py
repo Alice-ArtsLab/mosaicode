@@ -43,7 +43,7 @@ class Menu(Gtk.MenuBar):
                            file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)
-        self.__add_menu_category(_("File"), file_menu)
+        self.add_menu_category(_("File"), file_menu)
 
         # -------------------------- Edit -------------------------------------
         edit_menu = Gtk.Menu()
@@ -66,7 +66,7 @@ class Menu(Gtk.MenuBar):
             _("Clear Console"), "<Control>L", edit_menu, mc.clear_console)
         edit_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Preferences"), None, edit_menu, mc.preferences)
-        self.__add_menu_category(_("Edit"), edit_menu)
+        self.add_menu_category(_("Edit"), edit_menu)
 
         # -------------------------- View -------------------------------------
         view_menu = Gtk.Menu()
@@ -77,7 +77,7 @@ class Menu(Gtk.MenuBar):
 
         view_menu.append(Gtk.SeparatorMenuItem())
         self.__create_check_menu(_("Show Grid"), "<Control>g", view_menu, mc.show_grid)
-        self.__add_menu_category(_("View"), view_menu)
+        self.add_menu_category(_("View"), view_menu)
 
         # -------------------------- Insert -------------------------------------
         # Cria sub menu
@@ -86,7 +86,7 @@ class Menu(Gtk.MenuBar):
         blocks = self.create_menu(_("Block"), None, insert_menu, None)
         blocks.set_submenu(self.block_menu)
         insert_menu.append(Gtk.SeparatorMenuItem())
-        self.__add_menu_category(_("Insert"), insert_menu)
+        self.add_menu_category(_("Insert"), insert_menu)
 
         # -------------------------- Process --------------------------------
         process_menu = Gtk.Menu()
@@ -95,7 +95,7 @@ class Menu(Gtk.MenuBar):
                            process_menu, mc.save_source)
         self.create_menu(_("View Source"), None,
                            process_menu, mc.view_source)
-        self.__add_menu_category(_("Process"), process_menu)
+        self.add_menu_category(_("Process"), process_menu)
 
         # -------------------------- Help --------------------------------
         self.help_menu = Gtk.Menu()
@@ -106,12 +106,8 @@ class Menu(Gtk.MenuBar):
         self.create_menu(_("About"), None, self.help_menu, mc.about)
 
     # ----------------------------------------------------------------------
-    def add_plugin_menu(self, plugin):
-        self.__add_menu_category(plugin.label, plugin)
-
-    # ----------------------------------------------------------------------
     def add_help(self):
-        self.__add_menu_category(_("Help"), self.help_menu)
+        self.add_menu_category(_("Help"), self.help_menu)
 
     # ----------------------------------------------------------------------
     def create_menu(self, name, accel, menu, action):
@@ -151,7 +147,7 @@ class Menu(Gtk.MenuBar):
         return item
 
     # ----------------------------------------------------------------------
-    def __add_menu_category(self, name, submenu):
+    def add_menu_category(self, name, submenu):
         """
         This method add a category in menu.
 
