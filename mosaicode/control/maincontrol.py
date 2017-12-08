@@ -2,6 +2,7 @@
 """
 This module contains the MainControl class.
 """
+from copy import copy
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -41,8 +42,8 @@ class MainControl():
 
         self.main_window.menu.update_recent_files(System.properties.recent_files)
         self.main_window.menu.update_examples(System.list_of_examples)
-        self.main_window.menu.update_blocks(System.blocks)
-        self.main_window.block_notebook.update_blocks(System.blocks)
+        self.main_window.menu.update_blocks(copy(System.blocks))
+        self.main_window.block_notebook.update_blocks(copy(System.blocks))
 
     # ----------------------------------------------------------------------
     def new(self):
@@ -527,7 +528,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def add_new_block(self, block):
         BlockControl.add_new_block(block)
-        self.main_window.block_notebook.update_blocks(System.blocks)
+        self.main_window.block_notebook.update_blocks(copy(System.blocks))
         # Update everybody!
 
     # ----------------------------------------------------------------------
@@ -536,7 +537,7 @@ class MainControl():
             message = "This block is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
-        self.main_window.block_notebook.update_blocks(System.blocks)
+        self.main_window.block_notebook.update_blocks(copy(System.blocks))
 
     # ----------------------------------------------------------------------
     def update_all(self):
@@ -554,7 +555,7 @@ class MainControl():
     def print_blocks(cls):
         for block in System.blocks:
             print "--------------------- "
-            BlockControl.print_block(System.blocks[block])
+            BlockControl.print_block(copy(System.blocks[block]))
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):

@@ -55,7 +55,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         This method monitors if on button was pressed.
         """
         Gtk.Widget.grab_focus(self.diagram)
-        if event.button.button == 3:
+        if event.button == 3:
             ConnectorMenu(self, event)
 
         if self in self.diagram.current_widgets:
