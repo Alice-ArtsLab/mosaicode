@@ -49,7 +49,7 @@ class CodeTemplatePersistence():
 
             code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
             for code_part in code_parts:
-                code_template.code_parts.append(code_part.getAttr("value").strip())
+                code_template.code_parts.append(code_part.getAttr("value"))
 
         except Exception as e:
             print e
