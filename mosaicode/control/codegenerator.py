@@ -191,11 +191,11 @@ class CodeGenerator():
 
         connections = ""
         for connection in block.connections:
-            code = ports[connection.conn_type].code
+            code = connection.port.code
             # Replace output
-            port = connection.output.ports[connection.output_port]
-            value = ports[connection.conn_type].var_name
-            value = value.replace("$port_number$", str(connection.output_port))
+            port = connection.output_port
+            value = connection.port.var_name
+            value = value.replace("$port_number$", str(port["index"]))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", port["conn_type"])
             for attribute in connection.output.__dict__:
@@ -205,9 +205,9 @@ class CodeGenerator():
             code = code.replace("$output$", value)
 
             # Replace Input
-            port = connection.input.ports[connection.input_port]
-            value = ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(connection.input_port))
+            port = connection.input_port
+            value = connection.port.var_name
+            value = value.replace("$port_number$", str(port["index"]))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", port["conn_type"])
             for attribute in connection.input.__dict__:
