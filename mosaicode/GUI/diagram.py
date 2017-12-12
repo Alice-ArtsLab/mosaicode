@@ -552,8 +552,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ---------------------------------------------------------------------
     def delete(self):
         """
-        This method delete a block.
-
+        This method delete a block or connection.
         """
         if len(self.current_widgets) < 1:
             return

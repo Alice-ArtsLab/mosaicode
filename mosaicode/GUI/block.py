@@ -407,7 +407,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.update_flow()
 
     # ----------------------------------------------------------------------
-    def get_input_pos(self, input_id):
+    def get_port_pos(self, port):
         """
         This method get input position.
 
@@ -416,51 +416,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
-        height = 0
-        x = 0
-        for port in self.ports:
-            if port["conn_type"] is not "Input":
-                x += 1
-                continue
-            if x == input_id:
-                break
-            x += 1
-            height += 1
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
+        if port["conn_type"] == "Input":
+            x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
+        else:
+            x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
         y = (RADIUS +  # upper border
-             (height * 5) +  # spacing betwen ports
-             height * INPUT_HEIGHT +  # previous ports
-             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
-        return (x, y)
-
-    # ----------------------------------------------------------------------
-    def get_output_pos(self, output_id):
-        """
-        This method get output position.
-
-            Parameters:
-                * **output_id**
-            Returns:
-                * **Types** (:class:`float<float>`)
-
-        """
-        height = 0
-        x = 0
-        for port in self.ports:
-            if port["conn_type"] is not "Output":
-                x += 1
-                continue
-            if x == output_id:
-                break
-            x += 1
-            height += 1
-        isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
-        y = (RADIUS +  # upper border
-             (height * 5) +  # spacing betwen ports
-             height * INPUT_HEIGHT +  # previous ports
-             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
+                 (port["type_index"] * 5) +  # spacing betwen ports
+                 port["type_index"] * INPUT_HEIGHT +  # previous ports
+                 INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
     # ----------------------------------------------------------------------
