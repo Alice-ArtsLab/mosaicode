@@ -26,8 +26,6 @@ class BlockModel(object):
         self.color = "200:200:25:150"
         self.group = "Undefined"
         self.ports = []
-        self.in_ports = []
-        self.out_ports = []
 
         # Code generation
         self.properties = []

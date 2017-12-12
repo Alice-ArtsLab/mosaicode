@@ -160,11 +160,12 @@ class CodeGenerator():
         """
         This method generate the block code.
         """
+        ports = System.get_ports()
         for key in block.codes:
             # First we replace in ports
             count = 0
             for port in block.ports:
-                value = System.ports[port["type"]].var_name
+                value = ports[port["type"]].var_name
                 value = value.replace("$port_number$", str(count))
                 value = value.replace("$port_name$", port["name"])
                 value = value.replace("$conn_type$", port["conn_type"])
@@ -190,10 +191,10 @@ class CodeGenerator():
 
         connections = ""
         for connection in block.connections:
-            code = System.ports[connection.conn_type].code
+            code = ports[connection.conn_type].code
             # Replace output
             port = connection.output.ports[connection.output_port]
-            value = System.ports[connection.conn_type].var_name
+            value = ports[connection.conn_type].var_name
             value = value.replace("$port_number$", str(connection.output_port))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", port["conn_type"])
@@ -205,7 +206,7 @@ class CodeGenerator():
 
             # Replace Input
             port = connection.input.ports[connection.input_port]
-            value = System.ports[port["type"]].var_name
+            value = ports[port["type"]].var_name
             value = value.replace("$port_number$", str(connection.input_port))
             value = value.replace("$port_name$", port["name"])
             value = value.replace("$conn_type$", port["conn_type"])

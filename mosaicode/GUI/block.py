@@ -48,13 +48,26 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = False
 
         self.width = WIDTH_DEFAULT
-        self.build()
+
+        i = 0
+        in_port = 0
+        out_port = 0
+        for port in self.ports:
+            port["index"] = i
+            i += 1
+            port["type_index"] = in_port if port["conn_type"] == "Input" else out_port
+
+            if port["conn_type"] == "Input":
+                in_port += 1
+            else:
+                out_port += 1
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
         self.move(int(float(self.x)), int(float(self.y)))
+        self.build()
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -187,7 +200,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
-        icon.get_natural_extents(width, width2)
+
+        try: # Compatibility version problem
+            icon.get_natural_extents(width, width2)
+        except:
+            pass
+        try:
+            width, width2 = icon.get_natural_extents()
+        except:
+            pass
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
@@ -216,7 +237,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
-        label.get_natural_extents(width, width2)
+
+        try: # Compatibility version problem
+            label.get_natural_extents(width, width2)
+        except:
+            pass
+        try:
+            width, width2 = label.get_natural_extents()
+        except:
+            pass
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height - 10))
         self.width = max(text_width + 22, self.width)
@@ -229,11 +258,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         This method draw the inputs.
         """
         ins = []
-        x = 0
-        height = 0
         for port in self.ports:
             if port["conn_type"] != "Input":
-                x += 1
                 continue
             text_name = self.__get_port_label(port["type"]);
             inp = GooCanvas.CanvasText(parent=self,
@@ -243,16 +269,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                  alignment = Pango.Alignment.LEFT,
                                  x=2,
                                  y=(RADIUS +  # upper border
-                                     (height * 5) +  # spacing betwen ports
-                                      height * INPUT_HEIGHT),  # prev ports
+                                     (port["type_index"] * 5) +  # spacing betwen ports
+                                      port["type_index"] * INPUT_HEIGHT),  # prev ports
                                  use_markup=True
                                  )
             inp.set_property("tooltip", port["label"])
-            inp.connect("button-press-event", self.__on_input_press, x)
-            inp.connect("button-release-event", self.__on_input_release, x)
+            inp.connect("button-press-event", self.__on_input_press, port["index"])
+            inp.connect("button-release-event", self.__on_input_release, port["index"])
             ins.append(inp)
-            x += 1
-            height += 1
         self.widgets["Inputs"] = ins
 
     # ----------------------------------------------------------------------
@@ -290,11 +314,8 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         This method draw the outputs.
         """
         outs = []
-        x = 0
-        height = 0
         for port in self.ports:
             if port["conn_type"] != "Output":
-                x += 1
                 continue
             text_name = self.__get_port_label(port["type"]);
             out = GooCanvas.CanvasText(parent=self,
@@ -304,17 +325,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                  alignment = Pango.Alignment.RIGHT,
                                  x=(self.width - 1),
                                  y=(RADIUS +  # upper border
-                                     (height * 5) +  # spacing betwen ports
-                                      height * INPUT_HEIGHT),  # prev ports
+                                     (port["type_index"] * 5) +  # spacing betwen ports
+                                      port["type_index"] * INPUT_HEIGHT),  # prev ports
                                  use_markup=True
                                  )
 
             out.set_property("tooltip", port["label"])
-            out.connect("button-press-event", self.__on_output_press, x)
-            out.connect("button-release-event", self.__on_output_release, x)
+            out.connect("button-press-event", self.__on_output_press, port["index"])
+            out.connect("button-release-event", self.__on_output_release, port["index"])
             outs.append(out)
-            x += 1
-            height += 1
         self.widgets["Outputs"] = outs
 
     # ----------------------------------------------------------------------
@@ -557,12 +576,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __get_port_label(self, port_type):
-        if port_type in System.ports:
+        ports = System.get_ports()
+        if port_type in ports:
             return \
                 "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
                 "<span color = '" + \
-                System.ports[port_type].color + "'>" + \
-                System.ports[port_type].label + "</span>}</span>"
+                ports[port_type].color + "'>" + \
+                ports[port_type].label + "</span>}</span>"
         else:
             return "??"
 # ----------------------------------------------------------------------

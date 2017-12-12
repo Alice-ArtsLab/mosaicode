@@ -267,7 +267,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for oldCon in self.connectors:
             if oldCon.input == newCon.input \
                     and oldCon.input_port == newCon.input_port\
-                    and not System.ports[newCon.conn_type].multiple:
+                    and not newCon.port.multiple:
                 System.log(_("Connector Already exists"))
                 return False
         if (newCon.input == newCon.output) or self.__cycle_detection(newCon):
@@ -318,8 +318,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         self.__abort_connection()  # abort any possibly running connections
-        conn_type = block.ports[output]["type"]
-        self.curr_connector = Connector(self, block, output, conn_type)
+
+        port = System.get_ports()[block.ports[output]["type"]]
+        self.curr_connector = Connector(self, block, block.ports[output], port)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
@@ -337,13 +338,13 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         if self.curr_connector is None:
             return False
         self.curr_connector.input = block
-        self.curr_connector.input_port = block_input
+        self.curr_connector.input_port = block.ports[block_input]
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return False
 
-        out_type = self.curr_connector.output.ports[int(self.curr_connector.output_port)]["type"]
-        in_type = self.curr_connector.input.ports[int(self.curr_connector.input_port)]["type"]
+        out_type = self.curr_connector.output.ports[int(self.curr_connector.output_port["index"])]["type"]
+        in_type = self.curr_connector.input.ports[int(self.curr_connector.input_port["index"])]["type"]
 
         if not out_type == in_type:
             System.log(_("Connection Types mismatch"))

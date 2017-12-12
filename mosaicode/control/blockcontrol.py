@@ -27,18 +27,20 @@ class BlockControl():
     def export_xml(cls):
         from mosaicode.system import System as System
         System()
-        for block in System.blocks:
+        blocks = System.get_blocks()
+        for block in blocks:
             print "Exporting block " + block
-            BlockPersistence.save(System.blocks[block])
+            BlockPersistence.save(blocks[block])
 
     # ----------------------------------------------------------------------
     @classmethod
     def export_python(cls):
         from mosaicode.system import System as System
         System()
-        for block in System.blocks:
+        blocks = System.get_blocks()
+        for block in blocks:
             print "Exporting block " + block
-            BlockPersistence.save_python(System.blocks[block])
+            BlockPersistence.save_python(blocks[block])
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -58,11 +60,8 @@ class BlockControl():
     # ----------------------------------------------------------------------
     @classmethod
     def add_new_block(cls, block):
-        # first, save it
+        # Save it
         BlockPersistence.save(block)
-        # Then add it to system
-        from mosaicode.system import System
-        System.blocks[block.type] = block
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -72,7 +71,6 @@ class BlockControl():
             data_dir = System.get_user_dir() + "/extensions/"
             file_name = data_dir + block.language +"/" +block.framework+"/"+block.type + ".xml"
             os.remove(file_name)
-            System.blocks.pop(block.type, None)
             return True
         else:
             return False

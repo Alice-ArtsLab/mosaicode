@@ -39,11 +39,16 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def init(self):
-
         self.main_window.menu.update_recent_files(System.properties.recent_files)
         self.main_window.menu.update_examples(System.list_of_examples)
-        self.main_window.menu.update_blocks(copy(System.blocks))
-        self.main_window.block_notebook.update_blocks(copy(System.blocks))
+        self.update_blocks()
+
+    # ----------------------------------------------------------------------
+    def update_blocks(self):
+        System.reload()
+        blocks = System.get_blocks()
+        self.main_window.menu.update_blocks(blocks)
+        self.main_window.block_notebook.update_blocks(blocks)
 
     # ----------------------------------------------------------------------
     def new(self):
@@ -245,9 +250,11 @@ class MainControl():
             return None
 
         template_list = []
-        for key in System.code_templates:
-            if System.code_templates[key].language == diagram.language:
-                template_list.append(System.code_templates[key])
+        code_templates = System.get_code_templates()
+
+        for key in code_templates:
+            if code_templates[key].language == diagram.language:
+                template_list.append(code_templates[key])
 
         if len(template_list) == 0:
             message = "Generator not available for the language " + diagram.language + "."
@@ -506,6 +513,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def add_code_template(self, code_template):
         CodeTemplateControl.add_code_template(code_template)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def delete_code_template(self, code_template_name):
@@ -513,10 +521,12 @@ class MainControl():
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def add_port(self, port):
         PortControl.add_port(port)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def delete_port(self, port_key):
@@ -524,11 +534,12 @@ class MainControl():
             message = "This port is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def add_new_block(self, block):
         BlockControl.add_new_block(block)
-        self.main_window.block_notebook.update_blocks(copy(System.blocks))
+        self.update_blocks()
         # Update everybody!
 
     # ----------------------------------------------------------------------
@@ -537,7 +548,7 @@ class MainControl():
             message = "This block is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
-        self.main_window.block_notebook.update_blocks(copy(System.blocks))
+        self.update_blocks()
 
     # ----------------------------------------------------------------------
     def update_all(self):
@@ -547,20 +558,23 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def print_ports(cls):
-        for port in System.ports:
+        ports = System.get_ports()
+        for port in ports:
             print "--------------------- "
-            PortControl.print_port(System.ports[port])
+            PortControl.print_port(ports[port])
     # ----------------------------------------------------------------------
     @classmethod
     def print_blocks(cls):
-        for block in System.blocks:
+        blocks = System.get_blocks()
+        for block in blocks:
             print "--------------------- "
-            BlockControl.print_block(copy(System.blocks[block]))
+            BlockControl.print_block(blocks[block])
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):
-        for template in System.code_templates:
+        code_templates = System.get_code_templates()
+        for template in code_templates:
             print "--------------------- "
-            CodeTemplateControl.print_template(System.code_templates[template])
+            CodeTemplateControl.print_template(code_templates[template])
 
 # ----------------------------------------------------------------------
