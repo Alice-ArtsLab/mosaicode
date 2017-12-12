@@ -200,6 +200,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
+
         try: # Compatibility version problem
             icon.get_natural_extents(width, width2)
         except:
@@ -208,11 +209,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             width, width2 = icon.get_natural_extents()
         except:
             pass
-
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
-        icon.translate((self.width / 2) - oldX, (self.height / 2) - oldY)
+        icon.translate((self.width / 2)
+        - oldX, (self.height / 2) - oldY)
         self.widgets["Icon"] = icon
     # ----------------------------------------------------------------------
     def __draw_label(self):
@@ -236,6 +237,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
+
         try: # Compatibility version problem
             label.get_natural_extents(width, width2)
         except:

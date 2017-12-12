@@ -244,8 +244,8 @@ class CodeGenerator():
                 temp_header = []
                 temp_code = ""
                 for header_code in self.codes[key]:
-                    if header_code.strip() not in temp_header:
-                        temp_header.append(header_code.strip())
+                    if header_code not in temp_header:
+                        temp_header.append(header_code)
                 for header_code in temp_header:
                     temp_code += header_code
                 code = code.replace(code_name, temp_code)
