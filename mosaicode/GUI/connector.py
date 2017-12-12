@@ -29,7 +29,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         self.port = port
 
-        self.__from_point = self.output.get_output_pos(self.output_port["index"])
+        self.__from_point = self.output.get_port_pos(self.output_port)
         self.__to_point = (0, 0)
 
         self.__focus = False
@@ -112,8 +112,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         This method update the flow.
 
         """
-        self.__from_point = self.output.get_output_pos(self.output_port["index"])
-        self.__to_point = self.input.get_input_pos(self.input_port["index"])
+        self.__from_point = self.output.get_port_pos(self.output_port)
+        self.__to_point = self.input.get_port_pos(self.input_port)
         self.__update_draw()
 
     # ----------------------------------------------------------------------
@@ -141,7 +141,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x0 + 25 + x0_shift) + " " + str((y0 + y1) / 2)
 
         # Middle horizontal line if second block is on the left
-        if x1 - x1_shift < x0 + 50:
+        if x1 - 25 - x1_shift < x0 + 25 + x0_shift:
             path += " L " + str((x1 + x0) / 2 - x1_shift) + " " + str((y0 + y1) / 2)
             path += " L " + str(x1 - 25 - x1_shift) + " " + str((y0 + y1) / 2)
         else:
