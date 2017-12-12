@@ -624,7 +624,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def delete_connection(self, connection):
         """
-        This method delete a connection.
+        This method deletes a connection.
 
             Parameters:
                 connection

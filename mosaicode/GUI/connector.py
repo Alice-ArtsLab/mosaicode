@@ -9,7 +9,7 @@ gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import GooCanvas
 from connectormenu import ConnectorMenu
-
+from mosaicode.GUI.block import *
 from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.system import System as System
 
@@ -29,7 +29,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         self.port = port
 
-        self.__from_point = self.output.get_port_pos(self.output_port)
+        self.__from_point = self.__get_port_pos(self.output, self.output_port)
         self.__to_point = (0, 0)
 
         self.__focus = False
@@ -107,13 +107,32 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.__update_draw()
 
     # ----------------------------------------------------------------------
+    def __get_port_pos(self, block, port):
+        """
+        This method get input position.
+
+            Parameters:
+                * **input_id**
+            Returns:
+                * **Types** (:class:`float<float>`)
+        """
+        isSet, x, y, scale, rotation = block.get_simple_transform()
+        if port["conn_type"] != "Input":
+            x = block.width + x
+        y = (RADIUS - 9 +  # upper border
+                 (port["type_index"] * 5) +  # spacing betwen ports
+                 (port["type_index"] * INPUT_HEIGHT) +  # previous ports
+                 INPUT_HEIGHT / 2) + y
+        return (x, y)
+
+    # ----------------------------------------------------------------------
     def update_flow(self):
         """
         This method update the flow.
 
         """
-        self.__from_point = self.output.get_port_pos(self.output_port)
-        self.__to_point = self.input.get_port_pos(self.input_port)
+        self.__from_point = self.__get_port_pos(self.output, self.output_port)
+        self.__to_point = self.__get_port_pos(self.input, self.input_port)
         self.__update_draw()
 
     # ----------------------------------------------------------------------
