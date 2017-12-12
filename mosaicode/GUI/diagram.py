@@ -267,7 +267,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for oldCon in self.connectors:
             if oldCon.input == newCon.input \
                     and oldCon.input_port == newCon.input_port\
-                    and not System.ports[newCon.conn_type].multiple:
+                    and not System.get_ports()[newCon.conn_type].multiple:
                 System.log(_("Connector Already exists"))
                 return False
         if (newCon.input == newCon.output) or self.__cycle_detection(newCon):

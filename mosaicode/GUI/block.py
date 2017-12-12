@@ -185,7 +185,17 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                      stroke_color='black'
                                      )
 
-        width, width2 = icon.get_natural_extents()
+        width = Pango.Rectangle()
+        width2 = Pango.Rectangle()
+        try: # Compatibility version problem
+            icon.get_natural_extents(width, width2)
+        except:
+            pass
+        try:
+            width, width2 = icon.get_natural_extents()
+        except:
+            pass
+
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
@@ -211,7 +221,16 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                      stroke_color='black'
                                      )
 
-        width, width2 = label.get_natural_extents()
+        width = Pango.Rectangle()
+        width2 = Pango.Rectangle()
+        try: # Compatibility version problem
+            label.get_natural_extents(width, width2)
+        except:
+            pass
+        try:
+            width, width2 = label.get_natural_extents()
+        except:
+            pass
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height - 10))
         self.width = max(text_width + 22, self.width)
@@ -552,12 +571,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
     # ----------------------------------------------------------------------
     def __get_port_label(self, port_type):
-        if port_type in System.ports:
+        ports = System.get_ports()
+        if port_type in ports:
             return \
                 "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
                 "<span color = '" + \
-                System.ports[port_type].color + "'>" + \
-                System.ports[port_type].label + "</span>}</span>"
+                ports[port_type].color + "'>" + \
+                ports[port_type].label + "</span>}</span>"
         else:
             return "??"
 # ----------------------------------------------------------------------

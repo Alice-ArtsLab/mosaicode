@@ -36,9 +36,10 @@ class DiagramPersistence():
         # new version load
         blocks = parser.getTag(tag_name).getTag(
             "blocks").getChildTags("block")
+        system_blocks = System.get_blocks()
         for block in blocks:
             block_type = block.getAttr("type")
-            if block_type not in System.blocks:
+            if block_type not in system_blocks:
                 continue
             block_id = int(block.getAttr("id"))
             position = block.getTag("position")
@@ -51,7 +52,7 @@ class DiagramPersistence():
                     props[prop.key] = prop.value
                 except:
                     pass
-            new_block = deepcopy(System.blocks[block_type])
+            new_block = deepcopy(system_blocks[block_type])
             new_block.set_properties(props)
             new_block.id = block_id
             new_block.x = float(x)

@@ -143,8 +143,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1) + " " + str(y1)
 
         color = 'black'
-        if self.conn_type in System.ports:
-            color = System.ports[self.conn_type].color
+        ports = System.get_ports()
+        if self.conn_type in ports:
+            color = ports[self.conn_type].color
 
         if "Line" not in self.__widgets:
             widget = GooCanvas.CanvasPath(

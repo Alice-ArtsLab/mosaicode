@@ -40,17 +40,19 @@ class PortControl():
     def export_xml(cls):
         from mosaicode.system import System as System
         System()
-        for port in System.ports:
+        ports = System.get_ports()
+        for port in ports:
             print "Exporting port " + port
-            PortPersistence.save(System.ports[port])
+            PortPersistence.save(ports[port])
 
     # ----------------------------------------------------------------------
     @classmethod
     def export_python(cls):
         from mosaicode.system import System as System
         System()
-        for port in System.ports:
-            PortPersistence.save_python(System.ports[port])
+        ports = System.get_ports()
+        for port in ports:
+            PortPersistence.save_python(ports[port])
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -74,20 +76,17 @@ class PortControl():
     def add_port(cls, port):
         # first, save it
         PortPersistence.save(port)
-        # Then add it to system
-        from mosaicode.system import System
-        System.ports[port.type] = port
 
     # ----------------------------------------------------------------------
     @classmethod
     def delete_port(cls, port_key):
         from mosaicode.system import System
-        port = System.ports[port_key]
+        ports = System.get_ports()
+        port = ports[port_key]
         if port.source == "xml":
             data_dir = System.get_user_dir() + "/extensions/"
             file_name = data_dir + port.language +"/ports/" + port.type + ".xml"
             os.remove(file_name)
-            System.ports.pop(port_key, None)
             return True
         else:
             return False

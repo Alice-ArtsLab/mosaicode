@@ -4,7 +4,7 @@ This module contains the System class.
 """
 import os
 import sys
-import copy
+from copy import copy
 import inspect  # For module inspect
 import mosaicode.extensions
 import pkgutil  # For dynamic package load
@@ -44,14 +44,29 @@ class System(object):
         def __init__(self):
             self.Log = None
             self.properties = Preferences()
-            self.code_templates = {}
-            self.blocks = {}
+            self.__code_templates = {}
+            self.__blocks = {}
+            self.__ports = {}
+
             self.list_of_examples = []
-            self.ports = {}
             self.plugins = []
             self.__load_libs()
             self.__load_plugins()
 
+        # ----------------------------------------------------------------------
+        def get_blocks(self):
+            self.__load_libs()
+            return copy(self.__blocks)
+
+        # ----------------------------------------------------------------------
+        def get_code_templates(self):
+            self.__load_libs()
+            return copy(self.__code_templates)
+
+        # ----------------------------------------------------------------------
+        def get_ports(self):
+            self.__load_libs()
+            return copy(self.__ports)
 
         # ----------------------------------------------------------------------
         def __load_xml(self, data_dir):
@@ -70,18 +85,18 @@ class System(object):
                 code_template = CodeTemplateControl.load(full_file_path)
                 if code_template is not None:
                     code_template.source = "xml"
-                    self.code_templates[code_template.type] = code_template
+                    self.__code_templates[code_template.type] = code_template
 
                 port = PortControl.load(full_file_path)
 
                 if port is not None:
                     port.source = "xml"
-                    self.ports[port.type] = port
+                    self.__ports[port.type] = port
 
                 block = BlockControl.load(full_file_path)
                 if block is not None:
                     block.source = "xml"
-                    self.blocks[block.type] = block
+                    self.__blocks[block.type] = block
 
         # ----------------------------------------------------------------------
         def __load_libs(self):
@@ -100,9 +115,9 @@ class System(object):
             self.list_of_examples.sort()
 
             # Load CodeTemplates, Blocks and Ports
-            self.code_templates.clear()
-            self.ports.clear()
-            self.blocks.clear()
+            self.__code_templates.clear()
+            self.__ports.clear()
+            self.__blocks.clear()
             # First load ports on python classes.
             # They are installed with mosaicode as root
 
@@ -126,13 +141,13 @@ class System(object):
 
                                 instance = obj()
                                 if isinstance(instance, CodeTemplate):
-                                    self.code_templates[instance.type] = instance
+                                    self.__code_templates[instance.type] = instance
                                 if isinstance(instance, Port):
                                     instance.source = "Python"
-                                    self.ports[instance.type] = instance
+                                    self.__ports[instance.type] = instance
                                 if isinstance(instance, BlockModel):
                                     if instance.label != "":
-                                        self.blocks[instance.type] = instance
+                                        self.__blocks[instance.type] = instance
 
             walk_lib_packages(None, "")
 
@@ -184,10 +199,31 @@ class System(object):
             System.instance = System.__Singleton()
             # Add properties dynamically
             cls.properties = System.instance.properties
-            cls.blocks = System.instance.blocks
             cls.list_of_examples = System.instance.list_of_examples
-            cls.ports = System.instance.ports
-            cls.code_templates = System.instance.code_templates
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_blocks(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return cls.instance.get_blocks()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_code_templates(cls):
+        """
+        This method returns System installed code templates.
+        """
+        return cls.instance.get_code_templates()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_ports(cls):
+        """
+        This method returns System installed ports.
+        """
+        return cls.instance.get_ports()
 
     # ----------------------------------------------------------------------
     @classmethod
