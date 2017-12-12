@@ -45,6 +45,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def update_blocks(self):
+        System.reload()
         blocks = System.get_blocks()
         self.main_window.menu.update_blocks(blocks)
         self.main_window.block_notebook.update_blocks(blocks)
@@ -512,6 +513,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     def add_code_template(self, code_template):
         CodeTemplateControl.add_code_template(code_template)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def delete_code_template(self, code_template_name):
@@ -519,10 +521,12 @@ class MainControl():
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def add_port(self, port):
         PortControl.add_port(port)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def delete_port(self, port_key):
@@ -530,6 +534,7 @@ class MainControl():
             message = "This port is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def add_new_block(self, block):

@@ -53,19 +53,21 @@ class System(object):
             self.__load_libs()
             self.__load_plugins()
 
+
+        # ----------------------------------------------------------------------
+        def reload(self):
+            self.__load_libs()
+
         # ----------------------------------------------------------------------
         def get_blocks(self):
-            self.__load_libs()
             return copy(self.__blocks)
 
         # ----------------------------------------------------------------------
         def get_code_templates(self):
-            self.__load_libs()
             return copy(self.__code_templates)
 
         # ----------------------------------------------------------------------
         def get_ports(self):
-            self.__load_libs()
             return copy(self.__ports)
 
         # ----------------------------------------------------------------------
@@ -224,6 +226,14 @@ class System(object):
         This method returns System installed ports.
         """
         return cls.instance.get_ports()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def reload(cls):
+        """
+        This method reload System installed libs.
+        """
+        return cls.instance.reload()
 
     # ----------------------------------------------------------------------
     @classmethod

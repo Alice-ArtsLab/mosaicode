@@ -20,14 +20,16 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram, output, output_port, conn_type):
+    def __init__(self, diagram, output, output_port, port):
         """
         This method is the constructor.
         """
         GooCanvas.CanvasGroup.__init__(self)
-        ConnectionModel.__init__(self, diagram, output, output_port, conn_type)
+        ConnectionModel.__init__(self, diagram, output, output_port, port)
 
-        self.__from_point = self.output.get_output_pos(self.output_port)
+        self.port = port
+
+        self.__from_point = self.output.get_output_pos(self.output_port["index"])
         self.__to_point = (0, 0)
 
         self.__focus = False
@@ -110,8 +112,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         This method update the flow.
 
         """
-        self.__from_point = self.output.get_output_pos(self.output_port)
-        self.__to_point = self.input.get_input_pos(self.input_port)
+        self.__from_point = self.output.get_output_pos(self.output_port["index"])
+        self.__to_point = self.input.get_input_pos(self.input_port["index"])
         self.__update_draw()
 
     # ----------------------------------------------------------------------
@@ -119,33 +121,42 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         """
         This method update draw.
         """
-        # svg M L bezier curve
         path = ""
         x0 = self.__from_point[0]
         y0 = self.__from_point[1]
         x1 = self.__to_point[0]
         y1 = self.__to_point[1]
 
-        path += "M " + str(x0) + " " + str(y0)
+        x0_shift = (self.output_port["type_index"] * 4)
+        x1_shift = 0
+        if self.input_port is not None and "type_index" in self.input_port:
+            x1_shift = self.input_port["type_index"] * 4
 
-        path += " L " + str(x0 + 25) + " " + str(y0)
-        path += " L " + str(x0 + 25) + " " + str((y0 + y1) / 2)
-        if x1 < x0 + 50:
-            path += " L " + str((x1 + x0) / 2) + " " + str((y0 + y1) / 2)
-            path += " L " + str(x1 - 25) + " " + str((y0 + y1) / 2)
+        # svg M L bezier curve
+        # Move to output port starting point / first horizontal line
+        path += "M " + str(x0) + " " + str(y0) 
+        # Line to start point + 25 on x + output type index --
+        path += " L " + str(x0 + 25 + x0_shift) + " " + str(y0)
+        # First vertical line
+        path += " L " + str(x0 + 25 + x0_shift) + " " + str((y0 + y1) / 2)
+
+        # Middle horizontal line if second block is on the left
+        if x1 - x1_shift < x0 + 50:
+            path += " L " + str((x1 + x0) / 2 - x1_shift) + " " + str((y0 + y1) / 2)
+            path += " L " + str(x1 - 25 - x1_shift) + " " + str((y0 + y1) / 2)
         else:
-            path += " L " + str(x0 + 25) + " " + str(y1)
-        path += " L " + str(x1 - 25) + " " + str(y1)
+            path += " L " + str(x0 + 25 + x0_shift) + " " + str(y1)
+
+        path += " L " + str(x1 - 25 - x1_shift) + " " + str(y1)
+        # End Point
         path += " L " + str(x1) + " " + str(y1)
 
+        # Arrow
         path += " L " + str(x1 - 4) + " " + str(y1 - 4)
         path += " L " + str(x1 - 4) + " " + str(y1 + 4)
         path += " L " + str(x1) + " " + str(y1)
 
-        color = 'black'
-        ports = System.get_ports()
-        if self.conn_type in ports:
-            color = ports[self.conn_type].color
+        color = self.port.color
 
         if "Line" not in self.__widgets:
             widget = GooCanvas.CanvasPath(
