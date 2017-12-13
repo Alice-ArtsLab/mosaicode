@@ -96,7 +96,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
             for connector in self.connectors:
-                connector.update_flow()
+                connector.update_tracking()
 
         if self.curr_connector is None:
             return False
@@ -417,7 +417,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for block_id in self.blocks:
             self.blocks[block_id].update_flow()
         for conn in self.connectors:
-            conn.update_flow()
+            conn.update_tracking()
 
     # ----------------------------------------------------------------------
     def set_file_name(self, file_name):

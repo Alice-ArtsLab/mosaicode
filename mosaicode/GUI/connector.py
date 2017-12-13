@@ -29,7 +29,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         self.port = port
 
-        self.__from_point = self.__get_port_pos(self.output, self.output_port)
+        self.__from_point = (0,0)
         self.__to_point = (0, 0)
 
         self.__focus = False
@@ -81,32 +81,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return False
 
     # ----------------------------------------------------------------------
-    def update_tracking(self, newEnd=None):
-        """
-        This method update Tracking.
-
-            Parameters:
-                * **newEnd**
-        """
-        if newEnd is None:
-            newEnd = self.__from_point
-        a = newEnd[0] - self.__from_point[0]
-        b = newEnd[1] - self.__from_point[1]
-        if a > 0:
-            a -= 1
-        else:
-            a += 1
-
-        if b > 0:
-            b -= 1
-        else:
-            b += 1
-
-        self.__to_point = self.__from_point[
-            0] + a - 5, self.__from_point[1] + b
-        self.__update_draw()
-
-    # ----------------------------------------------------------------------
     def __get_port_pos(self, block, port):
         """
         This method get input position.
@@ -126,13 +100,26 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return (x, y)
 
     # ----------------------------------------------------------------------
-    def update_flow(self):
+    def update_tracking(self, newEnd=None):
         """
-        This method update the flow.
+        This method update Tracking.
 
+            Parameters:
+                * **newEnd**
         """
         self.__from_point = self.__get_port_pos(self.output, self.output_port)
-        self.__to_point = self.__get_port_pos(self.input, self.input_port)
+
+        if self.input is None:
+            if newEnd is None:
+                newEnd = self.__from_point
+            a = newEnd[0] - self.__from_point[0]
+            b = newEnd[1] - self.__from_point[1]
+            a = a - 1 if a > 0 else a + 1
+            b = b - 1 if b > 0 else b + 1
+            self.__to_point = self.__from_point[0] + a - 5, self.__from_point[1] + b
+        else:
+            self.__to_point = self.__get_port_pos(self.input, self.input_port)
+
         self.__update_draw()
 
     # ----------------------------------------------------------------------
