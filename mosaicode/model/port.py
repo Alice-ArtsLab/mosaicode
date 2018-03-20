@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+
 class Port(object):
     """
     This class contains the base attributes of each block port.
     """
+    INPUT = "input"
+    OUTPUT = "output"
 
     # ----------------------------------------------------------------------
     def __init__(self):
