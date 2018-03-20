@@ -15,6 +15,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from mosaicode.system import System as System
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.port import Port
 
 WIDTH_DEFAULT = 112
 HEIGHT_DEFAULT = 60
@@ -22,6 +23,7 @@ PORT_SENSITIVITY = 12
 RADIUS = 25
 INPUT_WIDTH = 24
 INPUT_HEIGHT = 12
+
 
 class Block(GooCanvas.CanvasGroup, BlockModel):
     """
@@ -55,9 +57,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         for port in self.ports:
             port["index"] = i
             i += 1
-            port["type_index"] = in_port if port["conn_type"] == "Input" else out_port
+            port["type_index"] = in_port if port["conn_type"] == Port.INPUT else out_port
 
-            if port["conn_type"] == "Input":
+            if port["conn_type"] == Port.INPUT:
                 in_port += 1
             else:
                 out_port += 1
@@ -101,7 +103,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.remember_y = event.y
 
         elif event.button == 3:
-            self.diagram.show_block_menu(self, event);
+            self.diagram.show_block_menu(self, event)
             return True
 
         self.diagram.update_flows()
@@ -189,19 +191,19 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.label.title()[0] + "</span>"
 
         icon = GooCanvas.CanvasText(parent=self,
-                                     text=text_label,
-                                     fill_color='white',
-                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
-                                     x=(self.width / 2),
-                                     y=(self.height / 2),
-                                     use_markup=True,
-                                     stroke_color='black'
-                                     )
+                                    text=text_label,
+                                    fill_color='white',
+                                    anchor=GooCanvas.CanvasAnchorType.CENTER,
+                                    x=(self.width / 2),
+                                    y=(self.height / 2),
+                                    use_markup=True,
+                                    stroke_color='black'
+                                    )
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
 
-        try: # Compatibility version problem
+        try:  # Compatibility version problem
             icon.get_natural_extents(width, width2)
         except:
             pass
@@ -213,9 +215,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
         icon.translate((self.width / 2)
-        - oldX, (self.height / 2) - oldY)
+                       - oldX, (self.height / 2) - oldY)
         self.widgets["Icon"] = icon
     # ----------------------------------------------------------------------
+
     def __draw_label(self):
         """
         This method draw the label.
@@ -238,7 +241,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
 
-        try: # Compatibility version problem
+        try:  # Compatibility version problem
             label.get_natural_extents(width, width2)
         except:
             pass
@@ -259,23 +262,26 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         ins = []
         for port in self.ports:
-            if port["conn_type"] != "Input":
+            if port["conn_type"] != Port.INPUT:
                 continue
-            text_name = self.__get_port_label(port["type"]);
+            text_name = self.__get_port_label(port["type"])
             inp = GooCanvas.CanvasText(parent=self,
-                                 text=text_name,
-                                 fill_color='black',
-                                 anchor=GooCanvas.CanvasAnchorType.WEST,
-                                 alignment = Pango.Alignment.LEFT,
-                                 x=2,
-                                 y=(RADIUS +  # upper border
-                                     (port["type_index"] * 5) +  # spacing betwen ports
-                                      port["type_index"] * INPUT_HEIGHT),  # prev ports
-                                 use_markup=True
-                                 )
+                                       text=text_name,
+                                       fill_color='black',
+                                       anchor=GooCanvas.CanvasAnchorType.WEST,
+                                       alignment=Pango.Alignment.LEFT,
+                                       x=2,
+                                       y=(RADIUS +  # upper border
+                                          # spacing betwen ports
+                                          (port["type_index"] * 5) +
+                                           port["type_index"] * INPUT_HEIGHT),  # prev ports
+                                       use_markup=True
+                                       )
             inp.set_property("tooltip", port["label"])
-            inp.connect("button-press-event", self.__on_input_press, port["index"])
-            inp.connect("button-release-event", self.__on_input_release, port["index"])
+            inp.connect("button-press-event",
+                        self.__on_input_press, port["index"])
+            inp.connect("button-release-event",
+                        self.__on_input_release, port["index"])
             ins.append(inp)
         self.widgets["Inputs"] = ins
 
@@ -315,24 +321,27 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         outs = []
         for port in self.ports:
-            if port["conn_type"] != "Output":
+            if port["conn_type"] != Port.OUTPUT:
                 continue
-            text_name = self.__get_port_label(port["type"]);
+            text_name = self.__get_port_label(port["type"])
             out = GooCanvas.CanvasText(parent=self,
-                                 text=text_name,
-                                 fill_color='black',
-                                 anchor=GooCanvas.CanvasAnchorType.EAST,
-                                 alignment = Pango.Alignment.RIGHT,
-                                 x=(self.width - 1),
-                                 y=(RADIUS +  # upper border
-                                     (port["type_index"] * 5) +  # spacing betwen ports
-                                      port["type_index"] * INPUT_HEIGHT),  # prev ports
-                                 use_markup=True
-                                 )
+                                       text=text_name,
+                                       fill_color='black',
+                                       anchor=GooCanvas.CanvasAnchorType.EAST,
+                                       alignment=Pango.Alignment.RIGHT,
+                                       x=(self.width - 1),
+                                       y=(RADIUS +  # upper border
+                                           # spacing betwen ports
+                                           (port["type_index"] * 5) +
+                                           port["type_index"] * INPUT_HEIGHT),  # prev ports
+                                       use_markup=True
+                                       )
 
             out.set_property("tooltip", port["label"])
-            out.connect("button-press-event", self.__on_output_press, port["index"])
-            out.connect("button-release-event", self.__on_output_release, port["index"])
+            out.connect("button-press-event",
+                        self.__on_output_press, port["index"])
+            out.connect("button-release-event",
+                        self.__on_output_release, port["index"])
             outs.append(out)
         self.widgets["Outputs"] = outs
 
@@ -381,7 +390,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         in_count = 0
         out_count = 0
         for port in self.ports:
-            if port["conn_type"] == "Input":
+            if port["conn_type"] == Port.INPUT:
                 in_count += 1
             else:
                 out_count += 1
@@ -417,14 +426,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 * **Types** (:class:`float<float>`)
         """
         isSet, x, y, scale, rotation = self.get_simple_transform()
-        if port["conn_type"] == "Input":
+        if port["conn_type"] == Port.INPUT:
             x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
         else:
             x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
         y = (RADIUS +  # upper border
-                 (port["type_index"] * 5) +  # spacing betwen ports
-                 port["type_index"] * INPUT_HEIGHT +  # previous ports
-                 INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
+             (port["type_index"] * 5) +  # spacing betwen ports
+             port["type_index"] * INPUT_HEIGHT +  # previous ports
+             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
         return (x, y)
 
     # ----------------------------------------------------------------------
@@ -506,7 +515,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 distinct_con.append(conn.input_port)
         in_count = 0
         for port in self.ports:
-            if port["conn_type"] == "Input":
+            if port["conn_type"] == Port.INPUT:
                 in_count += 1
         if len(distinct_con) < in_count:
             self.has_flow = False
