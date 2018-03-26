@@ -37,11 +37,11 @@ class Publisher():
             self.__start_server()
 
     # ----------------------------------------------------------------------
-    def get_ip(self):
+    def get_ip(self, count):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('10.255.255.255', 1))
         try:
-            IP = s.getsockname()[0]
+            IP = s.getsockname()[count]
         except:
             IP = '127.0.0.1'
         finally:
@@ -51,20 +51,31 @@ class Publisher():
 
     # ----------------------------------------------------------------------
     def __start_server(self):
-        self.ip = self.get_ip()
         while self.httpd is None:
             try:
                 path = '/tmp/'
                 my_path = os.curdir
                 os.chdir(path)
-                System.log("Trying to run the server on ip and port " + str(self.ip) + ":" + str(self.port))
+                count = 0
+                System.log("Trying to run the server on ips and ports:")
+                while count < 3:
+                    self.ip = self.get_ip(count)
+                    System.log(str(self.ip) + ":" + str(self.port))
+                    count = count + 1
+
                 handler = SimpleHTTPServer.SimpleHTTPRequestHandler
                 SocketServer.ThreadingTCPServer.allow_reuse_address = True
                 self.httpd = SocketServer.ThreadingTCPServer(('', self.port), handler)
                 self.httpd_thread = threading.Thread(target=self.httpd.serve_forever)
                 self.httpd_thread.setDaemon(True)
                 self.httpd_thread.start()
-                System.log("Server running on ip and port " + str(self.ip) + ":" + str(self.port))
+                count = 0
+                System.log("Server running on ip and port:")
+                while count < 3:
+                    self.ip = self.get_ip(count)
+                    System.log(str(self.ip) + ":" + str(self.port))
+                    count = count + 1
+
                 os.chdir(my_path)
             except:
                 self.port = self.port + 1
