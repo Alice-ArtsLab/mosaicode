@@ -44,12 +44,14 @@ setup(name='mosaicode',
       scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
       description='Image Processing and Computer Vision \
       Automatic Programming Tool',
-      author='Ouroboros',
-      author_email='cmagnobarbosa+mosaicode@gmail.com',
-      maintainer="Ouroboros",
-      maintainer_email="cmagnobarbosa+mosaicode@gmail.com",
+      author='Bits & Beads Research Lab',
+      author_email='mosaicode-dev@googlegroups.com',
+      maintainer="Bits & Beads Research Lab",
+      maintainer_email="mosaicode-dev@googlegroups.com",
       license="GNU GPL3",
-      url='http://ges.dcomp.ufsj.edu.br/index.php/ouroboros/',
+      url='https://mosaicode.github.io', 
+      download_url = 'https://github.com/Mosaicode/mosaicode.git',
+      keywords = ['VLP', 'blocos'],  
 
       # this is fucked up! must put it in package_data!!
       data_files=[

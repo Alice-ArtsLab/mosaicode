@@ -12,8 +12,8 @@ To install Mosaicode, there is two options by terminal:
 
 | | Command |
 | :---: | :---: |
-| *Compactado:* | ``` tar -xvvzf mosaicode-1.0.tar.gz ``` |
-| *Cloning GitHub:* | `git clone https://github.com/flschiavoni/mosaicode.git` </br> `git checkout newgui`|
+| *Compactado:* | ``` gunzip mosaicode-master.zip ``` |
+| *Cloning GitHub:* | `git clone https://github.com/Mosaicode/mosaicode.git` </br> `git checkout newgui`|
 
 Then procede with instalation:
 ```
@@ -61,5 +61,4 @@ FURTHER INFO:
 (http://s2i.das.ufsc.br/mosaicode/en/home.html)
 
 or asking to:
-* scotti@ieee.org
-* fls@ufsj.edu.br
+* mosaicode-dev@googlegroups.com
