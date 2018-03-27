@@ -377,14 +377,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.translate(new_x - position[0], new_y - position[1])
 
     # ----------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete a block.
-        """
-        self.diagram.delete_block(self)
-        self.diagram.update_flows()
-
-    # ----------------------------------------------------------------------
     def get_position(self):
         """
         This method get position the block.

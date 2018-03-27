@@ -413,7 +413,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         """
         This method update flows.
         """
-        self.white_board.set_property("stroke_color", "white")
+        self.update()
         for block_id in self.blocks:
             self.blocks[block_id].update_flow()
         for conn in self.connectors:
@@ -549,18 +549,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         return selected_blocks_id
 
-    # ---------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete a block or connection.
-        """
-        if len(self.current_widgets) < 1:
-            return
-        self.do("Delete")
-        for widget in self.current_widgets:
-            widget.delete()
-        self.current_widgets = []
-        self.update_flows()
 
     # ---------------------------------------------------------------------
     def paste(self):
@@ -621,8 +609,30 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             self.main_window.main_control.get_clipboard().append(widget)
             widget.delete()
 
+    # ---------------------------------------------------------------------
+    def delete_widget(self, widget):
+        if isinstance(widget, Block):
+            self.delete_block(widget)
+            return
+        if isinstance(widget, Connector):
+            self.delete_connector(widget)
+            return
+
+    # ---------------------------------------------------------------------
+    def delete(self):
+        """
+        This method delete a block or connection.
+        """
+        if len(self.current_widgets) < 1:
+            return
+        self.do("Delete")
+        for widget in self.current_widgets:
+            self.delete_widget()
+        self.current_widgets = []
+        self.update_flows()
+
     # ----------------------------------------------------------------------
-    def delete_connection(self, connection):
+    def __delete_connection(self, connection):
         """
         This method deletes a connection.
 
@@ -632,9 +642,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         if connection in self.connectors:
             self.connectors.remove(connection)
         connection.remove()
+        del connection
+        self.update_flows()
 
     # ----------------------------------------------------------------------
-    def delete_block(self, block):
+    def __delete_block(self, block):
         """
         This method delete a block.
 

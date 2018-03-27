@@ -44,14 +44,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.update_tracking()
 
     # ----------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete connection.
-        """
-        self.diagram.delete_connection(self)
-        self.diagram.update_flows()
-
-    # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         """
         This method monitors if on button was pressed.
