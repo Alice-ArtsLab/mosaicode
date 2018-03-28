@@ -15,11 +15,13 @@ from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from mosaicode.system import System as System
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.port import Port
 
 WIDTH_DEFAULT = 112
 HEIGHT_DEFAULT = 60
 INPUT_HEIGHT = 12
 RADIUS = 25
+
 
 class Block(GooCanvas.CanvasGroup, BlockModel):
     """
@@ -51,13 +53,22 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         in_port = 0
         out_port = 0
         for port in self.ports:
+
+            # Adjustment to keep compatibility
+            # To be removed in future
+            if port["conn_type"].upper() == "INPUT":
+                port["conn_type"] = Port.INPUT
+            else:
+                port["conn_type"] = Port.OUTPUT
+
             port["index"] = i
             i += 1
-            port["type_index"] = in_port if port["conn_type"] == "Input" else out_port
 
-            if port["conn_type"] == "Input":
+            if port["conn_type"] == Port.INPUT:
+                port["type_index"] = in_port
                 in_port += 1
             else:
+                port["type_index"] = out_port
                 out_port += 1
 
         self.connect("button-press-event", self.__on_button_press)
@@ -113,7 +124,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.remember_y = event.y
 
         elif event.button == 3:
-            self.diagram.show_block_menu(self, event);
+            self.diagram.show_block_menu(self, event)
             return True
 
         self.diagram.update_flows()
@@ -201,19 +212,19 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.label.title()[0] + "</span>"
 
         icon = GooCanvas.CanvasText(parent=self,
-                                     text=text_label,
-                                     fill_color='white',
-                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
-                                     x=(self.width / 2),
-                                     y=(self.height / 2),
-                                     use_markup=True,
-                                     stroke_color='black'
-                                     )
+                                    text=text_label,
+                                    fill_color='white',
+                                    anchor=GooCanvas.CanvasAnchorType.CENTER,
+                                    x=(self.width / 2),
+                                    y=(self.height / 2),
+                                    use_markup=True,
+                                    stroke_color='black'
+                                    )
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
 
-        try: # Compatibility version problem
+        try:  # Compatibility version problem
             icon.get_natural_extents(width, width2)
         except:
             pass
@@ -228,6 +239,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         - oldX, (self.height / 2) - oldY)
 
     # ----------------------------------------------------------------------
+
     def __draw_label(self):
         """
         This method draw the label.
@@ -250,7 +262,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
 
-        try: # Compatibility version problem
+        try:  # Compatibility version problem
             label.get_natural_extents(width, width2)
         except:
             pass
@@ -270,8 +282,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         for port in self.ports:
             text_name = self.__get_port_label(port["type"]);
-
-            if port["conn_type"] == "Input":
+            if port["conn_type"] == Port.INPUT:
                 x = 2
                 alignment = Pango.Alignment.LEFT
                 anchor=GooCanvas.CanvasAnchorType.WEST
@@ -425,7 +436,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 distinct_con.append(conn.input_port)
         in_count = 0
         for port in self.ports:
-            if port["conn_type"] == "Input":
+            if port["conn_type"] == Port.INPUT:
                 in_count += 1
         if len(distinct_con) < in_count:
             self.has_flow = False

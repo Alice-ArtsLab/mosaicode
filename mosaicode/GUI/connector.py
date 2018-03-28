@@ -83,7 +83,15 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
                 * **Types** (:class:`float<float>`)
         """
         isSet, x, y, scale, rotation = block.get_simple_transform()
-        if port["conn_type"] != "Input":
+
+        # Adjustment to keep compatibility
+        # To be removed in future
+        if port["conn_type"].upper() == "INPUT":
+            port["conn_type"] = Port.INPUT
+        else:
+            port["conn_type"] = Port.OUTPUT
+
+        if port["conn_type"] != Port.INPUT:
             x = block.width + x
         y = (RADIUS - 9 +  # upper border
                  (port["type_index"] * 5) +  # spacing betwen ports
