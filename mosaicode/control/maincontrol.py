@@ -19,6 +19,7 @@ from mosaicode.control.portcontrol import PortControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.codegenerator import CodeGenerator
+from mosaicode.control.publisher import Publisher
 from mosaicode.model.codetemplate import CodeTemplate
 
 
@@ -36,6 +37,7 @@ class MainControl():
         self.main_window = main_window
         # It must be possible to exchange data between diagrams
         self.clipboard = []
+        self.publisher = Publisher()
 
     # ----------------------------------------------------------------------
     def init(self):
@@ -278,6 +280,17 @@ class MainControl():
         generator = self.__get_code_generator(diagram)
         if generator is not None:
             generator.run(code = code)
+
+
+    # ----------------------------------------------------------------------
+    def publish(self):
+        """
+        This method run web server.
+        """
+        if self.publisher.is_running():
+            self.publisher.stop()
+        else:
+            self.publisher.start()
 
 
     # ----------------------------------------------------------------------

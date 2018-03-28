@@ -42,6 +42,9 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_EXECUTE,
                              _("Run"),
                              self.main_window.main_control.run)
+        self.__create_button(Gtk.STOCK_INDEX,
+                             _("Publish"),
+                             self.main_window.main_control.publish)
         self.__create_button(Gtk.STOCK_SELECT_ALL,
                              _("View Source"),
                              self.main_window.main_control.view_source)
@@ -59,7 +62,7 @@ class Toolbar(Gtk.Toolbar):
         self.__create_button(Gtk.STOCK_ZOOM_FIT,
                              _("Fit on screen"),
                              self.main_window.main_control.reload)
-                             
+
         self.add(Gtk.SeparatorToolItem())
         self.__create_button(Gtk.STOCK_GO_UP,
                              _("Align Top"),
