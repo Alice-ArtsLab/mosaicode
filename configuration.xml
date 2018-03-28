@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MosaicodeProperties default_directory="/tmp/%l/%n-%t" default_filename="%n" grid="10" height="733" hpaned_work_area="214" vpaned_bottom="465" vpaned_left="300" width="1353">
- <recent_files>
-  <name value="/home/avner/Área de Trabalho/teste.mscd"/>
- </recent_files>
+<MosaicodeProperties default_directory="/tmp/%l/%n-%t" default_filename="%n" grid="10" height="627" hpaned_work_area="227" vpaned_bottom="433" vpaned_left="300" width="838">
+ <recent_files/>
 </MosaicodeProperties>

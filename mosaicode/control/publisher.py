@@ -42,12 +42,13 @@ class Publisher():
         s.connect(('10.255.255.255', 1))
         try:
             IP = s.getsockname()[count]
+            if IP[4] is not '.':
+                s.close()
         except:
             IP = '127.0.0.1'
         finally:
             s.close()
         return IP
-
 
     # ----------------------------------------------------------------------
     def __start_server(self):
@@ -56,12 +57,7 @@ class Publisher():
                 path = '/tmp/'
                 my_path = os.curdir
                 os.chdir(path)
-                count = 0
-                System.log("Trying to run the server on ips and ports:")
-                while count < 3:
-                    self.ip = self.get_ip(count)
-                    System.log(str(self.ip) + ":" + str(self.port))
-                    count = count + 1
+                System.log("Trying to run the server")
 
                 handler = SimpleHTTPServer.SimpleHTTPRequestHandler
                 SocketServer.ThreadingTCPServer.allow_reuse_address = True
@@ -70,11 +66,14 @@ class Publisher():
                 self.httpd_thread.setDaemon(True)
                 self.httpd_thread.start()
                 count = 0
+                ip_aux = 0
                 System.log("Server running on ip and port:")
-                while count < 3:
+                while self.ip != ip_aux:
+                    ip_aux = self.ip
                     self.ip = self.get_ip(count)
-                    System.log(str(self.ip) + ":" + str(self.port))
                     count = count + 1
+                    if ip_aux != self.ip:
+                        System.log(str(self.ip) + ":" + str(self.port))
 
                 os.chdir(my_path)
             except:
