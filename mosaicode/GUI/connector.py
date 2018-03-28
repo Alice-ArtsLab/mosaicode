@@ -9,7 +9,7 @@ gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import GooCanvas
 from connectormenu import ConnectorMenu
-
+from mosaicode.GUI.block import *
 from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.system import System as System
 
@@ -29,7 +29,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         self.port = port
 
-        self.__from_point = self.output.get_port_pos(self.output_port)
+        self.__from_point = (0,0)
         self.__to_point = (0, 0)
 
         self.__focus = False
@@ -42,14 +42,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.__widgets = {}
 
         self.update_tracking()
-
-    # ----------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete connection.
-        """
-        self.diagram.delete_connection(self)
-        self.diagram.update_flows()
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -81,6 +73,33 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return False
 
     # ----------------------------------------------------------------------
+    def __get_port_pos(self, block, port):
+        """
+        This method get input position.
+
+            Parameters:
+                * **input_id**
+            Returns:
+                * **Types** (:class:`float<float>`)
+        """
+        isSet, x, y, scale, rotation = block.get_simple_transform()
+
+        # Adjustment to keep compatibility
+        # To be removed in future
+        if port["conn_type"].upper() == "INPUT":
+            port["conn_type"] = Port.INPUT
+        else:
+            port["conn_type"] = Port.OUTPUT
+
+        if port["conn_type"] != Port.INPUT:
+            x = block.width + x
+        y = (RADIUS - 9 +  # upper border
+                 (port["type_index"] * 5) +  # spacing betwen ports
+                 (port["type_index"] * INPUT_HEIGHT) +  # previous ports
+                 INPUT_HEIGHT / 2) + y
+        return (x, y)
+
+    # ----------------------------------------------------------------------
     def update_tracking(self, newEnd=None):
         """
         This method update Tracking.
@@ -88,32 +107,19 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             Parameters:
                 * **newEnd**
         """
-        if newEnd is None:
-            newEnd = self.__from_point
-        a = newEnd[0] - self.__from_point[0]
-        b = newEnd[1] - self.__from_point[1]
-        if a > 0:
-            a -= 1
+        self.__from_point = self.__get_port_pos(self.output, self.output_port)
+
+        if self.input is None:
+            if newEnd is None:
+                newEnd = self.__from_point
+            a = newEnd[0] - self.__from_point[0]
+            b = newEnd[1] - self.__from_point[1]
+            a = a - 1 if a > 0 else a + 1
+            b = b - 1 if b > 0 else b + 1
+            self.__to_point = self.__from_point[0] + a - 5, self.__from_point[1] + b
         else:
-            a += 1
+            self.__to_point = self.__get_port_pos(self.input, self.input_port)
 
-        if b > 0:
-            b -= 1
-        else:
-            b += 1
-
-        self.__to_point = self.__from_point[
-            0] + a - 5, self.__from_point[1] + b
-        self.__update_draw()
-
-    # ----------------------------------------------------------------------
-    def update_flow(self):
-        """
-        This method update the flow.
-
-        """
-        self.__from_point = self.output.get_port_pos(self.output_port)
-        self.__to_point = self.input.get_port_pos(self.input_port)
         self.__update_draw()
 
     # ----------------------------------------------------------------------
