@@ -23,6 +23,7 @@ INPUT_HEIGHT = 12
 RADIUS = 25
 
 
+
 class Block(GooCanvas.CanvasGroup, BlockModel):
     """
     This class contains methods related the Block class
@@ -63,7 +64,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
             port["index"] = i
             i += 1
-
             if port["conn_type"] == Port.INPUT:
                 port["type_index"] = in_port
                 in_port += 1
@@ -239,7 +239,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         - oldX, (self.height / 2) - oldY)
 
     # ----------------------------------------------------------------------
-
     def __draw_label(self):
         """
         This method draw the label.
