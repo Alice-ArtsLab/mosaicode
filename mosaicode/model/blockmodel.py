@@ -30,6 +30,11 @@ class BlockModel(object):
         # Code generation
         self.properties = []
         self.codes = {}
+        self.gen_codes = {}
+
+        # Attributes to code generation
+        self.weight = 0
+        self.connections = []
 
         if block == None:
             return

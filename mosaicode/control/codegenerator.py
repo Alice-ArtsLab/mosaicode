@@ -161,31 +161,39 @@ class CodeGenerator():
         This method generate the block code.
         """
         ports = System.get_ports()
+
+        # Empty the previous generated codes, if exist
+        block.gen_codes = {}
+
+        # For each code part, we need to replace wildcards
         for key in block.codes:
+
             # First we replace in ports
             count = 0
+            block.gen_codes[key] = block.codes[key]
             for port in block.ports:
                 value = ports[port["type"]].var_name
                 value = value.replace("$port_number$", str(count))
                 value = value.replace("$port_name$", port["name"])
                 value = value.replace("$conn_type$", port["conn_type"])
                 my_key = "$port[" + port["name"] + "]$"
-                block.codes[key] = block.codes[key].replace(my_key, value)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
                 count += 1
+
             # Then we replace object attributes by their values
             for attribute in block.__dict__:
                 my_key = "$" + attribute + "$"
                 value = str(block.__dict__[attribute])
-                block.codes[key] = block.codes[key].replace(my_key, value)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
             # Then we replace properties by their values
             for prop in block.get_properties():
                 my_key = "$prop[" + prop.get("name") + "]$"
                 value = str(prop.get("value"))
-                block.codes[key] = block.codes[key].replace(my_key, value)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
 
         for key in self.codes:
             if key in block.codes:
-                self.codes[key].append(block.codes[key])
+                self.codes[key].append(block.gen_codes[key])
             else:
                 self.codes[key].append('')
 
