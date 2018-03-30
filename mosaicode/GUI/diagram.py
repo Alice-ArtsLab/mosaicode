@@ -227,35 +227,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             block.move(0 - x, 0 - y)
         self.update_flows()
 
-
-    # ----------------------------------------------------------------------
-    def add_block(self, block):
-        """
-        This method add a block in the diagram.
-
-            Parameters:
-                * **block**
-            Returns:
-                * **Types** (:class:`boolean<boolean>`)
-        """
-        new_block = Block(self, deepcopy(block))
-
-        if self.language is not None and self.language != new_block.language:
-            System.log("Block language is different from diagram language.")
-            return False
-        if self.language is None or self.language == 'None':
-            self.language = new_block.language
-
-        self.last_id = max(int(self.last_id), int(new_block.id))
-        if new_block.id < 0:
-            new_block.id = self.last_id
-        self.last_id += 1
-        self.blocks[new_block.id] = new_block
-
-        self.do("Add")
-        self.get_root_item().add_child(new_block, -1)
-        return True
-
     # ----------------------------------------------------------------------
     def __valid_connector(self, newCon):
         """
@@ -272,6 +243,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 return False
         if (newCon.input == newCon.output) or self.__cycle_detection(newCon):
             System.log(_("Recursive connection is not allowed"))
+            return False
+        if newCon.input_port.type != newCon.output_port.type:
+            System.log(_("Connection Types mismatch"))
             return False
         return True
 
@@ -308,7 +282,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.curr_connector = None
 
     # ----------------------------------------------------------------------
-    def start_connection(self, block, output):
+    def start_connection(self, block, port):
         """
         This method start a connection.
 
@@ -318,38 +292,29 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         self.__abort_connection()  # abort any possibly running connections
-
-        port = System.get_ports()[block.ports[output]["type"]]
-        self.curr_connector = Connector(self, block, block.ports[output], port)
+        self.curr_connector = Connector(self, block, port)
         self.get_root_item().add_child(self.curr_connector, -1)
         self.update_flows()
 
     # ----------------------------------------------------------------------
-    def end_connection(self, block, block_input):
+    def end_connection(self, block, port):
         """
         This method end a connection.
 
             Parameters:
                 * **block**
-                * **block_input**
+                * **port**
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
         if self.curr_connector is None:
             return False
         self.curr_connector.input = block
-        self.curr_connector.input_port = block.ports[block_input]
+        self.curr_connector.input_port = port
         if not self.__valid_connector(self.curr_connector):
             self.__abort_connection()
             return False
 
-        out_type = self.curr_connector.output.ports[int(self.curr_connector.output_port["index"])]["type"]
-        in_type = self.curr_connector.input.ports[int(self.curr_connector.input_port["index"])]["type"]
-
-        if not out_type == in_type:
-            System.log(_("Connection Types mismatch"))
-            self.__abort_connection()
-            return False
         self.connectors.append(self.curr_connector)
         self.curr_connector = None
         self.update_flows()
@@ -509,7 +474,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 * **(x,y)** (:class:`float<float>`)
 
         """
-        self.do("Move blocks")
         for block_id in self.blocks:
             if (self.blocks[block_id] in self.current_widgets):
                 block_pos_x, block_pos_y = self.blocks[block_id].get_position()
@@ -540,13 +504,12 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         return x, y
 
     # ---------------------------------------------------------------------
-    def get_selected_blocks_id(self):
+    def __get_selected_blocks_id(self):
         selected_blocks_id = []
 
         for block_id in self.blocks:
             if self.blocks[block_id] in self.current_widgets:
                 selected_blocks_id.append(block_id)
-
         return selected_blocks_id
 
 
@@ -610,15 +573,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             widget.delete()
 
     # ---------------------------------------------------------------------
-    def delete_widget(self, widget):
-        if isinstance(widget, Block):
-            self.delete_block(widget)
-            return
-        if isinstance(widget, Connector):
-            self.delete_connector(widget)
-            return
-
-    # ---------------------------------------------------------------------
     def delete(self):
         """
         This method delete a block or connection.
@@ -627,43 +581,14 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return
         self.do("Delete")
         for widget in self.current_widgets:
-            self.delete_widget()
+            if isinstance(widget, Block):
+                del self.blocks[widget.id]
+                continue
+            if isinstance(widget, Connector):
+                self.connectors.remove(widget)
+                continue
         self.current_widgets = []
-        self.update_flows()
-
-    # ----------------------------------------------------------------------
-    def __delete_connection(self, connection):
-        """
-        This method deletes a connection.
-
-            Parameters:
-                connection
-        """
-        if connection in self.connectors:
-            self.connectors.remove(connection)
-        connection.remove()
-        del connection
-        self.update_flows()
-
-    # ----------------------------------------------------------------------
-    def __delete_block(self, block):
-        """
-        This method delete a block.
-
-            Parameters:
-                block
-        """
-        if block.id not in self.blocks:
-            System.log("Block " + str(block.id) + \
-                " is not present in this diagram.")
-            return
-        for idx in reversed(range(len(self.connectors))):
-            if self.connectors[idx].output == block \
-                    or self.connectors[idx].input == block:
-                self.delete_connection(self.connectors[idx])
-        self.blocks[block.id].remove()
-        del self.blocks[block.id]
-        self.update_flows()
+        self.redraw()
 
     # ---------------------------------------------------------------------
     def set_modified(self, state):
@@ -685,18 +610,64 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         Gtk.Widget.grab_focus(self)
 
     # ---------------------------------------------------------------------
+    def __check(self):
+        # Create Block widgets
+        for key in self.blocks:
+            block = self.blocks[key]
+            if not isinstance(block, Block):
+                block = Block(self, self.blocks[key])
+                self.blocks[key] = block
+        i = 0
+        # Create Connection Widgets
+        to_remove = []
+        for connector in self.connectors:
+            if not isinstance(connector, Connector):
+                outb = self.blocks[connector.output.id]
+                conn = Connector(self, outb, connector.output_port)
+                conn.input = self.blocks[connector.input.id]
+                conn.input_port = connector.input_port
+                connector = conn
+                self.connectors[i] = conn
+            if connector.output.id not in self.blocks or connector.input.id not in self.blocks:
+                to_remove.append(connector)
+            i = i + 1
+        for conn in to_remove:
+            self.connectors.remove(conn)
+
+    # ---------------------------------------------------------------------
     def redraw(self):
         """
-        This method redraw a block.
+        This method redraw the diagram.
         """
+        # First, remove all items from the diagram
         while self.get_root_item().get_n_children() != 0:
             self.get_root_item().remove_child(0)
         self.__update_white_board()
+
+        # Check diagram content
+        self.__check()
+
+        # Redraw Blocks
         for block_id in self.blocks:
-            self.get_root_item().add_child(self.blocks[block_id], -1)
-            self.blocks[block_id].adjust_position()
+            block = self.blocks[block_id]
+            if not isinstance(block, Block):
+                block = Block(self, self.blocks[block_id])
+                self.blocks[block_id] = block
+            self.get_root_item().add_child(block, -1)
+            block.adjust_position()
+        i = 0
+        # Redraw Connections
         for connector in self.connectors:
+            if not isinstance(connector, Connector):
+                outb = self.blocks[connector.output.id]
+                conn = Connector(self, outb, connector.output_port)
+                conn.input = self.blocks[connector.input.id]
+                conn.input_port = connector.input_port
+                connector = conn
+                self.connectors[i] = conn
             self.get_root_item().add_child(connector, -1)
+            i = i + 1
+        self.update_flows()
 
     # ---------------------------------------------------------------------
     def do(self, new_msg):
@@ -772,7 +743,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ---------------------------------------------------------------------
     def align_top(self):
-        blocks_id = self.get_selected_blocks_id()
+        blocks_id = self.__get_selected_blocks_id()
         top = self.main_window.get_size()[1]
 
         for block_id in blocks_id:
@@ -788,7 +759,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
-        blocks_id = self.get_selected_blocks_id()
+        blocks_id = self.__get_selected_blocks_id()
         bottom = 0
 
         for block_id in blocks_id:
@@ -804,7 +775,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def align_left(self):
-        blocks_id = self.get_selected_blocks_id()
+        blocks_id = self.__get_selected_blocks_id()
         left = self.main_window.get_size()[0]
 
         for block_id in blocks_id:
@@ -820,7 +791,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def align_right(self):
-        blocks_id = self.get_selected_blocks_id()
+        blocks_id = self.__get_selected_blocks_id()
         right = 0
 
         for block_id in blocks_id:
@@ -837,5 +808,4 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     # ----------------------------------------------------------------------
     def show_block_menu(self, block, event):
         self.main_window.block_menu.show_block_menu(block, event)
-
 # ----------------------------------------------------------------------

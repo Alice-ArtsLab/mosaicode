@@ -3,12 +3,14 @@
 This module contains the MainControl class.
 """
 from copy import copy
+from copy import deepcopy
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
+from mosaicode.GUI.block import Block
 from mosaicode.GUI.codewindow import CodeWindow
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
@@ -79,6 +81,7 @@ class MainControl():
         diagram = Diagram(self.main_window)
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
+        diagram.redraw()
         diagram.set_modified(False)
 
         if file_name in System.properties.recent_files:
@@ -372,12 +375,14 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        if not diagram.add_block(block):
+        new_block = Block(diagram, deepcopy(block))
+        if not DiagramControl.add_block(diagram, new_block):
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
             return False
+        diagram.redraw()
         return True
 
     # ----------------------------------------------------------------------
@@ -571,13 +576,15 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def print_ports(cls):
+        # This method is used by the launcher class
         ports = System.get_ports()
         for port in ports:
             print "--------------------- "
             PortControl.print_port(ports[port])
     # ----------------------------------------------------------------------
     @classmethod
-    def print_blocks(cls):
+    def print_blockmodels(cls):
+        # This method is used by the launcher class
         blocks = System.get_blocks()
         for block in blocks:
             print "--------------------- "
@@ -585,6 +592,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):
+        # This method is used by the launcher class
         code_templates = System.get_code_templates()
         for template in code_templates:
             print "--------------------- "

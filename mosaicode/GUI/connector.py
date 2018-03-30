@@ -20,14 +20,12 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram, output, output_port, port):
+    def __init__(self, diagram, output, output_port):
         """
         This method is the constructor.
         """
         GooCanvas.CanvasGroup.__init__(self)
-        ConnectionModel.__init__(self, diagram, output, output_port, port)
-
-        self.port = port
+        ConnectionModel.__init__(self, diagram, output, output_port)
 
         self.__from_point = (0,0)
         self.__to_point = (0, 0)
@@ -84,18 +82,11 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         """
         isSet, x, y, scale, rotation = block.get_simple_transform()
 
-        # Adjustment to keep compatibility
-        # To be removed in future
-        if port["conn_type"].upper() == "INPUT":
-            port["conn_type"] = Port.INPUT
-        else:
-            port["conn_type"] = Port.OUTPUT
-
-        if port["conn_type"] != Port.INPUT:
+        if not port.is_input():
             x = block.width + x
         y = (RADIUS - 9 +  # upper border
-                 (port["type_index"] * 5) +  # spacing betwen ports
-                 (port["type_index"] * INPUT_HEIGHT) +  # previous ports
+                 (port.type_index * 5) +  # spacing betwen ports
+                 (port.type_index * INPUT_HEIGHT) +  # previous ports
                  INPUT_HEIGHT / 2) + y
         return (x, y)
 
@@ -133,10 +124,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         x1 = self.__to_point[0]
         y1 = self.__to_point[1]
 
-        x0_shift = (self.output_port["type_index"] * 4)
+        x0_shift = (self.output_port.type_index * 4)
         x1_shift = 0
-        if self.input_port is not None and "type_index" in self.input_port:
-            x1_shift = self.input_port["type_index"] * 4
+        if self.input_port is not None:
+            x1_shift = self.input_port.type_index * 4
 
         # svg M L bezier curve
         # Move to output port starting point / first horizontal line
@@ -162,7 +153,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         path += " L " + str(x1 - 4) + " " + str(y1 + 4)
         path += " L " + str(x1) + " " + str(y1)
 
-        color = self.port.color
+        color = self.output_port.color
 
         if "Line" not in self.__widgets:
             widget = GooCanvas.CanvasPath(
