@@ -7,7 +7,7 @@ import sys
 import argparse
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
+from mosaicode.utils.FileUtils import *
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.control.maincontrol import MainControl
 
@@ -56,10 +56,9 @@ def main(argv):
         MainControl.print_templates()
         return
 
-
     if args.file:
         for arg in args.file:
-            win.main_control.open(arg)
+            win.main_control.open(get_absolute_path_from_file(arg))
     else:
         win.main_control.new()
 
