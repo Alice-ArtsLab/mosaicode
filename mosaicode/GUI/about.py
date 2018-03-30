@@ -35,7 +35,7 @@ class About(Gtk.Window):
         # -----------------------logo mosaicode----------------------------------#
 
         image = Gtk.Image()
-        image.set_from_file(self.data_dir + "images/mosaicode_ave.png")
+        image.set_from_file(self.data_dir + "images/mosaicode2.png")
 
         frame = Gtk.Frame()
         frame.set_border_width(2)
@@ -50,18 +50,16 @@ class About(Gtk.Window):
         # --------------------------------------------------------------------#
         # -------------------------------About Text---------------------------#
 
-        labelAbout = Gtk.Label(_('Mosaicode Project was one of the aproved'
-                                 'projects under CT-INFO 2003 Edital.\n' +
-                                 'This project intends to build a ' +
+        labelAbout = Gtk.Label(_('Mosaicode Project intends to build a ' +
                                  'graphical environment for learning,\n' +
-                                 'implementing and management of machine' +
-                                 ' vision systems.\n\n The system is ' +
+                                 'implementing and management of machine ' +
+                                 'vision systems.\n\nThe system is ' +
                                  '(would-be) made of several software ' +
-                                 'modules for hardware\n comunication,' +
-                                 ' image (signal) processing and remote ' +
-                                 'management of vision\nsystems.\n\n' +
-                                 'The system could be used in industries' +
-                                 ' or acadamics, making easier to \n' +
+                                 'modules for hardware\ncomunication, ' +
+                                 'image (signal) processing and remote ' +
+                                 'management of\nvision systems.\n\n' +
+                                 'The system could be used in industries ' +
+                                 'or acadamics, making easier to\n' +
                                  'develop quality control systems, and ' +
                                  'vision system based process,\n' +
                                  'helping the learning and spreading of ' +
@@ -74,14 +72,14 @@ class About(Gtk.Window):
         # ----------------------------License Text----------------------------#
 
         labelLicense = Gtk.Label(_('Mosaicode\n' +
-                                   'Copyright (C) 2007 S2i-das-ufsc\n\n' +
+                                   'Copyright (C) 2018\n\n' +
                                    'This program is free software: you can ' +
                                    ' redistribute it and/or modify\n' +
                                    'it under the terms of the GNU General  ' +
                                    'Public License as published by\n' +
                                    'the Free Software Foundation, either  ' +
                                    'version 3 of the License, or\n' +
-                                   '(at your option) any later version.\n\n' +
+                                   '(at your option) any later version.\n' +
                                    'This program is distributed in the hope' +
                                    'that it will be useful,\n' +
                                    'but WITHOUT ANY WARRANTY; without even  ' +
@@ -92,13 +90,8 @@ class About(Gtk.Window):
                                    'details.\n\n' +
                                    'You should have received a copy of the  ' +
                                    'GNU General Public License\n' +
-                                   'along with this program.  If not, s ' +
-                                   'ee www.gnu.org/licenses.\n\n' +
-                                   'This Program uses the Amara software,\n' +
-                                   'Copyright 2006-2016 Uche Ogbuji\n' +
-                                   '(http://uche.ogbuji.net), more ' +
-                                   'information\nfound in the copyright ' +
-                                   'archive \nprovided with this software.'))
+                                   'along with this program.  If not, ' +
+                                   'see www.gnu.org/licenses.'))
 
         labelLicense.set_justify(Gtk.Justification.CENTER)
 
@@ -108,76 +101,35 @@ class About(Gtk.Window):
 
         # --------------------------------------------------------------------#
         # -----------------------------Development part-----------------------#
-
-        imageSponsors1 = Gtk.Image()
-        imageSponsors1.set_from_file(self.data_dir + "")
-
-        imgbox = Gtk.Box()
-        imgbox.set_spacing(10)
-        imgbox.set_border_width(2)
-
-        textbox = Gtk.Box()
-        textbox.set_spacing(10)
-        textbox.set_border_width(2)
-
-        imgbox2 = Gtk.Box()
-        imgbox2.set_spacing(65)
-        imgbox2.set_border_width(2)
-
-        labelFinep = Gtk.Label(_('?'))
-
-        labelFinep.set_justify(Gtk.Justification.CENTER)
-
-        imgbox.add(imageSponsors1)
-
-        textbox.add(labelFinep)
-
-        spaceBox = Gtk.Box()
-        spaceBox2 = Gtk.Box()
-
-        sponsorsBox = Gtk.Box()
-        sponsorsBox.set_spacing(65)
-        sponsorsBox.add(spaceBox)
-        sponsorsBox.add(imgbox)
-        sponsorsBox.add(textbox)
-
-        labelSponsors = Gtk.Label(_("Sponsors"))
-        labelSponsors.set_markup(_("<b>Sponsors</b>"))
-
-        frame2 = Gtk.Frame()
-        frame2.set_label_widget(labelSponsors)
-        frame2.set_border_width(10)
-        frame2.add(sponsorsBox)
-
-        # ----------------------- DEVELOPMENT --------------------------- #
         labelDevelopment = Gtk.Label(_("Development"))
         labelDevelopment.set_markup(_("<b>Development</b>"))
 
         imageDevelopment = Gtk.Image()
-        imageDevelopment.set_from_file(self.data_dir + "images/dcomp.png")
+        imageDevelopment.set_from_file(self.data_dir + "images/mosaicode64x64.ico")
 
         labelDevelopmentText = Gtk.Label(_('Departamento ' +
-                                           'de Ciêncas da Computação da\n' +
+                                           'de Ciência da Computação\n' +
                                            'Universidade Federal ' +
-                                           'de São João del Rei\n' +
-                                           'http://mosaicode.github.io/'))
+                                           'de São João del Rei\n\n' +
+                                           'Bits & Beads Research Lab\n'))
+
         labelDevelopmentText.set_justify(Gtk.Justification.CENTER)
 
-        textBox2 = Gtk.Box()
-        textBox2.set_border_width(2)
+        textBox = Gtk.Box()
+        textBox.add(labelDevelopmentText)
 
-        imgbox2.add(imageDevelopment)
-        textBox2.add(labelDevelopmentText)
+        imgbox = Gtk.Box()
+        imgbox.add(imageDevelopment)
 
         developmentBox = Gtk.Box()
-        developmentBox.set_spacing(65)
-        developmentBox.add(spaceBox2)
-        developmentBox.add(imgbox2)
-        developmentBox.add(textBox2)
+        developmentBox.set_spacing(315)
+        developmentBox.add(imgbox)
+        developmentBox.add(textBox)
 
-        frame3 = Gtk.Frame()
-        frame3.set_label_widget(labelDevelopment)
-        frame3.set_border_width(10)
+        frame2 = Gtk.Frame()
+        frame2.set_label_widget(labelDevelopment)
+        frame2.set_size_request(635, 262)
+        frame2.set_border_width(10)
 
         hbox = Gtk.Box(spacing=10)
         hbox.set_homogeneous(False)
@@ -195,60 +147,30 @@ class About(Gtk.Window):
         hbox.pack_start(vbox_center, True, True, 0)
         hbox.pack_start(vbox_right, True, True, 0)
 
-        labelNames = Gtk.Label(_('Flávio Luiz Schiavoni\n\n' +
-                                 'Carlos Magno\n\n' +
-                                 'Luan Luiz Gonçalves\n\n'+
-                                 'Valney Faria\n\n' +
-                                 'AAAAAAA\n\n' +
-                                 'Lucas Júnio Calsavara Andrade'))
-
-        vbox_left.pack_start(labelNames, True, True, 0)
-
-        labelJobs = Gtk.Label(_('Tutor\n\n'+
-                                'Developer\n\n' +
-                                'Present Developer\n\n' +
-                                'Developer\n\n' +
-                                'Present Developer\n\n' +
-                                'Present Developer'))
-
-        vbox_center.pack_start(labelJobs, True, True, 0)
-
-        labelEMAILS = Gtk.Label(_('flsfls@teste.com\n\n' +
-                                  'carlosmagno@teste.com\n\n' +
-                                  'luanluiz@teste.com\n\n' +
-                                  'valneyfaria@teste.com\n\n' +
-                                  'aaaaaaa@teste.com\n\n' +
-                                  'lucas_junio_051191@hotmail.com'))
-
-        vbox_right.pack_start(labelEMAILS, True, True, 0)
-
-        gridFrame3 = Gtk.Grid()
-        gridFrame3.add(developmentBox)
+        gridFrame = Gtk.Grid()
+        gridFrame.add(developmentBox)
 
         x = Gtk.Separator()
-        y = Gtk.Separator()
 
-        gridFrame3.attach_next_to(
-            x, developmentBox, Gtk.PositionType.BOTTOM, 1, 2)
-        gridFrame3.attach_next_to(hbox, x, Gtk.PositionType.BOTTOM, 1, 2)
-        gridFrame3.attach_next_to(y, hbox, Gtk.PositionType.BOTTOM, 1, 2)
+        gridFrame.attach_next_to(x, developmentBox,
+                                 Gtk.PositionType.BOTTOM, 1, 2)
+        gridFrame.attach_next_to(hbox, x, Gtk.PositionType.BOTTOM, 1, 2)
 
-        labelFinal = Gtk.Label(_('Any bugs or sugestions\n' +
+        labelFinal = Gtk.Label(_('Any bugs or sugestions ' +
                                  'should be directed to\n' +
-                                 'teste@teste.com'))
+                                 'http://mosaicode.github.io/\n'))
 
         labelFinal.set_justify(Gtk.Justification.CENTER)
 
         finalbox = Gtk.Box()
         finalbox.pack_start(labelFinal, True, True, 0)
 
-        gridFrame3.attach_next_to(finalbox, y, Gtk.PositionType.BOTTOM, 1, 2)
+        gridFrame.attach_next_to(finalbox, hbox, Gtk.PositionType.BOTTOM, 2, 2)
 
-        frame3.add(gridFrame3)
+        frame2.add(gridFrame)
 
         gridTeste = Gtk.Grid()
         gridTeste.add(frame2)
-        gridTeste.attach_next_to(frame3, frame2, Gtk.PositionType.BOTTOM, 1, 2)
 
         # --------------------------------------------------------------------#
         # ------------------------------Placing everything--------------------#
