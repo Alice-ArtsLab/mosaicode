@@ -2,16 +2,15 @@
 """
 This module create the web server.
 """
-import SimpleHTTPServer
-import SocketServer
-import threading
 import os
 import socket
-import fcntl
-import struct
+import threading
+import SocketServer
+import SimpleHTTPServer
 from mosaicode.system import System as System
 
-class Publisher():
+
+class Publisher:
     """
     This class contains methods related to running web server.
     """
@@ -19,7 +18,7 @@ class Publisher():
     def __init__(self):
         self.httpd = None
         self.ip = None
-        self.port = 8080
+        self.port = System.properties.port
         self.httpd_thread = None
 
     # ----------------------------------------------------------------------
@@ -52,6 +51,8 @@ class Publisher():
 
     # ----------------------------------------------------------------------
     def __start_server(self):
+        self.port = System.properties.port
+
         while self.httpd is None:
             try:
                 path = '/tmp/'
