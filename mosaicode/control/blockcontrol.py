@@ -7,10 +7,12 @@ import ast
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
+import copy
 from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.persistence.blockpersistence import BlockPersistence
+from mosaicode.model.port import Port
 
 class BlockControl():
     """
@@ -21,6 +23,43 @@ class BlockControl():
 
     def __init__(self):
         pass
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def load_ports(cls, block, ports):
+        # Adjust ports attributes
+        i = 0
+        in_port = 0
+        out_port = 0
+        new_ports = []
+        for port in block.ports:
+            # if it is not a dictionary, dunno what to do. What happened?
+            if not isinstance(port, dict):
+                continue
+            port_type = port["type"]
+            # Create a copy from the port instance loaded in the System
+            new_port = copy.deepcopy(ports[port_type])
+
+            if "conn_type" not in port:
+                port["conn_type"] = Port.INPUT
+            if port["conn_type"].upper() == "INPUT":
+                new_port.conn_type = Port.INPUT
+            else:
+                new_port.conn_type = Port.OUTPUT
+
+            new_port.index = i
+            i += 1
+            if new_port.is_input():
+                new_port.type_index = in_port
+                in_port += 1
+            else:
+                new_port.type_index = out_port
+                out_port += 1
+            new_port.name = port["name"]
+            new_port.label = port["label"]
+            new_ports.append(new_port)
+        block.maxIO = max(in_port, out_port)
+        block.ports = new_ports
 
     # ----------------------------------------------------------------------
     @classmethod

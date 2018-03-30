@@ -8,6 +8,7 @@ class Preferences(object):
         self.default_directory = "/tmp/%l/%n-%t"
         self.default_filename = "%n"
         self.grid = 10
+        self.port = 49151
 
         # GUI stuff
         self.width = 900

@@ -50,39 +50,16 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         self.width = WIDTH_DEFAULT
 
-        i = 0
-        in_port = 0
-        out_port = 0
-        for port in self.ports:
-
-            # Adjustment to keep compatibility
-            # To be removed in future
-            if port["conn_type"].upper() == "INPUT":
-                port["conn_type"] = Port.INPUT
-            else:
-                port["conn_type"] = Port.OUTPUT
-
-            port["index"] = i
-            i += 1
-            if port["conn_type"] == Port.INPUT:
-                port["type_index"] = in_port
-                in_port += 1
-            else:
-                port["type_index"] = out_port
-                out_port += 1
-
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect("enter-notify-event", self.__on_enter_notify)
         self.connect("leave-notify-event", self.__on_leave_notify)
         self.move(int(float(self.x)), int(float(self.y)))
 
-        maxIO = max(in_port, out_port)
-
-        self.height = max(((maxIO - 1) * 5) +  # espacamento entre ports = 5
+        self.height = max(((self.maxIO - 1) * 5) +  # espacamento entre ports = 5
                           (RADIUS * 2) +
                           # tirando a margem superior e inferior
-                          (maxIO * INPUT_HEIGHT),
+                          (self.maxIO * INPUT_HEIGHT),
                           # adicionando a altura de cada port
                           HEIGHT_DEFAULT)
 
@@ -280,8 +257,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         This method draws the ports.
         """
         for port in self.ports:
-            text_name = self.__get_port_label(port["type"]);
-            if port["conn_type"] == Port.INPUT:
+            text_name = "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
+                "<span color = '" + \
+                port.color + "'>" + \
+                port.hint + "</span>}</span>"
+            if port.is_input():
                 x = 2
                 alignment = Pango.Alignment.LEFT
                 anchor=GooCanvas.CanvasAnchorType.WEST
@@ -301,16 +281,16 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                  alignment=alignment,
                                  x=x,
                                  y=(RADIUS +  # upper border
-                                     (port["type_index"] * 5) +  # spacing betwen ports
-                                      port["type_index"] * INPUT_HEIGHT),  # prev ports
+                                     (port.type_index * 5) +  # spacing betwen ports
+                                      port.type_index * INPUT_HEIGHT),  # prev ports
                                  use_markup=True,
-                                 tooltip=port["label"]
+                                 tooltip=port.label
                                  )
-            text.connect("button-press-event", press_event , port["index"])
-            text.connect("button-release-event", release_event, port["index"])
+            text.connect("button-press-event", press_event , port)
+            text.connect("button-release-event", release_event, port)
 
     # ----------------------------------------------------------------------
-    def __on_input_press(self, canvas_item, target_item, event, args):
+    def __on_input_press(self, canvas_item, target_item, event, port):
         """
         This method return true if a input was connected.
 
@@ -321,7 +301,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`boolean<boolean>`): Indicates the input as connected.
         """
-        self.diagram.end_connection(self, args)
+        self.diagram.end_connection(self, port)
         return True
 
     # ----------------------------------------------------------------------
@@ -339,7 +319,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         return True
 
     # ----------------------------------------------------------------------
-    def __on_output_press(self, canvas_item, target_item, event, args):
+    def __on_output_press(self, canvas_item, target_item, event, port):
         """
         This method monitors the output state, monitors if output was pressed.
 
@@ -351,7 +331,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
-        self.diagram.start_connection(self, args)
+        self.diagram.start_connection(self, port)
         return True
 
     # ----------------------------------------------------------------------
@@ -435,7 +415,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 distinct_con.append(conn.input_port)
         in_count = 0
         for port in self.ports:
-            if port["conn_type"] == Port.INPUT:
+            if port.is_input():
                 in_count += 1
         if len(distinct_con) < in_count:
             self.has_flow = False
@@ -467,15 +447,4 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.__widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
-    # ----------------------------------------------------------------------
-    def __get_port_label(self, port_type):
-        ports = System.get_ports()
-        if port_type in ports:
-            return \
-                "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
-                "<span color = '" + \
-                ports[port_type].color + "'>" + \
-                ports[port_type].label + "</span>}</span>"
-        else:
-            return "??"
 # ----------------------------------------------------------------------

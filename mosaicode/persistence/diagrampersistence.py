@@ -10,6 +10,7 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
+from mosaicode.model.connectionmodel import ConnectionModel
 
 tag_name = "mosaicode"
 
@@ -21,6 +22,7 @@ class DiagramPersistence():
     @classmethod
     def load(cls, diagram):
 
+        from mosaicode.control.diagramcontrol import DiagramControl
         # load the diagram
         parser = XMLParser(diagram.file_name)
 
@@ -34,8 +36,7 @@ class DiagramPersistence():
             pass
 
         # new version load
-        blocks = parser.getTag(tag_name).getTag(
-            "blocks").getChildTags("block")
+        blocks = parser.getTag(tag_name).getTag("blocks").getChildTags("block")
         system_blocks = System.get_blocks()
         for block in blocks:
             block_type = block.getAttr("type")
@@ -57,21 +58,22 @@ class DiagramPersistence():
             new_block.id = block_id
             new_block.x = float(x)
             new_block.y = float(y)
-            diagram.add_block(new_block)
+            DiagramControl.add_block(diagram, new_block)
 
         connections = parser.getTag(tag_name).getTag(
             "connections").getChildTags("connection")
         for conn in connections:
             try:
-                from_block = diagram.blocks[
-                    int(conn.getAttr("from_block"))]
+                from_block = diagram.blocks[int(conn.getAttr("from_block"))]
                 to_block = diagram.blocks[int(conn.getAttr("to_block"))]
             except:
                 continue
             from_block_out = int(conn.getAttr("from_out"))
             to_block_in = int(conn.getAttr("to_in"))
-            diagram.start_connection(from_block, int(from_block_out) - 1)
-            diagram.end_connection(to_block, int(to_block_in) - 1)
+            connection = ConnectionModel(diagram, from_block, from_block.ports[from_block_out])
+            connection.input = to_block
+            connection.input_port = to_block.ports[to_block_in]
+            diagram.connectors.append(connection)
         return True
 
     # ----------------------------------------------------------------------
@@ -109,9 +111,9 @@ class DiagramPersistence():
         for connector in diagram.connectors:
             parser.appendToTag('connections', 'connection',
                                from_block=connector.output.id,
-                               from_out=int(connector.output_port["index"]) + 1,
+                               from_out=int(connector.output_port.index),
                                to_block=connector.input.id,
-                               to_in=int(connector.input_port["index"]) + 1)
+                               to_in=int(connector.input_port.index))
 
         try:
             save_file = open(str(diagram.file_name), "w")
