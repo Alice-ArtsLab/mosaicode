@@ -38,6 +38,8 @@ class BlockModel(object):
 
         if block == None:
             return
+
+        # If block is defined, copy everything and load it!
         for key in block.__dict__:
             self.__dict__[key] = block.__dict__[key]
 
