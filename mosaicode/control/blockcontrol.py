@@ -74,7 +74,7 @@ class BlockControl():
     # ----------------------------------------------------------------------
     @classmethod
     def export_python(cls):
-        from mosaicode.system import System as System
+        from mosaicode.system import System
         System()
         blocks = System.get_blocks()
         for block in blocks:
@@ -91,6 +91,7 @@ class BlockControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
+        file_name = file_name.replace(" ", "\\ ")
         try:
             return BlockPersistence.load(file_name)
         except:
@@ -106,10 +107,8 @@ class BlockControl():
     @classmethod
     def delete_block(cls, block):
         from mosaicode.system import System
-        if block.source == "xml":
-            data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + block.language +"/" +block.framework+"/"+block.type + ".xml"
-            os.remove(file_name)
+        if block.file is not None:
+            os.remove(block.file)
             return True
         else:
             return False
@@ -127,7 +126,7 @@ class BlockControl():
         print 'block.type =', block.type
         print 'block.language =', block.language
         print 'block.framework =', block.framework
-        print 'block.source =', block.source
+        print 'block.file =', block.file
 
         # Appearance
         print 'block.help =', block.help

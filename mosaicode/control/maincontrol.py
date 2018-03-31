@@ -37,7 +37,7 @@ class MainControl():
 
     def __init__(self, main_window):
         self.main_window = main_window
-        # It must be possible to exchange data between diagrams
+        # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
         self.publisher = Publisher()
 
@@ -535,10 +535,13 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def delete_code_template(self, code_template_name):
-        if not CodeTemplateControl.delete_code_template(code_template_name):
+        filename = CodeTemplateControl.delete_code_template(code_template_name)
+        if filename is None:
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        else:
+            Dialog().message_dialog("Info", "File " + filename + " deleted.", self.main_window)
         System.reload()
 
     # ----------------------------------------------------------------------

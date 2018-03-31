@@ -86,18 +86,18 @@ class System(object):
 
                 code_template = CodeTemplateControl.load(full_file_path)
                 if code_template is not None:
-                    code_template.source = "xml"
+                    code_template.file = full_file_path
                     self.__code_templates[code_template.type] = code_template
 
                 port = PortControl.load(full_file_path)
 
                 if port is not None:
-                    port.source = "xml"
+                    port.file = full_file_path
                     self.__ports[port.type] = port
 
                 block = BlockControl.load(full_file_path)
                 if block is not None:
-                    block.source = "xml"
+                    block.file = full_file_path
                     self.__blocks[block.type] = block
 
         # ----------------------------------------------------------------------
@@ -145,7 +145,6 @@ class System(object):
                                 if isinstance(instance, CodeTemplate):
                                     self.__code_templates[instance.type] = instance
                                 if isinstance(instance, Port):
-                                    instance.source = "Python"
                                     self.__ports[instance.type] = instance
                                 if isinstance(instance, BlockModel):
                                     if instance.label != "":

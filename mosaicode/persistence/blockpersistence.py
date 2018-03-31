@@ -30,7 +30,7 @@ class BlockPersistence():
             * **Types** (:class:`boolean<boolean>`)
         """
         if os.path.exists(file_name) is False:
-            return
+            return None
         parser = XMLParser(file_name)
 
         if parser.getTag(tag_name) is None:
@@ -46,7 +46,6 @@ class BlockPersistence():
         block.group = parser.getTagAttr(tag_name, "group")
         block.color = parser.getTagAttr(tag_name, "color")
         block.help = parser.getTagAttr(tag_name, "help")
-        block.source = parser.getTagAttr(tag_name, "source")
 
         for code in block.codes:
             block.codes[code] = parser.getTag(tag_name).getTag(code).getText()
@@ -58,7 +57,12 @@ class BlockPersistence():
 
         ports = parser.getTag(tag_name).getTag("ports").getChildTags("port")
         for port in ports:
-            block.ports.append(ast.literal_eval(port.getAttr("value")))
+            dict_port = {}
+            dict_port["type"]= str(port.getAttr("type_"))
+            dict_port["name"]= str(port.getAttr("name_"))
+            dict_port["label"]= str(port.getAttr("label"))
+            dict_port["conn_type"]= str(port.getAttr("conn_type"))
+            block.ports.append(dict_port)
 
         if block.type == "mosaicode.model.blockmodel":
             return None
@@ -87,7 +91,6 @@ class BlockPersistence():
         parser.setTagAttr(tag_name,'group', block.group)
         parser.setTagAttr(tag_name,'color', block.color)
         parser.setTagAttr(tag_name,'help', block.help)
-        parser.setTagAttr(tag_name,'source', block.source)
 
         for code in block.codes:
             parser.appendToTag(tag_name, code, value=block.codes[code])
@@ -98,7 +101,11 @@ class BlockPersistence():
 
         parser.appendToTag(tag_name, 'ports')
         for port in block.ports:
-            parser.appendToTag('ports', 'port', value=port)
+            parser.appendToTag('ports', 'port',
+                conn_type=port.conn_type,
+                name_=port.name,
+                label=port.label,
+                type_=port.type)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -135,7 +142,6 @@ class BlockPersistence():
         parser.setAttribute('type', block.type)
         parser.setAttribute('language', block.language)
         parser.setAttribute('framework', 'python')
-        parser.setAttribute('source', block.source)
         parser.setAttribute('help', block.help)
         parser.setAttribute('label', block.label)
         parser.setAttribute('color', block.color)

@@ -38,10 +38,10 @@ class PortPersistence():
         port = Port()
         port.type = parser.getTagAttr(tag_name, "type")
         port.language = parser.getTagAttr(tag_name, "language")
-        port.label = parser.getTagAttr(tag_name, "label")
+        port.hint = parser.getTagAttr(tag_name, "hint")
         port.color = parser.getTagAttr(tag_name, "color")
         port.multiple = parser.getTagAttr(tag_name, "multiple")
-        port.source = parser.getTagAttr(tag_name, "source")
+        port.var_name = parser.getTagAttr(tag_name, "var_name")
         port.code = parser.getTag(tag_name).getTag("code").getText()
 
         if port.type == "":
@@ -66,10 +66,10 @@ class PortPersistence():
 
         parser.setTagAttr(tag_name, 'type', port.type)
         parser.setTagAttr(tag_name, 'language', port.language)
-        parser.setTagAttr(tag_name, 'label', port.label)
+        parser.setTagAttr(tag_name, 'hint', port.hint)
         parser.setTagAttr(tag_name, 'color', port.color)
         parser.setTagAttr(tag_name, 'multiple', port.multiple)
-        parser.setTagAttr(tag_name, 'source', port.source)
+        parser.setTagAttr(tag_name, 'var_name', port.var_name)
         parser.appendToTag(tag_name, 'code').string = str(port.code)
 
         try:
@@ -108,7 +108,6 @@ class PortPersistence():
         parser.setAttribute('label', port.label)
         parser.setAttribute('color', port.color)
         parser.setAttribute('multiple', port.multiple)
-        parser.setAttribute('source', 'python')
         parser.setAttribute('code', str(port.code))
 
         try:

@@ -17,7 +17,7 @@ class Port(object):
         self.hint = ""
         self.color = "#000"
         self.multiple = False
-        self.source = "Python"
+        self.file = None
         self.code = ""
         self.var_name = "$block[label]$_$block[id]$_$port[name]$"
         
