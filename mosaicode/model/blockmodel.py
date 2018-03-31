@@ -18,7 +18,7 @@ class BlockModel(object):
         self.type = self.__class__.__module__
         self.language = ""
         self.framework = ""
-        self.source = "python"
+        self.file = None
 
         # Appearance
         self.help = ""

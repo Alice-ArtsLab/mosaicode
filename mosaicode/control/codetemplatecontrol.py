@@ -57,13 +57,10 @@ class CodeTemplateControl():
         from mosaicode.system import System
         code_templates = System.get_code_templates()
         code_template = code_templates[code_template_key]
-        if code_template.source == "xml":
-            data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + code_template.language+ "/"+ code_template.name + ".xml"
-            os.remove(file_name)
-            return True
-        else:
-            return False
+        if code_template.file is not None:
+            os.remove(code_template.file)
+        return code_template.file
+
     # ----------------------------------------------------------------------
     @classmethod
     def print_template(cls, code_template):
@@ -76,6 +73,5 @@ class CodeTemplateControl():
         print 'CodeTemplate.language =', code_template.language
         print 'CodeTemplate.command =', code_template.command
         print 'CodeTemplate.extension =', code_template.extension
-        print 'CodeTemplate.code =', code_template.code
-        print 'CodeTemplate.source =', code_template.source
+        print 'CodeTemplate.file =', code_template.file
 # ----------------------------------------------------------------------
