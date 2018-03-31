@@ -20,7 +20,6 @@ class CodeGenerator():
     """
 
     # ----------------------------------------------------------------------
-
     def __init__(self, diagram=None, code_template=None):
         self.diagram = diagram
         self.code_template = code_template
@@ -63,7 +62,10 @@ class CodeGenerator():
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
         result = result.replace("%l", self.diagram.language)
-        result = result.replace("%n", self.diagram.patch_name[:-4])
+        if self.diagram.patch_name.endswith(".mscd"):
+            result = result.replace("%n", self.diagram.patch_name[:-5])
+        else:
+            result = result.replace("%n", self.diagram.patch_name)
         result = result.replace(" ", "_")
         return result
 
