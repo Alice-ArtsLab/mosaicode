@@ -27,20 +27,21 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-      install_requires=['mosaicomponents','beautifulsoup4', 'pip', 'Python>=2.7'],
+      install_requires=['pip', 'Python>=2.7', "opencv-python", "lxml", "gi", "BeautifulSoup4", "GooCalendar",
+                        "PyGObject"],
       tests_require=['pytest'],
       test_suite='tests',
       version='1.0a7',
-      packages = find_packages(exclude=["tests.*", "tests"]),
+      packages=find_packages(exclude=["tests.*", "tests"]),
       scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
       description='Image Processing and Computer Vision \
       Automatic Programming Tool',
-      author='Ouroboros',
-      author_email='cmagnobarbosa+mosaicode@gmail.com',
-      maintainer="Ouroboros",
-      maintainer_email="cmagnobarbosa+mosaicode@gmail.com",
+      author='Bits & Beads Research Lab',
+      author_email='mosaicode-dev@googlegroups.com',
+      maintainer="Bits & Beads Research Lab",
+      maintainer_email="mosaicode-dev@googlegroups.com",
       license="GNU GPL3",
-      url='http://ges.dcomp.ufsj.edu.br/index.php/ouroboros/',
+      url='http://mosaicode.github.io/',
 
       # this is fucked up! must put it in package_data!!
       data_files=[
