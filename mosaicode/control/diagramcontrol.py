@@ -40,12 +40,12 @@ class DiagramControl():
         if diagram.language is None or diagram.language == 'None':
             diagram.language = block.language
 
+        diagram.do("Add Block")
         diagram.last_id = max(int(diagram.last_id), int(block.id))
         if block.id < 0:
             block.id = diagram.last_id
         diagram.last_id += 1
         diagram.blocks[block.id] = block
-        diagram.do("Add")
         return True
 
     # ----------------------------------------------------------------------

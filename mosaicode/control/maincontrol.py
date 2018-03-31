@@ -184,7 +184,6 @@ class MainControl():
         if diagram is None:
             return
         diagram.select_all()
-        diagram.grab_focus()
 
     # ----------------------------------------------------------------------
     def cut(self):
@@ -493,28 +492,28 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_top()
+        diagram.align("TOP")
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_bottom()
+        diagram.align("BOTTOM")
 
     # ----------------------------------------------------------------------
     def align_left(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_left()
+        diagram.align("LEFT")
 
     # ----------------------------------------------------------------------
     def align_right(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_right()
+        diagram.align("RIGHT")
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):
