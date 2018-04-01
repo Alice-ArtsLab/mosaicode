@@ -26,6 +26,7 @@ class System(object):
 
     APP = 'mosaicode'
     DATA_DIR = "/usr/share/mosaicode/"
+    DATA_EXTENSIONS = "/usr/lib/python2.7/dist-packages/"
 
     ZOOM_ORIGINAL = 1
     ZOOM_IN = 2
@@ -34,6 +35,8 @@ class System(object):
     VERSION = "0.0.1"
     # Instance variable to the singleton
     instance = None
+
+    sys.path.insert(0, DATA_EXTENSIONS)
 
     # ----------------------------------------------------------------------
     # An inner class instance to be singleton
@@ -125,10 +128,14 @@ class System(object):
 
             def walk_lib_packages(path=None, name_par=""):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    if name.startswith(System.APP+"_lib") or name_par.startswith(System.APP+"_lib"):
+                    if path is None and name.startswith("." + System.APP):
+                        name = name.replace('.', '', 1)
+
+                    if name.startswith(System.APP + "_lib") or name_par.startswith(System.APP+"_lib"):
                         if ispkg:
-                            if name_par is not "":
+                            if name_par is not "" and not name.startswith(System.APP):
                                 name = name_par + "." + name
+
                             __import__(name)
                             path = getattr(sys.modules[name], '__path__', None) or []
                             walk_lib_packages(path, name)
