@@ -27,8 +27,8 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-      install_requires=['pip', 'Python>=2.7', "opencv-python", "lxml", "gi", "BeautifulSoup4", "GooCalendar",
-                        "PyGObject"],
+      install_requires=['pip', 'Python>=2.7', "PyGObject", "GooCalendar", "BeautifulSoup4", "lxml", "gi",
+                        "mosaicomponents"],
       tests_require=['pytest'],
       test_suite='tests',
       version='1.0a7',
@@ -50,6 +50,7 @@ setup(name='mosaicode',
             ('/usr/share/applications/', ["app_data/mosaicode.desktop"]),
             ('/usr/share/icons/hicolor/scalable/apps', ['app_data/images/mosaicode.svg']),
             ('/usr/share/pixmaps', ['app_data/images/mosaicode.svg']),
-            ('/usr/share/icons/hicolor/24x24/apps', ['app_data/images/mosaicode.png']), ],
+            ('/usr/share/icons/hicolor/24x24/apps', ['app_data/images/mosaicode.png'])],
+      zip_safe=False,
       **config
       )

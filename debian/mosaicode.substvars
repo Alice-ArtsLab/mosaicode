@@ -1,0 +1,4 @@
+python:Versions=2.7
+python:Depends=python, python-bs4, python-gi, python-goocalendar, python-lxml, python-pip, python:any, python:any (<< 2.8), python:any (>= 2.7.5-5~), python:any (>= 2.7~)
+misc:Depends=
+misc:Pre-Depends=
