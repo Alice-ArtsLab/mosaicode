@@ -31,6 +31,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.__to_point = (0, 0)
 
         self.__focus = False
+        self.is_selected = False
         self.width = 0
         self.height = 0
 
@@ -39,7 +40,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         self.connect("leave-notify-event", self.__on_leave_notify)
         self.__widgets = {}
 
-        self.update_tracking()
+        self.update_flow()
 
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
@@ -50,10 +51,10 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         if event.button == 3:
             ConnectorMenu(self, event)
 
-        if self in self.diagram.current_widgets:
-            self.diagram.current_widgets = []
+        if self.is_selected:
+            self.diagram.deselect_all()
         else:
-            self.diagram.current_widgets.append(self)
+            self.is_selected = True
 
         self.diagram.update_flows()
         return True
@@ -91,7 +92,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return (x, y)
 
     # ----------------------------------------------------------------------
-    def update_tracking(self, newEnd=None):
+    def update_flow(self, newEnd=None):
         """
         This method update Tracking.
 
@@ -180,7 +181,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.__widgets["Line"].set_property("line-width", 2)
 
         # selected: line style = dashed and line width = 3
-        if self in self.diagram.current_widgets:
+        if self.is_selected:
             self.__widgets["Line"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:

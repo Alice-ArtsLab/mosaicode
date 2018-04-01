@@ -62,10 +62,7 @@ class CodeGenerator():
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
         result = result.replace("%l", self.diagram.language)
-        if self.diagram.patch_name.endswith(".mscd"):
-            result = result.replace("%n", self.diagram.patch_name[:-5])
-        else:
-            result = result.replace("%n", self.diagram.patch_name)
+        result = result.replace("%n", self.diagram.patch_name)
         result = result.replace(" ", "_")
         return result
 

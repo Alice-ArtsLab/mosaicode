@@ -13,6 +13,7 @@ from gi.repository import GObject
 from gi.repository import GooCanvas
 from block import Block
 from connector import Connector
+from comment import Comment
 from mosaicode.system import System as System
 from mosaicode.model.diagrammodel import DiagramModel
 from mosaicode.model.blockmodel import BlockModel
@@ -39,7 +40,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.main_window = main_window
 
         self.curr_connector = None
-        self.current_widgets = []
 
         self.connect("motion-notify-event", self.__on_motion_notify)
         self.connect_after("button_press_event", self.__on_button_press)
@@ -57,12 +57,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.show_grid = False
         self.select_rect = None
         self.__draw_grid()
-        self.show()
-        self.language = None
-        #self.file_name = ""
 
         # Used for cycle detection
         self.__marks = None
+        self.show()
 
     # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, event):
@@ -72,24 +70,22 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             self.__update_select(event.x / scale, event.y / scale)
             items = self.get_items_in_area(
                 self.select_rect.bounds, True, False, True)
-            self.current_widgets = []
             for item in items:
-                if not isinstance(item, Connector) and not \
-                        isinstance(item, Block):
-                    continue
-                if item not in self.current_widgets:
-                    self.current_widgets.append(item)
+                try:
+                    item.is_selected = True
+                except:
+                    pass
             self.update_flows()
             return True  # Abort other events
 
         if event.state & Gdk.ModifierType.BUTTON1_MASK:
             for connector in self.connectors:
-                connector.update_tracking()
+                connector.update_flow()
 
         if self.curr_connector is None:
             return False
         point = (event.x / scale, event.y / scale)
-        self.curr_connector.update_tracking(point)
+        self.curr_connector.update_flow(point)
         return False
 
     # ----------------------------------------------------------------------
@@ -99,17 +95,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         event.state = event.state & modifier_mask
         if event.state == Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Up:
-                self.move_selected_blocks(0, -grid*5)
+                self.move_selected(0, -grid*5)
                 return True
-
             if event.keyval == Gdk.KEY_Down:
-                self.move_selected_blocks(0, grid*5)
+                self.move_selected(0, grid*5)
                 return True
             if event.keyval == Gdk.KEY_Left:
-                self.move_selected_blocks(-grid*5, 0)
+                self.move_selected(-grid*5, 0)
                 return True
             if event.keyval == Gdk.KEY_Right:
-                self.move_selected_blocks(grid*5, 0)
+                self.move_selected(grid*5, 0)
                 return True
 
         if event.keyval == Gdk.KEY_Delete:
@@ -117,16 +112,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             return True
 
         if event.keyval == Gdk.KEY_Up:
-            self.move_selected_blocks(0, -grid)
+            self.move_selected(0, -grid)
             return True
         if event.keyval == Gdk.KEY_Down:
-            self.move_selected_blocks(0, grid)
+            self.move_selected(0, grid)
             return True
         if event.keyval == Gdk.KEY_Left:
-            self.move_selected_blocks(-grid, 0)
+            self.move_selected(-grid, 0)
             return True
         if event.keyval == Gdk.KEY_Right:
-            self.move_selected_blocks(grid, 0)
+            self.move_selected(grid, 0)
             return True
 
     # ----------------------------------------------------------------------
@@ -138,7 +133,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         Gtk.Widget.grab_focus(self)
         if event.button == 1:
             self.last_clicked_point = (event.x, event.y)
-            self.current_widgets = []
+            self.deselect_all()
             self.__abort_connection()
             self.update_flows()
             self.__start_select()
@@ -330,7 +325,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for block_id in self.blocks:
             self.blocks[block_id].update_flow()
         for conn in self.connectors:
-            conn.update_tracking()
+            conn.update_flow()
+        for comment in self.comments:
+            comment.update_flow()
 
     # ----------------------------------------------------------------------
     def set_file_name(self, file_name):
@@ -380,6 +377,16 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.__apply_zoom()
 
     # ----------------------------------------------------------------------
+    def show_commnent_property(self, comment):
+        """
+        This method show comment property.
+
+            Parameters:
+                * **block**(:class: `Block<mosaicode.GUI.block>`)
+        """
+        self.main_window.main_control.show_comment_property(comment)
+
+    # ----------------------------------------------------------------------
     def show_block_property(self, block):
         """
         This method show block property.
@@ -401,20 +408,30 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_property("x2", value)
 
     # ----------------------------------------------------------------------
+    def deselect_all(self):
+        for key in self.blocks:
+            self.blocks[key].is_selected = False
+        for conn in self.connectors:
+            conn.is_selected = False
+        for comment in self.comments:
+            comment.is_selected = False
+
+    # ----------------------------------------------------------------------
     def select_all(self):
         """
         This method select all blocks in diagram.
         """
-        self.current_widgets = []
         for key in self.blocks:
-            self.current_widgets.append(self.blocks[key])
+            self.blocks[key].is_selected = True
         for conn in self.connectors:
-            self.current_widgets.append(conn)
+            conn.is_selected = True
+        for comment in self.comments:
+            comment.is_selected = True
         self.update_flows()
         Gtk.Widget.grab_focus(self)
 
     # ----------------------------------------------------------------------
-    def move_selected_blocks(self, x, y):
+    def move_selected(self, x, y):
         """
         This method move selected blocks.
 
@@ -423,11 +440,18 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         """
         for key in self.blocks:
-            if self.blocks[key] not in self.current_widgets:
+            if not self.blocks[key].is_selected:
                 continue
-            block_pos_x, block_pos_y = self.blocks[key].get_position()
-            x, y = self.check_limit(x, y, block_pos_x, block_pos_y)
+            pos_x, pos_y = self.blocks[key].get_position()
+            x, y = self.check_limit(x, y, pos_x, pos_y)
             self.blocks[key].move(x, y)
+
+        for comment in self.comments:
+            if not comment.is_selected:
+                continue
+            pos_x, pos_y = comment.get_position()
+            x, y = self.check_limit(x, y, pos_x, pos_y)
+            comment.move(x, y)
         self.update_flows()
 
     # ---------------------------------------------------------------------
@@ -453,21 +477,12 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         return x, y
 
     # ---------------------------------------------------------------------
-    def __get_selected_blocks_id(self):
-        selected_blocks_id = []
-
-        for key in self.blocks:
-            if self.blocks[key] in self.current_widgets:
-                selected_blocks_id.append(key)
-        return selected_blocks_id
-
-    # ---------------------------------------------------------------------
     def paste(self):
         """
         This method paste a block.
         """
         replace = {}
-        self.current_widgets = []
+        self.deselect_all()
         # interact into blocks, add blocks and change their id
         clipboard = self.main_window.main_control.get_clipboard()
         for widget in clipboard:
@@ -480,7 +495,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if not self.main_window.main_control.add_block(block):
                 return
             replace[widget.id] = block
-            self.current_widgets.append(block)
+            block.is_selected = True
         # interact into connections changing block ids
         for widget in clipboard:
             if not isinstance(widget, Connector):
@@ -494,7 +509,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             input = replace[widget.input.id]
             input_port = widget.input_port
             self.start_connection(output, output_port)
-            self.current_widgets.append(self.curr_connector)
+            self.curr_connector.is_selected = True
             self.end_connection(input, input_port)
         self.update_flows()
 
@@ -504,38 +519,50 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         This method copy a block.
         """
         self.main_window.main_control.reset_clipboard()
-        for widget in self.current_widgets:
-            self.main_window.main_control.get_clipboard().append(widget)
+        for key in self.blocks:
+            if not self.blocks[key].is_selected:
+                continue
+            self.main_window.main_control.get_clipboard().append(self.blocks[key])
+        for conn in self.connectors:
+            if not con.is_selected:
+                continue
+            self.main_window.main_control.get_clipboard().append(con)
+        for comment in self.comments:
+            if not comment.is_selected:
+                continue
+            self.main_window.main_control.get_clipboard().append(comment)
 
     # ---------------------------------------------------------------------
     def cut(self):
         """
         This method delete a block.
         """
-        if len(self.current_widgets) < 1:
-            return
         self.do(_("Cut"))
-        self.main_window.main_control.reset_clipboard()
-        for widget in self.current_widgets:
-            self.main_window.main_control.get_clipboard().append(widget)
-            widget.delete()
+        self.self.copy()
+        self.delete()
 
     # ---------------------------------------------------------------------
     def delete(self):
         """
         This method delete a block or connection.
         """
-        if len(self.current_widgets) < 1:
-            return
         self.do("Delete")
-        for widget in self.current_widgets:
-            if isinstance(widget, Block):
-                del self.blocks[widget.id]
+        for key in self.blocks.copy():
+            if not self.blocks[key].is_selected:
                 continue
-            if isinstance(widget, Connector):
-                self.connectors.remove(widget)
+            del self.blocks[key]
+        for con in self.connectors:
+            if not con.is_selected:
                 continue
-        self.current_widgets = []
+            if con not in self.connectors:
+                continue
+            self.connectors.remove(con)
+        for comment in self.comments:
+            if not comment.is_selected:
+                continue
+            self.comments.remove(comment)
+
+        self.deselect_all()
         self.redraw()
 
     # ---------------------------------------------------------------------
@@ -566,8 +593,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if not isinstance(block, Block):
                 block = Block(self, self.blocks[key])
                 self.blocks[key] = block
-        i = 0
         # Create Connection Widgets
+        i = 0
         to_remove = []
         for connector in self.connectors:
             if not isinstance(connector, Connector):
@@ -582,6 +609,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             i = i + 1
         for conn in to_remove:
             self.connectors.remove(conn)
+        # Create Comment Widgets
+        i = 0
+        for comment in self.comments:
+            if not isinstance(comment, Comment):
+                comm = Comment(self)
+                comm.set_text(comment.text)
+                comm.move(comment.x, comment.y)
+                self.comments[i] = comm
+            i = i + 1
 
         # Redraw Blocks
         for key in self.blocks:
@@ -592,6 +628,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             self.get_root_item().add_child(block, -1)
             block.adjust_position()
         i = 0
+
         # Redraw Connections
         for connector in self.connectors:
             if not isinstance(connector, Connector):
@@ -603,6 +640,11 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 self.connectors[i] = conn
             self.get_root_item().add_child(connector, -1)
             i = i + 1
+
+        # Redraw Comments
+        for comment in self.comments:
+            self.get_root_item().add_child(comment, -1)
+
         self.update_flows()
 
     # ---------------------------------------------------------------------
@@ -613,7 +655,10 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 * **new_msg** (:class:`str<str>`)
         """
         self.set_modified(True)
-        action = (copy(self.blocks), copy(self.connectors), new_msg)
+        action = (copy(self.blocks),    #0
+                  copy(self.connectors),#1
+                  copy(self.comments),  #2
+                  new_msg)              #3
         self.undo_stack.append(action)
 
     # ---------------------------------------------------------------------
@@ -627,7 +672,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         action = self.undo_stack.pop()
         self.blocks = action[0]
         self.connectors = action[1]
-        msg = action[2]
+        self.comments = action[2]
+        msg = action[3]
         self.redraw()
         self.redo_stack.append(action)
         if len(self.undo_stack) == 0:
@@ -644,7 +690,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         action = self.redo_stack.pop()
         self.blocks = action[0]
         self.connectors = action[1]
-        msg = action[2]
+        self.comments = action[2]
+        msg = action[3]
         self.redraw()
         self.undo_stack.append(action)
 
@@ -656,7 +703,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         right = 0
 
         for key in self.blocks:
-            if self.blocks[key] not in self.current_widgets:
+            if not self.blocks[key].is_selected:
                 continue
             x, y = self.blocks[key].get_position()
             if top > y: top = y
@@ -665,7 +712,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if right < x: right = x
 
         for key in self.blocks:
-            if self.blocks[key] not in self.current_widgets:
+            if not self.blocks[key].is_selected:
                 continue
             x, y = self.blocks[key].get_position()
             if alignment == "BOTTOM":

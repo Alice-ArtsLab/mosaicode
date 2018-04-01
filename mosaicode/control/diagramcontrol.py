@@ -49,6 +49,21 @@ class DiagramControl():
         return True
 
     # ----------------------------------------------------------------------
+    @classmethod
+    def add_comment(cls, diagram, comment):
+        """
+        This method add a comment in the diagram.
+
+            Parameters:
+                * **block**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
+        diagram.do("Add Comment")
+        diagram.comments.append(comment)
+        return True
+
+    # ----------------------------------------------------------------------
     def load(self, file_name=None):
         """
         This method load a file.

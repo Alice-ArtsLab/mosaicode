@@ -13,7 +13,7 @@ from gi.repository import Gdk
 from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
-from mosaicode.system import System as System
+from mosaicode.system import System
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.port import Port
 
@@ -39,14 +39,13 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         BlockModel.__init__(self, block)
 
         self.diagram = diagram
-        self.data_dir = System.DATA_DIR
-
         self.remember_x = 0
         self.remember_y = 0
 
         self.__widgets = {}
         self.focus = False
         self.has_flow = False
+        self.is_selected = False
 
         self.width = WIDTH_DEFAULT
 
@@ -83,15 +82,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         # with Shift
         if event.state == Gdk.ModifierType.SHIFT_MASK \
                 | Gdk.ModifierType.MOD2_MASK:
-            if self in self.diagram.current_widgets:
-                self.diagram.current_widgets.remove(self)
+            if self.is_selected:
+                self.is_selected = False
             else:
-                self.diagram.current_widgets.append(self)
+                self.is_selected = True
 
         else:
-            if self not in self.diagram.current_widgets:
-                self.diagram.current_widgets = []
-                self.diagram.current_widgets.append(self)
+            if not self.is_selected:
+                self.diagram.deselect_all()
+                self.is_selected = True
 
         self.diagram.show_block_property(self)
 
@@ -127,7 +126,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         # Get the new position and move by the difference
         new_x = event.x - self.remember_x
         new_y = event.y - self.remember_y
-        self.diagram.move_selected_blocks(new_x, new_y)
+        self.diagram.move_selected(new_x, new_y)
         return False
 
     # ----------------------------------------------------------------------
@@ -440,7 +439,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.__widgets["Rect"].set_property("line-width", 1)
 
         # selected: Line = dashed
-        if self in self.diagram.current_widgets:
+        if self.is_selected:
             self.__widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:

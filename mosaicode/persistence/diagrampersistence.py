@@ -11,6 +11,7 @@ from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
 from mosaicode.model.connectionmodel import ConnectionModel
+from mosaicode.model.commentmodel import CommentModel
 
 tag_name = "mosaicode"
 
@@ -74,6 +75,16 @@ class DiagramPersistence():
             connection.input = to_block
             connection.input_port = to_block.ports[to_block_in]
             diagram.connectors.append(connection)
+
+        comments = parser.getTag(tag_name).getTag(
+                    "comments").getChildTags("comment")
+        for com in comments:
+            comment = CommentModel()
+            comment.x = float(com.getAttr("x"))
+            comment.y = float(com.getAttr("y"))
+            comment.text = com.getAttr("text")
+            diagram.comments.append(comment)
+
         return True
 
     # ----------------------------------------------------------------------
@@ -114,6 +125,14 @@ class DiagramPersistence():
                                from_out=int(connector.output_port.index),
                                to_block=connector.input.id,
                                to_in=int(connector.input_port.index))
+
+        parser.appendToTag(tag_name, 'comments')
+        for comment in diagram.comments:
+            pos = comment.get_position()
+            parser.appendToTag('comments', 'comment',
+                               text=comment.text,
+                               x=pos[0],
+                               y=pos[1])
 
         try:
             save_file = open(str(diagram.file_name), "w")
