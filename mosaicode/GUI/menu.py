@@ -86,6 +86,7 @@ class Menu(Gtk.MenuBar):
         blocks = self.create_menu(_("Block"), None, insert_menu, None)
         blocks.set_submenu(self.block_menu)
         insert_menu.append(Gtk.SeparatorMenuItem())
+        self.create_menu(_("Coment"), None, insert_menu, mc.add_comment)
         self.add_menu_category(_("Insert"), insert_menu)
 
         # -------------------------- Process --------------------------------

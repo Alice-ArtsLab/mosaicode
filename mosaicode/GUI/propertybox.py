@@ -10,6 +10,8 @@ import mosaicomponents
 from gi.repository import Gtk
 from gi.repository import Gdk
 from mosaicode.GUI.fieldtypes import *
+import gettext
+_ = gettext.gettext
 
 
 class PropertyBox(Gtk.VBox):
@@ -22,6 +24,7 @@ class PropertyBox(Gtk.VBox):
     def __init__(self, main_window):
         self.main_window = main_window
         self.block = None
+        self.comment = None
         self.properties = {}
         Gtk.VBox.__init__(self)
         self.set_homogeneous(False)
@@ -29,6 +32,37 @@ class PropertyBox(Gtk.VBox):
         white = Gdk.RGBA(1, 1, 1, 1)
         self.override_background_color(Gtk.StateType.NORMAL, white)
         self.show_all()
+
+# ----------------------------------------------------------------------
+    def set_comment(self, comment):
+        """
+        This method set the comment.
+
+            Parameters:
+                * **comment** (:class:`PropertyBox<mosaicode.GUI.propertybox>`)
+            Returns:
+                None
+        """
+        # First, remove all components
+        for widget in self.get_children():
+            self.remove(widget)
+
+        data = {"label": _("Text:"),
+                "name": "comment",
+                "value": comment.get_text()}
+        field = CommentField(data, self.notify_comment)
+        self.pack_start(field, False, False, 0)
+        self.properties = {}
+        self.properties["comment"] = ""
+        self.comment = comment
+
+# ----------------------------------------------------------------------
+    def notify_comment(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self)
+        self.comment.set_text(self.properties["comment"])
 
 # ----------------------------------------------------------------------
     def set_block(self, block):

@@ -11,6 +11,7 @@ from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.block import Block
+from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.codewindow import CodeWindow
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
@@ -184,7 +185,6 @@ class MainControl():
         if diagram is None:
             return
         diagram.select_all()
-        diagram.grab_focus()
 
     # ----------------------------------------------------------------------
     def cut(self):
@@ -386,7 +386,7 @@ class MainControl():
         return True
 
     # ----------------------------------------------------------------------
-    def add_comment(self, block):
+    def add_comment(self):
         """
         This method add a block.
 
@@ -400,12 +400,9 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        if not diagram.add_block(block):
-            message = "Block language is different from diagram language.\n" +\
-                "Diagram is expecting to generate " + diagram.language + \
-                " code while block is writen in " + block.language
-            Dialog().message_dialog("Error", message, self.main_window)
-            return False
+        comment = Comment(diagram)
+        DiagramControl.add_comment(diagram, comment)
+        diagram.redraw()
         return True
 
     # ----------------------------------------------------------------------
@@ -444,6 +441,13 @@ class MainControl():
         if diagram is None:
             return
         diagram.change_zoom(System.ZOOM_ORIGINAL)
+
+    # ----------------------------------------------------------------------
+    def show_comment_property(self, comment):
+        """
+        This method show the comment properties.
+        """
+        self.main_window.block_properties.set_comment(comment)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -493,28 +497,28 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_top()
+        diagram.align("TOP")
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_bottom()
+        diagram.align("BOTTOM")
 
     # ----------------------------------------------------------------------
     def align_left(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_left()
+        diagram.align("LEFT")
 
     # ----------------------------------------------------------------------
     def align_right(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_right()
+        diagram.align("RIGHT")
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):

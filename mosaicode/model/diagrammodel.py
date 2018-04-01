@@ -10,6 +10,7 @@ class DiagramModel(object):
         self.last_id = 1  # first block is n1, increments to each new block
         self.blocks = {}  # GUI blocks
         self.connectors = []
+        self.comments = []
         self.zoom = 1.0  # pixels per unit
         self.file_name = "Untitled"
         self.modified = False
@@ -20,6 +21,8 @@ class DiagramModel(object):
     # ----------------------------------------------------------------------
     @property
     def patch_name(self):
-        return self.file_name.split("/").pop()
+        name = self.file_name.split("/").pop()
+        name = name.split(".")[0]
+        return name
 
 # ----------------------------------------------------------------------

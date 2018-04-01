@@ -40,12 +40,27 @@ class DiagramControl():
         if diagram.language is None or diagram.language == 'None':
             diagram.language = block.language
 
+        diagram.do("Add Block")
         diagram.last_id = max(int(diagram.last_id), int(block.id))
         if block.id < 0:
             block.id = diagram.last_id
         diagram.last_id += 1
         diagram.blocks[block.id] = block
-        diagram.do("Add")
+        return True
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def add_comment(cls, diagram, comment):
+        """
+        This method add a comment in the diagram.
+
+            Parameters:
+                * **block**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
+        diagram.do("Add Comment")
+        diagram.comments.append(comment)
         return True
 
     # ----------------------------------------------------------------------

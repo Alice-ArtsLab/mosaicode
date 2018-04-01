@@ -105,6 +105,7 @@ class PreferenceWindow(Gtk.Dialog):
 
         self.grid_preferences_tab.show_all()
 
+    # ----------------------------------------------------------------------
     def __create_network_preferences_tab(self):
         """Creates the networks preferences tab."""
         vbox = Gtk.VBox()
