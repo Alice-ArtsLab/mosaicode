@@ -1,4 +1,4 @@
-echo "Resolvendo problema de dependências"
+echo "Solving dependencies problems"
 sudo apt-get --yes install libopencv-dev python-opencv
 sudo apt-get --yes install python-gtk2 python-glade2
 sudo apt-get --yes install python-gnome2
