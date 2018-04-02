@@ -27,10 +27,10 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-       install_requires=['beautifulsoup4', 'pip', 'Python>=2.7','python-gtk2','python-glade2','python-gnome2','libgoocanvas-2.0-common','gir1.2-goocanvas-2.0','python-lxml','python-gobject','python-gi'],
+       install_requires=['beautifulsoup4', 'pip', 'Python>=2.7','pygtk','pygobject','gi','lxml'],
       tests_require=['pytest'],
       test_suite='test',
-      version='1.0a7',
+      version='1.0dev2',
       packages=[
           'app_data',
           'mosaicode',
