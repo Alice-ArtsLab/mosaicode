@@ -27,7 +27,7 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-       install_requires=['beautifulsoup4', 'pip', 'Python>=2.7','pygtk','pygobject','gi','lxml'],
+       install_requires=['beautifulsoup4','Python>=2.7','lxml','opencv-python','gi','pygobject','setuptools','pip'],
       tests_require=['pytest'],
       test_suite='test',
       version='1.0dev2',
@@ -41,7 +41,7 @@ setup(name='mosaicode',
           'mosaicode.extensions',
           'mosaicode.control',
           'mosaicode.model'],
-      scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
+  scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
       description='Image Processing and Computer Vision \
       Automatic Programming Tool',
       author='Bits & Beads Research Lab',
