@@ -27,10 +27,10 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-       install_requires=['beautifulsoup4','Python>=2.7','lxml','opencv-python','gi','pygobject','setuptools','pip'],
+       install_requires=['beautifulsoup4','Python>=2.7','lxml','opencv-python','pgi','pygobject','setuptools','pip','mosaicomponents'],
       tests_require=['pytest'],
       test_suite='test',
-      version='1.0dev2',
+      version='1.1',
       packages=[
           'app_data',
           'mosaicode',
