@@ -168,10 +168,12 @@ class System(object):
             # Load XML files in user space
             self.__load_xml(System.get_user_dir() + "/extensions")
 
-            # After loading all blocks and ports, load Blocks' Ports
             for key in self.__blocks:
-                block = self.__blocks[key]
-                BlockControl.load_ports(block, self.__ports)
+                try:
+                    block = self.__blocks[key]
+                    BlockControl.load_ports(block, self.__ports)
+                except:
+                    print("Error in loading plugin " + key)
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
