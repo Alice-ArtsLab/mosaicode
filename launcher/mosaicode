@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 # Libraries
-import gi
 import sys
 import argparse
+import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
+from mosaicode.utils.FileUtils import *
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.control.maincontrol import MainControl
 
@@ -36,7 +36,7 @@ def main(argv):
     parser.add_argument("-x", "--export", type=str, choices=['py', 'xml'],
                         help="Export extensions to Python or XML format")
     parser.add_argument("--print_ports", action="store_true", help="Print ports")
-    parser.add_argument("--print_plugins", action="store_true", help="Print plugnis")
+    parser.add_argument("--print_blockmodels", action="store_true", help="Print blockmodels")
     parser.add_argument("--print_templates", action="store_true", help="Print code templates")
     args = parser.parse_args()
 
@@ -48,18 +48,17 @@ def main(argv):
         MainControl.print_ports()
         return
 
-    if args.print_plugins:
-        MainControl.print_plugins()
+    if args.print_blockmodels:
+        MainControl.print_blockmodels()
         return
 
     if args.print_templates:
         MainControl.print_templates()
         return
 
-
     if args.file:
         for arg in args.file:
-            win.main_control.open(arg)
+            win.main_control.open(get_absolute_path_from_file(arg))
     else:
         win.main_control.new()
 

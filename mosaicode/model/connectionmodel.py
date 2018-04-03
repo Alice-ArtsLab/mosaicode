@@ -5,12 +5,11 @@
 class ConnectionModel(object):
 
     # -------------------------------------------------------------------------
-    def __init__(self, diagram, source, source_port, conn_type):
-        self.source = source
-        self.source_port = source_port
-        self.conn_type = conn_type
-        self.sink = None
-        self.sink_port = -1
+    def __init__(self, diagram, output, output_port):
+        self.output = output
+        self.output_port = output_port
+        self.input = None
+        self.input_port = None
         self.diagram = diagram
 
 # -----------------------------------------------------------------------------

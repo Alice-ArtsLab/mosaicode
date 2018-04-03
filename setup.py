@@ -27,43 +27,32 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-       install_requires=['beautifulsoup4','Python>=2.7','lxml','opencv-python','pgi','pygobject','setuptools','pip','mosaicomponents'],
+
+       install_requires=['beautifulsoup4','Python>=2.7','GooCalendar','lxml','PyGObject','opencv-python','pgi','pygobject','setuptools','pip','mosaicomponents'],
       tests_require=['pytest'],
       test_suite='test',
-      version='1.1',
-      packages=[
-          'app_data',
-          'mosaicode',
-          'mosaicode.utils',
-          'mosaicode.persistence',
-          'mosaicode.GUI',
-          'mosaicode.GUI.components',
-          'mosaicode.extensions',
-          'mosaicode.control',
-          'mosaicode.model'],
-  scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
-      description='Image Processing and Computer Vision \
-      Automatic Programming Tool',
+      version='1.3',
+      packages=find_packages(exclude=["tests.*", "tests"]),
+      scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
+      description='Code generation for Digital art',
       author='Bits & Beads Research Lab',
       author_email='mosaicode-dev@googlegroups.com',
       maintainer="Bits & Beads Research Lab",
       maintainer_email="mosaicode-dev@googlegroups.com",
       license="GNU GPL3",
+
       url='https://mosaicode.github.io', 
       download_url = 'https://github.com/Mosaicode/mosaicode.git',
-      keywords = ['VLP', 'blocos'],  
+      keywords = ['VLP', 'Blocks','Code Generation', 'Digital art'],  
 
       # this is fucked up! must put it in package_data!!
       data_files=[
             ('/usr/share/mosaicode/images', glob("app_data/images/*")),
-            ('/usr/share/mosaicode/po/pt/LC_MESSAGES/',
-                   glob("app_data/po/pt/LC_MESSAGES/*")),
-            ('/usr/share/mosaicode/examples', glob("app_data/examples/*.mscd")),
+            ('/usr/share/mosaicode/po/pt/LC_MESSAGES/', glob("app_data/po/pt/LC_MESSAGES/*")),
             ('/usr/share/applications/', ["app_data/mosaicode.desktop"]),
-            ('/usr/share/icons/hicolor/scalable/apps',
-                   ['app_data/images/mosaicode.svg']),
+            ('/usr/share/icons/hicolor/scalable/apps', ['app_data/images/mosaicode.svg']),
             ('/usr/share/pixmaps', ['app_data/images/mosaicode.svg']),
-            ('/usr/share/icons/hicolor/24x24/apps',
-                   ['app_data/images/mosaicode.png']), ],
+            ('/usr/share/icons/hicolor/24x24/apps', ['app_data/images/mosaicode.png'])],
+      zip_safe=False,
       **config
       )

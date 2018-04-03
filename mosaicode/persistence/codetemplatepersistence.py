@@ -11,6 +11,8 @@ from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.codetemplate import CodeTemplate
 
+tag_name = "MosaicodeCodeTemplate"
+
 class CodeTemplatePersistence():
     """
     This class contains methods related the CodeTemplatePersistence class.
@@ -28,23 +30,28 @@ class CodeTemplatePersistence():
         """
         # load the code_template
         if os.path.exists(file_name) is False:
-            return
+            return None
         parser = XMLParser(file_name)
 
-        if parser.getTag("MosaicodeCodeTemplate") is None:
+        if parser.getTag(tag_name) is None:
             return None
 
         try:
             code_template = CodeTemplate()
-            code_template.name = parser.getTagAttr("MosaicodeCodeTemplate",  "name")
-            code_template.type = parser.getTagAttr("MosaicodeCodeTemplate",  "type")
-            code_template.description = parser.getTagAttr("MosaicodeCodeTemplate",  "description")
-            code_template.language = parser.getTagAttr("MosaicodeCodeTemplate",  "language")
-            code_template.extension = parser.getTagAttr("MosaicodeCodeTemplate",  "extension")
-            code_template.source = parser.getTagAttr("MosaicodeCodeTemplate",  "source")
-            code_template.command = parser.getTag("MosaicodeCodeTemplate").getTag("command").getText()
-            code_template.code = parser.getTag("MosaicodeCodeTemplate").getTag("code").getText()
-        except:
+            code_template.name = parser.getTagAttr(tag_name,  "name")
+            code_template.type = parser.getTagAttr(tag_name,  "type")
+            code_template.description = parser.getTagAttr(tag_name,  "description")
+            code_template.language = parser.getTagAttr(tag_name,  "language")
+            code_template.command = parser.getTag(tag_name).getTag("command").getText()
+            code_template.extension = parser.getTagAttr(tag_name,  "extension")
+            code_template.code = parser.getTag(tag_name).getTag("code").getText()
+
+            code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
+            for code_part in code_parts:
+                code_template.code_parts.append(code_part.getAttr("value"))
+
+        except Exception as e:
+            print e
             return None
 
         if code_template.name == "":
@@ -64,15 +71,18 @@ class CodeTemplatePersistence():
         from mosaicode.system import System
         code_template.source = "xml"
         parser = XMLParser()
-        parser.addTag('MosaicodeCodeTemplate')
-        parser.setTagAttr('MosaicodeCodeTemplate','name', code_template.name)
-        parser.setTagAttr('MosaicodeCodeTemplate','type', code_template.type)
-        parser.setTagAttr('MosaicodeCodeTemplate','description', code_template.description)
-        parser.setTagAttr('MosaicodeCodeTemplate','language', code_template.language)
-        parser.setTagAttr('MosaicodeCodeTemplate','extension', code_template.extension)
-        parser.setTagAttr('MosaicodeCodeTemplate','source', code_template.source)
-        parser.appendToTag('MosaicodeCodeTemplate','command').string = str(code_template.command)
-        parser.appendToTag('MosaicodeCodeTemplate','code').string = str(code_template.code)
+        parser.addTag(tag_name)
+        parser.setTagAttr(tag_name,'name', code_template.name)
+        parser.setTagAttr(tag_name,'type', code_template.type)
+        parser.setTagAttr(tag_name,'description', code_template.description)
+        parser.setTagAttr(tag_name,'language', code_template.language)
+        parser.setTagAttr(tag_name,'extension', code_template.extension)
+        parser.appendToTag(tag_name,'command').string = str(code_template.command)
+        parser.appendToTag(tag_name,'code').string = str(code_template.code)
+
+        parser.appendToTag(tag_name, 'code_parts')
+        for key in code_template.code_parts:
+            parser.appendToTag('code_parts', 'code_part', value=key.strip())
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -112,7 +122,7 @@ class CodeTemplatePersistence():
         parser.setAttribute('command', code_template.command)
         parser.setAttribute('extension', code_template.extension)
         parser.setAttribute('code', code_template.code)
-        parser.setAttribute('source', 'python')
+        parser.setAttribute('code_parts', code_template.code_parts)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"

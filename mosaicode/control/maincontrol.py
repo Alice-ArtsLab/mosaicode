@@ -2,23 +2,30 @@
 """
 This module contains the MainControl class.
 """
+from copy import copy
+from copy import deepcopy
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.codewindow import CodeWindow
-from mosaicode.GUI.codetemplatemanager import CodeTemplateManager
-from mosaicode.GUI.pluginmanager import PluginManager
-from mosaicode.GUI.portmanager import PortManager
 from mosaicode.GUI.preferencewindow import PreferenceWindow
-from mosaicode.control.diagramcontrol import DiagramControl
+from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
 from mosaicode.system import System as System
 from mosaicode.persistence.preferencespersistence import PreferencesPersistence
+from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.portcontrol import PortControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
+from mosaicode.control.codegenerator import CodeGenerator
+from mosaicode.control.publisher import Publisher
+from mosaicode.model.codetemplate import CodeTemplate
+
+
 import gettext
 _ = gettext.gettext
 
@@ -31,8 +38,22 @@ class MainControl():
 
     def __init__(self, main_window):
         self.main_window = main_window
-        # It must be possible to exchange data between diagrams
+        # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
+        self.publisher = Publisher()
+
+    # ----------------------------------------------------------------------
+    def init(self):
+        self.main_window.menu.update_recent_files(System.properties.recent_files)
+        self.main_window.menu.update_examples(System.list_of_examples)
+        self.update_blocks()
+
+    # ----------------------------------------------------------------------
+    def update_blocks(self):
+        System.reload()
+        blocks = System.get_blocks()
+        self.main_window.menu.update_blocks(blocks)
+        self.main_window.block_notebook.update_blocks(blocks)
 
     # ----------------------------------------------------------------------
     def new(self):
@@ -61,9 +82,15 @@ class MainControl():
         diagram = Diagram(self.main_window)
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
+        diagram.redraw()
         diagram.set_modified(False)
-        MainControl.add_recent_file(System.properties, file_name)
-        self.main_window.menu.update_recent_file()
+
+        if file_name in System.properties.recent_files:
+            System.properties.recent_files.remove(file_name)
+        System.properties.recent_files.insert(0, file_name)
+        if len(System.properties.recent_files) > 10:
+            System.properties.recent_files.pop()
+        self.main_window.menu.update_recent_files(System.properties.recent_files)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -158,7 +185,6 @@ class MainControl():
         if diagram is None:
             return
         diagram.select_all()
-        diagram.grab_focus()
 
     # ----------------------------------------------------------------------
     def cut(self):
@@ -221,6 +247,32 @@ class MainControl():
         diagram.delete()
 
     # ----------------------------------------------------------------------
+    def __get_code_generator(self, diagram):
+
+        if diagram.language is None:
+            message = "You shall not generate code of an empty diagram!"
+            Dialog().message_dialog("Error", message, self.main_window)
+            return None
+
+        template_list = []
+        code_templates = System.get_code_templates()
+
+        for key in code_templates:
+            if code_templates[key].language == diagram.language:
+                template_list.append(code_templates[key])
+
+        if len(template_list) == 0:
+            message = "Generator not available for the language " + diagram.language + "."
+            Dialog().message_dialog("Error", message, self.main_window)
+            return None
+
+        if len(template_list) == 1:
+            return CodeGenerator(diagram, template_list[0])
+        select = SelectCodeTemplate(self.main_window, template_list)
+        code_template = select.get_value()
+        return CodeGenerator(diagram, code_template)
+
+    # ----------------------------------------------------------------------
     def run(self, code = None):
         """
         This method runs the code.
@@ -228,7 +280,21 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        DiagramControl(diagram).get_code_template().run(code = code)
+        generator = self.__get_code_generator(diagram)
+        if generator is not None:
+            generator.run(code = code)
+
+
+    # ----------------------------------------------------------------------
+    def publish(self):
+        """
+        This method run web server.
+        """
+        if self.publisher.is_running():
+            self.publisher.stop()
+        else:
+            self.publisher.start()
+
 
     # ----------------------------------------------------------------------
     def save_source(self, code = None):
@@ -239,7 +305,10 @@ class MainControl():
         if diagram is None:
             return
 
-        generator = DiagramControl(diagram).get_code_template()
+        generator = self.__get_code_generator(diagram)
+        if generator is None:
+            return
+
         while True:
             name = Dialog().save_dialog(self.main_window,
                         filename = generator.get_dir_name() + \
@@ -258,8 +327,10 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return
-        code = DiagramControl(diagram).get_code_template().generate_code()
-        CodeWindow(self.main_window, code)
+        generator = self.__get_code_generator(diagram)
+        if generator is not None:
+            code = generator.generate_code()
+            CodeWindow(self.main_window, code)
 
     # ----------------------------------------------------------------------
     def about(self):
@@ -304,12 +375,34 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        if not diagram.add_block(block):
+        new_block = Block(diagram, deepcopy(block))
+        if not DiagramControl.add_block(diagram, new_block):
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
             return False
+        diagram.redraw()
+        return True
+
+    # ----------------------------------------------------------------------
+    def add_comment(self):
+        """
+        This method add a block.
+
+        Parameters:
+
+                * **Types** (:class:`block<>`)
+        Returns:
+
+            * **Types** (:class:`boolean<boolean>`)
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        comment = Comment(diagram)
+        DiagramControl.add_comment(diagram, comment)
+        diagram.redraw()
         return True
 
     # ----------------------------------------------------------------------
@@ -348,6 +441,13 @@ class MainControl():
         if diagram is None:
             return
         diagram.change_zoom(System.ZOOM_ORIGINAL)
+
+    # ----------------------------------------------------------------------
+    def show_comment_property(self, comment):
+        """
+        This method show the comment properties.
+        """
+        self.main_window.block_properties.set_comment(comment)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -397,28 +497,28 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_top()
+        diagram.align("TOP")
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_bottom()
+        diagram.align("BOTTOM")
 
     # ----------------------------------------------------------------------
     def align_left(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_left()
+        diagram.align("LEFT")
 
     # ----------------------------------------------------------------------
     def align_right(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_right()
+        diagram.align("RIGHT")
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):
@@ -433,41 +533,25 @@ class MainControl():
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
-    def code_template_manager(self):
-        """
-        This add a new Code Template.
-        """
-        CodeTemplateManager(self.main_window)
-
-
-    # ----------------------------------------------------------------------
-    def plugin_manager(self):
-        """
-        This add a new plugin.
-        """
-        PluginManager(self.main_window)
-
-    # ----------------------------------------------------------------------
-    def port_manager(self):
-        """
-        This add a new port.
-        """
-        PortManager(self.main_window)
-
-    # ----------------------------------------------------------------------
     def add_code_template(self, code_template):
         CodeTemplateControl.add_code_template(code_template)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def delete_code_template(self, code_template_name):
-        if not CodeTemplateControl.delete_code_template(code_template_name):
+        filename = CodeTemplateControl.delete_code_template(code_template_name)
+        if filename is None:
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        else:
+            Dialog().message_dialog("Info", "File " + filename + " deleted.", self.main_window)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def add_port(self, port):
         PortControl.add_port(port)
+        System.reload()
 
     # ----------------------------------------------------------------------
     def delete_port(self, port_key):
@@ -475,19 +559,21 @@ class MainControl():
             message = "This port is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        System.reload()
 
     # ----------------------------------------------------------------------
-    def add_plugin(self, plugin):
-        BlockControl.add_plugin(plugin)
-        self.main_window.block_notebook.update()
+    def add_new_block(self, block):
+        BlockControl.add_new_block(block)
+        self.update_blocks()
+        # Update everybody!
 
     # ----------------------------------------------------------------------
-    def delete_plugin(self, plugin):
-        if not BlockControl.delete_plugin(plugin):
-            message = "This plugin is a python file installed in the System.\n"
+    def delete_block(self, block):
+        if not BlockControl.delete_block(block):
+            message = "This block is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
-        self.main_window.block_notebook.update()
+        self.update_blocks()
 
     # ----------------------------------------------------------------------
     def update_all(self):
@@ -497,63 +583,26 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def print_ports(cls):
-        for port in System.ports:
+        # This method is used by the launcher class
+        ports = System.get_ports()
+        for port in ports:
             print "--------------------- "
-            PortControl.print_port(System.ports[port])
+            PortControl.print_port(ports[port])
     # ----------------------------------------------------------------------
     @classmethod
-    def print_plugins(cls):
-        for plugin in System.plugins:
+    def print_blockmodels(cls):
+        # This method is used by the launcher class
+        blocks = System.get_blocks()
+        for block in blocks:
             print "--------------------- "
-            BlockControl.print_plugin(System.plugins[plugin])
+            BlockControl.print_block(blocks[block])
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):
-        for template in System.code_templates:
+        # This method is used by the launcher class
+        code_templates = System.get_code_templates()
+        for template in code_templates:
             print "--------------------- "
-            CodeTemplateControl.print_template(System.code_templates[template])
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_extensions(cls, extension):
-        if extension == 'py':
-            MainControl.export_python()
-        else:
-            MainControl.export_xml()
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_python(cls):
-        System()
-        BlockControl.export_python()
-        PortControl.export_python()
-        CodeTemplateControl.export_python()
-
-    # ----------------------------------------------------------------------
-    def export_python_dialog(self):
-        MainControl.export_python()
-        Dialog().message_dialog("Exporting as python", "Exported successfully!", self.main_window)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_xml(cls):
-        System()
-        BlockControl.export_xml()
-        PortControl.export_xml()
-        CodeTemplateControl.export_xml()
-
-    # ----------------------------------------------------------------------
-    def export_xml_dialog(self):
-        MainControl.export_xml()
-        Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def add_recent_file(cls, prefs, file_name):
-        if file_name in prefs.recent_files:
-            prefs.recent_files.remove(file_name)
-        prefs.recent_files.insert(0, file_name)
-        if len(prefs.recent_files) > 10:
-            prefs.recent_files.pop()
+            CodeTemplateControl.print_template(code_templates[template])
 
 # ----------------------------------------------------------------------

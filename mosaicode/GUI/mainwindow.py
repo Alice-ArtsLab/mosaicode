@@ -17,7 +17,7 @@ from blocknotebook import BlockNotebook
 from mosaicode.system import System as System
 from blockproperties import BlockProperties
 from mosaicode.control.maincontrol import MainControl
-
+from mosaicode.GUI.blockmenu import BlockMenu
 
 class MainWindow(Gtk.Window):
     """
@@ -45,6 +45,14 @@ class MainWindow(Gtk.Window):
         self.block_properties = BlockProperties(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
+        self.block_menu = BlockMenu()
+
+        # Load plugins
+        for plugin in System.instance.plugins:
+            plugin.load(self)
+
+        self.menu.add_help()
+
         System.set_log(self.status)
 
         # vbox main
@@ -113,9 +121,7 @@ class MainWindow(Gtk.Window):
         self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
 
-        for example in System.list_of_examples:
-            self.menu.add_example(example)
-        self.menu.update_recent_file()
+        self.main_control.init()
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
@@ -142,6 +148,7 @@ class MainWindow(Gtk.Window):
         System.properties.vpaned_bottom = self.vpaned_bottom.get_position()
         System.properties.vpaned_left = self.vpaned_left.get_position()
         self.work_area.resize(data)
+
     # ----------------------------------------------------------------------
     def update(self):
         self.main_control.update_all()

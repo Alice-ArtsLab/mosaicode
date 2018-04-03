@@ -20,7 +20,6 @@ class CodeGenerator():
     """
 
     # ----------------------------------------------------------------------
-
     def __init__(self, diagram=None, code_template=None):
         self.diagram = diagram
         self.code_template = code_template
@@ -31,7 +30,7 @@ class CodeGenerator():
 
         self.blockList = []
         self.connections = []
-        self.codes=[[],[],[],[],[]]
+        self.codes = {}
 
         if diagram is None:
             return
@@ -63,7 +62,7 @@ class CodeGenerator():
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
         result = result.replace("%l", self.diagram.language)
-        result = result.replace("%n", self.diagram.patch_name[:-4])
+        result = result.replace("%n", self.diagram.patch_name)
         result = result.replace(" ", "_")
         return result
 
@@ -96,55 +95,42 @@ class CodeGenerator():
         return name
 
     # ----------------------------------------------------------------------
-    def __change_directory(self):
+    def __prepare_block_list(self):
         """
-        This method change the directory.
-        """
-        try:
-            os.makedirs(self.dir_name)
-        except:
-            pass
-        os.chdir(self.dir_name)
-
-    # ----------------------------------------------------------------------
-    def __return_to_old_directory(self):
-        """
-        This method return path to old directory.
-        """
-        os.chdir(self.old_path)
-
-    # ----------------------------------------------------------------------
-    def __sort_blocks(self):
-        """
-        This method sorts the blocks.
+        This method prepare the blocks to code generation.
         """
         for block_key in self.diagram.blocks:
             block = self.diagram.blocks[block_key]
-
             # Creating class attributes on the fly
             try:
-                block.weight = 1
+                block.weight = 0
             except:
-                block.__class__.weight = 1
+                block.__class__.weight = 0
             try:
                 block.connections = []
             except:
                 block.__class__.connections = []
 
+            # Listing all connections that the block is output
             for connection in self.diagram.connectors:
-                if connection.source != block:
+                if connection.output != block:
                     continue
                 block.connections.append(connection)
             self.blockList.append(block)
 
-        # ajusta o peso de cada bloco
+    # ----------------------------------------------------------------------
+    def __sort_block_list(self):
+        """
+        This method sorts the blocks to code generation.
+        """
+        # adjust the weight of every blocks depending on the connection net
         modification = True
         while modification:
             modification = False
             for block in self.blockList:
                 for connection in block.connections:
                     for block_target in self.blockList:
-                        if block_target != connection.sink:
+                        if block_target != connection.input:
                             continue
                         weight = block.weight
                         if block_target.weight < weight + 1:
@@ -152,93 +138,99 @@ class CodeGenerator():
                             modification = True
 
     # ----------------------------------------------------------------------
-    def __get_max_weight(self):
+    def __generate_block_list_code(self):
         """
-        This method get max weight.
-
-        Returns:
-        
-            * **Types** (:class:`int<int>`)
+        This method interacts block by block to generate all code.
         """
-        biggestWeight = -1
-        for block in self.blockList:
-            if block.weight > biggestWeight:
-                biggestWeight = block.weight
-        return biggestWeight
-
-    # ----------------------------------------------------------------------
-    def __generate_parts(self):
-        """
-        This metho generate parts.
-        """
-        biggestWeight = self.__get_max_weight()
-        for activeWeight in range(biggestWeight):
-            activeWeight += 1
+        active_weight = 0
+        # The maxWeight is, in the worst case, the block list lenght
+        max_weight = len(self.blockList)
+        while active_weight <= max_weight:
+            if len(self.blockList) == 0:
+                break
             for block in self.blockList:
-                if block.weight == activeWeight:
-                    self.generate_block_code(block)
+                if block.weight == active_weight:
+                    # If it your time, lets generate your code and remove you
+                    self.__generate_block_code(block)
+            active_weight += 1
 
     # ----------------------------------------------------------------------
-    def replace_key_value(self, plugin, key, value):
-        i = 0
-        for code in plugin.codes:
-            plugin.codes[i] = code.replace(key, value)
-            i += 1
+    def __generate_port_var_name_code(self, block, port):
+        """
+        This method generate the block code.
+        """
+        value = port.var_name
+
+        # Replace all port[stuff] values
+        for attribute in port.__dict__:
+            my_key = "$port[" + attribute + "]$"
+            my_value = str(port.__dict__[attribute])
+            my_value = my_value.replace(" ", "_")
+            my_value = my_value.lower()
+            value = value.replace(my_key,my_value)
+
+        # Replace all block[stuff] values
+        for attribute in block.__dict__:
+            my_key = "$block[" + attribute + "]$"
+            my_value = str(block.__dict__[attribute])
+            my_value = my_value.replace(" ", "_")
+            my_value = my_value.lower()
+            value = value.replace(my_key, my_value)
+
+        return value
 
     # ----------------------------------------------------------------------
-    def generate_block_code(self, plugin):
+    def __generate_block_code(self, block):
         """
         This method generate the block code.
         """
 
-        # First we replace in ports
-        cont = 0
-        for port in plugin.in_ports:
-            my_key = "$in_ports[" + port["name"] + "]$"
-            value = System.ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(cont))
-            value = value.replace("$port_name$", port["name"])
-            value = value.replace("$conn_type$", "i")
-            self.replace_key_value(plugin, my_key, value)
-            cont += 1
+        # Empty the previous generated codes, if exist
+        block.gen_codes = {}
 
-        # Then we replace out ports
-        cont = 0
-        for port in plugin.out_ports:
-            my_key = "$out_ports[" + port["name"] + "]$"
-            value = System.ports[port["type"]].var_name
-            value = value.replace("$port_number$", str(cont))
-            value = value.replace("$port_name$", port["name"])
-            value = value.replace("$conn_type$", "o")
-            self.replace_key_value(plugin, my_key, value)
-            cont += 1
+        # For each code part, we need to replace wildcards
+        for key in block.codes:
+            block.gen_codes[key] = block.codes[key]
 
+            # First we replace in ports
+            for port in block.ports:
+                my_key = "$port[" + port.name + "]$"
+                my_value = self.__generate_port_var_name_code(block, port)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, my_value)
 
-        # First we replace object attributes by their values
-        for key in plugin.__dict__:
-            my_key = "$" + key + "$"
-            value = str(plugin.__dict__[key])
-            self.replace_key_value(plugin, my_key, value)
+            # Then we replace object attributes by their values
+            for attribute in block.__dict__:
+                my_key = "$" + attribute + "$"
+                value = str(block.__dict__[attribute])
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
 
-        # Then we replace properties by their values
-        for prop in plugin.get_properties():
-            my_key = "$prop[" + prop.get("name") + "]$"
-            value = str(prop.get("value"))
-            self.replace_key_value(plugin, my_key, value)
+            # Then we replace properties by their values
+            for prop in block.get_properties():
+                my_key = "$prop[" + prop.get("name") + "]$"
+                value = str(prop.get("value"))
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
 
-        for code, plugin_code in zip(self.codes, plugin.codes):
-            code.append(plugin_code)
+        # Append it all to Generator Codes
+        for key in self.codes:
+            if key in block.codes:
+                self.codes[key].append(block.gen_codes[key])
+            else:
+                self.codes[key].append('')
 
         connections = ""
-        for x in plugin.connections:
-            code = System.ports[x.conn_type].code
-            # Replace all connection properties by their values
-            for key in x.__dict__:
-                value = str(x.__dict__[key])
-                my_key = "$" + key + "$"
-                code = code.replace(my_key, value)
-            connections += code
+        for connection in block.connections:
+            connection_code = connection.output_port.code
+            # Replace output
+            value = self.__generate_port_var_name_code(connection.output, connection.output_port)
+            connection_code = connection_code.replace("$output$", value)
+
+            # Replace Input
+            value = self.__generate_port_var_name_code(connection.input, connection.input_port)
+            connection_code = connection_code.replace("$input$", value)
+            connections += connection_code
+
         self.connections.append(connections)
+
 
     # ----------------------------------------------------------------------
     def generate_code(self):
@@ -247,54 +239,53 @@ class CodeGenerator():
         """
 
         System.log("Generating Code")
-        self.__sort_blocks()
-        self.__generate_parts()
+        self.__prepare_block_list()
+        self.__sort_block_list()
+
+        # Create an array of codes to each code part
+        for key in self.code_template.code_parts:
+            self.codes[key] = []
+
+        self.__generate_block_list_code()
 
         code = self.code_template.code
 
-        # Replace single code
-        count = 0
-        for codex in self.codes:
-            code_name = "$single_code["+ str(count) + "]$"
-            if code_name not in code:
-                count = count + 1
-                continue
-            temp_header = []
-            temp_code = ""
-            for header_code in codex:
-                if header_code.strip() not in temp_header:
-                    temp_header.append(header_code.strip())
-            for header_code in temp_header:
-                temp_code += header_code
-            code = code.replace(code_name, temp_code)
-            count = count + 1
+        for key in self.codes:
+            # Check for single_code generation
+            code_name = "$single_code["+ key + "]$"
+            if code_name in code:
+                temp_header = []
+                temp_code = ""
+                for header_code in self.codes[key]:
+                    if header_code not in temp_header:
+                        temp_header.append(header_code)
+                for header_code in temp_header:
+                    temp_code += header_code
+                code = code.replace(code_name, temp_code)
+            # Check for code generation
+            code_name = "$code["+ key + "]$"
+            if code_name in code:
+                temp_code = ""
+                for x in self.codes[key]:
+                    temp_code += x
+                code = code.replace(code_name, temp_code)
+            # Check for code + connections generation
+            code_name = "$code["+ key + ", connection]$"
+            if code_name in code:
+                temp_code = ""
+                for x,y in zip(self.codes[key], self.connections):
+                    temp_code += x
+                    temp_code += y
+                code = code.replace(code_name, temp_code)
 
-        # Replace code
-        count = 0
-        for codex in self.codes:
-            code_name = "$code["+ str(count) + "]$"
-            if code_name not in code:
-                count = count + 1
-                continue
-            temp_code = ""
-            for x in codex:
-                temp_code += x
-            code = code.replace(code_name, temp_code)
-            count = count + 1
-
-        # Replace code + connection
-        count = 0
-        for codex in self.codes:
-            code_name = "$code["+ str(count) + ", connection]$"
-            if code_name not in code:
-                count = count + 1
-                continue
-            temp_code = ""
-            for x,y in zip(codex, self.connections):
-                temp_code += x
-                temp_code += y
-            code = code.replace(code_name, temp_code)
-            count = count + 1
+            # Check for connections + code generation
+            code_name = "$code[connection, "+ key + "]$"
+            if code_name in code:
+                temp_code = ""
+                for x,y in zip(self.connections, self.codes[key]):
+                    temp_code += x
+                    temp_code += y
+                code = code.replace(code_name, temp_code)
 
         # Replace only connection
         connection_block = ""
@@ -311,14 +302,24 @@ class CodeGenerator():
         """
         if name is None:
             name = self.dir_name + self.filename + self.code_template.extension
-            self.__change_directory()
-            self.__return_to_old_directory()
+            try:
+                os.makedirs(self.dir_name)
+            except:
+                pass
         System.log("Saving Code to " + name)
-        codeFile = open(name, 'w')
-        if code is None:
-            code = self.generate_code()
-        codeFile.write(code)
-        codeFile.close()
+        try:
+            codeFile = open(name, 'w')
+
+            if code is None:
+                code = self.generate_code()
+            codeFile.write(code)
+            codeFile.close()
+            return False
+        except IOError:
+            System.log("File or directory not found!")
+            return True
+
+
 
     # ----------------------------------------------------------------------
     def run(self, code = None):
@@ -330,10 +331,11 @@ class CodeGenerator():
         command = command.replace("$extension$", self.code_template.extension)
         command = command.replace("$dir_name$", self.dir_name)
 
-        self.save_code(code = code)
-        self.__change_directory()
+        if (self.save_code(code = code)):
+            System.log("Please, save the diagram!")
+            return
+        os.chdir(self.dir_name)
 
-        from mosaicode.system import System as System
         System.log("Executing Code: " + command)
 
         program = Thread(target=os.system, args=(command,))
@@ -343,7 +345,6 @@ class CodeGenerator():
             program.join(0.4)
             while Gtk.events_pending():
                 Gtk.main_iteration()
-
-        self.__return_to_old_directory()
+        os.chdir(self.old_path)
 
 # -------------------------------------------------------------------------

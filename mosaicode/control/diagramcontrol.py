@@ -5,14 +5,13 @@ This module contains the DiagramControl class.
 """
 import os
 import gi
+from copy import deepcopy
+from copy import copy
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
-from mosaicode.control.codegenerator import CodeGenerator
-from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.persistence.diagrampersistence import DiagramPersistence
-
 
 class DiagramControl():
     """
@@ -25,14 +24,44 @@ class DiagramControl():
         self.diagram = diagram
 
     # ----------------------------------------------------------------------
-    def get_code_template(self):
-        code_template = CodeTemplate()
-        for key in System.code_templates:
-            if System.code_templates[key].language == self.diagram.language:
-                code_template = System.code_templates[key]
-                break
-        generator = CodeGenerator(self.diagram, code_template)
-        return generator
+    @classmethod
+    def add_block(cls, diagram, block):
+        """
+        This method add a block in the diagram.
+
+            Parameters:
+                * **block**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
+        if diagram.language is not None and diagram.language != block.language:
+            System.log("Block language is different from diagram language.")
+            return False
+        if diagram.language is None or diagram.language == 'None':
+            diagram.language = block.language
+
+        diagram.do("Add Block")
+        diagram.last_id = max(int(diagram.last_id), int(block.id))
+        if block.id < 0:
+            block.id = diagram.last_id
+        diagram.last_id += 1
+        diagram.blocks[block.id] = block
+        return True
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def add_comment(cls, diagram, comment):
+        """
+        This method add a comment in the diagram.
+
+            Parameters:
+                * **block**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
+        diagram.do("Add Comment")
+        diagram.comments.append(comment)
+        return True
 
     # ----------------------------------------------------------------------
     def load(self, file_name=None):

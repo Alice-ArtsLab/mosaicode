@@ -33,25 +33,26 @@ class PortControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PortPersistence.load(file_name)
+        return PortPersistence.load(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod
     def export_xml(cls):
         from mosaicode.system import System as System
         System()
-        for port in System.ports:
+        ports = System.get_ports()
+        for port in ports:
             print "Exporting port " + port
-            PortPersistence.save(System.ports[port])
+            PortPersistence.save(ports[port])
 
     # ----------------------------------------------------------------------
     @classmethod
     def export_python(cls):
         from mosaicode.system import System as System
         System()
-        for port in System.ports:
-            print "Exporting port " + port
-            PortPersistence.save_python(System.ports[port])
+        ports = System.get_ports()
+        for port in ports:
+            PortPersistence.save_python(ports[port])
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -61,13 +62,11 @@ class PortControl():
         """
         print 'Port.type =', port.type
         print 'Port.language =', port.language
-        print 'Port.label =', port.label
+        print 'Port.hint =', port.hint
         print 'Port.color =', port.color
         print 'Port.multiple =',  port.multiple
-        print 'Port.source =', port.source
+        print 'Port.file =', port.file
         print 'Port.code =', port.code
-        print 'Port.input_codes =', port.input_codes
-        print 'Port.output_codes =', port.output_codes
         print 'Port.var_name =', port.var_name
 
     # ----------------------------------------------------------------------
@@ -75,20 +74,15 @@ class PortControl():
     def add_port(cls, port):
         # first, save it
         PortPersistence.save(port)
-        # Then add it to system
-        from mosaicode.system import System
-        System.ports[port.type] = port
 
     # ----------------------------------------------------------------------
     @classmethod
     def delete_port(cls, port_key):
         from mosaicode.system import System
-        port = System.ports[port_key]
-        if port.source == "xml":
-            data_dir = System.get_user_dir() + "/extensions/"
-            file_name = data_dir + port.type + ".xml"
-            os.remove(file_name)
-            System.ports.pop(port_key, None)
+        ports = System.get_ports()
+        port = ports[port_key]
+        if port.file is not None:
+            os.remove(port.file)
             return True
         else:
             return False

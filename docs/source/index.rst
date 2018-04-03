@@ -13,7 +13,7 @@ Contents:
    :maxdepth: 2
 
    user-documentation/getting-started/index
-   user-documentation/building-plugins/index
+   user-documentation/building-blockmodels/index
 
 
 ##################

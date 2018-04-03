@@ -13,43 +13,41 @@ from gi.repository import Gdk
 from gi.repository import GooCanvas
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
-from mosaicode.system import System as System
-from mosaicode.GUI.blockmenu import BlockMenu
-from mosaicode.model.plugin import Plugin
+from mosaicode.system import System
+from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.port import Port
 
 WIDTH_DEFAULT = 112
 HEIGHT_DEFAULT = 60
-PORT_SENSITIVITY = 12
-RADIUS = 25
-INPUT_WIDTH = 24
 INPUT_HEIGHT = 12
+RADIUS = 25
 
-class Block(GooCanvas.CanvasGroup, Plugin):
+
+
+class Block(GooCanvas.CanvasGroup, BlockModel):
     """
     This class contains methods related the Block class
     """
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram, plugin):
+    def __init__(self, diagram, block):
         """
         This method is the constuctor.
         """
         GooCanvas.CanvasGroup.__init__(self)
-        Plugin.__init__(self, plugin)
+        BlockModel.__init__(self, block)
 
         self.diagram = diagram
-        self.data_dir = System.DATA_DIR
-
         self.remember_x = 0
         self.remember_y = 0
 
-        self.widgets = {}
+        self.__widgets = {}
         self.focus = False
         self.has_flow = False
+        self.is_selected = False
 
         self.width = WIDTH_DEFAULT
-        self.build()
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
@@ -57,10 +55,23 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         self.connect("leave-notify-event", self.__on_leave_notify)
         self.move(int(float(self.x)), int(float(self.y)))
 
+        self.height = max(((self.maxIO - 1) * 5) +  # espacamento entre ports = 5
+                          (RADIUS * 2) +
+                          # tirando a margem superior e inferior
+                          (self.maxIO * INPUT_HEIGHT),
+                          # adicionando a altura de cada port
+                          HEIGHT_DEFAULT)
+
+        self.__draw_label()
+        self.__draw_rect()
+        self.__draw_ports()
+        self.__draw_icon()
+        self.update_flow()
+
     # ----------------------------------------------------------------------
     def __on_button_press(self, canvas_item, target_item, event):
         """
-        This method monitors the when the button is pressed.
+        This method monitors when the button is pressed.
 
             Parameters:
                 canvas_item
@@ -71,29 +82,28 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         # with Shift
         if event.state == Gdk.ModifierType.SHIFT_MASK \
                 | Gdk.ModifierType.MOD2_MASK:
-            if self in self.diagram.current_widgets:
-                self.diagram.current_widgets.remove(self)
+            if self.is_selected:
+                self.is_selected = False
             else:
-                self.diagram.current_widgets.append(self)
+                self.is_selected = True
 
         else:
-            if self not in self.diagram.current_widgets:
-                self.diagram.current_widgets = []
-                self.diagram.current_widgets.append(self)
+            if not self.is_selected:
+                self.diagram.deselect_all()
+                self.is_selected = True
 
         self.diagram.show_block_property(self)
 
         Gtk.Widget.grab_focus(self.diagram)
-        if event.button.button == 1:
+        if event.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
 
-        elif event.button.button == 3:
-            BlockMenu(self, event)
+        elif event.button == 3:
+            self.diagram.show_block_menu(self, event)
             return True
 
         self.diagram.update_flows()
-
         return True
 
     # ----------------------------------------------------------------------
@@ -116,7 +126,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         # Get the new position and move by the difference
         new_x = event.x - self.remember_x
         new_y = event.y - self.remember_y
-        self.diagram.move_selected_blocks(new_x, new_y)
+        self.diagram.move_selected(new_x, new_y)
         return False
 
     # ----------------------------------------------------------------------
@@ -166,7 +176,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                                     fill_color_rgba=self.get_color()
                                     )
         rect.set_property("tooltip", str(self.id))
-        self.widgets["Rect"] = rect
+        self.__widgets["Rect"] = rect
 
     # ----------------------------------------------------------------------
     def __draw_icon(self):
@@ -178,23 +188,32 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             self.label.title()[0] + "</span>"
 
         icon = GooCanvas.CanvasText(parent=self,
-                                     text=text_label,
-                                     fill_color='white',
-                                     anchor=GooCanvas.CanvasAnchorType.CENTER,
-                                     x=(self.width / 2),
-                                     y=(self.height / 2),
-                                     use_markup=True,
-                                     stroke_color='black'
-                                     )
+                                    text=text_label,
+                                    fill_color='white',
+                                    anchor=GooCanvas.CanvasAnchorType.CENTER,
+                                    x=(self.width / 2),
+                                    y=(self.height / 2),
+                                    use_markup=True,
+                                    stroke_color='black'
+                                    )
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
-        icon.get_natural_extents(width, width2)
+
+        try:  # Compatibility version problem
+            icon.get_natural_extents(width, width2)
+        except:
+            pass
+        try:
+            width, width2 = icon.get_natural_extents()
+        except:
+            pass
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height / 2))
         self.width = max(text_width + 22, self.width)
-        icon.translate((self.width / 2) - oldX, (self.height / 2) - oldY)
-        self.widgets["Icon"] = icon
+        icon.translate((self.width / 2)
+        - oldX, (self.height / 2) - oldY)
+
     # ----------------------------------------------------------------------
     def __draw_label(self):
         """
@@ -217,42 +236,60 @@ class Block(GooCanvas.CanvasGroup, Plugin):
 
         width = Pango.Rectangle()
         width2 = Pango.Rectangle()
-        label.get_natural_extents(width, width2)
+
+        try:  # Compatibility version problem
+            label.get_natural_extents(width, width2)
+        except:
+            pass
+        try:
+            width, width2 = label.get_natural_extents()
+        except:
+            pass
         text_width = width2.width / 1000
         oldX, oldY = ((self.width / 2), (self.height - 10))
         self.width = max(text_width + 22, self.width)
         label.translate((self.width / 2) - oldX, (self.height - 10) - oldY)
-        self.widgets["Label"] = label
 
     # ----------------------------------------------------------------------
-    def __draw_inputs(self):
+    def __draw_ports(self):
         """
-        This method draw the inputs.
+        This method draws the ports.
         """
-        ins = []
-        x = 0
-        for port in self.in_ports:
-            text_name = self.__get_port_label(port["type"]);
-            inp = GooCanvas.CanvasText(parent=self,
+        for port in self.ports:
+            text_name = "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
+                "<span color = '" + \
+                port.color + "'>" + \
+                port.hint + "</span>}</span>"
+            if port.is_input():
+                x = 2
+                alignment = Pango.Alignment.LEFT
+                anchor=GooCanvas.CanvasAnchorType.WEST
+                press_event = self.__on_input_press
+                release_event = self.__on_input_release
+            else:
+                x = (self.width - 1)
+                alignment = Pango.Alignment.RIGHT
+                anchor = GooCanvas.CanvasAnchorType.EAST
+                press_event = self.__on_output_press
+                release_event = self.__on_output_release
+
+            text = GooCanvas.CanvasText(parent=self,
                                  text=text_name,
                                  fill_color='black',
-                                 anchor=GooCanvas.CanvasAnchorType.WEST,
-                                 alignment = Pango.Alignment.LEFT,
-                                 x=2,
+                                 anchor=anchor,
+                                 alignment=alignment,
+                                 x=x,
                                  y=(RADIUS +  # upper border
-                                     (x * 5) +  # spacing betwen ports
-                                      x * INPUT_HEIGHT),  # prev ports
-                                 use_markup=True
+                                     (port.type_index * 5) +  # spacing betwen ports
+                                      port.type_index * INPUT_HEIGHT),  # prev ports
+                                 use_markup=True,
+                                 tooltip=port.label
                                  )
-            inp.set_property("tooltip", port["label"])
-            inp.connect("button-press-event", self.__on_input_press, x)
-            inp.connect("button-release-event", self.__on_input_release, x)
-            ins.append(inp)
-            x += 1
-        self.widgets["Inputs"] = ins
+            text.connect("button-press-event", press_event , port)
+            text.connect("button-release-event", release_event, port)
 
     # ----------------------------------------------------------------------
-    def __on_input_press(self, canvas_item, target_item, event, args):
+    def __on_input_press(self, canvas_item, target_item, event, port):
         """
         This method return true if a input was connected.
 
@@ -263,7 +300,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             Returns:
                 * **Types** (:class:`boolean<boolean>`): Indicates the input as connected.
         """
-        self.diagram.end_connection(self, args)
+        self.diagram.end_connection(self, port)
         return True
 
     # ----------------------------------------------------------------------
@@ -281,35 +318,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         return True
 
     # ----------------------------------------------------------------------
-    def __draw_outputs(self):
-        """
-        This method draw the outputs.
-        """
-        outs = []
-        x = 0
-        for port in self.out_ports:
-            text_name = self.__get_port_label(port["type"]);
-            out = GooCanvas.CanvasText(parent=self,
-                                 text=text_name,
-                                 fill_color='black',
-                                 anchor=GooCanvas.CanvasAnchorType.EAST,
-                                 alignment = Pango.Alignment.RIGHT,
-                                 x=(self.width - 1),
-                                 y=(RADIUS +  # upper border
-                                     (x * 5) +  # spacing betwen ports
-                                      x * INPUT_HEIGHT),  # prev ports
-                                 use_markup=True
-                                 )
-
-            out.set_property("tooltip", port["label"])
-            out.connect("button-press-event", self.__on_output_press, x)
-            out.connect("button-release-event", self.__on_output_release, x)
-            outs.append(out)
-            x += 1
-        self.widgets["Outputs"] = outs
-
-    # ----------------------------------------------------------------------
-    def __on_output_press(self, canvas_item, target_item, event, args):
+    def __on_output_press(self, canvas_item, target_item, event, port):
         """
         This method monitors the output state, monitors if output was pressed.
 
@@ -321,7 +330,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
-        self.diagram.start_connection(self, args)
+        self.diagram.start_connection(self, port)
         return True
 
     # ----------------------------------------------------------------------
@@ -333,80 +342,6 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                 * **Types** (:class:`boolean<boolean>`)
         """
         return True
-
-    # ----------------------------------------------------------------------
-    def rebuild(self):
-        """
-        This method rebuild the block.
-        """
-        self.widgets = {}
-        # remove all elements
-        while self.get_root_item().get_n_children() != 0:
-            self.get_root_item().remove_child(0)
-        self.build()
-
-    # ----------------------------------------------------------------------
-    def build(self):
-        """
-        This method build the block.
-        """
-        maxIO = max(len(self.in_ports), len(self.out_ports))
-
-        # Generates the block size, based on the number of inputs,outputs
-        # Comment block is too small...
-        if not maxIO:
-            maxIO = 1
-
-        self.height = max(((maxIO - 1) * 5) +  # espacamento entre ports = 5
-                          (RADIUS * 2) +
-                          # tirando a margem superior e inferior
-                          (maxIO * INPUT_HEIGHT),
-                          # adicionando a altura de cada port
-                          HEIGHT_DEFAULT)
-
-        self.__draw_label()
-        self.__draw_rect()
-        self.__draw_inputs()
-        self.__draw_outputs()
-        self.__draw_icon()
-        self.update_flow()
-
-    # ----------------------------------------------------------------------
-    def get_input_pos(self, input_id):
-        """
-        This method get input position.
-
-            Parameters:
-                * **input_id**
-            Returns:
-                * **Types** (:class:`float<float>`)
-        """
-        isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = INPUT_WIDTH / 2 + x - PORT_SENSITIVITY
-        y = (RADIUS +  # upper border
-             (input_id * 5) +  # spacing betwen ports
-             input_id * INPUT_HEIGHT +  # previous ports
-             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
-        return (x, y)
-
-    # ----------------------------------------------------------------------
-    def get_output_pos(self, output_id):
-        """
-        This method get output position.
-
-            Parameters:
-                * **output_id**
-            Returns:
-                * **Types** (:class:`float<float>`)
-
-        """
-        isSet, x, y, scale, rotation = self.get_simple_transform()
-        x = self.width - (INPUT_WIDTH / 2) + x + PORT_SENSITIVITY
-        y = (RADIUS +  # upper border
-             (output_id * 5) +  # spacing betwen ports
-             output_id * INPUT_HEIGHT +  # previous ports
-             INPUT_HEIGHT / 2) + y - PORT_SENSITIVITY + 3
-        return (x, y)
 
     # ----------------------------------------------------------------------
     def move(self, x, y):
@@ -431,14 +366,6 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         self.translate(new_x - position[0], new_y - position[1])
 
     # ----------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete a block.
-        """
-        self.diagram.delete_block(self)
-        self.diagram.update_flows()
-
-    # ----------------------------------------------------------------------
     def get_position(self):
         """
         This method get position the block.
@@ -458,7 +385,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
                 * **data**
         """
         self.diagram.do("Set block property")
-        Plugin.set_properties(self, data)
+        BlockModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -468,7 +395,7 @@ class Block(GooCanvas.CanvasGroup, Plugin):
             Returns:
                 * **Types** ()
         """
-        return Plugin.get_properties(self)
+        return BlockModel.get_properties(self)
 
     # ----------------------------------------------------------------------
     def update_flow(self):
@@ -481,11 +408,15 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         self.has_flow = True
         distinct_con = []
         for conn in self.diagram.connectors:
-            if conn.sink != self:
+            if conn.input != self:
                 continue
-            if conn.sink_port not in distinct_con:
-                distinct_con.append(conn.sink_port)
-        if len(distinct_con) < len(self.in_ports):
+            if conn.input_port not in distinct_con:
+                distinct_con.append(conn.input_port)
+        in_count = 0
+        for port in self.ports:
+            if port.is_input():
+                in_count += 1
+        if len(distinct_con) < in_count:
             self.has_flow = False
         self.__update_state()
         return self.has_flow
@@ -497,32 +428,22 @@ class Block(GooCanvas.CanvasGroup, Plugin):
         """
         # Not connected: Color = red
         if self.has_flow:
-            self.widgets["Rect"].set_property("stroke_color", 'black')
+            self.__widgets["Rect"].set_property("stroke_color", 'black')
         else:
-            self.widgets["Rect"].set_property("stroke_color", 'red')
+            self.__widgets["Rect"].set_property("stroke_color", 'red')
 
         # in focus: Line width = 3
         if self.focus:
-            self.widgets["Rect"].set_property("line-width", 3)
+            self.__widgets["Rect"].set_property("line-width", 3)
         else:
-            self.widgets["Rect"].set_property("line-width", 1)
+            self.__widgets["Rect"].set_property("line-width", 1)
 
         # selected: Line = dashed
-        if self in self.diagram.current_widgets:
-            self.widgets["Rect"].set_property(
+        if self.is_selected:
+            self.__widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:
-            self.widgets["Rect"].set_property(
+            self.__widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
-    # ----------------------------------------------------------------------
-    def __get_port_label(self, port_type):
-        if port_type in System.ports:
-            return \
-                "<span font_family ='Arial' size = '7000' weight = 'ultralight'>{" + \
-                "<span color = '" + \
-                System.ports[port_type].color + "'>" + \
-                System.ports[port_type].label + "</span>}</span>"
-        else:
-            return "??"
 # ----------------------------------------------------------------------

@@ -10,11 +10,12 @@ class CodeTemplate(object):
     def __init__(self):
         self.type = self.__class__.__module__
         self.name = ""
+        self.file = None
         self.description = ""
         self.language = ""
         self.command = ""
         self.extension = ""
         self.code = "Invalid Code Template"
-        self.source = "python"
+        self.code_parts = []
 
 # ------------------------------------------------------------------------------

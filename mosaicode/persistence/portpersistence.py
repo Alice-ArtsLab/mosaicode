@@ -11,6 +11,8 @@ from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.port import Port
 
+tag_name = "MosaicodePort"
+
 class PortPersistence():
     """
     This class contains methods related the PortPersistence class.
@@ -28,28 +30,23 @@ class PortPersistence():
         """
         # load the port
         if os.path.exists(file_name) is False:
-            return
+            return None
         parser = XMLParser(file_name)
-        if parser.getTag("MosaicodePort") is None:
+        if parser.getTag(tag_name) is None:
             return None
 
         port = Port()
-        port.type = parser.getTagAttr("MosaicodePort", "type")
-        port.language = parser.getTagAttr("MosaicodePort", "language")
-        port.label = parser.getTagAttr("MosaicodePort", "label")
-        port.color = parser.getTagAttr("MosaicodePort", "color")
-        port.multiple = parser.getTagAttr("MosaicodePort", "multiple")
-        port.source = parser.getTagAttr("MosaicodePort", "source")
-        port.code = parser.getTag("MosaicodePort").getTag("code").getText()
-
-        count = 0
-        for code in port.input_codes:
-            port.input_codes[count] = parser.getTag('MosaicodePort').getTag('input_code' + str(count)).getText()
-            port.output_codes[count] = parser.getTag('MosaicodePort').getTag('output_code' + str(count)).getText()
-            count = count + 1
+        port.type = parser.getTagAttr(tag_name, "type")
+        port.language = parser.getTagAttr(tag_name, "language")
+        port.hint = parser.getTagAttr(tag_name, "hint")
+        port.color = parser.getTagAttr(tag_name, "color")
+        port.multiple = parser.getTagAttr(tag_name, "multiple")
+        port.var_name = parser.getTagAttr(tag_name, "var_name")
+        port.code = parser.getTag(tag_name).getTag("code").getText()
 
         if port.type == "":
             return None
+        
         return port
 
     # ----------------------------------------------------------------------
@@ -65,24 +62,15 @@ class PortPersistence():
         from mosaicode.system import System
         port.source = "xml"
         parser = XMLParser()
-        parser.addTag('MosaicodePort')
+        parser.addTag(tag_name)
 
-        parser.setTagAttr('MosaicodePort','type', port.type)
-        parser.setTagAttr('MosaicodePort','language', port.language)
-        parser.setTagAttr('MosaicodePort','label', port.label)
-        parser.setTagAttr('MosaicodePort','color', port.color)
-        parser.setTagAttr('MosaicodePort','multiple', port.multiple)
-        parser.setTagAttr('MosaicodePort','source', port.source)
-        parser.appendToTag('MosaicodePort','code').string = str(port.code)
-
-        count = 0
-        for code in port.input_codes:
-            parser.appendToTag('MosaicodePort', 'input_code' + \
-                        str(count)).string = str(port.input_codes[count])
-            parser.appendToTag('MosaicodePort', 'output_code' + \
-                        str(count)).string = str(port.output_codes[count])
-            count = count + 1
-
+        parser.setTagAttr(tag_name, 'type', port.type)
+        parser.setTagAttr(tag_name, 'language', port.language)
+        parser.setTagAttr(tag_name, 'hint', port.hint)
+        parser.setTagAttr(tag_name, 'color', port.color)
+        parser.setTagAttr(tag_name, 'multiple', port.multiple)
+        parser.setTagAttr(tag_name, 'var_name', port.var_name)
+        parser.appendToTag(tag_name, 'code').string = str(port.code)
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"
@@ -120,14 +108,7 @@ class PortPersistence():
         parser.setAttribute('label', port.label)
         parser.setAttribute('color', port.color)
         parser.setAttribute('multiple', port.multiple)
-        parser.setAttribute('source', 'python')
         parser.setAttribute('code', str(port.code))
-        parser.setAttribute('input_codes', [])
-        parser.setAttribute('output_codes', [])
-
-        for index, code in enumerate(port.input_codes, start=0):
-            parser.attributes['input_codes'].append(str(port.input_codes[index]))
-            parser.attributes['output_codes'].append(str(port.output_codes[index]))
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"

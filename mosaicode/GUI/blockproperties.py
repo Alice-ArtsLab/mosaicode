@@ -5,9 +5,9 @@ This module contains the BlockProperties.
 """
 
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from propertybox import PropertyBox
-gi.require_version('Gtk', '3.0')
 import gettext
 _ = gettext.gettext
 
@@ -62,5 +62,15 @@ class BlockProperties(Gtk.Notebook):
         """
         self.help.get_buffer().set_text(block.help)
         self.property_box.set_block(block)
+
+# ----------------------------------------------------------------------
+    def set_comment(self, comment):
+        """
+        This method set properties of each comment.
+
+            Parameters:
+            * **comment** (:class:`block<mosaicode.GUI.comment>`)
+        """
+        self.property_box.set_comment(comment)
 
 # ----------------------------------------------------------------------

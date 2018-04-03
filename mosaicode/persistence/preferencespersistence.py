@@ -8,6 +8,8 @@ import ast
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.model.preferences import Preferences
 
+tag_name = "MosaicodeProperties"
+
 class PreferencesPersistence():
     """
     This class contains methods related the PreferencesPersistence class.
@@ -31,26 +33,21 @@ class PreferencesPersistence():
             return prefs
         parser = XMLParser(file_name)
 
-        if parser.getTag("MosaicodeProperties") is None:
+        if parser.getTag(tag_name) is None:
             return prefs
 
         try:
-            prefs.default_directory = parser.getTagAttr("MosaicodeProperties",
-                        "default_directory")
-            prefs.default_filename = parser.getTagAttr("MosaicodeProperties",
-                        "default_filename")
-            prefs.grid = int(parser.getTagAttr("MosaicodeProperties","grid"))
-            prefs.width = int(parser.getTagAttr("MosaicodeProperties","width"))
-            prefs.height = int(parser.getTagAttr("MosaicodeProperties",
-                        "height"))
-            prefs.hpaned_work_area = int(parser.getTagAttr("MosaicodeProperties",
-                        "hpaned_work_area"))
-            prefs.vpaned_bottom = int(parser.getTagAttr("MosaicodeProperties",
-                        "vpaned_bottom"))
-            prefs.vpaned_left = int(parser.getTagAttr("MosaicodeProperties",
-                        "vpaned_left"))
+            prefs.default_directory = parser.getTagAttr(tag_name, "default_directory")
+            prefs.default_filename = parser.getTagAttr(tag_name, "default_filename")
+            prefs.grid = int(parser.getTagAttr(tag_name,"grid"))
+            prefs.port = int(parser.getTagAttr(tag_name, "network_port"))
+            prefs.width = int(parser.getTagAttr(tag_name,"width"))
+            prefs.height = int(parser.getTagAttr(tag_name, "height"))
+            prefs.hpaned_work_area = int(parser.getTagAttr(tag_name, "hpaned_work_area"))
+            prefs.vpaned_bottom = int(parser.getTagAttr(tag_name, "vpaned_bottom"))
+            prefs.vpaned_left = int(parser.getTagAttr(tag_name, "vpaned_left"))
 
-            files = parser.getTag("MosaicodeProperties").getTag(
+            files = parser.getTag(tag_name).getTag(
                         "recent_files").getChildTags("name")
             for file_name in files:
                 prefs.recent_files.append(file_name.getAttr("value"))
@@ -69,22 +66,18 @@ class PreferencesPersistence():
             * **Types** (:class:`boolean<boolean>`)
         """
         parser = XMLParser()
-        parser.addTag('MosaicodeProperties')
-        parser.setTagAttr('MosaicodeProperties','default_directory',
-                prefs.default_directory)
-        parser.setTagAttr('MosaicodeProperties','default_filename',
-                prefs.default_filename)
-        parser.setTagAttr('MosaicodeProperties','grid', prefs.grid)
-        parser.setTagAttr('MosaicodeProperties','width', prefs.width)
-        parser.setTagAttr('MosaicodeProperties','height', prefs.height)
-        parser.setTagAttr('MosaicodeProperties','hpaned_work_area',
-                prefs.hpaned_work_area)
-        parser.setTagAttr('MosaicodeProperties','vpaned_bottom',
-                prefs.vpaned_bottom)
-        parser.setTagAttr('MosaicodeProperties','vpaned_left',
-                prefs.vpaned_left)
+        parser.addTag(tag_name)
+        parser.setTagAttr(tag_name,'default_directory', prefs.default_directory)
+        parser.setTagAttr(tag_name,'default_filename', prefs.default_filename)
+        parser.setTagAttr(tag_name,'grid', prefs.grid)
+        parser.setTagAttr(tag_name, 'network_port', prefs.port)
+        parser.setTagAttr(tag_name,'width', prefs.width)
+        parser.setTagAttr(tag_name,'height', prefs.height)
+        parser.setTagAttr(tag_name,'hpaned_work_area', prefs.hpaned_work_area)
+        parser.setTagAttr(tag_name,'vpaned_bottom', prefs.vpaned_bottom)
+        parser.setTagAttr(tag_name,'vpaned_left', prefs.vpaned_left)
 
-        parser.appendToTag('MosaicodeProperties', 'recent_files')
+        parser.appendToTag(tag_name, 'recent_files')
         for key in prefs.recent_files:
             parser.appendToTag('recent_files', 'name', value=key)
 
