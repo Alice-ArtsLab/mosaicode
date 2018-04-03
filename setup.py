@@ -27,21 +27,23 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-      install_requires=['pip', 'Python>=2.7', "PyGObject", "GooCalendar", "BeautifulSoup4", "lxml", "pgi",
-                        "mosaicomponents"],
+
+       install_requires=['beautifulsoup4','Python>=2.7','GooCalendar','lxml','PyGObject','opencv-python','pgi','pygobject','setuptools','pip','mosaicomponents'],
       tests_require=['pytest'],
-      test_suite='tests',
-      version='1.0a7',
+      test_suite='test',
+      version='1.3',
       packages=find_packages(exclude=["tests.*", "tests"]),
       scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
-      description='Image Processing and Computer Vision \
-      Automatic Programming Tool',
+      description='Code generation for Digital art',
       author='Bits & Beads Research Lab',
       author_email='mosaicode-dev@googlegroups.com',
       maintainer="Bits & Beads Research Lab",
       maintainer_email="mosaicode-dev@googlegroups.com",
       license="GNU GPL3",
-      url='http://mosaicode.github.io/',
+
+      url='https://mosaicode.github.io', 
+      download_url = 'https://github.com/Mosaicode/mosaicode.git',
+      keywords = ['VLP', 'Blocks','Code Generation', 'Digital art'],  
 
       # this is fucked up! must put it in package_data!!
       data_files=[

@@ -5,9 +5,11 @@ Mosaicode
 
 -------------
 
-### Installing Mosaicode
 
-Install dependencies: 
+| | Command |
+| :---: | :---: |
+| *Compactado:* | ``` gunzip mosaicode-master.zip ``` |
+| *Cloning GitHub:* | `git clone https://github.com/Mosaicode/mosaicode.git` </br> `git checkout newgui`|
 
 ```
 sudo apt-get install libopencv-dev python-opencv
