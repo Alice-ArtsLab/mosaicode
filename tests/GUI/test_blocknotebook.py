@@ -1,27 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
-from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.GUI.blocknotebook import BlockNotebook
+from tests.test_base import TestBase
 
-class TestBlockNotebook(TestCase):
 
-    def setUp(self):
-        """Do the test basic setup."""
-        win = MainWindow()
-        self.blocknotebook = BlockNotebook(win)
+class TestBlockNotebook(TestBase):
 
-    # ----------------------------------------------------------------------
-    def test_update(self):
-        self.assertIsNone(self.blocknotebook.update())
+    def test_update_blocks(self):
+        self.assertFalse(True)
 
-    # ----------------------------------------------------------------------
     def test_search(self):
-        query = "Testando"
-        self.assertIsNone(self.blocknotebook.search(query))
-        query = None
-        self.assertIsNone(self.blocknotebook.search(query))
+        self.assertFalse(True)
 
-    # ----------------------------------------------------------------------
     def test_get_selected_block(self):
-        self.assertIsNone(self.blocknotebook.get_selected_block())
+        self.assertFalse(True)
+
