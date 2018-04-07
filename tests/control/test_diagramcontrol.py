@@ -1,38 +1,34 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
+from tests.test_base import TestBase
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.comment import Comment
+from mosaicode.model.blockmodel import BlockModel
 from mosaicode.control.diagramcontrol import DiagramControl
-from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.GUI.diagram import Diagram
 
-class TestDiagramControl(TestCase):
 
-    def setUp(self):
-        """Do the test basic setup."""
-        diagram = Diagram(MainWindow())
-        self.diagram_control = DiagramControl(diagram)
+class TestDiagramControl(TestBase):
 
-    # ----------------------------------------------------------------------
-    def test_get_code_template(self):
-        #self.diagram_control.get_code_template()
-        self.assertIsNotNone(self.diagram_control.get_code_template())
+    def test_add_block(self):
+        diagram_control = self.create_diagram_control()
 
-    # ----------------------------------------------------------------------
+        block_model = BlockModel()
+        block_model.maxIO = 2
+
+        block = Block(diagram_control, block_model)
+        block.language = "language"
+
+        self.assertTrue(DiagramControl.add_block(diagram_control.diagram, block), "Failed to add block")
+
+    def test_add_comment(self):
+        comment = Comment(self.create_diagram())
+
+        self.assertTrue(DiagramControl.add_comment(comment.diagram, comment), "Failed to add comment")
+
     def test_load(self):
-        self.assertFalse(self.diagram_control.load("Teste"))
-        self.assertFalse(self.diagram_control.load(None))
+        self.assertFalse(True)
 
-    # ----------------------------------------------------------------------
     def test_save(self):
-        file_name = None
-        self.assertIsNotNone(self.diagram_control.save(file_name))
-        file_name = "None"
-        self.assertIsNotNone(self.diagram_control.save(file_name))
-        #file_name = -1
-        #self.assertIsNotNone(self.diagram_control.save(file_name))
+        self.assertFalse(True)
 
-    # ----------------------------------------------------------------------
     def test_export_png(self):
-        self.assertFalse(self.diagram_control.export_png(None))
-        self.assertTrue(self.diagram_control.export_png("diagrama.png"))
-        self.assertFalse(self.diagram_control.export_png("Teste.png"))
+        self.assertFalse(True)
+

@@ -70,3 +70,5 @@ debian/mosaicode\.substvars
 debian/mosaicode\.postinst\.debhelper
 
 debian/files
+
+tests/control/_trial_temp/

@@ -7,19 +7,18 @@ import gi
 import os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicomponents.stringfield import StringField
 import gettext
 _ = gettext.gettext
 
 
-class Dialog():
+class Dialog:
     """
     This class contains methods related the Dialog class.
     """
 
     # ----------------------------------------------------------------------
 
-    def open_dialog(self, title, main_window, filetype = None):
+    def open_dialog(self, title, main_window, filetype=None):
         """
         This method open dialog box.
 
@@ -56,11 +55,7 @@ class Dialog():
         return file_name
 
     # ----------------------------------------------------------------------
-    def save_dialog(self,
-                main_window,
-                title = "Save",
-                filename = None,
-                filetype = None):
+    def save_dialog(self, main_window, title="Save", filename=None, filetype=None):
         """
         This method open save dialog.
 

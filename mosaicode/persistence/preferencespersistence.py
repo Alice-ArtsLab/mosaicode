@@ -4,13 +4,13 @@
 This module contains the PreferencesPersistence class.
 """
 import os
-import ast
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.model.preferences import Preferences
 
 tag_name = "MosaicodeProperties"
 
-class PreferencesPersistence():
+
+class PreferencesPersistence:
     """
     This class contains methods related the PreferencesPersistence class.
     """
