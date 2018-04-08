@@ -22,7 +22,12 @@ class DiagramPersistence():
     # ----------------------------------------------------------------------
     @classmethod
     def load(cls, diagram):
+        """
+        This method load the xml file that represents the diagram.
 
+            :param diagram: diagram to load.
+            :return: operation status (True or False)
+        """
         from mosaicode.control.diagramcontrol import DiagramControl
         # load the diagram
         parser = XMLParser(diagram.file_name)
@@ -97,7 +102,6 @@ class DiagramPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-
         parser = XMLParser()
         parser.addTag(tag_name)
         parser.appendToTag(tag_name, 'version', value=System.VERSION)

@@ -725,6 +725,31 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 self.blocks[key].move(right -x, 0)
         self.update_flows()
 
+    def get_min_max(self):
+        """
+        This method get min and max.
+            Returns
+
+        """
+        min_x = self.main_window.get_size()[0]
+        min_y = self.main_window.get_size()[1]
+
+        max_x = 0
+        max_y = 0
+
+        for block_id in self.blocks:
+            block = self.blocks[block_id]
+            x, y = block.get_position()
+            if x < min_x:
+                min_x = x
+            if y < min_y:
+                min_y = y
+            if x + block.width > max_x:
+                max_x = x + block.width
+            if y + block.height > max_y:
+                max_y = y + block.height
+        return min_x, min_y, max_x - min_x, max_y - min_y
+
     # ----------------------------------------------------------------------
     def show_block_menu(self, block, event):
         self.main_window.block_menu.show_block_menu(block, event)

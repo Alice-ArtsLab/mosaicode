@@ -84,6 +84,8 @@ class DiagramControl:
         self.diagram.redo_stack = []
         self.diagram.undo_stack = []
 
+        return True
+
     # ----------------------------------------------------------------------
     def save(self, file_name=None):
         """
