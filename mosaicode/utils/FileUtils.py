@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 
 def get_absolute_path_from_file(filename):
@@ -12,4 +13,13 @@ def get_absolute_path_from_file(filename):
     filename = os.path.abspath(os.path.realpath(filename))
 
     return filename
+
+
+def get_temp_file():
+    """Gets the temporary file.
+
+        :return: temporary file.
+    """
+    with tempfile.NamedTemporaryFile() as file:
+        return file.name
 

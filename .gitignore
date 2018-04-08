@@ -72,3 +72,9 @@ debian/mosaicode\.postinst\.debhelper
 debian/files
 
 tests/control/_trial_temp/
+
+tests/GUI/_trial_temp/
+
+tests/control/_trial_temp-1/
+
+tests/persistence/_trial_temp/
