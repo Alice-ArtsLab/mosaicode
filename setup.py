@@ -31,11 +31,12 @@ setup(name='mosaicode',
                         "mosaicomponents"],
       tests_require=['pytest'],
       test_suite='tests',
-      version='1.3',
+      version='1.4',
       packages=find_packages(exclude=["tests.*", "tests"]),
       scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
-      description='Image Processing and Computer Vision \
-      Automatic Programming Tool \ Code generation for Visual art ',
+      description='Image Processing and Computer Vision, \
+      Automatic Programming Tool, \
+      Code generation for Visual art ',
       author='Bits & Beads Research Lab',
       author_email='mosaicode-dev@googlegroups.com',
       maintainer="Bits & Beads Research Lab",
