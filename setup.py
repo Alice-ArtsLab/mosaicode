@@ -31,7 +31,7 @@ setup(name='mosaicode',
                         "mosaicomponents"],
       tests_require=['pytest'],
       test_suite='tests',
-      version='1.0a7',
+      version='1.0.0.dev1',
       packages=find_packages(exclude=["tests.*", "tests"]),
       scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
       description='Image Processing and Computer Vision \
