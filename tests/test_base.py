@@ -30,10 +30,9 @@ class TestBase(unittest.TestCase):
         block_model = BlockModel()
         block_model.maxIO = 2
 
-        block = Block(diagram_control, block_model)
+        block = Block(diagram_control.diagram, block_model)
         block.language = "language"
         DiagramControl.add_block(diagram_control.diagram, block)
-
         return block
 
     def create_comment(self):

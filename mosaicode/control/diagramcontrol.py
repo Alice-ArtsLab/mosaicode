@@ -62,6 +62,21 @@ class DiagramControl:
         return True
 
     # ----------------------------------------------------------------------
+    @classmethod
+    def add_connection(cls, diagram, connection):
+        """
+        This method adds a connection to the diagram.
+
+            Parameters:
+                * **connection**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
+        diagram.do("Add Connection")
+        diagram.connectors.append(connection)
+        return True
+
+    # ----------------------------------------------------------------------
     def load(self, file_name=None):
         """
         This method load a file.
