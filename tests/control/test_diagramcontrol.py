@@ -9,7 +9,7 @@ class TestDiagramControl(TestBase):
     def test_add_block(self):
         block = self.create_block()
 
-        self.assertTrue(DiagramControl.add_block(block.diagram.diagram, block), "Failed to add block")
+        self.assertTrue(DiagramControl.add_block(block.diagram, block), "Failed to add block")
 
     def test_add_comment(self):
         comment = Comment(self.create_diagram())
@@ -47,7 +47,7 @@ class TestDiagramControl(TestBase):
         file_name = get_temp_file() + ".mscd"
 
         block = self.create_block()
-        DiagramControl.add_block(block.diagram.diagram, block)
+        DiagramControl.add_block(block.diagram, block)
 
         # result = DiagramControl.export_png(file_name)
         result = True
