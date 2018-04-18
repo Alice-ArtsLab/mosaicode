@@ -27,19 +27,18 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-      install_requires=['pip', 'Python>=2.7', "PyGObject", "GooCalendar", "BeautifulSoup4", "lxml", "pgi",
-                        "mosaicomponents"],
+      install_requires=["PyGObject", "GooCalendar", "BeautifulSoup4", "lxml", "pgi", "mosaicomponents"],
+      python_requires='>=2.7',
       tests_require=['pytest'],
       test_suite='tests',
-      version='1.4',
+      version='1.0.3.dev3',
       packages=find_packages(exclude=["tests.*", "tests"]),
       scripts=['launcher/mosaicode', 'scripts/mosaicode.sh','scripts/mosaicode.1'],
-      description='Image Processing and Computer Vision, \
-      Automatic Programming Tool, \
-      Code generation for Visual art ',
-      author='Bits & Beads Research Lab',
+      description='Image Processing and Computer Vision \
+      Automatic Programming Tool',
+      author='ALICE: Arts Lab in Interfaces, Computers, and Experiences',
       author_email='mosaicode-dev@googlegroups.com',
-      maintainer="Bits & Beads Research Lab",
+      maintainer="ALICE: Arts Lab in Interfaces, Computers, and Experiences",
       maintainer_email="mosaicode-dev@googlegroups.com",
       license="GNU GPL3",
       url='http://mosaicode.github.io/',
@@ -49,8 +48,8 @@ setup(name='mosaicode',
             ('/usr/share/mosaicode/images', glob("app_data/images/*")),
             ('/usr/share/mosaicode/po/pt/LC_MESSAGES/', glob("app_data/po/pt/LC_MESSAGES/*")),
             ('/usr/share/applications/', ["app_data/mosaicode.desktop"]),
-            ('/usr/share/icons/hicolor/scalable/apps', ['app_data/images/mosaicode.svg']),
-            ('/usr/share/pixmaps', ['app_data/images/mosaicode.svg']),
+            ('/usr/share/icons/hicolor/scalable/apps', ['app_data/images/mosaicode.png']),
+            ('/usr/share/pixmaps', ['app_data/images/mosaicode.png']),
             ('/usr/share/icons/hicolor/24x24/apps', ['app_data/images/mosaicode.png'])],
       zip_safe=False,
       **config

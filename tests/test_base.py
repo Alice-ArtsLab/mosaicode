@@ -1,6 +1,7 @@
 import unittest
 from abc import ABCMeta
 from mosaicode.GUI.block import Block
+from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.model.blockmodel import BlockModel
@@ -29,9 +30,13 @@ class TestBase(unittest.TestCase):
         block_model = BlockModel()
         block_model.maxIO = 2
 
-        block = Block(diagram_control, block_model)
+        block = Block(diagram_control.diagram, block_model)
         block.language = "language"
         DiagramControl.add_block(diagram_control.diagram, block)
-
         return block
+
+    def create_comment(self):
+        comment = Comment(self.create_diagram())
+        comment.text = "Test"
+        return comment
 

@@ -106,7 +106,6 @@ class BlockControl():
     # ----------------------------------------------------------------------
     @classmethod
     def delete_block(cls, block):
-        from mosaicode.system import System
         if block.file is not None:
             os.remove(block.file)
             return True

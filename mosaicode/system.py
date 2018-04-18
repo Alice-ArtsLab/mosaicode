@@ -68,6 +68,13 @@ class System(object):
             return copy(self.__blocks)
 
         # ----------------------------------------------------------------------
+        def remove_block(self, block):
+            try:
+                return self.__blocks.pop(block.type)
+            except:
+                return None
+
+        # ----------------------------------------------------------------------
         def get_code_templates(self):
             return copy(self.__code_templates)
 
@@ -228,6 +235,14 @@ class System(object):
         This method returns System installed blocks.
         """
         return cls.instance.get_blocks()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def remove_block(cls, block):
+        """
+        This method removes a block installed in the System.
+        """
+        return cls.instance.remove_block(block)
 
     # ----------------------------------------------------------------------
     @classmethod

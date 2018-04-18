@@ -55,10 +55,8 @@ class DiagramPersistence():
             properties = block.getChildTags("property")
             props = {}
             for prop in properties:
-                try:
+                if hasattr(prop, 'key') and hasattr(prop, 'value'):
                     props[prop.key] = prop.value
-                except:
-                    pass
             new_block = deepcopy(system_blocks[block_type])
             new_block.set_properties(props)
             new_block.id = block_id
@@ -66,20 +64,21 @@ class DiagramPersistence():
             new_block.y = float(y)
             DiagramControl.add_block(diagram, new_block)
 
-        connections = parser.getTag(tag_name).getTag(
-            "connections").getChildTags("connection")
+        connections = parser.getTag(tag_name).getTag("connections").getChildTags("connection")
         for conn in connections:
-            try:
-                from_block = diagram.blocks[int(conn.getAttr("from_block"))]
-                to_block = diagram.blocks[int(conn.getAttr("to_block"))]
-            except:
+            if not hasattr(conn, 'from_block'):
                 continue
+            elif not hasattr(conn, 'to_block'):
+                continue
+            from_block = diagram.blocks[int(conn.from_block)]
             from_block_out = int(conn.getAttr("from_out"))
             to_block_in = int(conn.getAttr("to_in"))
-            connection = ConnectionModel(diagram, from_block, from_block.ports[from_block_out])
-            connection.input = to_block
-            connection.input_port = to_block.ports[to_block_in]
-            diagram.connectors.append(connection)
+            to_block = diagram.blocks[int(conn.to_block)]
+            connection = ConnectionModel(diagram, from_block,
+                                from_block.ports[from_block_out],
+                                to_block,
+                                to_block.ports[to_block_in])
+            DiagramControl.add_connection(diagram, connection)
 
         comments = parser.getTag(tag_name).getTag(
                     "comments").getChildTags("comment")

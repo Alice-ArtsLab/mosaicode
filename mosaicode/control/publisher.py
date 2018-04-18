@@ -55,7 +55,7 @@ class Publisher:
 
         while self.httpd is None:
             try:
-                path = '/tmp/'
+                path = System.properties.default_directory
                 my_path = os.curdir
                 os.chdir(path)
                 System.log("Trying to run the server")
