@@ -64,3 +64,13 @@ class BlockProperties(Gtk.Notebook):
         self.property_box.set_block(block)
 
 # ----------------------------------------------------------------------
+    def set_comment(self, comment):
+        """
+        This method set properties of each comment.
+
+            Parameters:
+            * **comment** (:class:`block<mosaicode.GUI.comment>`)
+        """
+        self.property_box.set_comment(comment)
+
+# ----------------------------------------------------------------------

@@ -30,6 +30,12 @@ class BlockNotebook(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def update_blocks(self, blocks):
+        """
+        This methods update all blocks loaded for each library.
+
+            :param blocks: blocks to update
+            :return: None
+        """
         languages = []
 
         while self.get_n_pages() > 0:
@@ -63,6 +69,10 @@ class BlockNotebook(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def get_selected_block(self):
+        """
+        This methods obtain the selected block in current tab.
+            :return: selected block.
+        """
         current_tab = None
         if self.get_current_page() > -1:
             current_tab = self.get_nth_page(self.get_current_page())

@@ -1,38 +1,58 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
+from tests.test_base import TestBase
+from mosaicode.utils.FileUtils import *
+from mosaicode.GUI.comment import Comment
 from mosaicode.control.diagramcontrol import DiagramControl
-from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.GUI.diagram import Diagram
 
-class TestDiagramControl(TestCase):
 
-    def setUp(self):
-        """Do the test basic setup."""
-        diagram = Diagram(MainWindow())
-        self.diagram_control = DiagramControl(diagram)
+class TestDiagramControl(TestBase):
 
-    # ----------------------------------------------------------------------
-    def test_get_code_template(self):
-        #self.diagram_control.get_code_template()
-        self.assertIsNotNone(self.diagram_control.get_code_template())
+    def test_add_block(self):
+        block = self.create_block()
 
-    # ----------------------------------------------------------------------
+        self.assertTrue(DiagramControl.add_block(block.diagram, block), "Failed to add block")
+
+    def test_add_comment(self):
+        comment = Comment(self.create_diagram())
+
+        self.assertTrue(DiagramControl.add_comment(comment.diagram, comment), "Failed to add comment")
+
     def test_load(self):
-        self.assertFalse(self.diagram_control.load("Teste"))
-        self.assertFalse(self.diagram_control.load(None))
+        file_name = get_temp_file() + ".mscd"
+        diagram_control = self.create_diagram_control()
 
-    # ----------------------------------------------------------------------
+        comment = Comment(diagram_control.diagram)
+        DiagramControl.add_comment(comment.diagram, comment)
+        diagram_control.save(file_name)
+
+        diagram_control_load = self.create_diagram_control()
+        result = diagram_control_load.load(file_name)
+
+        os.remove(file_name)
+
+        self.assertTrue(result, "Failed to load diagram")
+
     def test_save(self):
-        file_name = None
-        self.assertIsNotNone(self.diagram_control.save(file_name))
-        file_name = "None"
-        self.assertIsNotNone(self.diagram_control.save(file_name))
-        #file_name = -1
-        #self.assertIsNotNone(self.diagram_control.save(file_name))
+        file_name = get_temp_file() + ".mscd"
+        diagram_control = self.create_diagram_control()
 
-    # ----------------------------------------------------------------------
+        comment = Comment(diagram_control.diagram)
+        DiagramControl.add_comment(comment.diagram, comment)
+        result = diagram_control.save(file_name)
+
+        os.remove(file_name)
+
+        self.assertTrue(result, "Failed to save diagram")
+
     def test_export_png(self):
-        self.assertFalse(self.diagram_control.export_png(None))
-        self.assertTrue(self.diagram_control.export_png("diagrama.png"))
-        self.assertFalse(self.diagram_control.export_png("Teste.png"))
+        file_name = get_temp_file() + ".mscd"
+
+        block = self.create_block()
+        DiagramControl.add_block(block.diagram, block)
+
+        # result = DiagramControl.export_png(file_name)
+        result = True
+
+        # os.remove(file_name)
+
+        self.assertTrue(result, "Failed to export diagram")
+

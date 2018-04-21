@@ -20,7 +20,6 @@ class CodeGenerator():
     """
 
     # ----------------------------------------------------------------------
-
     def __init__(self, diagram=None, code_template=None):
         self.diagram = diagram
         self.code_template = code_template
@@ -63,7 +62,7 @@ class CodeGenerator():
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
         result = result.replace("%l", self.diagram.language)
-        result = result.replace("%n", self.diagram.patch_name[:-4])
+        result = result.replace("%n", self.diagram.patch_name)
         result = result.replace(" ", "_")
         return result
 
@@ -156,66 +155,80 @@ class CodeGenerator():
             active_weight += 1
 
     # ----------------------------------------------------------------------
+    def __generate_port_var_name_code(self, block, port):
+        """
+        This method generate the block code.
+        """
+        value = port.var_name
+
+        # Replace all port[stuff] values
+        for attribute in port.__dict__:
+            my_key = "$port[" + attribute + "]$"
+            my_value = str(port.__dict__[attribute])
+            my_value = my_value.replace(" ", "_")
+            my_value = my_value.lower()
+            value = value.replace(my_key,my_value)
+
+        # Replace all block[stuff] values
+        for attribute in block.__dict__:
+            my_key = "$block[" + attribute + "]$"
+            my_value = str(block.__dict__[attribute])
+            my_value = my_value.replace(" ", "_")
+            my_value = my_value.lower()
+            value = value.replace(my_key, my_value)
+
+        return value
+
+    # ----------------------------------------------------------------------
     def __generate_block_code(self, block):
         """
         This method generate the block code.
         """
-        ports = System.get_ports()
+
+        # Empty the previous generated codes, if exist
+        block.gen_codes = {}
+
+        # For each code part, we need to replace wildcards
         for key in block.codes:
+            block.gen_codes[key] = block.codes[key]
+
             # First we replace in ports
-            count = 0
             for port in block.ports:
-                value = ports[port["type"]].var_name
-                value = value.replace("$port_number$", str(count))
-                value = value.replace("$port_name$", port["name"])
-                value = value.replace("$conn_type$", port["conn_type"])
-                my_key = "$port[" + port["name"] + "]$"
-                block.codes[key] = block.codes[key].replace(my_key, value)
-                count += 1
+                my_key = "$port[" + port.name + "]$"
+                my_value = self.__generate_port_var_name_code(block, port)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, my_value)
+
             # Then we replace object attributes by their values
             for attribute in block.__dict__:
                 my_key = "$" + attribute + "$"
                 value = str(block.__dict__[attribute])
-                block.codes[key] = block.codes[key].replace(my_key, value)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
+
             # Then we replace properties by their values
             for prop in block.get_properties():
                 my_key = "$prop[" + prop.get("name") + "]$"
                 value = str(prop.get("value"))
-                block.codes[key] = block.codes[key].replace(my_key, value)
+                block.gen_codes[key] = block.gen_codes[key].replace(my_key, value)
 
+        # Append it all to Generator Codes
         for key in self.codes:
             if key in block.codes:
-                self.codes[key].append(block.codes[key])
+                self.codes[key].append(block.gen_codes[key])
             else:
                 self.codes[key].append('')
 
         connections = ""
         for connection in block.connections:
-            code = connection.port.code
+            connection_code = connection.output_port.code
             # Replace output
-            port = connection.output_port
-            value = connection.port.var_name
-            value = value.replace("$port_number$", str(port["index"]))
-            value = value.replace("$port_name$", port["name"])
-            value = value.replace("$conn_type$", port["conn_type"])
-            for attribute in connection.output.__dict__:
-                my_key = "$" + attribute + "$"
-                my_value = str(connection.output.__dict__[attribute])
-                value = value.replace(my_key,my_value)
-            code = code.replace("$output$", value)
+            value = self.__generate_port_var_name_code(connection.output, connection.output_port)
+            connection_code = connection_code.replace("$output$", value)
 
             # Replace Input
-            port = connection.input_port
-            value = connection.port.var_name
-            value = value.replace("$port_number$", str(port["index"]))
-            value = value.replace("$port_name$", port["name"])
-            value = value.replace("$conn_type$", port["conn_type"])
-            for attribute in connection.input.__dict__:
-                my_key = "$" + attribute + "$"
-                my_value = str(connection.input.__dict__[attribute])
-                value = value.replace(my_key,my_value)
-            code = code.replace("$input$", value)
-            connections += code
+            value = self.__generate_port_var_name_code(connection.input, connection.input_port)
+            connection_code = connection_code.replace("$input$", value)
+            connections += connection_code
+
         self.connections.append(connections)
 
 

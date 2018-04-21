@@ -50,6 +50,13 @@ class PreferenceWindow(Gtk.Dialog):
         self.tabs.append_page(self.grid_preferences_tab, Gtk.Label(_("Grid Preferences")))
         self.__create_grid_preferences_tab()
 
+        # Network Preferences
+        # ----------------------------------------------------------------------
+        self.network_preferences_tab = Gtk.Box()
+        self.network_preferences_tab.set_border_width(10)
+        self.tabs.append_page(self.network_preferences_tab, Gtk.Label(_("Network Preferences")))
+        self.__create_network_preferences_tab()
+
         self.show_all()
         response = self.run()
 
@@ -57,6 +64,7 @@ class PreferenceWindow(Gtk.Dialog):
             self.properties.default_directory = self.default_directory.get_value()
             self.properties.default_filename = self.default_filename.get_value()
             self.properties.grid = self.grid.get_value()
+            self.properties.port = self.port.get_value()
             main_window.main_control.redraw(None)
 
         self.close()
@@ -96,3 +104,16 @@ class PreferenceWindow(Gtk.Dialog):
         vbox.add(self.grid)
 
         self.grid_preferences_tab.show_all()
+
+    # ----------------------------------------------------------------------
+    def __create_network_preferences_tab(self):
+        """Creates the networks preferences tab."""
+        vbox = Gtk.VBox()
+        self.network_preferences_tab.add(vbox)
+
+        data = {"label": _("Web Server Port"), "value": self.properties.port, "lower": 1024, "upper": 49151}
+        self.port = IntField(data, None)
+        vbox.add(self.port)
+
+        self.network_preferences_tab.show_all()
+

@@ -14,11 +14,12 @@ class BlockModel(object):
         self.id = -1
         self.x = 0
         self.y = 0
+        self.is_collapsed = False
 
         self.type = self.__class__.__module__
         self.language = ""
         self.framework = ""
-        self.source = "python"
+        self.file = None
 
         # Appearance
         self.help = ""
@@ -30,9 +31,16 @@ class BlockModel(object):
         # Code generation
         self.properties = []
         self.codes = {}
+        self.gen_codes = {}
+
+        # Attributes to code generation
+        self.weight = 0
+        self.connections = []
 
         if block == None:
             return
+
+        # If block is defined, copy everything and load it!
         for key in block.__dict__:
             self.__dict__[key] = block.__dict__[key]
 

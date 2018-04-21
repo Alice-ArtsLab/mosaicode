@@ -1,27 +1,22 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
-from mosaicode.GUI.mainwindow import MainWindow
+from tests.test_base import TestBase
+from mosaicode.system import System as System
 from mosaicode.GUI.blocknotebook import BlockNotebook
 
-class TestBlockNotebook(TestCase):
+
+class TestBlockNotebook(TestBase):
 
     def setUp(self):
-        """Do the test basic setup."""
-        win = MainWindow()
-        self.blocknotebook = BlockNotebook(win)
+        self.block_notebook = BlockNotebook(self.create_main_window())
 
-    # ----------------------------------------------------------------------
-    def test_update(self):
-        self.assertIsNone(self.blocknotebook.update())
+    def test_update_blocks(self):
+        blocks = System.get_blocks()
 
-    # ----------------------------------------------------------------------
+        self.assertIsNone(self.block_notebook.update_blocks(blocks), "Failed to update blocks")
+
     def test_search(self):
-        query = "Testando"
-        self.assertIsNone(self.blocknotebook.search(query))
-        query = None
-        self.assertIsNone(self.blocknotebook.search(query))
+        query = "Add Float"
+        self.assertIsNone(self.block_notebook.search(query))
 
-    # ----------------------------------------------------------------------
     def test_get_selected_block(self):
-        self.assertIsNone(self.blocknotebook.get_selected_block())
+        self.assertIsNone(self.block_notebook.get_selected_block())
+

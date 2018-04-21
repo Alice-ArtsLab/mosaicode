@@ -42,9 +42,8 @@ class CodeTemplatePersistence():
             code_template.type = parser.getTagAttr(tag_name,  "type")
             code_template.description = parser.getTagAttr(tag_name,  "description")
             code_template.language = parser.getTagAttr(tag_name,  "language")
-            code_template.extension = parser.getTagAttr(tag_name,  "extension")
-            code_template.source = parser.getTagAttr(tag_name,  "source")
             code_template.command = parser.getTag(tag_name).getTag("command").getText()
+            code_template.extension = parser.getTagAttr(tag_name,  "extension")
             code_template.code = parser.getTag(tag_name).getTag("code").getText()
 
             code_parts = parser.getTag(tag_name).getTag("code_parts").getChildTags("code_part")
@@ -78,7 +77,6 @@ class CodeTemplatePersistence():
         parser.setTagAttr(tag_name,'description', code_template.description)
         parser.setTagAttr(tag_name,'language', code_template.language)
         parser.setTagAttr(tag_name,'extension', code_template.extension)
-        parser.setTagAttr(tag_name,'source', code_template.source)
         parser.appendToTag(tag_name,'command').string = str(code_template.command)
         parser.appendToTag(tag_name,'code').string = str(code_template.code)
 
@@ -125,7 +123,6 @@ class CodeTemplatePersistence():
         parser.setAttribute('extension', code_template.extension)
         parser.setAttribute('code', code_template.code)
         parser.setAttribute('code_parts', code_template.code_parts)
-        parser.setAttribute('source', 'python')
 
         try:
             data_dir = System.get_user_dir() + "/extensions/"

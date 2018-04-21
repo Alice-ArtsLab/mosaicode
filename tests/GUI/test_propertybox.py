@@ -1,31 +1,36 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
+from mosaicode.GUI.fieldtypes import *
+from tests.test_base import TestBase
 from mosaicode.GUI.propertybox import PropertyBox
-
 from mosaicode.GUI.block import Block
-from mosaicode.GUI.diagram import Diagram
-from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.model.blockmodel import BlockModel
 
-class TestPropertyBox(TestCase):
+class TestPropertyBox(TestBase):
 
     def setUp(self):
-        """Do the test basic setup."""
-        win = MainWindow()
-        self.property_box = PropertyBox(win)
+        self.propertybox = PropertyBox(self.create_main_window())
 
-    # ----------------------------------------------------------------------x
     def test_set_block(self):
-        diagram = Diagram(MainWindow())
-        blockmodel = BlockModel()
-        block = Block(diagram, blockmodel)
-        self.assertIsNone(self.property_box.set_block(block))
+        block = Block(self.create_diagram(), self.create_block())
+        block.properties = [{"name": "curve",
+                            "label": "Curve",
+                            "type": MOSAICODE_FLOAT,
+                            "value": 800
+                            }
+                           ]
+        self.propertybox.set_block(block)
+        block.properties = [{"name": "curve",
+                            "label": "Curve",
+                            "type": MOSAICODE_OPEN_FILE,
+                            "value": "800"
+                            }
+                           ]
+        self.propertybox.set_block(block)
+        self.propertybox.notify()
 
-    # ----------------------------------------------------------------------x
-    def test_notify(self):
+    def test_set_comment(self):
+        comment = self.create_comment()
+        self.propertybox.set_comment(comment)
+        text = comment.text
+        self.propertybox.set_comment(comment)
+        self.propertybox.notify_comment()
+        self.assertEqual(text, comment.text, "Incorrect Text >" +  text + "< >" + comment.text + "<")
 
-        # NÃO HÁ TRATAMENTO PARA None
-        widget = None
-        data = None
-        self.assertIsNone(self.property_box.notify(widget, data))

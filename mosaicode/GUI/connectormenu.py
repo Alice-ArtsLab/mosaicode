@@ -53,9 +53,8 @@ class ConnectorMenu(Gtk.Menu):
 
         # Shows the menu
         self.show_all()
-        self.popup(None, None, None, None, event.button.button, event.time)
+        self.popup(None, None, None, None, event.button, event.time)
 
-# ----------------------------------------------------------------------
     def __delete_clicked(self, *args):  # strongly depends on garbage collector
         """
         This method delete connection.

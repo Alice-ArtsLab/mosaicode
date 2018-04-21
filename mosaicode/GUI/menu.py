@@ -57,16 +57,22 @@ class Menu(Gtk.MenuBar):
         self.create_menu(_("Paste"), "<Control>V", edit_menu, mc.paste)
         self.create_menu(_("Delete"), "Delete", edit_menu, mc.delete)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.create_menu(_("Align Top"), "<Control>1", edit_menu, mc.align_top)
-        self.create_menu(_("Align Bottom"), "<Control>2", edit_menu, mc.align_bottom)
-        self.create_menu(_("Align Left"), "<Control>3", edit_menu, mc.align_left)
-        self.create_menu(_("Align Right"), "<Control>4", edit_menu, mc.align_right)
-        edit_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(
             _("Clear Console"), "<Control>L", edit_menu, mc.clear_console)
         edit_menu.append(Gtk.SeparatorMenuItem())
+        self.create_menu(_("Collapse All"), None, edit_menu, mc.collapse_all)
+        self.create_menu(_("Uncollapse All"), None, edit_menu, mc.uncollapse_all)
+        edit_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Preferences"), None, edit_menu, mc.preferences)
         self.add_menu_category(_("Edit"), edit_menu)
+
+        # -------------------------- Align -------------------------------------
+        align_menu = Gtk.Menu()
+        self.create_menu(_("Align Top"), "<Control>1", align_menu, mc.align_top)
+        self.create_menu(_("Align Bottom"), "<Control>2", align_menu, mc.align_bottom)
+        self.create_menu(_("Align Left"), "<Control>3", align_menu, mc.align_left)
+        self.create_menu(_("Align Right"), "<Control>4", align_menu, mc.align_right)
+        self.add_menu_category(_("Align"), align_menu)
 
         # -------------------------- View -------------------------------------
         view_menu = Gtk.Menu()
@@ -86,6 +92,7 @@ class Menu(Gtk.MenuBar):
         blocks = self.create_menu(_("Block"), None, insert_menu, None)
         blocks.set_submenu(self.block_menu)
         insert_menu.append(Gtk.SeparatorMenuItem())
+        self.create_menu(_("Coment"), None, insert_menu, mc.add_comment)
         self.add_menu_category(_("Insert"), insert_menu)
 
         # -------------------------- Process --------------------------------

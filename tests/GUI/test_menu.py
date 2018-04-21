@@ -1,32 +1,27 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
+from tests.test_base import TestBase
 from mosaicode.GUI.menu import Menu
+from mosaicode.system import System
 
-from mosaicode.GUI.mainwindow import MainWindow
-
-class TestMenu(TestCase):
+class TestMenu(TestBase):
 
     def setUp(self):
-        """Do the test basic setup."""
-        win = MainWindow()
-        self.menu = Menu(win)
+        self.menu = Menu(self.create_main_window())
 
-    # ----------------------------------------------------------------------x
-    def test_add_example(self):
+    def test_new(self):
+        self.menu = Menu(self.create_main_window())
 
-        # NAO TRATA None
-        #example = None
-        #self.assertIsNone(self.menu.add_example(example))
-        example = "ARQUIVO INEXISTENTE"
-        self.assertIsNone(self.menu.add_example(example))
+    def test_add_help(self):
+        self.menu.add_help()
+    
+    def test_event(self):
+        menuitem = self.menu.help_menu.get_children()[0]
+        menuitem.emit("activate")
 
+    def test_update_examples(self):
+        System.list_of_examples.append("teste")
+        self.menu.update_examples(System.list_of_examples)
+        self.menu.update_examples(System.list_of_examples)
 
-    # ----------------------------------------------------------------------x
-    def test_update_recent_file(self):
-        self.assertIsNone(self.menu.update_recent_file())
-
-    # ----------------------------------------------------------------------x
-    def test_add_recent_file(self):
-        recent_file = "Arquivo inválido"
-        self.assertIsNone(self.menu.add_recent_file(recent_file))
+    def test_update_blocks(self):
+        self.menu.update_blocks(System.get_blocks())
+        self.menu.update_blocks(System.get_blocks())

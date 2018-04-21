@@ -1,58 +1,47 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from unittest import TestCase
+from tests.test_base import TestBase
 from mosaicode.GUI.connector import Connector
-
-from mosaicode.GUI.diagram import Diagram
-from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.model.blockmodel import BlockModel
 from mosaicode.GUI.block import Block
+from mosaicode.model.port import Port
+from gi.repository import GooCanvas
+from gi.repository import Gdk
 
-class TestConnector(TestCase):
+class TestConnector(TestBase):
 
     def setUp(self):
-        """Do the test basic setup."""
-        win = MainWindow()
-        diagram = Diagram(win)
+        port = Port()
+        self.source_block = self.create_block()
+        self.source_block.ports.append(port)
+        self.source_block = Block(self.create_diagram(), self.create_block())
+        self.diagram = self.create_diagram()
+        self.connector = Connector(
+                    self.diagram,
+                    self.source_block,
+                    port
+                    )
 
-        blockmodel = BlockModel()
-        source = Block(diagram, blockmodel)
-
-        # NAO TRATA NONE
-        # source = None
-        source_port = 0
-        conn_type = None
-        self.connector = Connector(diagram, source, source_port, conn_type)
-
-    # ----------------------------------------------------------------------x
-    def test_delete(self):
-        self.assertIsNone(self.connector.delete())
-
-    # ----------------------------------------------------------------------x
-    def test_update_tracking(self):
-        newEnd = None
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [0, 0]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [1, 1]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [2, 1]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [1, 2]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [2, 2]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [70, 70]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-        newEnd = [190, 70]
-        self.assertIsNone(self.connector.update_tracking(newEnd))
-
-
-    # ----------------------------------------------------------------------x
     def test_update_flow(self):
-        # NOTE: NAO TRATA NONE. SE INICIALIZAR CONNECTOR,
-        # QUE INICIALIZARA CONNECTORMODEL, O ATRIBUTO
-        # SINK SERA NONE. E, COM ISSO, RESULTARA EM
-        # ERRO. E SINK E DO TIPO BLOCK, ALGO DIFICIL
-        # DE SER INICIALIZADO POR MEIO DE TESTE.
-        self.assertIsNone(self.connector.update_flow())
+        self.connector.input = None
+        self.connector.update_flow()
+        point = (0,0)
+        self.connector.update_flow(point)
+        self.connector.input = Block(self.create_diagram(), self.create_block())
+        self.connector.input.move(100,100)
+        self.connector.input_port = Port()
+        self.connector.update_flow()
+
+    def test_events(self):
+        gdkevent = Gdk.Event()
+        gdkevent.key.type = Gdk.EventType.MOTION_NOTIFY
+
+        self.connector.emit("enter-notify-event", self.connector, gdkevent)
+        self.connector.is_selected = True
+        self.connector.emit("leave-notify-event", self.connector, gdkevent)
+
+        self.connector.is_selected = False
+        gdkevent.key.type = Gdk.EventType.DOUBLE_BUTTON_PRESS
+        self.connector.emit("button-press-event", self.connector, gdkevent)
+        gdkevent.button = 3
+        self.connector.emit("button-press-event", self.connector, gdkevent)
+        self.connector.is_selected = True
+        self.connector.emit("button-press-event", self.connector, gdkevent)
+

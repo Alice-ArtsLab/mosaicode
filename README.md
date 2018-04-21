@@ -15,7 +15,10 @@ sudo apt-get install python-gtk2
 sudo apt-get install python-gnome2
 sudo apt-get install python-pip
 sudo apt-get install libgoocanvas-2.0-common
+sudo apt-get install libgtksourceview-3.0-common
+sudo apt-get install libgtksourceview-3.0-1
 sudo apt-get install gir1.2-goocanvas-2.0
+sudo apt-get install gir1.2-gtksource-3.0
 sudo apt-get install python-lxml
 sudo apt-get install python-gobject
 sudo apt-get install python-gi

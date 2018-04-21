@@ -10,6 +10,8 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
+from mosaicode.model.connectionmodel import ConnectionModel
+from mosaicode.model.commentmodel import CommentModel
 
 tag_name = "mosaicode"
 
@@ -20,7 +22,13 @@ class DiagramPersistence():
     # ----------------------------------------------------------------------
     @classmethod
     def load(cls, diagram):
+        """
+        This method load the xml file that represents the diagram.
 
+            :param diagram: diagram to load.
+            :return: operation status (True or False)
+        """
+        from mosaicode.control.diagramcontrol import DiagramControl
         # load the diagram
         parser = XMLParser(diagram.file_name)
 
@@ -34,44 +42,57 @@ class DiagramPersistence():
             pass
 
         # new version load
-        blocks = parser.getTag(tag_name).getTag(
-            "blocks").getChildTags("block")
+        blocks = parser.getTag(tag_name).getTag("blocks").getChildTags("block")
         system_blocks = System.get_blocks()
         for block in blocks:
             block_type = block.getAttr("type")
             if block_type not in system_blocks:
                 continue
             block_id = int(block.getAttr("id"))
+            collapsed = False
+            if hasattr(block, "collapsed"):
+                collapsed = block.collapsed == "True"
             position = block.getTag("position")
             x = position.getAttr("x")
             y = position.getAttr("y")
             properties = block.getChildTags("property")
             props = {}
             for prop in properties:
-                try:
+                if hasattr(prop, 'key') and hasattr(prop, 'value'):
                     props[prop.key] = prop.value
-                except:
-                    pass
             new_block = deepcopy(system_blocks[block_type])
             new_block.set_properties(props)
             new_block.id = block_id
             new_block.x = float(x)
             new_block.y = float(y)
-            diagram.add_block(new_block)
+            new_block.is_collapsed = collapsed
+            DiagramControl.add_block(diagram, new_block)
 
-        connections = parser.getTag(tag_name).getTag(
-            "connections").getChildTags("connection")
+        connections = parser.getTag(tag_name).getTag("connections").getChildTags("connection")
         for conn in connections:
-            try:
-                from_block = diagram.blocks[
-                    int(conn.getAttr("from_block"))]
-                to_block = diagram.blocks[int(conn.getAttr("to_block"))]
-            except:
+            if not hasattr(conn, 'from_block'):
                 continue
+            elif not hasattr(conn, 'to_block'):
+                continue
+            from_block = diagram.blocks[int(conn.from_block)]
             from_block_out = int(conn.getAttr("from_out"))
             to_block_in = int(conn.getAttr("to_in"))
-            diagram.start_connection(from_block, int(from_block_out) - 1)
-            diagram.end_connection(to_block, int(to_block_in) - 1)
+            to_block = diagram.blocks[int(conn.to_block)]
+            connection = ConnectionModel(diagram, from_block,
+                                from_block.ports[from_block_out],
+                                to_block,
+                                to_block.ports[to_block_in])
+            DiagramControl.add_connection(diagram, connection)
+
+        comments = parser.getTag(tag_name).getTag(
+                    "comments").getChildTags("comment")
+        for com in comments:
+            comment = CommentModel()
+            comment.x = float(com.getAttr("x"))
+            comment.y = float(com.getAttr("y"))
+            comment.text = com.getAttr("text")
+            diagram.comments.append(comment)
+
         return True
 
     # ----------------------------------------------------------------------
@@ -84,7 +105,6 @@ class DiagramPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-
         parser = XMLParser()
         parser.addTag(tag_name)
         parser.appendToTag(tag_name, 'version', value=System.VERSION)
@@ -93,11 +113,14 @@ class DiagramPersistence():
 
         parser.appendToTag(tag_name, 'blocks')
         for block_id in diagram.blocks:
-            block_type = diagram.blocks[block_id].type
-            pos = diagram.blocks[block_id].get_position()
-            parser.appendToTag('blocks', 'block', type=block_type, id=block_id)
+            block = diagram.blocks[block_id]
+            pos = block.get_position()
+            parser.appendToTag('blocks', 'block',
+                    type=block.type,
+                    id=block.id,
+                    collapsed=block.is_collapsed)
             parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
-            props = diagram.blocks[block_id].get_properties()
+            props = block.get_properties()
             for prop in props:
                 parser.appendToLastTag('block',
                                        'property',
@@ -109,9 +132,17 @@ class DiagramPersistence():
         for connector in diagram.connectors:
             parser.appendToTag('connections', 'connection',
                                from_block=connector.output.id,
-                               from_out=int(connector.output_port["index"]) + 1,
+                               from_out=int(connector.output_port.index),
                                to_block=connector.input.id,
-                               to_in=int(connector.input_port["index"]) + 1)
+                               to_in=int(connector.input_port.index))
+
+        parser.appendToTag(tag_name, 'comments')
+        for comment in diagram.comments:
+            pos = comment.get_position()
+            parser.appendToTag('comments', 'comment',
+                               text=comment.text,
+                               x=pos[0],
+                               y=pos[1])
 
         try:
             save_file = open(str(diagram.file_name), "w")

@@ -3,12 +3,15 @@
 This module contains the MainControl class.
 """
 from copy import copy
+from copy import deepcopy
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.about import About
 from mosaicode.GUI.diagram import Diagram
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.codewindow import CodeWindow
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
@@ -19,6 +22,7 @@ from mosaicode.control.portcontrol import PortControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.codegenerator import CodeGenerator
+from mosaicode.control.publisher import Publisher
 from mosaicode.model.codetemplate import CodeTemplate
 
 
@@ -34,8 +38,9 @@ class MainControl():
 
     def __init__(self, main_window):
         self.main_window = main_window
-        # It must be possible to exchange data between diagrams
+        # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
+        self.publisher = Publisher()
 
     # ----------------------------------------------------------------------
     def init(self):
@@ -77,6 +82,7 @@ class MainControl():
         diagram = Diagram(self.main_window)
         self.main_window.work_area.add_diagram(diagram)
         DiagramControl(diagram).load(file_name)
+        diagram.redraw()
         diagram.set_modified(False)
 
         if file_name in System.properties.recent_files:
@@ -179,7 +185,6 @@ class MainControl():
         if diagram is None:
             return
         diagram.select_all()
-        diagram.grab_focus()
 
     # ----------------------------------------------------------------------
     def cut(self):
@@ -281,6 +286,17 @@ class MainControl():
 
 
     # ----------------------------------------------------------------------
+    def publish(self):
+        """
+        This method run web server.
+        """
+        if self.publisher.is_running():
+            self.publisher.stop()
+        else:
+            self.publisher.start()
+
+
+    # ----------------------------------------------------------------------
     def save_source(self, code = None):
         """
         This method saves the source code.
@@ -359,16 +375,18 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        if not diagram.add_block(block):
+        new_block = Block(diagram, deepcopy(block))
+        if not DiagramControl.add_block(diagram, new_block):
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
             return False
+        diagram.redraw()
         return True
 
     # ----------------------------------------------------------------------
-    def add_comment(self, block):
+    def add_comment(self):
         """
         This method add a block.
 
@@ -382,12 +400,9 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        if not diagram.add_block(block):
-            message = "Block language is different from diagram language.\n" +\
-                "Diagram is expecting to generate " + diagram.language + \
-                " code while block is writen in " + block.language
-            Dialog().message_dialog("Error", message, self.main_window)
-            return False
+        comment = Comment(diagram)
+        DiagramControl.add_comment(diagram, comment)
+        diagram.redraw()
         return True
 
     # ----------------------------------------------------------------------
@@ -426,6 +441,13 @@ class MainControl():
         if diagram is None:
             return
         diagram.change_zoom(System.ZOOM_ORIGINAL)
+
+    # ----------------------------------------------------------------------
+    def show_comment_property(self, comment):
+        """
+        This method show the comment properties.
+        """
+        self.main_window.block_properties.set_comment(comment)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -475,28 +497,28 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_top()
+        diagram.align("TOP")
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_bottom()
+        diagram.align("BOTTOM")
 
     # ----------------------------------------------------------------------
     def align_left(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_left()
+        diagram.align("LEFT")
 
     # ----------------------------------------------------------------------
     def align_right(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align_right()
+        diagram.align("RIGHT")
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):
@@ -517,10 +539,13 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def delete_code_template(self, code_template_name):
-        if not CodeTemplateControl.delete_code_template(code_template_name):
+        filename = CodeTemplateControl.delete_code_template(code_template_name)
+        if filename is None:
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
+        else:
+            Dialog().message_dialog("Info", "File " + filename + " deleted.", self.main_window)
         System.reload()
 
     # ----------------------------------------------------------------------
@@ -551,6 +576,20 @@ class MainControl():
         self.update_blocks()
 
     # ----------------------------------------------------------------------
+    def collapse_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return
+        DiagramControl.collapse_all(diagram, True)
+
+    # ----------------------------------------------------------------------
+    def uncollapse_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return
+        DiagramControl.collapse_all(diagram, False)
+
+    # ----------------------------------------------------------------------
     def update_all(self):
         for diagram in self.main_window.work_area.get_diagrams():
             diagram.update()
@@ -558,13 +597,15 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def print_ports(cls):
+        # This method is used by the launcher class
         ports = System.get_ports()
         for port in ports:
             print "--------------------- "
             PortControl.print_port(ports[port])
     # ----------------------------------------------------------------------
     @classmethod
-    def print_blocks(cls):
+    def print_blockmodels(cls):
+        # This method is used by the launcher class
         blocks = System.get_blocks()
         for block in blocks:
             print "--------------------- "
@@ -572,6 +613,7 @@ class MainControl():
     # ----------------------------------------------------------------------
     @classmethod
     def print_templates(cls):
+        # This method is used by the launcher class
         code_templates = System.get_code_templates()
         for template in code_templates:
             print "--------------------- "

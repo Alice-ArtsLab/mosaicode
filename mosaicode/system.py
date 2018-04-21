@@ -26,6 +26,7 @@ class System(object):
 
     APP = 'mosaicode'
     DATA_DIR = "/usr/share/mosaicode/"
+    DATA_EXTENSIONS = "/usr/lib/python2.7/dist-packages/"
 
     ZOOM_ORIGINAL = 1
     ZOOM_IN = 2
@@ -35,6 +36,8 @@ class System(object):
     # Instance variable to the singleton
     instance = None
 
+    sys.path.insert(0, DATA_EXTENSIONS)
+
     # ----------------------------------------------------------------------
     # An inner class instance to be singleton
     # ----------------------------------------------------------------------
@@ -43,24 +46,33 @@ class System(object):
 
         def __init__(self):
             self.Log = None
-            self.properties = Preferences()
             self.__code_templates = {}
             self.__blocks = {}
             self.__ports = {}
 
             self.list_of_examples = []
             self.plugins = []
+            self.properties = PreferencesPersistence.load()
+            self.__load_examples()
             self.__load_libs()
             self.__load_plugins()
 
-
         # ----------------------------------------------------------------------
         def reload(self):
+            self.__load_examples()
             self.__load_libs()
+            self.__load_plugins()
 
         # ----------------------------------------------------------------------
         def get_blocks(self):
             return copy(self.__blocks)
+
+        # ----------------------------------------------------------------------
+        def remove_block(self, block):
+            try:
+                return self.__blocks.pop(block.type)
+            except:
+                return None
 
         # ----------------------------------------------------------------------
         def get_code_templates(self):
@@ -86,19 +98,28 @@ class System(object):
 
                 code_template = CodeTemplateControl.load(full_file_path)
                 if code_template is not None:
-                    code_template.source = "xml"
+                    code_template.file = full_file_path
                     self.__code_templates[code_template.type] = code_template
 
                 port = PortControl.load(full_file_path)
 
                 if port is not None:
-                    port.source = "xml"
+                    port.file = full_file_path
                     self.__ports[port.type] = port
 
                 block = BlockControl.load(full_file_path)
                 if block is not None:
-                    block.source = "xml"
+                    block.file = full_file_path
                     self.__blocks[block.type] = block
+
+        # ----------------------------------------------------------------------
+        def __load_examples(self):
+            # Load Examples
+            self.list_of_examples = []
+            examples = glob(System.DATA_DIR + "examples/*")
+            for example in examples:
+                self.list_of_examples.append(example)
+            self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
         def __load_libs(self):
@@ -108,13 +129,6 @@ class System(object):
                     os.makedirs(System.get_user_dir() + "/extensions/")
                 except:
                     pass
-            # Load the preferences
-            self.properties = PreferencesPersistence.load()
-            # Load Examples
-            examples = glob(System.DATA_DIR + "examples/*")
-            for example in examples:
-                self.list_of_examples.append(example)
-            self.list_of_examples.sort()
 
             # Load CodeTemplates, Blocks and Ports
             self.__code_templates.clear()
@@ -125,31 +139,34 @@ class System(object):
 
             def walk_lib_packages(path=None, name_par=""):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    if name.startswith(System.APP+"_lib") or name_par.startswith(System.APP+"_lib"):
-                        if ispkg:
-                            if name_par is not "":
-                                name = name_par + "." + name
-                            __import__(name)
-                            path = getattr(sys.modules[name], '__path__', None) or []
-                            walk_lib_packages(path, name)
-                        else:
-                            module = __import__(name, fromlist="dummy")
-                            for class_name, obj in inspect.getmembers(module):
-                                if not inspect.isclass(obj):
-                                    continue
-                                modname = inspect.getmodule(obj).__name__
-                                if not modname.startswith(System.APP+"_lib"):
-                                    continue
+                    if path is None and name.startswith("." + System.APP):
+                        name = name.replace('.', '', 1)
+                    if not name.startswith(System.APP+"_lib") and not name_par.startswith(System.APP+"_lib"):
+                        continue
 
-                                instance = obj()
-                                if isinstance(instance, CodeTemplate):
-                                    self.__code_templates[instance.type] = instance
-                                if isinstance(instance, Port):
-                                    instance.source = "Python"
-                                    self.__ports[instance.type] = instance
-                                if isinstance(instance, BlockModel):
-                                    if instance.label != "":
-                                        self.__blocks[instance.type] = instance
+                    if ispkg:
+                        if name_par is not "" and not name.startswith(System.APP):
+                            name = name_par + "." + name
+                        __import__(name)
+                        path = getattr(sys.modules[name], '__path__', None) or []
+                        walk_lib_packages(path, name)
+                    else:
+                        module = __import__(name, fromlist="dummy")
+                        for class_name, obj in inspect.getmembers(module):
+                            if not inspect.isclass(obj):
+                                continue
+                            modname = inspect.getmodule(obj).__name__
+                            if not modname.startswith(System.APP+"_lib"):
+                                continue
+
+                            instance = obj()
+                            if isinstance(instance, CodeTemplate):
+                                self.__code_templates[instance.type] = instance
+                            if isinstance(instance, Port):
+                                self.__ports[instance.type] = instance
+                            if isinstance(instance, BlockModel):
+                                if instance.label != "":
+                                    self.__blocks[instance.type] = instance
 
             walk_lib_packages(None, "")
 
@@ -158,35 +175,43 @@ class System(object):
             # Load XML files in user space
             self.__load_xml(System.get_user_dir() + "/extensions")
 
+            for key in self.__blocks:
+                try:
+                    block = self.__blocks[key]
+                    BlockControl.load_ports(block, self.__ports)
+                except:
+                    print("Error in loading plugin " + key)
+
         # ----------------------------------------------------------------------
         def __load_plugins(self):
             def walk_plugin_packages(path=None, name_par=""):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    if name.startswith(System.APP+"_plugin") or name_par.startswith(System.APP+"_plugin"):
+                    # if package name do not starts with System.APP, give up
+                    if not name.startswith(System.APP+"_plugin") and not name_par.startswith(System.APP+"_plugin"):
+                        continue
+                    if ispkg:
+                        if name_par is not "":
+                            name = name_par + "." + name
+                        __import__(name)
+                        path = getattr(sys.modules[name], '__path__', None) or []
+                        walk_plugin_packages(path, name)
+                    else:
+                        module = __import__(name, fromlist="dummy")
+                        for class_name, obj in inspect.getmembers(module):
+                            if not inspect.isclass(obj):
+                                continue
+                            modname = inspect.getmodule(obj).__name__
+                            if not modname.startswith(System.APP+"_plugin"):
+                                continue
 
-                        if ispkg:
-                            if name_par is not "":
-                                name = name_par + "." + name
-                            __import__(name)
-                            path = getattr(sys.modules[name], '__path__', None) or []
-                            walk_plugin_packages(path, name)
-                        else:
-                            module = __import__(name, fromlist="dummy")
-                            for class_name, obj in inspect.getmembers(module):
-                                if not inspect.isclass(obj):
-                                    continue
-                                modname = inspect.getmodule(obj).__name__
-                                if not modname.startswith(System.APP+"_plugin"):
-                                    continue
+                            try:
+                                instance = obj()
+                            except:
+                                continue
 
-                                try:
-                                    instance = obj()
-                                except:
-                                    continue
-
-                                if isinstance(instance, Plugin):
-                                    if instance.label != "":
-                                        self.plugins.append(instance)
+                            if isinstance(instance, Plugin):
+                                if instance.label != "":
+                                    self.plugins.append(instance)
 
             walk_plugin_packages(None, "")
 
@@ -210,6 +235,14 @@ class System(object):
         This method returns System installed blocks.
         """
         return cls.instance.get_blocks()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def remove_block(cls, block):
+        """
+        This method removes a block installed in the System.
+        """
+        return cls.instance.remove_block(block)
 
     # ----------------------------------------------------------------------
     @classmethod
