@@ -14,6 +14,7 @@ class BlockModel(object):
         self.id = -1
         self.x = 0
         self.y = 0
+        self.is_collapsed = False
 
         self.type = self.__class__.__module__
         self.language = ""

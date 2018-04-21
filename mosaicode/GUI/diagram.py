@@ -524,9 +524,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 continue
             self.main_window.main_control.get_clipboard().append(self.blocks[key])
         for conn in self.connectors:
-            if not con.is_selected:
+            if not conn.is_selected:
                 continue
-            self.main_window.main_control.get_clipboard().append(con)
+            self.main_window.main_control.get_clipboard().append(conn)
         for comment in self.comments:
             if not comment.is_selected:
                 continue

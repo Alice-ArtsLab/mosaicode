@@ -77,6 +77,23 @@ class DiagramControl:
         return True
 
     # ----------------------------------------------------------------------
+    @classmethod
+    def collapse_all(cls, diagram, status):
+        """
+        This method Collapses all the blocks in a diagram
+
+            Parameters:
+                * **diagram**
+            Returns:
+                * **Types** (:class:`boolean<boolean>`)
+        """
+        for block_id in diagram.blocks:
+            block = diagram.blocks[block_id]
+            block.is_collapsed = status
+        diagram.update_flows()
+        return True
+
+    # ----------------------------------------------------------------------
     def load(self, file_name=None):
         """
         This method load a file.

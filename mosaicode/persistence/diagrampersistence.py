@@ -49,6 +49,9 @@ class DiagramPersistence():
             if block_type not in system_blocks:
                 continue
             block_id = int(block.getAttr("id"))
+            collapsed = False
+            if hasattr(block, "collapsed"):
+                collapsed = block.collapsed == "True"
             position = block.getTag("position")
             x = position.getAttr("x")
             y = position.getAttr("y")
@@ -62,6 +65,7 @@ class DiagramPersistence():
             new_block.id = block_id
             new_block.x = float(x)
             new_block.y = float(y)
+            new_block.is_collapsed = collapsed
             DiagramControl.add_block(diagram, new_block)
 
         connections = parser.getTag(tag_name).getTag("connections").getChildTags("connection")
@@ -109,11 +113,14 @@ class DiagramPersistence():
 
         parser.appendToTag(tag_name, 'blocks')
         for block_id in diagram.blocks:
-            block_type = diagram.blocks[block_id].type
-            pos = diagram.blocks[block_id].get_position()
-            parser.appendToTag('blocks', 'block', type=block_type, id=block_id)
+            block = diagram.blocks[block_id]
+            pos = block.get_position()
+            parser.appendToTag('blocks', 'block',
+                    type=block.type,
+                    id=block.id,
+                    collapsed=block.is_collapsed)
             parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
-            props = diagram.blocks[block_id].get_properties()
+            props = block.get_properties()
             for prop in props:
                 parser.appendToLastTag('block',
                                        'property',

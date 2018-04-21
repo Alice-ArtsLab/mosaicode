@@ -72,26 +72,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         return False
 
     # ----------------------------------------------------------------------
-    def __get_port_pos(self, block, port):
-        """
-        This method get input position.
-
-            Parameters:
-                * **input_id**
-            Returns:
-                * **Types** (:class:`float<float>`)
-        """
-        isSet, x, y, scale, rotation = block.get_simple_transform()
-
-        if not port.is_input():
-            x = block.width + x
-        y = (RADIUS - 9 +  # upper border
-                 (port.type_index * 5) +  # spacing betwen ports
-                 (port.type_index * INPUT_HEIGHT) +  # previous ports
-                 INPUT_HEIGHT / 2) + y
-        return (x, y)
-
-    # ----------------------------------------------------------------------
     def update_flow(self, newEnd=None):
         """
         This method update Tracking.
@@ -99,7 +79,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             Parameters:
                 * **newEnd**
         """
-        self.__from_point = self.__get_port_pos(self.output, self.output_port)
+        self.__from_point = self.output.get_port_pos(self.output_port)
 
         if self.input is None:
             if newEnd is None:
@@ -110,7 +90,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             b = b - 1 if b > 0 else b + 1
             self.__to_point = self.__from_point[0] + a - 5, self.__from_point[1] + b
         else:
-            self.__to_point = self.__get_port_pos(self.input, self.input_port)
+            self.__to_point = self.input.get_port_pos(self.input_port)
 
         self.__update_draw()
 
@@ -125,38 +105,53 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         x1 = self.__to_point[0]
         y1 = self.__to_point[1]
 
-        x0_shift = (self.output_port.type_index * 4)
-        x1_shift = 0
-        if self.input_port is not None:
-            x1_shift = self.input_port.type_index * 4
+        if System.properties.connection == "Curve":
+            c1x = x1
+            c1y = y0
+            c2x = x0
+            c2y = y1
+            path += "M " + str(x0) + " " + str(y0) 
+            path += " C" 
+            if x0 + 25 > x1:
+                c1x = x0 + x0 - x1
+                c2x = x1 - x0 + x1
+            path += " " + str(c1x) + " " + str(c1y)
+            path += " " + str(c2x) + " " + str(c2y)
+            path += " " + str(x1) + " " + str(y1)
 
-        # svg M L bezier curve
-        # Move to output port starting point / first horizontal line
-        path += "M " + str(x0) + " " + str(y0) 
-        # Line to start point + 25 on x + output type index --
-        path += " L " + str(x0 + 25 + x0_shift) + " " + str(y0)
-        # First vertical line
-        path += " L " + str(x0 + 25 + x0_shift) + " " + str((y0 + y1) / 2)
+        elif System.properties.connection == "Line":
+            path += "M " + str(x0) + " " + str(y0) 
+            path += " L " + str(x1) + " " + str(y1)
 
-        # Middle horizontal line if second block is on the left
-        if x1 - 25 - x1_shift < x0 + 25 + x0_shift:
-            path += " L " + str((x1 + x0) / 2 - x1_shift) + " " + str((y0 + y1) / 2)
-            path += " L " + str(x1 - 25 - x1_shift) + " " + str((y0 + y1) / 2)
-        else:
-            path += " L " + str(x0 + 25 + x0_shift) + " " + str(y1)
 
-        path += " L " + str(x1 - 25 - x1_shift) + " " + str(y1)
-        # End Point
-        path += " L " + str(x1) + " " + str(y1)
+        else: # System.properties.connection == "Square":
+            x0_shift = (self.output_port.type_index * 4)
+            x1_shift = 0
+            if self.input_port is not None:
+                x1_shift = self.input_port.type_index * 4
 
-        # Arrow
-        path += " L " + str(x1 - 4) + " " + str(y1 - 4)
-        path += " L " + str(x1 - 4) + " " + str(y1 + 4)
-        path += " L " + str(x1) + " " + str(y1)
+            # svg M L bezier curve
+            # Move to output port starting point / first horizontal line
+            path += "M " + str(x0) + " " + str(y0) 
+            # Line to start point + 25 on x + output type index --
+            path += " L " + str(x0 + 25 + x0_shift) + " " + str(y0)
+            # First vertical line
+            path += " L " + str(x0 + 25 + x0_shift) + " " + str((y0 + y1) / 2)
 
-        color = self.output_port.color
+            # Middle horizontal line if second block is on the left
+            if x1 - 25 - x1_shift < x0 + 25 + x0_shift:
+                path += " L " + str((x1 + x0) / 2 - x1_shift) + " " + str((y0 + y1) / 2)
+                path += " L " + str(x1 - 25 - x1_shift) + " " + str((y0 + y1) / 2)
+            else:
+                path += " L " + str(x0 + 25 + x0_shift) + " " + str(y1)
+
+            path += " L " + str(x1 - 25 - x1_shift) + " " + str(y1)
+            # End Point
+            path += " L " + str(x1) + " " + str(y1)
+
 
         if "Line" not in self.__widgets:
+            color = self.output_port.color
             widget = GooCanvas.CanvasPath(
                 parent=self,
                 stroke_color = color,
@@ -176,9 +171,9 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
         # With focus: line width = 3
         if self.__focus:
-            self.__widgets["Line"].set_property("line-width", 3)
-        else:
             self.__widgets["Line"].set_property("line-width", 2)
+        else:
+            self.__widgets["Line"].set_property("line-width", 1)
 
         # selected: line style = dashed and line width = 3
         if self.is_selected:

@@ -24,4 +24,5 @@ class Preferences(object):
         self.vpaned_bottom = 450
         self.vpaned_left = 300
 
+        self.connection = "Curve"
 # ------------------------------------------------------------------------------
