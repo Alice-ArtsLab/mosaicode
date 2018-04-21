@@ -17,11 +17,6 @@ from mosaicode.system import System
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.port import Port
 
-WIDTH_DEFAULT = 112
-HEIGHT_DEFAULT = 60
-INPUT_HEIGHT = 12
-RADIUS = 25
-
 class Block(GooCanvas.CanvasGroup, BlockModel):
     """
     This class contains methods related the Block class
@@ -45,7 +40,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = False
         self.is_selected = False
 
-        self.width = WIDTH_DEFAULT
+        self.width = 112
 
         self.connect("button-press-event", self.__on_button_press)
         self.connect("motion-notify-event", self.__on_motion_notify)
@@ -160,9 +155,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         rect = GooCanvas.CanvasRect(parent=self,
                                     x=0,
-                                    y=0,
+                                    y=10,
                                     width=self.width,
-                                    height=self.height,
+                                    height=self.height - 15,
                                     radius_x=10,
                                     radius_y=10,
                                     stroke_color="black",
@@ -208,7 +203,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                      fill_color='black',
                                      anchor=GooCanvas.CanvasAnchorType.CENTER,
                                      x=(self.width / 2),
-                                     y=(10),
+                                     y=0,
                                      use_markup=True,
                                      stroke_color='black'
                                      )
@@ -318,14 +313,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     def __get_port_pos(self, port):
 
         if self.is_collapsed:
-            y = (RADIUS - 9 +  # upper border
-                 (port.type_index * 6) +  # spacing betwen ports
-                 INPUT_HEIGHT / 2)
+            y = 16 + (port.type_index * 6)
         else:
-            y = (RADIUS - 5 +  # upper border
-                 (port.type_index * 5) +  # spacing betwen ports
-                 (port.type_index * INPUT_HEIGHT) +  # previous ports
-                 INPUT_HEIGHT / 2)
+            y = 26 + (port.type_index * 11)
 
         if port.is_input():
             x = 0
@@ -357,16 +347,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
     # ----------------------------------------------------------------------
     def __calculate_height(self):
         if self.is_collapsed:
-            return max(((self.maxIO - 1) * 5) +  # espacamento entre ports = 5
-                          (self.maxIO * 4),
-                          HEIGHT_DEFAULT - 20)
+            return max(((self.maxIO - 1) * 5) + (self.maxIO * 4), 40)
         else:
-            return max(((self.maxIO - 1) * 5) +  # espacamento entre ports = 5
-                          (RADIUS) +
-                          # tirando a margem superior e inferior
-                          (self.maxIO * INPUT_HEIGHT),
-                          # adicionando a altura de cada port
-                          HEIGHT_DEFAULT)
+            return max(((self.maxIO) * 5) + 15 + (self.maxIO * 7), 50)
 
     # ----------------------------------------------------------------------
     def move(self, x, y):
@@ -472,12 +455,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
         self.height = self.__calculate_height()
-        self.__widgets["Rect"].set_property("height", self.height)
         if self.is_collapsed:
             self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.INVISIBLE)
             self.__widgets["Rect"].set_property("width", self.width - 60)
             self.__widgets["Rect"].set_property("x", 35)
-            self.__widgets["Icon"].set_property("y", (self.height)/2)
+            self.__widgets["Rect"].set_property("y", 0)
+            self.__widgets["Rect"].set_property("height", self.height - 10)
+            self.__widgets["Icon"].set_property("y", (self.height - 10)/2)
+            self.__widgets["Icon"].set_property("x", (self.width / 2) + 2)
             i = 0
             for port in self.ports:
                 x,y = self.__get_port_pos(port)
@@ -489,7 +474,10 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.VISIBLE)
             self.__widgets["Rect"].set_property("width", self.width)
             self.__widgets["Rect"].set_property("x", 0)
-            self.__widgets["Icon"].set_property("y", (self.height)/2)
+            self.__widgets["Rect"].set_property("y", 10)
+            self.__widgets["Rect"].set_property("height", self.height)
+            self.__widgets["Icon"].set_property("y", (self.height + 20)/2)
+            self.__widgets["Icon"].set_property("x", (self.width / 2))
             for port in self.ports:
                 x,y = self.__get_port_pos(port)
                 self.__widgets["port" + str(port)].set_property("x", x)

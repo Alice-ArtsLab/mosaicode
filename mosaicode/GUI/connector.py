@@ -54,6 +54,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         if self.is_selected:
             self.diagram.deselect_all()
         else:
+            self.diagram.deselect_all()
             self.is_selected = True
 
         self.diagram.update_flows()
