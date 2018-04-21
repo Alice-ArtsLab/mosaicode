@@ -576,6 +576,20 @@ class MainControl():
         self.update_blocks()
 
     # ----------------------------------------------------------------------
+    def collapse_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return
+        DiagramControl.collapse_all(diagram, True)
+
+    # ----------------------------------------------------------------------
+    def uncollapse_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return
+        DiagramControl.collapse_all(diagram, False)
+
+    # ----------------------------------------------------------------------
     def update_all(self):
         for diagram in self.main_window.work_area.get_diagrams():
             diagram.update()

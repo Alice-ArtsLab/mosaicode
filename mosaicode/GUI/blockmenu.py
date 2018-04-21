@@ -28,6 +28,10 @@ class BlockMenu(Gtk.Menu):
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
+        menu_item = Gtk.MenuItem("Collapse")
+        menu_item.connect("activate", self.__collapse_clicked)
+        self.append(menu_item)
+
     # ----------------------------------------------------------------------
     def show_block_menu(self, block, event):
         self.block = block
@@ -46,3 +50,15 @@ class BlockMenu(Gtk.Menu):
 
         """
         self.block.delete()
+        
+    # ----------------------------------------------------------------------
+    def __collapse_clicked(self, *args):
+        """
+        This method monitors if the button delete was clicked.
+
+            Parameters:
+            * **args**
+
+        """
+        self.block.is_collapsed = not self.block.is_collapsed
+        self.block.diagram.update_flows()

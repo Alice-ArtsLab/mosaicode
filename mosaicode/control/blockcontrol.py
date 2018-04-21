@@ -36,8 +36,12 @@ class BlockControl():
             # if it is not a dictionary, dunno what to do. What happened?
             if not isinstance(port, dict):
                 continue
+            if "type" not in port:
+                continue
             port_type = port["type"]
             # Create a copy from the port instance loaded in the System
+            if port_type not in ports:
+                continue
             new_port = copy.deepcopy(ports[port_type])
 
             if "conn_type" not in port:

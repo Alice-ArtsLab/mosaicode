@@ -30,7 +30,7 @@ class WorkArea(Gtk.Notebook):
 
     # ----------------------------------------------------------------------
     def __on_switch_page(self, notebook, child, page_num):
-        self.main_window.set_title(child.get_children()[0].file_name)
+        self.main_window.set_title(child.file_name)
 
     # ----------------------------------------------------------------------
     def add_diagram(self, diagram):
@@ -40,11 +40,8 @@ class WorkArea(Gtk.Notebook):
             Parameters:
                 * **diagram** (:class:`Diagram<mosaicode.GUI.diagram`)
         """
-        frame = Gtk.ScrolledWindow()
-        frame.set_shadow_type(Gtk.ShadowType.IN)
-        frame.add(diagram)
         name = diagram.patch_name
-        index = self.append_page(frame, self.__create_tab_label(name, frame))
+        index = self.append_page(diagram, self.__create_tab_label(name, diagram))
         self.show_all()
         self.diagrams.append(diagram)
         self.set_current_page(self.get_n_pages() - 1)
@@ -61,8 +58,7 @@ class WorkArea(Gtk.Notebook):
         """
         if position is None:
             position = self.get_current_page()
-        tab = self.get_nth_page(position)
-        diagram = tab.get_children()[0]
+        diagram = self.get_nth_page(position)
 
         if diagram.modified:
             dialog = Dialog().confirm_dialog(_("Diagram ") +
@@ -135,10 +131,9 @@ class WorkArea(Gtk.Notebook):
                 * **diagram** (:class:`diagram<mosaicode.GUI.diagram>`)
         """
         index = -1
-        for scrolled_window in self.get_children():
+        for page in self.get_children():
             index += 1
-            tab = scrolled_window.get_children()[0]
-            if tab == diagram:
+            if page == diagram:
                 break
         tab = self.get_nth_page(index)
         if tab is None:

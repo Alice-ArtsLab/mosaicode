@@ -34,6 +34,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_property("expand", True)
         self.set_property("has-tooltip", True)  # Allow tooltip on elements
         self.set_property("background-color", "White")
+        self.set_property("clear-background", True)
         Gtk.Widget.grab_focus(self)
 
         self.last_clicked_point = (None, None)
@@ -59,7 +60,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.__draw_grid()
 
         # Used for cycle detection
-        self.__marks = None
         self.show()
 
     # ----------------------------------------------------------------------
@@ -219,25 +219,18 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __cycle_detection(self, newCon):
-        self.__marks = {}
-        self.__marks[newCon.output] = None
-        self.__marks[newCon.input] = None
-        if self.__dfs(newCon.input):
-            return True
-        return False
-
-    # Depth-First Search
-    # ----------------------------------------------------------------------
-    def __dfs(self, input):
-        for connection in self.connectors:
-            if (connection.output != input):
-                continue
-            adjacent = connection.input
-            if adjacent in self.__marks:
-                return True
-            self.__marks[adjacent] = None
-            if self.__dfs(adjacent):
-                return True
+        marks = []
+        marks.append(newCon.input.id)
+        i = 0
+        while i < len(marks):
+            for connection in self.connectors:
+                if connection.output.id != marks[i]:
+                    continue
+                if connection.input == newCon.output:
+                    return True
+                if connection.input.id not in marks:
+                    marks.append(connection.input.id)
+            i += 1
         return False
 
     # ----------------------------------------------------------------------
@@ -299,7 +292,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 GooCanvas.CanvasPath(
                         parent=self.get_root_item(),
                         stroke_color="#F9F9F9",
-                        data="M 0 " + str(i) + " L "+ str(width) +" "+ str(i) + ""
+                        data="M 0 " + str(i) + " L "+ str(width) +" "+ str(i) + "",
+                        line_width=0.8
                         )
                 i = i + System.properties.grid
             i = 0
@@ -307,7 +301,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 GooCanvas.CanvasPath(
                         parent=self.get_root_item(),
                         stroke_color="#F9F9F9",
-                        data="M " + str(i) + " 0 L "+ str(i) + " "+ str(height) +""
+                        data="M " + str(i) + " 0 L "+ str(i) + " "+ str(height) +"",
+                        line_width=0.8
                         )
                 i = i + System.properties.grid
 
@@ -524,9 +519,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 continue
             self.main_window.main_control.get_clipboard().append(self.blocks[key])
         for conn in self.connectors:
-            if not con.is_selected:
+            if not conn.is_selected:
                 continue
-            self.main_window.main_control.get_clipboard().append(con)
+            self.main_window.main_control.get_clipboard().append(conn)
         for comment in self.comments:
             if not comment.is_selected:
                 continue
@@ -725,6 +720,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 self.blocks[key].move(right -x, 0)
         self.update_flows()
 
+    # ----------------------------------------------------------------------
     def get_min_max(self):
         """
         This method get min and max.
