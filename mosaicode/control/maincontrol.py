@@ -330,7 +330,11 @@ class MainControl():
         generator = self.__get_code_generator(diagram)
         if generator is not None:
             code = generator.generate_code()
-            CodeWindow(self.main_window, code)
+            cw = CodeWindow(self.main_window, code)
+	    cw.run()
+            cw.close()
+            cw.destroy()
+	    
 
     # ----------------------------------------------------------------------
     def about(self):
