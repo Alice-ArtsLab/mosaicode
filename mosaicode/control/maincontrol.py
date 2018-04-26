@@ -234,7 +234,7 @@ class MainControl():
     def preferences(self):
         """
         """
-        PreferenceWindow(self.main_window)
+        PreferenceWindow(self.main_window).run()
 
     # ----------------------------------------------------------------------
     def delete(self):

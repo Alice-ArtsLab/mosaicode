@@ -7,10 +7,12 @@ class TestBlockNotebook(TestBase):
 
     def setUp(self):
         self.block_notebook = BlockNotebook(self.create_main_window())
+        blocks = System.get_blocks()
+        self.block_notebook.update_blocks(blocks)
 
     def test_update_blocks(self):
         blocks = System.get_blocks()
-
+        self.assertIsNone(self.block_notebook.update_blocks(blocks), "Failed to update blocks")
         self.assertIsNone(self.block_notebook.update_blocks(blocks), "Failed to update blocks")
 
     def test_search(self):
