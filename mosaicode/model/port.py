@@ -34,4 +34,5 @@ class Port(object):
             return True
         if self.conn_type == Port.OUTPUT:
             return False
+        return False
 # ------------------------------------------------------------------------------

@@ -1,11 +1,12 @@
 from tests.test_base import TestBase
 from mosaicode.model.blockmodel import BlockModel
-
+from mosaicode.GUI.fieldtypes import *
 
 class TestBlockModel(TestBase):
 
     def setUp(self):
         self.block = self.create_block()
+        str(self.block)
 
     def test_color(self):
         self.block.color = "#000000000000"
