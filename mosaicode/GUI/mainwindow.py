@@ -35,7 +35,6 @@ class MainWindow(Gtk.Window):
             System.properties.width,
             System.properties.height)
         self.main_control = MainControl(self)
-        self.connect("check-resize", self.__resize)
 
         # GUI components
         self.menu = Menu(self)
@@ -120,6 +119,7 @@ class MainWindow(Gtk.Window):
 
         self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
+        self.connect("check-resize", self.__resize)
 
         self.main_control.init()
 
