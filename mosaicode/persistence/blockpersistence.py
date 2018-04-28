@@ -11,6 +11,7 @@ from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.persistence.persistence import Persistence
 
 tag_name = "MosaicodeBlock"
 
@@ -107,15 +108,12 @@ class BlockPersistence():
                 label=port.label,
                 type_=port.type)
 
+        path = System.get_user_dir() + "/extensions/"
+        path = path + block.language + "/" + block.framework + "/"
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + block.language + "/" + block.framework + "/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + block.type + ".xml"
+            file_name = path + block.type + ".xml"
             block_file = file(os.path.expanduser(file_name), 'w')
             block_file.write(parser.getXML())
             block_file.close()
@@ -151,15 +149,12 @@ class BlockPersistence():
         parser.setAttribute('properties', block.properties)
         parser.setAttribute('codes', block.codes)
 
+        path = System.get_user_dir() + "/extensions/"
+        path = path + block.language + "/" + block.framework + "/"
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + block.language + "/" + block.framework + "/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + block.label.lower().replace(' ', '_') + ".py"
+            file_name = path + block.label.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False

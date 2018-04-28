@@ -10,6 +10,7 @@ from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.persistence.persistence import Persistence
 
 tag_name = "MosaicodeCodeTemplate"
 
@@ -84,15 +85,12 @@ class CodeTemplatePersistence():
         for key in code_template.code_parts:
             parser.appendToTag('code_parts', 'code_part', value=key.strip())
 
+        path = System.get_user_dir() + "/extensions/"
+        path = path + code_template.language + "/"
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + code_template.language + "/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + code_template.type + ".xml"
+            file_name = path + code_template.type + ".xml"
             code_template_file = file(os.path.expanduser(file_name), 'w')
             code_template_file.write(parser.prettify())
             code_template_file.close()
@@ -124,15 +122,12 @@ class CodeTemplatePersistence():
         parser.setAttribute('code', code_template.code)
         parser.setAttribute('code_parts', code_template.code_parts)
 
+        path = System.get_user_dir() + "/extensions/"
+        path = path + code_template.language + "/"
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + code_template.language + "/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + code_template.name.lower().replace(' ', '_') + ".py"
+            file_name = path + code_template.name.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False

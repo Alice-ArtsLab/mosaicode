@@ -10,6 +10,7 @@ from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.port import Port
+from mosaicode.persistence.persistence import Persistence
 
 tag_name = "MosaicodePort"
 
@@ -72,15 +73,12 @@ class PortPersistence():
         parser.setTagAttr(tag_name, 'var_name', port.var_name)
         parser.appendToTag(tag_name, 'code').string = str(port.code)
 
+        path = System.get_user_dir() + "/extensions/"
+        path = path + port.language + "/ports/"
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + port.language + "/ports/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + port.type + ".xml"
+            file_name = path + port.type + ".xml"
             port_file = file(os.path.expanduser(file_name), 'w')
             port_file.write(parser.prettify())
             port_file.close()
@@ -110,15 +108,12 @@ class PortPersistence():
         parser.setAttribute('multiple', port.multiple)
         parser.setAttribute('code', str(port.code))
 
+        path = System.get_user_dir() + "/extensions/"
+        path = path + port.language + "/ports/"
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + port.language + "/ports/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + port.label.lower().replace(' ', '_') + ".py"
+            file_name = path + port.label.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False
