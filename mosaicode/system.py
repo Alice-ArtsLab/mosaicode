@@ -52,10 +52,10 @@ class System(object):
 
             self.list_of_examples = []
             self.plugins = []
-            self.properties = PreferencesPersistence.load()
             self.__load_examples()
             self.__load_libs()
             self.__load_plugins()
+            self.properties = PreferencesPersistence.load(System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):

@@ -20,6 +20,8 @@ class Persistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
+        if os.path.isdir(path):
+            return True
         try:
             if not os.path.isdir(path):
                 try:

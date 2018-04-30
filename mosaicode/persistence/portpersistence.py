@@ -21,7 +21,7 @@ class PortPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def load(cls, file_name):
+    def load_xml(cls, file_name):
         """
         This method loads the port from XML file.
 
@@ -52,7 +52,7 @@ class PortPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save(cls, port):
+    def save_xml(cls, port, path):
         """
         This method save the port in user space.
 
@@ -60,7 +60,6 @@ class PortPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        from mosaicode.system import System
         port.source = "xml"
         parser = XMLParser()
         parser.addTag(tag_name)
@@ -73,8 +72,6 @@ class PortPersistence():
         parser.setTagAttr(tag_name, 'var_name', port.var_name)
         parser.appendToTag(tag_name, 'code').string = str(port.code)
 
-        path = System.get_user_dir() + "/extensions/"
-        path = path + port.language + "/ports/"
         if not Persistence.create_dir(path):
             return False
         try:
@@ -88,7 +85,7 @@ class PortPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save_python(cls, port):
+    def save_python(cls, port, path):
         """
         This method save the port in user space in python extension.
 
@@ -96,7 +93,6 @@ class PortPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        from mosaicode.system import System
         parser = PythonParser()
         parser.class_name = port.label.replace(' ', '')
         parser.dependencies = [{'from':'mosaicode.model.port', 'import':'Port'}]
@@ -108,8 +104,6 @@ class PortPersistence():
         parser.setAttribute('multiple', port.multiple)
         parser.setAttribute('code', str(port.code))
 
-        path = System.get_user_dir() + "/extensions/"
-        path = path + port.language + "/ports/"
         if not Persistence.create_dir(path):
             return False
         try:

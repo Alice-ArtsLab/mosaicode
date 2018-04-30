@@ -173,7 +173,7 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesPersistence.save(System.properties)
+        PreferencesPersistence.save(System.properties, System.get_user_dir())
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:

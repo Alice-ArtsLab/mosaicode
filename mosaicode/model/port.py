@@ -2,6 +2,9 @@
 
 
 class Port(object):
+# pylint: disable=too-few-public-methods
+# pylint: disable=too-many-instance-attributes
+
     """
     This class contains the base attributes of each block port.
     """
@@ -20,7 +23,6 @@ class Port(object):
         self.file = None
         self.code = ""
         self.var_name = "$block[label]$_$block[id]$_$port[name]$"
-        
         # Attributes defined in Block Ports
         self.conn_type = None
         self.name = None

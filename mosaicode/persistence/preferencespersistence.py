@@ -17,7 +17,7 @@ class PreferencesPersistence:
 
     # ----------------------------------------------------------------------
     @classmethod
-    def load(cls):
+    def load(cls, path):
         """
         This method loads the diagram.
 
@@ -26,8 +26,7 @@ class PreferencesPersistence:
             * **Types** (:class:`boolean<boolean>`)
         """
         prefs = Preferences()
-        from mosaicode.system import System
-        file_name = System.get_user_dir() + "/" + prefs.conf_file_path
+        file_name = path + "/" + prefs.conf_file_path
         file_name = os.path.expanduser(file_name)
         if os.path.exists(file_name) is False:
             return prefs
@@ -57,7 +56,7 @@ class PreferencesPersistence:
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save(cls, prefs):
+    def save(cls, prefs, path):
         """
         This method save the diagram.
 
@@ -82,8 +81,7 @@ class PreferencesPersistence:
             parser.appendToTag('recent_files', 'name', value=key)
 
         try:
-            from mosaicode.system import System
-            file_name = System.get_user_dir() + "/" + prefs.conf_file_path
+            file_name = path + "/" + prefs.conf_file_path
             confFile = file(os.path.expanduser(file_name), 'w')
             confFile.write(parser.prettify())
             confFile.close()
