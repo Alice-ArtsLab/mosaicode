@@ -11,6 +11,7 @@ from os.path import expanduser
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.persistence.persistence import Persistence
 
 tag_name = "MosaicodeBlock"
 
@@ -21,7 +22,7 @@ class BlockPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def load(cls, file_name):
+    def load_xml(cls, file_name):
         """
         This method loads the block from XML file.
 
@@ -70,7 +71,7 @@ class BlockPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save(cls, block):
+    def save_xml(cls, block, path):
         """
         This method save the block in user space.
 
@@ -79,7 +80,6 @@ class BlockPersistence():
             * **Types** (:class:`boolean<boolean>`)
         """
 
-        from mosaicode.system import System
         block.source = "xml"
         parser = XMLParser()
         main = parser.addTag(tag_name)
@@ -107,15 +107,10 @@ class BlockPersistence():
                 label=port.label,
                 type_=port.type)
 
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + block.language + "/" + block.framework + "/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + block.type + ".xml"
+            file_name = path + block.type + ".xml"
             block_file = file(os.path.expanduser(file_name), 'w')
             block_file.write(parser.getXML())
             block_file.close()
@@ -124,7 +119,7 @@ class BlockPersistence():
         return True
     # ----------------------------------------------------------------------
     @classmethod
-    def save_python(cls, block):
+    def save_python(cls, block, path):
         """
         This method save the port in user space in python extension.
 
@@ -132,9 +127,7 @@ class BlockPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        from mosaicode.system import System
         parser = PythonParser()
-
         parser.class_name = block.label.replace(' ', '')
         parser.dependencies = [{'from':'mosaicode.model.blockmodel', 'import':'BlockModel'}]
         parser.inherited_classes = ['BlockModel']
@@ -151,15 +144,10 @@ class BlockPersistence():
         parser.setAttribute('properties', block.properties)
         parser.setAttribute('codes', block.codes)
 
+        if not Persistence.create_dir(path):
+            return False
         try:
-            data_dir = System.get_user_dir() + "/extensions/"
-            data_dir = data_dir + block.language + "/" + block.framework + "/"
-            if not os.path.isdir(data_dir):
-                try:
-                    os.makedirs(data_dir)
-                except:
-                    pass
-            file_name = data_dir + block.label.lower().replace(' ', '_') + ".py"
+            file_name = path + block.label.lower().replace(' ', '_') + ".py"
             parser.save(file_name)
         except IOError as e:
             return False

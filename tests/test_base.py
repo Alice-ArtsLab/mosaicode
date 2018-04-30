@@ -6,6 +6,8 @@ from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.control.diagramcontrol import DiagramControl
+from mosaicode.control.blockcontrol import BlockControl
+from mosaicode.system import System
 
 
 class TestBase(unittest.TestCase):
@@ -32,6 +34,23 @@ class TestBase(unittest.TestCase):
 
         block = Block(diagram_control.diagram, block_model)
         block.language = "language"
+        block.properties = [
+            {"name": "test",
+             "label": "Test",
+             "type": "Test"
+             }]
+
+        block.ports = [{"type": "Test",
+                       "label": "Input",
+                       "conn_type": "Input",
+                       "name": "input"},
+                        {"type": "Test",
+                       "label": "Output",
+                       "conn_type": "Outpu",
+                       "name": "output"}]
+
+        BlockControl.load_ports(block, System.get_ports())
+
         DiagramControl.add_block(diagram_control.diagram, block)
         return block
 

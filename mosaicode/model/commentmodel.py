@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 class CommentModel(object):
+# pylint: disable=too-few-public-methods
+# pylint: disable=too-many-instance-attributes
     """
     This class contains the base attributes of each block,
     their position on the screen, id and others applicable properties for

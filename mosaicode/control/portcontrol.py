@@ -33,7 +33,7 @@ class PortControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        return PortPersistence.load(file_name)
+        return PortPersistence.load_xml(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -42,8 +42,9 @@ class PortControl():
         System()
         ports = System.get_ports()
         for port in ports:
-            print "Exporting port " + port
-            PortPersistence.save(ports[port])
+            path = System.get_user_dir() + "/extensions/"
+            path = path + port.language + "/ports/"
+            PortPersistence.save_xml(ports[port], path)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -52,6 +53,8 @@ class PortControl():
         System()
         ports = System.get_ports()
         for port in ports:
+            path = System.get_user_dir() + "/extensions/"
+            path = path + port.language + "/ports/"
             PortPersistence.save_python(ports[port])
 
     # ----------------------------------------------------------------------
