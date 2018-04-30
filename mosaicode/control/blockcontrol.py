@@ -14,6 +14,7 @@ from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.persistence.blockpersistence import BlockPersistence
 from mosaicode.model.port import Port
 
+
 class BlockControl():
     """
     This class contains methods related the BlockControl class.
@@ -104,10 +105,15 @@ class BlockControl():
             from mosaicode.system import System
             System.log("Block " + file_name + " could not load")
     # ----------------------------------------------------------------------
+
     @classmethod
     def add_new_block(cls, block):
         # Save it
-        BlockPersistence.save(block)
+        from mosaicode.system import System
+        System()
+        path = System.get_user_dir() + "/extensions/"
+        path = path + block.language + "/" + block.framework + "/"
+        BlockPersistence.save_xml(block, path)
 
     # ----------------------------------------------------------------------
     @classmethod

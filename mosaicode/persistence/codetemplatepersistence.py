@@ -12,13 +12,15 @@ from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.persistence.persistence import Persistence
 
+
 class CodeTemplatePersistence():
     """
     This class contains methods related the CodeTemplatePersistence class.
     """
 
     tag_name = "MosaicodeCodeTemplate"
-    properties = ["name", "type", "description", "language", "command", "extension", "code"]
+    properties = ["name", "type", "description",
+                  "language", "command", "extension", "code"]
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -42,9 +44,11 @@ class CodeTemplatePersistence():
         code_template = CodeTemplate()
         for prop in CodeTemplatePersistence.properties:
             if hasattr(ct, prop) and hasattr(code_template, prop):
-                code_template.__dict__[prop] = parser.getTagAttr(CodeTemplatePersistence.tag_name, prop)
+                code_template.__dict__[prop] = parser.getTagAttr(
+                    CodeTemplatePersistence.tag_name, prop)
 
-        code_parts = parser.getTag(CodeTemplatePersistence.tag_name).getTag("code_parts").getChildTags("code_part")
+        code_parts = parser.getTag(CodeTemplatePersistence.tag_name).getTag(
+            "code_parts").getChildTags("code_part")
         for code_part in code_parts:
             code_template.code_parts.append(code_part.getAttr("value"))
 
@@ -68,7 +72,8 @@ class CodeTemplatePersistence():
 
         for prop in CodeTemplatePersistence.properties:
             if hasattr(code_template, prop):
-                parser.setTagAttr(CodeTemplatePersistence.tag_name, prop, code_template.__dict__[prop])
+                parser.setTagAttr(CodeTemplatePersistence.tag_name,
+                                  prop, code_template.__dict__[prop])
 
         parser.appendToTag(CodeTemplatePersistence.tag_name, 'code_parts')
         for key in code_template.code_parts:
@@ -97,7 +102,8 @@ class CodeTemplatePersistence():
         """
         parser = PythonParser()
         parser.class_name = code_template.name.replace(' ', '')
-        parser.dependencies = [{'from':'mosaicode.model.codetemplate', 'import':'CodeTemplate'}]
+        parser.dependencies = [
+            {'from': 'mosaicode.model.codetemplate', 'import': 'CodeTemplate'}]
         parser.inherited_classes = ['CodeTemplate']
         parser.setAttribute('name', code_template.name)
         parser.setAttribute('description', code_template.description)
