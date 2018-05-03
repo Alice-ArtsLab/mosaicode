@@ -12,6 +12,7 @@ from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.port import Port
 from mosaicode.persistence.portpersistence import PortPersistence
 
+
 class PortControl():
     """
     This class contains methods related the PortControl class.
@@ -21,7 +22,6 @@ class PortControl():
 
     def __init__(self):
         pass
-
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -76,7 +76,11 @@ class PortControl():
     @classmethod
     def add_port(cls, port):
         # first, save it
-        PortPersistence.save(port)
+        from mosaicode.system import System as System
+        System()
+        path = System.get_user_dir() + "/extensions/"
+        path = path + port.language + "/ports/"
+        PortPersistence.save_xml(port, path)
 
     # ----------------------------------------------------------------------
     @classmethod
