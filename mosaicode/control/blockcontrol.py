@@ -14,6 +14,7 @@ from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.persistence.blockpersistence import BlockPersistence
 from mosaicode.model.port import Port
 
+
 class BlockControl():
     """
     This class contains methods related the BlockControl class.
@@ -72,8 +73,9 @@ class BlockControl():
         System()
         blocks = System.get_blocks()
         for block in blocks:
-            print "Exporting block " + block
-            BlockPersistence.save(blocks[block])
+            path = System.get_user_dir() + "/extensions/"
+            path = path + block.language + "/" + block.framework + "/"
+            BlockPersistence.save_xml(blocks[block], path)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -82,8 +84,9 @@ class BlockControl():
         System()
         blocks = System.get_blocks()
         for block in blocks:
-            print "Exporting block " + block
-            BlockPersistence.save_python(blocks[block])
+            path = System.get_user_dir() + "/extensions/"
+            path = path + block.language + "/" + block.framework + "/"
+            BlockPersistence.save_python(blocks[block], path)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -97,15 +100,20 @@ class BlockControl():
         """
         file_name = file_name.replace(" ", "\\ ")
         try:
-            return BlockPersistence.load(file_name)
+            return BlockPersistence.load_xml(file_name)
         except:
             from mosaicode.system import System
             System.log("Block " + file_name + " could not load")
     # ----------------------------------------------------------------------
+
     @classmethod
     def add_new_block(cls, block):
         # Save it
-        BlockPersistence.save(block)
+        from mosaicode.system import System
+        System()
+        path = System.get_user_dir() + "/extensions/"
+        path = path + block.language + "/" + block.framework + "/"
+        BlockPersistence.save_xml(block, path)
 
     # ----------------------------------------------------------------------
     @classmethod

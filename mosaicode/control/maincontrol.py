@@ -173,7 +173,7 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesPersistence.save(System.properties)
+        PreferencesPersistence.save(System.properties, System.get_user_dir())
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:
@@ -234,7 +234,7 @@ class MainControl():
     def preferences(self):
         """
         """
-        PreferenceWindow(self.main_window)
+        PreferenceWindow(self.main_window).run()
 
     # ----------------------------------------------------------------------
     def delete(self):
@@ -330,7 +330,11 @@ class MainControl():
         generator = self.__get_code_generator(diagram)
         if generator is not None:
             code = generator.generate_code()
-            CodeWindow(self.main_window, code)
+            cw = CodeWindow(self.main_window, code)
+	    cw.run()
+            cw.close()
+            cw.destroy()
+	    
 
     # ----------------------------------------------------------------------
     def about(self):

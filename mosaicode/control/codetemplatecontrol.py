@@ -12,6 +12,7 @@ from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.persistence.codetemplatepersistence import CodeTemplatePersistence
 
+
 class CodeTemplateControl():
     """
     This class contains methods related the CodeTemplateControl class.
@@ -25,7 +26,7 @@ class CodeTemplateControl():
     # ----------------------------------------------------------------------
     @classmethod
     def load(cls, file_name):
-        return CodeTemplatePersistence.load(file_name)
+        return CodeTemplatePersistence.load_xml(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -34,7 +35,9 @@ class CodeTemplateControl():
         System()
         code_templates = System.get_code_templates()
         for code_template in code_templates:
-            CodeTemplatePersistence.save(code_templates[code_template])
+            path = System.get_user_dir() + "/extensions/"
+            path = path + code_template.language + "/"
+            CodeTemplatePersistence.save_xml(code_templates[code_template])
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -43,13 +46,20 @@ class CodeTemplateControl():
         System()
         code_templates = System.get_code_templates()
         for code_template in code_templates:
-            CodeTemplatePersistence.save_python(code_templates[code_template])
+            path = System.get_user_dir() + "/extensions/"
+            path = path + code_template.language + "/"
+            CodeTemplatePersistence.save_python(
+                code_templates[code_template], path)
 
     # ----------------------------------------------------------------------
     @classmethod
     def add_code_template(cls, code_template):
         # save it
-        CodeTemplatePersistence.save(code_template)
+        from mosaicode.system import System as System
+        System()
+        path = System.get_user_dir() + "/extensions/"
+        path = path + code_template.language + "/"
+        CodeTemplatePersistence.save_xml(code_template, path)
 
     # ----------------------------------------------------------------------
     @classmethod

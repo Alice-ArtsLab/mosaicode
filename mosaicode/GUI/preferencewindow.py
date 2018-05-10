@@ -29,6 +29,7 @@ class PreferenceWindow(Gtk.Dialog):
                                 Gtk.ResponseType.CANCEL,
                                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
+        self.main_window = main_window
         self.properties = System.properties
         box = self.get_content_area()
         box.set_border_width(3)
@@ -58,14 +59,17 @@ class PreferenceWindow(Gtk.Dialog):
         self.__create_network_preferences_tab()
 
         self.show_all()
-        response = self.run()
+
+    # ----------------------------------------------------------------------
+    def run(self):
+        response = Gtk.Dialog.run(self)
 
         if response == Gtk.ResponseType.OK:
             self.properties.default_directory = self.default_directory.get_value()
             self.properties.default_filename = self.default_filename.get_value()
             self.properties.grid = self.grid.get_value()
             self.properties.port = self.port.get_value()
-            main_window.main_control.redraw(None)
+            self.main_window.main_control.redraw(None)
 
         self.close()
         self.destroy()

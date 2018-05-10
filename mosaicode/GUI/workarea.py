@@ -60,14 +60,17 @@ class WorkArea(Gtk.Notebook):
             position = self.get_current_page()
         diagram = self.get_nth_page(position)
 
+        if diagram is None:
+            return False
+
         if diagram.modified:
-            dialog = Dialog().confirm_dialog(_("Diagram ") +
+            self.dialog = Dialog().confirm_dialog(_("Diagram ") +
                                              diagram.file_name +
                                              _("is not saved.\nIf you close it"
                                                ", changes will be lost.\n"
                                                "Confirm?"), self.main_window)
-            result = dialog.run()
-            dialog.destroy()
+            result = self.dialog.run()
+            self.dialog.destroy()
             if result == Gtk.ResponseType.CANCEL:
                 return False
 

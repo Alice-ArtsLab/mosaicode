@@ -75,10 +75,6 @@ class CodeWindow(Gtk.Dialog):
         textview.show()
         self.show_all()
 
-        self.run()
-        self.close()
-        self.destroy()
-
     # ----------------------------------------------------------------------
     def __save_button_clicked(self, widget, data):
         """

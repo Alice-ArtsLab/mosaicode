@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from mosaicode.model.connectionmodel import ConnectionModel as ConnectionModel
-from mosaicode.system import System as System
-
 class DiagramModel(object):
+# pylint: disable=too-few-public-methods
+# pylint: disable=too-many-instance-attributes
 
     # ----------------------------------------------------------------------
     def __init__(self):
