@@ -265,10 +265,39 @@ class Menu(Gtk.MenuBar):
 
         for widget in self.example_menu.get_children():
             self.example_menu.remove(widget)
+        # Create submenu
+        submenu = None
         for example in list_of_examples:
-            menu_item = Gtk.MenuItem(example.split("/").pop())
-            self.example_menu.append(menu_item)
+            directory_list = example.split("/")
+            name = directory_list.pop()
+            framework = directory_list.pop()
+            language = directory_list.pop()
+
+            # first, the language submenu
+            language_menu_item = self.__get_child_by_name(self.example_menu, language)
+            if language_menu_item is None:
+                language_menu_item = Gtk.MenuItem(language)
+                language_menu_item.set_name(language)
+                self.example_menu.append(language_menu_item)
+                language_menu = Gtk.Menu()
+                language_menu_item.set_submenu(language_menu)
+            else:
+                language_menu = language_menu_item.get_submenu()
+
+            framework_menu_item = self.__get_child_by_name(language_menu, framework)
+            if framework_menu_item is None:
+                framework_menu_item = Gtk.MenuItem(framework)
+                framework_menu_item.set_name(framework)
+                language_menu.append(framework_menu_item)
+                framework_menu = Gtk.Menu()
+                framework_menu_item.set_submenu(framework_menu)
+            else:
+                framework_menu = framework_menu_item.get_submenu()
+
+            menu_item = Gtk.MenuItem(name)
+            framework_menu.append(menu_item)
             menu_item.connect("activate", self.__load_example, example)
+
         self.example_menu.show_all()
 
     # ----------------------------------------------------------------------
