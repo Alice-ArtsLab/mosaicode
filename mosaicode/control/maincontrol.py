@@ -46,6 +46,9 @@ class MainControl():
     def init(self):
         self.main_window.menu.update_recent_files(System.properties.recent_files)
         self.main_window.menu.update_examples(System.list_of_examples)
+        # Load plugins
+        for plugin in System.instance.plugins:
+            plugin.load(self.main_window)
         self.update_blocks()
 
     # ----------------------------------------------------------------------

@@ -116,9 +116,11 @@ class System(object):
         def __load_examples(self):
             # Load Examples
             self.list_of_examples = []
-            examples = glob(System.DATA_DIR + "examples/*")
-            for example in examples:
-                self.list_of_examples.append(example)
+            for root, subdirs, files in os.walk(System.DATA_DIR + "extensions/"):
+                for filename in files:
+                    file_path = os.path.join(root, filename)
+                    if filename.endswith(".mscd"):
+                        self.list_of_examples.append(file_path)
             self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------

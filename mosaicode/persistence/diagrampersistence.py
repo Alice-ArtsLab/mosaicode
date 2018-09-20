@@ -47,6 +47,7 @@ class DiagramPersistence():
         for block in blocks:
             block_type = block.getAttr("type")
             if block_type not in system_blocks:
+                System.log("Block " + block_type + " not found")
                 continue
             block_id = int(block.getAttr("id"))
             collapsed = False
@@ -74,24 +75,28 @@ class DiagramPersistence():
                 continue
             elif not hasattr(conn, 'to_block'):
                 continue
-            from_block = diagram.blocks[int(conn.from_block)]
             from_block_out = int(conn.getAttr("from_out"))
             to_block_in = int(conn.getAttr("to_in"))
-            to_block = diagram.blocks[int(conn.to_block)]
+            try:
+                from_block = diagram.blocks[int(conn.from_block)]
+                to_block = diagram.blocks[int(conn.to_block)]
+            except:
+                continue
             connection = ConnectionModel(diagram, from_block,
                                 from_block.ports[from_block_out],
                                 to_block,
                                 to_block.ports[to_block_in])
             DiagramControl.add_connection(diagram, connection)
 
-        comments = parser.getTag(tag_name).getTag(
-                    "comments").getChildTags("comment")
-        for com in comments:
-            comment = CommentModel()
-            comment.x = float(com.getAttr("x"))
-            comment.y = float(com.getAttr("y"))
-            comment.text = com.getAttr("text")
-            diagram.comments.append(comment)
+        comments = parser.getTag(tag_name).getTag("comments")
+        if comments is not None:
+            comments = comments.getChildTags("comment")
+            for com in comments:
+                comment = CommentModel()
+                comment.x = float(com.getAttr("x"))
+                comment.y = float(com.getAttr("y"))
+                comment.text = com.getAttr("text")
+                diagram.comments.append(comment)
 
         return True
 
