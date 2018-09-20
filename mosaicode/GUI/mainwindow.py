@@ -30,7 +30,6 @@ class MainWindow(Gtk.Window):
         """
         System()
         Gtk.Window.__init__(self, title="Mosaicode")
-        # self.set_default_size(800,600)
         self.resize(
             System.properties.width,
             System.properties.height)
@@ -45,11 +44,6 @@ class MainWindow(Gtk.Window):
         self.work_area = WorkArea(self)
         self.status = Status(self)
         self.block_menu = BlockMenu()
-
-        # Load plugins
-        for plugin in System.instance.plugins:
-            plugin.load(self)
-
         self.menu.add_help()
 
         System.set_log(self.status)

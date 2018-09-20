@@ -45,12 +45,10 @@ setup(name='mosaicode',
 
       # this is fucked up! must put it in package_data!!
       data_files=[
-            ('/usr/share/mosaicode/images', glob("app_data/images/*")),
-            ('/usr/share/mosaicode/po/pt/LC_MESSAGES/', glob("app_data/po/pt/LC_MESSAGES/*")),
             ('/usr/share/applications/', ["app_data/mosaicode.desktop"]),
-            ('/usr/share/icons/hicolor/scalable/apps', ['app_data/images/mosaicode.png']),
-            ('/usr/share/pixmaps', ['app_data/images/mosaicode.png']),
-            ('/usr/share/icons/hicolor/24x24/apps', ['app_data/images/mosaicode.png'])],
+            ('/usr/share/icons/hicolor/scalable/apps', ['app_data/mosaicode.png']),
+            ('/usr/share/pixmaps', ['app_data/mosaicode.png']),
+            ('/usr/share/icons/hicolor/24x24/apps', ['app_data/mosaicode.png'])],
       zip_safe=False,
       **config
       )
