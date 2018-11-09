@@ -52,15 +52,12 @@ class System(object):
 
             self.list_of_examples = []
             self.plugins = []
-            self.__load_examples()
-            self.__load_libs()
-            self.__load_plugins()
             self.properties = PreferencesPersistence.load(System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):
             self.__load_examples()
-            self.__load_libs()
+            self.__load_extensions()
             self.__load_plugins()
 
         # ----------------------------------------------------------------------
@@ -124,7 +121,7 @@ class System(object):
             self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
-        def __load_libs(self):
+        def __load_extensions(self):
             # Create user directory if does not exist
             if not os.path.isdir(System.get_user_dir() + "/extensions/"):
                 try:

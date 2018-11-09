@@ -137,6 +137,32 @@ class DiagramControl:
         return DiagramPersistence.save(self.diagram)
 
     # ----------------------------------------------------------------------
+    def get_min_max(self):
+        """
+        This method get min and max.
+            Returns
+
+        """
+        min_x = self.diagram.main_window.get_size()[0]
+        min_y = self.diagram.main_window.get_size()[1]
+
+        max_x = 0
+        max_y = 0
+
+        for block_id in self.diagram.blocks:
+            block = self.diagram.blocks[block_id]
+            x, y = block.get_position()
+            if x < min_x:
+                min_x = x
+            if y < min_y:
+                min_y = y
+            if x + block.width > max_x:
+                max_x = x + block.width
+            if y + block.height > max_y:
+                max_y = y + block.height
+        return min_x, min_y, max_x - min_x, max_y - min_y
+
+    # ----------------------------------------------------------------------
     def export_png(self, file_name="diagrama.png"):
         """
         This method export a png.
@@ -148,11 +174,11 @@ class DiagramControl:
         if file_name is None:
             file_name = "diagrama.png"
 
-        x, y, width, height = self.diagram.get_min_max()
+        x, y, width, height = self.get_min_max()
 
         if x < 0 or y < 0:
             self.diagram.reload()
-            x, y, width, height = self.diagram.get_min_max()
+            x, y, width, height = self.get_min_max()
 
         pixbuf = Gdk.pixbuf_get_from_window(
             self.diagram.get_window(), x, y, width, height)

@@ -15,7 +15,7 @@ from workarea import WorkArea
 from searchbar import SearchBar
 from blocknotebook import BlockNotebook
 from mosaicode.system import System as System
-from blockproperties import BlockProperties
+from propertybox import PropertyBox
 from mosaicode.control.maincontrol import MainControl
 from mosaicode.GUI.blockmenu import BlockMenu
 
@@ -40,7 +40,7 @@ class MainWindow(Gtk.Window):
         self.toolbar = Toolbar(self)
         self.search = SearchBar(self)
         self.block_notebook = BlockNotebook(self)
-        self.block_properties = BlockProperties(self)
+        self.property_box = PropertyBox(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
         self.block_menu = BlockMenu()
@@ -104,11 +104,11 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
         # |blocks_tree_view
         # =====================================================
-        # | block_properties
+        # |property_box
         # -----------------------------------------------------
 
         self.vpaned_left.add1(self.__create_frame(self.block_notebook))
-        self.vpaned_left.add2(self.__create_frame(self.block_properties))
+        self.vpaned_left.add2(self.__create_frame(self.property_box))
         self.vpaned_left.set_position(System.properties.vpaned_left)
 
         self.connect("delete-event", self.main_control.exit)
