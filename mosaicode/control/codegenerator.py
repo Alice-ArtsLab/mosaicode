@@ -13,16 +13,14 @@ from gi.repository import Gtk
 from threading import Thread
 from mosaicode.system import System as System
 
-
 class CodeGenerator():
     """
     This class contains methods related the CodeGenerator class.
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, diagram=None, code_template=None):
+    def __init__(self, diagram=None):
         self.diagram = diagram
-        self.code_template = code_template
 
         self.dir_name = ""
         self.filename = ""
@@ -35,7 +33,7 @@ class CodeGenerator():
         if diagram is None:
             return
 
-        if code_template is None:
+        if self.diagram.code_template is None:
             return
 
         if self.diagram.language is None:
@@ -243,12 +241,12 @@ class CodeGenerator():
         self.__sort_block_list()
 
         # Create an array of codes to each code part
-        for key in self.code_template.code_parts:
+        for key in self.diagram.code_template.code_parts:
             self.codes[key] = []
 
         self.__generate_block_list_code()
 
-        code = self.code_template.code
+        code = self.diagram.code_template.code
 
         for key in self.codes:
             # Check for single_code generation
@@ -301,7 +299,7 @@ class CodeGenerator():
         This method generate the save log.
         """
         if name is None:
-            name = self.dir_name + self.filename + self.code_template.extension
+            name = self.dir_name + self.filename + self.diagram.code_template.extension
             try:
                 os.makedirs(self.dir_name)
             except:
@@ -315,20 +313,19 @@ class CodeGenerator():
             codeFile.write(code)
             codeFile.close()
             return False
-        except IOError:
+        except IOError as erro:
             System.log("File or directory not found!")
+            System.log(erro)
             return True
-
-
 
     # ----------------------------------------------------------------------
     def run(self, code = None):
         """
         This method runs the code.
         """
-        command = self.code_template.command
+        command = self.diagram.code_template.command
         command = command.replace("$filename$", self.filename)
-        command = command.replace("$extension$", self.code_template.extension)
+        command = command.replace("$extension$", self.diagram.code_template.extension)
         command = command.replace("$dir_name$", self.dir_name)
 
         if (self.save_code(code = code)):
@@ -336,15 +333,11 @@ class CodeGenerator():
             return
         os.chdir(self.dir_name)
 
-        System.log("Executing Code: " + command)
+        System.log("Executing Code:\n" + command)
 
-        program = Thread(target=os.system, args=(command,))
-        program.start()
-
-        while program.isAlive():
-            program.join(0.4)
-            while Gtk.events_pending():
-                Gtk.main_iteration()
+        thread = Thread(target=os.system, args=(command,))
+        thread.start()
         os.chdir(self.old_path)
+        return command, thread
 
 # -------------------------------------------------------------------------

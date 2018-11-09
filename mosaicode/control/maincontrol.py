@@ -47,9 +47,9 @@ class MainControl():
         self.main_window.menu.update_recent_files(System.properties.recent_files)
         self.main_window.menu.update_examples(System.list_of_examples)
         # Load plugins
+        self.update_blocks()
         for plugin in System.instance.plugins:
             plugin.load(self.main_window)
-        self.update_blocks()
 
     # ----------------------------------------------------------------------
     def update_blocks(self):
@@ -270,10 +270,11 @@ class MainControl():
             return None
 
         if len(template_list) == 1:
-            return CodeGenerator(diagram, template_list[0])
+            diagram.code_template = template_list[0]
+            return CodeGenerator(diagram)
         select = SelectCodeTemplate(self.main_window, template_list)
-        code_template = select.get_value()
-        return CodeGenerator(diagram, code_template)
+        diagram.code_template = select.get_value()
+        return CodeGenerator(diagram)
 
     # ----------------------------------------------------------------------
     def run(self, code = None):

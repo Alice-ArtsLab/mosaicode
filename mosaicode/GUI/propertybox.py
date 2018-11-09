@@ -54,6 +54,26 @@ class PropertyBox(Gtk.VBox):
         for widget in self.vbox.get_children():
             self.vbox.remove(widget)
 
+        data1 = {"label": _("File Name:"),
+                "name": "file_name",
+                "value": diagram.file_name}
+        field1 = LabelField(data1, self.notify_comment)
+        self.vbox.pack_start(field1, False, False, 0)
+
+        data2 = {"label": _("Language:"),
+                "name": "language",
+                "value": diagram.language}
+        field2 = LabelField(data2, self.notify_comment)
+        self.vbox.pack_start(field2, False, False, 0)
+
+        value = "None"
+        if diagram.code_template is not None:
+            value = diagram.code_template.name
+        data3 = {"label": _("Code Template:"),
+                "name": "code_template",
+                "value": value}
+        field3 = LabelField(data3, self.notify_comment)
+        self.vbox.pack_start(field3, False, False, 0)
 
 # ----------------------------------------------------------------------
     def set_comment(self, comment):

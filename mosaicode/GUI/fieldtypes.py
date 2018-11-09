@@ -9,6 +9,7 @@ from mosaicomponents.commentfield import CommentField
 from mosaicomponents.floatfield import FloatField
 from mosaicomponents.iconfield import IconField
 from mosaicomponents.intfield import IntField
+from mosaicomponents.labelfield import LabelField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicomponents.savefilefield import SaveFileField
 from mosaicomponents.stringfield import StringField
@@ -21,6 +22,7 @@ MOSAICODE_COMMENT = "Comment"
 MOSAICODE_FLOAT = "Float"
 MOSAICODE_ICON = "Icon"
 MOSAICODE_INT = "Int"
+MOSAICODE_LABEL = "Label"
 MOSAICODE_NONE = "None"
 MOSAICODE_OPEN_FILE = "Open File"
 MOSAICODE_SAVE_FILE = "Save File"
@@ -34,6 +36,7 @@ component_list = {
     MOSAICODE_FLOAT: FloatField,
     MOSAICODE_ICON: IconField,
     MOSAICODE_INT: IntField,
+    MOSAICODE_LABEL: LabelField,
     MOSAICODE_OPEN_FILE: OpenFileField,
     MOSAICODE_SAVE_FILE: SaveFileField,
     MOSAICODE_STRING: StringField
