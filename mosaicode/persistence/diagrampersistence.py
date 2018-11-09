@@ -47,6 +47,7 @@ class DiagramPersistence():
         for block in blocks:
             block_type = block.getAttr("type")
             if block_type not in system_blocks:
+                
                 System.log("Block " + block_type + " not found")
                 continue
             block_id = int(block.getAttr("id"))
@@ -69,23 +70,25 @@ class DiagramPersistence():
             new_block.is_collapsed = collapsed
             DiagramControl.add_block(diagram, new_block)
 
-        connections = parser.getTag(tag_name).getTag("connections").getChildTags("connection")
+        connections = parser.getTag(tag_name).getTag("connections")
+        connections = connections.getChildTags("connection")
         for conn in connections:
             if not hasattr(conn, 'from_block'):
                 continue
             elif not hasattr(conn, 'to_block'):
                 continue
-            from_block_out = int(conn.getAttr("from_out"))
-            to_block_in = int(conn.getAttr("to_in"))
             try:
                 from_block = diagram.blocks[int(conn.from_block)]
                 to_block = diagram.blocks[int(conn.to_block)]
+                from_block_out = from_block.ports[int(conn.getAttr("from_out"))]
+                to_block_in = to_block.ports[int(conn.getAttr("to_in"))]
             except:
                 continue
-            connection = ConnectionModel(diagram, from_block,
-                                from_block.ports[from_block_out],
+            connection = ConnectionModel(diagram,
+                                from_block,
+                                from_block_out,
                                 to_block,
-                                to_block.ports[to_block_in])
+                                to_block_in)
             DiagramControl.add_connection(diagram, connection)
 
         comments = parser.getTag(tag_name).getTag("comments")

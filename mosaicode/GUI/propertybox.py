@@ -22,16 +22,38 @@ class PropertyBox(Gtk.VBox):
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
+        Gtk.VBox.__init__(self, True)
+
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
+        self.add(scrolled_window)
+
+        self.vbox = Gtk.VBox(self, True)
+        scrolled_window.add(self.vbox)
         self.main_window = main_window
         self.block = None
         self.comment = None
         self.properties = {}
-        Gtk.VBox.__init__(self)
-        self.set_homogeneous(False)
-        self.set_property("border-width", 0)
+        self.vbox.set_homogeneous(False)
+        self.vbox.set_property("border-width", 0)
         white = Gdk.RGBA(1, 1, 1, 1)
         self.override_background_color(Gtk.StateType.NORMAL, white)
         self.show_all()
+
+# ----------------------------------------------------------------------
+    def set_diagram(self, diagram):
+        """
+        This method set the property of the diagram.
+
+            Parameters:
+                * **comment** (:class:`PropertyBox<mosaicode.GUI.propertybox>`)
+            Returns:
+                None
+        """
+        # First, remove all components
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
+
 
 # ----------------------------------------------------------------------
     def set_comment(self, comment):
@@ -44,14 +66,14 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         # First, remove all components
-        for widget in self.get_children():
-            self.remove(widget)
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
 
         data = {"label": _("Text:"),
                 "name": "comment",
                 "value": comment.get_text()}
         field = CommentField(data, self.notify_comment)
-        self.pack_start(field, False, False, 0)
+        self.vbox.pack_start(field, False, False, 0)
         self.properties = {}
         self.properties["comment"] = ""
         self.comment = comment
@@ -61,7 +83,7 @@ class PropertyBox(Gtk.VBox):
         """
         This method notify modifications in propertybox
         """
-        self.__recursive_search(self)
+        self.__recursive_search(self.vbox)
         self.comment.set_text(self.properties["comment"])
 
 # ----------------------------------------------------------------------
@@ -76,8 +98,8 @@ class PropertyBox(Gtk.VBox):
         """
         self.block = block
         # First, remove all components
-        for widget in self.get_children():
-            self.remove(widget)
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
 
         # Search block properties to create GUI
         for prop in self.block.get_properties():
@@ -86,7 +108,7 @@ class PropertyBox(Gtk.VBox):
             if prop["type"] == MOSAICODE_OPEN_FILE or \
                     prop["type"] == MOSAICODE_SAVE_FILE:
                 field.set_parent_window(self.main_window)
-            self.pack_start(field, False, False, 0)
+            self.vbox.pack_start(field, False, False, 0)
 
 # ----------------------------------------------------------------------
     def notify(self, widget=None, data=None):
@@ -94,7 +116,7 @@ class PropertyBox(Gtk.VBox):
         This method notify modifications in propertybox
         """
         # It is time to look for values
-        self.__recursive_search(self)
+        self.__recursive_search(self.vbox)
         # we have a returnable dictionary, call the callback method
         self.block.set_properties(self.properties)
 

@@ -132,6 +132,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __on_button_press(self, widget, event=None):
         Gtk.Widget.grab_focus(self)
         if event.button == 1:
+            self.main_window.main_control.show_diagram_property(self)
             self.last_clicked_point = (event.x, event.y)
             self.deselect_all()
             self.__abort_connection()
@@ -337,23 +338,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.main_window.work_area.rename_diagram(self)
 
     # ----------------------------------------------------------------------
-    def __apply_zoom(self):
-        self.set_scale(self.zoom)
-        self.update_flows()
-        self.set_modified(True)
-
-    # ----------------------------------------------------------------------
-    def set_zoom(self, zoom):
-        """
-        This method set zoom.
-
-            Parameters:
-                * **zoom**
-        """
-        self.zoom = zoom
-        self.__apply_zoom()
-
-    # ----------------------------------------------------------------------
     def change_zoom(self, value):
         """
         This method change zoom.
@@ -369,7 +353,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         elif value == System.ZOOM_OUT:
             zoom = zoom - 0.1
         self.zoom = zoom
-        self.__apply_zoom()
+        self.set_scale(self.zoom)
+        self.update_flows()
+        self.set_modified(True)
 
     # ----------------------------------------------------------------------
     def show_commnent_property(self, comment):
@@ -719,32 +705,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if alignment == "RIGHT":
                 self.blocks[key].move(right -x, 0)
         self.update_flows()
-
-    # ----------------------------------------------------------------------
-    def get_min_max(self):
-        """
-        This method get min and max.
-            Returns
-
-        """
-        min_x = self.main_window.get_size()[0]
-        min_y = self.main_window.get_size()[1]
-
-        max_x = 0
-        max_y = 0
-
-        for block_id in self.blocks:
-            block = self.blocks[block_id]
-            x, y = block.get_position()
-            if x < min_x:
-                min_x = x
-            if y < min_y:
-                min_y = y
-            if x + block.width > max_x:
-                max_x = x + block.width
-            if y + block.height > max_y:
-                max_y = y + block.height
-        return min_x, min_y, max_x - min_x, max_y - min_y
 
     # ----------------------------------------------------------------------
     def show_block_menu(self, block, event):

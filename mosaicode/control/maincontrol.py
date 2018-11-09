@@ -358,7 +358,7 @@ class MainControl():
         """
         This method set the block properties.
         """
-        self.main_window.block_properties.set_block(block)
+        self.main_window.property_box.set_block(block)
 
     # ----------------------------------------------------------------------
     def append_status_log(self, text):
@@ -450,18 +450,25 @@ class MainControl():
         diagram.change_zoom(System.ZOOM_ORIGINAL)
 
     # ----------------------------------------------------------------------
+    def show_diagram_property(self, diagram):
+        """
+        This method show the comment properties.
+        """
+        self.main_window.property_box.set_diagram(diagram)
+
+    # ----------------------------------------------------------------------
     def show_comment_property(self, comment):
         """
         This method show the comment properties.
         """
-        self.main_window.block_properties.set_comment(comment)
+        self.main_window.property_box.set_comment(comment)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
         """
         This method show the block properties.
         """
-        self.main_window.block_properties.set_block(block)
+        self.main_window.property_box.set_block(block)
 
     # ----------------------------------------------------------------------
     def clear_console(self):
