@@ -18,7 +18,7 @@ class Publisher:
     def __init__(self):
         self.httpd = None
         self.ip = None
-        self.port = System.properties.port
+        self.port = System.preferences.port
         self.httpd_thread = None
 
     # ----------------------------------------------------------------------
@@ -51,11 +51,11 @@ class Publisher:
 
     # ----------------------------------------------------------------------
     def __start_server(self):
-        self.port = System.properties.port
+        self.port = System.preferences.port
 
         while self.httpd is None:
             try:
-                path = System.properties.default_directory
+                path = System.preferences.default_directory
                 my_path = os.curdir
                 os.chdir(path)
                 System.log("Trying to run the server")

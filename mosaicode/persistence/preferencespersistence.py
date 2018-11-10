@@ -35,23 +35,23 @@ class PreferencesPersistence:
         if parser.getTag(tag_name) is None:
             return prefs
 
-        try:
-            prefs.default_directory = parser.getTagAttr(tag_name, "default_directory")
-            prefs.default_filename = parser.getTagAttr(tag_name, "default_filename")
-            prefs.grid = int(parser.getTagAttr(tag_name,"grid"))
-            prefs.port = int(parser.getTagAttr(tag_name, "network_port"))
-            prefs.width = int(parser.getTagAttr(tag_name,"width"))
-            prefs.height = int(parser.getTagAttr(tag_name, "height"))
-            prefs.hpaned_work_area = int(parser.getTagAttr(tag_name, "hpaned_work_area"))
-            prefs.vpaned_bottom = int(parser.getTagAttr(tag_name, "vpaned_bottom"))
-            prefs.vpaned_left = int(parser.getTagAttr(tag_name, "vpaned_left"))
+        prefs.author = parser.getTagAttr(tag_name, "author")
+        prefs.license = parser.getTagAttr(tag_name, "license")
 
-            files = parser.getTag(tag_name).getTag(
-                        "recent_files").getChildTags("name")
-            for file_name in files:
-                prefs.recent_files.append(file_name.getAttr("value"))
-        except:
-            pass
+        prefs.default_directory = parser.getTagAttr(tag_name, "default_directory")
+        prefs.default_filename = parser.getTagAttr(tag_name, "default_filename")
+        prefs.grid = int(parser.getTagAttr(tag_name,"grid"))
+        prefs.port = int(parser.getTagAttr(tag_name, "network_port"))
+        prefs.width = int(parser.getTagAttr(tag_name,"width"))
+        prefs.height = int(parser.getTagAttr(tag_name, "height"))
+        prefs.hpaned_work_area = int(parser.getTagAttr(tag_name, "hpaned_work_area"))
+        prefs.vpaned_bottom = int(parser.getTagAttr(tag_name, "vpaned_bottom"))
+        prefs.vpaned_left = int(parser.getTagAttr(tag_name, "vpaned_left"))
+
+        files = parser.getTag(tag_name).getTag(
+                    "recent_files").getChildTags("name")
+        for file_name in files:
+            prefs.recent_files.append(file_name.getAttr("value"))
         return prefs
 
     # ----------------------------------------------------------------------
@@ -66,6 +66,10 @@ class PreferencesPersistence:
         """
         parser = XMLParser()
         parser.addTag(tag_name)
+
+        parser.setTagAttr(tag_name,'author', prefs.author)
+        parser.setTagAttr(tag_name,'license', prefs.license)
+
         parser.setTagAttr(tag_name,'default_directory', prefs.default_directory)
         parser.setTagAttr(tag_name,'default_filename', prefs.default_filename)
         parser.setTagAttr(tag_name,'grid', prefs.grid)

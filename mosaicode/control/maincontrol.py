@@ -44,7 +44,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def init(self):
-        self.main_window.menu.update_recent_files(System.properties.recent_files)
+        self.main_window.menu.update_recent_files(System.preferences.recent_files)
         self.main_window.menu.update_examples(System.list_of_examples)
         # Load plugins
         self.update_blocks()
@@ -88,12 +88,12 @@ class MainControl():
         diagram.redraw()
         diagram.set_modified(False)
 
-        if file_name in System.properties.recent_files:
-            System.properties.recent_files.remove(file_name)
-        System.properties.recent_files.insert(0, file_name)
-        if len(System.properties.recent_files) > 10:
-            System.properties.recent_files.pop()
-        self.main_window.menu.update_recent_files(System.properties.recent_files)
+        if file_name in System.preferences.recent_files:
+            System.preferences.recent_files.remove(file_name)
+        System.preferences.recent_files.insert(0, file_name)
+        if len(System.preferences.recent_files) > 10:
+            System.preferences.recent_files.pop()
+        self.main_window.menu.update_recent_files(System.preferences.recent_files)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -176,7 +176,7 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesPersistence.save(System.properties, System.get_user_dir())
+        PreferencesPersistence.save(System.preferences, System.get_user_dir())
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:

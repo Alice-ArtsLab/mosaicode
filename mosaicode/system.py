@@ -52,7 +52,7 @@ class System(object):
 
             self.list_of_examples = []
             self.plugins = []
-            self.properties = PreferencesPersistence.load(System.get_user_dir())
+            self.preferences = PreferencesPersistence.load(System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):
@@ -224,7 +224,7 @@ class System(object):
         if System.instance is None:
             System.instance = System.__Singleton()
             # Add properties dynamically
-            cls.properties = System.instance.properties
+            cls.preferences = System.instance.preferences
             cls.list_of_examples = System.instance.list_of_examples
 
     # ----------------------------------------------------------------------

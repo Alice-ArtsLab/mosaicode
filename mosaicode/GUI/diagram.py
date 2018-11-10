@@ -90,7 +90,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
-        grid = System.properties.grid
+        grid = System.preferences.grid
         modifier_mask = Gtk.accelerator_get_default_mod_mask()
         event.state = event.state & modifier_mask
         if event.state == Gdk.ModifierType.CONTROL_MASK:
@@ -296,7 +296,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                         data="M 0 " + str(i) + " L "+ str(width) +" "+ str(i) + "",
                         line_width=0.8
                         )
-                i = i + System.properties.grid
+                i = i + System.preferences.grid
             i = 0
             while i < width:
                 GooCanvas.CanvasPath(
@@ -305,7 +305,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                         data="M " + str(i) + " 0 L "+ str(i) + " "+ str(height) +"",
                         line_width=0.8
                         )
-                i = i + System.properties.grid
+                i = i + System.preferences.grid
 
     # ----------------------------------------------------------------------
     def set_show_grid(self, bool):

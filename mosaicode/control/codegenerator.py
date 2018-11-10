@@ -73,7 +73,7 @@ class CodeGenerator():
 
             * **Types** (:class:`str<str>`)
         """
-        name = System.properties.default_directory
+        name = System.preferences.default_directory
         name = self.__replace_wildcards(name)
         if not name.endswith("/"):
             name = name + "/"
@@ -88,7 +88,7 @@ class CodeGenerator():
 
             * **Types** (:class:`str<str>`)
         """
-        name = System.properties.default_filename
+        name = System.preferences.default_filename
         name = self.__replace_wildcards(name)
         return name
 
@@ -247,6 +247,9 @@ class CodeGenerator():
         self.__generate_block_list_code()
 
         code = self.diagram.code_template.code
+
+        code = code.replace("$author$", System.preferences.author)
+        code = code.replace("$license$", System.preferences.license)
 
         for key in self.codes:
             # Check for single_code generation

@@ -106,7 +106,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         x1 = self.__to_point[0]
         y1 = self.__to_point[1]
 
-        if System.properties.connection == "Curve":
+        if System.preferences.connection == "Curve":
             c1x = x1
             c1y = y0
             c2x = x0
@@ -120,12 +120,12 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             path += " " + str(c2x) + " " + str(c2y)
             path += " " + str(x1) + " " + str(y1)
 
-        elif System.properties.connection == "Line":
+        elif System.preferences.connection == "Line":
             path += "M " + str(x0) + " " + str(y0) 
             path += " L " + str(x1) + " " + str(y1)
 
 
-        else: # System.properties.connection == "Square":
+        else: # System.preferences.connection == "Square":
             x0_shift = (self.output_port.type_index * 4)
             x1_shift = 0
             if self.input_port is not None:
