@@ -11,6 +11,7 @@ class BlockModel(object):
     # ----------------------------------------------------------------------
     def __init__(self, block=None):
 
+
         self.id = -1
         self.x = 0
         self.y = 0
@@ -27,6 +28,7 @@ class BlockModel(object):
         self.color = "200:200:25:150"
         self.group = "Undefined"
         self.ports = []
+        self.maxIO = 0
 
         # Code generation
         self.properties = []
@@ -41,7 +43,7 @@ class BlockModel(object):
             return
 
         # If block is defined, copy everything and load it!
-        for key in block.__dict__:
+        for key in self.__dict__:
             self.__dict__[key] = block.__dict__[key]
 
     # ----------------------------------------------------------------------

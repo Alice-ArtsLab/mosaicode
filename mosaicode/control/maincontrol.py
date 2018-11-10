@@ -24,6 +24,7 @@ from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.codegenerator import CodeGenerator
 from mosaicode.control.publisher import Publisher
 from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.model.blockmodel import BlockModel
 
 
 import gettext
@@ -383,7 +384,9 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        new_block = Block(diagram, deepcopy(block))
+        new_block = BlockModel(block)
+        new_block = deepcopy(new_block)
+        new_block = Block(diagram, new_block)
         if not DiagramControl.add_block(diagram, new_block):
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
