@@ -57,8 +57,7 @@ class System(object):
         # ----------------------------------------------------------------------
         def reload(self):
             self.__load_examples()
-            self.__load_extensions()
-            self.__load_plugins()
+            self.__load_extensions_and_plugins()
 
         # ----------------------------------------------------------------------
         def get_blocks(self):
@@ -121,7 +120,7 @@ class System(object):
             self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
-        def __load_extensions(self):
+        def __load_extensions_and_plugins(self):
             # Create user directory if does not exist
             if not os.path.isdir(System.get_user_dir() + "/extensions/"):
                 try:
@@ -140,7 +139,7 @@ class System(object):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
                     if path is None and name.startswith("." + System.APP):
                         name = name.replace('.', '', 1)
-                    if not name.startswith(System.APP+"_lib") and not name_par.startswith(System.APP+"_lib"):
+                    if not name.startswith(System.APP+"_lib") and not name_par.startswith(System.APP+"_lib") and not name.startswith(System.APP+"_plugin") and not name_par.startswith(System.APP+"_plugin"):
                         continue
 
                     if ispkg:
@@ -155,10 +154,15 @@ class System(object):
                             if not inspect.isclass(obj):
                                 continue
                             modname = inspect.getmodule(obj).__name__
-                            if not modname.startswith(System.APP+"_lib"):
+                            if not modname.startswith(System.APP+"_lib") and not modname.startswith(System.APP+"_plugin"):
                                 continue
-
-                            instance = obj()
+                            try:
+                                instance = obj()
+                            except:
+                                continue
+                            if isinstance(instance, Plugin):
+                                if instance.label != "":
+                                    self.plugins.append(instance)
                             if isinstance(instance, CodeTemplate):
                                 self.__code_templates[instance.type] = instance
                             if isinstance(instance, Port):
@@ -180,39 +184,6 @@ class System(object):
                     BlockControl.load_ports(block, self.__ports)
                 except:
                     print("Error in loading plugin " + key)
-
-        # ----------------------------------------------------------------------
-        def __load_plugins(self):
-            def walk_plugin_packages(path=None, name_par=""):
-                for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    # if package name do not starts with System.APP, give up
-                    if not name.startswith(System.APP+"_plugin") and not name_par.startswith(System.APP+"_plugin"):
-                        continue
-                    if ispkg:
-                        if name_par is not "":
-                            name = name_par + "." + name
-                        __import__(name)
-                        path = getattr(sys.modules[name], '__path__', None) or []
-                        walk_plugin_packages(path, name)
-                    else:
-                        module = __import__(name, fromlist="dummy")
-                        for class_name, obj in inspect.getmembers(module):
-                            if not inspect.isclass(obj):
-                                continue
-                            modname = inspect.getmodule(obj).__name__
-                            if not modname.startswith(System.APP+"_plugin"):
-                                continue
-
-                            try:
-                                instance = obj()
-                            except:
-                                continue
-
-                            if isinstance(instance, Plugin):
-                                if instance.label != "":
-                                    self.plugins.append(instance)
-
-            walk_plugin_packages(None, "")
 
     # ----------------------------------------------------------------------
     def __init__(self):
