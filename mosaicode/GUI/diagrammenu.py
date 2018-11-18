@@ -7,7 +7,6 @@ This module contains the BlockMenu class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.GUI.comment import Comment
 from mosaicode.control.diagramcontrol import DiagramControl
 
 class DiagramMenu(Gtk.Menu):
@@ -65,12 +64,8 @@ class DiagramMenu(Gtk.Menu):
             * **args**
 
         """
-        comment = Comment(self.diagram)
+        comment = DiagramControl.add_comment(self.diagram)
         comment.move(int(float(self.x)), int(float(self.y)))
-        comment.is_selected = True
-        DiagramControl.add_comment(self.diagram, comment)
-        self.diagram.show_commnent_property(comment)
-        self.diagram.redraw()
     # ----------------------------------------------------------------------
     def __delete(self, *args):
         """

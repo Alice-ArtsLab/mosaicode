@@ -9,6 +9,7 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 from mosaicode.system import System as System
 from mosaicode.persistence.diagrampersistence import DiagramPersistence
+from mosaicode.GUI.comment import Comment
 
 
 class DiagramControl:
@@ -48,7 +49,7 @@ class DiagramControl:
 
     # ----------------------------------------------------------------------
     @classmethod
-    def add_comment(cls, diagram, comment):
+    def add_comment(cls, diagram):
         """
         This method add a comment in the diagram.
 
@@ -58,8 +59,12 @@ class DiagramControl:
                 * **Types** (:class:`boolean<boolean>`)
         """
         diagram.do("Add Comment")
+        comment = Comment(diagram)
         diagram.comments.append(comment)
-        return True
+        comment.is_selected = True
+        diagram.show_commnent_property(comment)
+        diagram.redraw()
+        return comment
 
     # ----------------------------------------------------------------------
     @classmethod

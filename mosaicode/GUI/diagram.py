@@ -132,7 +132,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
     def __on_button_press(self, widget, event=None):
         Gtk.Widget.grab_focus(self)
         if event.button == 1:
-            self.main_window.main_control.show_diagram_property(self)
+            self.main_window.property_box.set_diagram(self)
             self.last_clicked_point = (event.x, event.y)
             self.deselect_all()
             self.__abort_connection()
@@ -351,7 +351,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 * **block**(:class: `Block<mosaicode.GUI.block>`)
         """
-        self.main_window.main_control.show_comment_property(comment)
+        self.main_window.property_box.set_comment(comment)
 
     # ----------------------------------------------------------------------
     def show_block_property(self, block):
@@ -361,7 +361,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             Parameters:
                 * **block**(:class: `Block<mosaicode.GUI.block>`)
         """
-        self.main_window.main_control.show_block_property(block)
+        self.main_window.property_box.set_block(block)
 
     # ----------------------------------------------------------------------
     def resize(self, data):
