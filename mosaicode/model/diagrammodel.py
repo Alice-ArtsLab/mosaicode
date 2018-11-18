@@ -21,8 +21,10 @@ class DiagramModel(object):
     # ----------------------------------------------------------------------
     @property
     def patch_name(self):
-        name = self.file_name.split("/").pop()
-        name = name.split(".")[0]
+        name = self.file_name
+        if "/" in name:
+            name = name.split("/").pop()
+            name = name.split(".")[0]
         return name
 
 # ----------------------------------------------------------------------

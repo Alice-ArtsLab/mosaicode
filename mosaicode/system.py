@@ -4,6 +4,8 @@ This module contains the System class.
 """
 import os
 import sys
+import time
+import datetime
 from copy import copy
 import inspect  # For module inspect
 import mosaicode.extensions
@@ -52,6 +54,15 @@ class System(object):
 
             self.list_of_examples = []
             self.plugins = []
+            # Create user directory if does not exist
+            directories = ["/extensions/", "/examples/", "/images/", "/diagrams/", "/code-gen/"]
+            for name in directories:
+                if not os.path.isdir(System.get_user_dir() + name):
+                    try:
+                        os.makedirs(System.get_user_dir() + name)
+                    except Exception as error:
+                        System.log(error)
+
             self.preferences = PreferencesPersistence.load(System.get_user_dir())
 
         # ----------------------------------------------------------------------
@@ -77,6 +88,23 @@ class System(object):
         # ----------------------------------------------------------------------
         def get_ports(self):
             return copy(self.__ports)
+
+        # ----------------------------------------------------------------------
+        def __load_examples(self):
+            # Load Examples from the system
+            self.list_of_examples = []
+            for root, subdirs, files in os.walk(System.DATA_DIR + "extensions/"):
+                for filename in files:
+                    file_path = os.path.join(root, filename)
+                    if filename.endswith(".mscd"):
+                        self.list_of_examples.append(file_path)
+            # Load Examples from the user space
+            for root, subdirs, files in os.walk(System.get_user_dir() + "/examples/"):
+                for filename in files:
+                    file_path = os.path.join(root, filename)
+                    if filename.endswith(".mscd"):
+                        self.list_of_examples.append(file_path)
+            self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
         def __load_xml(self, data_dir):
@@ -109,25 +137,7 @@ class System(object):
                     self.__blocks[block.type] = block
 
         # ----------------------------------------------------------------------
-        def __load_examples(self):
-            # Load Examples
-            self.list_of_examples = []
-            for root, subdirs, files in os.walk(System.DATA_DIR + "extensions/"):
-                for filename in files:
-                    file_path = os.path.join(root, filename)
-                    if filename.endswith(".mscd"):
-                        self.list_of_examples.append(file_path)
-            self.list_of_examples.sort()
-
-        # ----------------------------------------------------------------------
         def __load_extensions_and_plugins(self):
-            # Create user directory if does not exist
-            if not os.path.isdir(System.get_user_dir() + "/extensions/"):
-                try:
-                    os.makedirs(System.get_user_dir() + "/extensions/")
-                except:
-                    pass
-
             # Load CodeTemplates, Blocks and Ports
             self.__code_templates.clear()
             self.__ports.clear()
@@ -196,7 +206,16 @@ class System(object):
             System.instance = System.__Singleton()
             # Add properties dynamically
             cls.preferences = System.instance.preferences
-            cls.list_of_examples = System.instance.list_of_examples
+            cls.plugins = System.instance.plugins
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_list_of_examples(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return System.instance.list_of_examples
+
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -264,5 +283,53 @@ class System(object):
         home_dir = os.path.expanduser("~")
         home_dir = home_dir + "/" + System.APP
         return home_dir
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def replace_wildcards(cls, text, diagram):
+        """
+        This method replace the wildcards.
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
+        result = text.replace("%t", str(time.time()))
+        date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
+        result = result.replace("%d", date)
+        result = result.replace("%l", diagram.language)
+        result = result.replace("%n", diagram.patch_name)
+        result = result.replace(" ", "_")
+        return result
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_dir_name(cls, diagram):
+        """
+        This method return the directory name.
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
+        name = System.preferences.default_directory
+        name = System.replace_wildcards(name, diagram)
+        if not name.endswith("/"):
+            name = name + "/"
+        return name
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_filename(cls, diagram):
+        """
+        This method return the filename
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
+        name = System.preferences.default_filename
+        name = System.replace_wildcards(name, diagram)
+        return name
 
 # ------------------------------------------------------------------------------

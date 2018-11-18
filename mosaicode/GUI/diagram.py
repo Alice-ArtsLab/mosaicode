@@ -139,6 +139,9 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             self.update_flows()
             self.__start_select()
             return False
+        elif event.button == 3:
+            self.main_window.diagram_menu.show(self, event)
+            return False
         return False
 
     # ----------------------------------------------------------------------
@@ -308,11 +311,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 i = i + System.preferences.grid
 
     # ----------------------------------------------------------------------
-    def set_show_grid(self, bool):
-        if bool is not None:
-            self.show_grid = bool
-
-    # ----------------------------------------------------------------------
     def update_flows(self):
         """
         This method update flows.
@@ -324,18 +322,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             conn.update_flow()
         for comment in self.comments:
             comment.update_flow()
-
-    # ----------------------------------------------------------------------
-    def set_file_name(self, file_name):
-        """
-        This method set name of diagram file.
-
-            Parameters:
-                * **file_name** (:class:`str<str>`)
-
-        """
-        self.file_name = file_name
-        self.main_window.work_area.rename_diagram(self)
 
     # ----------------------------------------------------------------------
     def change_zoom(self, value):
@@ -519,7 +505,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         This method delete a block.
         """
         self.do(_("Cut"))
-        self.self.copy()
+        self.copy()
         self.delete()
 
     # ---------------------------------------------------------------------
@@ -677,36 +663,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.undo_stack.append(action)
 
     # ----------------------------------------------------------------------
-    def align(self, alignment):
-        top = self.main_window.get_size()[1]
-        bottom = 0
-        left = self.main_window.get_size()[0]
-        right = 0
-
-        for key in self.blocks:
-            if not self.blocks[key].is_selected:
-                continue
-            x, y = self.blocks[key].get_position()
-            if top > y: top = y
-            if bottom < y: bottom = y
-            if left > x: left = x
-            if right < x: right = x
-
-        for key in self.blocks:
-            if not self.blocks[key].is_selected:
-                continue
-            x, y = self.blocks[key].get_position()
-            if alignment == "BOTTOM":
-                self.blocks[key].move(0, bottom -y)
-            if alignment == "TOP":
-                self.blocks[key].move(0, top -y)
-            if alignment == "LEFT":
-                self.blocks[key].move(left -x, 0)
-            if alignment == "RIGHT":
-                self.blocks[key].move(right -x, 0)
-        self.update_flows()
-
-    # ----------------------------------------------------------------------
     def show_block_menu(self, block, event):
-        self.main_window.block_menu.show_block_menu(block, event)
+        self.main_window.block_menu.show(block, event)
+
 # ----------------------------------------------------------------------

@@ -2,15 +2,10 @@
 """
 This module contains the CodeGenerator class.
 """
-import os
-import time
-import datetime
 import gettext
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from threading import Thread
 from mosaicode.system import System as System
 
 class CodeGenerator():
@@ -20,77 +15,25 @@ class CodeGenerator():
 
     # ----------------------------------------------------------------------
     def __init__(self, diagram=None):
+
         self.diagram = diagram
-
-        self.dir_name = ""
-        self.filename = ""
-        self.old_path = os.path.realpath(os.curdir)
-
         self.blockList = []
         self.connections = []
         self.codes = {}
 
         if diagram is None:
-            return
+            return False
 
         if self.diagram.code_template is None:
-            return
+            return False
 
         if self.diagram.language is None:
             System.log("No language, no block, no code")
-            return
+            return False
 
         if not len(self.diagram.blocks) > 0:
             System.log("Diagram is empty. Nothing to generate.")
-            return
-
-        self.dir_name = self.get_dir_name()
-        self.filename = self.get_filename()
-
-    # ----------------------------------------------------------------------
-    def __replace_wildcards(self, text):
-        """
-        This method replace the wildcards.
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        result = text.replace("%t", str(time.time()))
-        date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
-        result = result.replace("%d", date)
-        result = result.replace("%l", self.diagram.language)
-        result = result.replace("%n", self.diagram.patch_name)
-        result = result.replace(" ", "_")
-        return result
-
-    # ----------------------------------------------------------------------
-    def get_dir_name(self):
-        """
-        This method return the directory name.
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        name = System.preferences.default_directory
-        name = self.__replace_wildcards(name)
-        if not name.endswith("/"):
-            name = name + "/"
-        return name
-
-    # ----------------------------------------------------------------------
-    def get_filename(self):
-        """
-        This method return the filename
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        name = System.preferences.default_filename
-        name = self.__replace_wildcards(name)
-        return name
+            return False
 
     # ----------------------------------------------------------------------
     def __prepare_block_list(self):
@@ -229,7 +172,6 @@ class CodeGenerator():
 
         self.connections.append(connections)
 
-
     # ----------------------------------------------------------------------
     def generate_code(self):
         """
@@ -295,52 +237,5 @@ class CodeGenerator():
         code = code.replace("$connections$", connection_block)
 
         return code
-
-    # ----------------------------------------------------------------------
-    def save_code(self, name=None, code=None):
-        """
-        This method generate the save log.
-        """
-        if name is None:
-            name = self.dir_name + self.filename + self.diagram.code_template.extension
-            try:
-                os.makedirs(self.dir_name)
-            except:
-                pass
-        System.log("Saving Code to " + name)
-        try:
-            codeFile = open(name, 'w')
-
-            if code is None:
-                code = self.generate_code()
-            codeFile.write(code)
-            codeFile.close()
-            return False
-        except IOError as erro:
-            System.log("File or directory not found!")
-            System.log(erro)
-            return True
-
-    # ----------------------------------------------------------------------
-    def run(self, code = None):
-        """
-        This method runs the code.
-        """
-        command = self.diagram.code_template.command
-        command = command.replace("$filename$", self.filename)
-        command = command.replace("$extension$", self.diagram.code_template.extension)
-        command = command.replace("$dir_name$", self.dir_name)
-
-        if (self.save_code(code = code)):
-            System.log("Please, save the diagram!")
-            return
-        os.chdir(self.dir_name)
-
-        System.log("Executing Code:\n" + command)
-
-        thread = Thread(target=os.system, args=(command,))
-        thread.start()
-        os.chdir(self.old_path)
-        return command, thread
 
 # -------------------------------------------------------------------------

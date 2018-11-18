@@ -38,7 +38,8 @@ class Menu(Gtk.MenuBar):
         recents.set_submenu(self.recent_files_menu)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Save"), "<Control>S", file_menu, mc.save)
-        self.create_menu(_("Save As..."), None, file_menu, mc.save_as)
+        self.create_menu(_("Save as..."), None, file_menu, mc.save_as)
+        self.create_menu(_("Save as example..."), None, file_menu, mc.save_as_example)
         self.create_menu(_("Export Diagram As PNG..."), "<Control>E",
                            file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
@@ -60,9 +61,6 @@ class Menu(Gtk.MenuBar):
         self.create_menu(
             _("Clear Console"), "<Control>L", edit_menu, mc.clear_console)
         edit_menu.append(Gtk.SeparatorMenuItem())
-        self.create_menu(_("Collapse All"), None, edit_menu, mc.collapse_all)
-        self.create_menu(_("Uncollapse All"), None, edit_menu, mc.uncollapse_all)
-        edit_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Preferences"), None, edit_menu, mc.preferences)
         self.add_menu_category(_("Edit"), edit_menu)
 
@@ -81,6 +79,9 @@ class Menu(Gtk.MenuBar):
         self.create_menu(
             _("Normal Size"), "<Control>0", view_menu, mc.zoom_normal)
 
+        edit_menu.append(Gtk.SeparatorMenuItem())
+        self.create_menu(_("Collapse All"), None, view_menu, mc.collapse_all)
+        self.create_menu(_("Uncollapse All"), None, view_menu, mc.uncollapse_all)
         view_menu.append(Gtk.SeparatorMenuItem())
         self.__create_check_menu(_("Show Grid"), "<Control>g", view_menu, mc.show_grid)
         self.add_menu_category(_("View"), view_menu)

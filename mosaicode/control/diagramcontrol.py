@@ -94,6 +94,43 @@ class DiagramControl:
         return True
 
     # ----------------------------------------------------------------------
+    @classmethod
+    def align(cls, diagram, alignment):
+        top = diagram.main_window.get_size()[1]
+        bottom = 0
+        left = diagram.main_window.get_size()[0]
+        right = 0
+
+        for key in diagram.blocks:
+            if not diagram.blocks[key].is_selected:
+                continue
+            x, y = diagram.blocks[key].get_position()
+            if top > y: top = y
+            if bottom < y: bottom = y
+            if left > x: left = x
+            if right < x: right = x
+
+        for key in diagram.blocks:
+            if not diagram.blocks[key].is_selected:
+                continue
+            x, y = diagram.blocks[key].get_position()
+            if alignment == "BOTTOM":
+                diagram.blocks[key].move(0, bottom -y)
+            if alignment == "TOP":
+                diagram.blocks[key].move(0, top -y)
+            if alignment == "LEFT":
+                diagram.blocks[key].move(left -x, 0)
+            if alignment == "RIGHT":
+                diagram.blocks[key].move(right -x, 0)
+        diagram.update_flows()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def set_show_grid(cls, diagram, bool):
+        if bool is not None:
+            diagram.show_grid = bool
+
+    # ----------------------------------------------------------------------
     def load(self, file_name=None):
         """
         This method load a file.

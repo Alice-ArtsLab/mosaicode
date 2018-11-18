@@ -62,5 +62,6 @@ class ConnectorMenu(Gtk.Menu):
         Returns:
             * **Types** (:class:`boolean<boolean>`)
         """
-        self.connector.delete()
+        self.connector.is_selected = True
+        self.connector.diagram.delete()
         return True

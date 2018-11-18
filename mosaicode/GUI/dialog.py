@@ -18,7 +18,7 @@ class Dialog:
 
     # ----------------------------------------------------------------------
 
-    def open_dialog(self, title, main_window, filetype=None):
+    def open_dialog(self, title, main_window, filetype=None, path=None):
         """
         This method open dialog box.
 
@@ -33,6 +33,8 @@ class Dialog:
                                        (Gtk.STOCK_CANCEL,
                                         Gtk.ResponseType.CANCEL,
                                         Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        dialog.set_current_folder(path)
 
         allfiles = Gtk.FileFilter()
         allfiles.set_name(_("All Archives"))
@@ -55,7 +57,10 @@ class Dialog:
         return file_name
 
     # ----------------------------------------------------------------------
-    def save_dialog(self, main_window, title="Save", filename=None, filetype=None):
+    def save_dialog(self, main_window,
+                title="Save",
+                filename=None,
+                filetype=None):
         """
         This method open save dialog.
 
@@ -64,7 +69,6 @@ class Dialog:
             Returns:
                 * **Types** (:class:`str<str>`)
         """
-        diagram = main_window.work_area.get_current_diagram()
         dialog = Gtk.FileChooserDialog(title,
                         main_window,
                         Gtk.FileChooserAction.SAVE,
@@ -107,6 +111,8 @@ class Dialog:
             Returns:
                 * **Types** (:class:`boolean<boolean>`)
         """
+        if name is None:
+            return True
         if os.path.exists(name) is False:
             return True
 
