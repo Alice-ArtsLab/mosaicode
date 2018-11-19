@@ -37,28 +37,6 @@ class PortControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_xml(cls):
-        from mosaicode.system import System as System
-        System()
-        ports = System.get_ports()
-        for port in ports:
-            path = System.get_user_dir() + "/extensions/"
-            path = path + port.language + "/ports/"
-            PortPersistence.save_xml(ports[port], path)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_python(cls):
-        from mosaicode.system import System as System
-        System()
-        ports = System.get_ports()
-        for port in ports:
-            path = System.get_user_dir() + "/extensions/"
-            path = path + port.language + "/ports/"
-            PortPersistence.save_python(ports[port])
-
-    # ----------------------------------------------------------------------
-    @classmethod
     def print_port(cls, port):
         """
         This method prints the port properties.
