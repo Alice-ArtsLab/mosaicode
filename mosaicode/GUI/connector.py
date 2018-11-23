@@ -8,7 +8,6 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import GooCanvas
-from connectormenu import ConnectorMenu
 from mosaicode.GUI.block import *
 from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.system import System as System
@@ -47,9 +46,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         """
         This method monitors if on button was pressed.
         """
-        Gtk.Widget.grab_focus(self.diagram)
-        if event.button == 3:
-            ConnectorMenu(self, event)
 
         if self.is_selected:
             self.diagram.deselect_all()
@@ -58,7 +54,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.is_selected = True
 
         self.diagram.update_flows()
-        return True
+        return False
 
     # ----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):

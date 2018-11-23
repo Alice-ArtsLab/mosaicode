@@ -216,6 +216,13 @@ class System(object):
         """
         return System.instance.list_of_examples
 
+    # ----------------------------------------------------------------------
+    @classmethod
+    def remove_block(cls, block):
+        """
+        This method removes a block installed in the System.
+        """
+        return cls.instance.remove_block(block)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -224,14 +231,6 @@ class System(object):
         This method returns System installed blocks.
         """
         return cls.instance.get_blocks()
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def remove_block(cls, block):
-        """
-        This method removes a block installed in the System.
-        """
-        return cls.instance.remove_block(block)
 
     # ----------------------------------------------------------------------
     @classmethod

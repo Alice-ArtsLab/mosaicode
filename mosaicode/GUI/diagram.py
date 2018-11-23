@@ -421,6 +421,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             comment.move(x, y)
         self.update_flows()
 
+
+    # ----------------------------------------------------------------------
+    def collapse(self, state):
+        for key in self.blocks:
+            if not self.blocks[key].is_selected:
+                continue
+            self.blocks[key].is_collapsed = state
+        self.update_flows()
+
     # ---------------------------------------------------------------------
     def check_limit(self, x, y, block_pos_x, block_pos_y):
         min_x = 0

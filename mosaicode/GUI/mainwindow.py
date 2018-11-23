@@ -17,7 +17,6 @@ from blocknotebook import BlockNotebook
 from mosaicode.system import System as System
 from propertybox import PropertyBox
 from mosaicode.control.maincontrol import MainControl
-from mosaicode.GUI.blockmenu import BlockMenu
 from mosaicode.GUI.diagrammenu import DiagramMenu
 
 class MainWindow(Gtk.Window):
@@ -25,6 +24,7 @@ class MainWindow(Gtk.Window):
     This class contains methods related the MainWindow class.
     """
 
+    # ----------------------------------------------------------------------
     def __init__(self):
         """
         This method is constructor.
@@ -44,7 +44,6 @@ class MainWindow(Gtk.Window):
         self.property_box = PropertyBox(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
-        self.block_menu = BlockMenu()
         self.diagram_menu = DiagramMenu()
         self.menu.add_help()
 

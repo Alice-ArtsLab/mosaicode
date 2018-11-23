@@ -82,17 +82,12 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         self.diagram.show_block_property(self)
 
-        Gtk.Widget.grab_focus(self.diagram)
         if event.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
 
-        elif event.button == 3:
-            self.diagram.show_block_menu(self, event)
-            return True
-
         self.diagram.update_flows()
-        return True
+        return False
 
     # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):

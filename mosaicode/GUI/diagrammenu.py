@@ -27,14 +27,25 @@ class DiagramMenu(Gtk.Menu):
         self.diagram = None
         self.x = 0
         self.y = 0
+
         menu_item = Gtk.MenuItem("Clear Code Template")
         menu_item.connect("activate", self.__clear_code_template)
         self.append(menu_item)
+
         menu_item = Gtk.MenuItem("Insert comment")
         menu_item.connect("activate", self.__insert_comment)
         self.append(menu_item)
+
         menu_item = Gtk.MenuItem("Delete")
         menu_item.connect("activate", self.__delete)
+        self.append(menu_item)
+
+        menu_item = Gtk.MenuItem("Collapse")
+        menu_item.connect("activate", self.__collapse_clicked)
+        self.append(menu_item)
+
+        menu_item = Gtk.MenuItem("Uncollapse")
+        menu_item.connect("activate", self.__uncollapse_clicked)
         self.append(menu_item)
 
     # ----------------------------------------------------------------------
@@ -76,4 +87,25 @@ class DiagramMenu(Gtk.Menu):
 
         """
         self.diagram.delete()
+
+    # ----------------------------------------------------------------------
+    def __uncollapse_clicked(self, *args):
+        """
+        This method monitors if the button delete was clicked.
+
+            Parameters:
+            * **args**
+
+        """
+        self.diagram.collapse(False)
+    # ----------------------------------------------------------------------
+    def __collapse_clicked(self, *args):
+        """
+        This method monitors if the button delete was clicked.
+
+            Parameters:
+            * **args**
+
+        """
+        self.diagram.collapse(True)
 
