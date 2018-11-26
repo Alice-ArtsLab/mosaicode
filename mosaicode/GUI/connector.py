@@ -18,7 +18,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     """
 
     # ----------------------------------------------------------------------
-
     def __init__(self, diagram, output, output_port):
         """
         This method is the constructor.

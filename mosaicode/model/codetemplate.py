@@ -20,7 +20,9 @@ class CodeTemplate(object):
         self.extension = ""
         self.code = "Invalid Code Template"
         self.code_parts = []
+        self.properties = []
 
+    # ----------------------------------------------------------------------
     def equals(self, code_template):
         for key in self.__dict__:
             if not hasattr(code_template, key):
@@ -28,4 +30,9 @@ class CodeTemplate(object):
             if code_template.__dict__[key] != self.__dict__[key]:
                 return False
         return True
+
+    # ----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.type)
+
 # ------------------------------------------------------------------------------

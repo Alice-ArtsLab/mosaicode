@@ -32,22 +32,37 @@ class DiagramPersistence():
         # load the diagram
         parser = XMLParser(diagram.file_name)
 
-        zoom = parser.getTag(tag_name).getTag("zoom").getAttr("value")
+        # Loading from tags
+        zoom = parser.getTag(tag_name).getTag("zoom")
+        if zoom is not None:
+            zoom = zoom.getAttr("value")
+        else:
+            zoom = parser.getTagAttr(tag_name, "zoom")
         diagram.zoom = float(zoom)
-        try:
-            language = parser.getTag(tag_name).getTag(
-                "language").getAttr("value")
-            diagram.language = language
-        except:
-            pass
 
+        language = parser.getTag(tag_name).getTag("language")
+        if language is not None:
+            language = language.getAttr("value")
+        else:
+            language = parser.getTagAttr(tag_name, "language")
+        diagram.language = language
+
+        code_template = parser.getTag(tag_name).getTag("code_template")
+        if code_template is not None and hasattr(code_template, "value"):
+            code_template = code_template.getAttr("value")
+            if code_template not in System.get_code_templates():
+                System.log("Code Template " + code_template + " not found")
+            else:
+                code_template = System.get_code_templates()[code_template]
+                diagram.code_template = deepcopy(code_template)
+
+        parser = parser.getTag(tag_name)
         # new version load
-        blocks = parser.getTag(tag_name).getTag("blocks").getChildTags("block")
+        blocks = parser.getTag("blocks").getChildTags("block")
         system_blocks = System.get_blocks()
         for block in blocks:
             block_type = block.getAttr("type")
             if block_type not in system_blocks:
-                
                 System.log("Block " + block_type + " not found")
                 continue
             block_id = int(block.getAttr("id"))
@@ -70,7 +85,7 @@ class DiagramPersistence():
             new_block.is_collapsed = collapsed
             DiagramControl.add_block(diagram, new_block)
 
-        connections = parser.getTag(tag_name).getTag("connections")
+        connections = parser.getTag("connections")
         connections = connections.getChildTags("connection")
         for conn in connections:
             if not hasattr(conn, 'from_block'):
@@ -91,7 +106,7 @@ class DiagramPersistence():
                                 to_block_in)
             DiagramControl.add_connection(diagram, connection)
 
-        comments = parser.getTag(tag_name).getTag("comments")
+        comments = parser.getTag("comments")
         if comments is not None:
             comments = comments.getChildTags("comment")
             for com in comments:
@@ -115,9 +130,11 @@ class DiagramPersistence():
         """
         parser = XMLParser()
         parser.addTag(tag_name)
-        parser.appendToTag(tag_name, 'version', value=System.VERSION)
-        parser.appendToTag(tag_name, 'zoom', value=diagram.zoom)
-        parser.appendToTag(tag_name, 'language', value=diagram.language)
+        parser.setTagAttr(tag_name,'version', value=System.VERSION)
+        parser.setTagAttr(tag_name,'zoom', value=diagram.zoom)
+        parser.setTagAttr(tag_name,'language', value=diagram.language)
+
+        parser.appendToTag(tag_name, 'code_template', value=diagram.code_template)
 
         parser.appendToTag(tag_name, 'blocks')
         for block_id in diagram.blocks:

@@ -236,7 +236,7 @@ class MainControl():
                 template_list.append(code_templates[key])
 
         if len(template_list) == 1:
-            diagram.code_template = template_list[0]
+            diagram.code_template = deepcopy(template_list[0])
             return CodeGenerator(diagram)
 
         if len(template_list) == 0:
@@ -245,7 +245,7 @@ class MainControl():
             return None
 
         select = SelectCodeTemplate(self.main_window, template_list)
-        diagram.code_template = select.get_value()
+        diagram.code_template = deepcopy(select.get_value())
         return CodeGenerator(diagram)
 
     # ----------------------------------------------------------------------

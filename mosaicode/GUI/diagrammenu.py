@@ -36,6 +36,8 @@ class DiagramMenu(Gtk.Menu):
         menu_item.connect("activate", self.__insert_comment)
         self.append(menu_item)
 
+        self.append(Gtk.SeparatorMenuItem())
+
         menu_item = Gtk.MenuItem("Delete")
         menu_item.connect("activate", self.__delete)
         self.append(menu_item)

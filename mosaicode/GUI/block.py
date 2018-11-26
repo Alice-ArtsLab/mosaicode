@@ -87,7 +87,11 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.remember_y = event.y
 
         self.diagram.update_flows()
-        return False
+        
+        if event.button == 3:
+            return False
+
+        return True
 
     # ----------------------------------------------------------------------
     def __on_motion_notify(self, canvas_item, target_item, event=None):
@@ -450,6 +454,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
         self.height = self.__calculate_height()
+
         if self.is_collapsed:
             self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.INVISIBLE)
             self.__widgets["Rect"].set_property("width", self.width - 60)
@@ -465,7 +470,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 self.__widgets["port" + str(port)].set_property("y", y)
                 self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
                 i += 1
-        else:
+            return True
+
+        if not self.is_collapsed:
             self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.VISIBLE)
             self.__widgets["Rect"].set_property("width", self.width)
             self.__widgets["Rect"].set_property("x", 0)

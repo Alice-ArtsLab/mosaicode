@@ -421,7 +421,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             comment.move(x, y)
         self.update_flows()
 
-
     # ----------------------------------------------------------------------
     def collapse(self, state):
         for key in self.blocks:
@@ -620,6 +619,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         # Redraw Comments
         for comment in self.comments:
             self.get_root_item().add_child(comment, -1)
+            comment.adjust_position()
 
         self.update_flows()
 

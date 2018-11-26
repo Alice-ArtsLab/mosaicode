@@ -61,4 +61,5 @@ class CodeTemplateControl():
         print 'CodeTemplate.command =', code_template.command
         print 'CodeTemplate.extension =', code_template.extension
         print 'CodeTemplate.file =', code_template.file
+        print 'CodeTemplate.properties =', code_template.properties
 # ----------------------------------------------------------------------
