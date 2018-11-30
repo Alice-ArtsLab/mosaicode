@@ -10,11 +10,12 @@ class DiagramModel(object):
         self.blocks = {}  # GUI blocks
         self.connectors = []
         self.comments = []
+        self.code_template = None
+
         self.zoom = 1.0  # pixels per unit
         self.file_name = "Untitled"
         self.modified = False
         self.language = None
-        self.code_template = None
         self.undo_stack = []
         self.redo_stack = []
         self.authors = []

@@ -53,7 +53,7 @@ class MainControl():
         self.update_blocks()
         for plugin in System.plugins:
             plugin.load(self.main_window)
-        self.main_window.menu.update_recent_files(System.preferences.recent_files)
+        self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
         self.main_window.menu.update_examples(System.get_list_of_examples())
 
     # ----------------------------------------------------------------------
@@ -94,12 +94,12 @@ class MainControl():
         diagram.redraw()
         diagram.set_modified(False)
 
-        if file_name in System.preferences.recent_files:
-            System.preferences.recent_files.remove(file_name)
-        System.preferences.recent_files.insert(0, file_name)
-        if len(System.preferences.recent_files) > 10:
-            System.preferences.recent_files.pop()
-        self.main_window.menu.update_recent_files(System.preferences.recent_files)
+        if file_name in System.get_preferences().recent_files:
+            System.get_preferences().recent_files.remove(file_name)
+        System.get_preferences().recent_files.insert(0, file_name)
+        if len(System.get_preferences().recent_files) > 10:
+            System.get_preferences().recent_files.pop()
+        self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -190,7 +190,7 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesPersistence.save(System.preferences, System.get_user_dir())
+        PreferencesPersistence.save(System.get_preferences(), System.get_user_dir())
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:

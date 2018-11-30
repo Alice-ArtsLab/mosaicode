@@ -190,8 +190,8 @@ class CodeGenerator():
 
         code = self.diagram.code_template.code
 
-        code = code.replace("$author$", System.preferences.author)
-        code = code.replace("$license$", System.preferences.license)
+        code = code.replace("$author$", System.get_preferences().author)
+        code = code.replace("$license$", System.get_preferences().license)
 
         for key in self.codes:
             # Check for single_code generation

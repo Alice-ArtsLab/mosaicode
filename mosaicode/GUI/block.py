@@ -360,14 +360,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
-        new_x = x - (x % System.preferences.grid)
-        new_y = y - (y % System.preferences.grid)
+        new_x = x - (x % System.get_preferences().grid)
+        new_y = y - (y % System.get_preferences().grid)
         self.translate(new_x, new_y)
 
     # ----------------------------------------------------------------------
     def adjust_position(self):
         position = self.get_position()
-        grid = System.preferences.grid
+        grid = System.get_preferences().grid
         new_x = position[0] - position[0] % grid
         new_y = position[1] - position[1] % grid
         self.translate(new_x - position[0], new_y - position[1])

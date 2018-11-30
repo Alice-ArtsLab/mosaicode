@@ -188,8 +188,8 @@ class DiagramPersistence():
                                y=pos[1])
 
         auth = AuthorModel()
-        auth.name = System.preferences.author
-        auth.license = System.preferences.license
+        auth.name = System.get_preferences().author
+        auth.license = System.get_preferences().license
         auth.date = datetime.now()
         diagram.authors.insert(0,auth)
 

@@ -30,7 +30,7 @@ class PreferenceWindow(Gtk.Dialog):
                                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.main_window = main_window
-        self.properties = System.preferences
+        self.properties = System.get_preferences()
         box = self.get_content_area()
         box.set_border_width(3)
 

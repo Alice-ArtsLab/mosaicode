@@ -63,7 +63,7 @@ class System(object):
                     except Exception as error:
                         System.log(error)
 
-            self.preferences = PreferencesPersistence.load(System.get_user_dir())
+            self.__preferences = PreferencesPersistence.load(System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):
@@ -88,6 +88,10 @@ class System(object):
         # ----------------------------------------------------------------------
         def get_ports(self):
             return copy(self.__ports)
+
+        # ----------------------------------------------------------------------
+        def get_preferences(self):
+            return self.__preferences
 
         # ----------------------------------------------------------------------
         def __load_examples(self):
@@ -205,7 +209,6 @@ class System(object):
         if System.instance is None:
             System.instance = System.__Singleton()
             # Add properties dynamically
-            cls.preferences = System.instance.preferences
             cls.plugins = System.instance.plugins
 
     # ----------------------------------------------------------------------
@@ -223,6 +226,14 @@ class System(object):
         This method removes a block installed in the System.
         """
         return cls.instance.remove_block(block)
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_preferences(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return cls.instance.get_preferences()
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -311,7 +322,7 @@ class System(object):
 
             * **Types** (:class:`str<str>`)
         """
-        name = System.preferences.default_directory
+        name = System.__preferences.default_directory
         name = System.replace_wildcards(name, diagram)
         if not name.endswith("/"):
             name = name + "/"
@@ -327,7 +338,7 @@ class System(object):
 
             * **Types** (:class:`str<str>`)
         """
-        name = System.preferences.default_filename
+        name = System.__preferences.default_filename
         name = System.replace_wildcards(name, diagram)
         return name
 

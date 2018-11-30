@@ -32,8 +32,8 @@ class MainWindow(Gtk.Window):
         System()
         Gtk.Window.__init__(self, title="Mosaicode")
         self.resize(
-            System.preferences.width,
-            System.preferences.height)
+            System.get_preferences().width,
+            System.get_preferences().height)
         self.main_control = MainControl(self)
 
         # GUI components
@@ -75,11 +75,11 @@ class MainWindow(Gtk.Window):
 
         self.hpaned_work_area = Gtk.HPaned()
         self.hpaned_work_area.connect("accept-position", self.__resize)
-        self.hpaned_work_area.set_position(System.preferences.hpaned_work_area)
+        self.hpaned_work_area.set_position(System.get_preferences().hpaned_work_area)
 
         self.vpaned_bottom.add1(self.hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
-        self.vpaned_bottom.set_position(System.preferences.vpaned_bottom)
+        self.vpaned_bottom.set_position(System.get_preferences().vpaned_bottom)
         self.vpaned_bottom.set_size_request(50, 50)
 
         # hpaned_work_area
@@ -110,7 +110,7 @@ class MainWindow(Gtk.Window):
 
         self.vpaned_left.add1(self.__create_frame(self.block_notebook))
         self.vpaned_left.add2(self.__create_frame(self.property_box))
-        self.vpaned_left.set_position(System.preferences.vpaned_left)
+        self.vpaned_left.set_position(System.get_preferences().vpaned_left)
 
         self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
@@ -137,11 +137,11 @@ class MainWindow(Gtk.Window):
     # ----------------------------------------------------------------------
     def __resize(self, data):
         width, height = self.get_size()
-        System.preferences.width = width
-        System.preferences.height = height
-        System.preferences.hpaned_work_area = self.hpaned_work_area.get_position()
-        System.preferences.vpaned_bottom = self.vpaned_bottom.get_position()
-        System.preferences.vpaned_left = self.vpaned_left.get_position()
+        System.get_preferences().width = width
+        System.get_preferences().height = height
+        System.get_preferences().hpaned_work_area = self.hpaned_work_area.get_position()
+        System.get_preferences().vpaned_bottom = self.vpaned_bottom.get_position()
+        System.get_preferences().vpaned_left = self.vpaned_left.get_position()
         self.work_area.resize(data)
 
     # ----------------------------------------------------------------------
