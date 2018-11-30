@@ -17,6 +17,7 @@ class DiagramModel(object):
         self.code_template = None
         self.undo_stack = []
         self.redo_stack = []
+        self.authors = []
 
     # ----------------------------------------------------------------------
     @property

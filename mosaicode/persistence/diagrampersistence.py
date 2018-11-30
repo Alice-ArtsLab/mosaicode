@@ -8,10 +8,12 @@ import gi
 from copy import deepcopy
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
+from datetime import datetime
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.system import System as System
 from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.model.commentmodel import CommentModel
+from mosaicode.model.authormodel import AuthorModel
 
 tag_name = "mosaicode"
 
@@ -69,9 +71,14 @@ class DiagramPersistence():
             collapsed = False
             if hasattr(block, "collapsed"):
                 collapsed = block.collapsed == "True"
+            if hasattr(block, "x"):
+                x = block.x
+            if hasattr(block, "y"):
+                y = block.y
             position = block.getTag("position")
-            x = position.getAttr("x")
-            y = position.getAttr("y")
+            if position is not None:
+                x = position.getAttr("x")
+                y = position.getAttr("y")
             properties = block.getChildTags("property")
             props = {}
             for prop in properties:
@@ -116,6 +123,16 @@ class DiagramPersistence():
                 comment.text = com.getAttr("text")
                 diagram.comments.append(comment)
 
+        authors = parser.getTag("authors")
+        if authors is not None:
+            authors = authors.getChildTags("author")
+            for author in authors:
+                auth = AuthorModel()
+                auth.name = author.getAttr("author")
+                auth.license = author.getAttr("license")
+                auth.date = author.getAttr("date")
+                diagram.authors.append(auth)
+
         return True
 
     # ----------------------------------------------------------------------
@@ -143,8 +160,9 @@ class DiagramPersistence():
             parser.appendToTag('blocks', 'block',
                     type=block.type,
                     id=block.id,
-                    collapsed=block.is_collapsed)
-            parser.appendToLastTag('block', 'position', x=pos[0], y=pos[1])
+                    collapsed=block.is_collapsed,
+                    x=pos[0],
+                    y=pos[1])
             props = block.get_properties()
             for prop in props:
                 parser.appendToLastTag('block',
@@ -168,6 +186,19 @@ class DiagramPersistence():
                                text=comment.text,
                                x=pos[0],
                                y=pos[1])
+
+        auth = AuthorModel()
+        auth.name = System.preferences.author
+        auth.license = System.preferences.license
+        auth.date = datetime.now()
+        diagram.authors.insert(0,auth)
+
+        parser.appendToTag(tag_name, 'authors')
+        for author in diagram.authors:
+            parser.appendToTag('authors', 'author',
+                               author=author.name,
+                               license=author.license,
+                               date=author.date)
 
         try:
             save_file = open(str(diagram.file_name), "w")

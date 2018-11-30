@@ -93,6 +93,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         grid = System.preferences.grid
         modifier_mask = Gtk.accelerator_get_default_mod_mask()
         event.state = event.state & modifier_mask
+
         if event.state == Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Up:
                 self.move_selected(0, -grid*5)
@@ -107,7 +108,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
                 self.move_selected(grid*5, 0)
                 return True
 
-        if event.keyval == Gdk.KEY_Delete:
+        if event.keyval == Gdk.KEY_Delete and self.focus:
             self.delete()
             return True
 
