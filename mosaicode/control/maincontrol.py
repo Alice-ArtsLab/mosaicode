@@ -51,7 +51,7 @@ class MainControl():
     def init(self):
         # Load plugins
         self.update_blocks()
-        for plugin in System.plugins:
+        for plugin in System.get_plugins():
             plugin.load(self.main_window)
         self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
         self.main_window.menu.update_examples(System.get_list_of_examples())

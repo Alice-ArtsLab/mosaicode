@@ -53,7 +53,7 @@ class System(object):
             self.__ports = {}
 
             self.list_of_examples = []
-            self.plugins = []
+            self.__plugins = []
             # Create user directory if does not exist
             directories = ["/extensions/", "/examples/", "/images/", "/diagrams/", "/code-gen/"]
             for name in directories:
@@ -92,6 +92,10 @@ class System(object):
         # ----------------------------------------------------------------------
         def get_preferences(self):
             return self.__preferences
+
+        # ----------------------------------------------------------------------
+        def get_plugins(self):
+            return self.__plugins
 
         # ----------------------------------------------------------------------
         def __load_examples(self):
@@ -176,7 +180,7 @@ class System(object):
                                 continue
                             if isinstance(instance, Plugin):
                                 if instance.label != "":
-                                    self.plugins.append(instance)
+                                    self.__plugins.append(instance)
                             if isinstance(instance, CodeTemplate):
                                 self.__code_templates[instance.type] = instance
                             if isinstance(instance, Port):
@@ -208,8 +212,6 @@ class System(object):
     def __new__(cls):  # __new__ always a classmethod
         if System.instance is None:
             System.instance = System.__Singleton()
-            # Add properties dynamically
-            cls.plugins = System.instance.plugins
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -234,6 +236,14 @@ class System(object):
         This method returns System installed blocks.
         """
         return cls.instance.get_preferences()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_plugins(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return cls.instance.get_plugins()
 
     # ----------------------------------------------------------------------
     @classmethod
