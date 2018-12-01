@@ -5,9 +5,10 @@ This module contains the MainControl class.
 from copy import copy
 from copy import deepcopy
 import os
-import thread
-import threading
 from threading import Thread
+from threading import Event
+import subprocess
+import signal
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -45,6 +46,7 @@ class MainControl():
         self.main_window = main_window
         # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
+        self.threads = {}
         self.publisher = Publisher()
 
     # ----------------------------------------------------------------------
@@ -268,15 +270,26 @@ class MainControl():
         command = command.replace("$extension$", diagram.code_template.extension)
         command = command.replace("$dir_name$", System.get_dir_name(diagram))
 
-        def __run():
-            os.chdir(System.get_dir_name(diagram))
-            os.system(command)
-            # we need to notify that the thread is gone
+        def __run(self):
+            process = subprocess.Popen(command,
+                    cwd=System.get_dir_name(diagram),
+                    shell=True,
+                    preexec_fn=os.setsid)
+            self.threads[thread] = diagram, process;
+            self.main_window.toolbar.update_threads(self.threads)
+            System.log(process.communicate())
+            del self.threads[thread]
+            self.main_window.toolbar.update_threads(self.threads)
 
         System.log("Executing Code:\n" + command)
-        thread = Thread(target=__run)
+        thread = Thread(target=__run, args=(self,))
         thread.start()
+
         return True
+
+    # ----------------------------------------------------------------------
+    def stop(self, widget, process):
+        os.killpg(os.getpgid(process.pid), signal.SIGTERM)
 
     # ----------------------------------------------------------------------
     def save_source(self, code = None, generator = None):

@@ -27,7 +27,6 @@ class Toolbar(Gtk.Toolbar):
         self.set_property("expand", False)
 
         self.actions = {}
-
         self.__create_button(Gtk.STOCK_NEW,
                              _("New"),
                              self.main_window.main_control.new)
@@ -39,9 +38,14 @@ class Toolbar(Gtk.Toolbar):
                              self.main_window.main_control.save)
 
         self.add(Gtk.SeparatorToolItem())
+
+        self.run_menu = Gtk.Menu()
+
         self.__create_button(Gtk.STOCK_EXECUTE,
                              _("Run"),
-                             self.main_window.main_control.run)
+                             self.main_window.main_control.run,
+                             self.run_menu)
+
         self.__create_button(Gtk.STOCK_INDEX,
                              _("Publish"),
                              self.main_window.main_control.publish)
@@ -63,7 +67,7 @@ class Toolbar(Gtk.Toolbar):
         self.show_all()
 
     # ----------------------------------------------------------------------
-    def __create_button(self, stock, name, action):
+    def __create_button(self, stock, name, action, menu=None):
         """
         This method create a button on menu.
 
@@ -71,7 +75,11 @@ class Toolbar(Gtk.Toolbar):
             Returns:
 
         """
-        button = Gtk.ToolButton.new_from_stock(stock)
+        if menu is None:
+            button = Gtk.ToolButton.new_from_stock(stock)
+        else: 
+            button = Gtk.MenuToolButton.new_from_stock(stock)
+            button.set_menu(menu)
         button.set_expand(False)
         button.set_label(name)
         button.set_is_important(True)
@@ -79,6 +87,23 @@ class Toolbar(Gtk.Toolbar):
         self.add(button)
         self.actions[button] = action
         return button
+
+    # ----------------------------------------------------------------------
+    def update_threads(self, threads):
+        for widget in self.run_menu.get_children():
+            self.run_menu.remove(widget)
+        for thread in threads:
+            diagram, process = threads[thread]
+            box = Gtk.HBox()
+            box.add(Gtk.Label(diagram.patch_name))
+            box.add(Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU))
+            item = Gtk.MenuItem()
+            item.add(box)
+            item.connect("activate",
+                        self.main_window.main_control.stop,
+                        process)
+            self.run_menu.append(item)
+        self.run_menu.show_all()
 
     # ----------------------------------------------------------------------
     def __button_clicked(self, widget, data):
@@ -89,3 +114,5 @@ class Toolbar(Gtk.Toolbar):
 
         """
         self.actions[widget]()
+
+# ----------------------------------------------------------------------

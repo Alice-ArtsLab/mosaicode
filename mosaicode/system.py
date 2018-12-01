@@ -332,7 +332,7 @@ class System(object):
 
             * **Types** (:class:`str<str>`)
         """
-        name = System.__preferences.default_directory
+        name = System.get_preferences().default_directory
         name = System.replace_wildcards(name, diagram)
         if not name.endswith("/"):
             name = name + "/"
@@ -348,7 +348,7 @@ class System(object):
 
             * **Types** (:class:`str<str>`)
         """
-        name = System.__preferences.default_filename
+        name = System.get_preferences().default_filename
         name = System.replace_wildcards(name, diagram)
         return name
 
