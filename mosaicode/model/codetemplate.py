@@ -17,8 +17,8 @@ class CodeTemplate(object):
         self.description = ""
         self.language = ""
         self.command = ""
-        self.extension = ""
-        self.code = "Invalid Code Template"
+
+        self.files = {}
         self.code_parts = []
         self.properties = []
 

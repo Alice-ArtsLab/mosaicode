@@ -21,7 +21,7 @@ class CodeWindow(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, main_window, code):
+    def __init__(self, main_window, codes):
         """
         This method is the constructor.
         """
@@ -30,6 +30,7 @@ class CodeWindow(Gtk.Dialog):
                             Gtk.DialogFlags.MODAL,
                             (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
+        self.codes = codes
         self.main_window = main_window
         self.set_default_size(800, 600)
         box = self.get_content_area()
@@ -57,23 +58,44 @@ class CodeWindow(Gtk.Dialog):
         button.connect("clicked", self.__run_button_clicked, None)
         toolbar.add(button)
 
-        sw = Gtk.ScrolledWindow()
-        vbox.pack_start(sw, True, True, 0)
-        sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
-        lang_manager = GtkSource.LanguageManager()
-        textbuffer = GtkSource.Buffer.new_with_language(
-            lang_manager.get_language('c'))
-        textview = GtkSource.View.new_with_buffer(textbuffer)
-        textview.set_show_line_numbers(True)
-        textview.set_left_margin(10)
-        textview.set_right_margin(10)
-        textview.get_buffer().set_text(code)
-        self.buffer = textview.get_buffer()
+        self.notebook = Gtk.Notebook()
+        vbox.pack_start(self.notebook, True, True, 0)
 
-        sw.add(textview)
-        textview.show()
+        self.buffers = {}
+
+        for key in self.codes:
+            code = self.codes[key]
+            lang_manager = GtkSource.LanguageManager()
+            textbuffer = GtkSource.Buffer.new_with_language(
+                lang_manager.get_language('c'))
+            textview = GtkSource.View.new_with_buffer(textbuffer)
+            textview.set_show_line_numbers(True)
+            textview.set_left_margin(10)
+            textview.set_right_margin(10)
+            textview.get_buffer().set_text(code)
+            self.buffers[key] = textview.get_buffer()
+
+            sw = Gtk.ScrolledWindow()
+            sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+            sw.add(textview)
+            textview.show()
+            self.notebook.append_page(sw, Gtk.Label(key))
         self.show_all()
+
+    # ----------------------------------------------------------------------
+    def __load_buffers(self):
+        """
+        This method monitors if the button was clicked.
+
+            Parameters:
+
+        """
+        for key in self.buffers:
+            self.codes[key] = self.buffers[key].get_text(
+                        self.buffers[key].get_start_iter(),
+                        self.buffers[key].get_end_iter(),
+                        True)
 
     # ----------------------------------------------------------------------
     def __save_button_clicked(self, widget, data):
@@ -83,9 +105,8 @@ class CodeWindow(Gtk.Dialog):
             Parameters:
 
         """
-        code = self.buffer.get_text( self.buffer.get_start_iter(),
-                    self.buffer.get_end_iter(), True)
-        self.main_window.main_control.save_source(code)
+        self.__load_buffers()
+        self.main_window.main_control.save_source(self.codes)
 
     # ----------------------------------------------------------------------
     def __run_button_clicked(self, widget, data):
@@ -95,8 +116,7 @@ class CodeWindow(Gtk.Dialog):
             Parameters:
 
         """
-        code = self.buffer.get_text( self.buffer.get_start_iter(),
-                    self.buffer.get_end_iter(), True)
-        self.main_window.main_control.run(code)
+        self.__load_buffers()
+        self.main_window.main_control.run(self.codes)
 
 # ----------------------------------------------------------------------

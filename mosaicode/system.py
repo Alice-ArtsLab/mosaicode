@@ -178,16 +178,20 @@ class System(object):
                                 instance = obj()
                             except:
                                 continue
-                            if isinstance(instance, Plugin):
-                                if instance.label != "":
-                                    self.__plugins.append(instance)
-                            if isinstance(instance, CodeTemplate):
-                                self.__code_templates[instance.type] = instance
-                            if isinstance(instance, Port):
-                                self.__ports[instance.type] = instance
                             if isinstance(instance, BlockModel):
                                 if instance.label != "":
                                     self.__blocks[instance.type] = instance
+                                    continue
+                            if isinstance(instance, Port):
+                                self.__ports[instance.type] = instance
+                                continue
+                            if isinstance(instance, CodeTemplate):
+                                self.__code_templates[instance.type] = instance
+                                continue
+                            if isinstance(instance, Plugin):
+                                if instance.label != "":
+                                    self.__plugins.append(instance)
+                                    continue
 
             walk_lib_packages(None, "")
 

@@ -237,21 +237,68 @@ class MainControl():
             if code_templates[key].language == diagram.language:
                 template_list.append(code_templates[key])
 
-        if len(template_list) == 1:
-            diagram.code_template = deepcopy(template_list[0])
-            return CodeGenerator(diagram)
-
         if len(template_list) == 0:
             message = "Generator not available for the language " + diagram.language + "."
             Dialog().message_dialog("Error", message, self.main_window)
             return None
+
+        if len(template_list) == 1:
+            diagram.code_template = deepcopy(template_list[0])
+            return CodeGenerator(diagram)
 
         select = SelectCodeTemplate(self.main_window, template_list)
         diagram.code_template = deepcopy(select.get_value())
         return CodeGenerator(diagram)
 
     # ----------------------------------------------------------------------
-    def run(self, code = None):
+    def save_source(self, codes = None, generator = None):
+        """
+        This method saves the source codes.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+
+        # If it is not called from the run method
+        if generator is None:
+            generator = self.__get_code_generator(diagram)
+            if generator is None:
+                return False
+
+        if codes is None:
+            files = generator.generate_code()
+        else:
+            files = codes
+        for key in files:
+            file_name = System.get_dir_name(diagram) + key
+            System.log("Saving Code to " + file_name)
+            try:
+                codeFile = open(file_name, 'w')
+                codeFile.write(files[key])
+                codeFile.close()
+            except Exception as error:
+                System.log("File or directory not found!")
+                System.log(error)
+        return True
+
+    # ----------------------------------------------------------------------
+    def view_source(self):
+        """
+        This method view the source code.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        generator = self.__get_code_generator(diagram)
+        if generator is not None:
+            codes = generator.generate_code()
+            cw = CodeWindow(self.main_window, codes)
+            cw.run()
+            cw.close()
+            cw.destroy()
+
+    # ----------------------------------------------------------------------
+    def run(self, codes = None):
         """
         This method runs the code.
         """
@@ -263,11 +310,9 @@ class MainControl():
         if generator is None:
             return False
 
-        self.save_source(code = code, generator = generator)
+        self.save_source(codes = codes, generator = generator)
 
         command = diagram.code_template.command
-        command = command.replace("$filename$", System.get_filename(diagram))
-        command = command.replace("$extension$", diagram.code_template.extension)
         command = command.replace("$dir_name$", System.get_dir_name(diagram))
 
         def __run(self):
@@ -291,54 +336,6 @@ class MainControl():
     def stop(self, widget, process):
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
 
-    # ----------------------------------------------------------------------
-    def save_source(self, code = None, generator = None):
-        """
-        This method saves the source code.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return False
-
-        name = None
-
-        # If it is not called from the run method
-        if generator is None:
-
-            generator = self.__get_code_generator(diagram)
-            if generator is None:
-                return False
-
-            while True:
-                name = Dialog().save_dialog(self.main_window,
-                            filename = System.get_dir_name(diagram) + \
-                            System.get_filename(diagram) + \
-                            diagram.code_template.extension)
-                if Dialog().confirm_overwrite(name, self.main_window):
-                    break
-
-        if name is None:
-            name = System.get_dir_name(diagram) + \
-                    System.get_filename(diagram) + \
-                    diagram.code_template.extension
-            if not os.path.isdir(System.get_dir_name(diagram)):
-                try:
-                    os.makedirs(System.get_dir_name(diagram))
-                except Exception as error:
-                    System.log(error)
-
-        System.log("Saving Code to " + name)
-        try:
-            codeFile = open(name, 'w')
-            if code is None:
-                code = generator.generate_code()
-            codeFile.write(code)
-            codeFile.close()
-            return True
-        except Exception as error:
-            System.log("File or directory not found!")
-            System.log(error)
-            return False
 
     # ----------------------------------------------------------------------
     def publish(self):
@@ -349,22 +346,6 @@ class MainControl():
             self.publisher.stop()
         else:
             self.publisher.start()
-
-    # ----------------------------------------------------------------------
-    def view_source(self):
-        """
-        This method view the source code.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return False
-        generator = self.__get_code_generator(diagram)
-        if generator is not None:
-            code = generator.generate_code()
-            cw = CodeWindow(self.main_window, code)
-            cw.run()
-            cw.close()
-            cw.destroy()
 
     # ----------------------------------------------------------------------
     def about(self):
