@@ -3,8 +3,6 @@
 This module contains the Diagram class.
 """
 import gi
-from copy import deepcopy
-from copy import copy
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
@@ -452,94 +450,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         return x, y
 
-    # ---------------------------------------------------------------------
-    def paste(self):
-        """
-        This method paste a block.
-        """
-        replace = {}
-        self.deselect_all()
-        # interact into blocks, add blocks and change their id
-        clipboard = self.main_window.main_control.get_clipboard()
-        for widget in clipboard:
-            if not isinstance(widget, Block):
-                continue
-            block = BlockModel(widget)
-            block.x += 20
-            block.y += 20
-            block.id = -1
-            if not self.main_window.main_control.add_block(block):
-                return
-            replace[widget.id] = block
-            block.is_selected = True
-        # interact into connections changing block ids
-        for widget in clipboard:
-            if not isinstance(widget, Connector):
-                continue
-            # if a connector is copied without blocks
-            if widget.output.id not in replace or widget.input.id \
-                    not in replace:
-                continue
-            output = replace[widget.output.id]
-            output_port = widget.output_port
-            input = replace[widget.input.id]
-            input_port = widget.input_port
-            self.start_connection(output, output_port)
-            self.curr_connector.is_selected = True
-            self.end_connection(input, input_port)
-        self.update_flows()
-
-    # ---------------------------------------------------------------------
-    def copy(self):
-        """
-        This method copy a block.
-        """
-        self.main_window.main_control.reset_clipboard()
-        for key in self.blocks:
-            if not self.blocks[key].is_selected:
-                continue
-            self.main_window.main_control.get_clipboard().append(self.blocks[key])
-        for conn in self.connectors:
-            if not conn.is_selected:
-                continue
-            self.main_window.main_control.get_clipboard().append(conn)
-        for comment in self.comments:
-            if not comment.is_selected:
-                continue
-            self.main_window.main_control.get_clipboard().append(comment)
-
-    # ---------------------------------------------------------------------
-    def cut(self):
-        """
-        This method delete a block.
-        """
-        self.do(_("Cut"))
-        self.copy()
-        self.delete()
-
-    # ---------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete a block or connection.
-        """
-        self.do("Delete")
-        for key in self.blocks.copy():
-            if not self.blocks[key].is_selected:
-                continue
-            del self.blocks[key]
-        for con in self.connectors:
-            if not con.is_selected:
-                continue
-            if con not in self.connectors:
-                continue
-            self.connectors.remove(con)
-        for comment in self.comments:
-            if not comment.is_selected:
-                continue
-            self.comments.remove(comment)
-
-        self.deselect_all()
-        self.redraw()
 
     # ---------------------------------------------------------------------
     def set_modified(self, state):
@@ -590,8 +500,8 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         for comment in self.comments:
             if not isinstance(comment, Comment):
                 comm = Comment(self)
-                comm.set_text(comment.text)
                 comm.move(comment.x, comment.y)
+                comm.update_flow()
                 self.comments[i] = comm
             i = i + 1
 
@@ -623,54 +533,6 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             comment.adjust_position()
 
         self.update_flows()
-
-    # ---------------------------------------------------------------------
-    def do(self, new_msg):
-        """
-        This method do something
-            Parameters:
-                * **new_msg** (:class:`str<str>`)
-        """
-        self.set_modified(True)
-        action = (copy(self.blocks),    #0
-                  copy(self.connectors),#1
-                  copy(self.comments),  #2
-                  new_msg)              #3
-        self.undo_stack.append(action)
-
-    # ---------------------------------------------------------------------
-    def undo(self):
-        """
-        This method undo a modification.
-        """
-        if len(self.undo_stack) < 1:
-            return
-        self.set_modified(True)
-        action = self.undo_stack.pop()
-        self.blocks = action[0]
-        self.connectors = action[1]
-        self.comments = action[2]
-        msg = action[3]
-        self.redraw()
-        self.redo_stack.append(action)
-        if len(self.undo_stack) == 0:
-            self.set_modified(False)
-
-    # ---------------------------------------------------------------------
-    def redo(self):
-        """
-        This method redo a modification.
-        """
-        if len(self.redo_stack) < 1:
-            return
-        self.set_modified(True)
-        action = self.redo_stack.pop()
-        self.blocks = action[0]
-        self.connectors = action[1]
-        self.comments = action[2]
-        msg = action[3]
-        self.redraw()
-        self.undo_stack.append(action)
 
     # ----------------------------------------------------------------------
     def show_block_menu(self, block, event):

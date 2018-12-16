@@ -336,7 +336,6 @@ class MainControl():
     def stop(self, widget, process):
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
 
-
     # ----------------------------------------------------------------------
     def publish(self):
         """
@@ -400,14 +399,14 @@ class MainControl():
         new_block = BlockModel(block)
         new_block = deepcopy(new_block)
         new_block = Block(diagram, new_block)
-        if not DiagramControl.add_block(diagram, new_block):
+        if not DiagramControl(diagram).add_block(new_block):
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
-            return False
+            return None
         diagram.redraw()
-        return True
+        return new_block
 
     # ----------------------------------------------------------------------
     def add_comment(self):
@@ -424,7 +423,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.add_comment(diagram)
+        DiagramControl(diagram).add_comment()
         return True
 
     # ----------------------------------------------------------------------
@@ -442,7 +441,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.cut()
+        DiagramControl(diagram).cut()
 
     # ----------------------------------------------------------------------
     def copy(self):
@@ -452,7 +451,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.copy()
+        DiagramControl(diagram).copy()
 
     # ----------------------------------------------------------------------
     def paste(self):
@@ -462,7 +461,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.paste()
+        DiagramControl(diagram).paste()
 
     # ----------------------------------------------------------------------
     def delete(self):
@@ -472,7 +471,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.delete()
+        DiagramControl(diagram).delete()
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
@@ -512,7 +511,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.undo()
+        DiagramControl(diagram).undo()
 
     # ----------------------------------------------------------------------
     def redo(self):
@@ -522,56 +521,56 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.redo()
+        DiagramControl(diagram).redo()
 
     # ----------------------------------------------------------------------
     def align_top(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.align(diagram, "TOP")
+        DiagramControl(diagram).align("TOP")
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.align(diagram, "BOTTOM")
+        DiagramControl(diagram).align("BOTTOM")
 
     # ----------------------------------------------------------------------
     def align_left(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.align(diagram, "LEFT")
+        DiagramControl(diagram).align("LEFT")
 
     # ----------------------------------------------------------------------
     def align_right(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.align(diagram, "RIGHT")
+        DiagramControl(diagram).align("RIGHT")
 
     # ----------------------------------------------------------------------
     def collapse_all(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.collapse_all(diagram, True)
+        DiagramControl(diagram).collapse_all(True)
 
     # ----------------------------------------------------------------------
     def uncollapse_all(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl.collapse_all(diagram, False)
+        DiagramControl(diagram).collapse_all(False)
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):
         diagrams = self.main_window.work_area.get_diagrams()
 
         for diagram in diagrams:
-            DiagramControl.set_show_grid(diagram, show_grid)
+            DiagramControl(diagram).set_show_grid(show_grid)
             diagram.redraw()
 
     # ----------------------------------------------------------------------

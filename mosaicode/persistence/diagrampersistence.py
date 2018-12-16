@@ -31,6 +31,7 @@ class DiagramPersistence():
             :return: operation status (True or False)
         """
         from mosaicode.control.diagramcontrol import DiagramControl
+        dc = DiagramControl(diagram)
         # load the diagram
         parser = XMLParser(diagram.file_name)
 
@@ -90,7 +91,7 @@ class DiagramPersistence():
             new_block.x = float(x)
             new_block.y = float(y)
             new_block.is_collapsed = collapsed
-            DiagramControl.add_block(diagram, new_block)
+            dc.add_block(new_block)
 
         connections = parser.getTag("connections")
         connections = connections.getChildTags("connection")
@@ -111,7 +112,7 @@ class DiagramPersistence():
                                 from_block_out,
                                 to_block,
                                 to_block_in)
-            DiagramControl.add_connection(diagram, connection)
+            dc.add_connection(connection)
 
         comments = parser.getTag("comments")
         if comments is not None:
@@ -120,8 +121,13 @@ class DiagramPersistence():
                 comment = CommentModel()
                 comment.x = float(com.getAttr("x"))
                 comment.y = float(com.getAttr("y"))
-                comment.text = com.getAttr("text")
-                diagram.comments.append(comment)
+                properties = com.getChildTags("property")
+                props = {}
+                for prop in properties:
+                    if hasattr(prop, 'key') and hasattr(prop, 'value'):
+                        props[prop.key] = prop.value
+                comment.set_properties(props)
+                dc.add_comment(comment)
 
         authors = parser.getTag("authors")
         if authors is not None:
@@ -133,6 +139,7 @@ class DiagramPersistence():
                 auth.date = author.getAttr("date")
                 diagram.authors.append(auth)
 
+        diagram.redraw()
         return True
 
     # ----------------------------------------------------------------------
@@ -183,9 +190,15 @@ class DiagramPersistence():
         for comment in diagram.comments:
             pos = comment.get_position()
             parser.appendToTag('comments', 'comment',
-                               text=comment.text,
                                x=pos[0],
                                y=pos[1])
+            props = comment.get_properties()
+            for prop in props:
+                parser.appendToLastTag('comment',
+                                       'property',
+                                       key=str(prop["name"]),
+                                       value=str(prop["value"])
+                                       )
 
         auth = AuthorModel()
         auth.name = System.get_preferences().author

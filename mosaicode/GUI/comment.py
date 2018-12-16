@@ -22,15 +22,14 @@ class Comment(GooCanvas.CanvasText, CommentModel):
 
     # ----------------------------------------------------------------------
 
-    def __init__(self, diagram):
+    def __init__(self, diagram, comment):
         """
         This method is the constuctor.
         """
         GooCanvas.CanvasText.__init__(self)
-        CommentModel.__init__(self)
+        CommentModel.__init__(self, comment)
 
         self.diagram = diagram
-        self.text = "Insert Comment"
 
         self.remember_x = 0
         self.remember_y = 0
@@ -146,7 +145,7 @@ class Comment(GooCanvas.CanvasText, CommentModel):
         """
         text_label = "<span font_family ='Arial' " + \
             "size = '10000' weight = 'ultralight'>" + \
-            self.text + "</span>"
+            self.get_properties()[0]["value"] + "</span>"
 
         self.set_property("text", text_label)
         self.set_property("fill_color", 'black')
@@ -188,25 +187,24 @@ class Comment(GooCanvas.CanvasText, CommentModel):
         return x, y
 
     # ----------------------------------------------------------------------
-    def set_text(self, text):
+    def set_properties(self, data):
         """
-        This method set the text of each comment.
+        This method set properties of each block.
 
             Parameters:
                 * **data**
         """
-        self.text = text
-        self.__update()
+        CommentModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------
-    def get_text(self):
+    def get_properties(self):
         """
-        This method get text of each comment.
+        This method get properties of each block.
 
             Returns:
                 * **Types** ()
         """
-        return self.text
+        return CommentModel.get_properties(self)
 
     # ----------------------------------------------------------------------
     def __update_state(self):
@@ -221,12 +219,12 @@ class Comment(GooCanvas.CanvasText, CommentModel):
         if self.is_selected:
             text_label = "<span font_family ='Arial' background='#CCC' " + \
                     "size = '10000' weight = 'ultralight'>" + \
-                    self.text + "</span>"
+                    self.get_properties()[0]["value"] + "</span>"
             self.set_property("text", text_label)
         else:
             text_label = "<span font_family ='Arial' background='#FFF'" + \
                     "size = '10000' weight = 'ultralight'>" + \
-                    self.text + "</span>"
+                    self.get_properties()[0]["value"] + "</span>"
             self.set_property("text", text_label)
 
 

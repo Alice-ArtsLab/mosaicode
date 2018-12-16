@@ -391,7 +391,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Parameters:
                 * **data**
         """
-        self.diagram.do("Set block property")
         BlockModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------

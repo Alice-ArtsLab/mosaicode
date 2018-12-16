@@ -77,7 +77,7 @@ class DiagramMenu(Gtk.Menu):
             * **args**
 
         """
-        comment = DiagramControl.add_comment(self.diagram)
+        comment = DiagramControl(self.diagram).add_comment()
         comment.move(int(float(self.x)), int(float(self.y)))
     # ----------------------------------------------------------------------
     def __delete(self, *args):
