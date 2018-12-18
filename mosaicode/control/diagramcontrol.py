@@ -12,6 +12,7 @@ from copy import copy
 from mosaicode.system import System as System
 from mosaicode.persistence.diagrampersistence import DiagramPersistence
 from mosaicode.GUI.comment import Comment
+from mosaicode.model.commentmodel import CommentModel
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.connectionmodel import ConnectionModel
 
@@ -58,6 +59,7 @@ class DiagramControl:
         self.diagram.deselect_all()
         # interact into blocks, add blocks and change their id
         clipboard = self.diagram.main_window.main_control.get_clipboard()
+
         for widget in clipboard:
             if not isinstance(widget, BlockModel):
                 continue
@@ -70,6 +72,7 @@ class DiagramControl:
                 return
             replace[widget.id] = block
             block.is_selected = True
+
         # interact into connections changing block ids
         for widget in clipboard:
             if not isinstance(widget, ConnectionModel):
@@ -85,6 +88,17 @@ class DiagramControl:
             self.diagram.start_connection(output, output_port)
             self.diagram.curr_connector.is_selected = True
             self.diagram.end_connection(input, input_port)
+
+        for widget in clipboard:
+            if not isinstance(widget, CommentModel):
+                continue
+            comment = CommentModel(widget)
+            comment.x += 20
+            comment.y += 20
+            comment.is_selected = True
+            comment = self.diagram.main_window.main_control.add_comment(comment)
+
+
         self.diagram.update_flows()
 
     # ---------------------------------------------------------------------
@@ -112,7 +126,7 @@ class DiagramControl:
         """
         This method delete a block.
         """
-        self.do(_("Cut"))
+        self.do("Cut")
         self.copy()
         self.delete()
 

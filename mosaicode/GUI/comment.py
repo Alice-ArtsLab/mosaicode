@@ -227,5 +227,4 @@ class Comment(GooCanvas.CanvasText, CommentModel):
                     self.get_properties()[0]["value"] + "</span>"
             self.set_property("text", text_label)
 
-
 # ----------------------------------------------------------------------

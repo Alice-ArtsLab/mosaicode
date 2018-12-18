@@ -112,7 +112,6 @@ class MainWindow(Gtk.Window):
         self.vpaned_left.add2(self.__create_frame(self.property_box))
         self.vpaned_left.set_position(System.get_preferences().vpaned_left)
 
-        self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
         self.connect("check-resize", self.__resize)
 
@@ -125,6 +124,7 @@ class MainWindow(Gtk.Window):
             if event.keyval == Gdk.KEY_a:
                 self.main_control.select_all()
                 return True
+        return False
 
     # ----------------------------------------------------------------------
     def __create_frame(self, widget):

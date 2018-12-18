@@ -409,7 +409,7 @@ class MainControl():
         return new_block
 
     # ----------------------------------------------------------------------
-    def add_comment(self):
+    def add_comment(self, comment=None):
         """
         This method add a block.
 
@@ -423,7 +423,7 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        DiagramControl(diagram).add_comment()
+        DiagramControl(diagram).add_comment(comment)
         return True
 
     # ----------------------------------------------------------------------

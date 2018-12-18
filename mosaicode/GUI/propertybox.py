@@ -33,6 +33,7 @@ class PropertyBox(Gtk.VBox):
         self.main_window = main_window
         self.block = None
         self.comment = None
+        self.diagram = None
         self.properties = {}
         self.vbox.set_homogeneous(False)
         self.vbox.set_property("border-width", 0)
@@ -51,39 +52,14 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         # First, remove all components
-        for widget in self.vbox.get_children():
-            self.vbox.remove(widget)
-
-        data1 = {"label": _("Diagram"),
-                "name": "file_name",
-                "value": diagram.file_name}
-        field = LabelField(data1, self.notify_comment)
-        self.vbox.pack_start(field, False, False, 0)
-
-        
-        data2 = {"label": _("Language"),
-                "name": "language",
-                "value": diagram.language}
-        field2 = LabelField(data2, self.notify_comment)
-        self.vbox.pack_start(field2, False, False, 0)
-
-        value = "None"
+        self.diagram = diagram
         if diagram.code_template is None:
+            data3 = {"label": _("Choose a Code Template"),
+                    "name": "code_template",
+                    "value": ""}
             return
-
-        value = diagram.code_template.name
-        data3 = {"label": _("Code Template"),
-                "name": "code_template",
-                "value": value}
-        field3 = LabelField(data3, self.notify_comment)
-        self.vbox.pack_start(field3, False, False, 0)
-        for prop in diagram.code_template.get_properties():
-            field = self._generate_field(prop.get("name"), prop)
-            self.properties[prop.get("name")] = ""
-            if prop["type"] == MOSAICODE_OPEN_FILE or \
-                    prop["type"] == MOSAICODE_SAVE_FILE:
-                field.set_parent_window(self.main_window)
-            self.vbox.pack_start(field, False, False, 0)
+        self.__generate_fields(diagram.code_template.get_properties(),
+                    self.notify_diagram)
 
 # ----------------------------------------------------------------------
     def set_comment(self, comment):
@@ -96,18 +72,7 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         self.comment = comment
-        # First, remove all components
-        for widget in self.vbox.get_children():
-            self.vbox.remove(widget)
         self.__generate_fields(self.comment.get_properties(), self.notify_comment)
-
-# ----------------------------------------------------------------------
-    def notify_comment(self, widget=None, data=None):
-        """
-        This method notify modifications in propertybox
-        """
-        self.__recursive_search(self.vbox)
-        self.comment.set_properties(self.properties)
 
 # ----------------------------------------------------------------------
     def set_block(self, block):
@@ -120,26 +85,7 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         self.block = block
-        # First, remove all components
-        for widget in self.vbox.get_children():
-            self.vbox.remove(widget)
-
-        data1 = {"label": "Block",
-                "name": "",
-                "value": block.label}
-        field = LabelField(data1, None)
-        self.vbox.pack_start(field, False, False, 0)
         self.__generate_fields(self.block.get_properties(), self.notify_block)
-
-# ----------------------------------------------------------------------
-    def notify_block(self, widget=None, data=None):
-        """
-        This method notify modifications in propertybox
-        """
-        # It is time to look for values
-        self.__recursive_search(self.vbox)
-        # we have a returnable dictionary, call the callback method
-        self.block.set_properties(self.properties)
 
 # ----------------------------------------------------------------------
     def __recursive_search(self, container):
@@ -154,6 +100,8 @@ class PropertyBox(Gtk.VBox):
 # ----------------------------------------------------------------------
     def __generate_fields(self, props, callback):
         self.properties = {}
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
         for prop in props:
             field = component_list[prop["type"]](prop, callback)
             self.properties[prop.get("name")] = ""
@@ -167,5 +115,29 @@ class PropertyBox(Gtk.VBox):
                 "value": ""}
             field = LabelField(data1, None)
             self.vbox.pack_start(field, False, False, 0)
+
+# ----------------------------------------------------------------------
+    def notify_block(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self.vbox)
+        self.block.set_properties(self.properties)
+
+# ----------------------------------------------------------------------
+    def notify_comment(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self.vbox)
+        self.comment.set_properties(self.properties)
+
+# ----------------------------------------------------------------------
+    def notify_diagram(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self.vbox)
+        self.diagram.code_template.set_properties(self.properties)
 
 # ----------------------------------------------------------------------

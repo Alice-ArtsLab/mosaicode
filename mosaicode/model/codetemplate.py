@@ -32,6 +32,19 @@ class CodeTemplate(object):
         return True
 
     # ----------------------------------------------------------------------
+    def set_properties(self, data):
+        for prop in self.get_properties():
+            key = prop.get("name")
+            if key in data:
+                prop["value"] = data[key]
+            else:
+                pass
+
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return self.properties
+
+    # ----------------------------------------------------------------------
     def __str__(self):
         return str(self.type)
 
