@@ -30,7 +30,7 @@ Install Mosaicomponents: [https://github.com/Mosaicode/mosaicomponents](https://
 
 | | Command |
 | :---: | :---: |
-| *Cloning GitHub:* | `git clone https://github.com/flschiavoni/mosaicode.git`|
+| *Cloning GitHub:* | `git clone https://github.com/Mosaicode/mosaicode.git`|
 
 Then procede with instalation:
 
