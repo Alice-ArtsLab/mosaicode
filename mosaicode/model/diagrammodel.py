@@ -10,18 +10,27 @@ class DiagramModel(object):
         self.blocks = {}  # GUI blocks
         self.connectors = []
         self.comments = []
+        self.code_template = None
+
         self.zoom = 1.0  # pixels per unit
         self.file_name = "Untitled"
         self.modified = False
         self.language = None
         self.undo_stack = []
         self.redo_stack = []
+        self.authors = []
 
     # ----------------------------------------------------------------------
     @property
     def patch_name(self):
-        name = self.file_name.split("/").pop()
-        name = name.split(".")[0]
+        name = self.file_name
+        if "/" in name:
+            name = name.split("/").pop()
+            name = name.split(".")[0]
         return name
+
+    # ----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.patch_name)
 
 # ----------------------------------------------------------------------

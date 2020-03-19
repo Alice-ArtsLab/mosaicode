@@ -8,7 +8,6 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 from gi.repository import Gtk
 from gi.repository import GooCanvas
-from connectormenu import ConnectorMenu
 from mosaicode.GUI.block import *
 from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.system import System as System
@@ -19,7 +18,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
     """
 
     # ----------------------------------------------------------------------
-
     def __init__(self, diagram, output, output_port):
         """
         This method is the constructor.
@@ -47,9 +45,6 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         """
         This method monitors if on button was pressed.
         """
-        Gtk.Widget.grab_focus(self.diagram)
-        if event.button == 3:
-            ConnectorMenu(self, event)
 
         if self.is_selected:
             self.diagram.deselect_all()
@@ -58,7 +53,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             self.is_selected = True
 
         self.diagram.update_flows()
-        return True
+        return False
 
     # ----------------------------------------------------------------------
     def __on_enter_notify(self, canvas_item, target_item, event=None):
@@ -106,7 +101,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         x1 = self.__to_point[0]
         y1 = self.__to_point[1]
 
-        if System.properties.connection == "Curve":
+        if System.get_preferences().connection == "Curve":
             c1x = x1
             c1y = y0
             c2x = x0
@@ -120,12 +115,12 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             path += " " + str(c2x) + " " + str(c2y)
             path += " " + str(x1) + " " + str(y1)
 
-        elif System.properties.connection == "Line":
+        elif System.get_preferences().connection == "Line":
             path += "M " + str(x0) + " " + str(y0) 
             path += " L " + str(x1) + " " + str(y1)
 
 
-        else: # System.properties.connection == "Square":
+        else: # System.get_preferences().connection == "Square":
             x0_shift = (self.output_port.type_index * 4)
             x1_shift = 0
             if self.input_port is not None:

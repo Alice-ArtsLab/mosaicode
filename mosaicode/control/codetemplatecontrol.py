@@ -30,29 +30,6 @@ class CodeTemplateControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_xml(cls):
-        from mosaicode.system import System as System
-        System()
-        code_templates = System.get_code_templates()
-        for code_template in code_templates:
-            path = System.get_user_dir() + "/extensions/"
-            path = path + code_template.language + "/"
-            CodeTemplatePersistence.save_xml(code_templates[code_template])
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_python(cls):
-        from mosaicode.system import System as System
-        System()
-        code_templates = System.get_code_templates()
-        for code_template in code_templates:
-            path = System.get_user_dir() + "/extensions/"
-            path = path + code_template.language + "/"
-            CodeTemplatePersistence.save_python(
-                code_templates[code_template], path)
-
-    # ----------------------------------------------------------------------
-    @classmethod
     def add_code_template(cls, code_template):
         # save it
         from mosaicode.system import System as System
@@ -84,4 +61,5 @@ class CodeTemplateControl():
         print 'CodeTemplate.command =', code_template.command
         print 'CodeTemplate.extension =', code_template.extension
         print 'CodeTemplate.file =', code_template.file
+        print 'CodeTemplate.properties =', code_template.properties
 # ----------------------------------------------------------------------

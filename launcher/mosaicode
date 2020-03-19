@@ -4,13 +4,17 @@
 # Libraries
 import sys
 import argparse
+import signal
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.utils.FileUtils import *
 from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.control.maincontrol import MainControl
-
+from mosaicode.control.portcontrol import PortControl
+from mosaicode.control.blockcontrol import BlockControl
+from mosaicode.control.codetemplatecontrol import CodeTemplateControl
+from mosaicode.system import System
 
 # ---------------------------------------------------
 # --------MOSAICODE FRONTEND MAIN FUNCTION--------------
@@ -25,36 +29,47 @@ def main(argv):
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-    # Initialize the Frontend
-    win = MainWindow()
-    win.show_all()
-
     # Parameter passing
     parser = argparse.ArgumentParser()
     parser.add_argument('file', type=str, nargs='*',
                         help="List of files to open")
     parser.add_argument("-x", "--export", type=str, choices=['py', 'xml'],
                         help="Export extensions to Python or XML format")
-    parser.add_argument("--print_ports", action="store_true", help="Print ports")
-    parser.add_argument("--print_blockmodels", action="store_true", help="Print blockmodels")
-    parser.add_argument("--print_templates", action="store_true", help="Print code templates")
+    parser.add_argument("--print-ports", action="store_true", help="Print ports")
+    parser.add_argument("--print-blockmodels", action="store_true", help="Print blockmodels")
+    parser.add_argument("--print-templates", action="store_true", help="Print code templates")
     args = parser.parse_args()
 
     if args.export:
         MainControl.export_extensions(args.export)
         return
 
+    System()
     if args.print_ports:
-        MainControl.print_ports()
+        # This method is used by the launcher class
+        ports = System.get_ports()
+        for port in ports:
+            print "--------------------- "
+            PortControl.print_port(ports[port])
         return
 
     if args.print_blockmodels:
-        MainControl.print_blockmodels()
+        blocks = System.get_blocks()
+        for block in blocks:
+            print "--------------------- "
+            BlockControl.print_block(blocks[block])
         return
 
     if args.print_templates:
-        MainControl.print_templates()
+        code_templates = System.get_code_templates()
+        for template in code_templates:
+            print "--------------------- "
+            CodeTemplateControl.print_template(code_templates[template])
         return
+
+    # Initialize the Frontend
+    win = MainWindow()
+    win.show_all()
 
     if args.file:
         for arg in args.file:
@@ -63,7 +78,6 @@ def main(argv):
         win.main_control.new()
 
     # to kill with Terminal Ctrl+C
-    import signal
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
     # ----------------------------------------------------------------------

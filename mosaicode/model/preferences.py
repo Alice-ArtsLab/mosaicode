@@ -11,6 +11,10 @@ class Preferences(object):
 
     def __init__(self):
         self.conf_file_path = "configuration.xml"
+
+        self.author = ""
+        self.license = "GPL 3.0"
+
         self.recent_files = []
         # self.default_directory = "/tmp/%l/%n-%t"
         from mosaicode.system import System

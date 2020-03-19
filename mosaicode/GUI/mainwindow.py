@@ -17,13 +17,14 @@ from blocknotebook import BlockNotebook
 from mosaicode.system import System as System
 from propertybox import PropertyBox
 from mosaicode.control.maincontrol import MainControl
-from mosaicode.GUI.blockmenu import BlockMenu
+from mosaicode.GUI.diagrammenu import DiagramMenu
 
 class MainWindow(Gtk.Window):
     """
     This class contains methods related the MainWindow class.
     """
 
+    # ----------------------------------------------------------------------
     def __init__(self):
         """
         This method is constructor.
@@ -31,8 +32,8 @@ class MainWindow(Gtk.Window):
         System()
         Gtk.Window.__init__(self, title="Mosaicode")
         self.resize(
-            System.properties.width,
-            System.properties.height)
+            System.get_preferences().width,
+            System.get_preferences().height)
         self.main_control = MainControl(self)
 
         # GUI components
@@ -43,7 +44,7 @@ class MainWindow(Gtk.Window):
         self.property_box = PropertyBox(self)
         self.work_area = WorkArea(self)
         self.status = Status(self)
-        self.block_menu = BlockMenu()
+        self.diagram_menu = DiagramMenu()
         self.menu.add_help()
 
         System.set_log(self.status)
@@ -74,11 +75,11 @@ class MainWindow(Gtk.Window):
 
         self.hpaned_work_area = Gtk.HPaned()
         self.hpaned_work_area.connect("accept-position", self.__resize)
-        self.hpaned_work_area.set_position(System.properties.hpaned_work_area)
+        self.hpaned_work_area.set_position(System.get_preferences().hpaned_work_area)
 
         self.vpaned_bottom.add1(self.hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))
-        self.vpaned_bottom.set_position(System.properties.vpaned_bottom)
+        self.vpaned_bottom.set_position(System.get_preferences().vpaned_bottom)
         self.vpaned_bottom.set_size_request(50, 50)
 
         # hpaned_work_area
@@ -109,9 +110,8 @@ class MainWindow(Gtk.Window):
 
         self.vpaned_left.add1(self.__create_frame(self.block_notebook))
         self.vpaned_left.add2(self.__create_frame(self.property_box))
-        self.vpaned_left.set_position(System.properties.vpaned_left)
+        self.vpaned_left.set_position(System.get_preferences().vpaned_left)
 
-        self.connect("delete-event", self.main_control.exit)
         self.connect("key-press-event", self.__on_key_press)
         self.connect("check-resize", self.__resize)
 
@@ -124,6 +124,7 @@ class MainWindow(Gtk.Window):
             if event.keyval == Gdk.KEY_a:
                 self.main_control.select_all()
                 return True
+        return False
 
     # ----------------------------------------------------------------------
     def __create_frame(self, widget):
@@ -136,11 +137,11 @@ class MainWindow(Gtk.Window):
     # ----------------------------------------------------------------------
     def __resize(self, data):
         width, height = self.get_size()
-        System.properties.width = width
-        System.properties.height = height
-        System.properties.hpaned_work_area = self.hpaned_work_area.get_position()
-        System.properties.vpaned_bottom = self.vpaned_bottom.get_position()
-        System.properties.vpaned_left = self.vpaned_left.get_position()
+        System.get_preferences().width = width
+        System.get_preferences().height = height
+        System.get_preferences().hpaned_work_area = self.hpaned_work_area.get_position()
+        System.get_preferences().vpaned_bottom = self.vpaned_bottom.get_position()
+        System.get_preferences().vpaned_left = self.vpaned_left.get_position()
         self.work_area.resize(data)
 
     # ----------------------------------------------------------------------

@@ -30,12 +30,19 @@ class PreferenceWindow(Gtk.Dialog):
                                 Gtk.STOCK_OK, Gtk.ResponseType.OK))
 
         self.main_window = main_window
-        self.properties = System.properties
+        self.properties = System.get_preferences()
         box = self.get_content_area()
         box.set_border_width(3)
 
         self.tabs = Gtk.Notebook()
         box.add(self.tabs)
+
+        # User preferences
+        # ----------------------------------------------------------------------
+        self.user_preferences_tab = Gtk.Box()
+        self.user_preferences_tab.set_border_width(10)
+        self.tabs.append_page(self.user_preferences_tab, Gtk.Label(_("User Preferences")))
+        self.__create_user_preferences_tab()
 
         # Default directory
         # ----------------------------------------------------------------------
@@ -65,6 +72,8 @@ class PreferenceWindow(Gtk.Dialog):
         response = Gtk.Dialog.run(self)
 
         if response == Gtk.ResponseType.OK:
+            self.properties.author = self.author.get_value()
+            self.properties.license = self.license.get_value()
             self.properties.default_directory = self.default_directory.get_value()
             self.properties.default_filename = self.default_filename.get_value()
             self.properties.grid = self.grid.get_value()
@@ -76,24 +85,43 @@ class PreferenceWindow(Gtk.Dialog):
 
     # Default directory
     # ----------------------------------------------------------------------
+    def __create_user_preferences_tab(self):
+        vbox = Gtk.VBox()
+        self.user_preferences_tab.pack_start(vbox, True, True, 0)
+
+        data = {"label": _("User Name:"),
+                "value": self.properties.author}
+        self.author = StringField(data, None)
+        vbox.pack_start(self.author, False, True, 0)
+
+        data = {"label": _("Generate Code License:"),
+                "value": self.properties.license}
+        self.license = StringField(data, None)
+        vbox.pack_start(self.license, False, True, 0)
+
+        self.user_preferences_tab.show_all()
+
+    # Default directory
+    # ----------------------------------------------------------------------
     def __create_default_directory_tab(self):
         vbox = Gtk.VBox()
-        self.default_directory_tab.add(vbox)
+        self.default_directory_tab.pack_start(vbox, True, True, 0)
 
         data = {"label": _("Default directory:"),
                 "value": self.properties.default_directory}
         self.default_directory = OpenFileField(data, None)
-        vbox.add(self.default_directory)
+        vbox.pack_start(self.default_directory, False, True, 0)
 
         # Default directory
         data = {"label": _("Default Filename:"),
                 "value": self.properties.default_filename}
         self.default_filename = StringField(data, None)
-        vbox.add(self.default_filename)
+        vbox.pack_start(self.default_filename, False, True, 0)
 
-        vbox.add(Gtk.Label(_("\nName Wildcards:\n" +
+        vbox.pack_start(Gtk.Label(_("\nName Wildcards:\n" +
                              "\t%d = Date | %n = diagram name |"
-                             " %t = time value | %l = language\n")))
+                             " %t = time value | %l = language\n")),
+                             False, True, 0)
 
         self.default_directory_tab.show_all()
 
@@ -101,11 +129,11 @@ class PreferenceWindow(Gtk.Dialog):
     # ----------------------------------------------------------------------
     def __create_grid_preferences_tab(self):
         vbox = Gtk.VBox()
-        self.grid_preferences_tab.add(vbox)
+        self.grid_preferences_tab.pack_start(vbox, True, True, 0)
 
         data = {"label": _("Grid size"), "value": self.properties.grid}
         self.grid = IntField(data, None)
-        vbox.add(self.grid)
+        vbox.pack_start(self.grid, False, True, 0)
 
         self.grid_preferences_tab.show_all()
 
@@ -113,11 +141,14 @@ class PreferenceWindow(Gtk.Dialog):
     def __create_network_preferences_tab(self):
         """Creates the networks preferences tab."""
         vbox = Gtk.VBox()
-        self.network_preferences_tab.add(vbox)
+        self.network_preferences_tab.pack_start(vbox, True, True, 0)
 
-        data = {"label": _("Web Server Port"), "value": self.properties.port, "lower": 1024, "upper": 49151}
+        data = {"label": _("Web Server Port"),
+                    "value": self.properties.port,
+                    "lower": 1024,
+                    "upper": 49151}
         self.port = IntField(data, None)
-        vbox.add(self.port)
+        vbox.pack_start(self.port, False, True, 0)
 
         self.network_preferences_tab.show_all()
 

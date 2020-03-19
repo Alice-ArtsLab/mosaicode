@@ -2,17 +2,11 @@
 """
 This module contains the CodeGenerator class.
 """
-import os
-import time
-import datetime
 import gettext
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from threading import Thread
 from mosaicode.system import System as System
-
 
 class CodeGenerator():
     """
@@ -20,79 +14,26 @@ class CodeGenerator():
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, diagram=None, code_template=None):
+    def __init__(self, diagram=None):
+
         self.diagram = diagram
-        self.code_template = code_template
-
-        self.dir_name = ""
-        self.filename = ""
-        self.old_path = os.path.realpath(os.curdir)
-
         self.blockList = []
         self.connections = []
         self.codes = {}
 
         if diagram is None:
-            return
+            return False
 
-        if code_template is None:
-            return
+        if self.diagram.code_template is None:
+            return False
 
         if self.diagram.language is None:
             System.log("No language, no block, no code")
-            return
+            return False
 
         if not len(self.diagram.blocks) > 0:
             System.log("Diagram is empty. Nothing to generate.")
-            return
-
-        self.dir_name = self.get_dir_name()
-        self.filename = self.get_filename()
-
-    # ----------------------------------------------------------------------
-    def __replace_wildcards(self, text):
-        """
-        This method replace the wildcards.
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        result = text.replace("%t", str(time.time()))
-        date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
-        result = result.replace("%d", date)
-        result = result.replace("%l", self.diagram.language)
-        result = result.replace("%n", self.diagram.patch_name)
-        result = result.replace(" ", "_")
-        return result
-
-    # ----------------------------------------------------------------------
-    def get_dir_name(self):
-        """
-        This method return the directory name.
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        name = System.properties.default_directory
-        name = self.__replace_wildcards(name)
-        if not name.endswith("/"):
-            name = name + "/"
-        return name
-
-    # ----------------------------------------------------------------------
-    def get_filename(self):
-        """
-        This method return the filename
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        name = System.properties.default_filename
-        name = self.__replace_wildcards(name)
-        return name
+            return False
 
     # ----------------------------------------------------------------------
     def __prepare_block_list(self):
@@ -101,15 +42,8 @@ class CodeGenerator():
         """
         for block_key in self.diagram.blocks:
             block = self.diagram.blocks[block_key]
-            # Creating class attributes on the fly
-            try:
-                block.weight = 0
-            except:
-                block.__class__.weight = 0
-            try:
-                block.connections = []
-            except:
-                block.__class__.connections = []
+            block.weight = 0
+            block.connections = []
 
             # Listing all connections that the block is output
             for connection in self.diagram.connectors:
@@ -138,10 +72,14 @@ class CodeGenerator():
                             modification = True
 
     # ----------------------------------------------------------------------
-    def __generate_block_list_code(self):
+    def __generate_block_code_parts(self):
         """
-        This method interacts block by block to generate all code.
+        This method sorts the blocks to code generation.
         """
+        # Create an array of codes to each code part
+        for key in self.diagram.code_template.code_parts:
+            self.codes[key] = []
+
         active_weight = 0
         # The maxWeight is, in the worst case, the block list lenght
         max_weight = len(self.blockList)
@@ -150,7 +88,7 @@ class CodeGenerator():
                 break
             for block in self.blockList:
                 if block.weight == active_weight:
-                    # If it your time, lets generate your code and remove you
+                    # If it is your time, lets generate your code and remove you
                     self.__generate_block_code(block)
             active_weight += 1
 
@@ -231,31 +169,33 @@ class CodeGenerator():
 
         self.connections.append(connections)
 
-
     # ----------------------------------------------------------------------
-    def generate_code(self):
+    def __generate_file_code(self, code):
         """
-        This method generate the source code.
+        This method generate the block code.
         """
 
-        System.log("Generating Code")
-        self.__prepare_block_list()
-        self.__sort_block_list()
+        # We first substitute data from the code template itself
+        code = code.replace("$author$", System.get_preferences().author)
+        code = code.replace("$license$", System.get_preferences().license)
+        code = code.replace("$dir_name$", System.get_dir_name(self.diagram))
+        code = code.replace("$command$", self.diagram.code_template.command)
+        code = code.replace("$name$", self.diagram.code_template.name)
+        code = code.replace("$description$", self.diagram.code_template.description)
 
-        # Create an array of codes to each code part
-        for key in self.code_template.code_parts:
-            self.codes[key] = []
+        for prop in self.diagram.code_template.properties:
+            my_key = "$prop[" + prop.get("name") + "]$"
+            value = str(prop.get("value"))
+            code = code.replace(my_key, value)
 
-        self.__generate_block_list_code()
-
-        code = self.code_template.code
-
+        # Then we substitute the code parts with blocks
         for key in self.codes:
             # Check for single_code generation
             code_name = "$single_code["+ key + "]$"
             if code_name in code:
                 temp_header = []
                 temp_code = ""
+
                 for header_code in self.codes[key]:
                     if header_code not in temp_header:
                         temp_header.append(header_code)
@@ -283,6 +223,7 @@ class CodeGenerator():
             if code_name in code:
                 temp_code = ""
                 for x,y in zip(self.connections, self.codes[key]):
+
                     temp_code += x
                     temp_code += y
                 code = code.replace(code_name, temp_code)
@@ -292,59 +233,23 @@ class CodeGenerator():
         for conn in self.connections:
             connection_block += conn + "\n"
         code = code.replace("$connections$", connection_block)
-
         return code
 
     # ----------------------------------------------------------------------
-    def save_code(self, name=None, code=None):
+    def generate_code(self):
         """
-        This method generate the save log.
+        This method generate the source code.
         """
-        if name is None:
-            name = self.dir_name + self.filename + self.code_template.extension
-            try:
-                os.makedirs(self.dir_name)
-            except:
-                pass
-        System.log("Saving Code to " + name)
-        try:
-            codeFile = open(name, 'w')
 
-            if code is None:
-                code = self.generate_code()
-            codeFile.write(code)
-            codeFile.close()
-            return False
-        except IOError:
-            System.log("File or directory not found!")
-            return True
+        System.log("Generating Code")
+        self.__prepare_block_list()
+        self.__sort_block_list()
+        self.__generate_block_code_parts()
 
+        files = self.diagram.code_template.files
 
-
-    # ----------------------------------------------------------------------
-    def run(self, code = None):
-        """
-        This method runs the code.
-        """
-        command = self.code_template.command
-        command = command.replace("$filename$", self.filename)
-        command = command.replace("$extension$", self.code_template.extension)
-        command = command.replace("$dir_name$", self.dir_name)
-
-        if (self.save_code(code = code)):
-            System.log("Please, save the diagram!")
-            return
-        os.chdir(self.dir_name)
-
-        System.log("Executing Code: " + command)
-
-        program = Thread(target=os.system, args=(command,))
-        program.start()
-
-        while program.isAlive():
-            program.join(0.4)
-            while Gtk.events_pending():
-                Gtk.main_iteration()
-        os.chdir(self.old_path)
+        for key in files:
+            files[key] = self.__generate_file_code(files[key])
+        return files
 
 # -------------------------------------------------------------------------

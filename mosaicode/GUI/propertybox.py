@@ -33,6 +33,7 @@ class PropertyBox(Gtk.VBox):
         self.main_window = main_window
         self.block = None
         self.comment = None
+        self.diagram = None
         self.properties = {}
         self.vbox.set_homogeneous(False)
         self.vbox.set_property("border-width", 0)
@@ -51,9 +52,14 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         # First, remove all components
-        for widget in self.vbox.get_children():
-            self.vbox.remove(widget)
-
+        self.diagram = diagram
+        if diagram.code_template is None:
+            data3 = {"label": _("Choose a Code Template"),
+                    "name": "code_template",
+                    "value": ""}
+            return
+        self.__generate_fields(diagram.code_template.get_properties(),
+                    self.notify_diagram)
 
 # ----------------------------------------------------------------------
     def set_comment(self, comment):
@@ -65,26 +71,8 @@ class PropertyBox(Gtk.VBox):
             Returns:
                 None
         """
-        # First, remove all components
-        for widget in self.vbox.get_children():
-            self.vbox.remove(widget)
-
-        data = {"label": _("Text:"),
-                "name": "comment",
-                "value": comment.get_text()}
-        field = CommentField(data, self.notify_comment)
-        self.vbox.pack_start(field, False, False, 0)
-        self.properties = {}
-        self.properties["comment"] = ""
         self.comment = comment
-
-# ----------------------------------------------------------------------
-    def notify_comment(self, widget=None, data=None):
-        """
-        This method notify modifications in propertybox
-        """
-        self.__recursive_search(self.vbox)
-        self.comment.set_text(self.properties["comment"])
+        self.__generate_fields(self.comment.get_properties(), self.notify_comment)
 
 # ----------------------------------------------------------------------
     def set_block(self, block):
@@ -97,28 +85,7 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         self.block = block
-        # First, remove all components
-        for widget in self.vbox.get_children():
-            self.vbox.remove(widget)
-
-        # Search block properties to create GUI
-        for prop in self.block.get_properties():
-            field = self._generate_field(prop.get("name"), prop)
-            self.properties[prop.get("name")] = ""
-            if prop["type"] == MOSAICODE_OPEN_FILE or \
-                    prop["type"] == MOSAICODE_SAVE_FILE:
-                field.set_parent_window(self.main_window)
-            self.vbox.pack_start(field, False, False, 0)
-
-# ----------------------------------------------------------------------
-    def notify(self, widget=None, data=None):
-        """
-        This method notify modifications in propertybox
-        """
-        # It is time to look for values
-        self.__recursive_search(self.vbox)
-        # we have a returnable dictionary, call the callback method
-        self.block.set_properties(self.properties)
+        self.__generate_fields(self.block.get_properties(), self.notify_block)
 
 # ----------------------------------------------------------------------
     def __recursive_search(self, container):
@@ -131,9 +98,46 @@ class PropertyBox(Gtk.VBox):
                 self.properties[widget.get_name()] = widget.get_value()
 
 # ----------------------------------------------------------------------
-    def _generate_field(self, component_key, component_attributes):
-        type_ = component_attributes["type"]
-        field = component_list[type_](component_attributes, self.notify)
-        return field
+    def __generate_fields(self, props, callback):
+        self.properties = {}
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
+        for prop in props:
+            field = component_list[prop["type"]](prop, callback)
+            self.properties[prop.get("name")] = ""
+            if prop["type"] == MOSAICODE_OPEN_FILE or \
+                    prop["type"] == MOSAICODE_SAVE_FILE:
+                field.set_parent_window(self.main_window)
+            self.vbox.pack_start(field, False, False, 0)
+        if len(props) == 0:
+            data1 = {"label": "No property is available",
+                "name": "",
+                "value": ""}
+            field = LabelField(data1, None)
+            self.vbox.pack_start(field, False, False, 0)
+
+# ----------------------------------------------------------------------
+    def notify_block(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self.vbox)
+        self.block.set_properties(self.properties)
+
+# ----------------------------------------------------------------------
+    def notify_comment(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self.vbox)
+        self.comment.set_properties(self.properties)
+
+# ----------------------------------------------------------------------
+    def notify_diagram(self, widget=None, data=None):
+        """
+        This method notify modifications in propertybox
+        """
+        self.__recursive_search(self.vbox)
+        self.diagram.code_template.set_properties(self.properties)
 
 # ----------------------------------------------------------------------

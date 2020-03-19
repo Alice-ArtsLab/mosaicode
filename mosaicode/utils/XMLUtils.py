@@ -24,7 +24,10 @@ class XMLParser(object):
                                                        from_encoding="UTF-8")
 
     def getTagAttr(self, tag, attr):
-        return getattr(self.parsedXML, tag)[attr]
+        try:
+            return getattr(self.parsedXML, tag)[attr]
+        except:
+            return None
 
     def setTagAttr(self, tag, attr, value):
         getattr(self.parsedXML, tag)[attr] = value

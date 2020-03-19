@@ -68,28 +68,6 @@ class BlockControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_xml(cls):
-        from mosaicode.system import System as System
-        System()
-        blocks = System.get_blocks()
-        for block in blocks:
-            path = System.get_user_dir() + "/extensions/"
-            path = path + block.language + "/" + block.framework + "/"
-            BlockPersistence.save_xml(blocks[block], path)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export_python(cls):
-        from mosaicode.system import System
-        System()
-        blocks = System.get_blocks()
-        for block in blocks:
-            path = System.get_user_dir() + "/extensions/"
-            path = path + block.language + "/" + block.framework + "/"
-            BlockPersistence.save_python(blocks[block], path)
-
-    # ----------------------------------------------------------------------
-    @classmethod
     def load(cls, file_name):
         """
         This method loads the block from XML file.

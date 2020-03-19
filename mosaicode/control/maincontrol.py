@@ -4,6 +4,11 @@ This module contains the MainControl class.
 """
 from copy import copy
 from copy import deepcopy
+import os
+from threading import Thread
+from threading import Event
+import subprocess
+import signal
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -24,6 +29,7 @@ from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.codegenerator import CodeGenerator
 from mosaicode.control.publisher import Publisher
 from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.model.blockmodel import BlockModel
 
 
 import gettext
@@ -40,16 +46,17 @@ class MainControl():
         self.main_window = main_window
         # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
+        self.threads = {}
         self.publisher = Publisher()
 
     # ----------------------------------------------------------------------
     def init(self):
-        self.main_window.menu.update_recent_files(System.properties.recent_files)
-        self.main_window.menu.update_examples(System.list_of_examples)
         # Load plugins
-        for plugin in System.instance.plugins:
-            plugin.load(self.main_window)
         self.update_blocks()
+        for plugin in System.get_plugins():
+            plugin.load(self.main_window)
+        self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
+        self.main_window.menu.update_examples(System.get_list_of_examples())
 
     # ----------------------------------------------------------------------
     def update_blocks(self):
@@ -72,7 +79,8 @@ class MainControl():
         """
         file_name = Dialog().open_dialog("Open Diagram",
                         self.main_window,
-                        filetype="mscd")
+                        filetype="mscd",
+                        path = System.get_user_dir())
         if file_name is None or file_name == "":
             return
         self.open(file_name)
@@ -88,12 +96,12 @@ class MainControl():
         diagram.redraw()
         diagram.set_modified(False)
 
-        if file_name in System.properties.recent_files:
-            System.properties.recent_files.remove(file_name)
-        System.properties.recent_files.insert(0, file_name)
-        if len(System.properties.recent_files) > 10:
-            System.properties.recent_files.pop()
-        self.main_window.menu.update_recent_files(System.properties.recent_files)
+        if file_name in System.get_preferences().recent_files:
+            System.get_preferences().recent_files.remove(file_name)
+        System.get_preferences().recent_files.insert(0, file_name)
+        if len(System.get_preferences().recent_files) > 10:
+            System.get_preferences().recent_files.pop()
+        self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -109,19 +117,20 @@ class MainControl():
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
+            return False
 
         if diagram.file_name is "Untitled" or save_as:
             while True:
                 name = Dialog().save_dialog(
                         self.main_window,
                         title = _("Save Diagram"),
-                        filename = diagram.file_name,
+                        filename = System.get_user_dir() + "/" + diagram.file_name,
                         filetype = "mscd")
                 if name and not name.endswith("mscd"):
                     name = (("%s" + ".mscd") % name)
                 if Dialog().confirm_overwrite(name, self.main_window):
-                    diagram.set_file_name(name)
+                    diagram.file_name = name
+                    self.main_window.work_area.rename_diagram(diagram)
                     break
         result, message = False, ""
 
@@ -140,19 +149,26 @@ class MainControl():
         self.save(save_as=True)
 
     # ----------------------------------------------------------------------
+    def save_as_example(self):
+        """
+        This method save as.
+        """
+        self.save(save_as=True)
+
+    # ----------------------------------------------------------------------
     def export_diagram(self):
         """
         This method exports the diagram.
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
+            return False
 
         while True:
             name = Dialog().save_dialog(
                         self.main_window,
                         title = _("Export diagram as png"),
-                        filename = diagram.file_name + ".png",
+                        filename = System.get_user_dir() + "/" + diagram.file_name + ".png",
                         filetype = "png")
 
             if name is None:
@@ -176,48 +192,12 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesPersistence.save(System.properties, System.get_user_dir())
+        PreferencesPersistence.save(System.get_preferences(), System.get_user_dir())
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:
             return True
 
-    # ----------------------------------------------------------------------
-    def select_all(self):
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        diagram.select_all()
-
-    # ----------------------------------------------------------------------
-    def cut(self):
-        """
-        This method cut a block on work area.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        diagram.cut()
-
-    # ----------------------------------------------------------------------
-    def copy(self):
-        """
-        This method copy a block.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        diagram.copy()
-
-    # ----------------------------------------------------------------------
-    def paste(self):
-        """
-        This method paste a block.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        diagram.paste()
 
     # ----------------------------------------------------------------------
     def get_clipboard(self):
@@ -240,22 +220,15 @@ class MainControl():
         PreferenceWindow(self.main_window).run()
 
     # ----------------------------------------------------------------------
-    def delete(self):
-        """
-        This method delete a block.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        diagram.delete()
-
-    # ----------------------------------------------------------------------
     def __get_code_generator(self, diagram):
 
         if diagram.language is None:
-            message = "You shall not generate code of an empty diagram!"
+            message = "You shall not generate the code of an empty diagram!"
             Dialog().message_dialog("Error", message, self.main_window)
             return None
+
+        if diagram.code_template is not None:
+            return CodeGenerator(diagram)
 
         template_list = []
         code_templates = System.get_code_templates()
@@ -270,23 +243,98 @@ class MainControl():
             return None
 
         if len(template_list) == 1:
-            return CodeGenerator(diagram, template_list[0])
+            diagram.code_template = deepcopy(template_list[0])
+            return CodeGenerator(diagram)
+
         select = SelectCodeTemplate(self.main_window, template_list)
-        code_template = select.get_value()
-        return CodeGenerator(diagram, code_template)
+        diagram.code_template = deepcopy(select.get_value())
+        return CodeGenerator(diagram)
 
     # ----------------------------------------------------------------------
-    def run(self, code = None):
+    def save_source(self, codes = None, generator = None):
+        """
+        This method saves the source codes.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+
+        # If it is not called from the run method
+        if generator is None:
+            generator = self.__get_code_generator(diagram)
+            if generator is None:
+                return False
+
+        if codes is None:
+            files = generator.generate_code()
+        else:
+            files = codes
+        for key in files:
+            file_name = System.get_dir_name(diagram) + key
+            System.log("Saving Code to " + file_name)
+            try:
+                codeFile = open(file_name, 'w')
+                codeFile.write(files[key])
+                codeFile.close()
+            except Exception as error:
+                System.log("File or directory not found!")
+                System.log(error)
+        return True
+
+    # ----------------------------------------------------------------------
+    def view_source(self):
+        """
+        This method view the source code.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        generator = self.__get_code_generator(diagram)
+        if generator is not None:
+            codes = generator.generate_code()
+            cw = CodeWindow(self.main_window, codes)
+            cw.run()
+            cw.close()
+            cw.destroy()
+
+    # ----------------------------------------------------------------------
+    def run(self, codes = None):
         """
         This method runs the code.
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
-        generator = self.__get_code_generator(diagram)
-        if generator is not None:
-            generator.run(code = code)
+            return False
 
+        generator = self.__get_code_generator(diagram)
+        if generator is None:
+            return False
+
+        self.save_source(codes = codes, generator = generator)
+
+        command = diagram.code_template.command
+        command = command.replace("$dir_name$", System.get_dir_name(diagram))
+
+        def __run(self):
+            process = subprocess.Popen(command,
+                    cwd=System.get_dir_name(diagram),
+                    shell=True,
+                    preexec_fn=os.setsid)
+            self.threads[thread] = diagram, process;
+            self.main_window.toolbar.update_threads(self.threads)
+            System.log(process.communicate())
+            del self.threads[thread]
+            self.main_window.toolbar.update_threads(self.threads)
+
+        System.log("Executing Code:\n" + command)
+        thread = Thread(target=__run, args=(self,))
+        thread.start()
+
+        return True
+
+    # ----------------------------------------------------------------------
+    def stop(self, widget, process):
+        os.killpg(os.getpgid(process.pid), signal.SIGTERM)
 
     # ----------------------------------------------------------------------
     def publish(self):
@@ -297,47 +345,6 @@ class MainControl():
             self.publisher.stop()
         else:
             self.publisher.start()
-
-
-    # ----------------------------------------------------------------------
-    def save_source(self, code = None):
-        """
-        This method saves the source code.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-
-        generator = self.__get_code_generator(diagram)
-        if generator is None:
-            return
-
-        while True:
-            name = Dialog().save_dialog(self.main_window,
-                        filename = generator.get_dir_name() + \
-                            generator.get_filename())
-            if Dialog().confirm_overwrite(name, self.main_window):
-                diagram.set_file_name(name)
-                break
-
-        generator.save_code(name=name, code=code)
-
-    # ----------------------------------------------------------------------
-    def view_source(self):
-        """
-        This method view the source code.
-        """
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        generator = self.__get_code_generator(diagram)
-        if generator is not None:
-            code = generator.generate_code()
-            cw = CodeWindow(self.main_window, code)
-	    cw.run()
-            cw.close()
-            cw.destroy()
-	    
 
     # ----------------------------------------------------------------------
     def about(self):
@@ -361,11 +368,18 @@ class MainControl():
         self.main_window.property_box.set_block(block)
 
     # ----------------------------------------------------------------------
-    def append_status_log(self, text):
+    def get_selected_block(self):
         """
-        This method append a text on status log.
+        This method get the tree view block.
         """
-        self.main_window.status.append_text(text)
+        return self.main_window.block_notebook.get_selected_block()
+
+    # ----------------------------------------------------------------------
+    def clear_console(self):
+        """
+        This method clear the console.
+        """
+        self.main_window.status.clear()
 
     # ----------------------------------------------------------------------
     def add_block(self, block):
@@ -382,18 +396,20 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        new_block = Block(diagram, deepcopy(block))
-        if not DiagramControl.add_block(diagram, new_block):
+        new_block = BlockModel(block)
+        new_block = deepcopy(new_block)
+        new_block = Block(diagram, new_block)
+        if not DiagramControl(diagram).add_block(new_block):
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
             Dialog().message_dialog("Error", message, self.main_window)
-            return False
+            return None
         diagram.redraw()
-        return True
+        return new_block
 
     # ----------------------------------------------------------------------
-    def add_comment(self):
+    def add_comment(self, comment=None):
         """
         This method add a block.
 
@@ -407,17 +423,55 @@ class MainControl():
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        comment = Comment(diagram)
-        DiagramControl.add_comment(diagram, comment)
-        diagram.redraw()
+        DiagramControl(diagram).add_comment(comment)
         return True
 
     # ----------------------------------------------------------------------
-    def get_selected_block(self):
+    def select_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        diagram.select_all()
+
+    # ----------------------------------------------------------------------
+    def cut(self):
         """
-        This method get the tree view block.
+        This method cut a block on work area.
         """
-        return self.main_window.block_notebook.get_selected_block()
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        DiagramControl(diagram).cut()
+
+    # ----------------------------------------------------------------------
+    def copy(self):
+        """
+        This method copy a block.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        DiagramControl(diagram).copy()
+
+    # ----------------------------------------------------------------------
+    def paste(self):
+        """
+        This method paste a block.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        DiagramControl(diagram).paste()
+
+    # ----------------------------------------------------------------------
+    def delete(self):
+        """
+        This method delete a block.
+        """
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        DiagramControl(diagram).delete()
 
     # ----------------------------------------------------------------------
     def zoom_in(self):
@@ -426,7 +480,7 @@ class MainControl():
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
+            return False
         diagram.change_zoom(System.ZOOM_IN)
 
     # ----------------------------------------------------------------------
@@ -436,7 +490,7 @@ class MainControl():
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
+            return False
         diagram.change_zoom(System.ZOOM_OUT)
 
     # ----------------------------------------------------------------------
@@ -446,36 +500,8 @@ class MainControl():
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
+            return False
         diagram.change_zoom(System.ZOOM_ORIGINAL)
-
-    # ----------------------------------------------------------------------
-    def show_diagram_property(self, diagram):
-        """
-        This method show the comment properties.
-        """
-        self.main_window.property_box.set_diagram(diagram)
-
-    # ----------------------------------------------------------------------
-    def show_comment_property(self, comment):
-        """
-        This method show the comment properties.
-        """
-        self.main_window.property_box.set_comment(comment)
-
-    # ----------------------------------------------------------------------
-    def show_block_property(self, block):
-        """
-        This method show the block properties.
-        """
-        self.main_window.property_box.set_block(block)
-
-    # ----------------------------------------------------------------------
-    def clear_console(self):
-        """
-        This method clear the console.
-        """
-        self.main_window.status.clear()
 
     # ----------------------------------------------------------------------
     def undo(self):
@@ -484,62 +510,67 @@ class MainControl():
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
-        diagram.undo()
+            return False
+        DiagramControl(diagram).undo()
 
     # ----------------------------------------------------------------------
     def redo(self):
         """
         Redo a modification.
         """
-        if self.main_window.work_area.get_current_diagram() is None:
-            return
-        self.main_window.work_area.get_current_diagram().redo()
-
-    # ----------------------------------------------------------------------
-    def reload(self):
-        """
-        Reload the diagram.
-        """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return
-        diagram.update_scrolling()
+            return False
+        DiagramControl(diagram).redo()
 
     # ----------------------------------------------------------------------
     def align_top(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align("TOP")
+        DiagramControl(diagram).align("TOP")
 
     # ----------------------------------------------------------------------
     def align_bottom(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align("BOTTOM")
+        DiagramControl(diagram).align("BOTTOM")
 
     # ----------------------------------------------------------------------
     def align_left(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align("LEFT")
+        DiagramControl(diagram).align("LEFT")
 
     # ----------------------------------------------------------------------
     def align_right(self):
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
             return False
-        diagram.align("RIGHT")
+        DiagramControl(diagram).align("RIGHT")
+
+    # ----------------------------------------------------------------------
+    def collapse_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        DiagramControl(diagram).collapse_all(True)
+
+    # ----------------------------------------------------------------------
+    def uncollapse_all(self):
+        diagram = self.main_window.work_area.get_current_diagram()
+        if diagram is None:
+            return False
+        DiagramControl(diagram).collapse_all(False)
 
     # ----------------------------------------------------------------------
     def redraw(self, show_grid):
         diagrams = self.main_window.work_area.get_diagrams()
 
         for diagram in diagrams:
-            diagram.set_show_grid(show_grid)
+            DiagramControl(diagram).set_show_grid(show_grid)
             diagram.redraw()
 
     # ----------------------------------------------------------------------
@@ -590,47 +621,8 @@ class MainControl():
         self.update_blocks()
 
     # ----------------------------------------------------------------------
-    def collapse_all(self):
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        DiagramControl.collapse_all(diagram, True)
-
-    # ----------------------------------------------------------------------
-    def uncollapse_all(self):
-        diagram = self.main_window.work_area.get_current_diagram()
-        if diagram is None:
-            return
-        DiagramControl.collapse_all(diagram, False)
-
-    # ----------------------------------------------------------------------
     def update_all(self):
         for diagram in self.main_window.work_area.get_diagrams():
             diagram.update()
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def print_ports(cls):
-        # This method is used by the launcher class
-        ports = System.get_ports()
-        for port in ports:
-            print "--------------------- "
-            PortControl.print_port(ports[port])
-    # ----------------------------------------------------------------------
-    @classmethod
-    def print_blockmodels(cls):
-        # This method is used by the launcher class
-        blocks = System.get_blocks()
-        for block in blocks:
-            print "--------------------- "
-            BlockControl.print_block(blocks[block])
-    # ----------------------------------------------------------------------
-    @classmethod
-    def print_templates(cls):
-        # This method is used by the launcher class
-        code_templates = System.get_code_templates()
-        for template in code_templates:
-            print "--------------------- "
-            CodeTemplateControl.print_template(code_templates[template])
 
 # ----------------------------------------------------------------------

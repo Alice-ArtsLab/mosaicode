@@ -17,10 +17,12 @@ class CodeTemplate(object):
         self.description = ""
         self.language = ""
         self.command = ""
-        self.extension = ""
-        self.code = "Invalid Code Template"
-        self.code_parts = []
 
+        self.files = {}
+        self.code_parts = []
+        self.properties = []
+
+    # ----------------------------------------------------------------------
     def equals(self, code_template):
         for key in self.__dict__:
             if not hasattr(code_template, key):
@@ -28,4 +30,22 @@ class CodeTemplate(object):
             if code_template.__dict__[key] != self.__dict__[key]:
                 return False
         return True
+
+    # ----------------------------------------------------------------------
+    def set_properties(self, data):
+        for prop in self.get_properties():
+            key = prop.get("name")
+            if key in data:
+                prop["value"] = data[key]
+            else:
+                pass
+
+    # ----------------------------------------------------------------------
+    def get_properties(self):
+        return self.properties
+
+    # ----------------------------------------------------------------------
+    def __str__(self):
+        return str(self.type)
+
 # ------------------------------------------------------------------------------

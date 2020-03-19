@@ -82,16 +82,15 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
 
         self.diagram.show_block_property(self)
 
-        Gtk.Widget.grab_focus(self.diagram)
         if event.button == 1:
             self.remember_x = event.x
             self.remember_y = event.y
 
-        elif event.button == 3:
-            self.diagram.show_block_menu(self, event)
-            return True
-
         self.diagram.update_flows()
+        
+        if event.button == 3:
+            return False
+
         return True
 
     # ----------------------------------------------------------------------
@@ -361,14 +360,14 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Returns:
                 * **Types** (:class:`float<float>`)
         """
-        new_x = x - (x % System.properties.grid)
-        new_y = y - (y % System.properties.grid)
+        new_x = x - (x % System.get_preferences().grid)
+        new_y = y - (y % System.get_preferences().grid)
         self.translate(new_x, new_y)
 
     # ----------------------------------------------------------------------
     def adjust_position(self):
         position = self.get_position()
-        grid = System.properties.grid
+        grid = System.get_preferences().grid
         new_x = position[0] - position[0] % grid
         new_y = position[1] - position[1] % grid
         self.translate(new_x - position[0], new_y - position[1])
@@ -392,7 +391,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             Parameters:
                 * **data**
         """
-        self.diagram.do("Set block property")
         BlockModel.set_properties(self, data)
 
     # ----------------------------------------------------------------------
@@ -455,6 +453,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
         self.height = self.__calculate_height()
+
         if self.is_collapsed:
             self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.INVISIBLE)
             self.__widgets["Rect"].set_property("width", self.width - 60)
@@ -470,7 +469,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                 self.__widgets["port" + str(port)].set_property("y", y)
                 self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
                 i += 1
-        else:
+            return True
+
+        if not self.is_collapsed:
             self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.VISIBLE)
             self.__widgets["Rect"].set_property("width", self.width)
             self.__widgets["Rect"].set_property("x", 0)

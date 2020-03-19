@@ -4,6 +4,8 @@ This module contains the System class.
 """
 import os
 import sys
+import time
+import datetime
 from copy import copy
 import inspect  # For module inspect
 import mosaicode.extensions
@@ -51,14 +53,22 @@ class System(object):
             self.__ports = {}
 
             self.list_of_examples = []
-            self.plugins = []
-            self.properties = PreferencesPersistence.load(System.get_user_dir())
+            self.__plugins = []
+            # Create user directory if does not exist
+            directories = ["/extensions/", "/examples/", "/images/", "/diagrams/", "/code-gen/"]
+            for name in directories:
+                if not os.path.isdir(System.get_user_dir() + name):
+                    try:
+                        os.makedirs(System.get_user_dir() + name)
+                    except Exception as error:
+                        System.log(error)
+
+            self.__preferences = PreferencesPersistence.load(System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):
             self.__load_examples()
-            self.__load_extensions()
-            self.__load_plugins()
+            self.__load_extensions_and_plugins()
 
         # ----------------------------------------------------------------------
         def get_blocks(self):
@@ -78,6 +88,31 @@ class System(object):
         # ----------------------------------------------------------------------
         def get_ports(self):
             return copy(self.__ports)
+
+        # ----------------------------------------------------------------------
+        def get_preferences(self):
+            return self.__preferences
+
+        # ----------------------------------------------------------------------
+        def get_plugins(self):
+            return self.__plugins
+
+        # ----------------------------------------------------------------------
+        def __load_examples(self):
+            # Load Examples from the system
+            self.list_of_examples = []
+            for root, subdirs, files in os.walk(System.DATA_DIR + "extensions/"):
+                for filename in files:
+                    file_path = os.path.join(root, filename)
+                    if filename.endswith(".mscd"):
+                        self.list_of_examples.append(file_path)
+            # Load Examples from the user space
+            for root, subdirs, files in os.walk(System.get_user_dir() + "/examples/"):
+                for filename in files:
+                    file_path = os.path.join(root, filename)
+                    if filename.endswith(".mscd"):
+                        self.list_of_examples.append(file_path)
+            self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
         def __load_xml(self, data_dir):
@@ -110,25 +145,7 @@ class System(object):
                     self.__blocks[block.type] = block
 
         # ----------------------------------------------------------------------
-        def __load_examples(self):
-            # Load Examples
-            self.list_of_examples = []
-            for root, subdirs, files in os.walk(System.DATA_DIR + "extensions/"):
-                for filename in files:
-                    file_path = os.path.join(root, filename)
-                    if filename.endswith(".mscd"):
-                        self.list_of_examples.append(file_path)
-            self.list_of_examples.sort()
-
-        # ----------------------------------------------------------------------
-        def __load_extensions(self):
-            # Create user directory if does not exist
-            if not os.path.isdir(System.get_user_dir() + "/extensions/"):
-                try:
-                    os.makedirs(System.get_user_dir() + "/extensions/")
-                except:
-                    pass
-
+        def __load_extensions_and_plugins(self):
             # Load CodeTemplates, Blocks and Ports
             self.__code_templates.clear()
             self.__ports.clear()
@@ -140,7 +157,7 @@ class System(object):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
                     if path is None and name.startswith("." + System.APP):
                         name = name.replace('.', '', 1)
-                    if not name.startswith(System.APP+"_lib") and not name_par.startswith(System.APP+"_lib"):
+                    if not name.startswith(System.APP+"_lib") and not name_par.startswith(System.APP+"_lib") and not name.startswith(System.APP+"_plugin") and not name_par.startswith(System.APP+"_plugin"):
                         continue
 
                     if ispkg:
@@ -155,17 +172,26 @@ class System(object):
                             if not inspect.isclass(obj):
                                 continue
                             modname = inspect.getmodule(obj).__name__
-                            if not modname.startswith(System.APP+"_lib"):
+                            if not modname.startswith(System.APP+"_lib") and not modname.startswith(System.APP+"_plugin"):
                                 continue
-
-                            instance = obj()
-                            if isinstance(instance, CodeTemplate):
-                                self.__code_templates[instance.type] = instance
-                            if isinstance(instance, Port):
-                                self.__ports[instance.type] = instance
+                            try:
+                                instance = obj()
+                            except:
+                                continue
                             if isinstance(instance, BlockModel):
                                 if instance.label != "":
                                     self.__blocks[instance.type] = instance
+                                    continue
+                            if isinstance(instance, Port):
+                                self.__ports[instance.type] = instance
+                                continue
+                            if isinstance(instance, CodeTemplate):
+                                self.__code_templates[instance.type] = instance
+                                continue
+                            if isinstance(instance, Plugin):
+                                if instance.label != "":
+                                    self.__plugins.append(instance)
+                                    continue
 
             walk_lib_packages(None, "")
 
@@ -181,39 +207,6 @@ class System(object):
                 except:
                     print("Error in loading plugin " + key)
 
-        # ----------------------------------------------------------------------
-        def __load_plugins(self):
-            def walk_plugin_packages(path=None, name_par=""):
-                for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
-                    # if package name do not starts with System.APP, give up
-                    if not name.startswith(System.APP+"_plugin") and not name_par.startswith(System.APP+"_plugin"):
-                        continue
-                    if ispkg:
-                        if name_par is not "":
-                            name = name_par + "." + name
-                        __import__(name)
-                        path = getattr(sys.modules[name], '__path__', None) or []
-                        walk_plugin_packages(path, name)
-                    else:
-                        module = __import__(name, fromlist="dummy")
-                        for class_name, obj in inspect.getmembers(module):
-                            if not inspect.isclass(obj):
-                                continue
-                            modname = inspect.getmodule(obj).__name__
-                            if not modname.startswith(System.APP+"_plugin"):
-                                continue
-
-                            try:
-                                instance = obj()
-                            except:
-                                continue
-
-                            if isinstance(instance, Plugin):
-                                if instance.label != "":
-                                    self.plugins.append(instance)
-
-            walk_plugin_packages(None, "")
-
     # ----------------------------------------------------------------------
     def __init__(self):
         if not System.instance:
@@ -223,17 +216,14 @@ class System(object):
     def __new__(cls):  # __new__ always a classmethod
         if System.instance is None:
             System.instance = System.__Singleton()
-            # Add properties dynamically
-            cls.properties = System.instance.properties
-            cls.list_of_examples = System.instance.list_of_examples
 
     # ----------------------------------------------------------------------
     @classmethod
-    def get_blocks(cls):
+    def get_list_of_examples(cls):
         """
         This method returns System installed blocks.
         """
-        return cls.instance.get_blocks()
+        return System.instance.list_of_examples
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -242,6 +232,30 @@ class System(object):
         This method removes a block installed in the System.
         """
         return cls.instance.remove_block(block)
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_preferences(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return cls.instance.get_preferences()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_plugins(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return cls.instance.get_plugins()
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_blocks(cls):
+        """
+        This method returns System installed blocks.
+        """
+        return cls.instance.get_blocks()
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -293,5 +307,53 @@ class System(object):
         home_dir = os.path.expanduser("~")
         home_dir = home_dir + "/" + System.APP
         return home_dir
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def replace_wildcards(cls, text, diagram):
+        """
+        This method replace the wildcards.
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
+        result = text.replace("%t", str(time.time()))
+        date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
+        result = result.replace("%d", date)
+        result = result.replace("%l", diagram.language)
+        result = result.replace("%n", diagram.patch_name)
+        result = result.replace(" ", "_")
+        return result
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_dir_name(cls, diagram):
+        """
+        This method return the directory name.
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
+        name = System.get_preferences().default_directory
+        name = System.replace_wildcards(name, diagram)
+        if not name.endswith("/"):
+            name = name + "/"
+        return name
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def get_filename(cls, diagram):
+        """
+        This method return the filename
+
+        Returns:
+
+            * **Types** (:class:`str<str>`)
+        """
+        name = System.get_preferences().default_filename
+        name = System.replace_wildcards(name, diagram)
+        return name
 
 # ------------------------------------------------------------------------------
