@@ -36,4 +36,3 @@ class TreeView(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def get_selection(self):
         return self.tree_view.get_selection()
-

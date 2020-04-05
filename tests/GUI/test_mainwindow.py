@@ -1,5 +1,7 @@
 from tests.test_base import TestBase
 from mosaicode.GUI.mainwindow import MainWindow
+import gi
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 
 class TestMainWindow(TestBase):
@@ -21,4 +23,3 @@ class TestMainWindow(TestBase):
         self.main_window.emit("key-press-event", event)
         self.main_window.emit("check-resize")
         self.main_window.emit("delete_event", event)
-

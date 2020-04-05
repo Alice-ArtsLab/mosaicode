@@ -27,7 +27,7 @@ config['classifiers'] = [
 ]
 
 setup(name='mosaicode',
-      install_requires=["PyGObject", "GooCalendar", "BeautifulSoup4", "lxml", "pgi", "mosaicomponents"],
+      install_requires=["PyGObject", "GooCalendar", "BeautifulSoup4", "lxml", "pgi"],
       python_requires='>=2.7',
       tests_require=['pytest'],
       test_suite='tests',

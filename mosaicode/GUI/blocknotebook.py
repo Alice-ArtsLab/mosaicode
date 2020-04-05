@@ -45,7 +45,7 @@ class BlockNotebook(Gtk.Notebook):
         for x in blocks:
             instance = blocks[x]
             name = instance.language
-            name += "/" + instance.framework
+            name += "/" + instance.extension
             if name in languages:
                 continue
             languages.append(name)

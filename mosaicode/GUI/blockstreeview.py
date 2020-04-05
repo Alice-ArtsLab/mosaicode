@@ -6,9 +6,8 @@ This module contains the BlocksTreeView class.
 import os
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import GdkPixbuf
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gtk, Gdk, GdkPixbuf
 import gettext
 _ = gettext.gettext
 
@@ -63,7 +62,7 @@ class BlocksTreeView(Gtk.ScrolledWindow):
         for x in blocks:
             instance = blocks[x]
             name = instance.language
-            name += "/" + instance.framework
+            name += "/" + instance.extension
             if name != language:
                 continue
             block_list.append(x)

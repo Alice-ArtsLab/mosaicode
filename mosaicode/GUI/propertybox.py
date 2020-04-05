@@ -2,11 +2,12 @@
 """
 This module contains the PropertyBox class.
 """
-import gi
-gi.require_version('Gtk', '3.0')
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 import mosaicomponents
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from mosaicode.GUI.fieldtypes import *

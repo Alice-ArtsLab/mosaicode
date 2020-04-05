@@ -6,7 +6,7 @@ This module contains the CodeTemplatePersistence class.
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-from os.path import expanduser
+from os.path import join
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.codetemplate import CodeTemplate
@@ -82,8 +82,8 @@ class CodeTemplatePersistence():
         if not Persistence.create_dir(path):
             return False
         try:
-            file_name = path + code_template.type + ".xml"
-            code_template_file = file(os.path.expanduser(file_name), 'w')
+            file_name = code_template.name
+            code_template_file = file(os.path.join(path, file_name + '.xml'), 'w')
             code_template_file.write(parser.prettify())
             code_template_file.close()
         except IOError as e:

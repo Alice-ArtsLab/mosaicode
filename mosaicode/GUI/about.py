@@ -3,8 +3,8 @@
 This module contains the class About.
 """
 
-import gi
 import os
+import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.system import System as System
