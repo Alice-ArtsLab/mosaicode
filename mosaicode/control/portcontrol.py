@@ -3,14 +3,15 @@
 """
 This module contains the PortControl class.
 """
-import os
 import inspect  # For module inspect
+import os
 import pkgutil  # For dynamic package load
 from os.path import expanduser
-from mosaicode.utils.XMLUtils import XMLParser
-from mosaicode.utils.PythonUtils import PythonParser
+
 from mosaicode.model.port import Port
 from mosaicode.persistence.portpersistence import PortPersistence
+from mosaicode.utils.PythonUtils import PythonParser
+from mosaicode.utils.XMLUtils import XMLParser
 
 
 class PortControl():
@@ -22,6 +23,20 @@ class PortControl():
 
     def __init__(self):
         pass
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_xml(cls):
+        from mosaicode.system import System as System
+        System()
+        ports = System.get_ports()
+        for key in ports:
+            path = System.get_user_dir()
+            path = os.path.join(path,
+                                'extensions',
+                                ports[key].language,
+                                'ports')
+            PortPersistence.save_xml(ports[key], path)
 
     # ----------------------------------------------------------------------
     @classmethod

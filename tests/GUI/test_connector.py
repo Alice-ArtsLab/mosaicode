@@ -2,6 +2,8 @@ from tests.test_base import TestBase
 from mosaicode.GUI.connector import Connector
 from mosaicode.GUI.block import Block
 from mosaicode.model.port import Port
+import gi
+gi.require_version('Gdk', '3.0')
 from gi.repository import GooCanvas
 from gi.repository import Gdk
 
@@ -44,4 +46,3 @@ class TestConnector(TestBase):
         self.connector.emit("button-press-event", self.connector, gdkevent)
         self.connector.is_selected = True
         self.connector.emit("button-press-event", self.connector, gdkevent)
-

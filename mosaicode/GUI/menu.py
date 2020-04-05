@@ -3,11 +3,12 @@
 """
 This module contains the menu bar.
 """
+import gettext
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import gettext
 
 _ = gettext.gettext
 
@@ -39,9 +40,10 @@ class Menu(Gtk.MenuBar):
         file_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Save"), "<Control>S", file_menu, mc.save)
         self.create_menu(_("Save as..."), None, file_menu, mc.save_as)
-        self.create_menu(_("Save as example..."), None, file_menu, mc.save_as_example)
+        self.create_menu(_("Save as example..."), None,
+                         file_menu, mc.save_as_example)
         self.create_menu(_("Export Diagram As PNG..."), "<Control>E",
-                           file_menu, mc.export_diagram)
+                         file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Exit"), "<Control>Q", file_menu, mc.exit)
         self.add_menu_category(_("File"), file_menu)
@@ -66,10 +68,14 @@ class Menu(Gtk.MenuBar):
 
         # -------------------------- Align -------------------------------------
         align_menu = Gtk.Menu()
-        self.create_menu(_("Align Top"), "<Control>1", align_menu, mc.align_top)
-        self.create_menu(_("Align Bottom"), "<Control>2", align_menu, mc.align_bottom)
-        self.create_menu(_("Align Left"), "<Control>3", align_menu, mc.align_left)
-        self.create_menu(_("Align Right"), "<Control>4", align_menu, mc.align_right)
+        self.create_menu(_("Align Top"), "<Control>1",
+                         align_menu, mc.align_top)
+        self.create_menu(_("Align Bottom"), "<Control>2",
+                         align_menu, mc.align_bottom)
+        self.create_menu(_("Align Left"), "<Control>3",
+                         align_menu, mc.align_left)
+        self.create_menu(_("Align Right"), "<Control>4",
+                         align_menu, mc.align_right)
         self.add_menu_category(_("Align"), align_menu)
 
         # -------------------------- View -------------------------------------
@@ -81,9 +87,11 @@ class Menu(Gtk.MenuBar):
 
         edit_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Collapse All"), None, view_menu, mc.collapse_all)
-        self.create_menu(_("Uncollapse All"), None, view_menu, mc.uncollapse_all)
+        self.create_menu(_("Uncollapse All"), None,
+                         view_menu, mc.uncollapse_all)
         view_menu.append(Gtk.SeparatorMenuItem())
-        self.__create_check_menu(_("Show Grid"), "<Control>g", view_menu, mc.show_grid)
+        self.__create_check_menu(
+            _("Show Grid"), "<Control>g", view_menu, mc.show_grid)
         self.add_menu_category(_("View"), view_menu)
 
         # -------------------------- Insert -------------------------------------
@@ -100,10 +108,13 @@ class Menu(Gtk.MenuBar):
         process_menu = Gtk.Menu()
         self.create_menu(_("Run"), "<Control>R", process_menu, mc.run)
         self.create_menu(_("Save Source"), None,
-                           process_menu, mc.save_source)
+                         process_menu, mc.save_source)
         self.create_menu(_("View Source"), None,
-                           process_menu, mc.view_source)
+                         process_menu, mc.view_source)
         self.add_menu_category(_("Process"), process_menu)
+
+        # ------------------------- Plugins ------------------------------
+        self.plugins_menu = Gtk.Menu()
 
         # -------------------------- Help --------------------------------
         self.help_menu = Gtk.Menu()
@@ -116,6 +127,10 @@ class Menu(Gtk.MenuBar):
     # ----------------------------------------------------------------------
     def add_help(self):
         self.add_menu_category(_("Help"), self.help_menu)
+
+    # ----------------------------------------------------------------------
+    def add_plugins(self):
+        self.add_menu_category(_("Plugins"), self.plugins_menu)
 
     # ----------------------------------------------------------------------
     def create_menu(self, name, accel, menu, action):
@@ -164,7 +179,6 @@ class Menu(Gtk.MenuBar):
                 * **submenu** (:class:`str<str>`):
         """
         menu_item = Gtk.MenuItem(name)
-        menu_item.show()
         menu_item.set_submenu(submenu)
         self.append(menu_item)
 
@@ -213,7 +227,8 @@ class Menu(Gtk.MenuBar):
         # time to populate
         for block in sorted(block_list):
             # first, the language submenu
-            language_menu_item = self.__get_child_by_name(self.block_menu, block.language)
+            language_menu_item = self.__get_child_by_name(
+                self.block_menu, block.language)
             if language_menu_item is None:
                 language_menu_item = Gtk.MenuItem(block.language)
                 language_menu_item.set_name(block.language)
@@ -223,21 +238,23 @@ class Menu(Gtk.MenuBar):
             else:
                 language_menu = language_menu_item.get_submenu()
 
-            framework_menu_item = self.__get_child_by_name(language_menu, block.framework)
-            if framework_menu_item is None:
-                framework_menu_item = Gtk.MenuItem(block.framework)
-                framework_menu_item.set_name(block.framework)
-                language_menu.append(framework_menu_item)
-                framework_menu = Gtk.Menu()
-                framework_menu_item.set_submenu(framework_menu)
+            extension_menu_item = self.__get_child_by_name(
+                language_menu, block.extension)
+            if extension_menu_item is None:
+                extension_menu_item = Gtk.MenuItem(block.extension)
+                extension_menu_item.set_name(block.extension)
+                language_menu.append(extension_menu_item)
+                extension_menu = Gtk.Menu()
+                extension_menu_item.set_submenu(extension_menu)
             else:
-                framework_menu = framework_menu_item.get_submenu()
+                extension_menu = extension_menu_item.get_submenu()
 
-            group_menu_item = self.__get_child_by_name(framework_menu, block.group)
+            group_menu_item = self.__get_child_by_name(
+                extension_menu, block.group)
             if group_menu_item is None:
                 group_menu_item = Gtk.MenuItem(block.group)
                 group_menu_item.set_name(block.group)
-                framework_menu.append(group_menu_item)
+                extension_menu.append(group_menu_item)
                 group_menu = Gtk.Menu()
                 group_menu_item.set_submenu(group_menu)
             else:
@@ -271,11 +288,12 @@ class Menu(Gtk.MenuBar):
         for example in list_of_examples:
             directory_list = example.split("/")
             name = directory_list.pop()
-            framework = directory_list.pop()
+            extension = directory_list.pop()
             language = directory_list.pop()
 
             # first, the language submenu
-            language_menu_item = self.__get_child_by_name(self.example_menu, language)
+            language_menu_item = self.__get_child_by_name(
+                self.example_menu, language)
             if language_menu_item is None:
                 language_menu_item = Gtk.MenuItem(language)
                 language_menu_item.set_name(language)
@@ -285,18 +303,19 @@ class Menu(Gtk.MenuBar):
             else:
                 language_menu = language_menu_item.get_submenu()
 
-            framework_menu_item = self.__get_child_by_name(language_menu, framework)
-            if framework_menu_item is None:
-                framework_menu_item = Gtk.MenuItem(framework)
-                framework_menu_item.set_name(framework)
-                language_menu.append(framework_menu_item)
-                framework_menu = Gtk.Menu()
-                framework_menu_item.set_submenu(framework_menu)
+            extension_menu_item = self.__get_child_by_name(
+                language_menu, extension)
+            if extension_menu_item is None:
+                extension_menu_item = Gtk.MenuItem(extension)
+                extension_menu_item.set_name(extension)
+                language_menu.append(extension_menu_item)
+                extension_menu = Gtk.Menu()
+                extension_menu_item.set_submenu(extension_menu)
             else:
-                framework_menu = framework_menu_item.get_submenu()
+                extension_menu = extension_menu_item.get_submenu()
 
             menu_item = Gtk.MenuItem(name)
-            framework_menu.append(menu_item)
+            extension_menu.append(menu_item)
             menu_item.connect("activate", self.__load_example, example)
 
         self.example_menu.show_all()
@@ -313,8 +332,8 @@ class Menu(Gtk.MenuBar):
         """
         self.main_window.main_control.open(data)
 
-
     # ----------------------------------------------------------------------
+
     def update_recent_files(self, list_of_recent_files):
         """
         This method update recent files.

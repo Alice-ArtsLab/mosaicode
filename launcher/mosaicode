@@ -1,24 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Libraries
-import sys
-import argparse
-import signal
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.utils.FileUtils import *
-from mosaicode.GUI.mainwindow import MainWindow
-from mosaicode.control.maincontrol import MainControl
-from mosaicode.control.portcontrol import PortControl
+import sys
+import signal
+import argparse
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
+from mosaicode.control.maincontrol import MainControl
+from mosaicode.control.portcontrol import PortControl
+from mosaicode.GUI.mainwindow import MainWindow
 from mosaicode.system import System
+from mosaicode.utils.FileUtils import *
+
+
+# Libraries
 
 # ---------------------------------------------------
 # --------MOSAICODE FRONTEND MAIN FUNCTION--------------
 # ---------------------------------------------------
+
 
 def main(argv):
     """
@@ -35,9 +38,12 @@ def main(argv):
                         help="List of files to open")
     parser.add_argument("-x", "--export", type=str, choices=['py', 'xml'],
                         help="Export extensions to Python or XML format")
-    parser.add_argument("--print-ports", action="store_true", help="Print ports")
-    parser.add_argument("--print-blockmodels", action="store_true", help="Print blockmodels")
-    parser.add_argument("--print-templates", action="store_true", help="Print code templates")
+    parser.add_argument(
+        "--print-ports", action="store_true", help="Print ports")
+    parser.add_argument("--print-blockmodels",
+                        action="store_true", help="Print blockmodels")
+    parser.add_argument("--print-templates",
+                        action="store_true", help="Print code templates")
     args = parser.parse_args()
 
     if args.export:
@@ -81,6 +87,7 @@ def main(argv):
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     Gtk.main()
     # ----------------------------------------------------------------------
+
 
 if __name__ == '__main__':
     main(sys.argv)

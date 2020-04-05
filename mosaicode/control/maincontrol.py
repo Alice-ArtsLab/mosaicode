@@ -2,37 +2,35 @@
 """
 This module contains the MainControl class.
 """
-from copy import copy
-from copy import deepcopy
+import gettext
 import os
-from threading import Thread
-from threading import Event
-import subprocess
 import signal
+import subprocess
+from copy import copy, deepcopy
+from threading import Event, Thread
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.GUI.dialog import Dialog
-from mosaicode.GUI.about import About
-from mosaicode.GUI.diagram import Diagram
-from mosaicode.GUI.block import Block
-from mosaicode.GUI.comment import Comment
-from mosaicode.GUI.codewindow import CodeWindow
-from mosaicode.GUI.preferencewindow import PreferenceWindow
-from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
-from mosaicode.system import System as System
-from mosaicode.persistence.preferencespersistence import PreferencesPersistence
+from mosaicode.control.blockcontrol import BlockControl
+from mosaicode.control.codegenerator import CodeGenerator
+from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.portcontrol import PortControl
-from mosaicode.control.blockcontrol import BlockControl
-from mosaicode.control.codetemplatecontrol import CodeTemplateControl
-from mosaicode.control.codegenerator import CodeGenerator
 from mosaicode.control.publisher import Publisher
-from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.GUI.about import About
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.codewindow import CodeWindow
+from mosaicode.GUI.comment import Comment
+from mosaicode.GUI.diagram import Diagram
+from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.preferencewindow import PreferenceWindow
+from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.persistence.preferencespersistence import PreferencesPersistence
+from mosaicode.system import System as System
 
-
-import gettext
 _ = gettext.gettext
 
 
@@ -55,7 +53,9 @@ class MainControl():
         self.update_blocks()
         for plugin in System.get_plugins():
             plugin.load(self.main_window)
-        self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
+
+        self.main_window.menu.update_recent_files(
+            System.get_preferences().recent_files)
         self.main_window.menu.update_examples(System.get_list_of_examples())
 
     # ----------------------------------------------------------------------
@@ -78,9 +78,9 @@ class MainControl():
         This method open a selected file.
         """
         file_name = Dialog().open_dialog("Open Diagram",
-                        self.main_window,
-                        filetype="mscd",
-                        path = System.get_user_dir())
+                                         self.main_window,
+                                         filetype="mscd",
+                                         path=System.get_user_dir())
         if file_name is None or file_name == "":
             return
         self.open(file_name)
@@ -101,7 +101,8 @@ class MainControl():
         System.get_preferences().recent_files.insert(0, file_name)
         if len(System.get_preferences().recent_files) > 10:
             System.get_preferences().recent_files.pop()
-        self.main_window.menu.update_recent_files(System.get_preferences().recent_files)
+        self.main_window.menu.update_recent_files(
+            System.get_preferences().recent_files)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -122,10 +123,10 @@ class MainControl():
         if diagram.file_name is "Untitled" or save_as:
             while True:
                 name = Dialog().save_dialog(
-                        self.main_window,
-                        title = _("Save Diagram"),
-                        filename = System.get_user_dir() + "/" + diagram.file_name,
-                        filetype = "mscd")
+                    self.main_window,
+                    title=_("Save Diagram"),
+                    filename=System.get_user_dir() + "/" + diagram.file_name,
+                    filetype="mscd")
                 if name and not name.endswith("mscd"):
                     name = (("%s" + ".mscd") % name)
                 if Dialog().confirm_overwrite(name, self.main_window):
@@ -166,10 +167,10 @@ class MainControl():
 
         while True:
             name = Dialog().save_dialog(
-                        self.main_window,
-                        title = _("Export diagram as png"),
-                        filename = System.get_user_dir() + "/" + diagram.file_name + ".png",
-                        filetype = "png")
+                self.main_window,
+                title=_("Export diagram as png"),
+                filename=System.get_user_dir() + "/" + diagram.file_name + ".png",
+                filetype="png")
 
             if name is None:
                 return
@@ -192,14 +193,15 @@ class MainControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        PreferencesPersistence.save(System.get_preferences(), System.get_user_dir())
+        PreferencesPersistence.save(
+            System.get_preferences(), System.get_user_dir())
         if self.main_window.work_area.close_tabs():
             Gtk.main_quit()
         else:
             return True
 
-
     # ----------------------------------------------------------------------
+
     def get_clipboard(self):
         """
         This method return the clipboard.
@@ -251,7 +253,7 @@ class MainControl():
         return CodeGenerator(diagram)
 
     # ----------------------------------------------------------------------
-    def save_source(self, codes = None, generator = None):
+    def save_source(self, codes=None, generator=None):
         """
         This method saves the source codes.
         """
@@ -298,7 +300,7 @@ class MainControl():
             cw.destroy()
 
     # ----------------------------------------------------------------------
-    def run(self, codes = None):
+    def run(self, codes=None):
         """
         This method runs the code.
         """
@@ -310,17 +312,17 @@ class MainControl():
         if generator is None:
             return False
 
-        self.save_source(codes = codes, generator = generator)
+        self.save_source(codes=codes, generator=generator)
 
         command = diagram.code_template.command
         command = command.replace("$dir_name$", System.get_dir_name(diagram))
 
         def __run(self):
             process = subprocess.Popen(command,
-                    cwd=System.get_dir_name(diagram),
-                    shell=True,
-                    preexec_fn=os.setsid)
-            self.threads[thread] = diagram, process;
+                                       cwd=System.get_dir_name(diagram),
+                                       shell=True,
+                                       preexec_fn=os.setsid)
+            self.threads[thread] = diagram, process
             self.main_window.toolbar.update_threads(self.threads)
             System.log(process.communicate())
             del self.threads[thread]

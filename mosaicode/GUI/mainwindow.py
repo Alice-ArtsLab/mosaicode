@@ -5,19 +5,19 @@ This module contains the MainWindow class.
 """
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-from gi.repository import Gdk
+from gi.repository import Gdk, Gtk
+from mosaicode.control.maincontrol import MainControl
+from mosaicode.GUI.blockmenu import BlockMenu
+from mosaicode.GUI.diagrammenu import DiagramMenu
+from mosaicode.system import System as System
 
+from blocknotebook import BlockNotebook
 from menu import Menu
+from propertybox import PropertyBox
+from searchbar import SearchBar
 from status import Status
 from toolbar import Toolbar
 from workarea import WorkArea
-from searchbar import SearchBar
-from blocknotebook import BlockNotebook
-from mosaicode.system import System as System
-from propertybox import PropertyBox
-from mosaicode.control.maincontrol import MainControl
-from mosaicode.GUI.diagrammenu import DiagramMenu
 
 class MainWindow(Gtk.Window):
     """
@@ -45,7 +45,9 @@ class MainWindow(Gtk.Window):
         self.work_area = WorkArea(self)
         self.status = Status(self)
         self.diagram_menu = DiagramMenu()
+        self.menu.add_plugins()
         self.menu.add_help()
+        self.block_menu = BlockMenu()
 
         System.set_log(self.status)
 
@@ -75,7 +77,8 @@ class MainWindow(Gtk.Window):
 
         self.hpaned_work_area = Gtk.HPaned()
         self.hpaned_work_area.connect("accept-position", self.__resize)
-        self.hpaned_work_area.set_position(System.get_preferences().hpaned_work_area)
+        self.hpaned_work_area.set_position(
+            System.get_preferences().hpaned_work_area)
 
         self.vpaned_bottom.add1(self.hpaned_work_area)
         self.vpaned_bottom.add2(self.__create_frame(self.status))

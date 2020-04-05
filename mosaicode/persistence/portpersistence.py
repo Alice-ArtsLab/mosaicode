@@ -6,7 +6,7 @@ This module contains the PortPersistence class.
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-from os.path import expanduser
+from os.path import join
 from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.port import Port
@@ -47,7 +47,7 @@ class PortPersistence():
 
         if port.type == "":
             return None
-        
+
         return port
 
     # ----------------------------------------------------------------------
@@ -75,8 +75,8 @@ class PortPersistence():
         if not Persistence.create_dir(path):
             return False
         try:
-            file_name = path + port.type + ".xml"
-            port_file = file(os.path.expanduser(file_name), 'w')
+            file_name = port.hint
+            port_file = file(os.path.join(path, file_name + '.xml'), 'w')
             port_file.write(parser.prettify())
             port_file.close()
         except IOError as e:

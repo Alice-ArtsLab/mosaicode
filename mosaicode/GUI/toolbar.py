@@ -77,7 +77,7 @@ class Toolbar(Gtk.Toolbar):
         """
         if menu is None:
             button = Gtk.ToolButton.new_from_stock(stock)
-        else: 
+        else:
             button = Gtk.MenuToolButton.new_from_stock(stock)
             button.set_menu(menu)
         button.set_expand(False)
