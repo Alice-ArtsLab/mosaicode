@@ -106,8 +106,8 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             c1y = y0
             c2x = x0
             c2y = y1
-            path += "M " + str(x0) + " " + str(y0) 
-            path += " C" 
+            path += "M " + str(x0) + " " + str(y0)
+            path += " C"
             if x0 + 25 > x1:
                 c1x = x0 + x0 - x1
                 c2x = x1 - x0 + x1
@@ -116,7 +116,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
             path += " " + str(x1) + " " + str(y1)
 
         elif System.get_preferences().connection == "Line":
-            path += "M " + str(x0) + " " + str(y0) 
+            path += "M " + str(x0) + " " + str(y0)
             path += " L " + str(x1) + " " + str(y1)
 
 
@@ -128,7 +128,7 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
 
             # svg M L bezier curve
             # Move to output port starting point / first horizontal line
-            path += "M " + str(x0) + " " + str(y0) 
+            path += "M " + str(x0) + " " + str(y0)
             # Line to start point + 25 on x + output type index --
             path += " L " + str(x0 + 25 + x0_shift) + " " + str(y0)
             # First vertical line
@@ -178,4 +178,3 @@ class Connector(GooCanvas.CanvasGroup, ConnectionModel):
         else:
             self.__widgets["Line"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
-

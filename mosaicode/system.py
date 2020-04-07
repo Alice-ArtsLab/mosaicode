@@ -2,24 +2,25 @@
 """
 This module contains the System class.
 """
+import datetime
+import inspect  # For module inspect
 import os
+import pkgutil  # For dynamic package load
 import sys
 import time
-import datetime
 from copy import copy
-import inspect  # For module inspect
-import mosaicode.extensions
-import pkgutil  # For dynamic package load
 from glob import glob  # To load examples
-from mosaicode.persistence.preferencespersistence import PreferencesPersistence
-from mosaicode.control.portcontrol import PortControl
+import mosaicode.extensions
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
-from mosaicode.model.preferences import Preferences
-from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.control.portcontrol import PortControl
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.model.plugin import Plugin
 from mosaicode.model.port import Port
+from mosaicode.model.preferences import Preferences
+from mosaicode.persistence.preferencespersistence import PreferencesPersistence
+
 
 class System(object):
     """
@@ -55,7 +56,8 @@ class System(object):
             self.list_of_examples = []
             self.__plugins = []
             # Create user directory if does not exist
-            directories = ["/extensions/", "/examples/", "/images/", "/diagrams/", "/code-gen/"]
+            directories = ["/extensions/", "/examples/",
+                           "/images/", "/diagrams/", "/code-gen/"]
             for name in directories:
                 if not os.path.isdir(System.get_user_dir() + name):
                     try:
@@ -63,12 +65,14 @@ class System(object):
                     except Exception as error:
                         System.log(error)
 
-            self.__preferences = PreferencesPersistence.load(System.get_user_dir())
+            self.__preferences = PreferencesPersistence.load(
+                System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):
             self.__load_examples()
-            self.__load_extensions_and_plugins()
+            self.__load_extensions()
+            self.__load_plugins()
 
         # ----------------------------------------------------------------------
         def get_blocks(self):
@@ -115,7 +119,7 @@ class System(object):
             self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
-        def __load_xml(self, data_dir):
+        def __get_extensions_xml(self, data_dir):
             if not os.path.exists(data_dir):
                 return
             for file_name in os.listdir(data_dir):
@@ -123,7 +127,7 @@ class System(object):
 
                 # Recursion to make it more interesting...
                 if os.path.isdir(full_file_path):
-                    self.__load_xml(full_file_path)
+                    self.__get_extensions_xml(full_file_path)
 
                 if not file_name.endswith(".xml"):
                     continue
@@ -145,11 +149,12 @@ class System(object):
                     self.__blocks[block.type] = block
 
         # ----------------------------------------------------------------------
-        def __load_extensions_and_plugins(self):
+        def __load_extensions(self):
             # Load CodeTemplates, Blocks and Ports
             self.__code_templates.clear()
             self.__ports.clear()
             self.__blocks.clear()
+
             # First load ports on python classes.
             # They are installed with mosaicode as root
 
@@ -157,14 +162,15 @@ class System(object):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
                     if path is None and name.startswith("." + System.APP):
                         name = name.replace('.', '', 1)
-                    if not name.startswith(System.APP+"_lib") and not name_par.startswith(System.APP+"_lib") and not name.startswith(System.APP+"_plugin") and not name_par.startswith(System.APP+"_plugin"):
+                    if not name.startswith(System.APP + "_lib") and not name_par.startswith(System.APP + "_lib") and not name.startswith(System.APP + "_plugin") and not name_par.startswith(System.APP + "_plugin"):
                         continue
 
                     if ispkg:
                         if name_par is not "" and not name.startswith(System.APP):
                             name = name_par + "." + name
                         __import__(name)
-                        path = getattr(sys.modules[name], '__path__', None) or []
+                        path = getattr(
+                            sys.modules[name], '__path__', None) or []
                         walk_lib_packages(path, name)
                     else:
                         module = __import__(name, fromlist="dummy")
@@ -172,7 +178,7 @@ class System(object):
                             if not inspect.isclass(obj):
                                 continue
                             modname = inspect.getmodule(obj).__name__
-                            if not modname.startswith(System.APP+"_lib") and not modname.startswith(System.APP+"_plugin"):
+                            if not modname.startswith(System.APP + "_lib") and not modname.startswith(System.APP + "_plugin"):
                                 continue
                             try:
                                 instance = obj()
@@ -188,17 +194,13 @@ class System(object):
                             if isinstance(instance, CodeTemplate):
                                 self.__code_templates[instance.type] = instance
                                 continue
-                            if isinstance(instance, Plugin):
-                                if instance.label != "":
-                                    self.__plugins.append(instance)
-                                    continue
 
             walk_lib_packages(None, "")
 
             # Load XML files in application space
-            self.__load_xml(System.DATA_DIR + "extensions")
+            self.__get_extensions_xml(System.DATA_DIR + "extensions")
             # Load XML files in user space
-            self.__load_xml(System.get_user_dir() + "/extensions")
+            self.__get_extensions_xml(System.get_user_dir() + "/extensions")
 
             for key in self.__blocks:
                 try:
@@ -206,6 +208,35 @@ class System(object):
                     BlockControl.load_ports(block, self.__ports)
                 except:
                     print("Error in loading plugin " + key)
+
+        # ----------------------------------------------------------------------
+        def __load_plugins(self):
+            plugins_dir = os.path.join(os.getcwd(), System.APP, 'plugins')
+
+            for name in os.listdir(plugins_dir):
+                plugin_dir = os.path.join(plugins_dir, name)
+                if os.path.isdir(plugin_dir):
+                    module_name = 'mosaicode.plugins.' + name
+                    module = None
+
+                    try:
+                        module = getattr(__import__(module_name, fromlist=[name]), name)
+                    except:
+                        print 'Can not import: '+ module_name
+
+                    for class_name, obj in inspect.getmembers(module):
+                        if not inspect.isclass(obj):
+                            continue
+
+                        try:
+                            instance = obj()
+                        except:
+                            continue
+
+                        if isinstance(instance, Plugin) and class_name != 'Plugin':
+                            self.__plugins.append(instance)
+                            continue
+
 
     # ----------------------------------------------------------------------
     def __init__(self):
@@ -305,8 +336,7 @@ class System(object):
     @classmethod
     def get_user_dir(cls):
         home_dir = os.path.expanduser("~")
-        home_dir = home_dir + "/" + System.APP
-        return home_dir
+        return os.path.join(home_dir, System.APP)
 
     # ----------------------------------------------------------------------
     @classmethod

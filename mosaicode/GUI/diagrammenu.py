@@ -110,4 +110,3 @@ class DiagramMenu(Gtk.Menu):
 
         """
         self.diagram.collapse(True)
-
