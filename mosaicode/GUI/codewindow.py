@@ -7,8 +7,7 @@ This module contains the CodeWindow class.
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
-from gi.repository import Gtk
-from gi.repository import GtkSource
+from gi.repository import Gtk, GtkSource
 import gettext
 _ = gettext.gettext
 

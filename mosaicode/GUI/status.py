@@ -3,8 +3,8 @@
 """
 This module contains the Status class.
 """
-import gi
 import datetime
+import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -52,7 +52,7 @@ class Status(Gtk.ScrolledWindow):
     def append_text(self, text):
         """
         This method append a text in text buffer.
-        
+
             Parameters:
                 * **self** (:class:`Status<mosaicode.GUI.status>`):The class.
                 * **text** (:class:`str<str>`)

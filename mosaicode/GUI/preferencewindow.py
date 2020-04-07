@@ -151,4 +151,3 @@ class PreferenceWindow(Gtk.Dialog):
         vbox.pack_start(self.port, False, True, 0)
 
         self.network_preferences_tab.show_all()
-

@@ -4,15 +4,16 @@
 This module contains the BlockControl class.
 """
 import ast
-import os
-import inspect  # For module inspect
-import pkgutil  # For dynamic package load
 import copy
+import inspect  # For module inspect
+import os
+import pkgutil  # For dynamic package load
 from os.path import expanduser
-from mosaicode.utils.XMLUtils import XMLParser
-from mosaicode.utils.PythonUtils import PythonParser
-from mosaicode.persistence.blockpersistence import BlockPersistence
+
 from mosaicode.model.port import Port
+from mosaicode.persistence.blockpersistence import BlockPersistence
+from mosaicode.utils.PythonUtils import PythonParser
+from mosaicode.utils.XMLUtils import XMLParser
 
 
 class BlockControl():
@@ -24,6 +25,24 @@ class BlockControl():
 
     def __init__(self):
         pass
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_xml(cls):
+        from mosaicode.system import System as System
+        System()
+        blocks = System.get_blocks()
+
+        for key in blocks:
+            path = System.get_user_dir()
+            path = os.path.join(path,
+                                'extensions',
+                                blocks[key].language,
+                                'block',
+                                blocks[key].extension,
+                                blocks[key].group)
+
+            BlockPersistence.save_xml(blocks[key], path)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -90,7 +109,7 @@ class BlockControl():
         from mosaicode.system import System
         System()
         path = System.get_user_dir() + "/extensions/"
-        path = path + block.language + "/" + block.framework + "/"
+        path = path + block.language + "/" + block.extension + "/"
         BlockPersistence.save_xml(block, path)
 
     # ----------------------------------------------------------------------
@@ -114,7 +133,7 @@ class BlockControl():
 
         print 'block.type =', block.type
         print 'block.language =', block.language
-        print 'block.framework =', block.framework
+        print 'block.extension =', block.extension
         print 'block.file =', block.file
 
         # Appearance

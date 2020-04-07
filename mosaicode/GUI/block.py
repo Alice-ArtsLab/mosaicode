@@ -3,8 +3,8 @@
 """
 This module contains the Block class.
 """
-import gi
 import os
+import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GooCanvas', '2.0')
 gi.require_version('PangoCairo', '1.0')
@@ -87,7 +87,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.remember_y = event.y
 
         self.diagram.update_flows()
-        
+
         if event.button == 3:
             return False
 

@@ -1,9 +1,9 @@
 import gi
-from gi.repository import GObject
-gi.require_version('Gdk', '3.0')
-from gi.repository import Gdk
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gtk, Gdk
+from gi.repository import GObject
+
 from tests.test_base import TestBase
 from mosaicode.GUI.workarea import WorkArea
 
@@ -65,4 +65,3 @@ class TestWorkArea(TestBase):
         label = hbox.get_children()[0]
         button = hbox.get_children()[1]
         button.emit("clicked")
-

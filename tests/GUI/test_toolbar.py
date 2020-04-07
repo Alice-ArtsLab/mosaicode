@@ -1,5 +1,6 @@
 from tests.test_base import TestBase
 from mosaicode.GUI.toolbar import Toolbar
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 
 class TestToolbar(TestBase):
@@ -12,4 +13,3 @@ class TestToolbar(TestBase):
         gdkevent.key.type = Gdk.EventType.BUTTON_PRESS
         button = self.toolbar.get_children()[0]
         button.emit("button-press-event", gdkevent)
-

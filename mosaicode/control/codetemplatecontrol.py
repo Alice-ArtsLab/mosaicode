@@ -3,14 +3,16 @@
 """
 This module contains the CodeTemplateControl class.
 """
-import os
 import inspect  # For module inspect
+import os
 import pkgutil  # For dynamic package load
 from os.path import expanduser
-from mosaicode.utils.XMLUtils import XMLParser
-from mosaicode.utils.PythonUtils import PythonParser
+
 from mosaicode.model.codetemplate import CodeTemplate
-from mosaicode.persistence.codetemplatepersistence import CodeTemplatePersistence
+from mosaicode.persistence.codetemplatepersistence import \
+    CodeTemplatePersistence
+from mosaicode.utils.PythonUtils import PythonParser
+from mosaicode.utils.XMLUtils import XMLParser
 
 
 class CodeTemplateControl():
@@ -22,6 +24,20 @@ class CodeTemplateControl():
 
     def __init__(self):
         pass
+
+    # ----------------------------------------------------------------------
+    @classmethod
+    def export_xml(cls):
+        from mosaicode.system import System as System
+        System()
+        code_templates = System.get_code_templates()
+        for key in code_templates:
+            path = System.get_user_dir()
+            path = os.path.join(path,
+                                'extensions',
+                                code_templates[key].language,
+                                'codetemplates')
+            CodeTemplatePersistence.save_xml(code_templates[key], path)
 
     # ----------------------------------------------------------------------
     @classmethod

@@ -19,7 +19,7 @@ class BlockModel(object):
 
         self.type = self.__class__.__module__
         self.language = ""
-        self.framework = ""
+        self.extension = ""
         self.file = None
 
         # Appearance
