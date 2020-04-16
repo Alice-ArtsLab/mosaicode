@@ -96,13 +96,7 @@ class MainControl():
         diagram.redraw()
         diagram.set_modified(False)
 
-        if file_name in System.get_preferences().recent_files:
-            System.get_preferences().recent_files.remove(file_name)
-        System.get_preferences().recent_files.insert(0, file_name)
-        if len(System.get_preferences().recent_files) > 10:
-            System.get_preferences().recent_files.pop()
-        self.main_window.menu.update_recent_files(
-            System.get_preferences().recent_files)
+        self.set_recent_files(file_name)
 
     # ----------------------------------------------------------------------
     def close(self):
@@ -138,9 +132,11 @@ class MainControl():
         if diagram.file_name is not None:
             if len(diagram.file_name) > 0:
                 result, message = DiagramControl(diagram).save()
+                self.set_recent_files(diagram.file_name)
 
         if not result:
             Dialog().message_dialog("Error", message, self.main_window)
+
 
     # ----------------------------------------------------------------------
     def save_as(self):
@@ -199,6 +195,18 @@ class MainControl():
             Gtk.main_quit()
         else:
             return True
+    # ----------------------------------------------------------------------
+    def set_recent_files(self, file_name):
+        if file_name in System.get_preferences().recent_files:
+            System.get_preferences().recent_files.remove(file_name)
+        System.get_preferences().recent_files.insert(0, file_name)
+        if len(System.get_preferences().recent_files) > 10:
+            System.get_preferences().recent_files.pop()
+        self.main_window.menu.update_recent_files(
+            System.get_preferences().recent_files)
+
+        PreferencesPersistence.save(
+            System.get_preferences(), System.get_user_dir())
 
     # ----------------------------------------------------------------------
 
