@@ -81,6 +81,7 @@ class PreferencesPersistence:
         parser.setTagAttr(tag_name,'vpaned_left', prefs.vpaned_left)
 
         parser.appendToTag(tag_name, 'recent_files')
+
         for key in prefs.recent_files:
             parser.appendToTag('recent_files', 'name', value=key)
 

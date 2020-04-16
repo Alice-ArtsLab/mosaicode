@@ -1,5 +1,6 @@
 from tests.test_base import TestBase
 from mosaicode.GUI.toolbar import Toolbar
+import gi
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gdk
 

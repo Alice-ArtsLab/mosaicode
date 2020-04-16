@@ -117,6 +117,7 @@ class MainWindow(Gtk.Window):
 
         self.connect("key-press-event", self.__on_key_press)
         self.connect("check-resize", self.__resize)
+        self.connect("delete-event", self.main_control.exit)
 
         self.main_control.init()
 
