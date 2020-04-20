@@ -20,8 +20,10 @@ class TestDiagram(TestBase):
         event.key.type = Gdk.EventType.KEY_PRESS
         event.state = Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK
         event.keyval = Gdk.KEY_a
-        self.diagram.emit("key-press-event", event)
         self.diagram.emit("check-resize")
         self.diagram.emit("delete_event", event)
+        self.diagram.emit("motion-notify-event", event)
+        self.diagram.emit("button_press_event", event)
+        self.diagram.emit("button_release_event", event)
         self.diagram.emit("key-press-event", event)
-
+#        self.diagram.emit("drag_data_received", event)

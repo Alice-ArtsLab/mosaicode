@@ -1,11 +1,14 @@
+import gi
+gi.require_version('Gdk', '3.0')
+gi.require_version('GooCanvas', '2.0')
+from gi.repository import GooCanvas
+from gi.repository import Gdk
+
 from tests.mosaicode_tests.test_base import TestBase
 from mosaicode.GUI.connector import Connector
 from mosaicode.GUI.block import Block
 from mosaicode.model.port import Port
-import gi
-gi.require_version('Gdk', '3.0')
-from gi.repository import GooCanvas
-from gi.repository import Gdk
+from mosaicode.system import System
 
 class TestConnector(TestBase):
 
@@ -29,6 +32,11 @@ class TestConnector(TestBase):
         self.connector.input = Block(self.create_diagram(), self.create_block())
         self.connector.input.move(100,100)
         self.connector.input_port = Port()
+        System.get_preferences().connection = "Curve"
+        self.connector.update_flow()
+        System.get_preferences().connection = "Line"
+        self.connector.update_flow()
+        System.get_preferences().connection = "Square"
         self.connector.update_flow()
 
     def test_events(self):

@@ -21,7 +21,7 @@ class FloatField(Field):
         "lower": -9223372036854775806,
         "upper": 9223372036854775807,
         "step": 0.01,
-        "page_inc": 0.1,
+        "page_increment": 0.1,
         "page_size": 0.1,
         "digits": 2
     }
@@ -46,11 +46,11 @@ class FloatField(Field):
             pass
 
         adjustment = Gtk.Adjustment(value=value,
-                                    lower=float(self.data["lower"]),
-                                    upper=float(self.data["upper"]),
-                                    step_incr=float(self.data["step"]),
-                                    page_incr=float(self.data["page_inc"]),
-                                    page_size=float(self.data["page_size"]))
+                            lower=float(self.data["lower"]),
+                            upper=float(self.data["upper"]),
+                            step_increment=float(self.data["step"]),
+                            page_increment=float(self.data["page_increment"]),
+                            page_size=float(self.data["page_size"]))
 
         self.field = Gtk.SpinButton.new(adjustment,
                                     float(self.data["step"]),
