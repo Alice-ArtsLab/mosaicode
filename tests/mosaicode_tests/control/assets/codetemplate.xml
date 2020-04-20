@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MosaicodeCodeTemplate command="python -m webbrowser -t $dir_name$index.html " description="Javascript / webaudio code template" language="javascript" name="webaudio" type="mosaicode_lib_javascript_webaudio.extensions.html">
+ <code_parts>
+  <code_part value="onload"/>
+  <code_part value="function"/>
+  <code_part value="declaration"/>
+  <code_part value="execution"/>
+  <code_part value="html"/>
+ </code_parts>
+</MosaicodeCodeTemplate>

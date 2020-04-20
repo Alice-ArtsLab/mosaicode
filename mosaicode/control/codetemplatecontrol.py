@@ -70,12 +70,38 @@ class CodeTemplateControl():
         """
         This method prints the CodeTemplate properties.
         """
-        print 'CodeTemplate.type =', code_template.type
-        print 'CodeTemplate.name =', code_template.name
-        print 'CodeTemplate.description =', code_template.description
-        print 'CodeTemplate.language =', code_template.language
-        print 'CodeTemplate.command =', code_template.command
-        print 'CodeTemplate.extension =', code_template.extension
-        print 'CodeTemplate.file =', code_template.file
-        print 'CodeTemplate.properties =', code_template.properties
+        separator = '-------------------------------------------------'
+
+        print separator
+        print 'CodeTemplate.type: ', code_template.type
+
+        print separator
+        print 'CodeTemplate.name: ', code_template.name
+
+        print separator
+        print 'CodeTemplate.file: ', code_template.file
+
+        print separator
+        print 'CodeTemplate.description: ', code_template.description
+
+        print separator
+        print 'CodeTemplate.language: ', code_template.language
+
+        print separator
+        print 'CodeTemplate.command: ', code_template.command
+
+        print separator
+        print 'CodeTemplate.files:\n'
+        for file in code_template.files:
+            print '\n', file
+
+        print separator
+        print 'CodeTemplate.code_parts:\n'
+        for code_part in code_template.code_parts:
+            print '\n', code_part
+
+        print separator
+        print 'CodeTemplate.properties:\n'
+        for property in code_template.properties:
+            print '\n', property
 # ----------------------------------------------------------------------
