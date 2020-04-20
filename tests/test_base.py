@@ -51,11 +51,10 @@ class TestBase(unittest.TestCase):
 
         BlockControl.load_ports(block, System.get_ports())
 
-        DiagramControl.add_block(diagram_control.diagram, block)
+        diagram_control.add_block(block)
         return block
 
     def create_comment(self):
         comment = Comment(self.create_diagram())
         comment.text = "Test"
         return comment
-

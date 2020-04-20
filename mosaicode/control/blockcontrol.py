@@ -96,11 +96,14 @@ class BlockControl():
             * **Types** (:class:`boolean<boolean>`)
         """
         file_name = file_name.replace(" ", "\\ ")
-        try:
-            return BlockPersistence.load_xml(file_name)
-        except:
+
+        block = BlockPersistence.load_xml(file_name)
+
+        if block is None:
             from mosaicode.system import System
             System.log("Block " + file_name + " could not load")
+
+        return block
     # ----------------------------------------------------------------------
 
     @classmethod
