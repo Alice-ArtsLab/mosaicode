@@ -17,17 +17,7 @@ class TestWorkArea(TestBase):
         self.workarea.add_diagram(self.create_diagram())
 
     def close_window(self):
-        self.workarea.dialog.response(Gtk.ResponseType.CANCEL)
-        self.workarea.dialog.destroy()
-
-    def test_close_tab(self):
-        GLib.timeout_add(100, self.close_window)
-        self.workarea.close_tab()
-        self.workarea.close_tab(0)
-        diagram = self.create_diagram()
-        diagram.set_modified(True)
-        self.workarea.add_diagram(diagram)
-        self.workarea.close_tab(0)
+        self.workarea.destroy()
 
     def test_rename_diagram(self):
         diagram = self.create_diagram()
@@ -47,7 +37,8 @@ class TestWorkArea(TestBase):
         diagram = self.create_diagram()
         self.workarea.add_diagram(diagram)
         diagram.set_modified(True)
-        self.workarea.close_tabs()
+#        GLib.timeout_add(100, self.close_window)
+#        self.workarea.close_tabs()
 
     def test_get_current_diagram(self):
         self.workarea.add_diagram(self.create_diagram())
