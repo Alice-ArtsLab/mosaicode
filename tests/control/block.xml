@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MosaicodeBlock color="50:150:50:150" extension="" group="Sound" help="" label="Filter" language="javascript" type="mosaicode_lib_javascript_webaudio.extensions.blocks.filter">
+ <declaration value="
+
+// block_$id$ = $label$
+var block_$id$ = context.createBiquadFilter();
+var $port[osc_freq]$ = block_$id$.frequency;
+block_$id$.type = '$prop[type]$';
+block_$id$.frequency.value = '$prop[freq]$';
+block_$id$.gain.value = $prop[gain]$;
+block_$id$.Q.value = $prop[Q]$;
+
+var $port[freq]$ = function(value){
+    block_$id$.frequency.value = parseFloat(value);
+    return true;
+    };
+
+var $port[q]$ = function(value){
+    block_$id$.Q.value = parseFloat(value);
+    return true;
+    };
+
+var $port[gain]$ = function(value){
+    block_$id$.gain.value = parseFloat(value);
+    return true;
+    };
+
+var $port[sound_input]$ = block_$id$;
+var $port[output]$ = block_$id$;
+"/>
+ <properties>
+  <property value="{'values': ['allpass', 'bandpass', 'highshelf', 'highpass', 'lowpass', 'lowshelf', 'notch', 'peaking'], 'type': 'Combo', 'name': 'type', 'value': 'highpass', 'label': 'Type'}"/>
+  <property value="{'upper': 48000, 'lower': 0, 'name': 'freq', 'value': 200, 'label': 'Frequency', 'step': 1, 'type': 'Float'}"/>
+  <property value="{'upper': 100, 'lower': 0, 'name': 'gain', 'value': 1, 'label': 'Gain', 'step': 0.1, 'type': 'Float'}"/>
+  <property value="{'upper': 48000, 'lower': 0, 'name': 'Q', 'value': 200, 'label': 'Q', 'step': 1, 'type': 'Float'}"/>
+ </properties>
+ <ports>
+  <port conn_type="input" label="Sound" name_="sound_input" type_="mosaicode_lib_javascript_webaudio.extensions.ports.sound"/>
+  <port conn_type="input" label="Frequency" name_="osc_freq" type_="mosaicode_lib_javascript_webaudio.extensions.ports.sound"/>
+  <port conn_type="input" label="Frequency" name_="freq" type_="mosaicode_lib_javascript_webaudio.extensions.ports.float"/>
+  <port conn_type="input" label="Gain" name_="gain" type_="mosaicode_lib_javascript_webaudio.extensions.ports.float"/>
+  <port conn_type="input" label="Q" name_="q" type_="mosaicode_lib_javascript_webaudio.extensions.ports.float"/>
+  <port conn_type="output" label="Sound" name_="output" type_="mosaicode_lib_javascript_webaudio.extensions.ports.sound"/>
+ </ports>
+</MosaicodeBlock>
