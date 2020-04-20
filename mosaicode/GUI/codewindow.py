@@ -24,11 +24,12 @@ class CodeWindow(Gtk.Dialog):
         """
         This method is the constructor.
         """
-        Gtk.Dialog.__init__(self, "Code Window", main_window,
-                            Gtk.DialogFlags.DESTROY_WITH_PARENT |
-                            Gtk.DialogFlags.MODAL,
-                            (Gtk.STOCK_OK, Gtk.ResponseType.OK))
-
+        Gtk.Dialog.__init__(self,
+                        title="Code Window",
+                        transient_for=main_window,
+                        modal=True,
+                        destroy_with_parent=True)
+        self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         self.codes = codes
         self.main_window = main_window
         self.set_default_size(800, 600)
@@ -43,16 +44,17 @@ class CodeWindow(Gtk.Dialog):
         vbox.pack_start(toolbar, False, False, 0)
 
 
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_SAVE_AS)
+        icon_size = Gtk.IconSize.LARGE_TOOLBAR
+        icon = Gtk.Image.new_from_icon_name(Gtk.STOCK_SAVE_AS, icon_size)
+        button = Gtk.ToolButton.new(icon, _("Save Source"))
         button.set_expand(False)
-        button.set_label(_("Save Source"))
         button.set_is_important(True)
         button.connect("clicked", self.__save_button_clicked, None)
         toolbar.add(button)
 
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_EXECUTE)
+        icon = Gtk.Image.new_from_icon_name(Gtk.STOCK_EXECUTE, icon_size)
+        button = Gtk.ToolButton.new(icon, _("Run this code"))
         button.set_expand(False)
-        button.set_label(_("Run this code"))
         button.set_is_important(True)
         button.connect("clicked", self.__run_button_clicked, None)
         toolbar.add(button)
@@ -79,7 +81,7 @@ class CodeWindow(Gtk.Dialog):
             sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
             sw.add(textview)
             textview.show()
-            self.notebook.append_page(sw, Gtk.Label(key))
+            self.notebook.append_page(sw, Gtk.Label(label=key))
         self.show_all()
 
     # ----------------------------------------------------------------------

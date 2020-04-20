@@ -34,7 +34,8 @@ class Dialog:
             Returns:
                 * **Types** (:class:`str<str>`)
         """
-        self.dialog = Gtk.FileChooserDialog(title=title,
+        self.dialog = Gtk.FileChooserDialog(
+                            title=title,
                             transient_for=main_window,
                             action=Gtk.FileChooserAction.OPEN)
         self.dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
@@ -77,7 +78,8 @@ class Dialog:
             Returns:
                 * **Types** (:class:`str<str>`)
         """
-        self.dialog = Gtk.FileChooserDialog(title=title,
+        self.dialog = Gtk.FileChooserDialog(
+                        title=title,
                         transient_for=main_window,
                         action=Gtk.FileChooserAction.SAVE)
         self.dialog.add_buttons(Gtk.STOCK_CANCEL,Gtk.ResponseType.CANCEL)
@@ -143,7 +145,8 @@ class Dialog:
                 * **message** (:class:`str<str>`)
                 * **main_window** (:class:`MainWindow<mosaicode.GUI.mainwindow>`)
         """
-        self.dialog = Gtk.MessageDialog(transient_for=main_window,
+        self.dialog = Gtk.MessageDialog(
+                                    transient_for=main_window,
                                     message_type=Gtk.MessageType.INFO,
                                     text=title)
         self.dialog.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
@@ -162,9 +165,11 @@ class Dialog:
             Returns:
                * **Types:** (:class:`dialog<GTK.MessageDialog>`)
         """
-        self.dialog = Gtk.MessageDialog(transient_for=main_window,
+        self.dialog = Gtk.MessageDialog(
+                            transient_for=main_window,
                             message_type=Gtk.MessageType.INFO,
-                            text="")
+                            text="",
+                            destroy_with_parent=True)
         self.dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         self.dialog.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         self.dialog.format_secondary_text(message)
