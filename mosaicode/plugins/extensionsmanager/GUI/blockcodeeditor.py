@@ -171,9 +171,7 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
         name = model.get_value(model.get_iter(path), 0)
 
-        dialog = Dialog().confirm_dialog(_("Are you sure?"), self)
-        result = dialog.run()
-        dialog.destroy()
+        result = Dialog().confirm_dialog(_("Are you sure?"), self)
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)

@@ -24,11 +24,11 @@ class BlockMenu(Gtk.Menu):
         """
         Gtk.Menu.__init__(self)
         self.block = None
-        menu_item = Gtk.MenuItem("Delete")
+        menu_item = Gtk.MenuItem.new_with_label("Delete")
         menu_item.connect("activate", self.__delete_clicked)
         self.append(menu_item)
 
-        menu_item = Gtk.MenuItem("Collapse")
+        menu_item = Gtk.MenuItem.new_with_label("Collapse")
         menu_item.connect("activate", self.__collapse_clicked)
         self.append(menu_item)
 

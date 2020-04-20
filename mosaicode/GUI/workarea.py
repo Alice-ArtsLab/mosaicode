@@ -64,13 +64,11 @@ class WorkArea(Gtk.Notebook):
             return False
 
         if diagram.modified:
-            self.dialog = Dialog().confirm_dialog(_("Diagram ") +
-                                             diagram.file_name +
-                                             _("is not saved.\nIf you close it"
-                                               ", changes will be lost.\n"
-                                               "Confirm?"), self.main_window)
-            result = self.dialog.run()
-            self.dialog.destroy()
+            result = Dialog().confirm_dialog(_("Diagram ") +
+                                       diagram.file_name +
+                                       _("is not saved.\nIf you close it"
+                                       ", changes will be lost.\n"
+                                       "Confirm?"), self.main_window)
             if result == Gtk.ResponseType.CANCEL:
                 return False
 
@@ -89,11 +87,11 @@ class WorkArea(Gtk.Notebook):
         """
         box = Gtk.HBox()
         button = Gtk.Button()
-        image = Gtk.Image().new_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
+        image = Gtk.Image().new_from_icon_name(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
         button.set_image(image)
         button.set_relief(Gtk.ReliefStyle.NONE)
         button.connect('clicked', self.__on_close_button_clicked, frame)
-        label = Gtk.Label(text)
+        label = Gtk.Label.new(text)
         box.add(label)
         box.add(button)
         box.show_all()

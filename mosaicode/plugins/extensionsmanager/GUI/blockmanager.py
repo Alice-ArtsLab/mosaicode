@@ -75,9 +75,7 @@ class BlockManager(Gtk.Dialog):
         block = self.block_notebook.get_selected_block()
         if block is None:
             return
-        dialog = Dialog().confirm_dialog(_("Are you sure?"), self)
-        result = dialog.run()
-        dialog.destroy()
+        result = Dialog().confirm_dialog(_("Are you sure?"), self)
         if result == Gtk.ResponseType.OK:
             self.main_window.main_control.delete_block(block)
             self.update()

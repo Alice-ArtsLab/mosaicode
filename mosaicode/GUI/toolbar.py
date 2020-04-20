@@ -75,10 +75,12 @@ class Toolbar(Gtk.Toolbar):
             Returns:
 
         """
+        icon_size = Gtk.IconSize.LARGE_TOOLBAR
+        icon = Gtk.Image.new_from_icon_name(stock, icon_size)
         if menu is None:
-            button = Gtk.ToolButton.new_from_stock(stock)
+            button = Gtk.ToolButton.new(icon, name)
         else:
-            button = Gtk.MenuToolButton.new_from_stock(stock)
+            button = Gtk.MenuToolButton.new(icon, name)
             button.set_menu(menu)
         button.set_expand(False)
         button.set_label(name)

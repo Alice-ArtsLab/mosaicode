@@ -28,25 +28,25 @@ class DiagramMenu(Gtk.Menu):
         self.x = 0
         self.y = 0
 
-        menu_item = Gtk.MenuItem("Clear Code Template")
+        menu_item = Gtk.MenuItem.new_with_label("Clear Code Template")
         menu_item.connect("activate", self.__clear_code_template)
         self.append(menu_item)
 
-        menu_item = Gtk.MenuItem("Insert comment")
+        menu_item = Gtk.MenuItem.new_with_label("Insert comment")
         menu_item.connect("activate", self.__insert_comment)
         self.append(menu_item)
 
         self.append(Gtk.SeparatorMenuItem())
 
-        menu_item = Gtk.MenuItem("Delete")
+        menu_item = Gtk.MenuItem.new_with_label("Delete")
         menu_item.connect("activate", self.__delete)
         self.append(menu_item)
 
-        menu_item = Gtk.MenuItem("Collapse")
+        menu_item = Gtk.MenuItem.new_with_label("Collapse")
         menu_item.connect("activate", self.__collapse_clicked)
         self.append(menu_item)
 
-        menu_item = Gtk.MenuItem("Uncollapse")
+        menu_item = Gtk.MenuItem.new_with_label("Uncollapse")
         menu_item.connect("activate", self.__uncollapse_clicked)
         self.append(menu_item)
 

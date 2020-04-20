@@ -23,23 +23,20 @@ class PropertyBox(Gtk.VBox):
     # ----------------------------------------------------------------------
 
     def __init__(self, main_window):
-        Gtk.VBox.__init__(self, True)
+        Gtk.VBox.__init__(self, homogeneous=True, spacing=0)
 
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_shadow_type(Gtk.ShadowType.ETCHED_IN)
         self.add(scrolled_window)
 
-        self.vbox = Gtk.VBox(self, True)
+        self.vbox = Gtk.VBox(homogeneous=False, spacing=0)
         scrolled_window.add(self.vbox)
         self.main_window = main_window
         self.block = None
         self.comment = None
         self.diagram = None
         self.properties = {}
-        self.vbox.set_homogeneous(False)
         self.vbox.set_property("border-width", 0)
-        white = Gdk.RGBA(1, 1, 1, 1)
-        self.override_background_color(Gtk.StateType.NORMAL, white)
         self.show_all()
 
 # ----------------------------------------------------------------------

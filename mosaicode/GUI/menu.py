@@ -145,7 +145,7 @@ class Menu(Gtk.MenuBar):
                 Return menu.
 
         """
-        item = Gtk.MenuItem(name)
+        item = Gtk.MenuItem.new_with_label(name)
         if accel is not None:
             key, mod = Gtk.accelerator_parse(accel)
             item.add_accelerator(
@@ -158,7 +158,7 @@ class Menu(Gtk.MenuBar):
 
     # ----------------------------------------------------------------------
     def __create_check_menu(self, name, accel, menu, action):
-        item = Gtk.CheckMenuItem(name)
+        item = Gtk.CheckMenuItem.new_with_label(name)
         if accel is not None:
             key, mod = Gtk.accelerator_parse(accel)
             item.add_accelerator(
@@ -178,7 +178,7 @@ class Menu(Gtk.MenuBar):
                 * **name** (:class:`str<str>`):
                 * **submenu** (:class:`str<str>`):
         """
-        menu_item = Gtk.MenuItem(name)
+        menu_item = Gtk.MenuItem.new_with_label(name)
         menu_item.set_submenu(submenu)
         self.append(menu_item)
 
@@ -230,7 +230,7 @@ class Menu(Gtk.MenuBar):
             language_menu_item = self.__get_child_by_name(
                 self.block_menu, block.language)
             if language_menu_item is None:
-                language_menu_item = Gtk.MenuItem(block.language)
+                language_menu_item = Gtk.MenuItem.new_with_label(block.language)
                 language_menu_item.set_name(block.language)
                 self.block_menu.append(language_menu_item)
                 language_menu = Gtk.Menu()
@@ -241,7 +241,7 @@ class Menu(Gtk.MenuBar):
             extension_menu_item = self.__get_child_by_name(
                 language_menu, block.extension)
             if extension_menu_item is None:
-                extension_menu_item = Gtk.MenuItem(block.extension)
+                extension_menu_item = Gtk.MenuItem.new_with_label(block.extension)
                 extension_menu_item.set_name(block.extension)
                 language_menu.append(extension_menu_item)
                 extension_menu = Gtk.Menu()
@@ -252,7 +252,7 @@ class Menu(Gtk.MenuBar):
             group_menu_item = self.__get_child_by_name(
                 extension_menu, block.group)
             if group_menu_item is None:
-                group_menu_item = Gtk.MenuItem(block.group)
+                group_menu_item = Gtk.MenuItem.new_with_label(block.group)
                 group_menu_item.set_name(block.group)
                 extension_menu.append(group_menu_item)
                 group_menu = Gtk.Menu()
@@ -260,7 +260,7 @@ class Menu(Gtk.MenuBar):
             else:
                 group_menu = group_menu_item.get_submenu()
 
-            menu_item = Gtk.MenuItem(block.type)
+            menu_item = Gtk.MenuItem.new_with_label(block.type)
             group_menu.append(menu_item)
             menu_item.connect("activate", self.__add_block, block)
 
@@ -287,15 +287,19 @@ class Menu(Gtk.MenuBar):
         submenu = None
         for example in list_of_examples:
             directory_list = example.split("/")
-            name = directory_list.pop()
-            extension = directory_list.pop()
-            language = directory_list.pop()
+            name = ""
+            extension = ""
+            language = ""
+            if len(directory_list) >= 3:
+                name = directory_list.pop()
+                extension = directory_list.pop()
+                language = directory_list.pop()
 
             # first, the language submenu
             language_menu_item = self.__get_child_by_name(
                 self.example_menu, language)
             if language_menu_item is None:
-                language_menu_item = Gtk.MenuItem(language)
+                language_menu_item = Gtk.MenuItem.new_with_label(language)
                 language_menu_item.set_name(language)
                 self.example_menu.append(language_menu_item)
                 language_menu = Gtk.Menu()
@@ -306,7 +310,7 @@ class Menu(Gtk.MenuBar):
             extension_menu_item = self.__get_child_by_name(
                 language_menu, extension)
             if extension_menu_item is None:
-                extension_menu_item = Gtk.MenuItem(extension)
+                extension_menu_item = Gtk.MenuItem.new_with_label(extension)
                 extension_menu_item.set_name(extension)
                 language_menu.append(extension_menu_item)
                 extension_menu = Gtk.Menu()
@@ -314,7 +318,7 @@ class Menu(Gtk.MenuBar):
             else:
                 extension_menu = extension_menu_item.get_submenu()
 
-            menu_item = Gtk.MenuItem(name)
+            menu_item = Gtk.MenuItem.new_with_label(name)
             extension_menu.append(menu_item)
             menu_item.connect("activate", self.__load_example, example)
 
@@ -343,12 +347,12 @@ class Menu(Gtk.MenuBar):
 
         for index, recent_file in enumerate(list_of_recent_files):
             item_name = str(index)+': '+recent_file
-            menu_item = Gtk.MenuItem(item_name)
+            menu_item = Gtk.MenuItem.new_with_label(item_name)
             self.recent_files_menu.append(menu_item)
             menu_item.connect("activate", self.__load_recent, None)
 
         if not list_of_recent_files:
-            menu_item = Gtk.MenuItem(_("<empty>"))
+            menu_item = Gtk.MenuItem.new_with_label(_("<empty>"))
             self.recent_files_menu.append(menu_item)
 
         self.recent_files_menu.show_all()

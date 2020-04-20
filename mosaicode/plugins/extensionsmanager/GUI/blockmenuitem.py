@@ -21,7 +21,7 @@ class BlockMenuItem(Gtk.MenuItem):
 
     def __init__(self, main_window):
         """Constructor."""
-        Gtk.MenuItem.__init__(self, "Edit Block")
+        Gtk.MenuItem.__init__(self, label="Edit Block")
         self.main_window = main_window
         self.connect("activate", self.__edit_clicked)
 

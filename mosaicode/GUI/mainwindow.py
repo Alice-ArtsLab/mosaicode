@@ -89,7 +89,7 @@ class MainWindow(Gtk.Window):
         # -----------------------------------------------------
         # | vbox_left      ||   work_area
         # -----------------------------------------------------
-        vbox_left = Gtk.VBox(False, 0)
+        vbox_left = Gtk.VBox(homogeneous=False, spacing=0)
         self.hpaned_work_area.add1(vbox_left)
         self.hpaned_work_area.add2(self.work_area)
 
@@ -124,11 +124,12 @@ class MainWindow(Gtk.Window):
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
         if event.state == \
-                Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK:
-            if event.keyval == Gdk.KEY_a:
-                self.main_control.select_all()
-                return True
-        return False
+                Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK \
+                and event.keyval == Gdk.KEY_a:
+            self.main_control.select_all()
+            return True
+        else:
+            return False
 
     # ----------------------------------------------------------------------
     def __create_frame(self, widget):

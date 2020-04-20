@@ -22,8 +22,10 @@ class SelectCodeTemplate(Gtk.Dialog):
         """
         This method is the constructor.
         """
-        Gtk.Dialog.__init__(self, _("Select Code Template"), main_window,
-                            0, (Gtk.STOCK_OK, Gtk.ResponseType.OK))
+        Gtk.Dialog.__init__(self,
+                    title=_("Select Code Template"),
+                    transient_for=main_window)
+        self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
 
         self.template_list = template_list
 
@@ -41,6 +43,8 @@ class SelectCodeTemplate(Gtk.Dialog):
         self.show_all()
         response = self.run()
         index = self.field.field.get_active()
+        if index == -1:
+            return None
         template = self.template_list[index]
         self.close()
         self.destroy()

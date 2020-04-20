@@ -24,10 +24,11 @@ class PreferenceWindow(Gtk.Dialog):
         """
         This method is the constructor.
         """
-        Gtk.Dialog.__init__(self, _("Preferences"), main_window,
-                            0, (Gtk.STOCK_CANCEL,
-                                Gtk.ResponseType.CANCEL,
-                                Gtk.STOCK_OK, Gtk.ResponseType.OK))
+        Gtk.Dialog.__init__(self,
+                    title=_("Preferences"),
+                    transient_for=main_window)
+        self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
 
         self.main_window = main_window
         self.properties = System.get_preferences()
@@ -41,28 +42,32 @@ class PreferenceWindow(Gtk.Dialog):
         # ----------------------------------------------------------------------
         self.user_preferences_tab = Gtk.Box()
         self.user_preferences_tab.set_border_width(10)
-        self.tabs.append_page(self.user_preferences_tab, Gtk.Label(_("User Preferences")))
+        label = Gtk.Label(label=_("User Preferences"))
+        self.tabs.append_page(self.user_preferences_tab, label)
         self.__create_user_preferences_tab()
 
         # Default directory
         # ----------------------------------------------------------------------
         self.default_directory_tab = Gtk.Box()
         self.default_directory_tab.set_border_width(10)
-        self.tabs.append_page(self.default_directory_tab, Gtk.Label(_("Default Directory")))
+        label = Gtk.Label(label=_("Default Directory"))
+        self.tabs.append_page(self.default_directory_tab, label)
         self.__create_default_directory_tab()
 
         # Grid Preferences
         # ----------------------------------------------------------------------
         self.grid_preferences_tab = Gtk.Box()
         self.grid_preferences_tab.set_border_width(10)
-        self.tabs.append_page(self.grid_preferences_tab, Gtk.Label(_("Grid Preferences")))
+        label = Gtk.Label(label=_("Grid Preferences"))
+        self.tabs.append_page(self.grid_preferences_tab, label)
         self.__create_grid_preferences_tab()
 
         # Network Preferences
         # ----------------------------------------------------------------------
         self.network_preferences_tab = Gtk.Box()
         self.network_preferences_tab.set_border_width(10)
-        self.tabs.append_page(self.network_preferences_tab, Gtk.Label(_("Network Preferences")))
+        label = Gtk.Label(label=_("Network Preferences"))
+        self.tabs.append_page(self.network_preferences_tab, label)
         self.__create_network_preferences_tab()
 
         self.show_all()
@@ -118,7 +123,7 @@ class PreferenceWindow(Gtk.Dialog):
         self.default_filename = StringField(data, None)
         vbox.pack_start(self.default_filename, False, True, 0)
 
-        vbox.pack_start(Gtk.Label(_("\nName Wildcards:\n" +
+        vbox.pack_start(Gtk.Label(label=_("\nName Wildcards:\n" +
                              "\t%d = Date | %n = diagram name |"
                              " %t = time value | %l = language\n")),
                              False, True, 0)

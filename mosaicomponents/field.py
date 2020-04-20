@@ -20,9 +20,9 @@ class Field(Gtk.VBox):
         """
         This method is the constructor.
         """
-        Gtk.VBox.__init__(self, False)
-        self.set_margin_right(5)
-        self.set_margin_left(5)
+        Gtk.VBox.__init__(self, homogeneous=False)
+        self.set_margin_start(5)
+        self.set_margin_end(5)
         self.set_margin_top(3)
         self.data = data
 

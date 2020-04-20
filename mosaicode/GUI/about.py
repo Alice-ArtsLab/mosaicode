@@ -50,7 +50,7 @@ class About(Gtk.Window):
         # --------------------------------------------------------------------#
         # -------------------------------About Text---------------------------#
 
-        labelAbout = Gtk.Label(_('Mosaicode Project intends to build a ' +
+        labelAbout = Gtk.Label.new(_('Mosaicode Project intends to build a ' +
                                  'graphical environment for learning,\n' +
                                  'implementing and management of machine ' +
                                  'vision systems.\n\nThe system is ' +
@@ -71,7 +71,7 @@ class About(Gtk.Window):
         # --------------------------------------------------------------------#
         # ----------------------------License Text----------------------------#
 
-        labelLicense = Gtk.Label(_('Mosaicode\n' +
+        labelLicense = Gtk.Label.new(_('Mosaicode\n' +
                                    'Copyright (C) 2018\n\n' +
                                    'This program is free software: you can ' +
                                    ' redistribute it and/or modify\n' +
@@ -101,13 +101,13 @@ class About(Gtk.Window):
 
         # --------------------------------------------------------------------#
         # -----------------------------Development part-----------------------#
-        labelDevelopment = Gtk.Label(_("Development"))
+        labelDevelopment = Gtk.Label.new(_("Development"))
         labelDevelopment.set_markup(_("<b>Development</b>"))
 
         imageDevelopment = Gtk.Image()
         imageDevelopment.set_from_file(self.data_dir + "images/mosaicode64x64.ico")
 
-        labelDevelopmentText = Gtk.Label(_('Departamento ' +
+        labelDevelopmentText = Gtk.Label.new(_('Departamento ' +
                                            'de Ciência da Computação\n' +
                                            'Universidade Federal ' +
                                            'de São João del Rei\n\n' +
@@ -156,7 +156,7 @@ class About(Gtk.Window):
                                  Gtk.PositionType.BOTTOM, 1, 2)
         gridFrame.attach_next_to(hbox, x, Gtk.PositionType.BOTTOM, 1, 2)
 
-        labelFinal = Gtk.Label(_('Any bugs or sugestions ' +
+        labelFinal = Gtk.Label.new(_('Any bugs or sugestions ' +
                                  'should be directed to\n' +
                                  'http://mosaicode.github.io/\n'))
 
@@ -181,17 +181,17 @@ class About(Gtk.Window):
         notebook.page1 = Gtk.Frame()
         notebook.page1.set_border_width(10)
         notebook.page1.add(aboutBox)
-        notebook.append_page(notebook.page1, Gtk.Label(_('About')))
+        notebook.append_page(notebook.page1, Gtk.Label.new(_('About')))
 
         notebook.page2 = Gtk.ScrolledWindow()
         notebook.page2.set_min_content_width(635)
         notebook.page2.add(gridTeste)
-        notebook.append_page(notebook.page2, Gtk.Label(_('Developers')))
+        notebook.append_page(notebook.page2, Gtk.Label.new(_('Developers')))
 
         notebook.page3 = Gtk.ScrolledWindow()
         notebook.page3.set_min_content_width(635)
         notebook.page3.add(frameLicense)
-        notebook.append_page(notebook.page3, Gtk.Label(_('License')))
+        notebook.append_page(notebook.page3, Gtk.Label.new(_('License')))
 
         grid.attach_next_to(
             notebook, frameBorder, Gtk.PositionType.BOTTOM, 1, 2)

@@ -21,7 +21,7 @@ class IntField(Field):
         "lower": 0,
         "upper": 9223372036854775807,
         "step": 1,
-        "page_inc": 10,
+        "page_increment": 10,
         "page_size": 10
     }
 
@@ -38,11 +38,11 @@ class IntField(Field):
         self.create_label()
 
         adjustment = Gtk.Adjustment(value=float(self.data["value"]),
-                                    lower=int(self.data["lower"]),
-                                    upper=int(self.data["upper"]),
-                                    step_incr=int(self.data["step"]),
-                                    page_incr=int(self.data["page_inc"]),
-                                    page_size=int(self.data["page_size"]))
+                                lower=int(self.data["lower"]),
+                                upper=int(self.data["upper"]),
+                                step_increment=int(self.data["step"]),
+                                page_increment=int(self.data["page_increment"]),
+                                page_size=int(self.data["page_size"]))
         self.field = Gtk.SpinButton()
         self.field.set_property("margin-left", 20)
         self.field.set_adjustment(adjustment)

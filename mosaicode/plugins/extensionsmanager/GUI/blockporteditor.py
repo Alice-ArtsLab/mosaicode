@@ -88,10 +88,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
-        dialog = Dialog().confirm_dialog(_("Are you sure?"),
-                self.block_editor)
-        result = dialog.run()
-        dialog.destroy()
+        result = Dialog().confirm_dialog(_("Are you sure?"), self.block_editor)
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)
