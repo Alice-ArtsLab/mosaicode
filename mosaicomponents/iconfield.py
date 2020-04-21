@@ -62,7 +62,7 @@ class IconField(Field):
 
     # ------------------------------------------------------------------------------
     def get_value(self):
-        value = self.field.get_active_text()
+        value = self.field.get_active()
         if value is not None:
             self.value = value
         return self.value

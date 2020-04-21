@@ -40,7 +40,7 @@ class SaveFileField(Field):
         box.pack_start(self.field, True, True, 0)
 
         button = Gtk.Button.new_from_icon_name("gtk-file", Gtk.IconSize.BUTTON)
-        button.connect("clicked", self.on_choose_file)
+        button.connect("clicked", self.__on_choose_file)
         box.pack_start(button, False, False, 0)
         self.add(box)
         self.show_all()
@@ -50,7 +50,7 @@ class SaveFileField(Field):
         self.parent_window = widget
 
     # --------------------------------------------------------------------------
-    def on_choose_file(self, widget):
+    def __on_choose_file(self, widget):
         dialog = Gtk.FileChooserDialog("Salvar...",
                                        self.parent_window,
                                        Gtk.FileChooserAction.SAVE,
