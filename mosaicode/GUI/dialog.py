@@ -20,7 +20,7 @@ class Dialog:
         """
         This method is the constuctor.
         """
-        self.dialog = Gtk.Dialog.new()
+        self.dialog = Gtk.Dialog()
 
     # ----------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ class Dialog:
             filefilter.add_pattern("*." +  filetype)
             self.dialog.add_filter(filefilter)
 
-        response = self.dialog.run()
+        response = self.dialog.show()
         file_name = ""
         if response == Gtk.ResponseType.OK:
             file_name = dialog.get_filename()
@@ -100,7 +100,7 @@ class Dialog:
             filefilter.add_pattern("*." +  filetype)
             self.dialog.add_filter(filefilter)
 
-        response = self.dialog.run()
+        response = self.dialog.show()
         file_name = None
 
         if response == Gtk.ResponseType.OK:
@@ -151,7 +151,7 @@ class Dialog:
                                     text=title)
         self.dialog.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         self.dialog.format_secondary_text(message)
-        self.dialog.run()
+        self.dialog.show()
         self.dialog.destroy()
 
 # ----------------------------------------------------------------------

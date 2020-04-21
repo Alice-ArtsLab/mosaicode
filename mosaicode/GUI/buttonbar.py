@@ -19,7 +19,9 @@ class ButtonBar(Gtk.HBox):
 
     # ----------------------------------------------------------------------
     def add_button(self, button_data):
-        button = Gtk.ToolButton.new_from_stock(button_data["icone"])
+        icon_size = Gtk.IconSize.LARGE_TOOLBAR
+        icon = Gtk.Image.new_from_icon_name(button_data["icone"], icon_size)
+        button = Gtk.ToolButton.new(icon, button_data["data"])
         button.connect("clicked", button_data["action"], button_data["data"])
         self.pack_start(button, False, False, 0)
         self.show_all()

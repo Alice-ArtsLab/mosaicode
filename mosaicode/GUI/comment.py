@@ -70,7 +70,7 @@ class Comment(GooCanvas.CanvasText, CommentModel):
                 self.diagram.deselect_all()
                 self.is_selected = True
 
-        self.diagram.show_commnent_property(self)
+        self.diagram.show_comment_property(self)
 
         Gtk.Widget.grab_focus(self.diagram)
         if event.button == 1:

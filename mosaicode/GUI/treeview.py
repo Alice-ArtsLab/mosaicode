@@ -18,7 +18,7 @@ class TreeView(Gtk.ScrolledWindow):
     def __init__(self, title, action, data=None):
         Gtk.ScrolledWindow.__init__(self)
         self.list_store = Gtk.ListStore(str)
-        self.tree_view = Gtk.TreeView(self.list_store)
+        self.tree_view = Gtk.TreeView.new_with_model(self.list_store)
         self.tree_view.connect("row-activated", action, data)
         self.add(self.tree_view)
         col = Gtk.TreeViewColumn(title)

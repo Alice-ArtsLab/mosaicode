@@ -344,7 +344,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         self.set_modified(True)
 
     # ----------------------------------------------------------------------
-    def show_commnent_property(self, comment):
+    def show_comment_property(self, comment):
         """
         This method show comment property.
 
