@@ -8,6 +8,7 @@ class TestSaveFileField(unittest.TestCase):
         self.field = SaveFileField({"label": "test", "value": "False"}, None)
         self.field = SaveFileField({"label": "test", "value": "True"}, None)
         self.field = SaveFileField({}, self.test_value)
+        self.field.set_parent_window(None)
 
     def test_value(self):
         value1 = "False"

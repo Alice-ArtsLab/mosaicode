@@ -7,7 +7,7 @@ class TestFloatField(unittest.TestCase):
         FloatField(None, None)
         self.field = FloatField({"label": "test", "value": 0.5}, None)
         self.field = FloatField({"label": "test", "value": -1}, None)
-        self.field = FloatField({}, self.test_value)
+        self.field = FloatField({"value": "N"}, self.test_value)
 
     def test_value(self):
         value1 = -0.5
