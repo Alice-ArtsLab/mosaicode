@@ -55,7 +55,7 @@ class ExtensionsManagerControl(object):
     # ----------------------------------------------------------------------
     @classmethod
     def export_extensions(cls):
-        self.export_xml()
+        cls.export_xml()
 
     # ----------------------------------------------------------------------
     @classmethod
