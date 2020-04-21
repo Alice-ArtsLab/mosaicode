@@ -5,6 +5,7 @@ from gi.repository import Gtk, Gdk
 from gi.repository import GObject
 
 from tests.mosaicode_tests.test_base import TestBase
+from mosaicode.system import System
 from mosaicode.GUI.diagram import Diagram
 
 class TestDiagram(TestBase):
@@ -14,6 +15,26 @@ class TestDiagram(TestBase):
 
     def test_redraw(self):
         self.diagram.redraw()
+
+    def test_change_zoom(self):
+        self.diagram.change_zoom(System.ZOOM_IN)
+        self.diagram.change_zoom(System.ZOOM_OUT)
+        self.diagram.change_zoom(System.ZOOM_ORIGINAL)
+
+    def test_show_elements(self):
+        self.diagram.show_comment_property(self.create_comment())
+        self.diagram.show_block_property(self.create_block())
+
+    def test_selection(self):
+        block = self.create_block()
+        self.add_block(block)
+        self.diagram.select_all()
+        self.diagram.deselect_all()
+
+    def test_connection(self):
+        block = self.create_block()
+        self.diagram.start_connection(block, 0)
+        self.diagram.end_connection(block, 1)
 
     def test_event(self):
         event = Gdk.Event()

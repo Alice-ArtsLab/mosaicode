@@ -12,6 +12,13 @@ class TestBlock(TestBase):
     def setUp(self):
         self.block = self.create_block()
 
+    def test_adjust_position(self):
+        self.block.adjust_position()
+
+    def test_set_properties(self):
+        properties = self.block.get_properties()
+        self.block.set_properties(properties)
+
     def test_event(self):
         gdkevent = Gdk.Event()
         gdkevent.key.type = Gdk.EventType.MOTION_NOTIFY
