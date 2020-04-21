@@ -169,7 +169,7 @@ class DiagramControl:
         self.diagram.comments.append(new_comment)
         if comment is None:
             new_comment.is_selected = True
-            self.diagram.show_commnent_property(new_comment)
+            self.diagram.show_comment_property(new_comment)
         self.diagram.redraw()
         return comment
 
