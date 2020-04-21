@@ -36,11 +36,12 @@ class BlockEditor(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __init__(self, block_manager, block):
-        Gtk.Dialog.__init__(self, _("Block Editor"),
-                            block_manager,
-                            0,
-                            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                                Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+        Gtk.Dialog.__init__(
+                        self,
+                        title=_("Block Editor"),
+                        transient_for=block_manager)
+        self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
 
         self.block_manager = block_manager
         self.block = block
@@ -52,16 +53,16 @@ class BlockEditor(Gtk.Dialog):
         box.pack_start(self.tabs, True, True, 0)
 
         self.tabs.append_page(BlockCommonEditor(self, self.block),
-                    Gtk.Label(_("Common Properties")))
+                    Gtk.Label.new(_("Common Properties")))
         self.tabs.append_page(BlockPropertyEditor(self, self.block),
-                    Gtk.Label(_("Properties")))
+                    Gtk.Label.new(_("Properties")))
         self.tabs.append_page(BlockPortEditor(self, self.block),
-                    Gtk.Label(_("Ports")))
+                    Gtk.Label.new(_("Ports")))
         self.tabs.append_page(BlockCodeEditor(self, self.block),
-                    Gtk.Label(_("Code")))
+                    Gtk.Label.new(_("Code")))
 
         self.show_all()
-        result = self.run()
+        result = self.show()
         if result == Gtk.ResponseType.OK:
             self.block_manager.main_control.add_new_block(block)
             self.block_manager.update()

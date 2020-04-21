@@ -35,7 +35,10 @@ class BlockManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __init__(self, main_window):
-        Gtk.Dialog.__init__(self, _("Block Manager"), main_window, 0, ())
+        Gtk.Dialog.__init__(
+                        self,
+                        title=_("Block Manager"),
+                        transient_for=main_window)
 
         self.main_window = main_window
         self.main_control = self
@@ -99,7 +102,8 @@ class BlockManager(Gtk.Dialog):
             Parameters:
                 * **block** (:class:`<>`)
         """
-        BlockEditor(self, self.block_notebook.get_selected_block())
+        if self.block_notebook.get_selected_block() is not None:
+            BlockEditor(self, self.block_notebook.get_selected_block())
 
     # ----------------------------------------------------------------------
     def add_new_block(self, block):

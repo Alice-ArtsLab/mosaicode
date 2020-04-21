@@ -31,14 +31,17 @@ class CodeTemplateEditor(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __init__(self, code_template_manager, code_template_name):
-        Gtk.Dialog.__init__(self, _("Code Template Editor"),
-                            code_template_manager,
-                            0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                                Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+        Gtk.Dialog.__init__(
+                        self,
+                        title=_("Code Template Editor"),
+                        transient_for=code_template_manager)
+        self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
 
         self.code_template_manager = code_template_manager
         system_code_template = System.get_code_templates()
-        if code_template_name is not None:
+        if code_template_name is not None \
+                and code_template_name in system_code_template:
             self.code_template = system_code_template[code_template_name]
         else:
             self.code_template = CodeTemplate()
@@ -55,9 +58,9 @@ class CodeTemplateEditor(Gtk.Dialog):
         code_tab = Gtk.VBox()
         command_tab = Gtk.VBox()
 
-        self.tabs.append_page(common_tab, Gtk.Label(_("Common")))
-        self.tabs.append_page(code_tab, Gtk.Label(_("Code")))
-        self.tabs.append_page(command_tab, Gtk.Label(_("Command")))
+        self.tabs.append_page(common_tab, Gtk.Label.new(_("Common")))
+        self.tabs.append_page(code_tab, Gtk.Label.new(_("Code")))
+        self.tabs.append_page(command_tab, Gtk.Label.new(_("Command")))
 
         # First Tab: Common properties
         self.name = StringField({"label": _("Name")}, self.__edit)
@@ -101,7 +104,7 @@ class CodeTemplateEditor(Gtk.Dialog):
             self.code_parts.set_value(code_parts_string)
 
         self.show_all()
-        result = self.run()
+        result = self.show()
         if result == Gtk.ResponseType.OK:
             self.__save()
         self.close()

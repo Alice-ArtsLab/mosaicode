@@ -35,7 +35,9 @@ class CodeTemplateManager(Gtk.Dialog):
     # ----------------------------------------------------------------------
     def __init__(self, main_window):
         Gtk.Dialog.__init__(
-            self, _("Code Template Manager"), main_window, 0, ())
+                    self,
+                    title=_("Code Template Manager"),
+                    transient_for=main_window)
 
         self.main_window = main_window
         self.set_default_size(400, 300)
@@ -47,7 +49,7 @@ class CodeTemplateManager(Gtk.Dialog):
         # CodeTemplate List
         sw = Gtk.ScrolledWindow()
         self.tree_store = Gtk.TreeStore(str)
-        self.tree_view = Gtk.TreeView(self.tree_store)
+        self.tree_view = Gtk.TreeView.new_with_model(self.tree_store)
 
         col = Gtk.TreeViewColumn(_("Available Code Templates"))
         self.tree_view.append_column(col)

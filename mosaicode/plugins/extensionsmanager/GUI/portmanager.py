@@ -33,7 +33,10 @@ class PortManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __init__(self, main_window):
-        Gtk.Dialog.__init__(self, _("Port Manager"), main_window, 0, ())
+        Gtk.Dialog.__init__(
+                self,
+                title=_("Port Manager"),
+                transient_for=main_window)
 
         self.main_window = main_window
         self.set_default_size(400, 300)
@@ -45,7 +48,7 @@ class PortManager(Gtk.Dialog):
         # Port List
         sw = Gtk.ScrolledWindow()
         self.tree_store = Gtk.TreeStore(str)
-        self.tree_view = Gtk.TreeView(self.tree_store)
+        self.tree_view = Gtk.TreeView.new_with_model(self.tree_store)
 
         col = Gtk.TreeViewColumn(_("Available Ports"))
         self.tree_view.append_column(col)

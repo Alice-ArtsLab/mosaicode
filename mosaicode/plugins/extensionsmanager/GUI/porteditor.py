@@ -34,12 +34,17 @@ class PortEditor(Gtk.Dialog):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, port_manager, port):
+    def __init__(self, port_manager, port_type):
+        if port_type not in System.get_ports():
+            return
         self.port_manager = port_manager
-        self.port = System.get_ports()[port]
-        Gtk.Dialog.__init__(self, _("Port Editor"), self.port_manager,
-                            0, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                                Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+        self.port = System.get_ports()[port_type]
+        Gtk.Dialog.__init__(
+                        self,
+                        title=_("Port Editor"),
+                        transient_for=self.port_manager)
+        self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
 
         self.main_control = self
         self.set_default_size(800, 300)
@@ -51,7 +56,7 @@ class PortEditor(Gtk.Dialog):
 
         # Common Properties --------------------------------------------------
         common_tab = Gtk.VBox()
-        self.tabs.append_page(common_tab, Gtk.Label(_("Common Properties")))
+        self.tabs.append_page(common_tab, Gtk.Label.new(_("Common Properties")))
         self.type = StringField({"label": _("Type")}, None)
         self.language = StringField({"label": _("Language")}, None)
         self.hint = StringField({"label": _("Hint")}, None)
@@ -60,9 +65,9 @@ class PortEditor(Gtk.Dialog):
         self.multiple = CheckField({"label": _("Multiple")}, None)
         self.var_name = StringField({"label": _("Var Name")}, None)
 
-        if port is not None:
+        if port_type is not None:
             System()
-            self.type.set_value(port)
+            self.type.set_value(port_type)
             self.language.set_value(self.port.language)
             self.hint.set_value(self.port.hint)
             self.color.set_value(self.port.color)
@@ -78,7 +83,7 @@ class PortEditor(Gtk.Dialog):
 
         # Connection Code ----------------------------------------------------
         code_tab = Gtk.VBox()
-        self.tabs.append_page(code_tab, Gtk.Label(_("Connection Code")))
+        self.tabs.append_page(code_tab, Gtk.Label.new(_("Connection Code")))
 
         # Top Button bar
         top_button_bar = Gtk.HBox()
@@ -87,12 +92,12 @@ class PortEditor(Gtk.Dialog):
 
         self.code = CodeField({"label": _("Connection Code")}, None)
         code_tab.pack_start(self.code, True, True, 1)
-        if port is not None:
+        if port_type is not None:
             System()
             self.code.set_value(self.port.code)
 
         self.show_all()
-        result = self.run()
+        result = self.show()
         if result == Gtk.ResponseType.OK:
             self.__save()
         self.close()
