@@ -4,7 +4,10 @@ from mosaicode.GUI.block import Block
 from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.mainwindow import MainWindow
+from mosaicode.GUI.fieldtypes import *
 from mosaicode.model.blockmodel import BlockModel
+from mosaicode.model.port import Port
+from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.system import System
@@ -36,7 +39,7 @@ class TestBase(unittest.TestCase):
         block.properties = [
             {"name": "test",
              "label": "Test",
-             "type": "Test"
+             "type": MOSAICODE_FLOAT
              }]
 
         block.ports = [{"type": "Test",
@@ -56,3 +59,11 @@ class TestBase(unittest.TestCase):
     def create_comment(self):
         comment = Comment(self.create_diagram(), None)
         return comment
+
+    def create_port(self):
+        port = Port()
+        return port
+
+    def create_code_template(self):
+        code_template = CodeTemplate()
+        return code_template
