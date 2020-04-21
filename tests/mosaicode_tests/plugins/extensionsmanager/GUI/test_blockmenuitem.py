@@ -6,12 +6,8 @@ from mosaicode.plugins.extensionsmanager.GUI.blockmenuitem \
 class TestBlockMenuItem(TestBase):
 
     def setUp(self):
-        self.widget = BlockMenuItem(
-                        None,
-                        self.create_block())
+        self.widget = BlockMenuItem(self.create_main_window())
 
     def test_base(self):
-        self.widget = BlockMenuItem(
-                        None,
-                        self.create_block())
+        self.widget.emit("activate")
 

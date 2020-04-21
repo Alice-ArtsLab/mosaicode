@@ -6,12 +6,8 @@ from mosaicode.plugins.extensionsmanager.GUI.codetemplatemanager \
 class TestCodeTemplateManager(TestBase):
 
     def setUp(self):
-        self.widget = CodeTemplateManager(
-                        None,
-                        self.create_block())
+        self.widget = CodeTemplateManager(self.create_main_window())
 
     def test_base(self):
-        self.widget = CodeTemplateManager(
-                        None,
-                        self.create_block())
+        self.widget = CodeTemplateManager(self.create_main_window())
 

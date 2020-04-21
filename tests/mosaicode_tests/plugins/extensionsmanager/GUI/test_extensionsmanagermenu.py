@@ -6,12 +6,8 @@ from mosaicode.plugins.extensionsmanager.GUI.extensionsmanagermenu \
 class TestExtensionsManagerMenu(TestBase):
 
     def setUp(self):
-        self.widget = ExtensionsManagerMenu(
-                        None,
-                        self.create_block())
+        self.widget = ExtensionsManagerMenu(self.create_main_window())
 
     def test_base(self):
-        self.widget = ExtensionsManagerMenu(
-                        None,
-                        self.create_block())
+        self.widget = ExtensionsManagerMenu(self.create_main_window())
 
