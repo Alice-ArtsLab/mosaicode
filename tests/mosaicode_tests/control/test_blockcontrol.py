@@ -10,6 +10,7 @@ class TestBlockControl(TestBase):
 
     # ----------------------------------------------------------------------
     def test_export_xml(self):
+        System()
         System.reload()
         BlockControl.export_xml()
 
@@ -39,10 +40,12 @@ class TestBlockControl(TestBase):
     # ----------------------------------------------------------------------
     def test_load(self):
         file_name = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "assets",
                                  "block.xml")
         BlockControl.load(file_name)
 
         file_name = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "assets",
                                  "block_error.xml")
 
         block = BlockControl.load(file_name)
@@ -68,7 +71,7 @@ class TestBlockControl(TestBase):
         block.file = None
         ok = BlockControl.delete_block(self.create_block())
         assert not ok
-        
+
     # ----------------------------------------------------------------------
     def test_print_block(self):
         BlockControl.print_block(self.create_block())

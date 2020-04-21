@@ -11,6 +11,7 @@ from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.system import System
+from mosaicode.GUI.fieldtypes import *
 
 class TestBase(unittest.TestCase):
     __metaclass__ = ABCMeta
@@ -66,4 +67,78 @@ class TestBase(unittest.TestCase):
 
     def create_code_template(self):
         code_template = CodeTemplate()
+        code_template.name = "webaudio"
+        code_template.language = "javascript"
+        code_template.command = "python -m webbrowser -t $dir_name$index.html\n"
+        code_template.description = "Javascript / webaudio code template"
+
+        code_template.code_parts = ["onload", "function", "declaration", "execution", "html"]
+        code_template.properties = [{"name": "title",
+                            "label": "Title",
+                            "value": "Title",
+                            "type": MOSAICODE_STRING
+                            }
+                           ]
+
+        code_template.files["index.html"] = r"""
+<html>
+    <head>
+        <meta http-equiv="Cache-Control" content="no-store" />
+        <!-- $author$ $license$ -->
+        <title>$prop[title]$</title>
+        <link rel="stylesheet" type="text/css" href="theme.css">
+        <script src="functions.js"></script>
+        <script>
+        $single_code[function]$
+        function loadme(){
+        $single_code[onload]$
+        return;
+        }
+        var context = new (window.AudioContext || window.webkitAudioContext)();
+        //declaration block
+        $code[declaration]$
+
+        //execution
+        $code[execution]$
+
+        //connections
+        $connections$
+        </script>
+    </head>
+
+    <body onload='loadme();'>
+        $code[html]$
+    </body>
+</html>
+"""
+
+        code_template.files["theme.css"] = r"""
+/*
+Developed by: $author$
+*/
+html, body {
+  background: #ffeead;
+  color: #ff6f69;
+}
+h1, p {
+  color: #ff6f69;
+}
+#navbar a {
+  color: #ff6f69;
+}
+.item {
+  background: #ffcc5c;
+}
+button {
+  background: #ff6f69;
+  color: #ffcc5c;
+}
+"""
+
+        code_template.files["functions.js"] = r"""
+/*
+Developed by: $author$
+*/
+$single_code[function]$
+"""
         return code_template
