@@ -162,7 +162,7 @@ class System(object):
                 for importer, name, ispkg in pkgutil.iter_modules(path, name_par + "."):
                     if path is None and name.startswith("." + System.APP):
                         name = name.replace('.', '', 1)
-                    if not name.startswith(System.APP + "_lib") and not name_par.startswith(System.APP + "_lib") and not name.startswith(System.APP + "_plugin") and not name_par.startswith(System.APP + "_plugin"):
+                    if not name.startswith(System.APP + "_lib") and not name_par.startswith(System.APP + "_lib"):
                         continue
 
                     if ispkg:

@@ -12,6 +12,7 @@ from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.system import System
 from mosaicode.GUI.fieldtypes import *
+from mosaicode.model.port import Port
 
 class TestBase(unittest.TestCase):
     __metaclass__ = ABCMeta
@@ -33,26 +34,39 @@ class TestBase(unittest.TestCase):
             diagram_control = self.create_diagram_control()
 
         block_model = BlockModel()
-        block_model.maxIO = 2
 
         block = Block(diagram_control.diagram, block_model)
+        block.extension = "Test"
+        block.file = None
+
+        block.help = "Test"
+        block.label = "Test"
+        block.color = "200:200:25:150"
+        block.group = "Test"
+        block.codes = {"code0":"Test",
+                       "Code1":"Test",
+                       "Code2":"Test"}
+        block.type = "Test"
+        block.maxIO = 2
         block.language = "language"
-        block.properties = [
-            {"name": "test",
-             "label": "Test",
-             "type": MOSAICODE_FLOAT
-             }]
+        block.properties = [{"name": "test",
+                             "label": "Test",
+                             "type": MOSAICODE_FLOAT
+                             }]
 
-        block.ports = [{"type": "Test",
-                       "label": "Input",
-                       "conn_type": "Input",
-                       "name": "input"},
-                        {"type": "Test",
-                       "label": "Output",
-                       "conn_type": "Outpu",
-                       "name": "output"}]
+        port0 = Port()
+        port0.label = "Test0"
+        port0.conn_type = "Test"
+        port0.name = "Test"
+        port0.type = "Test"
 
-        BlockControl.load_ports(block, System.get_ports())
+        port1 = Port()
+        port1.label = "Test1"
+        port1.conn_type = "Test"
+        port1.name = "Test"
+        port1.type = "Test"
+
+        block.ports = [port0, port1]
 
         diagram_control.add_block(block)
         return block

@@ -45,13 +45,13 @@ class BlockPersistence():
         block.language = parser.getTagAttr(tag_name, "language")
         block.extension = parser.getTagAttr(tag_name, "extension")
 
+        block.help = parser.getTagAttr(tag_name, "help")
+        block.color = parser.getTagAttr(tag_name, "color")
         block.label = parser.getTagAttr(tag_name, "label")
         block.group = parser.getTagAttr(tag_name, "group")
-        block.color = parser.getTagAttr(tag_name, "color")
-        block.help = parser.getTagAttr(tag_name, "help")
+        block.maxOI = parser.getTagAttr(tag_name, "maxOI")
 
-        for code in block.codes:
-            block.codes[code] = parser.getTag(tag_name).getTag(code).getText()
+        block.codes = ast.literal_eval(parser.getTagAttr(tag_name, "codes"))
 
         props = parser.getTag(tag_name).getTag(
             "properties").getChildTags("property")
@@ -67,13 +67,15 @@ class BlockPersistence():
             dict_port["conn_type"] = str(port.getAttr("conn_type"))
             block.ports.append(dict_port)
 
+        block.file = parser.getTagAttr(tag_name, "file")
+
         if block.type == "mosaicode.model.blockmodel":
             return None
         return block
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save_xml(cls, block, path):
+    def save_xml(cls, block, path=None):
         """
         This method save the block in user space.
 
@@ -89,13 +91,13 @@ class BlockPersistence():
         parser.setTagAttr(tag_name, 'language', block.language)
         parser.setTagAttr(tag_name, 'extension', block.extension)
 
-        parser.setTagAttr(tag_name, 'label', block.label)
-        parser.setTagAttr(tag_name, 'group', block.group)
-        parser.setTagAttr(tag_name, 'color', block.color)
         parser.setTagAttr(tag_name, 'help', block.help)
+        parser.setTagAttr(tag_name, 'label', block.label)
+        parser.setTagAttr(tag_name, 'color', block.color)
+        parser.setTagAttr(tag_name, 'group', block.group)
+        parser.setTagAttr(tag_name, 'maxIO', block.maxIO)
 
-        for code in block.codes:
-            parser.appendToTag(tag_name, code, value=block.codes[code])
+        parser.setTagAttr(tag_name, 'codes', block.codes)
 
         parser.appendToTag(tag_name, 'properties')
         for key in block.properties:
@@ -109,11 +111,21 @@ class BlockPersistence():
                                label=port.label,
                                type_=port.type)
 
-        if not Persistence.create_dir(path):
+        if (path is not None) and not Persistence.create_dir(path):
             return False
-        try:
+
+        if (path is None) and (block.file is not None):
+            path = block.file
+        elif (path is not None):
             file_name = block.label
-            block_file = file(os.path.join(path, file_name + '.xml'), 'w')
+            path = os.path.join(path, file_name + '.xml')
+        else:
+            return False
+
+        parser.setTagAttr(tag_name, 'file', path)
+
+        try:
+            block_file = file(path, 'w')
             block_file.write(parser.getXML())
             block_file.close()
         except IOError as e:

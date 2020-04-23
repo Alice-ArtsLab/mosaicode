@@ -21,6 +21,9 @@ class Persistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
+        if path is None:
+            return False
+            
         if os.path.isdir(path):
             return True
         try:
