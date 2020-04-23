@@ -10,7 +10,7 @@ class TestIntField(unittest.TestCase):
         self.field = IntField({}, self.test_value)
 
     def test_value(self):
-        value1 = -1
+        value1 = 0
         self.field.set_value(value1)
         value2 = self.field.get_value()
         self.assertEqual(value1, value2, 'incorrect value')
