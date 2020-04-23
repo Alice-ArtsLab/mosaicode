@@ -7,7 +7,6 @@ from mosaicomponents.colorfield import ColorField
 from mosaicomponents.combofield import ComboField
 from mosaicomponents.commentfield import CommentField
 from mosaicomponents.floatfield import FloatField
-from mosaicomponents.iconfield import IconField
 from mosaicomponents.intfield import IntField
 from mosaicomponents.labelfield import LabelField
 from mosaicomponents.openfilefield import OpenFileField
@@ -34,7 +33,6 @@ component_list = {
     MOSAICODE_COMBO: ComboField,
     MOSAICODE_COMMENT: CommentField,
     MOSAICODE_FLOAT: FloatField,
-    MOSAICODE_ICON: IconField,
     MOSAICODE_INT: IntField,
     MOSAICODE_LABEL: LabelField,
     MOSAICODE_OPEN_FILE: OpenFileField,
