@@ -56,8 +56,12 @@ class System(object):
             self.list_of_examples = []
             self.__plugins = []
             # Create user directory if does not exist
-            directories = ["/extensions/", "/examples/",
-                           "/images/", "/diagrams/", "/code-gen/"]
+            directories = ["/extensions/",
+                            "/examples/",
+                           "/images/",
+                           "/diagrams/",
+                           "/plugins/",
+                           "/code-gen/"]
             for name in directories:
                 if not os.path.isdir(System.get_user_dir() + name):
                     try:
@@ -211,8 +215,8 @@ class System(object):
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
-            plugins_dir = os.path.join(os.getcwd(), System.APP, 'plugins')
-
+#            plugins_dir = os.path.join(os.getcwd(), System.APP, 'plugins')
+            plugins_dir = System.get_user_dir() + "/plugins/"
             for name in os.listdir(plugins_dir):
                 plugin_dir = os.path.join(plugins_dir, name)
                 if os.path.isdir(plugin_dir):
