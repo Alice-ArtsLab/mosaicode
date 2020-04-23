@@ -52,27 +52,27 @@ class OpenFileField(Field):
 
     # --------------------------------------------------------------------------
     def __on_choose_file(self, widget):
-        dialog = Gtk.FileChooserDialog("Open...",
-                                       self.parent_window,
-                                       Gtk.FileChooserAction.OPEN,
-                                       (Gtk.STOCK_CANCEL,
-                                        Gtk.ResponseType.CANCEL,
-                                        Gtk.STOCK_OPEN,
-                                        Gtk.ResponseType.OK)
-                                       )
+        self.dialog = Gtk.FileChooserDialog()
+        self.dialog.set_title("Open")
+        self.dialog.set_transient_for(self.parent_window)
+        self.dialog.set_action(Gtk.FileChooserAction.OPEN)
+        self.dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.dialog.add_buttons(Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+        self.dialog.set_default_response(Gtk.ResponseType.OK)
+        self.dialog.set_filename(self.field.get_text())
+
         current_dir = ""
         if os.path.isdir(self.field.get_text()):
             current_dir = self.field.get_text()
         else:
             current_dir = os.path.dirname(self.field.get_text())
-        dialog.set_current_folder(current_dir)
+        self.dialog.set_current_folder(current_dir)
 
-        response = dialog.run()
+        response = self.dialog.run()
+        print response
         if response == Gtk.ResponseType.OK:
-            self.field.set_text(dialog.get_filename())
-        elif response == Gtk.ResponseType.CANCEL:
-            pass
-        dialog.destroy()
+            self.field.set_text(self.dialog.get_filename())
+        self.dialog.destroy()
 
     # --------------------------------------------------------------------------
     def get_value(self):
