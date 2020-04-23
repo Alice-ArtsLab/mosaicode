@@ -34,14 +34,15 @@ class ColorField(Field):
 
         box = Gtk.HBox()
         box.set_property("margin-left", 20)
+        self.add(box)
+
         self.color_block = Gtk.Frame()
         box.add(self.color_block)
 
         button = Gtk.Button.new_from_icon_name(
             "gtk-select-color", Gtk.IconSize.BUTTON)
-        button.connect("clicked", self.on_choose_color)
+        button.connect("clicked", self.__on_choose_color)
         box.add(button)
-        self.add(box)
 
         self.parent_window = None
         self.event = event
@@ -55,31 +56,41 @@ class ColorField(Field):
         self.parent_window = widget
 
     # --------------------------------------------------------------------------
-    def on_choose_color(self, widget):
-        color_selection_dialog = Gtk.ColorSelectionDialog("Select color")
-        color_selection_dialog.set_transient_for(self.parent_window)
+    def __on_choose_color(self, widget):
+        self.dialog = Gtk.ColorSelectionDialog()
+        self.dialog.set_title("Select color")
+        self.dialog.set_modal(True)
+        self.dialog.set_transient_for(self.parent_window)
         if self.event is not None:
-            color_selection_dialog.connect("destroy", self.event)
-        color_selection = color_selection_dialog.get_color_selection()
+            self.dialog.connect("destroy", self.event)
+        color_selection = self.dialog.get_color_selection()
         if self.color is not None:
-            color_selection.set_current_color(self.color)
-        response = color_selection_dialog.run()
-
+            try:
+                color_selection.set_current_rgba(self.color)
+            except:
+                pass
+        response = self.dialog.run()
         if response == Gtk.ResponseType.OK:
-            self.color = color_selection.get_current_color()
-            self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
-        color_selection_dialog.destroy()
+            color_selection = self.dialog.get_color_selection()
+            self.color = color_selection.get_current_rgba()
+            self.color_block.get_style_context().add_class(
+                    "frame {background-color: " + self.color.to_string() + ";}")
+        self.dialog.destroy()
 
     # --------------------------------------------------------------------------
     def get_value(self):
-        result_string = self.color.to_string()
+        result_string = Gdk.RGBA.from_color(self.color).to_string()
         if len(self.format) == 6:
-            result = "#" + result_string[1:3] + \
-                result_string[5:7] + result_string[9:11]
+            result = '#%02x%02x%02x' % (
+                        self.color.red / 256,
+                        self.color.green / 256,
+                        self.color.blue / 256)
             return result
         if len(self.format) == 3:
-            result = "#" + result_string[1:2] + \
-                result_string[5:6] + result_string[9:10]
+            result = '#%01x%01x%01x' % (
+                    self.color.red / 4096,
+                    self.color.green / 4096,
+                    self.color.blue / 4096)
             return result
         return result_string
 
@@ -105,6 +116,6 @@ class ColorField(Field):
         color = Gdk.RGBA()
         result = color.parse(value)
         self.color = color.to_color()
-        self.color_block.modify_bg(Gtk.StateType.NORMAL, self.color)
-
+        self.color_block.get_style_context().add_class(
+                "frame {background-color: " + value + ";}")
 # -----------------------------------------------------------------------------

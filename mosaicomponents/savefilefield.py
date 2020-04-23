@@ -51,22 +51,20 @@ class SaveFileField(Field):
 
     # --------------------------------------------------------------------------
     def __on_choose_file(self, widget):
-        dialog = Gtk.FileChooserDialog("Salvar...",
-                                       self.parent_window,
-                                       Gtk.FileChooserAction.SAVE,
-                                       (Gtk.STOCK_CANCEL,
-                                        Gtk.ResponseType.CANCEL,
-                                        Gtk.STOCK_SAVE,
-                                        Gtk.ResponseType.OK)
-                                       )
-        dialog.set_current_folder(self.field.get_text())
+        self.dialog = Gtk.FileChooserDialog()
+        self.dialog.set_title("Save")
+        self.dialog.set_transient_for(self.parent_window)
+        self.dialog.set_action(Gtk.FileChooserAction.SAVE)
+        self.dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
+        self.dialog.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
+        self.dialog.set_current_folder(self.field.get_text())
+        self.dialog.set_default_response(Gtk.ResponseType.OK)
+        self.dialog.set_current_name(self.field.get_text())
 
-        response = dialog.run()
+        response = self.dialog.run()
         if response == Gtk.ResponseType.OK:
-            self.field.set_text(dialog.get_filename())
-        elif response == Gtk.ResponseType.CANCEL:
-            pass
-        dialog.destroy()
+            self.field.set_text(self.dialog.get_filename())
+        self.dialog.destroy()
 
     # --------------------------------------------------------------------------
     def get_value(self):
