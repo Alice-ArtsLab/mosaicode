@@ -214,8 +214,8 @@ class System(object):
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
-            plugins_dir = os.path.join(os.getcwd(), System.APP, 'plugins')
-#            plugins_dir = System.get_user_dir() + "/plugins/"
+            plugins_dir = os.path.join(System.DATA_DIR, System.APP, 'plugins')
+            print plugins_dir
             for name in os.listdir(plugins_dir):
                 plugin_dir = os.path.join(plugins_dir, name)
                 if os.path.isdir(plugin_dir):
