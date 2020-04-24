@@ -80,6 +80,8 @@ class PortControl():
     def delete_port(cls, port_key):
         from mosaicode.system import System
         ports = System.get_ports()
+        if port_key not in ports:
+            return False
         port = ports[port_key]
         if port.file is not None:
             os.remove(port.file)

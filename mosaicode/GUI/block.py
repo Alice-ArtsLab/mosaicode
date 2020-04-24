@@ -462,13 +462,12 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.__widgets["Rect"].set_property("height", self.height - 10)
             self.__widgets["Icon"].set_property("y", (self.height - 10)/2)
             self.__widgets["Icon"].set_property("x", (self.width / 2) + 2)
-            i = 0
             for port in self.ports:
                 x,y = self.__get_port_pos(port)
-                self.__widgets["port" + str(port)].set_property("x", x)
-                self.__widgets["port" + str(port)].set_property("y", y)
-                self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
-                i += 1
+                if "port" + str(port) in self.__widgets:
+                    self.__widgets["port" + str(port)].set_property("x", x)
+                    self.__widgets["port" + str(port)].set_property("y", y)
+                    self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
             return True
 
         if not self.is_collapsed:
@@ -481,8 +480,9 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
             self.__widgets["Icon"].set_property("x", (self.width / 2))
             for port in self.ports:
                 x,y = self.__get_port_pos(port)
-                self.__widgets["port" + str(port)].set_property("x", x)
-                self.__widgets["port" + str(port)].set_property("y", y)
-                self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
+                if "port" + str(port) in self.__widgets:
+                    self.__widgets["port" + str(port)].set_property("x", x)
+                    self.__widgets["port" + str(port)].set_property("y", y)
+                    self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
 
 # ----------------------------------------------------------------------

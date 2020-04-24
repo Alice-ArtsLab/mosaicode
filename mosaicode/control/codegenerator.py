@@ -24,18 +24,18 @@ class CodeGenerator():
         self.codes = {}
 
         if diagram is None:
-            return False
+            return None
 
         if self.diagram.code_template is None:
-            return False
+            return None
 
         if self.diagram.language is None:
             System.log("No language, no block, no code")
-            return False
+            return None
 
         if not len(self.diagram.blocks) > 0:
             System.log("Diagram is empty. Nothing to generate.")
-            return False
+            return None
 
     # ----------------------------------------------------------------------
     def __prepare_block_list(self):
@@ -78,6 +78,8 @@ class CodeGenerator():
         """
         This method sorts the blocks to code generation.
         """
+        if self.diagram.code_template is None:
+            return False
         # Create an array of codes to each code part
         for key in self.diagram.code_template.code_parts:
             self.codes[key] = []
@@ -254,6 +256,8 @@ class CodeGenerator():
         self.__sort_block_list()
         self.__generate_block_code_parts()
 
+        if self.diagram.code_template is None:
+            return False
         files = self.diagram.code_template.files
 
         for key in files:

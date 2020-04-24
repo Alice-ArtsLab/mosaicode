@@ -51,7 +51,8 @@ class BlockPersistence():
         block.group = parser.getTagAttr(tag_name, "group")
         block.maxOI = parser.getTagAttr(tag_name, "maxOI")
 
-        block.codes = ast.literal_eval(parser.getTagAttr(tag_name, "codes"))
+        for code in block.codes:
+            block.codes[code] = parser.getTag(tag_name).getTag(code).getText()
 
         props = parser.getTag(tag_name).getTag(
             "properties").getChildTags("property")

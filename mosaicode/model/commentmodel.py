@@ -47,6 +47,9 @@ class CommentModel(object):
 
     # ----------------------------------------------------------------------
     def __str__(self):
-        return str(self.text)
+        if "value" in self.properties:
+            return str(self.properties["value"])
+        else:
+            return ""
 
 # ------------------------------------------------------------------------------

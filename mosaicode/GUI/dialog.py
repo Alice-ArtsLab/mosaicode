@@ -173,7 +173,7 @@ class Dialog:
         self.dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         self.dialog.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         self.dialog.format_secondary_text(message)
-        result = self.dialog.run()
+        result = self.dialog.show()
         self.dialog.destroy()
         return result
 # ----------------------------------------------------------------------

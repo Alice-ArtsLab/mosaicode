@@ -172,7 +172,8 @@ class DiagramPersistence():
                     y=pos[1])
             props = block.get_properties()
             for prop in props:
-                parser.appendToLastTag('block',
+                if "name" in prop and "value" in prop:
+                    parser.appendToLastTag('block',
                                        'property',
                                        key=str(prop["name"]),
                                        value=str(prop["value"])

@@ -35,6 +35,8 @@ class CodeTemplatePersistence():
         # load the code_template
         if os.path.exists(file_name) is False:
             return None
+        if os.path and os.path.isdir(file_name):
+            return None
         parser = XMLParser(file_name)
 
         if parser.getTag(CodeTemplatePersistence.tag_name) is None:
@@ -109,8 +111,8 @@ class CodeTemplatePersistence():
         parser.setAttribute('description', code_template.description)
         parser.setAttribute('language', code_template.language)
         parser.setAttribute('command', code_template.command)
-        parser.setAttribute('extension', code_template.extension)
-        parser.setAttribute('code', code_template.code)
+#        parser.setAttribute('extension', code_template.extension)
+#        parser.setAttribute('code', code_template.code)
         parser.setAttribute('code_parts', code_template.code_parts)
 
         if not Persistence.create_dir(path):

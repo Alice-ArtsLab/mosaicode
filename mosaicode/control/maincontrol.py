@@ -344,6 +344,8 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def stop(self, widget, process):
+        if process is None:
+            return
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
 
     # ----------------------------------------------------------------------
@@ -585,6 +587,8 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def show_grid(self, event):
+        if event is None:
+            return
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
@@ -595,14 +599,18 @@ class MainControl():
     # ----------------------------------------------------------------------
     def delete_code_template(self, code_template_name):
         filename = CodeTemplateControl.delete_code_template(code_template_name)
+        if not filename:
+            message = "This code template does not exist."
+            Dialog().message_dialog("Error", message, self.main_window)
+            return False
         if filename is None:
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
             Dialog().message_dialog("Error", message, self.main_window)
-        else:
-            Dialog().message_dialog("Info", "File " + filename + " deleted.", self.main_window)
+            return False
+        Dialog().message_dialog("Info", "File " + filename + " deleted.", self.main_window)
         System.reload()
-
+        return True
     # ----------------------------------------------------------------------
     def add_port(self, port):
         PortControl.add_port(port)

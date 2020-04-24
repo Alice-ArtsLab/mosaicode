@@ -188,7 +188,7 @@ class DiagramControl:
         return True
 
     # ----------------------------------------------------------------------
-    def collapse_all(status):
+    def collapse_all(self, status):
         """
         This method Collapses all the blocks in a diagram
 
@@ -373,8 +373,14 @@ class DiagramControl:
             self.diagram.reload()
             x, y, width, height = self.get_min_max()
 
+        if self.diagram.get_window() is None:
+            return False
         pixbuf = Gdk.pixbuf_get_from_window(
-            self.diagram.get_window(), x, y, width, height)
+                        self.diagram.get_window(),
+                        x,
+                        y,
+                        width,
+                        height)
 
         if pixbuf is None:
             return False, "No image to export"
