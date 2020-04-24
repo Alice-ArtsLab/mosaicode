@@ -21,7 +21,11 @@ class TestBase(unittest.TestCase):
         return MainWindow()
 
     def create_diagram(self):
-        return Diagram(self.create_main_window())
+        diagram = Diagram(self.create_main_window())
+        block = self.create_block(diagram_control=DiagramControl(diagram))
+        diagram.main_window.main_control.add_block(block)
+        diagram.language = "test"
+        return diagram
 
     def create_diagram_control(self):
         diagram_control = DiagramControl(self.create_diagram())

@@ -19,8 +19,8 @@ class TestColorField(unittest.TestCase):
         self.field.set_parent_window(Gtk.Window.new(Gtk.WindowType.TOPLEVEL))
 
     def close_window(self):
-        self.field.dialog.props.ok_button.clicked()
         self.field.dialog.response(Gtk.ResponseType.OK)
+        self.field.dialog.response(Gtk.ResponseType.CLOSE)
         self.t1.join()
 
     def event(widget, event):

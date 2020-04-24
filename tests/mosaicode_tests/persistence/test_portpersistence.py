@@ -17,4 +17,4 @@ class PortPersistenceTest(TestBase):
         file_name = "/tmp/" + port.type + ".xml"
 
         result = PortPersistence.load_xml(file_name)
-        os.remove(file_name)
+#        os.remove(file_name)

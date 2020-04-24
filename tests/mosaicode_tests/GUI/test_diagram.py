@@ -1,9 +1,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
-from gi.repository import Gtk, Gdk
-from gi.repository import GObject
-
+from gi.repository import Gtk
+from gi.repository import Gdk
 from tests.mosaicode_tests.test_base import TestBase
 from mosaicode.system import System
 from mosaicode.GUI.diagram import Diagram
@@ -27,14 +26,14 @@ class TestDiagram(TestBase):
 
     def test_selection(self):
         block = self.create_block()
-        self.add_block(block)
+        self.diagram.main_window.main_control.add_block(block)
         self.diagram.select_all()
         self.diagram.deselect_all()
 
     def test_connection(self):
         block = self.create_block()
-        self.diagram.start_connection(block, 0)
-        self.diagram.end_connection(block, 1)
+        self.diagram.start_connection(block, block.ports[0])
+        self.diagram.end_connection(block, block.ports[1])
 
     def test_event(self):
         event = Gdk.Event()

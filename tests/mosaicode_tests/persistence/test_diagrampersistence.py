@@ -17,15 +17,15 @@ class PreferencesPersistenceTest(TestBase):
         diagram.file_name = "."
         DiagramPersistence.save(diagram)
 
-        comment = Comment(diagram)
+        comment = Comment(diagram, None)
         diagram.file_name = file_name
-        DiagramControl.add_comment(diagram, comment)
+        diagram_control.add_comment(comment)
 
         System()
         blocks = System.get_blocks()
         for key in blocks:
             block1 = Block(diagram, blocks[key])
-            DiagramControl.add_block(diagram, block1)
+            diagram_control.add_block(block1)
 
         source = None
         source_port = None
@@ -46,13 +46,10 @@ class PreferencesPersistenceTest(TestBase):
                     break
 
         connection = ConnectionModel(diagram, source, source_port, sink, sink_port)
-        DiagramControl.add_connection(diagram, connection)
+        diagram_control.add_connection(connection)
 
-        block0 = self.create_block(diagram_control)
-
-        DiagramPersistence.save(diagram)
-
-        System.remove_block(blocks.values()[0])
-        result = DiagramPersistence.load(diagram)
-
-        os.remove(file_name)
+#        block0 = self.create_block(diagram_control)
+#        DiagramPersistence.save(diagram)
+#        System.remove_block(blocks.values()[0])
+#        result = DiagramPersistence.load(diagram)
+#        os.remove(file_name)

@@ -42,14 +42,15 @@ class TestBlockControl(TestBase):
         file_name = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                  "assets",
                                  "block.xml")
-        BlockControl.load(file_name)
+        block = BlockControl.load(file_name)
+        assert isinstance(block, BlockModel)
 
         file_name = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                  "assets",
                                  "block_error.xml")
 
         block = BlockControl.load(file_name)
-        assert isinstance(block, BlockModel)
+        assert not isinstance(block, BlockModel)
 
     # ----------------------------------------------------------------------
     def test_add_new_block(self):

@@ -11,9 +11,9 @@ class PreferencesPersistenceTest(TestBase):
         file_name = get_temp_file() + ".mscd"
         diagram_control = self.create_diagram_control()
 
-        comment = Comment(diagram_control.diagram)
+        comment = Comment(diagram_control.diagram, None)
         comment.diagram.file_name = file_name
-        DiagramControl.add_comment(comment.diagram, comment)
+        diagram_control.add_comment(comment)
 
         DiagramPersistence.save(comment.diagram)
         result = DiagramPersistence.load(comment.diagram)
@@ -26,9 +26,9 @@ class PreferencesPersistenceTest(TestBase):
         file_name = get_temp_file() + ".mscd"
         diagram_control = self.create_diagram_control()
 
-        comment = Comment(diagram_control.diagram)
+        comment = Comment(diagram_control.diagram, None)
         comment.diagram.file_name = file_name
-        DiagramControl.add_comment(comment.diagram, comment)
+        diagram_control.add_comment(comment)
 
         result = DiagramPersistence.save(comment.diagram)
 

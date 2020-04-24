@@ -21,7 +21,7 @@ class TestSaveFileField(unittest.TestCase):
 
     def close_window_on_cancel(self):
         self.field.dialog.response(Gtk.ResponseType.CANCEL)
-        self.t1.join()
+        self.t2.join()
 
     def close_window_on_ok(self):
         self.field.dialog.set_current_folder("Test")
@@ -49,8 +49,8 @@ class TestSaveFileField(unittest.TestCase):
         vbox = self.field.get_children()[1]
         # 0 is the frame, 1 is the button
         button = vbox.get_children()[1]
-        self.t1 = threading.Thread(target=button.clicked)
-        self.t1.start()
+        self.t2 = threading.Thread(target=button.clicked)
+        self.t2.start()
         sleep(0.5)
         self.close_window_on_cancel()
 
