@@ -34,12 +34,14 @@ class CommentModel(object):
 
     # ----------------------------------------------------------------------
     def set_properties(self, data):
+        if data is None:
+            return
+        if self.get_properties() is None:
+            self.properties = []
         for prop in self.get_properties():
             key = prop.get("name")
             if key in data:
                 prop["value"] = data[key]
-            else:
-                pass
 
     # ----------------------------------------------------------------------
     def get_properties(self):
@@ -47,8 +49,12 @@ class CommentModel(object):
 
     # ----------------------------------------------------------------------
     def __str__(self):
-        if "value" in self.properties:
-            return str(self.properties["value"])
+        if self.properties is None:
+            self.properties = []
+        if len(self.properties) < 1:
+            return ""
+        if "value" in self.properties[0]:
+            return str(self.properties[0]["value"])
         else:
             return ""
 

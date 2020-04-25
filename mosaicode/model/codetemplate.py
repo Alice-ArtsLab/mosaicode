@@ -37,8 +37,6 @@ class CodeTemplate(object):
             key = prop.get("name")
             if key in data:
                 prop["value"] = data[key]
-            else:
-                pass
 
     # ----------------------------------------------------------------------
     def get_properties(self):
