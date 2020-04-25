@@ -54,9 +54,21 @@ class BlockManager(Gtk.Dialog):
 
         # Button bar
         button_bar = ButtonBar()
-        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":None})
-        button_bar.add_button({"icone":Gtk.STOCK_EDIT, "action": self.__edit, "data":None})
-        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":None})
+        button_bar.add_button({
+                "icone":Gtk.STOCK_NEW,
+                "action": self.__new,
+                "data":None
+                })
+        button_bar.add_button({
+                "icone":Gtk.STOCK_EDIT,
+                "action": self.__edit,
+                "data":None
+                })
+        button_bar.add_button({
+                "icone":Gtk.STOCK_DELETE,
+                "action": self.__delete,
+                "data":None
+                })
         vbox.pack_start(button_bar, False, False, 0)
 
         self.show_all()
@@ -64,14 +76,14 @@ class BlockManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):
-        BlockEditor(self, BlockModel())
+        BlockEditor(self, BlockModel()).run()
 
     # ----------------------------------------------------------------------
     def __edit(self, widget=None, data=None):
         block = self.block_notebook.get_selected_block()
         if block is None:
             return
-        BlockEditor(self, block)
+        BlockEditor(self, block).run()
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):
@@ -82,28 +94,6 @@ class BlockManager(Gtk.Dialog):
         if result == Gtk.ResponseType.OK:
             self.main_window.main_control.delete_block(block)
             self.update()
-
-    # ----------------------------------------------------------------------
-    def set_block(self, block):
-        """
-        This method is called when a block is selected. Nothing to do here.
-            Parameters:
-                block
-            Returns:
-                None.
-        """
-        pass
-
-    # ----------------------------------------------------------------------
-    def add_block(self, block):
-        """
-        This method is called when a block is double clicked.
-
-            Parameters:
-                * **block** (:class:`<>`)
-        """
-        if self.block_notebook.get_selected_block() is not None:
-            BlockEditor(self, self.block_notebook.get_selected_block())
 
     # ----------------------------------------------------------------------
     def add_new_block(self, block):

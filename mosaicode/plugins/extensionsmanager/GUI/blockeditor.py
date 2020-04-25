@@ -39,7 +39,8 @@ class BlockEditor(Gtk.Dialog):
         Gtk.Dialog.__init__(
                         self,
                         title=_("Block Editor"),
-                        transient_for=block_manager)
+                        transient_for=block_manager,
+                        destroy_with_parent=True)
         self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         self.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
 
@@ -60,11 +61,12 @@ class BlockEditor(Gtk.Dialog):
                     Gtk.Label.new(_("Ports")))
         self.tabs.append_page(BlockCodeEditor(self, self.block),
                     Gtk.Label.new(_("Code")))
-
         self.show_all()
-        result = self.show()
+
+    def run(self):
+        result = super(Gtk.Dialog, self).run()
         if result == Gtk.ResponseType.OK:
-            self.block_manager.main_control.add_new_block(block)
+            self.block_manager.main_control.add_new_block(self.block)
             self.block_manager.update()
         self.close()
         self.destroy()

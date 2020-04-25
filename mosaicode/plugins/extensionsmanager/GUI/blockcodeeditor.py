@@ -40,9 +40,6 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
         self.block_editor = block_editor
         self.block = block
 
-        for widget in self.get_children():
-            self.remove(widget)
-
         vbox = Gtk.VBox()
         self.add(vbox)
 
@@ -54,8 +51,16 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
         content_pane.pack_start(self.tree_view, True, True, 1)
 
         button_bar = ButtonBar()
-        button_bar.add_button({"icone":Gtk.STOCK_NEW, "action": self.__new, "data":None})
-        button_bar.add_button({"icone":Gtk.STOCK_DELETE, "action": self.__delete, "data":None})
+        button_bar.add_button({
+                "icone":Gtk.STOCK_NEW,
+                "action": self.__new,
+                "data":None
+                })
+        button_bar.add_button({
+                "icone":Gtk.STOCK_DELETE,
+                "action": self.__delete,
+                "data":None
+                })
         vbox.pack_start(button_bar, False, False, 1)
 
         self.codes = self.block.codes
