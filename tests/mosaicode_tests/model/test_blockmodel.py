@@ -34,5 +34,5 @@ class TestBlockModel(TestBase):
                             "type": MOSAICODE_COLOR
                             }
                            ]
-        erro = {"erro": "time"}
+        erro = {"color": "time"}
         self.block.set_properties(erro)

@@ -29,11 +29,9 @@ class TestCodeTemplate(TestBase):
                              "value": "test",
                              "type": "test"}]
 
-        code.set_properties({"name": "test",
-                             "label": "SET",
-                             "value": "test",
-                             "type": "test"})
-#        assert code.properties[0]["label"] == "SET"
+        code.set_properties({"out": "SET"})
+        code.set_properties({"test": "SET"})
+        assert code.properties[0]["value"] == "SET"
 
     # ----------------------------------------------------------------------
     def test_get_properties(self):

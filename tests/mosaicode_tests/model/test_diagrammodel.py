@@ -5,4 +5,6 @@ class TestDiagramModel(TestBase):
 
     def test_init(self):
         model = DiagramModel()
-        self.assertEqual("Untitled", model.patch_name)
+        str(model)
+        model.file_name = "/tmp/test.mscd"
+        self.assertEqual("test", model.patch_name)
