@@ -30,6 +30,7 @@ class System(object):
     APP = 'mosaicode'
     DATA_DIR = "/usr/share/mosaicode/"
     DATA_EXTENSIONS = "/usr/lib/python2.7/dist-packages/"
+#    DATA_EXTENSIONS = "~/.local/lib/python2.7/site-packages"
 
     ZOOM_ORIGINAL = 1
     ZOOM_IN = 2
@@ -214,8 +215,7 @@ class System(object):
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
-            plugins_dir = os.path.join(System.DATA_DIR, System.APP, 'plugins')
-            print plugins_dir
+            plugins_dir = os.path.join(System.DATA_EXTENSIONS)
             for name in os.listdir(plugins_dir):
                 plugin_dir = os.path.join(plugins_dir, name)
                 if os.path.isdir(plugin_dir):
