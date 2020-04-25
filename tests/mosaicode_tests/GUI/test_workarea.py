@@ -37,8 +37,8 @@ class TestWorkArea(TestBase):
         diagram = self.create_diagram()
         self.workarea.add_diagram(diagram)
         diagram.set_modified(True)
-#        GLib.timeout_add(100, self.close_window)
-#        self.workarea.close_tabs()
+        GLib.timeout_add(100, self.close_window)
+        self.workarea.close_tabs()
 
     def test_get_current_diagram(self):
         self.workarea.add_diagram(self.create_diagram())

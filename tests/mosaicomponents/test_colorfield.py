@@ -20,7 +20,6 @@ class TestColorField(unittest.TestCase):
 
     def close_window(self):
         self.field.dialog.response(Gtk.ResponseType.OK)
-        self.field.dialog.response(Gtk.ResponseType.CLOSE)
         self.t1.join()
 
     def event(widget, event):
