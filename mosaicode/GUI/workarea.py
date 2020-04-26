@@ -5,7 +5,7 @@ This module contains the WorkArea class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 import gettext
 _ = gettext.gettext
 
@@ -64,11 +64,11 @@ class WorkArea(Gtk.Notebook):
             return False
 
         if diagram.modified:
-            result = Dialog().confirm_dialog(_("Diagram ") +
-                                       diagram.file_name +
-                                       _("is not saved.\nIf you close it"
+            message = _("Diagram ") + diagram.file_name + \
+                                       _(" is not saved.\nIf you close it"
                                        ", changes will be lost.\n"
-                                       "Confirm?"), self.main_window)
+                                       "Confirm?")
+            result = ConfirmDialog(message, self.main_window).run()
             if result == Gtk.ResponseType.CANCEL:
                 return False
 

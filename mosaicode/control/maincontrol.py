@@ -23,7 +23,8 @@ from mosaicode.GUI.block import Block
 from mosaicode.GUI.codewindow import CodeWindow
 from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.diagram import Diagram
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.messagedialog import MessageDialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
 from mosaicode.model.blockmodel import BlockModel
@@ -77,10 +78,12 @@ class MainControl():
         """
         This method open a selected file.
         """
-        file_name = Dialog().open_dialog("Open Diagram",
-                                         self.main_window,
-                                         filetype="mscd",
-                                         path=System.get_user_dir())
+        file_name = OpenDialog(
+                                "Open Diagram",
+                                self.main_window,
+                                filetype="mscd",
+                                path=System.get_user_dir()
+                                ).run()
         if file_name is None or file_name == "":
             return
         self.open(file_name)
@@ -116,17 +119,20 @@ class MainControl():
 
         if diagram.file_name is "Untitled" or save_as:
             while True:
-                name = Dialog().save_dialog(
+                name = SaveDialog(
                     self.main_window,
                     title=_("Save Diagram"),
                     filename=System.get_user_dir() + "/" + diagram.file_name,
-                    filetype="mscd")
+                    filetype="mscd").run()
                 if name and not name.endswith("mscd"):
                     name = (("%s" + ".mscd") % name)
-                if Dialog().confirm_overwrite(name, self.main_window):
-                    diagram.file_name = name
-                    self.main_window.work_area.rename_diagram(diagram)
-                    break
+                if name is not None and os.path.exists(name) is True:
+                    msg = _("File exists. Overwrite?")
+                    result = ConfirmDialog(msg, self.main_window).run()
+                    if result == Gtk.ResponseType.OK:
+                        diagram.file_name = name
+                        self.main_window.work_area.rename_diagram(diagram)
+                        break
         result, message = False, ""
 
         if diagram.file_name is not None:
@@ -135,7 +141,7 @@ class MainControl():
                 self.set_recent_files(diagram.file_name)
 
         if not result:
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
 
 
     # ----------------------------------------------------------------------
@@ -162,23 +168,26 @@ class MainControl():
             return False
 
         while True:
-            name = Dialog().save_dialog(
+            name = SaveDialog(
                 self.main_window,
                 title=_("Export diagram as png"),
                 filename=System.get_user_dir() + "/" + diagram.file_name + ".png",
-                filetype="png")
+                filetype="png").run()
 
             if name is None:
                 return
             if name.find(".png") == -1:
                 name = name + ".png"
-            if Dialog().confirm_overwrite(name, self.main_window):
-                break
+            if name is not None and os.path.exists(name) is True:
+                msg = _("File exists. Overwrite?")
+                result = ConfirmDialog(msg, self.main_window).run()
+                if result == Gtk.ResponseType.OK:
+                    break
 
         result, message = DiagramControl(diagram).export_png(name)
 
         if not result:
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
 
     # ----------------------------------------------------------------------
     def exit(self, widget=None, data=None):
@@ -234,7 +243,7 @@ class MainControl():
 
         if diagram.language is None:
             message = "You shall not generate the code of an empty diagram!"
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
             return None
 
         if diagram.code_template is not None:
@@ -249,7 +258,7 @@ class MainControl():
 
         if len(template_list) == 0:
             message = "Generator not available for the language " + diagram.language + "."
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
             return None
 
         if len(template_list) == 1:
@@ -415,7 +424,7 @@ class MainControl():
             message = "Block language is different from diagram language.\n" +\
                 "Diagram is expecting to generate " + diagram.language + \
                 " code while block is writen in " + block.language
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
             return None
         diagram.redraw()
         return new_block
@@ -601,14 +610,14 @@ class MainControl():
         filename = CodeTemplateControl.delete_code_template(code_template_name)
         if not filename:
             message = "This code template does not exist."
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
             return False
         if filename is None:
             message = "This code template is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
             return False
-        Dialog().message_dialog("Info", "File " + filename + " deleted.", self.main_window)
+        MessageDialog("Info", "File " + filename + " deleted.", self.main_window)
         System.reload()
         return True
     # ----------------------------------------------------------------------
@@ -621,7 +630,7 @@ class MainControl():
         if not PortControl.delete_port(port_key):
             message = "This port is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
         System.reload()
 
     # ----------------------------------------------------------------------
@@ -635,7 +644,7 @@ class MainControl():
         if not BlockControl.delete_block(block):
             message = "This block is a python file installed in the System.\n"
             message = message + "Sorry, you can't remove it"
-            Dialog().message_dialog("Error", message, self.main_window)
+            MessageDialog("Error", message, self.main_window)
         self.update_blocks()
 
     # ----------------------------------------------------------------------
