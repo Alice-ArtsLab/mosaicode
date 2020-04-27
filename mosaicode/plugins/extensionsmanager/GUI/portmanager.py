@@ -18,7 +18,7 @@ from mosaicomponents.codefield import CodeField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.GUI.porteditor import PortEditor
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.system import *
 import gettext
@@ -106,7 +106,7 @@ class PortManager(Gtk.Dialog):
         name = self.__get_selected()
         if name is None:
             return
-        result = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = ConfirmDialog(_("Are you sure?"), self).run()
         if result == Gtk.ResponseType.OK:
             self.main_window.main_control.delete_port(name)
             self.__update()

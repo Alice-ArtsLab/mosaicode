@@ -9,7 +9,7 @@ from mosaicode.system import *
 from mosaicode.control.portcontrol import PortControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.messagedialog import MessageDialog
 from mosaicode.plugins.extensionsmanager.GUI.blockcodeeditor import BlockCodeEditor
 from mosaicode.plugins.extensionsmanager.GUI.blockeditor import BlockEditor
 from mosaicode.plugins.extensionsmanager.GUI.blockmanager import BlockManager
@@ -68,6 +68,10 @@ class ExtensionsManagerControl(object):
     # ----------------------------------------------------------------------
     def export_xml_dialog(self):
         self.export_xml()
-        Dialog().message_dialog("Exporting as xml", "Exported successfully!", self.main_window)
+        MessageDialog(
+                "Exporting as xml",
+                "Exported successfully!",
+                self.main_window
+                )
 
 # ----------------------------------------------------------------------

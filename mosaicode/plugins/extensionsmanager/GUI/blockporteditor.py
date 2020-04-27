@@ -18,7 +18,8 @@ from mosaicomponents.codefield import CodeField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.messagedialog import MessageDialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.GUI.treeview import TreeView
 from mosaicode.system import *
@@ -88,7 +89,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
-        result = Dialog().confirm_dialog(_("Are you sure?"), self.block_editor)
+        result = ConfirmDialog(_("Are you sure?"), self.block_editor).run()
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)
@@ -186,15 +187,15 @@ class BlockPortEditor(Gtk.ScrolledWindow):
 
         if new_port.type == "":
             message = "Type can not be empty"
-            Dialog().message_dialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor)
             return
         if new_port.label == "":
             message = "Label can not be empty"
-            Dialog().message_dialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor)
             return
         if new_port.name == "":
             message = "Name can not be empty"
-            Dialog().message_dialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor)
             return
         contains = False
         i = 0

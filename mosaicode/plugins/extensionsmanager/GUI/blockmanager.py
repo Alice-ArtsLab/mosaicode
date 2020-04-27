@@ -19,7 +19,7 @@ from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.GUI.blockeditor import BlockEditor
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.system import *
@@ -90,7 +90,7 @@ class BlockManager(Gtk.Dialog):
         block = self.block_notebook.get_selected_block()
         if block is None:
             return
-        result = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = ConfirmDialog(_("Are you sure?"), self).run()
         if result == Gtk.ResponseType.OK:
             self.main_window.main_control.delete_block(block)
             self.update()

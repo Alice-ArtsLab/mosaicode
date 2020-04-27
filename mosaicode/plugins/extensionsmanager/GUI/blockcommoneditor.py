@@ -17,7 +17,6 @@ from mosaicomponents.combofield import ComboField
 from mosaicomponents.commentfield import CommentField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicomponents.stringfield import StringField
-from mosaicode.GUI.dialog import Dialog
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.GUI.blockporteditor import BlockPortEditor
 from mosaicode.plugins.extensionsmanager.GUI.blockpropertyeditor import BlockPropertyEditor

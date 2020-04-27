@@ -18,7 +18,7 @@ from mosaicomponents.codefield import CodeField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.GUI.codetemplateeditor import CodeTemplateEditor
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.system import *
@@ -110,7 +110,7 @@ class CodeTemplateManager(Gtk.Dialog):
         name = self.__get_selected()
         if name is None:
             return
-        result = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = ConfirmDialog(_("Are you sure?"), self).run()
         if result == Gtk.ResponseType.OK:
             self.main_window.main_control.delete_code_template(name)
             self.__update()

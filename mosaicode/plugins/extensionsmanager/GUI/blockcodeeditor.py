@@ -17,7 +17,8 @@ from mosaicomponents.combofield import ComboField
 from mosaicomponents.commentfield import CommentField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicomponents.stringfield import StringField
-from mosaicode.GUI.dialog import Dialog
+from mosaicode.GUI.messagedialog import MessageDialog
+from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.GUI.blockporteditor import BlockPortEditor
 from mosaicode.GUI.buttonbar import ButtonBar
@@ -176,7 +177,7 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
         name = model.get_value(model.get_iter(path), 0)
 
-        result = Dialog().confirm_dialog(_("Are you sure?"), self)
+        result = ConfirmDialog(_("Are you sure?"), self).run()
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)
@@ -228,11 +229,11 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
                 code = widget.get_value()
         if name == "":
             message = "Code Part Name can not be empty"
-            Dialog().message_dialog("Error", message, self)
+            MessageDialog("Error", message, self)
             return
         if code == "":
             message = "Code can not be empty"
-            Dialog().message_dialog("Error", message, self)
+            MessageDialog("Error", message, self)
             return
         contains = False
         i = 0
