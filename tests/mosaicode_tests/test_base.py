@@ -1,4 +1,12 @@
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import GLib
 import unittest
+from time import sleep
 from abc import ABCMeta
 from mosaicode.GUI.block import Block
 from mosaicode.GUI.comment import Comment
@@ -16,6 +24,11 @@ from mosaicode.model.port import Port
 
 class TestBase(unittest.TestCase):
     __metaclass__ = ABCMeta
+
+    def refresh_gui(self, delay=0):
+        while Gtk.events_pending():
+            Gtk.main_iteration_do(False)
+        sleep(delay)
 
     def create_main_window(self):
         return MainWindow()
