@@ -25,6 +25,8 @@ from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.diagram import Diagram
 from mosaicode.GUI.messagedialog import MessageDialog
 from mosaicode.GUI.confirmdialog import ConfirmDialog
+from mosaicode.GUI.savedialog import SaveDialog
+from mosaicode.GUI.opendialog import OpenDialog
 from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
 from mosaicode.model.blockmodel import BlockModel

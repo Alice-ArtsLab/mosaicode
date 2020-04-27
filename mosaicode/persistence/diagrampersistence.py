@@ -36,6 +36,8 @@ class DiagramPersistence():
         parser = XMLParser(diagram.file_name)
 
         # Loading from tags
+        if parser.getTag(tag_name) is None:
+            return False
         zoom = parser.getTag(tag_name).getTag("zoom")
         if zoom is not None:
             zoom = zoom.getAttr("value")

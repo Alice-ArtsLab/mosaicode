@@ -225,7 +225,8 @@ class System(object):
                     try:
                         module = getattr(__import__(module_name, fromlist=[name]), name)
                     except:
-                        print 'Can not import: '+ module_name
+                        pass
+#                        print 'Can not import: '+ module_name
 
                     for class_name, obj in inspect.getmembers(module):
                         if not inspect.isclass(obj):
