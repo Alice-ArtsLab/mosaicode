@@ -6,7 +6,9 @@ This module contains the BlockMenu class.
 """
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 class BlockMenu(Gtk.Menu):
     """
@@ -24,21 +26,23 @@ class BlockMenu(Gtk.Menu):
         """
         Gtk.Menu.__init__(self)
         self.block = None
-        menu_item = Gtk.MenuItem.new_with_label("Delete")
-        menu_item.connect("activate", self.__delete_clicked)
-        self.append(menu_item)
+        self.delete_menu_item = Gtk.MenuItem.new_with_label("Delete")
+        self.delete_menu_item.connect("activate", self.__delete_clicked)
+        self.append(self.delete_menu_item)
 
-        menu_item = Gtk.MenuItem.new_with_label("Collapse")
-        menu_item.connect("activate", self.__collapse_clicked)
-        self.append(menu_item)
+        self.collapse_menu_item = Gtk.MenuItem.new_with_label("Collapse")
+        self.collapse_menu_item.connect("activate", self.__collapse_clicked)
+        self.append(self.collapse_menu_item)
 
     # ----------------------------------------------------------------------
-    def show_block_menu(self, block, event):
+    def show(self, block, event):
         self.block = block
-
-        # Shows the menu
         self.show_all()
-        self.popup(None, None, None, None, event.button, event.time)
+        self.popup_at_widget(
+                    block.diagram,
+                    Gdk.Gravity.CENTER, # widget_anchor
+                    Gdk.Gravity.CENTER, # menu_anchor
+                    event)
 
     # ----------------------------------------------------------------------
     def __delete_clicked(self, *args):

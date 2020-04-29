@@ -6,7 +6,9 @@ This module contains the BlockMenu class.
 """
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 from mosaicode.control.diagramcontrol import DiagramControl
 
 class DiagramMenu(Gtk.Menu):
@@ -25,38 +27,38 @@ class DiagramMenu(Gtk.Menu):
         """
         Gtk.Menu.__init__(self)
         self.diagram = None
-        self.x = 0
-        self.y = 0
 
-        menu_item = Gtk.MenuItem.new_with_label("Clear Code Template")
-        menu_item.connect("activate", self.__clear_code_template)
-        self.append(menu_item)
+        self.clear_menu_item = Gtk.MenuItem.new_with_label("Clear Code Template")
+        self.clear_menu_item.connect("activate", self.__clear_code_template)
+        self.append(self.clear_menu_item)
 
-        menu_item = Gtk.MenuItem.new_with_label("Insert comment")
-        menu_item.connect("activate", self.__insert_comment)
-        self.append(menu_item)
+        self.insert_menu_item = Gtk.MenuItem.new_with_label("Insert comment")
+        self.insert_menu_item.connect("activate", self.__insert_comment)
+        self.append(self.insert_menu_item)
 
         self.append(Gtk.SeparatorMenuItem())
 
-        menu_item = Gtk.MenuItem.new_with_label("Delete")
-        menu_item.connect("activate", self.__delete)
-        self.append(menu_item)
+        self.delete_menu_item = Gtk.MenuItem.new_with_label("Delete")
+        self.delete_menu_item.connect("activate", self.__delete)
+        self.append(self.delete_menu_item)
 
-        menu_item = Gtk.MenuItem.new_with_label("Collapse")
-        menu_item.connect("activate", self.__collapse_clicked)
-        self.append(menu_item)
+        self.collapse_menu_item = Gtk.MenuItem.new_with_label("Collapse")
+        self.collapse_menu_item.connect("activate", self.__collapse_clicked)
+        self.append(self.collapse_menu_item)
 
-        menu_item = Gtk.MenuItem.new_with_label("Uncollapse")
-        menu_item.connect("activate", self.__uncollapse_clicked)
-        self.append(menu_item)
+        self.uncollapse_menu_item = Gtk.MenuItem.new_with_label("Uncollapse")
+        self.uncollapse_menu_item.connect("activate", self.__uncollapse_clicked)
+        self.append(self.uncollapse_menu_item)
 
     # ----------------------------------------------------------------------
     def show(self, diagram, event):
         self.diagram = diagram
-        self.x = event.x
-        self.y = event.y
         self.show_all()
-        self.popup(None, None, None, None, event.button, event.time)
+        self.popup_at_widget(
+                    diagram,
+                    Gdk.Gravity.CENTER, # widget_anchor
+                    Gdk.Gravity.CENTER, # menu_anchor
+                    event)
 
     # ----------------------------------------------------------------------
     def __clear_code_template(self, *args):
