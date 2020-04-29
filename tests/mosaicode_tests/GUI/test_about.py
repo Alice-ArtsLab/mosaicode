@@ -9,5 +9,8 @@ class TestAbout(TestBase):
         self.about.destroy()
 
     def test_get_default_size(self):
-        self.assertEqual(self.about.get_default_size(), (650, 480), 'incorrect size')
+        self.assertEqual(
+                    self.about.get_default_size(),
+                    (650, 480),
+                    "incorrect size")
 

@@ -84,8 +84,6 @@ class TestBase(unittest.TestCase):
         port1.type = "Test"
 
         block.ports = [port0, port1]
-
-        diagram_control.add_block(block)
         return block
 
     def create_comment(self):

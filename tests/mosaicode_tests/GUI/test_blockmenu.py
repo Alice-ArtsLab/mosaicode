@@ -11,8 +11,13 @@ class TestBlockMenu(TestBase):
     def setUp(self):
         self.blockmenu = BlockMenu()
 
-    def test_show_block_menu(self):
+    def test_show(self):
         event = Gdk.Event().new(Gdk.EventType.BUTTON_PRESS)
         event.button = 1
-        event.state = Gdk.ModifierType.BUTTON1_MASK
-#        self.blockmenu.show_block_menu(self.create_block(), event)
+        self.blockmenu.show(self.create_block(), event)
+
+        self.blockmenu.collapse_menu_item.emit("activate")
+        self.refresh_gui()
+        self.blockmenu.delete_menu_item.emit("activate")
+        self.refresh_gui()
+        self.blockmenu.destroy()

@@ -12,8 +12,14 @@ class TestBlockNotebook(TestBase):
 
     def test_update_blocks(self):
         blocks = System.get_blocks()
-        self.assertIsNone(self.block_notebook.update_blocks(blocks), "Failed to update blocks")
-        self.assertIsNone(self.block_notebook.update_blocks(blocks), "Failed to update blocks")
+        self.assertIsNone(
+                self.block_notebook.update_blocks(blocks),
+                "Failed to update blocks"
+                )
+        self.assertIsNone(
+                self.block_notebook.update_blocks(blocks),
+                "Failed to update blocks"
+                )
 
     def test_search(self):
         query = "Add Float"

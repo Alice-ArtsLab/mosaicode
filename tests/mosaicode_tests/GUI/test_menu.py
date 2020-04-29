@@ -20,6 +20,7 @@ class TestMenu(TestBase):
     def test_event(self):
         menuitem = self.menu.help_menu.get_children()[0]
         menuitem.emit("activate")
+        self.refresh_gui()
 
     def test_update_examples(self):
         System.get_list_of_examples().append("language/framework/test")
@@ -35,10 +36,20 @@ class TestMenu(TestBase):
     def test_update_recent_files(self):
         self.menu.update_recent_files(["file1", "file2"])
         self.menu.update_recent_files(["file1", "file2"])
+        self.menu.update_recent_files(None)
 
     def test_update_blocks(self):
         self.menu.update_blocks(System.get_blocks())
         self.menu.update_blocks(System.get_blocks())
+
+    def test_menu_item(self):
+        self.menu.actions.keys()[0].emit("activate")
+        self.refresh_gui()
+
+    def test_recent_files(self):
+        self.menu.update_recent_files(["file1", "file2"])
+        self.menu.recent_files_menu.get_children()[0].emit("activate")
+        self.refresh_gui()
 
     def test_event(self):
         event = Gdk.Event()
@@ -46,7 +57,12 @@ class TestMenu(TestBase):
         event.state = Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK
         event.keyval = Gdk.KEY_a
         self.menu.emit("key-press-event", event)
+        self.refresh_gui()
         self.menu.emit("check-resize")
+        self.refresh_gui()
         self.menu.emit("delete_event", event)
+        self.refresh_gui()
         event.keyval = Gdk.KEY_b
         self.menu.emit("key-press-event", event)
+        self.refresh_gui()
+

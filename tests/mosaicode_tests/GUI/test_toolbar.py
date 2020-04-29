@@ -14,3 +14,12 @@ class TestToolbar(TestBase):
         gdkevent.key.type = Gdk.EventType.BUTTON_PRESS
         button = self.toolbar.get_children()[0]
         button.emit("button-press-event", gdkevent)
+        self.refresh_gui()
+
+    def test_update_threads(self):
+        self.toolbar.update_threads({})
+
+    def test_click_button(self):
+        self.toolbar.actions.keys()[0].emit("clicked")
+        self.refresh_gui()
+

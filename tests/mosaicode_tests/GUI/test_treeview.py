@@ -10,4 +10,14 @@ from mosaicode.GUI.treeview import TreeView
 class TestTreeView(TestBase):
 
     def setUp(self):
-        self.treeview = TreeView("Title", None, None)
+        self.treeview = TreeView("Title", self.action, None)
+
+    def action(self):
+        pass
+
+    def test_populate(self):
+        items = ["A", "B", "C"]
+        self.treeview.populate(items)
+
+    def test_get_selection(self):
+        self.treeview.get_selection()

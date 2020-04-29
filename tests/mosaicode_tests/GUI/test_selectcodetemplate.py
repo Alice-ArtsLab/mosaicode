@@ -24,8 +24,11 @@ class TestSelectCodeTemplate(TestBase):
         event = Gdk.Event()
         event.key.type = Gdk.EventType.BUTTON_PRESS
         self.selectcodetemplate.emit("button-press-event", event)
+        self.refresh_gui()
         self.selectcodetemplate.response(Gtk.ResponseType.OK)
+        self.refresh_gui()
         self.selectcodetemplate.response(Gtk.ResponseType.CANCEL)
+        self.refresh_gui()
         self.selectcodetemplate.close()
         self.selectcodetemplate.destroy()
 

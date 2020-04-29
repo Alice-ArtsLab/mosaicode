@@ -22,8 +22,12 @@ class TestMainWindow(TestBase):
         event.state = Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.MOD2_MASK
         event.keyval = Gdk.KEY_a
         self.main_window.emit("key-press-event", event)
+        self.refresh_gui()
         self.main_window.emit("check-resize")
+        self.refresh_gui()
         self.main_window.emit("delete_event", event)
+        self.refresh_gui()
         event.keyval = Gdk.KEY_b
         self.main_window.emit("key-press-event", event)
+        self.refresh_gui()
 

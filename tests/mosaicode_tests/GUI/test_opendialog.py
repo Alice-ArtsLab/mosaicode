@@ -37,11 +37,10 @@ class TestOpenDialog(TestBase):
     def test_run(self):
         t1 = threading.Thread(target=self.dialog.run, args=());
         t1.start()
-        sleep(0.2)
-        while not self.dialog.is_visible():
-            sleep(0.1)
+        sleep(1)
         self.dialog.select_filename("LICENSE")
         self.dialog.response(Gtk.ResponseType.OK)
         self.refresh_gui()
         t1.join()
-
+        self.dialog.close()
+        self.dialog.destroy()

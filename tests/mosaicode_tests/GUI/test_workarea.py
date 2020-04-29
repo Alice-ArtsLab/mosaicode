@@ -4,7 +4,8 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk, Gdk
 from gi.repository import GObject
 from gi.repository import GLib
-
+from time import sleep
+import threading
 from tests.mosaicode_tests.test_base import TestBase
 from mosaicode.GUI.workarea import WorkArea
 
@@ -33,12 +34,31 @@ class TestWorkArea(TestBase):
         self.workarea.resize(None)
 
     def test_close_tabs(self):
-        GLib.timeout_add(100, self.close_window)
         diagram = self.create_diagram()
         self.workarea.add_diagram(diagram)
         diagram.set_modified(True)
-        GLib.timeout_add(100, self.close_window)
-        self.workarea.close_tabs()
+        t1 = threading.Thread(target=self.workarea.close_tabs, args=());
+        t1.start()
+        sleep(1)
+        self.workarea.confirm.response(Gtk.ResponseType.CANCEL)
+        self.refresh_gui()
+        t1.join()
+
+        t1 = threading.Thread(target=self.workarea.close_tab, args=());
+        t1.start()
+        sleep(1)
+        self.workarea.confirm.response(Gtk.ResponseType.CANCEL)
+        self.refresh_gui()
+        t1.join()
+
+        t1 = threading.Thread(target=self.workarea.close_tab, args=(-2));
+        t1.start()
+        sleep(1)
+        self.workarea.confirm.response(Gtk.ResponseType.CANCEL)
+        self.refresh_gui()
+        t1.join()
+
+        self.workarea.destroy()
 
     def test_get_current_diagram(self):
         self.workarea.add_diagram(self.create_diagram())
@@ -55,3 +75,5 @@ class TestWorkArea(TestBase):
         label = hbox.get_children()[0]
         button = hbox.get_children()[1]
         button.emit("clicked")
+        self.refresh_gui()
+
