@@ -39,6 +39,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.focus = False
         self.has_flow = False
         self.is_selected = False
+        self.is_collapsed = False
 
         self.width = 112
 

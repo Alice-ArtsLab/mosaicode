@@ -345,14 +345,16 @@ class Menu(Gtk.MenuBar):
         for widget in self.recent_files_menu.get_children():
             self.recent_files_menu.remove(widget)
 
+        if not list_of_recent_files:
+            menu_item = Gtk.MenuItem.new_with_label(_("<empty>"))
+            self.recent_files_menu.append(menu_item)
+            self.recent_files_menu.show_all()
+            return False
+
         for index, recent_file in enumerate(list_of_recent_files):
             item_name = str(index)+': '+recent_file
             menu_item = Gtk.MenuItem.new_with_label(item_name)
             self.recent_files_menu.append(menu_item)
             menu_item.connect("activate", self.__load_recent, None)
-
-        if not list_of_recent_files:
-            menu_item = Gtk.MenuItem.new_with_label(_("<empty>"))
-            self.recent_files_menu.append(menu_item)
 
         self.recent_files_menu.show_all()

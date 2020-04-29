@@ -70,10 +70,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             items = self.get_items_in_area(
                 self.select_rect.bounds, True, False, True)
             for item in items:
-                try:
                     item.is_selected = True
-                except:
-                    pass
             self.update_flows()
             return True  # Abort other events
 
@@ -139,7 +136,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             self.update_flows()
             self.__start_select()
             return False
-        elif event.button == 3:
+        if event.button == 3:
             self.main_window.diagram_menu.show(self, event)
             return False
         return False

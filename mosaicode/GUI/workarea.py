@@ -22,6 +22,7 @@ class WorkArea(Gtk.Notebook):
         self.diagrams = []
         self.connect("switch-page", self.__on_switch_page)
         self.connect("page-removed", self.__on_page_removed)
+        self.confirm = None
 
     # ----------------------------------------------------------------------
     def __on_page_removed(self, notebook, child, page_num):
@@ -68,7 +69,8 @@ class WorkArea(Gtk.Notebook):
                                        _(" is not saved.\nIf you close it"
                                        ", changes will be lost.\n"
                                        "Confirm?")
-            result = ConfirmDialog(message, self.main_window).run()
+            self.confirm = ConfirmDialog(message, self.main_window)
+            result = self.confirm.run()
             if result == Gtk.ResponseType.CANCEL:
                 return False
 
