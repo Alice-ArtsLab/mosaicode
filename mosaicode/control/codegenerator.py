@@ -116,7 +116,6 @@ class CodeGenerator():
             my_key = "$block[" + attribute + "]$"
             my_value = str(block.__dict__[attribute])
             my_value = my_value.replace(" ", "_")
-            my_value = my_value.lower()
             value = value.replace(my_key, my_value)
 
         return value

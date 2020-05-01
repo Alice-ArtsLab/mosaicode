@@ -34,5 +34,5 @@ class MessageDialog(Gtk.MessageDialog):
         self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         self.format_secondary_text(message)
         self.show_all()
-        self.show()
+        self.run()
         self.destroy()
