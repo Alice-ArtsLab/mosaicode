@@ -376,18 +376,3 @@ class System(object):
             name = name + "/"
         return name
 
-    # ----------------------------------------------------------------------
-    @classmethod
-    def get_filename(cls, diagram):
-        """
-        This method return the filename
-
-        Returns:
-
-            * **Types** (:class:`str<str>`)
-        """
-        name = System.get_preferences().default_filename
-        name = System.replace_wildcards(name, diagram)
-        return name
-
-# ------------------------------------------------------------------------------
