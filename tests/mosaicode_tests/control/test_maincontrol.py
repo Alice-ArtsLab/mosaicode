@@ -6,6 +6,11 @@ class TestMainControl(TestBase):
 
     def setUp(self):
         self.main_control = MainControl(self.create_main_window())
+        self.main_control.init()
+        self.main_control.new()
+
+    def test_about(self):
+        self.main_control.about()
 
     def test_add_block(self):
         self.main_control.add_block(self.create_block())

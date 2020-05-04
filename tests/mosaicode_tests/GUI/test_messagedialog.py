@@ -12,13 +12,18 @@ from mosaicode.GUI.messagedialog import MessageDialog
 
 class TestMessageDialog(TestBase):
 
-    def setUp(self):
+    def test_constructor(self):
         self.dialog = MessageDialog(
                     "Test Message Dialog",
                     "Test",
                     self.create_main_window()
                     )
-
-    def test_constructor(self):
-        pass
+        t1 = threading.Thread(target=self.dialog.run, args=());
+        t1.start()
+        sleep(1)
+        self.dialog.response(Gtk.ResponseType.OK)
+        self.refresh_gui()
+        t1.join()
+        self.dialog.close()
+        self.dialog.destroy()
 

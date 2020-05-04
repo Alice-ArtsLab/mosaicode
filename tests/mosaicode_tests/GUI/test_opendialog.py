@@ -12,29 +12,10 @@ from mosaicode.GUI.opendialog import OpenDialog
 
 class TestOpenDialog(TestBase):
 
-    def setUp(self):
-        self.dialog = OpenDialog(
-                    "Test",
-                    self.create_main_window(),
-                    "jpg",
-                    "."
-                    )
-
-        self.dialog = OpenDialog(
-                    "Test",
-                    self.create_main_window(),
-                    None,
-                    None
-                    )
-
-        self.dialog = OpenDialog(
-                    "Test",
-                    self.create_main_window(),
-                    "jpg",
-                    None
-                    )
-
     def test_run(self):
+        self.dialog = OpenDialog("Test", self.create_main_window(), "*.jpg", ".")
+        self.dialog = OpenDialog("Test", self.create_main_window(), None, None)
+        self.dialog = OpenDialog("Test", self.create_main_window(), "*.mscd", None)
         t1 = threading.Thread(target=self.dialog.run, args=());
         t1.start()
         sleep(1)
