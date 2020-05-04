@@ -187,15 +187,15 @@ class BlockPortEditor(Gtk.ScrolledWindow):
 
         if new_port.type == "":
             message = "Type can not be empty"
-            MessageDialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor).run()
             return
         if new_port.label == "":
             message = "Label can not be empty"
-            MessageDialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor).run()
             return
         if new_port.name == "":
             message = "Name can not be empty"
-            MessageDialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor).run()
             return
         contains = False
         i = 0

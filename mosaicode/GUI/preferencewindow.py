@@ -74,11 +74,7 @@ class PreferenceWindow(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def run(self):
-        response = None
-        if self.main_window is None:
-            response = self.run()
-        else:
-            response = self.show()
+        response = super(Gtk.Dialog, self).run()
 
         if response == Gtk.ResponseType.OK:
             self.properties.author = self.author.get_value()

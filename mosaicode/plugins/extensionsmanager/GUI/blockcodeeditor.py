@@ -229,11 +229,11 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
                 code = widget.get_value()
         if name == "":
             message = "Code Part Name can not be empty"
-            MessageDialog("Error", message, self)
+            MessageDialog("Error", message, self).run()
             return
         if code == "":
             message = "Code can not be empty"
-            MessageDialog("Error", message, self)
+            MessageDialog("Error", message, self).run()
             return
         contains = False
         i = 0

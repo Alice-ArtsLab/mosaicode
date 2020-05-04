@@ -72,6 +72,6 @@ class ExtensionsManagerControl(object):
                 "Exporting as xml",
                 "Exported successfully!",
                 self.main_window
-                )
+                ).run()
 
 # ----------------------------------------------------------------------

@@ -177,11 +177,11 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
             return
         if configuration["label"] == "":
             message = "Label can not be empty"
-            MessageDialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor).run()
             return
         if configuration["name"] == "":
             message = "Name can not be empty"
-            MessageDialog("Error", message, self.block_editor)
+            MessageDialog("Error", message, self.block_editor).run()
             return
         contains = False
         i = 0
