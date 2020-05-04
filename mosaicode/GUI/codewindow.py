@@ -46,18 +46,18 @@ class CodeWindow(Gtk.Dialog):
 
         icon_size = Gtk.IconSize.LARGE_TOOLBAR
         icon = Gtk.Image.new_from_icon_name(Gtk.STOCK_SAVE_AS, icon_size)
-        button = Gtk.ToolButton.new(icon, _("Save Source"))
-        button.set_expand(False)
-        button.set_is_important(True)
-        button.connect("clicked", self.__save_button_clicked, None)
-        toolbar.add(button)
+        self.save_button = Gtk.ToolButton.new(icon, _("Save Source"))
+        self.save_button.set_expand(False)
+        self.save_button.set_is_important(True)
+        self.save_button.connect("clicked", self.__save_button_clicked, None)
+        toolbar.add(self.save_button)
 
         icon = Gtk.Image.new_from_icon_name(Gtk.STOCK_EXECUTE, icon_size)
-        button = Gtk.ToolButton.new(icon, _("Run this code"))
-        button.set_expand(False)
-        button.set_is_important(True)
-        button.connect("clicked", self.__run_button_clicked, None)
-        toolbar.add(button)
+        self.run_button = Gtk.ToolButton.new(icon, _("Run this code"))
+        self.run_button.set_expand(False)
+        self.run_button.set_is_important(True)
+        self.run_button.connect("clicked", self.__run_button_clicked, None)
+        toolbar.add(self.run_button)
 
 
         self.notebook = Gtk.Notebook()
