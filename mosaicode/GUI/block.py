@@ -35,7 +35,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.remember_x = 0
         self.remember_y = 0
 
-        self.__widgets = {}
+        self.widgets = {}
         self.focus = False
         self.has_flow = False
         self.is_selected = False
@@ -164,7 +164,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                     fill_color_rgba=self.get_color(),
                                     tooltip=self.label
                                     )
-        self.__widgets["Rect"] = rect
+        self.widgets["Rect"] = rect
 
     # ----------------------------------------------------------------------
     def __draw_icon(self):
@@ -186,7 +186,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                     tooltip=self.label
                                     )
 
-        self.__widgets["Icon"] = icon
+        self.widgets["Icon"] = icon
 
     # ----------------------------------------------------------------------
     def __draw_label(self):
@@ -207,7 +207,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                      use_markup=True,
                                      stroke_color='black'
                                      )
-        self.__widgets["Label"] = label
+        self.widgets["Label"] = label
 
     # ----------------------------------------------------------------------
     def __create_ports_label(self, port):
@@ -252,7 +252,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                  )
             text.connect("button-press-event", press_event , port)
             text.connect("button-release-event", release_event, port)
-            self.__widgets["port" + str(port)] = text
+            self.widgets["port" + str(port)] = text
 
     # ----------------------------------------------------------------------
     def __on_input_press(self, canvas_item, target_item, event, port):
@@ -415,6 +415,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = True
         distinct_con = []
         for conn in self.diagram.connectors:
+            print conn
             if conn.input != self:
                 continue
             if conn.input_port not in distinct_con:
@@ -435,55 +436,55 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         """
         # Not connected: Color = red
         if self.has_flow:
-            self.__widgets["Rect"].set_property("stroke_color", 'black')
+            self.widgets["Rect"].set_property("stroke_color", 'black')
         else:
-            self.__widgets["Rect"].set_property("stroke_color", 'red')
+            self.widgets["Rect"].set_property("stroke_color", 'red')
 
         # in focus: Line width = 3
         if self.focus:
-            self.__widgets["Rect"].set_property("line-width", 3)
+            self.widgets["Rect"].set_property("line-width", 3)
         else:
-            self.__widgets["Rect"].set_property("line-width", 1)
+            self.widgets["Rect"].set_property("line-width", 1)
 
         # selected: Line = dashed
         if self.is_selected:
-            self.__widgets["Rect"].set_property(
+            self.widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((4.0, 2.0)))
         else:
-            self.__widgets["Rect"].set_property(
+            self.widgets["Rect"].set_property(
                 "line_dash", GooCanvas.CanvasLineDash.newv((10.0, 0.0)))
 
         self.height = self.__calculate_height()
 
         if self.is_collapsed:
-            self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.INVISIBLE)
-            self.__widgets["Rect"].set_property("width", self.width - 60)
-            self.__widgets["Rect"].set_property("x", 35)
-            self.__widgets["Rect"].set_property("y", 0)
-            self.__widgets["Rect"].set_property("height", self.height - 10)
-            self.__widgets["Icon"].set_property("y", (self.height - 10)/2)
-            self.__widgets["Icon"].set_property("x", (self.width / 2) + 2)
+            self.widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.INVISIBLE)
+            self.widgets["Rect"].set_property("width", self.width - 60)
+            self.widgets["Rect"].set_property("x", 35)
+            self.widgets["Rect"].set_property("y", 0)
+            self.widgets["Rect"].set_property("height", self.height - 10)
+            self.widgets["Icon"].set_property("y", (self.height - 10)/2)
+            self.widgets["Icon"].set_property("x", (self.width / 2) + 2)
             for port in self.ports:
                 x,y = self.__get_port_pos(port)
-                if "port" + str(port) in self.__widgets:
-                    self.__widgets["port" + str(port)].set_property("x", x)
-                    self.__widgets["port" + str(port)].set_property("y", y)
-                    self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
+                if "port" + str(port) in self.widgets:
+                    self.widgets["port" + str(port)].set_property("x", x)
+                    self.widgets["port" + str(port)].set_property("y", y)
+                    self.widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
             return True
 
         if not self.is_collapsed:
-            self.__widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.VISIBLE)
-            self.__widgets["Rect"].set_property("width", self.width)
-            self.__widgets["Rect"].set_property("x", 0)
-            self.__widgets["Rect"].set_property("y", 10)
-            self.__widgets["Rect"].set_property("height", self.height)
-            self.__widgets["Icon"].set_property("y", (self.height + 20)/2)
-            self.__widgets["Icon"].set_property("x", (self.width / 2))
+            self.widgets["Label"].set_property("visibility", GooCanvas.CanvasItemVisibility.VISIBLE)
+            self.widgets["Rect"].set_property("width", self.width)
+            self.widgets["Rect"].set_property("x", 0)
+            self.widgets["Rect"].set_property("y", 10)
+            self.widgets["Rect"].set_property("height", self.height)
+            self.widgets["Icon"].set_property("y", (self.height + 20)/2)
+            self.widgets["Icon"].set_property("x", (self.width / 2))
             for port in self.ports:
                 x,y = self.__get_port_pos(port)
-                if "port" + str(port) in self.__widgets:
-                    self.__widgets["port" + str(port)].set_property("x", x)
-                    self.__widgets["port" + str(port)].set_property("y", y)
-                    self.__widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
+                if "port" + str(port) in self.widgets:
+                    self.widgets["port" + str(port)].set_property("x", x)
+                    self.widgets["port" + str(port)].set_property("y", y)
+                    self.widgets["port" + str(port)].set_property("text", self.__create_ports_label(port))
 
 # ----------------------------------------------------------------------

@@ -33,15 +33,17 @@ class TestBase(unittest.TestCase):
     def create_main_window(self):
         return MainWindow()
 
-    def create_diagram(self):
-        diagram = Diagram(self.create_main_window())
-        block = self.create_block(diagram_control=DiagramControl(diagram))
-        diagram.main_window.main_control.add_block(block)
+    def create_diagram(self, main_window=None):
+        if main_window is None:
+            main_window = self.create_main_window()
+        diagram = Diagram(main_window)
         diagram.language = "test"
         return diagram
 
-    def create_diagram_control(self):
-        diagram_control = DiagramControl(self.create_diagram())
+    def create_diagram_control(self, diagram=None):
+        if diagram is None:
+            diagram = self.create_diagram()
+        diagram_control = DiagramControl(diagram)
         diagram_control.connectors = []
         diagram_control.language = "language"
         return diagram_control
@@ -52,38 +54,41 @@ class TestBase(unittest.TestCase):
 
         block_model = BlockModel()
 
-        block = Block(diagram_control.diagram, block_model)
-        block.extension = "Test"
-        block.file = None
-
-        block.help = "Test"
-        block.label = "Test"
-        block.color = "200:200:25:150"
-        block.group = "Test"
-        block.codes = {"code0":"Test",
-                       "Code1":"Test",
-                       "Code2":"Test"}
-        block.type = "Test"
-        block.maxIO = 2
-        block.language = "language"
-        block.properties = [{"name": "test",
-                             "label": "Test",
-                             "type": MOSAICODE_FLOAT
-                             }]
-
         port0 = Port()
         port0.label = "Test0"
-        port0.conn_type = "Test"
-        port0.name = "Test"
+        port0.conn_type = Port.OUTPUT
+        port0.name = "Test0"
         port0.type = "Test"
 
         port1 = Port()
         port1.label = "Test1"
-        port1.conn_type = "Test"
-        port1.name = "Test"
+        port1.conn_type = Port.INPUT
+        port1.name = "Test1"
         port1.type = "Test"
 
-        block.ports = [port0, port1]
+        block_model.ports = [port0, port1]
+
+        block_model.help = "Test"
+        block_model.label = "Test"
+        block_model.color = "200:200:25:150"
+        block_model.group = "Test"
+        block_model.codes = {"code0":"Test",
+                       "Code1":"Test",
+                       "Code2":"Test"}
+        block_model.type = "Test"
+        block_model.maxIO = 2
+        block_model.language = "language"
+        block_model.properties = [{"name": "test",
+                             "label": "Test",
+                             "type": MOSAICODE_FLOAT
+                             }]
+
+        block_model.extension = "Test"
+        block_model.file = None
+
+        block = Block(diagram_control.diagram, block_model)
+
+
         return block
 
     def create_comment(self):
