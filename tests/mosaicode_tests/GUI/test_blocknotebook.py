@@ -26,5 +26,10 @@ class TestBlockNotebook(TestBase):
         self.assertIsNone(self.block_notebook.search(query))
 
     def test_get_selected_block(self):
-        self.assertIsNone(self.block_notebook.get_selected_block())
+        self.block_notebook.get_selected_block()
+        self.block_notebook.set_current_page(0)
+        while self.block_notebook.get_n_pages() > 0: 
+            self.block_notebook.remove_page(0) 
+            self.block_notebook.tabs.pop()
+        self.block_notebook.get_selected_block()
 
