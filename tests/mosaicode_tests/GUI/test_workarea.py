@@ -33,6 +33,11 @@ class TestWorkArea(TestBase):
         self.workarea.add_diagram(self.create_diagram())
         self.workarea.resize(None)
 
+    def test_close_tab(self):
+        diagram = self.create_diagram()
+        self.workarea.add_diagram(diagram)
+        self.workarea.close_tab(1000)
+
     def test_close_tabs(self):
         diagram = self.create_diagram()
         self.workarea.add_diagram(diagram)
