@@ -29,3 +29,15 @@ class TestPropertyBox(TestBase):
     def test_set_comment(self):
         comment = self.create_comment()
         self.propertybox.set_comment(comment)
+        comment.properties = []
+        self.propertybox.set_comment(comment)
+        self.propertybox.notify_comment()
+
+    def test_set_diagram(self):
+        diagram = self.create_diagram()
+        diagram.code_template = None
+        self.propertybox.set_diagram(diagram)
+        diagram.code_template = self.create_code_template()
+        self.propertybox.set_diagram(diagram)
+        self.propertybox.notify_diagram()
+

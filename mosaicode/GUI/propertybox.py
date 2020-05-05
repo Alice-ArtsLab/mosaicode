@@ -52,9 +52,11 @@ class PropertyBox(Gtk.VBox):
         # First, remove all components
         self.diagram = diagram
         if diagram.code_template is None:
-            data3 = {"label": _("Choose a Code Template"),
+            data1 = {"label": _("Choose a Code Template"),
                     "name": "code_template",
                     "value": ""}
+            field = LabelField(data1, None)
+            self.vbox.pack_start(field, False, False, 0)
             return
         self.__generate_fields(diagram.code_template.get_properties(),
                     self.notify_diagram)
