@@ -96,9 +96,10 @@ class Toolbar(Gtk.Toolbar):
             self.run_menu.remove(widget)
         for thread in threads:
             diagram, process = threads[thread]
+            icon = Gtk.Image.new_from_icon_name(Gtk.STOCK_STOP, Gtk.IconSize.MENU)
             box = Gtk.HBox()
-            box.add(Gtk.Label(diagram.patch_name))
-            box.add(Gtk.Image.new_from_stock(Gtk.STOCK_STOP, Gtk.IconSize.MENU))
+            box.add(Gtk.Label.new(diagram.patch_name))
+            box.add(icon)
             item = Gtk.MenuItem()
             item.add(box)
             item.connect("activate",

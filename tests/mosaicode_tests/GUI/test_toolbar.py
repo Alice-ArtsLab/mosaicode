@@ -17,7 +17,8 @@ class TestToolbar(TestBase):
         self.refresh_gui()
 
     def test_update_threads(self):
-        self.toolbar.update_threads({})
+        self.toolbar.update_threads({"test":[self.create_diagram(), None]})
+        self.toolbar.update_threads({"test":[self.create_diagram(), None]})
 
     def test_click_button(self):
         self.toolbar.actions.keys()[0].emit("clicked")
