@@ -3,6 +3,7 @@
 """
 This module contains the IntField class.
 """
+import sys
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -18,8 +19,8 @@ class IntField(Field):
         "label": "",
         "value": 0,
         "name": "",
-        "lower": 0,
-        "upper": 9223372036854775807,
+        "lower": -(sys.maxint - 1),
+        "upper": sys.maxint,
         "step": 1,
         "page_increment": 10,
         "page_size": 10

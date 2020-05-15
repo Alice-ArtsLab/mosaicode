@@ -12,6 +12,7 @@ from mosaicomponents.labelfield import LabelField
 from mosaicomponents.openfilefield import OpenFileField
 from mosaicomponents.savefilefield import SaveFileField
 from mosaicomponents.stringfield import StringField
+from mosaicomponents.charfield import CharField
 
 MOSAICODE_CHECK = "Check"
 MOSAICODE_CODE = "Code"
@@ -26,6 +27,7 @@ MOSAICODE_NONE = "None"
 MOSAICODE_OPEN_FILE = "Open File"
 MOSAICODE_SAVE_FILE = "Save File"
 MOSAICODE_STRING = "String"
+MOSAICODE_CHAR = "CHAR"
 
 component_list = {
     MOSAICODE_CHECK: CheckField,
@@ -37,5 +39,6 @@ component_list = {
     MOSAICODE_LABEL: LabelField,
     MOSAICODE_OPEN_FILE: OpenFileField,
     MOSAICODE_SAVE_FILE: SaveFileField,
-    MOSAICODE_STRING: StringField
+    MOSAICODE_STRING: StringField,
+    MOSAICODE_CHAR: CharField
 }
