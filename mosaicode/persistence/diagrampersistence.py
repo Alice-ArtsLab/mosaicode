@@ -14,6 +14,7 @@ from mosaicode.system import System as System
 from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.model.commentmodel import CommentModel
 from mosaicode.model.authormodel import AuthorModel
+from mosaicode.model.diagrammodel import DiagramModel
 
 tag_name = "mosaicode"
 
@@ -30,6 +31,8 @@ class DiagramPersistence():
             :param diagram: diagram to load.
             :return: operation status (True or False)
         """
+        if not isinstance(diagram, DiagramModel):
+            return False
         from mosaicode.control.diagramcontrol import DiagramControl
         dc = DiagramControl(diagram)
         # load the diagram
@@ -38,17 +41,14 @@ class DiagramPersistence():
         # Loading from tags
         if parser.getTag(tag_name) is None:
             return False
-        zoom = parser.getTag(tag_name).getTag("zoom")
-        if zoom is not None:
-            zoom = zoom.getAttr("value")
-        else:
+
+        zoom = 1.0
+        if parser.getTagAttr(tag_name, "zoom"):
             zoom = parser.getTagAttr(tag_name, "zoom")
         diagram.zoom = float(zoom)
 
-        language = parser.getTag(tag_name).getTag("language")
-        if language is not None:
-            language = language.getAttr("value")
-        else:
+        language = ""
+        if parser.getTagAttr(tag_name, "language"):
             language = parser.getTagAttr(tag_name, "language")
         diagram.language = language
 
@@ -78,10 +78,6 @@ class DiagramPersistence():
                 x = block.x
             if hasattr(block, "y"):
                 y = block.y
-            position = block.getTag("position")
-            if position is not None:
-                x = position.getAttr("x")
-                y = position.getAttr("y")
             properties = block.getChildTags("property")
             props = {}
             for prop in properties:
@@ -98,15 +94,23 @@ class DiagramPersistence():
         connections = parser.getTag("connections")
         connections = connections.getChildTags("connection")
         for conn in connections:
-            if not hasattr(conn, 'from_block'):
-                continue
-            elif not hasattr(conn, 'to_block'):
-                continue
             try:
                 from_block = diagram.blocks[int(conn.from_block)]
                 to_block = diagram.blocks[int(conn.to_block)]
-                from_block_out = from_block.ports[int(conn.getAttr("from_out"))]
-                to_block_in = to_block.ports[int(conn.getAttr("to_in"))]
+                port_index = int(conn.getAttr("from_out"))
+                if port_index > 0 and port_index < len(from_block.ports):
+                    from_block_out = from_block.ports[port_index]
+                    if from_block_out.is_input():
+                        continue
+                else:
+                    continue
+                port_index = int(conn.getAttr("to_in"))
+                if port_index > 0 and port_index < len(to_block.ports):
+                    to_block_in = to_block.ports[port_index]
+                    if not to_block_in.is_input():
+                        continue
+                else:
+                    continue
             except:
                 continue
             connection = ConnectionModel(diagram,
@@ -166,20 +170,24 @@ class DiagramPersistence():
         for block_id in diagram.blocks:
             block = diagram.blocks[block_id]
             pos = block.get_position()
-            parser.appendToTag('blocks', 'block',
+            parser.appendToTag(
+                    'blocks',
+                    'block',
                     type=block.type,
                     id=block.id,
                     collapsed=block.is_collapsed,
                     x=pos[0],
-                    y=pos[1])
+                    y=pos[1]
+                    )
             props = block.get_properties()
             for prop in props:
                 if "name" in prop and "value" in prop:
-                    parser.appendToLastTag('block',
-                                       'property',
-                                       key=str(prop["name"]),
-                                       value=str(prop["value"])
-                                       )
+                    parser.appendToLastTag(
+                            'block',
+                            'property',
+                            key=str(prop["name"]),
+                            value=str(prop["value"])
+                            )
 
         parser.appendToTag(tag_name, 'connections')
         for connector in diagram.connectors:

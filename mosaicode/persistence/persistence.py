@@ -23,16 +23,12 @@ class Persistence():
         """
         if path is None:
             return False
-            
         if os.path.isdir(path):
             return True
-        try:
-            if not os.path.isdir(path):
-                try:
-                    os.makedirs(path)
-                    return True
-                except:
-                    return False
-        except IOError as e:
-            return False
-        return True
+        else:
+            try:
+                os.makedirs(path)
+                return True
+            except:
+                return False
+

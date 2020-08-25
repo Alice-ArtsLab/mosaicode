@@ -8,7 +8,6 @@ import inspect  # For module inspect
 import pkgutil  # For dynamic package load
 from os.path import join
 from mosaicode.utils.XMLUtils import XMLParser
-from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.model.port import Port
 from mosaicode.persistence.persistence import Persistence
 
@@ -83,33 +82,4 @@ class PortPersistence():
             return False
         return True
 
-    # ----------------------------------------------------------------------
-    @classmethod
-    def save_python(cls, port, path):
-        """
-        This method save the port in user space in python extension.
-
-        Returns:
-
-            * **Types** (:class:`boolean<boolean>`)
-        """
-        parser = PythonParser()
-        parser.class_name = port.label.replace(' ', '')
-        parser.dependencies = [{'from':'mosaicode.model.port', 'import':'Port'}]
-        parser.inherited_classes = ['Port']
-        parser.setAttribute('type', port.type)
-        parser.setAttribute('language', port.language)
-        parser.setAttribute('label', port.label)
-        parser.setAttribute('color', port.color)
-        parser.setAttribute('multiple', port.multiple)
-        parser.setAttribute('code', str(port.code))
-
-        if not Persistence.create_dir(path):
-            return False
-        try:
-            file_name = path + port.label.lower().replace(' ', '_') + ".py"
-            parser.save(file_name)
-        except IOError as e:
-            return False
-        return True
 # ----------------------------------------------------------------------

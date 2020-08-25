@@ -6,17 +6,28 @@ from mosaicode.persistence.blockpersistence import BlockPersistence
 
 class TestBlockPersistence(TestBase):
 
-    def test_load_save(self):
+    def test_load_non_existent(self):
         # Try to load a nonexistent file
         file_name = "nonexistent_file.nofile"
         result = BlockPersistence.load_xml(file_name)
         assert result is None
 
+    def test_load_wrong_file(self):
         # Try to load a different file
         file_name = os.path.abspath(__file__)
         result = BlockPersistence.load_xml(file_name)
         assert result is None
 
+    def test_save_no_permission(self):
+        # Create, save and load a empty block
+        block = BlockModel()
+        block.label = "Empty block"
+        persistence = BlockPersistence.save_xml(block, "/no_permission")
+        assert not persistence
+        persistence = BlockPersistence.save_xml(block, "/etc")
+        assert not persistence
+
+    def test_load_save(self):
         # Create, save and load a empty block
         block = BlockModel()
         block.label = "Empty block"
