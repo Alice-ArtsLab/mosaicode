@@ -415,7 +415,6 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
         self.has_flow = True
         distinct_con = []
         for conn in self.diagram.connectors:
-            print conn
             if conn.input != self:
                 continue
             if conn.input_port not in distinct_con:

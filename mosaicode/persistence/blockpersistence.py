@@ -11,11 +11,9 @@ from os.path import join
 
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.persistence.persistence import Persistence
-from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.utils.XMLUtils import XMLParser
 
 tag_name = "MosaicodeBlock"
-
 
 class BlockPersistence():
     """
@@ -49,26 +47,31 @@ class BlockPersistence():
         block.color = parser.getTagAttr(tag_name, "color")
         block.label = parser.getTagAttr(tag_name, "label")
         block.group = parser.getTagAttr(tag_name, "group")
-        block.maxOI = parser.getTagAttr(tag_name, "maxOI")
 
-        for code in block.codes:
-            block.codes[code] = parser.getTag(tag_name).getTag(code).getText()
+        codes = parser.getTag(tag_name).getTag("codes")
+        if codes:
+            codes = codes.getChildTags("code")
+            for code in codes:
+                block.codes[code.getAttr("name_")] = code.getAttr("value")
 
-        props = parser.getTag(tag_name).getTag(
-            "properties").getChildTags("property")
-        for prop in props:
-            block.properties.append(ast.literal_eval(prop.getAttr("value")))
+        props = parser.getTag(tag_name).getTag("properties")
+        if props:
+            props = props.getChildTags("property")
+            for prop in props:
+                block.properties.append(ast.literal_eval(prop.getAttr("value")))
 
-        ports = parser.getTag(tag_name).getTag("ports").getChildTags("port")
-        for port in ports:
-            dict_port = {}
-            dict_port["type"] = str(port.getAttr("type_"))
-            dict_port["name"] = str(port.getAttr("name_"))
-            dict_port["label"] = str(port.getAttr("label"))
-            dict_port["conn_type"] = str(port.getAttr("conn_type"))
-            block.ports.append(dict_port)
+        ports = parser.getTag(tag_name).getTag("ports")
+        if ports:
+            ports = ports.getChildTags("port")
+            for port in ports:
+                dict_port = {}
+                dict_port["type"] = str(port.getAttr("type_"))
+                dict_port["name"] = str(port.getAttr("name_"))
+                dict_port["label"] = str(port.getAttr("label"))
+                dict_port["conn_type"] = str(port.getAttr("conn_type"))
+                block.ports.append(dict_port)
 
-        block.file = parser.getTagAttr(tag_name, "file")
+        block.file = file_name
 
         if block.type == "mosaicode.model.blockmodel":
             return None
@@ -96,9 +99,15 @@ class BlockPersistence():
         parser.setTagAttr(tag_name, 'label', block.label)
         parser.setTagAttr(tag_name, 'color', block.color)
         parser.setTagAttr(tag_name, 'group', block.group)
-        parser.setTagAttr(tag_name, 'maxIO', block.maxIO)
 
-        parser.setTagAttr(tag_name, 'codes', block.codes)
+        parser.appendToTag(tag_name, 'codes')
+        for key in block.codes:
+            parser.appendToTag(
+                    'codes',
+                    'code',
+                    name_=key,
+                    value=block.codes[key]
+                    )
 
         parser.appendToTag(tag_name, 'properties')
         for key in block.properties:
@@ -106,11 +115,14 @@ class BlockPersistence():
 
         parser.appendToTag(tag_name, 'ports')
         for port in block.ports:
-            parser.appendToTag('ports', 'port',
-                               conn_type=port.conn_type,
-                               name_=port.name,
-                               label=port.label,
-                               type_=port.type)
+            parser.appendToTag(
+                        'ports',
+                        'port',
+                        conn_type=port.conn_type,
+                        name_=port.name,
+                        label=port.label,
+                        type_=port.type
+                        )
 
         if (path is not None) and not Persistence.create_dir(path):
             return False
@@ -123,13 +135,11 @@ class BlockPersistence():
         else:
             return False
 
-        parser.setTagAttr(tag_name, 'file', path)
-
         try:
-            block_file = file(path, 'w')
+            block_file = open(path, 'w')
             block_file.write(parser.getXML())
             block_file.close()
-        except IOError as e:
+        except IOError as e: 
             return False
         return True
 

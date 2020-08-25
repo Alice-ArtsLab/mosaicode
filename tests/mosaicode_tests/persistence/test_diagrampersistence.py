@@ -2,54 +2,71 @@ from tests.mosaicode_tests.test_base import TestBase
 from mosaicode.utils.FileUtils import *
 from mosaicode.GUI.comment import Comment
 from mosaicode.GUI.block import Block
+from mosaicode.GUI.diagram import Diagram
+from mosaicode.model.port import Port
+from mosaicode.persistence.portpersistence import PortPersistence
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.persistence.diagrampersistence import DiagramPersistence
 from mosaicode.system import System
-from mosaicode.model.connectionmodel import ConnectionModel
 
 class PreferencesPersistenceTest(TestBase):
 
     def test_load_save(self):
-        file_name = get_temp_file() + ".mscd"
+        diagram = self.create_full_diagram()
+        diagram.file_name = "/tmp/Diagram.msc"
+        result = DiagramPersistence.save(diagram)
+        assert result
+        result = DiagramPersistence.load(diagram)
+        assert result
+        os.remove(diagram.file_name)
+
+        diagram = self.create_diagram()
+        diagram.file_name = "/tmp/Diagram.msc"
+        result = DiagramPersistence.save(diagram)
+        assert result
+        result = DiagramPersistence.load(diagram)
+        assert result
+        os.remove(diagram.file_name)
+
+    def test_load_wrong_code_template(self):
+        diagram = self.create_full_diagram()
+        diagram.code_template = "Fail"
+        result = DiagramPersistence.save(diagram)
+        assert result
+        result = DiagramPersistence.load(diagram)
+        assert result
+        os.remove(diagram.file_name)
+
+    def test_load_wrong_block(self):
+        diagram = self.create_full_diagram()
         diagram_control = self.create_diagram_control()
         diagram = diagram_control.diagram
+        block1 = self.create_block()
+        block1.type = "Worng Block Type"
+        diagram_control.add_block(block1)
+        result = DiagramPersistence.save(diagram)
+        assert result
+        result = DiagramPersistence.load(diagram)
+        assert result
+        os.remove(diagram.file_name)
 
-        diagram.file_name = "."
-        DiagramPersistence.save(diagram)
+    def test_save_exception(self):
+        diagram = self.create_full_diagram()
+        diagram.file_name = "/etc/Diagram.msc"
+        result = DiagramPersistence.save(diagram)
+        self.assertEquals(result, (False, 'Permission denied'))
 
-        comment = Comment(diagram, None)
+    def test_load_wrong_diagram(self):
+        port = Port()
+        port.hint = "test"
+        PortPersistence.save_xml(port, path="/tmp/")
+        file_name = "/tmp/" + port.hint + ".xml"
+        result = DiagramPersistence.load(file_name)
+        self.assertNotEquals(result, True)
+
+        diagram = self.create_full_diagram()
         diagram.file_name = file_name
-        diagram_control.add_comment(comment)
+        result = DiagramPersistence.load(diagram)
+        self.assertNotEquals(result, True)
+        os.remove(file_name)
 
-        System()
-        blocks = System.get_blocks()
-        for key in blocks:
-            block1 = Block(diagram, blocks[key])
-            diagram_control.add_block(block1)
-
-        source = None
-        source_port = None
-        for key in diagram.blocks:
-            for port in diagram.blocks[key].ports:
-                if not port.is_input():
-                    source = diagram.blocks[key]
-                    source_port = port
-                    break
-
-        sink = None
-        sink_port = None
-        for key in diagram.blocks:
-            for port in diagram.blocks[key].ports:
-                if port.is_input():
-                    sink = diagram.blocks[key]
-                    sink_port = port
-                    break
-
-        connection = ConnectionModel(diagram, source, source_port, sink, sink_port)
-        diagram_control.add_connection(connection)
-
-#        block0 = self.create_block(diagram_control)
-#        DiagramPersistence.save(diagram)
-#        System.remove_block(blocks.values()[0])
-#        result = DiagramPersistence.load(diagram)
-#        os.remove(file_name)
