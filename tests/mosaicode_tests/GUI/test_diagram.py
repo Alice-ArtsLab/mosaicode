@@ -64,6 +64,13 @@ class TestDiagram(TestBase):
         self.diagram.emit("button_press_event", event)
         self.refresh_gui()
 
+    def test_check_limit(self):
+        self.diagram.check_limit(0, 0, 800, 600)
+
+    def test_collapse(self):
+        self.diagram.collapse(True)
+        self.diagram.collapse(False)
+
     def test_button_release_event(self):
         event = Gdk.Event().new(Gdk.EventType.BUTTON_PRESS)
         event.button = 1

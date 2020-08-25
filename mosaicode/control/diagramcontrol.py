@@ -81,13 +81,13 @@ class DiagramControl:
             if widget.output.id not in replace or widget.input.id \
                     not in replace:
                 continue
-            output = replace[widget.output.id]
+            output_block = replace[widget.output.id]
             output_port = widget.output_port
-            input = replace[widget.input.id]
+            input_block = replace[widget.input.id]
             input_port = widget.input_port
-            self.diagram.start_connection(output, output_port)
+            self.diagram.start_connection(output_block, output_port)
             self.diagram.curr_connector.is_selected = True
-            self.diagram.end_connection(input, input_port)
+            self.diagram.end_connection(input_block, input_port)
 
         for widget in clipboard:
             if not isinstance(widget, CommentModel):

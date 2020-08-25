@@ -16,6 +16,7 @@ from mosaicode.GUI.fieldtypes import *
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.port import Port
 from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.model.connectionmodel import ConnectionModel
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.system import System
@@ -37,8 +38,49 @@ class TestBase(unittest.TestCase):
         if main_window is None:
             main_window = self.create_main_window()
         diagram = Diagram(main_window)
-        diagram.language = "test"
+        diagram.language = "Test"
+        diagram.zoom = 2
+        diagram.code_template = self.create_code_template()
         return diagram
+
+    def create_full_diagram(self):
+        main_window = self.create_main_window()
+        diagram = Diagram(main_window)
+        diagram_control = self.create_diagram_control()
+        diagram = diagram_control.diagram
+
+        block1 = self.create_block()
+        diagram_control.add_block(block1)
+
+        block2 = self.create_block()
+        diagram_control.add_block(block2)
+
+        connection = ConnectionModel(
+                    diagram,
+                    block1,
+                    block1.ports[0],
+                    block2,
+                    block2.ports[1]
+                    )
+        diagram_control.add_connection(connection)
+
+        connection = ConnectionModel(
+                    diagram,
+                    block1,
+                    block1.ports[1],
+                    block2,
+                    block2.ports[0]
+                    )
+        diagram_control.add_connection(connection)
+
+        connection = ConnectionModel(diagram, None, None, None, None)
+        diagram_control.add_connection(connection)
+
+        comment = self.create_comment()
+        main_window.main_control.add_comment(comment)
+        diagram_control.add_comment(comment)
+        return diagram
+
 
     def create_diagram_control(self, diagram=None):
         if diagram is None:
@@ -59,12 +101,14 @@ class TestBase(unittest.TestCase):
         port0.conn_type = Port.OUTPUT
         port0.name = "Test0"
         port0.type = "Test"
+        port0.index = 0
 
         port1 = Port()
         port1.label = "Test1"
         port1.conn_type = Port.INPUT
         port1.name = "Test1"
         port1.type = "Test"
+        port1.index = 1
 
         block_model.ports = [port0, port1]
 
@@ -76,19 +120,16 @@ class TestBase(unittest.TestCase):
                        "Code1":"Test",
                        "Code2":"Test"}
         block_model.type = "Test"
-        block_model.maxIO = 2
-        block_model.language = "language"
+        block_model.language = "Test"
         block_model.properties = [{"name": "test",
                              "label": "Test",
+                             "value": "0",
                              "type": MOSAICODE_FLOAT
                              }]
-
         block_model.extension = "Test"
         block_model.file = None
-
         block = Block(diagram_control.diagram, block_model)
-
-
+        System.get_blocks()[block.type] = block
         return block
 
     def create_comment(self):
@@ -102,6 +143,7 @@ class TestBase(unittest.TestCase):
     def create_code_template(self):
         code_template = CodeTemplate()
         code_template.name = "webaudio"
+        code_template.type = "Test"
         code_template.language = "javascript"
         code_template.command = "python -m webbrowser -t $dir_name$index.html\n"
         code_template.description = "Javascript / webaudio code template"
@@ -175,4 +217,5 @@ Developed by: $author$
 */
 $single_code[function]$
 """
+        System.get_code_templates()[code_template.type] = code_template
         return code_template

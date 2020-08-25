@@ -481,15 +481,19 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
         i = 0
         to_remove = []
         for connector in self.connectors:
-            if not isinstance(connector, Connector):
+            if not isinstance(connector, Connector) and connector.output:
                 outb = self.blocks[connector.output.id]
                 conn = Connector(self, outb, connector.output_port)
                 conn.input = self.blocks[connector.input.id]
                 conn.input_port = connector.input_port
                 connector = conn
                 self.connectors[i] = conn
-            if connector.output.id not in self.blocks or connector.input.id not in self.blocks:
+            else:
                 to_remove.append(connector)
+            if connector.output:
+                if  connector.output.id not in self.blocks or \
+                        connector.input.id not in self.blocks:
+                    to_remove.append(connector)
             i = i + 1
         for conn in to_remove:
             self.connectors.remove(conn)
@@ -515,14 +519,15 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
 
         # Redraw Connections
         for connector in self.connectors:
-            if not isinstance(connector, Connector):
+            if not isinstance(connector, Connector) and connector.output:
                 outb = self.blocks[connector.output.id]
                 conn = Connector(self, outb, connector.output_port)
                 conn.input = self.blocks[connector.input.id]
                 conn.input_port = connector.input_port
                 connector = conn
                 self.connectors[i] = conn
-            self.get_root_item().add_child(connector, -1)
+            if isinstance(connector, GooCanvas.CanvasItem):
+                self.get_root_item().add_child(connector, -1)
             i = i + 1
 
         # Redraw Comments

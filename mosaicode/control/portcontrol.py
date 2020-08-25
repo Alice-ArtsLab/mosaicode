@@ -10,7 +10,6 @@ from os.path import expanduser
 
 from mosaicode.model.port import Port
 from mosaicode.persistence.portpersistence import PortPersistence
-from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.utils.XMLUtils import XMLParser
 
 

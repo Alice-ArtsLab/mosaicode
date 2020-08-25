@@ -11,7 +11,6 @@ from os.path import expanduser
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.persistence.codetemplatepersistence import \
     CodeTemplatePersistence
-from mosaicode.utils.PythonUtils import PythonParser
 from mosaicode.utils.XMLUtils import XMLParser
 
 

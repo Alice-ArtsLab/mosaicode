@@ -16,7 +16,6 @@ class Preferences(object):
         self.license = "GPL 3.0"
 
         self.recent_files = []
-        # self.default_directory = "/tmp/%l/%n-%t"
         from mosaicode.system import System
         self.default_directory = os.path.join(System.get_user_dir(), "code-gen")
         self.default_filename = "%n"
