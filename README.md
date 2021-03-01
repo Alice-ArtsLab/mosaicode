@@ -10,7 +10,9 @@ Mosaicode
 Install dependencies:
 
 ```
-sudo apt install python python-pip libgtk-3-dev gir1.2-gtksource-3 gir1.2-goocanvas
+curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip.py
+python get-pip.py
+sudo apt install python libgtk-3-dev gir1.2-gtksource-3.0 gir1.2-goocanvas2.0 python-cairo-dev
 sudo pip install pgi lxml GooCalendar beautifulsoup4 soupsieve PyGObject
 ```
 
