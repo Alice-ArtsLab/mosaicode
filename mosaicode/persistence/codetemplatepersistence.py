@@ -113,7 +113,7 @@ class CodeTemplatePersistence():
             return False
         try:
             file_name = code_template.name
-            code_template_file = file(os.path.join(path, file_name + '.xml'), 'w')
+            code_template_file = open(os.path.join(path, file_name + '.xml'), 'w')
             code_template_file.write(parser.prettify())
             code_template_file.close()
         except IOError as e:

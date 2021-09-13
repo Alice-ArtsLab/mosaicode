@@ -19,8 +19,8 @@ class IntField(Field):
         "label": "",
         "value": 0,
         "name": "",
-        "lower": -(sys.maxint - 1),
-        "upper": sys.maxint,
+        "lower": -(sys.maxsize - 1),
+        "upper": sys.maxsize,
         "step": 1,
         "page_increment": 10,
         "page_size": 10

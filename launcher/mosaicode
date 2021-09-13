@@ -29,8 +29,8 @@ def main(argv):
         It initializes the interface.
     """
 
-    reload(sys)
-    sys.setdefaultencoding('utf8')
+#    reload(sys)
+#    sys.setdefaultencoding('utf8')
 
     # Parameter passing
     parser = argparse.ArgumentParser()
@@ -49,21 +49,21 @@ def main(argv):
         # This method is used by the launcher class
         ports = System.get_ports()
         for port in ports:
-            print "--------------------- "
+            print("--------------------- ")
             PortControl.print_port(ports[port])
         return
 
     if args.print_blockmodels:
         blocks = System.get_blocks()
         for block in blocks:
-            print "--------------------- "
+            print("--------------------- ")
             BlockControl.print_block(blocks[block])
         return
 
     if args.print_templates:
         code_templates = System.get_code_templates()
         for template in code_templates:
-            print "--------------------- "
+            print("--------------------- ")
             CodeTemplateControl.print_template(code_templates[template])
         return
 

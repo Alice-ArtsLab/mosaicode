@@ -6,7 +6,7 @@ This module contains the PreferenceWindow class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicomponents.combofield import ComboField
+from mosaicode.GUI.fields.combofield import ComboField
 
 import gettext
 

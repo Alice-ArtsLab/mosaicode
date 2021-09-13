@@ -170,7 +170,7 @@ class System(object):
                         continue
 
                     if ispkg:
-                        if name_par is not "" and not name.startswith(System.APP):
+                        if name_par != "" and not name.startswith(System.APP):
                             name = name_par + "." + name
                         __import__(name)
                         path = getattr(
@@ -226,7 +226,7 @@ class System(object):
                         module = getattr(__import__(module_name, fromlist=[name]), name)
                     except:
                         pass
-#                        print 'Can not import: '+ module_name
+#                        print('Can not import: '+ module_name)
 
                     for class_name, obj in inspect.getmembers(module):
                         if not inspect.isclass(obj):
@@ -325,7 +325,7 @@ class System(object):
         try:
             cls.instance.Log = Logger
         except:
-            print "Could not set logger"
+            print("Could not set logger")
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -334,8 +334,8 @@ class System(object):
         try:
             cls.instance.Log.log(msg)
         except:
-            print msg
-
+            print(msg)
+            
     # ----------------------------------------------------------------------
     @classmethod
     def get_user_dir(cls):

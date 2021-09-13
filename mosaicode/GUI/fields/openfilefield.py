@@ -69,7 +69,7 @@ class OpenFileField(Field):
         self.dialog.set_current_folder(current_dir)
 
         response = self.dialog.run()
-        print response
+
         if response == Gtk.ResponseType.OK:
             self.field.set_text(self.dialog.get_filename())
         self.dialog.destroy()

@@ -6,7 +6,7 @@ This module contains the BlockNotebook class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from blockstreeview import BlocksTreeView
+from mosaicode.GUI.blockstreeview import BlocksTreeView
 
 
 class BlockNotebook(Gtk.Notebook):

@@ -129,23 +129,23 @@ class BlockControl():
         """
         This method prints the block properties.
         """
-        print 'block.id =', block.id
-        print 'block.x =', block.x
-        print 'block.y =', block.y
+        print('block.id =', block.id)
+        print('block.x =', block.x)
+        print('block.y =', block.y)
 
-        print 'block.type =', block.type
-        print 'block.language =', block.language
-        print 'block.extension =', block.extension
-        print 'block.file =', block.file
+        print('block.type =', block.type)
+        print('block.language =', block.language)
+        print('block.extension =', block.extension)
+        print('block.file =', block.file)
 
         # Appearance
-        print 'block.help =', block.help
-        print 'block.label =', block.label
-        print 'block.color =', block.color
-        print 'block.group =', block.group
-        print 'block.ports =', block.ports
+        print('block.help =', block.help)
+        print('block.label =', block.label)
+        print('block.color =', block.color)
+        print('block.group =', block.group)
+        print('block.ports =', block.ports)
 
         # Code generation
-        print 'block.properties =', block.properties
-        print 'block.codes =', block.codes
+        print('block.properties =', block.properties)
+        print('block.codes =', block.codes)
 # ----------------------------------------------------------------------

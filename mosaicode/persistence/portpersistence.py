@@ -75,7 +75,7 @@ class PortPersistence():
             return False
         try:
             file_name = port.hint
-            port_file = file(os.path.join(path, file_name + '.xml'), 'w')
+            port_file = open(os.path.join(path, file_name + '.xml'), 'w')
             port_file.write(parser.prettify())
             port_file.close()
         except IOError as e:

@@ -55,14 +55,14 @@ class PortControl():
         """
         This method prints the port properties.
         """
-        print 'Port.type =', port.type
-        print 'Port.language =', port.language
-        print 'Port.hint =', port.hint
-        print 'Port.color =', port.color
-        print 'Port.multiple =',  port.multiple
-        print 'Port.file =', port.file
-        print 'Port.code =', port.code
-        print 'Port.var_name =', port.var_name
+        print('Port.type =', port.type)
+        print('Port.language =', port.language)
+        print('Port.hint =', port.hint)
+        print('Port.color =', port.color)
+        print('Port.multiple =',  port.multiple)
+        print('Port.file =', port.file)
+        print('Port.code =', port.code)
+        print('Port.var_name =', port.var_name)
 
     # ----------------------------------------------------------------------
     @classmethod

@@ -5,8 +5,8 @@ This module create the web server.
 import os
 import socket
 import threading
-import SocketServer
-import SimpleHTTPServer
+import socketserver
+import http.server
 from mosaicode.system import System as System
 
 

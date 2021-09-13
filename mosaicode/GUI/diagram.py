@@ -10,9 +10,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GooCanvas
-from block import Block
-from connector import Connector
-from comment import Comment
+from mosaicode.GUI.block import Block
+from mosaicode.GUI.connector import Connector
+from mosaicode.GUI.comment import Comment
 from mosaicode.system import System as System
 from mosaicode.model.diagrammodel import DiagramModel
 from mosaicode.model.blockmodel import BlockModel

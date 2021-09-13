@@ -11,13 +11,13 @@ from mosaicode.GUI.blockmenu import BlockMenu
 from mosaicode.GUI.diagrammenu import DiagramMenu
 from mosaicode.system import System as System
 
-from blocknotebook import BlockNotebook
-from menu import Menu
-from propertybox import PropertyBox
-from searchbar import SearchBar
-from status import Status
-from toolbar import Toolbar
-from workarea import WorkArea
+from mosaicode.GUI.blocknotebook import BlockNotebook
+from mosaicode.GUI.menu import Menu
+from mosaicode.GUI.propertybox import PropertyBox
+from mosaicode.GUI.searchbar import SearchBar
+from mosaicode.GUI.status import Status
+from mosaicode.GUI.toolbar import Toolbar
+from mosaicode.GUI.workarea import WorkArea
 
 class MainWindow(Gtk.Window):
     """

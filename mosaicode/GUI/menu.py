@@ -225,7 +225,7 @@ class Menu(Gtk.MenuBar):
             block_list.append(instance)
 
         # time to populate
-        for block in sorted(block_list):
+        for block in block_list:
             # first, the language submenu
             language_menu_item = self.__get_child_by_name(
                 self.block_menu, block.language)

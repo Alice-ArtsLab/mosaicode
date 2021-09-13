@@ -2,17 +2,17 @@
 """
 This module contains the fieldtypes.
 """
-from mosaicomponents.checkfield import CheckField
-from mosaicomponents.colorfield import ColorField
-from mosaicomponents.combofield import ComboField
-from mosaicomponents.commentfield import CommentField
-from mosaicomponents.floatfield import FloatField
-from mosaicomponents.intfield import IntField
-from mosaicomponents.labelfield import LabelField
-from mosaicomponents.openfilefield import OpenFileField
-from mosaicomponents.savefilefield import SaveFileField
-from mosaicomponents.stringfield import StringField
-from mosaicomponents.charfield import CharField
+from mosaicode.GUI.fields.checkfield import CheckField
+from mosaicode.GUI.fields.colorfield import ColorField
+from mosaicode.GUI.fields.combofield import ComboField
+from mosaicode.GUI.fields.commentfield import CommentField
+from mosaicode.GUI.fields.floatfield import FloatField
+from mosaicode.GUI.fields.intfield import IntField
+from mosaicode.GUI.fields.labelfield import LabelField
+from mosaicode.GUI.fields.openfilefield import OpenFileField
+from mosaicode.GUI.fields.savefilefield import SaveFileField
+from mosaicode.GUI.fields.stringfield import StringField
+from mosaicode.GUI.fields.charfield import CharField
 
 MOSAICODE_CHECK = "Check"
 MOSAICODE_CODE = "Code"

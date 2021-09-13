@@ -87,7 +87,7 @@ class PreferencesPersistence:
 
         try:
             file_name = path + "/" + prefs.conf_file_path
-            confFile = file(os.path.expanduser(file_name), 'w')
+            confFile = open(os.path.expanduser(file_name), 'w')
             confFile.write(parser.prettify())
             confFile.close()
         except IOError as e:
