@@ -40,8 +40,6 @@ class Menu(Gtk.MenuBar):
         file_menu.append(Gtk.SeparatorMenuItem())
         self.create_menu(_("Save"), "<Control>S", file_menu, mc.save)
         self.create_menu(_("Save as..."), None, file_menu, mc.save_as)
-        self.create_menu(_("Save as example..."), None,
-                         file_menu, mc.save_as_example)
         self.create_menu(_("Export Diagram As PNG..."), "<Control>E",
                          file_menu, mc.export_diagram)
         file_menu.append(Gtk.SeparatorMenuItem())

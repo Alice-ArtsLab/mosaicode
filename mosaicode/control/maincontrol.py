@@ -158,13 +158,6 @@ class MainControl():
         self.save(save_as=True)
 
     # ----------------------------------------------------------------------
-    def save_as_example(self):
-        """
-        This method save as.
-        """
-        self.save(save_as=True)
-
-    # ----------------------------------------------------------------------
     def export_diagram(self):
         """
         This method exports the diagram.
