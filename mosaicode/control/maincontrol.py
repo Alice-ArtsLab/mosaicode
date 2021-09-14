@@ -170,7 +170,7 @@ class MainControl():
             name = SaveDialog(
                 self.main_window,
                 title=_("Export diagram as png"),
-                filename=System.get_user_dir() + "/" + diagram.file_name + ".png",
+                filename=System.get_user_dir() + "/images/" + diagram.patch_name + ".png",
                 filetype="png").run()
 
             if name is None:
@@ -182,6 +182,8 @@ class MainControl():
                 result = ConfirmDialog(msg, self.main_window).run()
                 if result == Gtk.ResponseType.OK:
                     break
+            else:
+                break
 
         result, message = DiagramControl(diagram).export_png(name)
 
