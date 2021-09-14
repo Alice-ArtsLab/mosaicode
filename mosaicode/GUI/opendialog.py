@@ -38,11 +38,6 @@ class OpenDialog(Gtk.FileChooserDialog):
         if path is not None:
             self.set_current_folder(path)
 
-        allfiles = Gtk.FileFilter()
-        allfiles.set_name(_("All Archives"))
-        allfiles.add_pattern("*")
-        self.add_filter(allfiles)
-
         if filetype is not None:
             filefilter = Gtk.FileFilter()
             filefilter.set_name(filetype)

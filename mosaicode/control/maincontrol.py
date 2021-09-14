@@ -124,11 +124,13 @@ class MainControl():
                 dialog = SaveDialog(
                     self.main_window,
                     title=_("Save Diagram"),
-                    filename=System.get_user_dir() + "/" + diagram.file_name,
+                    filename=System.get_user_dir() + "/" + diagram.patch_name,
                     filetype="*.mscd")
                 name = dialog.run()
                 if name is None:
-                    continue
+                    System.log("File not saved")
+                    return
+
                 if not name.endswith("mscd"):
                     name = (("%s" + ".mscd") % name)
                 if os.path.exists(name) is True:
@@ -170,7 +172,7 @@ class MainControl():
             name = SaveDialog(
                 self.main_window,
                 title=_("Export diagram as png"),
-                filename=System.get_user_dir() + "/" + diagram.file_name + ".png",
+                filename=System.get_user_dir() + "/images/" + diagram.patch_name + ".png",
                 filetype="png").run()
 
             if name is None:
@@ -182,6 +184,8 @@ class MainControl():
                 result = ConfirmDialog(msg, self.main_window).run()
                 if result == Gtk.ResponseType.OK:
                     break
+            else:
+                break
 
         result, message = DiagramControl(diagram).export_png(name)
 

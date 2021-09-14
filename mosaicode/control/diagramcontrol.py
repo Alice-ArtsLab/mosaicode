@@ -374,7 +374,7 @@ class DiagramControl:
             x, y, width, height = self.get_min_max()
 
         if self.diagram.get_window() is None:
-            return False
+            return False, "Diagram has no window"
         pixbuf = Gdk.pixbuf_get_from_window(
                         self.diagram.get_window(),
                         x,
@@ -388,12 +388,12 @@ class DiagramControl:
         test, tmp_buffer = pixbuf.save_to_bufferv("png",  [], [])
 
         try:
-            save_file = open(file_name, "w")
+            save_file = open(file_name, "wb")
             save_file.write(tmp_buffer)
             save_file.close()
         except IOError as e:
             System.log(e.strerror)
             return False, e.strerror
 
-        return True, ""
+        return True, "Sucess"
 # ------------------------------------------------------------------------------

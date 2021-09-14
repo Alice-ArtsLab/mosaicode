@@ -47,13 +47,14 @@ class DiagramPersistence():
             zoom = parser.getTagAttr(tag_name, "zoom")
         diagram.zoom = float(zoom)
 
-        language = ""
-        if parser.getTagAttr(tag_name, "language"):
-            language = parser.getTagAttr(tag_name, "language")
+        language = parser.getTagAttr(tag_name, "language")
+        if language == "":
+            language = None
         diagram.language = language
 
         code_template = parser.getTag(tag_name).getTag("code_template")
-        if code_template is not None and hasattr(code_template, "value"):
+        if code_template is not None \
+                    and parser.getTagAttr(code_template, "value") is not None:
             code_template = code_template.getAttr("value")
             if code_template not in System.get_code_templates():
                 System.log("Code Template " + code_template + " not found")
@@ -170,7 +171,12 @@ class DiagramPersistence():
         parser.setTagAttr(tag_name,'zoom', value=diagram.zoom)
         parser.setTagAttr(tag_name,'language', value=diagram.language)
 
-        parser.appendToTag(tag_name, 'code_template', value=diagram.code_template)
+        if diagram.code_template is not None:
+            parser.appendToTag(
+                    tag_name,
+                    'code_template',
+                    value=diagram.code_template
+                    )
 
         parser.appendToTag(tag_name, 'blocks')
         for block_id in diagram.blocks:
