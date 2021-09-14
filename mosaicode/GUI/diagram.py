@@ -477,19 +477,23 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             if not isinstance(block, Block):
                 block = Block(self, self.blocks[key])
                 self.blocks[key] = block
+
         # Create Connection Widgets
         i = 0
         to_remove = []
+
         for connector in self.connectors:
-            if not isinstance(connector, Connector) and connector.output:
+
+            # If it is not an instance of a connector, it is a connection model
+            # Probably it it the first time we draw this diagram            
+            if not isinstance(connector, Connector):
                 outb = self.blocks[connector.output.id]
                 conn = Connector(self, outb, connector.output_port)
                 conn.input = self.blocks[connector.input.id]
                 conn.input_port = connector.input_port
                 connector = conn
                 self.connectors[i] = conn
-            else:
-                to_remove.append(connector)
+
             if connector.output:
                 if  connector.output.id not in self.blocks or \
                         connector.input.id not in self.blocks:
@@ -497,6 +501,7 @@ class Diagram(GooCanvas.Canvas, DiagramModel):
             i = i + 1
         for conn in to_remove:
             self.connectors.remove(conn)
+
         # Create Comment Widgets
         i = 0
         for comment in self.comments:

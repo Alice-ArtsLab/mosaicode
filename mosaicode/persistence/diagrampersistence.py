@@ -98,20 +98,25 @@ class DiagramPersistence():
                 from_block = diagram.blocks[int(conn.from_block)]
                 to_block = diagram.blocks[int(conn.to_block)]
                 port_index = int(conn.getAttr("from_out"))
-                if port_index > 0 and port_index < len(from_block.ports):
+                if port_index >= 0 and port_index < len(from_block.ports):
                     from_block_out = from_block.ports[port_index]
                     if from_block_out.is_input():
+                        System.log("Loading error: Output port is an input port")
                         continue
                 else:
+                    System.log("Loading error: invalid output port index " + str(port_index))
                     continue
                 port_index = int(conn.getAttr("to_in"))
-                if port_index > 0 and port_index < len(to_block.ports):
+                if port_index >= 0 and port_index < len(to_block.ports):
                     to_block_in = to_block.ports[port_index]
                     if not to_block_in.is_input():
+                        System.log("Loading error: Input port is an output port")
                         continue
                 else:
+                    System.log("Loading error: invalid input port index " + str(port_index))
                     continue
-            except:
+            except Exception as e:
+                System.log("Loading error:" + str(e))
                 continue
             connection = ConnectionModel(diagram,
                                 from_block,
@@ -146,6 +151,7 @@ class DiagramPersistence():
                 diagram.authors.append(auth)
 
         diagram.redraw()
+        
         return True
 
     # ----------------------------------------------------------------------

@@ -54,12 +54,15 @@ class BlockControl():
         for port in block.ports:
             # if it is not a dictionary, dunno what to do. What happened?
             if not isinstance(port, dict):
+                System.log("Error Loading a Block: Port is not a dictionary?");
                 continue
             if "type" not in port:
+                System.log("Error Loading a Block: Port should have a type");
                 continue
             port_type = port["type"]
             # Create a copy from the port instance loaded in the System
             if port_type not in ports:
+                System.log("Error Loading a Block: Port is not present in System");
                 continue
             new_port = copy.deepcopy(ports[port_type])
 
@@ -71,7 +74,6 @@ class BlockControl():
                 new_port.conn_type = Port.OUTPUT
 
             new_port.index = i
-            i += 1
             if new_port.is_input():
                 new_port.type_index = in_port
                 in_port += 1
@@ -81,9 +83,9 @@ class BlockControl():
             new_port.name = port["name"]
             new_port.label = port["label"]
             new_ports.append(new_port)
+            i += 1
         block.maxIO = max(in_port, out_port)
         block.ports = new_ports
-
     # ----------------------------------------------------------------------
     @classmethod
     def load(cls, file_name):
