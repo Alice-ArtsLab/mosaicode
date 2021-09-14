@@ -124,11 +124,13 @@ class MainControl():
                 dialog = SaveDialog(
                     self.main_window,
                     title=_("Save Diagram"),
-                    filename=System.get_user_dir() + "/" + diagram.file_name,
+                    filename=System.get_user_dir() + "/" + diagram.patch_name,
                     filetype="*.mscd")
                 name = dialog.run()
                 if name is None:
-                    continue
+                    System.log("File not saved")
+                    return
+
                 if not name.endswith("mscd"):
                     name = (("%s" + ".mscd") % name)
                 if os.path.exists(name) is True:
