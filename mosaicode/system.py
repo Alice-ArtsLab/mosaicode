@@ -211,10 +211,15 @@ class System(object):
                     block = self.__blocks[key]
                     BlockControl.load_ports(block, self.__ports)
                 except:
-                    print("Error in loading plugin " + key)
+                    print("Error in loading block " + key)
 
         # ----------------------------------------------------------------------
         def __load_plugins(self):
+            # load a default plugin
+            from mosaicode.plugins.extensionsmanager.extensionsmanager \
+                import ExtensionsManager as em
+            self.__plugins.append(em())
+                
             plugins_dir = os.path.join(System.DATA_EXTENSIONS)
             for name in os.listdir(plugins_dir):
                 plugin_dir = os.path.join(plugins_dir, name)
@@ -225,8 +230,8 @@ class System(object):
                     try:
                         module = getattr(__import__(module_name, fromlist=[name]), name)
                     except:
+                        System.log('Can not import: '+ module_name)
                         pass
-#                        print('Can not import: '+ module_name)
 
                     for class_name, obj in inspect.getmembers(module):
                         if not inspect.isclass(obj):

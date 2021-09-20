@@ -7,14 +7,15 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from mosaicode.model.plugin import Plugin
-from mosaicode.plugins.extensionsmanager.GUI.extensionsmanagermenu import ExtensionsManagerMenu
-from mosaicode.plugins.extensionsmanager.GUI.blockmenuitem import BlockMenuItem
+from mosaicode.plugins.extensionsmanager.codetemplatemanager import CodeTemplateManager
+from mosaicode.plugins.extensionsmanager.blockmanager import BlockManager
+from mosaicode.plugins.extensionsmanager.portmanager import PortManager
 
 import gettext
 
 _ = gettext.gettext
 
-class ExtensionsManager(Plugin):
+class ExtensionsManager(Plugin, Gtk.Menu):
     """
     This class contains methods related the ExtensionsManagerMenu
     """
@@ -22,20 +23,56 @@ class ExtensionsManager(Plugin):
     # ----------------------------------------------------------------------
     def __init__(self):
         """Constructor."""
+        Gtk.Menu.__init__(self)
         self.label = _("Extensions Manager")
 
     # ----------------------------------------------------------------------
     def load(self, main_window):
-        plugin_menu = main_window.menu.plugins_menu
+
+        self.main_window = main_window
+        main_window.menu.create_menu(
+                _("Code Template Manager"),
+                None,
+                self,
+                self.__show_code_template_manager
+                )
+
+        main_window.menu.create_menu(
+                _("Block Manager"),
+                None,
+                self,
+                self.__show_block_manager
+                )
+
+        main_window.menu.create_menu(
+                _("Port Manager"),
+                None,
+                self,
+                self.__show_port_manager
+                )
 
         item = Gtk.MenuItem()
         item.set_label(self.label)
-        plugin_menu.append(item)
+        main_window.menu.append(item)
+        item.set_submenu(self)
 
-        sub_menu = ExtensionsManagerMenu(main_window)
-        submenu_item = Gtk.MenuItem()
-        submenu_item.set_label("item text")
-        item.set_submenu(sub_menu)
+    # ----------------------------------------------------------------------
+    def __show_code_template_manager(self):
+        """
+        This add a new Code Template.
+        """
+        CodeTemplateManager(self.main_window)
 
-        menu_item = BlockMenuItem(main_window)
-        main_window.block_menu.append(menu_item)
+    # ----------------------------------------------------------------------
+    def __show_block_manager(self):
+        """
+        This add a new Block.
+        """
+        BlockManager(self.main_window)
+
+    # ----------------------------------------------------------------------
+    def __show_port_manager(self):
+        """
+        This add a new port.
+        """
+        PortManager(self.main_window)

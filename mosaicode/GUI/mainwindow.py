@@ -45,7 +45,6 @@ class MainWindow(Gtk.Window):
         self.work_area = WorkArea(self)
         self.status = Status(self)
         self.diagram_menu = DiagramMenu()
-        self.menu.add_plugins()
         self.menu.add_help()
         self.block_menu = BlockMenu()
 

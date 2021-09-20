@@ -41,6 +41,7 @@ class CodeTemplatePersistence():
         ct = parser.getTag(tag_name)
 
         code_template = CodeTemplate()
+        code_template.version = parser.getTagAttr(tag_name, "version")
         code_template.name = parser.getTagAttr(tag_name, "name")
         code_template.type = parser.getTagAttr(tag_name, "type")
         code_template.description = parser.getTagAttr(tag_name, "description")
@@ -86,6 +87,7 @@ class CodeTemplatePersistence():
         parser = XMLParser()
         parser.addTag(tag_name)
 
+        parser.setTagAttr(tag_name, 'version', code_template.version)
         parser.setTagAttr(tag_name, 'name', code_template.name)
         parser.setTagAttr(tag_name, 'type', code_template.type)
         parser.setTagAttr(tag_name, 'description', code_template.description)

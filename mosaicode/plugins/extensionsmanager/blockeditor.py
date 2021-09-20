@@ -11,17 +11,17 @@ gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from mosaicode.GUI.blocknotebook import BlockNotebook
-from mosaicomponents.codefield import CodeField
-from mosaicomponents.colorfield import ColorField
-from mosaicomponents.combofield import ComboField
-from mosaicomponents.commentfield import CommentField
-from mosaicomponents.openfilefield import OpenFileField
-from mosaicomponents.stringfield import StringField
+from mosaicode.GUI.fields.codefield import CodeField
+from mosaicode.GUI.fields.colorfield import ColorField
+from mosaicode.GUI.fields.combofield import ComboField
+from mosaicode.GUI.fields.commentfield import CommentField
+from mosaicode.GUI.fields.openfilefield import OpenFileField
+from mosaicode.GUI.fields.stringfield import StringField
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.plugins.extensionsmanager.GUI.blockporteditor import BlockPortEditor
-from mosaicode.plugins.extensionsmanager.GUI.blockcommoneditor import BlockCommonEditor
-from mosaicode.plugins.extensionsmanager.GUI.blockpropertyeditor import BlockPropertyEditor
-from mosaicode.plugins.extensionsmanager.GUI.blockcodeeditor import BlockCodeEditor
+from mosaicode.plugins.extensionsmanager.blockporteditor import BlockPortEditor
+from mosaicode.plugins.extensionsmanager.blockcommoneditor import BlockCommonEditor
+from mosaicode.plugins.extensionsmanager.blockpropertyeditor import BlockPropertyEditor
+from mosaicode.plugins.extensionsmanager.blockcodeeditor import BlockCodeEditor
 from mosaicode.system import *
 import gettext
 
@@ -61,13 +61,5 @@ class BlockEditor(Gtk.Dialog):
         self.tabs.append_page(BlockCodeEditor(self, self.block),
                     Gtk.Label.new(_("Code")))
         self.show_all()
-
-    def run(self):
-        result = super(Gtk.Dialog, self).run()
-        if result == Gtk.ResponseType.OK:
-            self.block_manager.main_control.add_new_block(self.block)
-            self.block_manager.update()
-        self.close()
-        self.destroy()
 
 # ----------------------------------------------------------------------

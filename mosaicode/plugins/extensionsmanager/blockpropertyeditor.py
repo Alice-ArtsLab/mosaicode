@@ -10,12 +10,12 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from mosaicomponents.stringfield import StringField
-from mosaicomponents.combofield import ComboField
-from mosaicomponents.colorfield import ColorField
-from mosaicomponents.commentfield import CommentField
-from mosaicomponents.codefield import CodeField
-from mosaicomponents.openfilefield import OpenFileField
+from mosaicode.GUI.fields.stringfield import StringField
+from mosaicode.GUI.fields.combofield import ComboField
+from mosaicode.GUI.fields.colorfield import ColorField
+from mosaicode.GUI.fields.commentfield import CommentField
+from mosaicode.GUI.fields.codefield import CodeField
+from mosaicode.GUI.fields.openfilefield import OpenFileField
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.messagedialog import MessageDialog

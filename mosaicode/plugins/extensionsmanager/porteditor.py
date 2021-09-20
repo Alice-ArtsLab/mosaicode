@@ -10,12 +10,12 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from mosaicomponents.stringfield import StringField
-from mosaicomponents.combofield import ComboField
-from mosaicomponents.colorfield import ColorField
-from mosaicomponents.commentfield import CommentField
-from mosaicomponents.codefield import CodeField
-from mosaicomponents.openfilefield import OpenFileField
+from mosaicode.GUI.fields.stringfield import StringField
+from mosaicode.GUI.fields.combofield import ComboField
+from mosaicode.GUI.fields.colorfield import ColorField
+from mosaicode.GUI.fields.commentfield import CommentField
+from mosaicode.GUI.fields.codefield import CodeField
+from mosaicode.GUI.fields.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.GUI.treeview import TreeView
@@ -34,18 +34,14 @@ class PortEditor(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __init__(self, port_manager, port_type):
-        if port_type not in System.get_ports():
-            return
-        self.port_manager = port_manager
-        self.port = System.get_ports()[port_type]
         Gtk.Dialog.__init__(
                         self,
                         title=_("Port Editor"),
-                        transient_for=self.port_manager)
+                        transient_for=port_manager)
         self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         self.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
 
-        self.main_control = self
+        self.port_manager = port_manager
         self.set_default_size(800, 300)
 
         self.tabs = Gtk.Notebook()
@@ -63,15 +59,6 @@ class PortEditor(Gtk.Dialog):
         self.color.set_parent_window(self)
         self.multiple = CheckField({"label": _("Multiple")}, None)
         self.var_name = StringField({"label": _("Var Name")}, None)
-
-        if port_type is not None:
-            System()
-            self.type.set_value(port_type)
-            self.language.set_value(self.port.language)
-            self.hint.set_value(self.port.hint)
-            self.color.set_value(self.port.color)
-            self.multiple.set_value(self.port.multiple)
-            self.var_name.set_value(self.port.var_name)
 
         common_tab.pack_start(self.type, False, False, 1)
         common_tab.pack_start(self.language, False, False, 1)
@@ -93,14 +80,16 @@ class PortEditor(Gtk.Dialog):
         code_tab.pack_start(self.code, True, True, 1)
         if port_type is not None:
             System()
-            self.code.set_value(self.port.code)
+            port = System.get_ports()[port_type]
+            self.code.set_value(port.code)
+            self.type.set_value(port_type)
+            self.language.set_value(port.language)
+            self.hint.set_value(port.hint)
+            self.color.set_value(port.color)
+            self.multiple.set_value(port.multiple)
+            self.var_name.set_value(port.var_name)
 
         self.show_all()
-        result = self.show()
-        if result == Gtk.ResponseType.OK:
-            self.__save()
-        self.close()
-        self.destroy()
 
     # ----------------------------------------------------------------------
     def __populate_combos(self, top_button_bar):
@@ -124,7 +113,7 @@ class PortEditor(Gtk.Dialog):
         self.code.insert_at_cursor(value)
 
     # ----------------------------------------------------------------------
-    def __save(self):
+    def save(self):
         port = Port()
         port.type = self.type.get_value()
         port.language = self.language.get_value()
@@ -133,6 +122,6 @@ class PortEditor(Gtk.Dialog):
         port.multiple = self.multiple.get_value()
         port.code = self.code.get_value()
         port.var_name = self.var_name.get_value()
-        self.port_manager.add_port(port)
+        self.port_manager.add(port)
 
 # ----------------------------------------------------------------------

@@ -36,6 +36,7 @@ class PortPersistence():
             return None
 
         port = Port()
+        port.version = parser.getTagAttr(tag_name, "version")
         port.type = parser.getTagAttr(tag_name, "type")
         port.language = parser.getTagAttr(tag_name, "language")
         port.hint = parser.getTagAttr(tag_name, "hint")
@@ -63,6 +64,8 @@ class PortPersistence():
         parser = XMLParser()
         parser.addTag(tag_name)
 
+        from mosaicode.system import System as System
+        parser.setTagAttr(tag_name, 'version', port.version)
         parser.setTagAttr(tag_name, 'type', port.type)
         parser.setTagAttr(tag_name, 'language', port.language)
         parser.setTagAttr(tag_name, 'hint', port.hint)

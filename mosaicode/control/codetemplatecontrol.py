@@ -50,7 +50,7 @@ class CodeTemplateControl():
         from mosaicode.system import System as System
         System()
         path = System.get_user_dir() + "/extensions/"
-        path = path + code_template.language + "/"
+        path = path + code_template.language + "/codetemplates/"
         CodeTemplatePersistence.save_xml(code_template, path)
 
     # ----------------------------------------------------------------------
@@ -59,10 +59,13 @@ class CodeTemplateControl():
         from mosaicode.system import System
         code_templates = System.get_code_templates()
         if code_template_key not in code_templates:
+            System.log("Error: This code template does not exist")
             return False
         code_template = code_templates[code_template_key]
         if code_template.file is not None:
             os.remove(code_template.file)
+        else:
+            System.log("Error: This code template does not have a file.")            
         return code_template.file
 
     # ----------------------------------------------------------------------
