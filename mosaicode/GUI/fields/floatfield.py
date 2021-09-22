@@ -6,7 +6,7 @@ This module contains the FloatField class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicomponents.field import Field
+from mosaicode.GUI.fields.field import Field
 
 
 class FloatField(Field):

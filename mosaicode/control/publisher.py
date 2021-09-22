@@ -41,7 +41,7 @@ class Publisher:
         s.connect(('10.255.255.255', 1))
         try:
             IP = s.getsockname()[count]
-            if IP[4] is not '.':
+            if IP[4] != '.':
                 s.close()
         except:
             IP = '127.0.0.1'

@@ -8,7 +8,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-from mosaicomponents.field import Field
+from mosaicode.GUI.fields.field import Field
 
 
 class ColorField(Field):

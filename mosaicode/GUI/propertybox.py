@@ -4,7 +4,7 @@ This module contains the PropertyBox class.
 """
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-import mosaicomponents
+import mosaicode.GUI.fields
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')

@@ -120,7 +120,7 @@ class MainControl():
         if diagram is None:
             return False
 
-        if diagram.file_name is "Untitled" or save_as:
+        if diagram.file_name == "Untitled" or save_as:
             while True:
                 dialog = SaveDialog(
                     self.main_window,

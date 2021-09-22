@@ -74,7 +74,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
     def __populate_list(self):
         labels = []
         for port in self.block.ports:
-            labels.append(port.label)
+            labels.append(port["label"])
         self.tree_view.populate(labels)
 
     # ----------------------------------------------------------------------

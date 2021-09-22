@@ -21,7 +21,6 @@ from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.GUI.treeview import TreeView
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.port import Port
-from mosaicode.system import *
 import gettext
 
 _ = gettext.gettext
@@ -33,7 +32,7 @@ class PortEditor(Gtk.Dialog):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, port_manager, port_type):
+    def __init__(self, port_manager, port):
         Gtk.Dialog.__init__(
                         self,
                         title=_("Port Editor"),
@@ -78,17 +77,14 @@ class PortEditor(Gtk.Dialog):
 
         self.code = CodeField({"label": _("Connection Code")}, None)
         code_tab.pack_start(self.code, True, True, 1)
-        if port_type is not None:
-            System()
-            port = System.get_ports()[port_type]
-            self.code.set_value(port.code)
-            self.type.set_value(port_type)
-            self.language.set_value(port.language)
-            self.hint.set_value(port.hint)
-            self.color.set_value(port.color)
-            self.multiple.set_value(port.multiple)
-            self.var_name.set_value(port.var_name)
 
+        self.code.set_value(port.code)
+        self.type.set_value(port.type)
+        self.language.set_value(port.language)
+        self.hint.set_value(port.hint)
+        self.color.set_value(port.color)
+        self.multiple.set_value(port.multiple)
+        self.var_name.set_value(port.var_name)
         self.show_all()
 
     # ----------------------------------------------------------------------
@@ -113,7 +109,7 @@ class PortEditor(Gtk.Dialog):
         self.code.insert_at_cursor(value)
 
     # ----------------------------------------------------------------------
-    def save(self):
+    def get_port(self):
         port = Port()
         port.type = self.type.get_value()
         port.language = self.language.get_value()
@@ -122,6 +118,6 @@ class PortEditor(Gtk.Dialog):
         port.multiple = self.multiple.get_value()
         port.code = self.code.get_value()
         port.var_name = self.var_name.get_value()
-        self.port_manager.add(port)
+        return port
 
 # ----------------------------------------------------------------------

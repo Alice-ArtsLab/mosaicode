@@ -18,7 +18,6 @@ from mosaicode.GUI.fields.codefield import CodeField
 from mosaicode.GUI.fields.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.model.codetemplate import CodeTemplate
-from mosaicode.system import *
 import gettext
 
 _ = gettext.gettext
@@ -30,7 +29,7 @@ class CodeTemplateEditor(Gtk.Dialog):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, code_template_manager, code_template_name):
+    def __init__(self, code_template_manager, code_template):
         Gtk.Dialog.__init__(
                         self,
                         title=_("Code Template Editor"),
@@ -40,16 +39,8 @@ class CodeTemplateEditor(Gtk.Dialog):
         self.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         self.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
 
-        self.code_template_manager = code_template_manager
-        system_code_template = System.get_code_templates()
-        if code_template_name is not None \
-                and code_template_name in system_code_template:
-            self.code_template = system_code_template[code_template_name]
-        else:
-            self.code_template = CodeTemplate()
-
         self.set_default_size(800, 300)
-
+        self.code_template = code_template
         self.tabs = Gtk.Notebook()
         self.tabs.set_scrollable(True)
         box = self.get_content_area()
@@ -92,17 +83,15 @@ class CodeTemplateEditor(Gtk.Dialog):
         self.command = CodeField({"label": _("")}, None)
         command_tab.pack_start(self.command, True, True, 1)
 
-        if code_template_name is not None:
-            System()
-            self.name.set_value(self.code_template.name)
-            self.type.set_value(self.code_template.type)
-            self.description.set_value(self.code_template.description)
-            self.language.set_value(self.code_template.language)
-            self.command.set_value(self.code_template.command)
-            #self.extension.set_value(self.code_template.extension)
-            #self.code.set_value(self.code_template.code)
-            code_parts_string = ', '.join(self.code_template.code_parts)
-            self.code_parts.set_value(code_parts_string)
+        self.name.set_value(self.code_template.name)
+        self.type.set_value(self.code_template.type)
+        self.description.set_value(self.code_template.description)
+        self.language.set_value(self.code_template.language)
+        self.command.set_value(self.code_template.command)
+        #self.extension.set_value(self.code_template.extension)
+        #self.code.set_value(self.code_template.code)
+        code_parts_string = ', '.join(self.code_template.code_parts)
+        self.code_parts.set_value(code_parts_string)
 
         self.show_all()
 
@@ -115,7 +104,7 @@ class CodeTemplateEditor(Gtk.Dialog):
                 "_" + name + ".extensions" + extension)
 
     # ----------------------------------------------------------------------
-    def save(self):
+    def get_code_template(self):
         code_template = CodeTemplate()
         code_template.name = self.name.get_value()
         code_template.language = self.language.get_value()
@@ -125,7 +114,7 @@ class CodeTemplateEditor(Gtk.Dialog):
         code_template.extension = self.extension.get_value()
         code_template.code = self.code.get_value()
         code_template.code_parts = self.code_parts.get_value().split(",")
-        self.code_template_manager.add(code_template)
+        return code_template
 
     # ----------------------------------------------------------------------
     def __populate_combos(self, button_bar):

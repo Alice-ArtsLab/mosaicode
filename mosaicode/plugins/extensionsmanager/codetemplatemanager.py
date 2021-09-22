@@ -78,33 +78,31 @@ class CodeTemplateManager(Gtk.Dialog):
         self.show()
 
     # ----------------------------------------------------------------------
-    def add(self, element):
-        self.main_window.main_control.add_extension(element)
-        self.__update()
-
-    # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):
-        self.__run_editor(None)
+        self.__run_editor(CodeTemplate())
 
     # ----------------------------------------------------------------------
     def __edit(self, widget=None, data=None):
         name = self.__get_selected()
         if name is None:
             return
-        self.__run_editor(name)
+        code_template = System.get_code_templates()[name]
+        self.__run_editor(code_template)
 
     # ----------------------------------------------------------------------
     def __run_editor(self, element):
         editor = CodeTemplateEditor(self, element)
         result = editor.run()
         if result == Gtk.ResponseType.OK:
-            editor.save()
+            code_template = editor.get_code_template()
+            self.main_window.main_control.add_extension(code_template)
+            self.__update()
         editor.close()
         editor.destroy()
 
     # ----------------------------------------------------------------------
     def __on_row_activated(self, tree_view, path, column):
-        self.__run_editor(self.__get_selected())
+        self.__edit()
 
     # ----------------------------------------------------------------------
     def __get_selected(self):

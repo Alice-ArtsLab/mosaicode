@@ -37,7 +37,7 @@ class BlockControl():
             path = os.path.join(path,
                                 'extensions',
                                 blocks[key].language,
-                                'block',
+                                'blocks',
                                 blocks[key].extension,
                                 blocks[key].group)
 
@@ -113,7 +113,7 @@ class BlockControl():
         from mosaicode.system import System
         System()
         path = System.get_user_dir() + "/extensions/"
-        path = path + block.language + "/" + block.extension + "/"
+        path = path + block.language + "/blocks/" + block.extension + "/"
         BlockPersistence.save_xml(block, path)
 
     # ----------------------------------------------------------------------

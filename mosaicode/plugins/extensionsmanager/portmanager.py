@@ -17,7 +17,7 @@ from mosaicode.GUI.fields.commentfield import CommentField
 from mosaicode.GUI.fields.codefield import CodeField
 from mosaicode.GUI.fields.openfilefield import OpenFileField
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.plugins.extensionsmanager.GUI.porteditor import PortEditor
+from mosaicode.plugins.extensionsmanager.porteditor import PortEditor
 from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.system import *
@@ -82,13 +82,8 @@ class PortManager(Gtk.Dialog):
         self.show()
 
     # ----------------------------------------------------------------------
-    def add(self, element):
-        self.main_window.main_control.add_extension(element)
-        self.__update()
-
-    # ----------------------------------------------------------------------
     def __on_row_activated(self, tree_view, path, column):
-        self.__run_editor(self.__get_selected())
+        self.__edit()
 
     # ----------------------------------------------------------------------
     def __get_selected(self):
@@ -102,14 +97,16 @@ class PortManager(Gtk.Dialog):
 
     # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):
-        self.__run_editor(None)
+        self.__run_editor(Port())
 
     # ----------------------------------------------------------------------
     def __run_editor(self, element):
         editor = PortEditor(self, element)
         result = editor.run()
         if result == Gtk.ResponseType.OK:
-            editor.save()
+            port = editor.get_port()
+            self.main_window.main_control.add_extension(element)
+            self.__update()
         editor.close()
         editor.destroy()
 
@@ -118,7 +115,8 @@ class PortManager(Gtk.Dialog):
         name = self.__get_selected()
         if name is None:
             return
-        self.__run_editor(name)
+        port = System.get_ports()[name]
+        self.__run_editor(port)
 
     # ----------------------------------------------------------------------
     def __delete(self, widget=None, data=None):

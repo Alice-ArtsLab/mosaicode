@@ -6,7 +6,7 @@ This module contains the StringField class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicomponents.field import Field
+from mosaicode.GUI.fields.field import Field
 
 
 class LabelField(Field):
