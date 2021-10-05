@@ -50,6 +50,8 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         # First, remove all components
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
         self.diagram = diagram
         if diagram.code_template is None:
             data1 = {"label": _("Choose a Code Template"),
