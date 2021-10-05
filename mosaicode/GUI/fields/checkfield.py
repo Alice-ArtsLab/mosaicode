@@ -30,6 +30,7 @@ class CheckField(Field):
 
         self.field = Gtk.Switch()
         self.field.set_property("margin-left", 20)
+        self.field.set_property("halign", Gtk.Align.END)
 
         if isinstance(self.data["value"], str) \
                 or isinstance(self.data["value"], bytes):
