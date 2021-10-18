@@ -10,10 +10,12 @@ class Preferences(object):
     """
 
     def __init__(self):
-        self.conf_file_path = "configuration.xml"
+        self.conf_file_path = "configuration"
 
         self.author = ""
         self.license = "GPL 3.0"
+        from mosaicode.system import System as System
+        self.version = System.VERSION
 
         self.recent_files = []
         from mosaicode.system import System
