@@ -18,7 +18,7 @@ class ColorField(Field):
     configuration = {"label": "",
                      "value": "#ffff00000000",
                      "name": "",
-                     "format": "FFFF0000FFFF"}
+                     "format": "FF00FF"}
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
