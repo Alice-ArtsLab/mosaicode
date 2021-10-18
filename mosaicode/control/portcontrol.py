@@ -25,17 +25,19 @@ class PortControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_xml(cls):
+    def export(cls):
         from mosaicode.system import System as System
         System()
         ports = System.get_ports()
+        result = True
         for key in ports:
             path = System.get_user_dir()
             path = os.path.join(path,
                                 'extensions',
                                 ports[key].language,
                                 'ports')
-            PortPersistence.save_xml(ports[key], path)
+            result = result and PortPersistence.save(ports[key], path)
+        return result
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -47,22 +49,7 @@ class PortControl():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        return PortPersistence.load_xml(file_name)
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def print_port(cls, port):
-        """
-        This method prints the port properties.
-        """
-        print('Port.type =', port.type)
-        print('Port.language =', port.language)
-        print('Port.hint =', port.hint)
-        print('Port.color =', port.color)
-        print('Port.multiple =',  port.multiple)
-        print('Port.file =', port.file)
-        print('Port.code =', port.code)
-        print('Port.var_name =', port.var_name)
+        return PortPersistence.load(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -72,7 +59,7 @@ class PortControl():
         System()
         path = System.get_user_dir() + "/extensions/"
         path = path + port.language + "/ports/"
-        PortPersistence.save_xml(port, path)
+        PortPersistence.save(port, path)
 
     # ----------------------------------------------------------------------
     @classmethod

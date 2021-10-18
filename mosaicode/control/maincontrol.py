@@ -53,11 +53,7 @@ class MainControl():
 
     # ----------------------------------------------------------------------
     def init(self):
-        # Load plugins
         self.update_blocks()
-        for plugin in System.get_plugins():
-            plugin.load(self.main_window)
-
         self.main_window.menu.update_recent_files(
             System.get_preferences().recent_files)
         self.main_window.menu.update_examples(System.get_list_of_examples())
@@ -313,12 +309,18 @@ class MainControl():
         if diagram is None:
             return False
         generator = self.__get_code_generator(diagram)
+        codes = {}
+
         if generator is not None:
             codes = generator.generate_code()
-            cw = CodeWindow(self.main_window, codes)
-            cw.run()
-            cw.close()
-            cw.destroy()
+        else:
+            return False
+        cw = CodeWindow(self.main_window, codes)
+        cw.run()
+        cw.close()
+        cw.destroy()
+        return True
+        
 
     # ----------------------------------------------------------------------
     def run(self, codes=None):

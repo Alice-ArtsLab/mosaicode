@@ -11,7 +11,6 @@ from os.path import expanduser
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.persistence.codetemplatepersistence import \
     CodeTemplatePersistence
-from mosaicode.utils.XMLUtils import XMLParser
 
 
 class CodeTemplateControl():
@@ -26,22 +25,24 @@ class CodeTemplateControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_xml(cls):
+    def export(cls):
         from mosaicode.system import System as System
         System()
         code_templates = System.get_code_templates()
+        result = True
         for key in code_templates:
             path = System.get_user_dir()
             path = os.path.join(path,
                                 'extensions',
                                 code_templates[key].language,
                                 'codetemplates')
-            CodeTemplatePersistence.save_xml(code_templates[key], path)
+            result = result and CodeTemplatePersistence.save(code_templates[key], path)
+        return result
 
     # ----------------------------------------------------------------------
     @classmethod
     def load(cls, file_name):
-        return CodeTemplatePersistence.load_xml(file_name)
+        return CodeTemplatePersistence.load(file_name)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -51,7 +52,7 @@ class CodeTemplateControl():
         System()
         path = System.get_user_dir() + "/extensions/"
         path = path + code_template.language + "/codetemplates/"
-        CodeTemplatePersistence.save_xml(code_template, path)
+        CodeTemplatePersistence.save(code_template, path)
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -68,44 +69,4 @@ class CodeTemplateControl():
             System.log("Error: This code template does not have a file.")            
         return code_template.file
 
-    # ----------------------------------------------------------------------
-    @classmethod
-    def print_template(cls, code_template):
-        """
-        This method prints the CodeTemplate properties.
-        """
-        separator = '-------------------------------------------------'
-
-        print(separator)
-        print('CodeTemplate.type: ', code_template.type)
-
-        print(separator)
-        print('CodeTemplate.name: ', code_template.name)
-
-        print(separator)
-        print('CodeTemplate.file: ', code_template.file)
-
-        print(separator)
-        print('CodeTemplate.description: ', code_template.description)
-
-        print(separator)
-        print('CodeTemplate.language: ', code_template.language)
-
-        print(separator)
-        print('CodeTemplate.command: ', code_template.command)
-
-        print(separator)
-        print('CodeTemplate.files:\n')
-        for file in code_template.files:
-            print('\n', file)
-
-        print(separator)
-        print('CodeTemplate.code_parts:\n')
-        for code_part in code_template.code_parts:
-            print('\n', code_part)
-
-        print(separator)
-        print('CodeTemplate.properties:\n')
-        for property in code_template.properties:
-            print('\n', property)
 # ----------------------------------------------------------------------
