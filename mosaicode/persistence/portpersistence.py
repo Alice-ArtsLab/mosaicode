@@ -6,12 +6,11 @@ This module contains the PortPersistence class.
 import os
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
+import json
 from os.path import join
-from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.model.port import Port
 from mosaicode.persistence.persistence import Persistence
 
-tag_name = "MosaicodePort"
 
 class PortPersistence():
     """
@@ -20,7 +19,7 @@ class PortPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def load_xml(cls, file_name):
+    def load(cls, file_name):
         """
         This method loads the port from XML file.
 
@@ -31,19 +30,30 @@ class PortPersistence():
         # load the port
         if os.path.exists(file_name) is False:
             return None
-        parser = XMLParser(file_name)
-        if parser.getTag(tag_name) is None:
-            return None
 
+        data = ""
         port = Port()
-        port.version = parser.getTagAttr(tag_name, "version")
-        port.type = parser.getTagAttr(tag_name, "type")
-        port.language = parser.getTagAttr(tag_name, "language")
-        port.hint = parser.getTagAttr(tag_name, "hint")
-        port.color = parser.getTagAttr(tag_name, "color")
-        port.multiple = parser.getTagAttr(tag_name, "multiple")
-        port.var_name = parser.getTagAttr(tag_name, "var_name")
-        port.code = parser.getTag(tag_name).getTag("code").getText()
+
+        try:
+            data_file = open(file_name, 'r')
+            data = json.load(data_file)
+            data_file.close()
+
+            if data["data"] != "PORT":
+                return None
+
+            port = Port()
+            port.type = data["type"]
+            port.version = data["version"]
+            port.type = data["type"]
+            port.language = data["language"]
+            port.hint = data["hint"]
+            port.color = data["color"]
+            port.multiple = bool(data["multiple"])
+            port.var_name = data["var_name"]
+            port.code = data["code"]
+        except:
+            return None
 
         if port.type == "":
             return None
@@ -52,7 +62,7 @@ class PortPersistence():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def save_xml(cls, port, path):
+    def save(cls, port, path):
         """
         This method save the port in user space.
 
@@ -60,27 +70,26 @@ class PortPersistence():
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        port.source = "xml"
-        parser = XMLParser()
-        parser.addTag(tag_name)
-
-        from mosaicode.system import System as System
-        parser.setTagAttr(tag_name, 'version', port.version)
-        parser.setTagAttr(tag_name, 'type', port.type)
-        parser.setTagAttr(tag_name, 'language', port.language)
-        parser.setTagAttr(tag_name, 'hint', port.hint)
-        parser.setTagAttr(tag_name, 'color', port.color)
-        parser.setTagAttr(tag_name, 'multiple', port.multiple)
-        parser.setTagAttr(tag_name, 'var_name', port.var_name)
-        parser.appendToTag(tag_name, 'code').string = str(port.code)
-
+        x = {
+          "source": "JSON",
+          "data": "PORT",
+          "version": port.version,
+          "type": port.type,
+          "language": port.language,
+          "hint": port.hint,
+          "color": port.color,
+          "multiple": port.multiple,
+          "var_name": port.var_name,
+          "code": port.code
+        }
+        
         if not Persistence.create_dir(path):
             return False
         try:
-            file_name = port.hint
-            port_file = open(os.path.join(path, file_name + '.xml'), 'w')
-            port_file.write(parser.prettify())
-            port_file.close()
+            data_file = open(os.path.join(path, port.type + '.json'), 'w')
+            data_file.write(json.dumps(x, indent=4))
+            data_file.close()
+
         except IOError as e:
             return False
         return True
