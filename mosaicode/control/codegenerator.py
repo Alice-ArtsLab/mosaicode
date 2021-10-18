@@ -18,41 +18,28 @@ class CodeGenerator():
     # ----------------------------------------------------------------------
     def __init__(self, diagram=None):
 
-        self.diagram = diagram
-        self.blockList = []
-        self.connections = []
-        self.codes = {}
-
-        if diagram is None:
-            return None
-
-        if self.diagram.code_template is None:
-            return None
-
-        if self.diagram.language is None:
-            System.log("No language, no block, no code")
-            return None
-
-        if not len(self.diagram.blocks) > 0:
-            System.log("Diagram is empty. Nothing to generate.")
-            return None
+        self.__diagram = diagram
+        self.__block_list = []
+        self.__connections = []
+        self.__codes = {}
 
     # ----------------------------------------------------------------------
     def __prepare_block_list(self):
         """
         This method prepare the blocks to code generation.
         """
-        for block_key in self.diagram.blocks:
-            block = self.diagram.blocks[block_key]
+        for block_key in self.__diagram.blocks:
+            block = self.__diagram.blocks[block_key]
             block.weight = 0
             block.connections = []
 
             # Listing all connections that the block is output
-            for connection in self.diagram.connectors:
+            for connection in self.__diagram.connectors:
                 if connection.output != block:
                     continue
                 block.connections.append(connection)
-            self.blockList.append(block)
+            self.__block_list.append(block)
+        return True
 
     # ----------------------------------------------------------------------
     def __sort_block_list(self):
@@ -63,38 +50,40 @@ class CodeGenerator():
         modification = True
         while modification:
             modification = False
-            for block in self.blockList:
+            for block in self.__block_list:
                 for connection in block.connections:
-                    for block_target in self.blockList:
+                    for block_target in self.__block_list:
                         if block_target != connection.input:
                             continue
                         weight = block.weight
                         if block_target.weight < weight + 1:
                             block_target.weight = weight + 1
                             modification = True
+        return True
 
     # ----------------------------------------------------------------------
     def __generate_block_code_parts(self):
         """
         This method sorts the blocks to code generation.
         """
-        if self.diagram.code_template is None:
+        if self.__diagram.code_template is None:
             return False
         # Create an array of codes to each code part
-        for key in self.diagram.code_template.code_parts:
-            self.codes[key] = []
+        for key in self.__diagram.code_template.code_parts:
+            self.__codes[key] = []
 
         active_weight = 0
         # The maxWeight is, in the worst case, the block list lenght
-        max_weight = len(self.blockList)
+        max_weight = len(self.__block_list)
         while active_weight <= max_weight:
-            if len(self.blockList) == 0:
+            if len(self.__block_list) == 0:
                 break
-            for block in self.blockList:
+            for block in self.__block_list:
                 if block.weight == active_weight:
                     # If it is your time, lets generate your code and remove you
                     self.__generate_block_code(block)
             active_weight += 1
+        return True
 
     # ----------------------------------------------------------------------
     def __generate_port_var_name_code(self, block, port):
@@ -155,11 +144,11 @@ class CodeGenerator():
                     my_key, value)
 
         # Append it all to Generator Codes
-        for key in self.codes:
+        for key in self.__codes:
             if key in block.codes:
-                self.codes[key].append(block.gen_codes[key])
+                self.__codes[key].append(block.gen_codes[key])
             else:
-                self.codes[key].append('')
+                self.__codes[key].append('')
 
         connections = ""
         for connection in block.connections:
@@ -175,37 +164,37 @@ class CodeGenerator():
             connection_code = connection_code.replace("$input$", value)
             connections += connection_code
 
-        self.connections.append(connections)
+        self.__connections.append(connections)
+        return True
 
     # ----------------------------------------------------------------------
     def __generate_file_code(self, code):
         """
         This method generate the block code.
         """
-
+        code_template = self.__diagram.code_template
         # We first substitute data from the code template itself
         code = code.replace("$author$", System.get_preferences().author)
         code = code.replace("$license$", System.get_preferences().license)
-        code = code.replace("$dir_name$", System.get_dir_name(self.diagram))
-        code = code.replace("$command$", self.diagram.code_template.command)
-        code = code.replace("$name$", self.diagram.code_template.name)
-        code = code.replace(
-            "$description$", self.diagram.code_template.description)
+        code = code.replace("$dir_name$", System.get_dir_name(self.__diagram))
+        code = code.replace("$command$", code_template.command)
+        code = code.replace("$name$", code_template.name)
+        code = code.replace("$description$", code_template.description)
 
-        for prop in self.diagram.code_template.properties:
+        for prop in code_template.properties:
             my_key = "$prop[" + prop.get("name") + "]$"
             value = str(prop.get("value"))
             code = code.replace(my_key, value)
 
         # Then we substitute the code parts with blocks
-        for key in self.codes:
+        for key in self.__codes:
             # Check for single_code generation
             code_name = "$single_code[" + key + "]$"
             if code_name in code:
                 temp_header = []
                 temp_code = ""
 
-                for header_code in self.codes[key]:
+                for header_code in self.__codes[key]:
                     if header_code not in temp_header:
                         temp_header.append(header_code)
                 for header_code in temp_header:
@@ -215,14 +204,14 @@ class CodeGenerator():
             code_name = "$code[" + key + "]$"
             if code_name in code:
                 temp_code = ""
-                for x in self.codes[key]:
+                for x in self.__codes[key]:
                     temp_code += x
                 code = code.replace(code_name, temp_code)
             # Check for code + connections generation
             code_name = "$code[" + key + ", connection]$"
             if code_name in code:
                 temp_code = ""
-                for x, y in zip(self.codes[key], self.connections):
+                for x, y in zip(self.__codes[key], self.__connections):
                     temp_code += x
                     temp_code += y
                 code = code.replace(code_name, temp_code)
@@ -231,7 +220,7 @@ class CodeGenerator():
             code_name = "$code[connection, " + key + "]$"
             if code_name in code:
                 temp_code = ""
-                for x, y in zip(self.connections, self.codes[key]):
+                for x, y in zip(self.__connections, self.__codes[key]):
 
                     temp_code += x
                     temp_code += y
@@ -239,7 +228,7 @@ class CodeGenerator():
 
         # Replace only connection
         connection_block = ""
-        for conn in self.connections:
+        for conn in self.__connections:
             connection_block += conn + "\n"
         code = code.replace("$connections$", connection_block)
         return code
@@ -251,16 +240,20 @@ class CodeGenerator():
         """
 
         System.log("Generating Code")
+
         self.__prepare_block_list()
         self.__sort_block_list()
         self.__generate_block_code_parts()
 
-        if self.diagram.code_template is None:
-            return False
-        files = self.diagram.code_template.files
+        if self.__diagram.code_template is None:
+            System.log("Code template is none")
+            return {}
+        codes = {}
+        for key in self.__diagram.code_template.codes:
+            codes[key] = self.__diagram.code_template.codes[key]
 
-        for key in files:
-            files[key] = self.__generate_file_code(files[key])
-        return files
+        for key in codes:
+            codes[key] = self.__generate_file_code(codes[key])
+        return codes
 
 # -------------------------------------------------------------------------
