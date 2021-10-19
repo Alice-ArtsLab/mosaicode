@@ -62,14 +62,6 @@ class PreferenceWindow(Gtk.Dialog):
         self.tabs.append_page(self.grid_preferences_tab, label)
         self.__create_grid_preferences_tab()
 
-        # Network Preferences
-        # ----------------------------------------------------------------------
-        self.network_preferences_tab = Gtk.Box()
-        self.network_preferences_tab.set_border_width(10)
-        label = Gtk.Label(label=_("Network Preferences"))
-        self.tabs.append_page(self.network_preferences_tab, label)
-        self.__create_network_preferences_tab()
-
         self.show_all()
 
     # ----------------------------------------------------------------------
@@ -142,17 +134,3 @@ class PreferenceWindow(Gtk.Dialog):
 
         self.grid_preferences_tab.show_all()
 
-    # ----------------------------------------------------------------------
-    def __create_network_preferences_tab(self):
-        """Creates the networks preferences tab."""
-        vbox = Gtk.VBox()
-        self.network_preferences_tab.pack_start(vbox, True, True, 0)
-
-        data = {"label": _("Web Server Port"),
-                    "value": self.properties.port,
-                    "lower": 1024,
-                    "upper": 49151}
-        self.port = IntField(data, None)
-        vbox.pack_start(self.port, False, True, 0)
-
-        self.network_preferences_tab.show_all()

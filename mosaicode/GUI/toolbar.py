@@ -46,9 +46,6 @@ class Toolbar(Gtk.Toolbar):
                              self.main_window.main_control.run,
                              self.run_menu)
 
-        self.__create_button(Gtk.STOCK_INDEX,
-                             _("Publish"),
-                             self.main_window.main_control.publish)
         self.__create_button(Gtk.STOCK_SELECT_ALL,
                              _("View Source"),
                              self.main_window.main_control.view_source)

@@ -22,7 +22,6 @@ class Preferences(object):
         self.default_directory = os.path.join(System.get_user_dir(), "code-gen")
         self.default_filename = "%n"
         self.grid = 10
-        self.port = 49151
 
         # GUI stuff
         self.width = 900

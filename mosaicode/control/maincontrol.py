@@ -49,7 +49,6 @@ class MainControl():
         # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
         self.threads = {}
-        self.publisher = Publisher()
 
     # ----------------------------------------------------------------------
     def init(self):
@@ -362,16 +361,6 @@ class MainControl():
         if process is None:
             return
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-
-    # ----------------------------------------------------------------------
-    def publish(self):
-        """
-        This method run web server.
-        """
-        if self.publisher.is_running():
-            self.publisher.stop()
-        else:
-            self.publisher.start()
 
     # ----------------------------------------------------------------------
     def about(self):

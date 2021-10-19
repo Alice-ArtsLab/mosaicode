@@ -17,7 +17,7 @@ class PreferencesPersistence:
     @classmethod
     def load(cls, path):
         """
-        This method loads the port from XML file.
+        This method loads the preference from JSON file.
 
         Returns:
 
@@ -50,7 +50,6 @@ class PreferencesPersistence:
             prefs.default_directory = data["default_directory"]
             prefs.default_filename = data["default_filename"]
             prefs.grid = int(data["grid"])
-            prefs.port = int(data["network_port"])
             prefs.width = int(data["width"])
             prefs.height = int(data["height"])
             prefs.hpaned_work_area = int(data["hpaned_work_area"])
@@ -71,7 +70,7 @@ class PreferencesPersistence:
     @classmethod
     def save(cls, prefs, path):
         """
-        This method save the port in user space.
+        This method save the preference in user space.
 
         Returns:
 
@@ -85,7 +84,6 @@ class PreferencesPersistence:
         'default_directory': prefs.default_directory,
         'default_filename': prefs.default_filename,
         'grid': prefs.grid,
-        'network_port': prefs.port,
         'width': prefs.width,
         'height': prefs.height,
         'hpaned_work_area': prefs.hpaned_work_area,
