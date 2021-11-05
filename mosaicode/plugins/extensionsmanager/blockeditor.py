@@ -20,7 +20,7 @@ from mosaicode.GUI.fields.stringfield import StringField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.blockporteditor import BlockPortEditor
 from mosaicode.plugins.extensionsmanager.blockcommoneditor import BlockCommonEditor
-from mosaicode.plugins.extensionsmanager.blockpropertyeditor import BlockPropertyEditor
+from mosaicode.plugins.extensionsmanager.propertyeditor import PropertyEditor
 from mosaicode.plugins.extensionsmanager.blockcodeeditor import BlockCodeEditor
 from mosaicode.system import *
 import gettext
@@ -52,14 +52,18 @@ class BlockEditor(Gtk.Dialog):
         self.tabs.set_scrollable(True)
         box.pack_start(self.tabs, True, True, 0)
 
-        self.tabs.append_page(BlockCommonEditor(self, self.block),
+        self.tabs.append_page(BlockCommonEditor(self.block),
                     Gtk.Label.new(_("Common Properties")))
-        self.tabs.append_page(BlockPropertyEditor(self, self.block),
+        self.tabs.append_page(PropertyEditor(self.block),
                     Gtk.Label.new(_("Properties")))
-        self.tabs.append_page(BlockPortEditor(self, self.block),
+        self.tabs.append_page(BlockPortEditor(self.block),
                     Gtk.Label.new(_("Ports")))
-        self.tabs.append_page(BlockCodeEditor(self, self.block),
+        self.tabs.append_page(BlockCodeEditor(self.block),
                     Gtk.Label.new(_("Code")))
         self.show_all()
+
+    # ----------------------------------------------------------------------
+    def get_element(self):
+        return self.block
 
 # ----------------------------------------------------------------------

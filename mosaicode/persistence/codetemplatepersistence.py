@@ -58,15 +58,14 @@ class CodeTemplatePersistence():
 
             codes = data["codes"]
             if codes:
-                for code in codes:
-                    code_template.codes[code["filename"]] = code["code"]
-
-            codes = data["codes"]
+                for key in codes:
+                    code_template.codes[key] = codes[key]
 
             parts = data["code_parts"]
             for part in parts:
-                code_template.code_parts.append(part)
-        except:
+                code_template.code_parts.append(part.strip())
+        except Exception as e:
+            print(e)
             return None
 
         if code_template.name == "":
@@ -95,17 +94,14 @@ class CodeTemplatePersistence():
             'command': code_template.command,
             "code_parts": code_template.code_parts,
             "properties":[],
-            "codes":[]
+            "codes":{}
         }
 
         for key in code_template.properties:
             x["properties"].append(key)
 
         for key in code_template.codes:
-            x["codes"].append({
-                "filename":key,
-                "code": code_template.codes[key]
-                })
+            x["codes"][key] = code_template.codes[key]
 
         if not Persistence.create_dir(path):
             from mosaicode.system import System as System

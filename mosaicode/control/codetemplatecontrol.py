@@ -36,7 +36,8 @@ class CodeTemplateControl():
                                 'extensions',
                                 code_templates[key].language,
                                 'codetemplates')
-            result = result and CodeTemplatePersistence.save(code_templates[key], path)
+            result = result and CodeTemplatePersistence.save(
+                    code_templates[key], path)
         return result
 
     # ----------------------------------------------------------------------
@@ -50,8 +51,9 @@ class CodeTemplateControl():
         # save it
         from mosaicode.system import System as System
         System()
-        path = System.get_user_dir() + "/extensions/"
-        path = path + code_template.language + "/codetemplates/"
+        path = os.path.join(System.get_user_dir(), "extensions")
+        path = os.path.join(path, code_template.language)
+        path = os.path.join(path, "codetemplates")
         CodeTemplatePersistence.save(code_template, path)
 
     # ----------------------------------------------------------------------

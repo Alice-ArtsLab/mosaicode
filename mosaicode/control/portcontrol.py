@@ -57,8 +57,9 @@ class PortControl():
         # first, save it
         from mosaicode.system import System as System
         System()
-        path = System.get_user_dir() + "/extensions/"
-        path = path + port.language + "/ports/"
+        path = os.path.join(System.get_user_dir(), "extensions")
+        path = os.path.join(path, port.language)
+        path = os.path.join(path, "ports")
         PortPersistence.save(port, path)
 
     # ----------------------------------------------------------------------

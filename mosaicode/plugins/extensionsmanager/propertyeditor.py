@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the BlockPropertyEditor class.
+This module contains the PropertyEditor class.
 """
 import os
 import gi
@@ -16,7 +16,6 @@ from mosaicode.GUI.fields.colorfield import ColorField
 from mosaicode.GUI.fields.commentfield import CommentField
 from mosaicode.GUI.fields.codefield import CodeField
 from mosaicode.GUI.fields.openfilefield import OpenFileField
-from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.GUI.messagedialog import MessageDialog
 from mosaicode.GUI.confirmdialog import ConfirmDialog
@@ -28,18 +27,17 @@ import gettext
 _ = gettext.gettext
 
 
-class BlockPropertyEditor(Gtk.ScrolledWindow):
+class PropertyEditor(Gtk.ScrolledWindow):
     """
-    This class contains methods related the BlockPropertyEditor class
+    This class contains methods related the PropertyEditor class
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, block_editor, block):
+    def __init__(self, element):
 
         Gtk.ScrolledWindow.__init__(self)
 
-        self.block_editor = block_editor
-        self.block = block
+        self.element = element
 
         for widget in self.get_children():
             self.remove(widget)
@@ -71,10 +69,10 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __populate_property(self):
-        block_label = []
-        for prop in self.block.get_properties():
-            block_label.append(prop.get("label"))
-        self.tree_view.populate(block_label)
+        label = []
+        for prop in self.element.get_properties():
+            label.append(prop.get("label"))
+        self.tree_view.populate(label)
 
     # ----------------------------------------------------------------------
     def __new(self, widget=None, data=None):
@@ -93,11 +91,11 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
-        result = ConfirmDialog(_("Are you sure?"), self.block_editor).run()
+        result = ConfirmDialog(_("Are you sure?"), self.get_toplevel()).run()
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)
-        del self.block.get_properties()[int(str(path))]
+        del self.element.get_properties()[int(str(path))]
         self.__populate_property()
         self.__clean_side_panel()
 
@@ -110,10 +108,10 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         path = model.get_path(iterac)
         if int(str(path)) == 0:
             return
-        self.block.get_properties()[int(str(path))], \
-            self.block.get_properties()[int(str(path)) - 1] = \
-            self.block.get_properties()[int(str(path)) - 1], \
-            self.block.get_properties()[int(str(path))]
+        self.element.get_properties()[int(str(path))], \
+            self.element.get_properties()[int(str(path)) - 1] = \
+            self.element.get_properties()[int(str(path)) - 1], \
+            self.element.get_properties()[int(str(path))]
         self.__populate_property()
 
     # ----------------------------------------------------------------------
@@ -123,12 +121,12 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
         if iterac is None:
             return None
         path = model.get_path(iterac)
-        if int(str(path)) == len(self.block.get_properties()) - 1:
+        if int(str(path)) == len(self.element.get_properties()) - 1:
             return
-        self.block.get_properties()[int(str(path))], \
-            self.block.get_properties()[int(str(path)) + 1] = \
-            self.block.get_properties()[int(str(path)) + 1], \
-            self.block.get_properties()[int(str(path))]
+        self.element.get_properties()[int(str(path))], \
+            self.element.get_properties()[int(str(path)) + 1] = \
+            self.element.get_properties()[int(str(path)) + 1], \
+            self.element.get_properties()[int(str(path))]
         self.__populate_property()
 
     # ----------------------------------------------------------------------
@@ -161,7 +159,7 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_props_row_activated(self, tree_view, path, column, data=None):
-        configuration = self.block.get_properties()[int(str(path))]
+        configuration = self.element.get_properties()[int(str(path))]
         self.__create_side_panel(configuration)
 
     # ----------------------------------------------------------------------
@@ -177,21 +175,21 @@ class BlockPropertyEditor(Gtk.ScrolledWindow):
             return
         if configuration["label"] == "":
             message = "Label can not be empty"
-            MessageDialog("Error", message, self.block_editor).run()
+            MessageDialog("Error", message, self.get_toplevel()).run()
             return
         if configuration["name"] == "":
             message = "Name can not be empty"
-            MessageDialog("Error", message, self.block_editor).run()
+            MessageDialog("Error", message, self.get_toplevel()).run()
             return
         contains = False
         i = 0
-        for props in self.block.properties:
+        for props in self.element.properties:
             if props["label"] == configuration["label"]:
-                self.block.properties[i] = configuration
+                self.element.properties[i] = configuration
                 contains = True
             i += 1
         if not contains:
-            self.block.properties.append(configuration)
+            self.element.properties.append(configuration)
         self.__populate_property()
         self.__clean_side_panel()
 

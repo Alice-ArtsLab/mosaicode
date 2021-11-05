@@ -104,13 +104,21 @@ class BlockControl():
         # Save it
         from mosaicode.system import System
         System()
-        path = System.get_user_dir() + "/extensions/"
-        path = path + block.language + "/blocks/" + block.extension + "/"
+        path = os.path.join(System.get_user_dir(),"extensions")
+        path = os.path.join(path, block.language)
+        path = os.path.join(path, "blocks")
+        path = os.path.join(path, block.extension)
+        path = os.path.join(path, block.group)
         BlockPersistence.save(block, path)
 
     # ----------------------------------------------------------------------
     @classmethod
-    def delete_block(cls, block):
+    def delete_block(cls, block_key):
+        from mosaicode.system import System
+        blocks = System.get_blocks()
+        if block_key not in blocks:
+            return False
+        block = blocks[block_key]
         if block.file is not None:
             os.remove(block.file)
             return True

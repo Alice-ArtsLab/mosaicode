@@ -109,7 +109,7 @@ class PortEditor(Gtk.Dialog):
         self.code.insert_at_cursor(value)
 
     # ----------------------------------------------------------------------
-    def get_port(self):
+    def get_element(self):
         port = Port()
         port.type = self.type.get_value()
         port.language = self.language.get_value()

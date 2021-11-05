@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # noqa: E402
 """
-This module contains the BlockCodeEditor class.
+This module contains the CodeTemplateCodeEditor class.
 """
 import os
 import gi
@@ -19,7 +19,6 @@ from mosaicode.GUI.fields.stringfield import StringField
 from mosaicode.GUI.messagedialog import MessageDialog
 from mosaicode.GUI.confirmdialog import ConfirmDialog
 from mosaicode.GUI.fieldtypes import *
-from mosaicode.plugins.extensionsmanager.blockporteditor import BlockPortEditor
 from mosaicode.GUI.buttonbar import ButtonBar
 from mosaicode.GUI.treeview import TreeView
 from mosaicode.system import *
@@ -28,25 +27,25 @@ import gettext
 _ = gettext.gettext
 
 
-class BlockCodeEditor(Gtk.ScrolledWindow):
+class CodeTemplateCodeEditor(Gtk.ScrolledWindow):
     """
-    This class contains methods related the BlockCodeEditor class
+    This class contains methods related the CodeTemplateCodeEditor class
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, block):
+    def __init__(self, code_template):
         Gtk.ScrolledWindow.__init__(self)
 
-        self.block = block
+        self.code_template = code_template
 
         vbox = Gtk.VBox()
         self.add(vbox)
 
-        # Code Parts
+        # Generated files
         content_pane = Gtk.HBox()
         vbox.pack_start(content_pane, True, True, 1)
 
-        self.tree_view = TreeView(_("Code Parts"), self.__on_row_activated)
+        self.tree_view = TreeView(_("Generated files"), self.__on_row_activated)
         content_pane.pack_start(self.tree_view, True, True, 1)
 
         button_bar = ButtonBar()
@@ -62,7 +61,7 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
                 })
         vbox.pack_start(button_bar, False, False, 1)
 
-        self.codes = self.block.codes
+        self.codes = self.code_template.codes
         self.__populate_list()
 
         self.side_panel = Gtk.VBox()
@@ -73,13 +72,13 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __on_edit(self, widget=None, data=None):
         """
-        This method save the block.
+        This method save the code_template.
             Parameters:
-                * **block** (:class:`<>`)
+                * **code_template** (:class:`<>`)
         """
         count = 0
         for code_widget in self.code_widgets:
-            self.block.codes[count] = self.code_widgets[count].get_value()
+            self.code_template.codes[count] = self.code_widgets[count].get_value()
             count = count + 1
 
     # ----------------------------------------------------------------------
@@ -96,31 +95,32 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __populate_menu(self, entry, widget):
 
-        # Block Common Properties
-        values = ["$id$",
-                   "$label$",
-                   "$x$",
-                   "$y$",
-                   "$type$",
-                   "$language$",
-                   "$extension$",
-                   "$group$",
-                   "$color$",
-                   "$help$"]
+        # code_template Common Properties
+        values = ["$author$",
+                   "$license$",
+                   "$dir_name$",
+                   "$command$",
+                   "$name$",
+                   "$description$"]
         self.__create_menu(widget, values, "Common Properties")
 
-        # Block Properties
+        # Code Parts
         values = []
-        for prop in self.block.get_properties():
+        for code_part in self.code_template.code_parts:
+            values.append("$single_code[" + code_part + "]$")
+            values.append("$code[" + code_part + "]$")
+            values.append("$code[" + code_part + ",connection]$")
+        values.append("$connections$")
+        values.sort()
+        self.__create_menu(widget, values, "Code Parts")
+
+
+        # code_template Properties
+        values = []
+        for prop in self.code_template.get_properties():
             values.append("$prop[" + prop["name"] + "]$")
         values.sort()
-        self.__create_menu(widget, values, "Block Properties")
-
-        values = []
-        for port in self.block.ports:
-            values.append("$port[" + port.name + "]$")
-        values.sort()
-        self.__create_menu(widget, values, "Ports")
+        self.__create_menu(widget, values, "Code Template Properties")
 
         widget.show_all()
 
@@ -144,8 +144,8 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
     # ----------------------------------------------------------------------
     def __populate_list(self):
         labels = []
-        for code_part in self.codes:
-            labels.append(code_part)
+        for key in self.codes:
+            labels.append(key)
         self.tree_view.populate(labels)
 
     # ----------------------------------------------------------------------
@@ -194,17 +194,8 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
         self.__clean_side_panel()
 
 
-        code_parts = []
-        code_templates = System.get_code_templates()
-        for key in code_templates:
-            if code_templates[key].language == self.block.language:
-                code_parts = code_parts + code_templates[key].code_parts
-
-
-        data = {"label": _("Code Part Name"), "name":"name", "values": code_parts}
-        field = ComboField(data, None)
-#        data = {"label": _("Code Part Name"), "name":"name"}
-#        field = StringField(data, None)
+        data = {"label": _("File Name"), "name":"name"}
+        field = StringField(data, None)
         self.side_panel.pack_start(field, False, False, 1)
         try:
             field.set_value(configuration["name"])
@@ -236,7 +227,7 @@ class BlockCodeEditor(Gtk.ScrolledWindow):
             if widget.get_name() == "code":
                 code = widget.get_value()
         if name == "":
-            message = "Code Part Name can not be empty"
+            message = "File Name can not be empty"
             MessageDialog("Error", message, self).run()
             return
         if code == "":

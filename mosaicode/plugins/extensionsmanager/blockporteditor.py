@@ -35,10 +35,8 @@ class BlockPortEditor(Gtk.ScrolledWindow):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, block_editor, block):
+    def __init__(self, block):
         Gtk.ScrolledWindow.__init__(self)
-
-        self.block_editor = block_editor
         self.block = block
 
         self.selected_port = None
@@ -74,7 +72,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
     def __populate_list(self):
         labels = []
         for port in self.block.ports:
-            labels.append(port["label"])
+            labels.append(port.label)
         self.tree_view.populate(labels)
 
     # ----------------------------------------------------------------------
@@ -89,7 +87,7 @@ class BlockPortEditor(Gtk.ScrolledWindow):
         model, iterac = treeselection.get_selected()
         if iterac is None:
             return None
-        result = ConfirmDialog(_("Are you sure?"), self.block_editor).run()
+        result = ConfirmDialog(_("Are you sure?"), self.get_toplevel()).run()
         if result != Gtk.ResponseType.OK:
             return
         path = model.get_path(iterac)
@@ -187,15 +185,15 @@ class BlockPortEditor(Gtk.ScrolledWindow):
 
         if new_port.type == "":
             message = "Type can not be empty"
-            MessageDialog("Error", message, self.block_editor).run()
+            MessageDialog("Error", message, self.get_toplevel()).run()
             return
         if new_port.label == "":
             message = "Label can not be empty"
-            MessageDialog("Error", message, self.block_editor).run()
+            MessageDialog("Error", message, self.get_toplevel()).run()
             return
         if new_port.name == "":
             message = "Name can not be empty"
-            MessageDialog("Error", message, self.block_editor).run()
+            MessageDialog("Error", message, self.get_toplevel()).run()
             return
         contains = False
         i = 0

@@ -32,10 +32,9 @@ class BlockCommonEditor(Gtk.ScrolledWindow):
     """
 
     # ----------------------------------------------------------------------
-    def __init__(self, block_editor, block):
+    def __init__(self, block):
         Gtk.ScrolledWindow.__init__(self)
 
-        self.block_editor = block_editor
         self.block = block
 
         for widget in self.get_children():
@@ -60,7 +59,7 @@ class BlockCommonEditor(Gtk.ScrolledWindow):
 
         data = {"label": _("Color"), "value": block.get_color()}
         self.color_field = ColorField(data, self.__on_edit)
-        self.color_field.set_parent_window(self.block_editor)
+        self.color_field.set_parent_window(self.get_parent_window())
 
         data = {"label": _("Help"), "value": block.help}
         self.help_field = CommentField(data, self.__on_edit)
@@ -77,7 +76,7 @@ class BlockCommonEditor(Gtk.ScrolledWindow):
 
     # ----------------------------------------------------------------------
     def __on_edit(self, widget=None, data=None):
-        self.type_field.set_value("mosaicode.extensions." + \
+        self.type_field.set_value("" + \
                 self.language_field.get_value().lower() + "." + \
                 self.extension_field.get_value().lower() + "." + \
                 self.label_field.get_value().lower().replace(" ","")

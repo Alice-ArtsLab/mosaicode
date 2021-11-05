@@ -106,50 +106,6 @@ class System(object):
             self.list_of_examples.sort()
 
         # ----------------------------------------------------------------------
-        def __get_extensions(self, data_dir):
-            if not os.path.exists(data_dir):
-                return
-            # List of languages
-            for languages in os.listdir(data_dir):
-                lang_path = os.path.join(data_dir, languages)
-
-                # Load Code Templates
-                for file_name in os.listdir(os.path.join(lang_path, "codetemplates")):
-                    if not file_name.endswith(".json"):
-                        continue
-                    file_path = os.path.join(lang_path,"codetemplates")
-                    file_path = os.path.join(file_path, file_name)
-                    code_template = CodeTemplateControl.load(file_path)
-                    if code_template is not None:
-                        code_template.file = lang_path
-                        self.__code_templates[code_template.type] = code_template
-
-                # Load Ports
-                for file_name in os.listdir(os.path.join(lang_path,"ports")):
-                    if not file_name.endswith(".json"):
-                        continue
-                    file_path = os.path.join(lang_path,"ports")
-                    file_path = os.path.join(file_path, file_name)
-                    port = PortControl.load(file_path)
-                    if port is not None:
-                        port.file = lang_path
-                        self.__ports[port.type] = port
-
-                # Load Blocks
-                for extension_name in os.listdir(os.path.join(lang_path,"blocks")):
-                    extension_path = os.path.join(lang_path, "blocks")
-                    extension_path = os.path.join(extension_path, extension_name)
-                    for group_name in os.listdir(extension_path):
-                        group_path = os.path.join(extension_path, group_name)
-                        for file_name in os.listdir(group_path):
-                            if not file_name.endswith(".json"):
-                                continue
-                            file_path = os.path.join(group_path, file_name)
-                            block = BlockControl.load(file_path)
-                            if block is not None:
-                                block.file = lang_path
-                                self.__blocks[block.type] = block
-        # ----------------------------------------------------------------------
         def __load_extensions(self):
             # Load CodeTemplates, Blocks and Ports
             self.__code_templates.clear()
@@ -199,7 +155,50 @@ class System(object):
             walk_lib_packages(None, "")
 
             # Load XML files in user space
-            self.__get_extensions(System.get_user_dir() + "/extensions")
+            data_dir = System.get_user_dir() + "/extensions"
+
+            if not os.path.exists(data_dir):
+                return
+            # List of languages
+            for languages in os.listdir(data_dir):
+                lang_path = os.path.join(data_dir, languages)
+
+                # Load Code Templates
+                for file_name in os.listdir(os.path.join(lang_path, "codetemplates")):
+                    if not file_name.endswith(".json"):
+                        continue
+                    file_path = os.path.join(lang_path,"codetemplates")
+                    file_path = os.path.join(file_path, file_name)
+                    code_template = CodeTemplateControl.load(file_path)
+                    if code_template is not None:
+                        code_template.file = file_path
+                        self.__code_templates[code_template.type] = code_template
+
+                # Load Ports
+                for file_name in os.listdir(os.path.join(lang_path,"ports")):
+                    if not file_name.endswith(".json"):
+                        continue
+                    file_path = os.path.join(lang_path,"ports")
+                    file_path = os.path.join(file_path, file_name)
+                    port = PortControl.load(file_path)
+                    if port is not None:
+                        port.file = file_path
+                        self.__ports[port.type] = port
+
+                # Load Blocks
+                for extension_name in os.listdir(os.path.join(lang_path,"blocks")):
+                    extension_path = os.path.join(lang_path, "blocks")
+                    extension_path = os.path.join(extension_path, extension_name)
+                    for group_name in os.listdir(extension_path):
+                        group_path = os.path.join(extension_path, group_name)
+                        for file_name in os.listdir(group_path):
+                            if not file_name.endswith(".json"):
+                                continue
+                            file_path = os.path.join(group_path, file_name)
+                            block = BlockControl.load(file_path)
+                            if block is not None:
+                                block.file = file_path
+                                self.__blocks[block.type] = block
 
             for key in self.__blocks:
                 try:

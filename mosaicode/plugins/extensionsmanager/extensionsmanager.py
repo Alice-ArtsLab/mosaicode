@@ -6,16 +6,17 @@ This module contains the ExtensionsManagerMenu class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicode.model.plugin import Plugin
 from mosaicode.plugins.extensionsmanager.codetemplatemanager import CodeTemplateManager
 from mosaicode.plugins.extensionsmanager.blockmanager import BlockManager
 from mosaicode.plugins.extensionsmanager.portmanager import PortManager
-
+from mosaicode.control.portcontrol import PortControl
+from mosaicode.control.blockcontrol import BlockControl
+from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 import gettext
 
 _ = gettext.gettext
 
-class ExtensionsManager(Plugin, Gtk.Menu):
+class ExtensionsManager(Gtk.Menu):
     """
     This class contains methods related the ExtensionsManagerMenu
     """
@@ -51,6 +52,13 @@ class ExtensionsManager(Plugin, Gtk.Menu):
                 self.__show_port_manager
                 )
 
+        main_window.menu.create_menu(
+                _("Export all Extensions"),
+                None,
+                self,
+                self.__export
+                )
+
         item = Gtk.MenuItem()
         item.set_label(self.label)
         main_window.menu.append(item)
@@ -76,3 +84,21 @@ class ExtensionsManager(Plugin, Gtk.Menu):
         This add a new port.
         """
         PortManager(self.main_window)
+        
+    # ----------------------------------------------------------------------
+    def __export(self):
+        """
+        Export all data.
+        """
+        if not CodeTemplateControl.export():
+            from mosaicode.system import System as System
+            System.log("Problem expornt Code templates")
+
+        if not BlockControl.export():
+            from mosaicode.system import System as System
+            System.log("Problem exporting Blocks")
+
+        if not PortControl.export():
+            from mosaicode.system import System as System
+            System.log("Problem exporting Ports")
+

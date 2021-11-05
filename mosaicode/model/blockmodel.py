@@ -27,7 +27,7 @@ class BlockModel(object):
         # Appearance
         self.help = ""
         self.label = "A"
-        self.color = "200:200:25:150"
+        self.color = "#000000"
         self.group = "Undefined"
         self.ports = []
         self.maxIO = 0
@@ -50,6 +50,17 @@ class BlockModel(object):
 
     # ----------------------------------------------------------------------
     def get_color(self):
+        """
+        Get the color in RGB format and return in hexadecimal.
+
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return is the hex value reference to color. The hex value is a **str** type.
+        """
+        return self.color
+
+    # ----------------------------------------------------------------------
+    def get_color_as_int(self):
         """
         Get the color in RGB format and return in hexadecimal.
 

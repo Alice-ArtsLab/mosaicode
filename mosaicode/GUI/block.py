@@ -161,7 +161,7 @@ class Block(GooCanvas.CanvasGroup, BlockModel):
                                     radius_x=10,
                                     radius_y=10,
                                     stroke_color="black",
-                                    fill_color_rgba=self.get_color(),
+                                    fill_color_rgba=self.get_color_as_int(),
                                     tooltip=self.label
                                     )
         self.widgets["Rect"] = rect
