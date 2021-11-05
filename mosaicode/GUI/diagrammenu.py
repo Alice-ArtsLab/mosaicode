@@ -90,7 +90,7 @@ class DiagramMenu(Gtk.Menu):
             * **args**
 
         """
-        self.diagram.delete()
+        self.diagram.main_window.main_control.delete()
 
     # ----------------------------------------------------------------------
     def __uncollapse_clicked(self, *args):

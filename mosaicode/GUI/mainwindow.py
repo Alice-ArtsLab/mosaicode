@@ -6,11 +6,12 @@ This module contains the MainWindow class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gdk, Gtk
+import os
+
+from mosaicode.system import System as System
 from mosaicode.control.maincontrol import MainControl
 from mosaicode.GUI.blockmenu import BlockMenu
 from mosaicode.GUI.diagrammenu import DiagramMenu
-from mosaicode.system import System as System
-
 from mosaicode.GUI.blocknotebook import BlockNotebook
 from mosaicode.GUI.menu import Menu
 from mosaicode.GUI.propertybox import PropertyBox
@@ -35,7 +36,11 @@ class MainWindow(Gtk.Window):
             System.get_preferences().width,
             System.get_preferences().height)
         self.main_control = MainControl(self)
-
+        path = os.path.join(os.path.dirname(__file__), "..")
+        path = os.path.join(path, "img")
+        path = os.path.join(path, "mosaicode.png")
+        ret = self.set_default_icon_from_file(path)
+        
         # GUI components
         self.menu = Menu(self)
         self.toolbar = Toolbar(self)
@@ -45,7 +50,6 @@ class MainWindow(Gtk.Window):
         self.work_area = WorkArea(self)
         self.status = Status(self)
         self.diagram_menu = DiagramMenu()
-        self.menu.add_plugins()
         self.menu.add_help()
         self.block_menu = BlockMenu()
 
@@ -121,6 +125,11 @@ class MainWindow(Gtk.Window):
 
         self.main_control.init()
 
+        # Load the plugin
+        from mosaicode.plugins.extensionsmanager.extensionsmanager \
+            import ExtensionsManager as em
+        em().load(self)
+        
     # ----------------------------------------------------------------------
     def __on_key_press(self, widget, event=None):
         if event.state == \

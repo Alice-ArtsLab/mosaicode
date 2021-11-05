@@ -4,11 +4,9 @@
 This module contains the PreferencesPersistence class.
 """
 import os
-from mosaicode.utils.XMLUtils import XMLParser
 from mosaicode.model.preferences import Preferences
-
-tag_name = "MosaicodeProperties"
-
+from mosaicode.persistence.persistence import Persistence
+import json
 
 class PreferencesPersistence:
     """
@@ -19,79 +17,95 @@ class PreferencesPersistence:
     @classmethod
     def load(cls, path):
         """
-        This method loads the diagram.
+        This method loads the preference from JSON file.
 
         Returns:
 
             * **Types** (:class:`boolean<boolean>`)
         """
         prefs = Preferences()
-        file_name = path + "/" + prefs.conf_file_path
+        file_name = path + "/" + prefs.conf_file_path + ".json"
         file_name = os.path.expanduser(file_name)
         if os.path.exists(file_name) is False:
             return prefs
-        parser = XMLParser(file_name)
 
-        if parser.getTag(tag_name) is None:
-            return prefs
 
-        prefs.author = parser.getTagAttr(tag_name, "author")
-        prefs.license = parser.getTagAttr(tag_name, "license")
+        # load the port
+        if os.path.exists(file_name) is False:
+            return None
 
-        prefs.default_directory = parser.getTagAttr(tag_name, "default_directory")
-        prefs.default_filename = parser.getTagAttr(tag_name, "default_filename")
-        prefs.grid = int(parser.getTagAttr(tag_name,"grid"))
-        prefs.port = int(parser.getTagAttr(tag_name, "network_port"))
-        prefs.width = int(parser.getTagAttr(tag_name,"width"))
-        prefs.height = int(parser.getTagAttr(tag_name, "height"))
-        prefs.hpaned_work_area = int(parser.getTagAttr(tag_name, "hpaned_work_area"))
-        prefs.vpaned_bottom = int(parser.getTagAttr(tag_name, "vpaned_bottom"))
-        prefs.vpaned_left = int(parser.getTagAttr(tag_name, "vpaned_left"))
+        data = ""
+        try:
+            data_file = open(file_name, 'r')
+            data = json.load(data_file)
+            data_file.close()
 
-        files = parser.getTag(tag_name).getTag(
-                    "recent_files").getChildTags("name")
-        for file_name in files:
-            prefs.recent_files.append(file_name.getAttr("value"))
+            if data["data"] != "PREFERENCES":
+                return None
+
+            prefs.author = data["author"]
+            prefs.license = data["license"]
+            prefs.version = data["version"]
+
+            prefs.default_directory = data["default_directory"]
+            prefs.default_filename = data["default_filename"]
+            prefs.grid = int(data["grid"])
+            prefs.width = int(data["width"])
+            prefs.height = int(data["height"])
+            prefs.hpaned_work_area = int(data["hpaned_work_area"])
+            prefs.vpaned_bottom = int(data["vpaned_bottom"])
+            prefs.vpaned_left = int(data["vpaned_left"])
+
+            files = data["recent_files"]
+            for file_name in files:
+                prefs.recent_files.append(file_name)
+
+        except:
+            from mosaicode.system import System as System
+            System.log("Problem loading preferences")
+
         return prefs
 
     # ----------------------------------------------------------------------
     @classmethod
     def save(cls, prefs, path):
         """
-        This method save the diagram.
+        This method save the preference in user space.
 
         Returns:
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        parser = XMLParser()
-        parser.addTag(tag_name)
-
-        parser.setTagAttr(tag_name,'author', prefs.author)
-        parser.setTagAttr(tag_name,'license', prefs.license)
-
-        parser.setTagAttr(tag_name,'default_directory', prefs.default_directory)
-        parser.setTagAttr(tag_name,'default_filename', prefs.default_filename)
-        parser.setTagAttr(tag_name,'grid', prefs.grid)
-        parser.setTagAttr(tag_name, 'network_port', prefs.port)
-        parser.setTagAttr(tag_name,'width', prefs.width)
-        parser.setTagAttr(tag_name,'height', prefs.height)
-        parser.setTagAttr(tag_name,'hpaned_work_area', prefs.hpaned_work_area)
-        parser.setTagAttr(tag_name,'vpaned_bottom', prefs.vpaned_bottom)
-        parser.setTagAttr(tag_name,'vpaned_left', prefs.vpaned_left)
-
-        parser.appendToTag(tag_name, 'recent_files')
-
+        x = {
+        'data': "PREFERENCES",
+        'author': prefs.author,
+        'license': prefs.license,
+        'version': prefs.version,
+        'default_directory': prefs.default_directory,
+        'default_filename': prefs.default_filename,
+        'grid': prefs.grid,
+        'width': prefs.width,
+        'height': prefs.height,
+        'hpaned_work_area': prefs.hpaned_work_area,
+        'vpaned_bottom': prefs.vpaned_bottom,
+        'vpaned_left': prefs.vpaned_left,
+        'recent_files':[]
+        }
+        
         for key in prefs.recent_files:
-            parser.appendToTag('recent_files', 'name', value=key)
+            x['recent_files'].append(key)
 
+        if not Persistence.create_dir(path):
+            return False
         try:
-            file_name = path + "/" + prefs.conf_file_path
-            confFile = open(os.path.expanduser(file_name), 'w')
-            confFile.write(parser.prettify())
-            confFile.close()
+            file_name = path + "/" + prefs.conf_file_path + ".json"
+            data_file = open(file_name, 'w')
+            data_file.write(json.dumps(x, indent=4))
+            data_file.close()
+
         except IOError as e:
             return False
         return True
 
 # ----------------------------------------------------------------------
+

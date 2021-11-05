@@ -12,7 +12,6 @@ from os.path import expanduser
 
 from mosaicode.model.port import Port
 from mosaicode.persistence.blockpersistence import BlockPersistence
-from mosaicode.utils.XMLUtils import XMLParser
 
 
 class BlockControl():
@@ -27,21 +26,22 @@ class BlockControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export_xml(cls):
+    def export(cls):
         from mosaicode.system import System as System
         System()
         blocks = System.get_blocks()
-
+        result = True
         for key in blocks:
             path = System.get_user_dir()
             path = os.path.join(path,
                                 'extensions',
                                 blocks[key].language,
-                                'block',
+                                'blocks',
                                 blocks[key].extension,
                                 blocks[key].group)
 
-            BlockPersistence.save_xml(blocks[key], path)
+            result = result and BlockPersistence.save(blocks[key], path)
+        return result
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -90,64 +90,39 @@ class BlockControl():
     @classmethod
     def load(cls, file_name):
         """
-        This method loads the block from XML file.
+        This method loads the block from JSON file.
 
         Returns:
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        file_name = file_name.replace(" ", "\\ ")
-
-        block = BlockPersistence.load_xml(file_name)
-
-        if block is None:
-            from mosaicode.system import System
-            System.log("Block " + file_name + " could not load")
-
+        block = BlockPersistence.load(file_name)
         return block
     # ----------------------------------------------------------------------
-
     @classmethod
     def add_new_block(cls, block):
         # Save it
         from mosaicode.system import System
         System()
-        path = System.get_user_dir() + "/extensions/"
-        path = path + block.language + "/" + block.extension + "/"
-        BlockPersistence.save_xml(block, path)
+        path = os.path.join(System.get_user_dir(),"extensions")
+        path = os.path.join(path, block.language)
+        path = os.path.join(path, "blocks")
+        path = os.path.join(path, block.extension)
+        path = os.path.join(path, block.group)
+        BlockPersistence.save(block, path)
 
     # ----------------------------------------------------------------------
     @classmethod
-    def delete_block(cls, block):
+    def delete_block(cls, block_key):
+        from mosaicode.system import System
+        blocks = System.get_blocks()
+        if block_key not in blocks:
+            return False
+        block = blocks[block_key]
         if block.file is not None:
             os.remove(block.file)
             return True
         else:
             return False
 
-    # ----------------------------------------------------------------------
-    @classmethod
-    def print_block(cls, block):
-        """
-        This method prints the block properties.
-        """
-        print('block.id =', block.id)
-        print('block.x =', block.x)
-        print('block.y =', block.y)
-
-        print('block.type =', block.type)
-        print('block.language =', block.language)
-        print('block.extension =', block.extension)
-        print('block.file =', block.file)
-
-        # Appearance
-        print('block.help =', block.help)
-        print('block.label =', block.label)
-        print('block.color =', block.color)
-        print('block.group =', block.group)
-        print('block.ports =', block.ports)
-
-        # Code generation
-        print('block.properties =', block.properties)
-        print('block.codes =', block.codes)
 # ----------------------------------------------------------------------

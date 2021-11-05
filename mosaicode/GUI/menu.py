@@ -111,9 +111,6 @@ class Menu(Gtk.MenuBar):
                          process_menu, mc.view_source)
         self.add_menu_category(_("Process"), process_menu)
 
-        # ------------------------- Plugins ------------------------------
-        self.plugins_menu = Gtk.Menu()
-
         # -------------------------- Help --------------------------------
         self.help_menu = Gtk.Menu()
         self.example_menu = Gtk.Menu()
@@ -125,10 +122,6 @@ class Menu(Gtk.MenuBar):
     # ----------------------------------------------------------------------
     def add_help(self):
         self.add_menu_category(_("Help"), self.help_menu)
-
-    # ----------------------------------------------------------------------
-    def add_plugins(self):
-        self.add_menu_category(_("Plugins"), self.plugins_menu)
 
     # ----------------------------------------------------------------------
     def create_menu(self, name, accel, menu, action):

@@ -13,6 +13,8 @@ class BlockModel(object):
 
 
         self.id = -1
+        from mosaicode.system import System as System
+        self.version = System.VERSION
         self.x = 0
         self.y = 0
         self.is_collapsed = False
@@ -25,7 +27,7 @@ class BlockModel(object):
         # Appearance
         self.help = ""
         self.label = "A"
-        self.color = "200:200:25:150"
+        self.color = "#000000"
         self.group = "Undefined"
         self.ports = []
         self.maxIO = 0
@@ -55,6 +57,17 @@ class BlockModel(object):
             * **Types**: :class:`str<str>`
             The return is the hex value reference to color. The hex value is a **str** type.
         """
+        return self.color
+
+    # ----------------------------------------------------------------------
+    def get_color_as_int(self):
+        """
+        Get the color in RGB format and return in hexadecimal.
+
+        Returns:
+            * **Types**: :class:`str<str>`
+            The return is the hex value reference to color. The hex value is a **str** type.
+        """
 
         if self.color.startswith("#"):
             color = self.color.replace("#", "")
@@ -62,6 +75,15 @@ class BlockModel(object):
                 color = [int(color[0:2], 16),
                          int(color[4:6], 16),
                          int(color[8:10], 16)]
+                color = int(color[0]) * 0x1000000 + \
+                        int(color[1]) * 0x10000 + \
+                        int(color[2]) * 0x100 + \
+                        150 * 0x01 # Transparency
+                return color
+            elif len(color) == 6: # RGB
+                color = [int(color[0:2], 16),
+                         int(color[2:4], 16),
+                         int(color[4:6], 16)]
                 color = int(color[0]) * 0x1000000 + \
                         int(color[1]) * 0x10000 + \
                         int(color[2]) * 0x100 + \

@@ -16,6 +16,8 @@ class Port(object):
 
         # Attributes defined by the Ports
         self.type = self.__class__.__module__
+        from mosaicode.system import System as System
+        self.version = System.VERSION
         self.language = ""
         self.hint = ""
         self.color = "#000"

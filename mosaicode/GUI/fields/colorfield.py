@@ -8,7 +8,7 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
-from mosaicomponents.field import Field
+from mosaicode.GUI.fields.field import Field
 
 
 class ColorField(Field):
@@ -18,7 +18,7 @@ class ColorField(Field):
     configuration = {"label": "",
                      "value": "#ffff00000000",
                      "name": "",
-                     "format": "FFFF0000FFFF"}
+                     "format": "FF00FF"}
 
     # --------------------------------------------------------------------------
     def __init__(self, data, event):
@@ -69,53 +69,46 @@ class ColorField(Field):
                 color_selection.set_current_rgba(self.color)
             except:
                 pass
-        response = self.dialog.show()
+        response = self.dialog.run()
         if response == Gtk.ResponseType.OK:
             color_selection = self.dialog.get_color_selection()
             self.color = color_selection.get_current_rgba()
-            self.color_block.get_style_context().add_class(
-                    "frame {background-color: " + self.color.to_string() + ";}")
+            self.__change_bg_color()
         self.dialog.destroy()
 
     # --------------------------------------------------------------------------
     def get_value(self):
-        result_string = Gdk.RGBA.from_color(self.color).to_string()
         if len(self.format) == 6:
             result = '#%02x%02x%02x' % (
-                        self.color.red / 256,
-                        self.color.green / 256,
-                        self.color.blue / 256)
+                        int(self.color.red * 65535 / 256),
+                        int(self.color.green * 65535 / 256),
+                        int(self.color.blue * 65535 / 256)
+                        )
             return result
-        if len(self.format) == 3:
+        elif len(self.format) == 3:
             result = '#%01x%01x%01x' % (
-                    self.color.red / 4096,
-                    self.color.green / 4096,
-                    self.color.blue / 4096)
+                    int(self.color.red * 65535 / 4096),
+                    int(self.color.green * 65535 / 4096),
+                    int(self.color.blue * 65535 / 4096)
+                    )
             return result
+        result_string = Gdk.RGBA.from_color(self.color).to_string()
         return result_string
 
     # --------------------------------------------------------------------------
+    def __change_bg_color(self):
+        self.color_block.modify_bg(
+                Gtk.StateType.NORMAL,
+                Gdk.Color(
+                        self.color.red * 65535,
+                        self.color.green * 65535,
+                        self.color.blue * 65535)
+                )
+
+    # --------------------------------------------------------------------------
     def set_value(self, value):
-        if isinstance(value, int):
-            a = value & 255
-            b = (value >> 8) & 255
-            g = (value >> 16) & 255
-            r = (value >> 24) & 255
-            value = "rgba(" + str(r) + "," + str(g) + "," + str(b) + \
-                    "," + str(a) + ")"
-
-        if ":" in value:
-            vlist = value.split(":")
-            if len(vlist) == 3:
-                value = "rgb(" + vlist[0] + "," + vlist[1] + \
-                        "," + vlist[2] + ")"
-            if len(vlist) == 4:
-                value = "rgba(" + vlist[0] + "," + vlist[1] + \
-                        "," + vlist[2] + "," + vlist[3] + ")"
-
         color = Gdk.RGBA()
         result = color.parse(value)
-        self.color = color.to_color()
-        self.color_block.get_style_context().add_class(
-                "frame {background-color: " + value + ";}")
+        self.color = color
+        self.__change_bg_color()
 # -----------------------------------------------------------------------------

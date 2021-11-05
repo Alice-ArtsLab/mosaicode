@@ -3,7 +3,7 @@
 """
 This module contains the CodeField class.
 """
-from mosaicomponents.field import Field
+from mosaicode.GUI.fields.field import Field
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GtkSource', '3.0')

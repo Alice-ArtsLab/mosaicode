@@ -6,7 +6,7 @@ This module contains the CheckField class.
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from mosaicomponents.field import Field
+from mosaicode.GUI.fields.field import Field
 
 
 class CheckField(Field):
@@ -30,9 +30,10 @@ class CheckField(Field):
 
         self.field = Gtk.Switch()
         self.field.set_property("margin-left", 20)
+        self.field.set_property("halign", Gtk.Align.END)
 
         if isinstance(self.data["value"], str) \
-                or isinstance(self.data["value"], unicode):
+                or isinstance(self.data["value"], bytes):
             if self.data["value"] == "True":
                 self.field.set_active(True)
             else:

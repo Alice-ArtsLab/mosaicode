@@ -17,8 +17,6 @@ setup(
     install_requires=[
             "PyGObject",
             "GooCalendar",
-            "BeautifulSoup4",
-            "lxml",
             "pgi"],
     license="GNU GPL3",
     maintainer="ALICE: Arts Lab in Interfaces, Computers, and Else",

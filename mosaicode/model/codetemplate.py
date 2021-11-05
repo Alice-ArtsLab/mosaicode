@@ -12,13 +12,13 @@ class CodeTemplate(object):
     # ----------------------------------------------------------------------
     def __init__(self):
         self.type = self.__class__.__module__
+        self.version = 0
         self.name = ""
         self.file = None
         self.description = ""
         self.language = ""
         self.command = ""
-
-        self.files = {}
+        self.codes = {}
         self.code_parts = []
         self.properties = []
 

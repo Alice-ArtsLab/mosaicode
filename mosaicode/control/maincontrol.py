@@ -31,6 +31,7 @@ from mosaicode.GUI.preferencewindow import PreferenceWindow
 from mosaicode.GUI.selectcodetemplate import SelectCodeTemplate
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.codetemplate import CodeTemplate
+from mosaicode.model.port import Port
 from mosaicode.persistence.preferencespersistence import PreferencesPersistence
 from mosaicode.system import System as System
 
@@ -48,15 +49,10 @@ class MainControl():
         # Clipboard is here because It must be possible to exchange data between diagrams
         self.clipboard = []
         self.threads = {}
-        self.publisher = Publisher()
 
     # ----------------------------------------------------------------------
     def init(self):
-        # Load plugins
         self.update_blocks()
-        for plugin in System.get_plugins():
-            plugin.load(self.main_window)
-
         self.main_window.menu.update_recent_files(
             System.get_preferences().recent_files)
         self.main_window.menu.update_examples(System.get_list_of_examples())
@@ -119,7 +115,7 @@ class MainControl():
         if diagram is None:
             return False
 
-        if diagram.file_name is "Untitled" or save_as:
+        if diagram.file_name == "Untitled" or save_as:
             while True:
                 dialog = SaveDialog(
                     self.main_window,
@@ -312,12 +308,18 @@ class MainControl():
         if diagram is None:
             return False
         generator = self.__get_code_generator(diagram)
+        codes = {}
+
         if generator is not None:
             codes = generator.generate_code()
-            cw = CodeWindow(self.main_window, codes)
-            cw.run()
-            cw.close()
-            cw.destroy()
+        else:
+            return False
+        cw = CodeWindow(self.main_window, codes)
+        cw.run()
+        cw.close()
+        cw.destroy()
+        return True
+        
 
     # ----------------------------------------------------------------------
     def run(self, codes=None):
@@ -359,16 +361,6 @@ class MainControl():
         if process is None:
             return
         os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-
-    # ----------------------------------------------------------------------
-    def publish(self):
-        """
-        This method run web server.
-        """
-        if self.publisher.is_running():
-            self.publisher.stop()
-        else:
-            self.publisher.start()
 
     # ----------------------------------------------------------------------
     def about(self):
@@ -603,52 +595,47 @@ class MainControl():
         self.redraw(event.get_active())
 
     # ----------------------------------------------------------------------
-    def add_code_template(self, code_template):
-        CodeTemplateControl.add_code_template(code_template)
+    def add_extension(self, element):
+        if isinstance(element, Port):
+            PortControl.add_port(element)
+        elif isinstance(element, CodeTemplate):
+            CodeTemplateControl.add_code_template(element)
+        elif isinstance(element, BlockModel):
+            BlockControl.add_new_block(element)
+            self.update_blocks()
         System.reload()
 
     # ----------------------------------------------------------------------
-    def delete_code_template(self, code_template_name):
-        filename = CodeTemplateControl.delete_code_template(code_template_name)
-        if not filename:
-            message = "This code template does not exist."
-            MessageDialog("Error", message, self.main_window).run()
-            return False
-        if filename is None:
-            message = "This code template is a python file installed in the System.\n"
-            message = message + "Sorry, you can't remove it"
-            MessageDialog("Error", message, self.main_window).run()
-            return False
-        MessageDialog("Info", "File " + filename + " deleted.", self.main_window).run()
-        System.reload()
+    def delete_extension(self, element, element_type):
+        if isinstance(element_type, Port):
+            if not PortControl.delete_port(element):
+                message = "This port is a python file installed in the System.\n"
+                message = message + "Sorry, you can't remove it"
+                MessageDialog("Error", message, self.main_window).run()
+                return False
+            System.reload()
+        elif isinstance(element_type, CodeTemplate):
+            filename = CodeTemplateControl.delete_code_template(element)
+            if not filename:
+                message = "This code template does not exist."
+                MessageDialog("Error", message, self.main_window).run()
+                return False
+            if filename is None:
+                message = "This code template is a python file installed in the System.\n"
+                message = message + "Sorry, you can't remove it"
+                MessageDialog("Error", message, self.main_window).run()
+                return False
+            System.reload()
+            return True
+        elif isinstance(element_type, BlockModel):
+            if not BlockControl.delete_block(element):
+                message = "This block is a python file installed in the System.\n"
+                message = message + "Sorry, you can't remove it"
+                MessageDialog("Error", message, self.main_window).run()
+                return False
+            self.update_blocks()
+        MessageDialog("Info", str(element) + " deleted.", self.main_window).run()
         return True
-
-    # ----------------------------------------------------------------------
-    def add_port(self, port):
-        PortControl.add_port(port)
-        System.reload()
-
-    # ----------------------------------------------------------------------
-    def delete_port(self, port_key):
-        if not PortControl.delete_port(port_key):
-            message = "This port is a python file installed in the System.\n"
-            message = message + "Sorry, you can't remove it"
-            MessageDialog("Error", message, self.main_window).run()
-        System.reload()
-
-    # ----------------------------------------------------------------------
-    def add_new_block(self, block):
-        BlockControl.add_new_block(block)
-        self.update_blocks()
-        # Update everybody!
-
-    # ----------------------------------------------------------------------
-    def delete_block(self, block):
-        if not BlockControl.delete_block(block):
-            message = "This block is a python file installed in the System.\n"
-            message = message + "Sorry, you can't remove it"
-            MessageDialog("Error", message, self.main_window).run()
-        self.update_blocks()
 
     # ----------------------------------------------------------------------
     def update_all(self):

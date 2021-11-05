@@ -10,17 +10,18 @@ class Preferences(object):
     """
 
     def __init__(self):
-        self.conf_file_path = "configuration.xml"
+        self.conf_file_path = "configuration"
 
         self.author = ""
         self.license = "GPL 3.0"
+        from mosaicode.system import System as System
+        self.version = System.VERSION
 
         self.recent_files = []
         from mosaicode.system import System
         self.default_directory = os.path.join(System.get_user_dir(), "code-gen")
         self.default_filename = "%n"
         self.grid = 10
-        self.port = 49151
 
         # GUI stuff
         self.width = 900

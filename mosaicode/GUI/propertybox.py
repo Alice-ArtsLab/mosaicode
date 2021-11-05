@@ -4,7 +4,7 @@ This module contains the PropertyBox class.
 """
 import inspect  # For module inspect
 import pkgutil  # For dynamic package load
-import mosaicomponents
+import mosaicode.GUI.fields
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('Gdk', '3.0')
@@ -50,6 +50,8 @@ class PropertyBox(Gtk.VBox):
                 None
         """
         # First, remove all components
+        for widget in self.vbox.get_children():
+            self.vbox.remove(widget)
         self.diagram = diagram
         if diagram.code_template is None:
             data1 = {"label": _("Choose a Code Template"),

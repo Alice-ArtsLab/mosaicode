@@ -9,14 +9,12 @@ import pkgutil  # For dynamic package load
 import sys
 import time
 from copy import copy
-from glob import glob  # To load examples
 import mosaicode.extensions
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.portcontrol import PortControl
 from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.codetemplate import CodeTemplate
-from mosaicode.model.plugin import Plugin
 from mosaicode.model.port import Port
 from mosaicode.model.preferences import Preferences
 from mosaicode.persistence.preferencespersistence import PreferencesPersistence
@@ -28,10 +26,6 @@ class System(object):
     """
 
     APP = 'mosaicode'
-    DATA_DIR = "/usr/share/mosaicode/"
-    DATA_EXTENSIONS = "/usr/lib/python2.7/dist-packages/"
-#    DATA_EXTENSIONS = "~/.local/lib/python2.7/site-packages"
-
     ZOOM_ORIGINAL = 1
     ZOOM_IN = 2
     ZOOM_OUT = 3
@@ -39,8 +33,6 @@ class System(object):
     VERSION = "0.0.1"
     # Instance variable to the singleton
     instance = None
-
-    sys.path.insert(0, DATA_EXTENSIONS)
 
     # ----------------------------------------------------------------------
     # An inner class instance to be singleton
@@ -55,28 +47,25 @@ class System(object):
             self.__ports = {}
 
             self.list_of_examples = []
-            self.__plugins = []
             # Create user directory if does not exist
-            directories = ["/extensions/",
-                            "/examples/",
-                           "/images/",
-                           "/diagrams/",
-                           "/code-gen/"]
+            directories = ["extensions",
+                           "images",
+                           "code-gen"]
             for name in directories:
-                if not os.path.isdir(System.get_user_dir() + name):
+                path = os.path.join(System.get_user_dir(), name)
+                if not os.path.isdir(path):
                     try:
-                        os.makedirs(System.get_user_dir() + name)
+                        os.makedirs(path)
                     except Exception as error:
                         System.log(error)
 
             self.__preferences = PreferencesPersistence.load(
-                System.get_user_dir())
+                        System.get_user_dir())
 
         # ----------------------------------------------------------------------
         def reload(self):
             self.__load_examples()
             self.__load_extensions()
-            self.__load_plugins()
 
         # ----------------------------------------------------------------------
         def get_blocks(self):
@@ -102,55 +91,19 @@ class System(object):
             return self.__preferences
 
         # ----------------------------------------------------------------------
-        def get_plugins(self):
-            return self.__plugins
-
-        # ----------------------------------------------------------------------
         def __load_examples(self):
             # Load Examples from the system
             self.list_of_examples = []
-            for root, subdirs, files in os.walk(System.DATA_DIR + "extensions/"):
-                for filename in files:
-                    file_path = os.path.join(root, filename)
-                    if filename.endswith(".mscd"):
-                        self.list_of_examples.append(file_path)
             # Load Examples from the user space
-            for root, subdirs, files in os.walk(System.get_user_dir() + "/examples/"):
-                for filename in files:
-                    file_path = os.path.join(root, filename)
+            file_path = os.path.join(System.get_user_dir(),"extensions")
+            for language in os.listdir(file_path):
+                path = os.path.join(file_path, language)
+                path = os.path.join(path, "examples")
+                for filename in os.listdir(path):
+                    file_path = os.path.join(path, filename)
                     if filename.endswith(".mscd"):
                         self.list_of_examples.append(file_path)
             self.list_of_examples.sort()
-
-        # ----------------------------------------------------------------------
-        def __get_extensions_xml(self, data_dir):
-            if not os.path.exists(data_dir):
-                return
-            for file_name in os.listdir(data_dir):
-                full_file_path = data_dir + "/" + file_name
-
-                # Recursion to make it more interesting...
-                if os.path.isdir(full_file_path):
-                    self.__get_extensions_xml(full_file_path)
-
-                if not file_name.endswith(".xml"):
-                    continue
-
-                code_template = CodeTemplateControl.load(full_file_path)
-                if code_template is not None:
-                    code_template.file = full_file_path
-                    self.__code_templates[code_template.type] = code_template
-
-                port = PortControl.load(full_file_path)
-
-                if port is not None:
-                    port.file = full_file_path
-                    self.__ports[port.type] = port
-
-                block = BlockControl.load(full_file_path)
-                if block is not None:
-                    block.file = full_file_path
-                    self.__blocks[block.type] = block
 
         # ----------------------------------------------------------------------
         def __load_extensions(self):
@@ -182,65 +135,77 @@ class System(object):
                             if not inspect.isclass(obj):
                                 continue
                             modname = inspect.getmodule(obj).__name__
-                            if not modname.startswith(System.APP + "_lib") and not modname.startswith(System.APP + "_plugin"):
+                            if not modname.startswith(System.APP + "_lib"):
                                 continue
                             try:
                                 instance = obj()
-                            except:
+                            except Exception as error:
                                 continue
                             if isinstance(instance, BlockModel):
                                 if instance.label != "":
                                     self.__blocks[instance.type] = instance
                                     continue
-                            if isinstance(instance, Port):
+                            elif isinstance(instance, Port):
                                 self.__ports[instance.type] = instance
                                 continue
-                            if isinstance(instance, CodeTemplate):
+                            elif isinstance(instance, CodeTemplate):
                                 self.__code_templates[instance.type] = instance
                                 continue
 
             walk_lib_packages(None, "")
 
-            # Load XML files in application space
-            self.__get_extensions_xml(System.DATA_DIR + "extensions")
             # Load XML files in user space
-            self.__get_extensions_xml(System.get_user_dir() + "/extensions")
+            data_dir = System.get_user_dir() + "/extensions"
+
+            if not os.path.exists(data_dir):
+                return
+            # List of languages
+            for languages in os.listdir(data_dir):
+                lang_path = os.path.join(data_dir, languages)
+
+                # Load Code Templates
+                for file_name in os.listdir(os.path.join(lang_path, "codetemplates")):
+                    if not file_name.endswith(".json"):
+                        continue
+                    file_path = os.path.join(lang_path,"codetemplates")
+                    file_path = os.path.join(file_path, file_name)
+                    code_template = CodeTemplateControl.load(file_path)
+                    if code_template is not None:
+                        code_template.file = file_path
+                        self.__code_templates[code_template.type] = code_template
+
+                # Load Ports
+                for file_name in os.listdir(os.path.join(lang_path,"ports")):
+                    if not file_name.endswith(".json"):
+                        continue
+                    file_path = os.path.join(lang_path,"ports")
+                    file_path = os.path.join(file_path, file_name)
+                    port = PortControl.load(file_path)
+                    if port is not None:
+                        port.file = file_path
+                        self.__ports[port.type] = port
+
+                # Load Blocks
+                for extension_name in os.listdir(os.path.join(lang_path,"blocks")):
+                    extension_path = os.path.join(lang_path, "blocks")
+                    extension_path = os.path.join(extension_path, extension_name)
+                    for group_name in os.listdir(extension_path):
+                        group_path = os.path.join(extension_path, group_name)
+                        for file_name in os.listdir(group_path):
+                            if not file_name.endswith(".json"):
+                                continue
+                            file_path = os.path.join(group_path, file_name)
+                            block = BlockControl.load(file_path)
+                            if block is not None:
+                                block.file = file_path
+                                self.__blocks[block.type] = block
 
             for key in self.__blocks:
                 try:
                     block = self.__blocks[key]
                     BlockControl.load_ports(block, self.__ports)
                 except:
-                    print("Error in loading plugin " + key)
-
-        # ----------------------------------------------------------------------
-        def __load_plugins(self):
-            plugins_dir = os.path.join(System.DATA_EXTENSIONS)
-            for name in os.listdir(plugins_dir):
-                plugin_dir = os.path.join(plugins_dir, name)
-                if os.path.isdir(plugin_dir):
-                    module_name = 'mosaicode.plugins.' + name
-                    module = None
-
-                    try:
-                        module = getattr(__import__(module_name, fromlist=[name]), name)
-                    except:
-                        pass
-#                        print('Can not import: '+ module_name)
-
-                    for class_name, obj in inspect.getmembers(module):
-                        if not inspect.isclass(obj):
-                            continue
-
-                        try:
-                            instance = obj()
-                        except:
-                            continue
-
-                        if isinstance(instance, Plugin) and class_name != 'Plugin':
-                            self.__plugins.append(instance)
-                            continue
-
+                    print("Error in loading block " + key)
 
     # ----------------------------------------------------------------------
     def __init__(self):
@@ -275,14 +240,6 @@ class System(object):
         This method returns System installed blocks.
         """
         return cls.instance.get_preferences()
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def get_plugins(cls):
-        """
-        This method returns System installed blocks.
-        """
-        return cls.instance.get_plugins()
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -344,7 +301,7 @@ class System(object):
 
     # ----------------------------------------------------------------------
     @classmethod
-    def replace_wildcards(cls, text, diagram):
+    def replace_wildcards(cls, name, diagram):
         """
         This method replace the wildcards.
 
@@ -352,7 +309,7 @@ class System(object):
 
             * **Types** (:class:`str<str>`)
         """
-        result = text.replace("%t", str(time.time()))
+        result = name.replace("%t", str(time.time()))
         date = datetime.datetime.now().strftime("(%Y-%m-%d-%H:%M:%S)")
         result = result.replace("%d", date)
         result = result.replace("%l", diagram.language)
