@@ -9,7 +9,6 @@ import pkgutil  # For dynamic package load
 import sys
 import time
 from copy import copy
-import mosaicode.extensions
 from mosaicode.control.blockcontrol import BlockControl
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.portcontrol import PortControl

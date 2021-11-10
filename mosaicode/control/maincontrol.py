@@ -20,7 +20,6 @@ from mosaicode.control.codegenerator import CodeGenerator
 from mosaicode.control.codetemplatecontrol import CodeTemplateControl
 from mosaicode.control.diagramcontrol import DiagramControl
 from mosaicode.control.portcontrol import PortControl
-from mosaicode.control.publisher import Publisher
 from mosaicode.GUI.about import About
 from mosaicode.GUI.block import Block
 from mosaicode.GUI.codewindow import CodeWindow

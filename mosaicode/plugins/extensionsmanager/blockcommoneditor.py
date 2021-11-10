@@ -19,7 +19,7 @@ from mosaicode.GUI.fields.openfilefield import OpenFileField
 from mosaicode.GUI.fields.stringfield import StringField
 from mosaicode.GUI.fieldtypes import *
 from mosaicode.plugins.extensionsmanager.blockporteditor import BlockPortEditor
-from mosaicode.plugins.extensionsmanager.blockpropertyeditor import BlockPropertyEditor
+from mosaicode.plugins.extensionsmanager.propertyeditor import PropertyEditor
 from mosaicode.system import *
 import gettext
 
