@@ -4,8 +4,11 @@ This module contains the MainControl class.
 """
 import gettext
 import os
+import zipfile
+import shutil
 import signal
 import subprocess
+import datetime
 from copy import copy, deepcopy
 from threading import Event, Thread
 
@@ -33,6 +36,9 @@ from mosaicode.model.blockmodel import BlockModel
 from mosaicode.model.codetemplate import CodeTemplate
 from mosaicode.model.port import Port
 from mosaicode.persistence.preferencespersistence import PreferencesPersistence
+from mosaicode.persistence.portpersistence import PortPersistence
+from mosaicode.persistence.blockpersistence import BlockPersistence
+from mosaicode.persistence.codetemplatepersistence import CodeTemplatePersistence
 from mosaicode.system import System as System
 
 _ = gettext.gettext
@@ -55,7 +61,7 @@ class MainControl():
         self.update_blocks()
         self.main_window.menu.update_recent_files(
             System.get_preferences().recent_files)
-        self.main_window.menu.update_examples(System.get_list_of_examples())
+        self.main_window.menu.update_examples(System.get_examples())
 
     # ----------------------------------------------------------------------
     def update_blocks(self):
@@ -93,7 +99,8 @@ class MainControl():
         """
         diagram = Diagram(self.main_window)
         self.main_window.work_area.add_diagram(diagram)
-        DiagramControl(diagram).load(file_name)
+        if not DiagramControl(diagram).load(file_name):
+            System.log("Problem Loading the Diagram")
         diagram.redraw()
         diagram.set_modified(False)
 
@@ -129,11 +136,13 @@ class MainControl():
 
                 if not name.endswith("mscd"):
                     name = (("%s" + ".mscd") % name)
+
                 if os.path.exists(name) is True:
                     msg = _("File exists. Overwrite?")
                     result = ConfirmDialog(msg, self.main_window).run()
                     if result == Gtk.ResponseType.CANCEL:
                         continue
+
                 diagram.file_name = name
                 self.main_window.work_area.rename_diagram(diagram)
                 break
@@ -411,7 +420,8 @@ class MainControl():
         """
         diagram = self.main_window.work_area.get_current_diagram()
         if diagram is None:
-            return False
+            self.new()
+            diagram = self.main_window.work_area.get_current_diagram()
         new_block = BlockModel(block)
         new_block = deepcopy(new_block)
         new_block = Block(diagram, new_block)
@@ -637,6 +647,116 @@ class MainControl():
         MessageDialog("Info", str(element) + " deleted.", self.main_window).run()
         return True
 
+    # ----------------------------------------------------------------------
+    def export_extensions(self):
+    
+        from mosaicode.system import System as System
+        System()
+
+        result = True
+        folder = "extension-" + datetime.datetime.now().strftime("%Y-%m-%d")
+
+        # Export ports
+        ports = System.get_ports()
+        for key in ports:
+            path = System.get_user_dir()
+            path = os.path.join(path, folder, ports[key].language, 'ports')
+            result = result and PortPersistence.save(ports[key], path)
+        # Export Blocks
+        blocks = System.get_blocks()
+        result = True
+        for key in blocks:
+            path = System.get_user_dir()
+            path = os.path.join(path,
+                                folder,
+                                blocks[key].language,
+                                'blocks',
+                                blocks[key].extension,
+                                blocks[key].group)
+            result = result and BlockPersistence.save(blocks[key], path)
+        # Export Code Templates
+        code_templates = System.get_code_templates()
+        result = True
+        for key in code_templates:
+            path = System.get_user_dir()
+            path = os.path.join(path,
+                                folder,
+                                code_templates[key].language,
+                                'codetemplates')
+            result = result and CodeTemplatePersistence.save(
+                    code_templates[key], path)
+        # Export examples
+        path = System.get_user_dir()
+        path = os.path.join(path, "extensions")
+        examples = System.get_examples()
+        for example in examples:
+            relpath = os.path.relpath(example, path)
+            path = System.get_user_dir()
+            path = os.path.join(path, folder, relpath)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            shutil.copy2(example, path)
+
+        # Create a zip file to the extension
+        path = System.get_user_dir()
+        path = os.path.join(path, folder+".zip")
+        zip_file = zipfile.ZipFile(path, 'w')
+
+        path = System.get_user_dir()
+        path = os.path.join(path, folder)
+
+        for folderName, subfolders, filenames in os.walk(path):
+            for filename in filenames:
+                filePath = os.path.join(folderName, filename)
+                #create complete filepath of file in directory
+                # Add file to zip
+                zip_file.write(filePath, os.path.relpath(filePath, path))
+        zip_file.close()
+
+        path = System.get_user_dir()
+        path = os.path.join(path, folder)
+        shutil.rmtree(path)
+
+        # create a publish file
+        filename = "resource.txt"
+        path = System.get_user_dir()
+        path = os.path.join(path, filename)
+        f = open(path, "w")
+        f.write(folder + ".zip")
+        f.close()
+
+        if result:
+            MessageDialog(
+                    "Success",
+                     "File " + folder + ".zip created successfully!",
+                     self.main_window).run()
+        else:
+            MessageDialog(
+                    "Error",
+                    "Could not export extension",
+                    self.main_window).run()
+        return result
+
+    # ----------------------------------------------------------------------
+    def import_extensions(self):
+        import urllib.request
+        url = "https://alice.dcomp.ufsj.edu.br/mosaicode/extensions/"
+        resource_file = url + "resource.txt"
+        # download and read resource list
+        for line in urllib.request.urlopen(resource_file):
+            file_name = line.decode('utf-8')
+            # download zip file
+            file_path = os.path.join(System.get_user_dir(), file_name)
+            urllib.request.urlretrieve(url + file_name, file_path)
+            # extract it
+            zip_file = zipfile.ZipFile(file_path, 'r')
+            destination = os.path.join(System.get_user_dir(), "extensions")
+            zip_file.extractall(destination)            
+        MessageDialog(
+                "Success",
+                 "Extensions imported successfully!",
+                 self.main_window).run()
+        System.reload()
+        
     # ----------------------------------------------------------------------
     def update_all(self):
         for diagram in self.main_window.work_area.get_diagrams():

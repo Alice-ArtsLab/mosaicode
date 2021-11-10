@@ -59,6 +59,13 @@ class ExtensionsManager(Gtk.Menu):
                 self.__export
                 )
 
+        main_window.menu.create_menu(
+                _("Import Extension"),
+                None,
+                self,
+                self.__import
+                )
+
         item = Gtk.MenuItem()
         item.set_label(self.label)
         main_window.menu.append(item)
@@ -90,15 +97,11 @@ class ExtensionsManager(Gtk.Menu):
         """
         Export all data.
         """
-        if not CodeTemplateControl.export():
-            from mosaicode.system import System as System
-            System.log("Problem expornt Code templates")
+        self.main_window.main_control.export_extensions()
 
-        if not BlockControl.export():
-            from mosaicode.system import System as System
-            System.log("Problem exporting Blocks")
-
-        if not PortControl.export():
-            from mosaicode.system import System as System
-            System.log("Problem exporting Ports")
-
+    # ----------------------------------------------------------------------
+    def __import(self):
+        """
+        Export all data.
+        """
+        self.main_window.main_control.import_extensions()

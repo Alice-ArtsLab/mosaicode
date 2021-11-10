@@ -10,7 +10,6 @@ from os.path import expanduser
 
 from mosaicode.model.port import Port
 from mosaicode.persistence.portpersistence import PortPersistence
-from mosaicode.utils.XMLUtils import XMLParser
 
 
 class PortControl():
@@ -22,22 +21,6 @@ class PortControl():
 
     def __init__(self):
         pass
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export(cls):
-        from mosaicode.system import System as System
-        System()
-        ports = System.get_ports()
-        result = True
-        for key in ports:
-            path = System.get_user_dir()
-            path = os.path.join(path,
-                                'extensions',
-                                ports[key].language,
-                                'ports')
-            result = result and PortPersistence.save(ports[key], path)
-        return result
 
     # ----------------------------------------------------------------------
     @classmethod
@@ -54,12 +37,10 @@ class PortControl():
     # ----------------------------------------------------------------------
     @classmethod
     def add_port(cls, port):
-        # first, save it
         from mosaicode.system import System as System
         System()
         path = os.path.join(System.get_user_dir(), "extensions")
-        path = os.path.join(path, port.language)
-        path = os.path.join(path, "ports")
+        path = os.path.join(path, port.language, "ports")
         PortPersistence.save(port, path)
 
     # ----------------------------------------------------------------------

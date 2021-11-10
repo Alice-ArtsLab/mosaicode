@@ -26,25 +26,6 @@ class BlockControl():
 
     # ----------------------------------------------------------------------
     @classmethod
-    def export(cls):
-        from mosaicode.system import System as System
-        System()
-        blocks = System.get_blocks()
-        result = True
-        for key in blocks:
-            path = System.get_user_dir()
-            path = os.path.join(path,
-                                'extensions',
-                                blocks[key].language,
-                                'blocks',
-                                blocks[key].extension,
-                                blocks[key].group)
-
-            result = result and BlockPersistence.save(blocks[key], path)
-        return result
-
-    # ----------------------------------------------------------------------
-    @classmethod
     def load_ports(cls, block, ports):
         # Adjust ports attributes
         i = 0
