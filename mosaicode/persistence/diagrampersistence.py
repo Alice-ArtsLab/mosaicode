@@ -51,46 +51,52 @@ class DiagramPersistence():
                 System.log("Problem loading the diagram. Are you sure this is a valid file?")
                 return False
 
-            diagram.zoom = float(data["zoom"])
-            diagram.language = data["language"]
+            if "zoom" in data:
+                diagram.zoom = float(data["zoom"])
+            if "language" in data:
+                diagram.language = data["language"]
 
             # Loading Code Template
-            code_template_data = data["code_template"]
-            code_template = code_template_data["type"]
-            if code_template not in System.get_code_templates():
-                System.log("Code Template " + code_template + " not found")
-            else:
-                code_template = System.get_code_templates()[code_template]
-                diagram.code_template = deepcopy(code_template)
-            properties = code_template_data["properties"]
-            props = {}
-            for prop in properties:
-                props[prop["key"]] = prop["value"]
-            diagram.code_template.set_properties(props)
+            if "code_template" in data:
+                code_template_data = data["code_template"]
+                if "type" in code_template_data:
+                    code_template = code_template_data["type"]
+                    if code_template not in System.get_code_templates():
+                        System.log("Code Template " + code_template + " not found")
+                    else:
+                        code_template = System.get_code_templates()[code_template]
+                        diagram.code_template = deepcopy(code_template)
+                if "properties" in code_template_data:
+                    properties = code_template_data["properties"]
+                    props = {}
+                    for prop in properties:
+                        props[prop["key"]] = prop["value"]
+                    diagram.code_template.set_properties(props)
 
             # Loading Blocks
-            blocks = data["blocks"]
-            system_blocks = System.get_blocks()
-            for block in blocks:
-                block_type = block["type"]
-                if block_type not in system_blocks:
-                    System.log("Block " + block_type + " not found")
-                    continue
-                block_id = int(block["id"])
-                collapsed = block["collapsed"]
-                x = block["x"]
-                y = block["y"]
-                properties = block["properties"]
-                props = {}
-                for prop in properties:
-                    props[prop["key"]] = prop["value"]
-                new_block = deepcopy(system_blocks[block_type])
-                new_block.set_properties(props)
-                new_block.id = block_id
-                new_block.x = float(x)
-                new_block.y = float(y)
-                new_block.is_collapsed = collapsed
-                dc.add_block(new_block)
+            if "blocks" in data:        
+                blocks = data["blocks"]
+                system_blocks = System.get_blocks()
+                for block in blocks:
+                    block_type = block["type"]
+                    if block_type not in system_blocks:
+                        System.log("Block " + block_type + " not found")
+                        continue
+                    block_id = int(block["id"])
+                    collapsed = block["collapsed"]
+                    x = block["x"]
+                    y = block["y"]
+                    properties = block["properties"]
+                    props = {}
+                    for prop in properties:
+                        props[prop["key"]] = prop["value"]
+                    new_block = deepcopy(system_blocks[block_type])
+                    new_block.set_properties(props)
+                    new_block.id = block_id
+                    new_block.x = float(x)
+                    new_block.y = float(y)
+                    new_block.is_collapsed = collapsed
+                    dc.add_block(new_block)
 
             # Loading connections
             connections = data["connections"]
@@ -151,7 +157,8 @@ class DiagramPersistence():
             diagram.redraw()
 
 
-        except:
+        except Exception as e:
+            System.log(e)
             return False
 
         return True
@@ -180,17 +187,18 @@ class DiagramPersistence():
             "authors": []
         }
 
-        code_template_data = {
-            "type": diagram.code_template.type,
-            "properties": []
-            }
-        props = diagram.code_template.properties
-        for prop in props:
-            code_template_data["properties"].append({
-                    "key": str(prop["name"]),
-                    "value": str(prop["value"])
-                    })
-        x["code_template"] = code_template_data
+        if diagram.code_template:
+            code_template_data = {
+                "type": diagram.code_template.type,
+                "properties": []
+                }
+            props = diagram.code_template.properties
+            for prop in props:
+                code_template_data["properties"].append({
+                        "key": str(prop["name"]),
+                        "value": str(prop["value"])
+                        })
+            x["code_template"] = code_template_data
 
         for block_id in diagram.blocks:
             block = diagram.blocks[block_id]

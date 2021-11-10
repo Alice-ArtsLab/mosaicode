@@ -9,8 +9,7 @@ import pkgutil  # For dynamic package load
 from os.path import expanduser
 
 from mosaicode.model.codetemplate import CodeTemplate
-from mosaicode.persistence.codetemplatepersistence import \
-    CodeTemplatePersistence
+from mosaicode.persistence.codetemplatepersistence import CodeTemplatePersistence
 
 
 class CodeTemplateControl():
@@ -22,23 +21,6 @@ class CodeTemplateControl():
 
     def __init__(self):
         pass
-
-    # ----------------------------------------------------------------------
-    @classmethod
-    def export(cls):
-        from mosaicode.system import System as System
-        System()
-        code_templates = System.get_code_templates()
-        result = True
-        for key in code_templates:
-            path = System.get_user_dir()
-            path = os.path.join(path,
-                                'extensions',
-                                code_templates[key].language,
-                                'codetemplates')
-            result = result and CodeTemplatePersistence.save(
-                    code_templates[key], path)
-        return result
 
     # ----------------------------------------------------------------------
     @classmethod

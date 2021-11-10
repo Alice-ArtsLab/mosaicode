@@ -305,14 +305,14 @@ class DiagramControl:
                        "' does not exist!")
             return False
 
-        DiagramPersistence.load(self.diagram)
+        result = DiagramPersistence.load(self.diagram)
         self.diagram.redo_stack = []
         self.diagram.undo_stack = []
 
-        return True
+        return result
 
     # ----------------------------------------------------------------------
-    def save(self, file_name=None):
+    def save(self):
         """
         This method save a file.
 
@@ -320,12 +320,6 @@ class DiagramControl:
 
             * **Types** (:class:`boolean<boolean>`)
         """
-        if file_name is not None:
-            self.diagram.file_name = file_name
-        if self.diagram.file_name is None:
-            self.diagram.file_name = "Cadeia_" + str(time.time()) + ".mscd"
-        if self.diagram.file_name.find(".mscd") == -1:
-            self.diagram.file_name = self.diagram.file_name + ".mscd"
 
         return DiagramPersistence.save(self.diagram)
 

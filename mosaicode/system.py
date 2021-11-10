@@ -95,9 +95,9 @@ class System(object):
             # Load Examples from the system
             self.list_of_examples = []
             # Load Examples from the user space
-            file_path = os.path.join(System.get_user_dir(),"extensions")
-            for language in os.listdir(file_path):
-                path = os.path.join(file_path, language)
+            extension_path = os.path.join(System.get_user_dir(),"extensions")
+            for language in os.listdir(extension_path):
+                path = os.path.join(extension_path, language)
                 path = os.path.join(path, "examples")
                 for filename in os.listdir(path):
                     file_path = os.path.join(path, filename)
@@ -219,7 +219,7 @@ class System(object):
 
     # ----------------------------------------------------------------------
     @classmethod
-    def get_list_of_examples(cls):
+    def get_examples(cls):
         """
         This method returns System installed blocks.
         """
