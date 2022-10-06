@@ -1,62 +1,74 @@
-Mosaicode
-======
+# Mosaicode
 
-**This project is a new vision about how to program.**
+A Visual Programming Environment and source code generator for specific domains, focusing on Digital Art.
 
--------------
+## Getting Started
 
-### Installing Mosaicode
+Getting a copy of the project up and running on your local machine. Supported Platform: GNU/Linux.
 
-Install dependencies:
+
+### Prerequisites
+
+Open the terminal (Ctrl+Alt+T) and run the following command to install the software dependencies:
 
 ```
-curl https://bootstrap.pypa.io/2.7/get-pip.py -o get-pip.py
-python get-pip.py
-sudo apt install python libgtk-3-dev gir1.2-gtksource-3.0 gir1.2-goocanvas2.0 python-cairo-dev
-sudo pip install pgi lxml GooCalendar beautifulsoup4 soupsieve PyGObject
+sudo apt install python3 libgtk-3-dev gir1.2-gtksource-3.0 gir1.2-goocanvas-2.0 python-cairo-dev python3-lxml python3-goocalendar python3-bs4 python3-soupsieve python-gi-dev python3-gi python3-gi-cairo gir1.2-gtk-3.0
 ```
 
-| | Command |
-| :---: | :---: |
-| *Cloning GitHub:* | `git clone https://github.com/Alice-ArtsLab/mosaicode.git`|
+### Installation
 
-Then procede with instalation:
+Steps to install the Mosaicode in a virtual environment or in the operational system directory.
 
-    sudo python setup.py install
 
-### Uninstall
-To uninstall Mosaicode, execute at terminal:
+#### Virtual Environment / Isolated from system directories
+
+Installing python virtual environment via terminal:
+
 ```
-sudo ./uninstall.sh
-```
-
-### Mosaicode Blocks
-
-The Mosaicode allows install Blocks separately. There are available two set of blocks by Mosaicode Team:
-
-* https://github.com/Alice-ArtsLab/mosaicode-javascript-webaudio
-* https://github.com/Alice-ArtsLab/mosaicode-c-opencv
-* https://github.com/Alice-ArtsLab/mosaicode-c-opengl
-*https://github.com/Alice-ArtsLab/mosaicode-javascript-canvas
-*https://github.com/Alice-ArtsLab/mosaicode-c-joystick
-*https://github.com/Alice-ArtsLab/mosaicode-c-gtk
-*https://github.com/Alice-ArtsLab/mosaicode-c-sound
-
-### Packaging Info
-
-This source distribution was generated with:
-```
-python setup.py sdist --formats=gztar
+sudo apt install python3.8-venv
 ```
 
-You can generate a built distribution (:metal:) for your platform using:
+Setting the virtual environment:
+
+1. Create the environment: `python3 -m venv <virtual environment name>`
+1. Active the environment: `source <virtual environment path>/<virtual environment name>/bin/activate`
+1. Install prerequisites: `sudo apt install libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev`
+1. Install PyGObject: `python -m pip install PyGObject`
+1. Install Mosaicode: `python setup.py install`
+
+More details in the Python 3 *Virtual Environments and Packages* documentation: https://docs.python.org/3/tutorial/venv.html
+
+#### Operational System Directories
+
+Run via terminal:
+
 ```
-python setup.py bdist
+sudo python setup.py install
 ```
 
-### Further Info
+## Mosaicode Extensions
 
-Original page of Mosaicode project: [https://mosaicode.github.io/](https://mosaicode.github.io/)
+Some extensions that you can install to add visual programming languages with resources from areas of computing which allow the development of tools to support Digital Art in a simple and practical way: dragging and connecting blocks:
 
-or asking to:
+
+| Technology  	                | Domain  	         | Extension repository  	                                          | Operating |
+| ---	                          | ---	               | ---	                                                            | ---       |
+|  Javascript / Web Audio API   | Computer Music  	 | https://github.com/Alice-ArtsLab/mosaicode-javascript-webaudio  	| Yes        |
+|  C / OpenCV  	              	| Computer vision  	 | https://github.com/Alice-ArtsLab/mosaicode-c-opencv              | No        |
+|  C / Opengl 	    	          | Computer graphics  | https://github.com/Alice-ArtsLab/mosaicode-c-opengl              | No        |
+|  Javascript / Canvas 	        | Graphics on a web  | https://github.com/Alice-ArtsLab/mosaicode-javascript-canvas     | No        |
+|  C / Linux-Joystick	          | USB Controller  	 | https://github.com/Alice-ArtsLab/mosaicode-c-joystick            | No        |
+|  C / Gtk 	                    | GUI                | https://github.com/Alice-ArtsLab/mosaicode-c-gtk                 | No        |
+|  C / Portaudio 	              | Computer Music  	 | https://github.com/Alice-ArtsLab/mosaicode-c-sound               | No        |
+
+
+
+## Related pages
+
+ALICE. Lab:  [https://alice.dcomp.ufsj.edu.br/](https://alice.dcomp.ufsj.edu.br/)
+
+## Contact
+
+Asking to:
+
 * mosaicode-dev@googlegroups.com
